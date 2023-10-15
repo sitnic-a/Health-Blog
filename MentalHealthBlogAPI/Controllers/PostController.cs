@@ -1,6 +1,8 @@
-﻿using MentalHealthBlogAPI.Models;
+﻿using MentalHealthBlogAPI.Data;
+using MentalHealthBlogAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace MentalHealthBlogAPI.Controllers
 {
@@ -8,17 +10,24 @@ namespace MentalHealthBlogAPI.Controllers
     [ApiController]
     public class PostController : ControllerBase
     {
-        [HttpGet]
-        public IEnumerable<Post> GetAllPosts()
+        private readonly DataContext _context;
+
+        public PostController(DataContext context)
         {
-            var posts = Data.GeneratePosts();
+            _context = context;
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<Post>> GetAllPosts()
+        {
+            var posts = await _context.Posts.ToListAsync();
             return posts;
         }
 
         [HttpGet("{id}")]
-        public Post GetById(int id)
+        public async Task<Post> GetById(int id)
         {
-            var post = Data.GeneratePosts().FirstOrDefault(p => p.Id == id);
+            var post = await _context.Posts.FindAsync(id);
             return post != null ? post : new Post(string.Empty, "Post doens't exist", 0);
         }
                
