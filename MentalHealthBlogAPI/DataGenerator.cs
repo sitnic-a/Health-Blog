@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MentalHealthBlogAPI
 {
-    public static class Data
+    public static class DataGenerator
     {
         public static IEnumerable<Post> GeneratePosts()
         {
