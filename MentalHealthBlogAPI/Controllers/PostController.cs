@@ -1,5 +1,6 @@
 ﻿using MentalHealthBlogAPI.Data;
 using MentalHealthBlogAPI.Models;
+using MentalHealthBlogAPI.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,26 +11,44 @@ namespace MentalHealthBlogAPI.Controllers
     [ApiController]
     public class PostController : ControllerBase
     {
-        private readonly DataContext _context;
+        private readonly IPostService _postService;
+        private readonly ILogger _logger;
 
-        public PostController(DataContext context)
+        public PostController(IPostService postService, ILogger logger)
         {
-            _context = context;
+            _postService = postService;
+            _logger = logger;
         }
 
         [HttpGet]
         public async Task<IEnumerable<Post>> GetAllPosts()
         {
-            var posts = await _context.Posts.ToListAsync();
-            return posts;
+            try
+            {
+                _logger.LogInformation("Posts");
+                return await _postService.GetPosts();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Get posts failed", e);
+                throw;
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<Post> GetById(int id)
         {
-            var post = await _context.Posts.FindAsync(id);
-            return post != null ? post : new Post(string.Empty, "Post doens't exist", 0);
+            try
+            {
+                _logger.LogInformation("Post Id");
+                return await _postService.GetById(id);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Get post failed", e);
+                throw;
+            }
         }
-               
+
     }
 }
