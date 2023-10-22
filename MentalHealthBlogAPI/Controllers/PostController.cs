@@ -45,13 +45,13 @@ namespace MentalHealthBlogAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<Post> AddPost([FromBody] Post post)
+        public async Task<Post> AddPost([FromBody]Post post)
         {
             return await _postService.Add(post);
         }
 
         [HttpPut("{id}")]
-        public async Task<Post> UpdatePost(int id, [FromBody]Post post)
+        public async Task<Post> UpdatePost(int id, [FromBody] Post post)
         {
             return await _postService.Update(id, post);
         }

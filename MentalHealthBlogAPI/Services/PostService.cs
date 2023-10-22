@@ -23,13 +23,13 @@ namespace MentalHealthBlogAPI.Services
             return searched != null ? searched : new Post();
         }
 
-        public async Task<Post> Add([FromBody] Post post)
+        public async Task<Post> Add(Post post)
         {
             await _context.AddAsync(post);
             await _context.SaveChangesAsync();
             return post;
         }
-        public async Task<Post> Update(int id, [FromBody] Post post)
+        public async Task<Post> Update(int id, Post post)
         {
             var searched = await _context.Posts.FindAsync(id);
             if (searched != null)
@@ -41,7 +41,7 @@ namespace MentalHealthBlogAPI.Services
                 await _context.SaveChangesAsync();
                 return searched;
             }
-            return new Post("","",0);
+            return new Post();
         }
     }
 }
