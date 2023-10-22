@@ -8,5 +8,6 @@ namespace MentalHealthBlogAPI.Services
         public Task<Post> GetById(int id);
         public Task<Post> Add(Post post);
         public Task<Post> Update(int id, Post post);
+        public Task<Post> Delete(int id);
     }
 }

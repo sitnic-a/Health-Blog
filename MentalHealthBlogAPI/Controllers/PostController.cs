@@ -55,7 +55,11 @@ namespace MentalHealthBlogAPI.Controllers
         {
             return await _postService.Update(id, post);
         }
-        
 
+        [HttpDelete("{id}")]
+        public async Task<Post> DeletePost(int id)
+        {
+            return await _postService.Delete(id);
+        }
     }
 }

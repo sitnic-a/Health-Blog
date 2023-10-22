@@ -43,5 +43,17 @@ namespace MentalHealthBlogAPI.Services
             }
             return new Post();
         }
+
+        public async Task<Post> Delete(int id)
+        {
+            var searched = await _context.Posts.FindAsync(id);
+            if (searched != null)
+            {
+                _context.Posts.Remove(searched);
+                await _context.SaveChangesAsync();
+                return searched;
+            }
+            return new Post();
+        }
     }
 }
