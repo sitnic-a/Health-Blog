@@ -9,15 +9,9 @@ namespace MentalHealthBlogAPI.Models
         public string Content { get; set; } = string.Empty;
         public int UserId { get; set; }
         [JsonIgnore]
-        public User User { get; set; } = new User(string.Empty,string.Empty);
+        public User? User { get; set; }
 
-        public Post(int id, string title, string content, int userId)
-        {
-            Id = id;
-            Title = title;
-            Content = content;
-            UserId = userId;
-        }
+        public Post(){  }
         public Post(string title, string content, int userId)
         {
             Title = title;

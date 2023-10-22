@@ -12,12 +12,10 @@ namespace MentalHealthBlogAPI.Controllers
     public class PostController : ControllerBase
     {
         private readonly IPostService _postService;
-        private readonly ILogger _logger;
 
-        public PostController(IPostService postService, ILogger logger)
+        public PostController(IPostService postService)
         {
             _postService = postService;
-            _logger = logger;
         }
 
         [HttpGet]
@@ -25,12 +23,10 @@ namespace MentalHealthBlogAPI.Controllers
         {
             try
             {
-                _logger.LogInformation("Posts");
                 return await _postService.GetPosts();
             }
             catch (Exception e)
             {
-                _logger.LogError("Get posts failed", e);
                 throw;
             }
         }
@@ -40,15 +36,26 @@ namespace MentalHealthBlogAPI.Controllers
         {
             try
             {
-                _logger.LogInformation("Post Id");
                 return await _postService.GetById(id);
             }
             catch (Exception e)
             {
-                _logger.LogError("Get post failed", e);
                 throw;
             }
         }
+
+        [HttpPost]
+        public async Task<Post> AddPost([FromBody] Post post)
+        {
+            return await _postService.Add(post);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<Post> UpdatePost(int id, [FromBody]Post post)
+        {
+            return await _postService.Update(id, post);
+        }
+        
 
     }
 }

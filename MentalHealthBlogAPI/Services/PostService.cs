@@ -1,5 +1,6 @@
 ﻿using MentalHealthBlogAPI.Data;
 using MentalHealthBlogAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace MentalHealthBlogAPI.Services
@@ -19,16 +20,28 @@ namespace MentalHealthBlogAPI.Services
         public async Task<Post> GetById(int id)
         {
             var searched = await _context.Posts.FindAsync(id);
-            return searched != null ? searched : new Post(string.Empty,string.Empty,-1);
+            return searched != null ? searched : new Post();
         }
 
-        public Task<Post> Add(Post post)
+        public async Task<Post> Add([FromBody] Post post)
         {
-            throw new NotImplementedException();
+            await _context.AddAsync(post);
+            await _context.SaveChangesAsync();
+            return post;
         }
-        public Task<Post> Update(int id, Post post)
+        public async Task<Post> Update(int id, [FromBody] Post post)
         {
-            throw new NotImplementedException();
+            var searched = await _context.Posts.FindAsync(id);
+            if (searched != null)
+            {
+                searched.Id = id;
+                searched.Title = post.Title;
+                searched.Content = post.Content;
+                searched.UserId = post.UserId;
+                await _context.SaveChangesAsync();
+                return searched;
+            }
+            return new Post("","",0);
         }
     }
 }
