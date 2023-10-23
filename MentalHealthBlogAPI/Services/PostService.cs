@@ -5,55 +5,129 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MentalHealthBlogAPI.Services
 {
+    enum PostServiceLogTypes
+    {
+        POST_NULL,
+        POSTS_SUCCESS,
+        POSTS_FAILED
+    }
+
     public class PostService : IPostService
     {
         private readonly DataContext _context;
+        private readonly ILogger<PostService> _postServiceLogger;
 
-        public PostService(DataContext context)
+        public PostService(DataContext context, ILogger<PostService> postServiceLogger)
         {
             _context = context;
+            _postServiceLogger = postServiceLogger;
         }
         public async Task<IEnumerable<Post>> GetPosts()
         {
-            return await _context.Posts.ToListAsync();
+            try
+            {
+                var posts = await _context.Posts.ToListAsync();
+                if (posts is null)
+                {
+                    _postServiceLogger.LogWarning($"GET: {PostServiceLogTypes.POST_NULL.ToString()}");
+                    return new List<Post>();
+                }
+                _postServiceLogger.LogInformation($"GET: {PostServiceLogTypes.POSTS_SUCCESS.ToString()}");
+                return posts;
+            }
+            catch (Exception e)
+            {
+                _postServiceLogger.LogError($"GET: {PostServiceLogTypes.POSTS_FAILED.ToString()}", e);
+                return new List<Post>();
+            }
         }
+
         public async Task<Post> GetById(int id)
         {
-            var searched = await _context.Posts.FindAsync(id);
-            return searched != null ? searched : new Post();
+            try
+            {
+                var searched = await _context.Posts.FindAsync(id);
+                if (searched is null)
+                {
+                    _postServiceLogger.LogWarning($"GET/id: {PostServiceLogTypes.POST_NULL}");
+                    return new Post();
+                }
+                _postServiceLogger.LogInformation($"GET/id: {PostServiceLogTypes.POSTS_SUCCESS.ToString()}");
+                return searched;
+            }
+            catch (Exception e)
+            {
+                _postServiceLogger.LogError($"GET/id: {PostServiceLogTypes.POSTS_FAILED.ToString()}", e);
+                return new Post();
+            }
         }
 
         public async Task<Post> Add(Post post)
         {
-            await _context.AddAsync(post);
-            await _context.SaveChangesAsync();
-            return post;
+            try
+            {
+                var newPost = await _context.Posts.AddAsync(post);
+                if (newPost is null)
+                {
+                    _postServiceLogger.LogWarning($"POST: {PostServiceLogTypes.POST_NULL.ToString()}");
+                    return new Post();
+                }
+                await _context.SaveChangesAsync();
+                _postServiceLogger.LogInformation($"POST: {PostServiceLogTypes.POSTS_SUCCESS}");
+                return newPost.Entity;
+            }
+            catch (Exception e)
+            {
+                _postServiceLogger.LogError($"POST: {PostServiceLogTypes.POSTS_FAILED.ToString()}", e);
+                return new Post();
+            }
         }
         public async Task<Post> Update(int id, Post post)
         {
-            var searched = await _context.Posts.FindAsync(id);
-            if (searched != null)
+            try
             {
+                var searched = await _context.Posts.FindAsync(id);
+                if (searched is null)
+                {
+                    _postServiceLogger.LogWarning($"PUT/id: {PostServiceLogTypes.POST_NULL.ToString()}");
+                    return new Post();
+                }
                 searched.Id = id;
                 searched.Title = post.Title;
                 searched.Content = post.Content;
                 searched.UserId = post.UserId;
                 await _context.SaveChangesAsync();
+                _postServiceLogger.LogInformation($"PUT/id: {PostServiceLogTypes.POSTS_SUCCESS.ToString()}");
                 return searched;
             }
-            return new Post();
+            catch (Exception e)
+            {
+                _postServiceLogger.LogError($"PUT/id: {PostServiceLogTypes.POSTS_FAILED.ToString()}", e);
+                return new Post();
+            }
+
         }
 
         public async Task<Post> Delete(int id)
         {
-            var searched = await _context.Posts.FindAsync(id);
-            if (searched != null)
+            try
             {
+                var searched = await _context.Posts.FindAsync(id);
+                if (searched is null)
+                {
+                    _postServiceLogger.LogWarning($"DELETE/id: {PostServiceLogTypes.POST_NULL.ToString()}");
+                    return new Post();
+                }
                 _context.Posts.Remove(searched);
                 await _context.SaveChangesAsync();
+                _postServiceLogger.LogInformation($"DELETE/id: {PostServiceLogTypes.POSTS_SUCCESS.ToString()}");
                 return searched;
             }
-            return new Post();
+            catch (Exception e)
+            {
+                _postServiceLogger.LogError($"DELETE/id: {PostServiceLogTypes.POSTS_FAILED.ToString()}", e);
+                return new Post();
+            }
         }
     }
 }

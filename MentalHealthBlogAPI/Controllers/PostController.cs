@@ -21,31 +21,17 @@ namespace MentalHealthBlogAPI.Controllers
         [HttpGet]
         public async Task<IEnumerable<Post>> GetAllPosts()
         {
-            try
-            {
-                return await _postService.GetPosts();
-            }
-            catch (Exception e)
-            {
-                throw;
-            }
+            return await _postService.GetPosts();
         }
 
         [HttpGet("{id}")]
         public async Task<Post> GetById(int id)
         {
-            try
-            {
-                return await _postService.GetById(id);
-            }
-            catch (Exception e)
-            {
-                throw;
-            }
+            return await _postService.GetById(id);
         }
 
         [HttpPost]
-        public async Task<Post> AddPost([FromBody]Post post)
+        public async Task<Post> AddPost([FromBody] Post post)
         {
             return await _postService.Add(post);
         }
