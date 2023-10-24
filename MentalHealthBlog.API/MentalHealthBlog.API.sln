@@ -5,6 +5,8 @@ VisualStudioVersion = 17.7.34018.315
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MentalHealthBlog.API", "MentalHealthBlog.API.csproj", "{0DE9A4B6-E8AB-46FD-868B-68D020809F19}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MentalHealthBlog.Test", "..\MentalHealthBlog.Test\MentalHealthBlog.Test.csproj", "{B2F8E980-2172-4DEF-B392-01A07D77DF7D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{0DE9A4B6-E8AB-46FD-868B-68D020809F19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0DE9A4B6-E8AB-46FD-868B-68D020809F19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0DE9A4B6-E8AB-46FD-868B-68D020809F19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2F8E980-2172-4DEF-B392-01A07D77DF7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2F8E980-2172-4DEF-B392-01A07D77DF7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2F8E980-2172-4DEF-B392-01A07D77DF7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2F8E980-2172-4DEF-B392-01A07D77DF7D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
