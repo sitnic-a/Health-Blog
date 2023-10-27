@@ -7,6 +7,11 @@
         public string PasswordHash { get; set; } = string.Empty;
         public List<Post> Posts { get; set; }
 
+        public User()
+        {
+            Posts = new List<Post>();
+        }
+
         public User(string username, string passwordHash)
         {
             Username = username;
