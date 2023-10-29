@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using MentalHealthBlog.Test.Moq;
+using MentalHealthBlog.Test.TestData;
 using MentalHealthBlogAPI.Data;
 using MentalHealthBlogAPI.Models;
 using MentalHealthBlogAPI.Services;
@@ -58,7 +59,7 @@ namespace MentalHealthBlog.Test.PostTest
         public async Task GetById_ReturnNonExistingElementAsNewPost(object value)
         {
             //Arrange
-            var id = Convert.ToInt32(value);  
+            var id = Convert.ToInt32(value);
 
             //Act
             var dbPost = await _postService.GetById(id);
@@ -73,8 +74,37 @@ namespace MentalHealthBlog.Test.PostTest
 
         #region POST
 
-        // To implement tests
+        [Theory]
+        [MemberData(memberName: nameof(Data.PostMethodsInvalidTestData), MemberType = typeof(Data))]
+        public async Task Add_ReturnNonCreatedNewPost(string Title, string Content, int userId)
+        {
+            //Arrange
+            var post = new Post(Title, Content, userId);
+            //Act
+            var newPost = await _postService.Add(post);
 
+            //Assert
+            newPost.Should().BeOfType(typeof(Post));
+            newPost.Should().BeEquivalentTo(new Post());
+            newPost.Should().NotBeNull();
+        }
+
+        [Theory]
+        [MemberData(memberName: nameof(Data.PostMethodsValidTestData), MemberType = typeof(Data))]
+        public async Task Add_ReturnCreatedPost(string Title, string Content, int userId)
+        {
+            //Arrange
+            var post = new Post(Title, Content, userId);
+
+            //Act
+            var newPost = await _postService.Add(post);
+
+            //Assert
+            newPost.Should().BeEquivalentTo(post);
+            newPost.Should().NotBeNull();
+            newPost.Should().BeOfType(typeof(Post));
+            newPost.Content.Should().BeEquivalentTo(Content);
+        }
         #endregion
 
     }
