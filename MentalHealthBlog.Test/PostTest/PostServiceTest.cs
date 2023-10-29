@@ -18,6 +18,8 @@ namespace MentalHealthBlog.Test.PostTest
             _postService = new PostService(_context, _postServiceLogger.Object);
         }
 
+        #region GET
+
         [Fact]
         public async void GetPosts_ReturnsNonNull()
         {
@@ -49,5 +51,31 @@ namespace MentalHealthBlog.Test.PostTest
             Assert.Contains("Mocked", dbPost.Title, StringComparison.OrdinalIgnoreCase);
             Assert.Contains("Mocked", dbPost.Title, StringComparison.OrdinalIgnoreCase);
         }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData(6)]
+        public async Task GetById_ReturnNonExistingElementAsNewPost(object value)
+        {
+            //Arrange
+            var id = Convert.ToInt32(value);  
+
+            //Act
+            var dbPost = await _postService.GetById(id);
+
+            //Assert
+            dbPost.Should().BeOfType(typeof(Post));
+            dbPost.Should().BeEquivalentTo(new Post());
+            dbPost.Should().NotBeNull();
+        }
+
+        #endregion
+
+        #region POST
+
+        // To implement tests
+
+        #endregion
+
     }
 }
