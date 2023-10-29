@@ -1,4 +1,5 @@
-﻿using MentalHealthBlogAPI.Data;
+﻿using MentalHealthBlog.API.ExtensionMethods.ExtensionPostClass;
+using MentalHealthBlogAPI.Data;
 using MentalHealthBlogAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -66,6 +67,11 @@ namespace MentalHealthBlogAPI.Services
         {
             try
             {
+                if (post.IsNullOrEmpthy())
+                {
+                    _postServiceLogger.LogWarning($"POST: {PostServiceLogTypes.POST_NULL.ToString()}");
+                    return new Post();
+                }
                 var newPost = await _context.Posts.AddAsync(post);
                 if (newPost is null)
                 {
