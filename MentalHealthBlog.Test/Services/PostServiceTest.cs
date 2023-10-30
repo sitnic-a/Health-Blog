@@ -76,10 +76,10 @@ namespace MentalHealthBlog.Test.PostTest
 
         [Theory]
         [MemberData(memberName: nameof(Data.PostMethodsInvalidTestData), MemberType = typeof(Data))]
-        public async Task Add_ReturnNonCreatedNewPost(string Title, string Content, int userId)
+        public async Task Add_ReturnNonCreatedNewPost(string title, string content, int userId)
         {
             //Arrange
-            var post = new Post(Title, Content, userId);
+            var post = new Post(title, content, userId);
             //Act
             var newPost = await _postService.Add(post);
 
@@ -91,10 +91,10 @@ namespace MentalHealthBlog.Test.PostTest
 
         [Theory]
         [MemberData(memberName: nameof(Data.PostMethodsValidTestData), MemberType = typeof(Data))]
-        public async Task Add_ReturnCreatedPost(string Title, string Content, int userId)
+        public async Task Add_ReturnCreatedPost(string title, string content, int userId)
         {
             //Arrange
-            var post = new Post(Title, Content, userId);
+            var post = new Post(title, content, userId);
 
             //Act
             var newPost = await _postService.Add(post);
@@ -103,9 +103,48 @@ namespace MentalHealthBlog.Test.PostTest
             newPost.Should().BeEquivalentTo(post);
             newPost.Should().NotBeNull();
             newPost.Should().BeOfType(typeof(Post));
-            newPost.Content.Should().BeEquivalentTo(Content);
+            newPost.Content.Should().BeEquivalentTo(content);
         }
         #endregion
 
+        #region PUT
+
+        [Theory]
+        [MemberData(memberName: nameof(Data.UpdateMethodsInvalidData), MemberType = typeof(Data))]
+        public async Task Update_ReturnNonUpdatedPost(int postId, string title, string content, int usedId)
+        {
+            //Arrange
+            var dbPost = await _postService.GetById(postId);
+            var post = new Post(title, content, usedId);
+
+            //Act
+            var updatedPost = await _postService.Update(postId, post);
+
+            //Assert
+            updatedPost.Should().BeOfType(typeof(Post));
+            updatedPost.Should().BeEquivalentTo(new Post());
+            updatedPost.Should().NotBeNull();
+            updatedPost.Should().NotBeSameAs(dbPost);
+        }
+
+        [Theory]
+        [MemberData(memberName:nameof(Data.UpdateMethodsValidData), MemberType =typeof(Data))]
+        public async Task Update_ReturnsUpdatedPost(int postId, string title, string content, int userId)
+        {
+            //Arrange
+            var dbPost = await _postService.GetById(postId);
+            var post = new Post(title, content, userId);
+
+            //Act
+            var updatedPost = await _postService.Update(postId, post);
+
+            //Assert
+            updatedPost.Should().NotBeNull();
+            updatedPost.Should().BeOfType(typeof(Post));
+            Assert.Equal(updatedPost.Title, post.Title);
+            Assert.Equal(updatedPost.Content, post.Content);
+            Assert.Equal(updatedPost.UserId, post.UserId);
+        }
+        #endregion
     }
 }
