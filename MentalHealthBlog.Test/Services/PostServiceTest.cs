@@ -145,6 +145,49 @@ namespace MentalHealthBlog.Test.PostTest
             Assert.Equal(updatedPost.Content, post.Content);
             Assert.Equal(updatedPost.UserId, post.UserId);
         }
+
+        #endregion
+
+        #region DELETE
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1)]
+        [InlineData(10)]
+        public async Task Delete_ReturnsNonExistingNewPost(int id)
+        {
+            //Arrange
+
+            //Act
+            var dbPost = await _postService.Delete(id);
+
+            //Assert
+            dbPost.Should().NotBeNull();
+            dbPost.Should().BeEquivalentTo(new Post());
+            dbPost.Should().BeOfType(typeof(Post));
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(5)]
+        public async Task Delete_ReturnDeletedPost(int id)
+        {
+            //Arrange
+            var dbPost = await _postService.GetById(id);
+
+            //Act
+            var deletedPost = await _postService.Delete(id);
+
+            //Assert
+            deletedPost.Should().NotBeNull();
+            deletedPost.Should().BeOfType(typeof(Post));
+            deletedPost.Should().NotBeEquivalentTo(new Post());
+            Assert.Equal(deletedPost.Title, dbPost.Title);
+            Assert.Equal(deletedPost.Content, dbPost.Content);
+            Assert.Equal(deletedPost.UserId, dbPost.UserId);
+        }
+
         #endregion
     }
 }
