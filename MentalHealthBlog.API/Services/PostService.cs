@@ -92,6 +92,11 @@ namespace MentalHealthBlogAPI.Services
         {
             try
             {
+                if (post.IsNullOrEmpthy())
+                {
+                    _postServiceLogger.LogWarning($"PUT/id: {PostServiceLogTypes.POST_NULL.ToString()}");
+                    return new Post();
+                }
                 var searched = await _context.Posts.FindAsync(id);
                 if (searched is null)
                 {
