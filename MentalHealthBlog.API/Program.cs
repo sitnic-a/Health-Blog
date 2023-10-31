@@ -13,6 +13,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//CORS registration
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "localPolicy", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000")
+              .WithMethods("POST", "PUT", "DELETE");
+    });
+});
+
 //Custom service registration
 builder.Services.AddScoped<IPostService, PostService>();
 
@@ -35,6 +45,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseCors();
 }
 
 app.UseHttpsRedirection();
