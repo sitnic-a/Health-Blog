@@ -1,9 +1,13 @@
-import { Posts } from './components/Posts'
+//Main imports
+import './App.css'
+
+//Import components
+import { ListOfPosts } from './components/ListOfPosts'
 
 function App() {
   return (
     <main>
-      <Posts />
+      <ListOfPosts />
     </main>
   )
 }
