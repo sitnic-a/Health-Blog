@@ -1,0 +1,21 @@
+main {
+  margin: 1rem;
+  border: 1px solid red;
+  box-sizing: border-box;
+}
+
+.list-of-posts-main-container {
+  display: flex;
+  align-content: start;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  border: 1px solid red;
+  margin: 0.2rem;
+  width: fit-content;
+}
+
+.post-container {
+  margin: 0.2rem;
+  border: 1px solid blue;
+  padding: 0.5rem;
+}
