@@ -5,7 +5,7 @@ main {
 }
 
 .list-of-posts-author {
-  margin: 0.5rem;
+  /* margin: 0.5rem; */
   padding: 0.5rem;
 }
 
@@ -13,19 +13,78 @@ main {
   display: flex;
   flex-wrap: wrap;
   justify-content: left;
-  gap: 0.5rem;
-  border: 1px solid red;
+  gap: 0.8rem;
+  /* border: 1px solid red; */
   margin: 0.5rem;
+  /* background: #ffb81d; */
+  /* padding: 0.5rem; */
+  color: #fff;
+}
+
+button[data-action-update='update'] {
+  position: absolute;
+  background: none;
+  outline: none;
+  border: none;
+  top: 0.3rem;
+  left: 0;
+}
+
+button[data-action-delete='delete'] {
+  position: absolute;
+  background: none;
+  outline: none;
+  border: none;
+  top: 0.3rem;
+  right: 0;
+}
+
+button[data-action-update='update'] svg,
+button[data-action-delete='delete'] svg {
+  transform: scale(1.8);
+  /* color: #365c6d; */
+  color: red;
 }
 
 .post-container {
-  margin: 0.5rem;
-  border: 1px solid blue;
-  padding: 0.5rem;
+  margin-top: 0.3rem;
+  /* border: 1px solid blue; */
+  padding: 0.3rem;
+  position: relative;
+  background: #ffeebb;
+
+  .post-container-content {
+    margin-top: 1.5rem;
+  }
+
+  .post-header {
+    background: #89cff0;
+  }
 
   .post-header h1 {
-    border: 1px solid green;
+    /* border: 1px solid green; */
     padding: 0.2rem;
     text-align: center;
+  }
+
+  .post-content {
+    border: none;
+  }
+
+  .overlay-mask {
+    background: transparent;
+    opacity: 0.5;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    visibility: hidden;
+  }
+}
+
+.post-container:hover {
+  .overlay-mask {
+    visibility: visible;
   }
 }
