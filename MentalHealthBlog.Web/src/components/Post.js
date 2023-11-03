@@ -4,23 +4,24 @@ export const Post = (props) => {
   return (
     <section className="post-container">
       <div className="post-header">
-        <label>{props.title}</label>
+        <h1>{props.title}</h1>
       </div>
       <div className="post-information">
         <textarea
           className="post-content"
           name="content"
-          id="post-content"
-          cols={15}
+          cols={30}
           rows={12}
           value={props.content}
           disabled={true}
         ></textarea>
       </div>
-      <button data-put="update" type="button">
+      <button data-action-update="update" type="button">
         Checkmark
       </button>
-      <button type="button">X</button>
+      <button data-action-delete="delete" type="button">
+        X
+      </button>
     </section>
   )
 }

@@ -1,21 +1,31 @@
 main {
-  margin: 1rem;
-  border: 1px solid red;
+  margin-inline: 1rem;
+  /* border: 1px solid red; */
   box-sizing: border-box;
+}
+
+.list-of-posts-author {
+  margin: 0.5rem;
+  padding: 0.5rem;
 }
 
 .list-of-posts-main-container {
   display: flex;
-  align-content: start;
   flex-wrap: wrap;
-  gap: 0.3rem;
+  justify-content: left;
+  gap: 0.5rem;
   border: 1px solid red;
-  margin: 0.2rem;
-  width: fit-content;
+  margin: 0.5rem;
 }
 
 .post-container {
-  margin: 0.2rem;
+  margin: 0.5rem;
   border: 1px solid blue;
   padding: 0.5rem;
+
+  .post-header h1 {
+    border: 1px solid green;
+    padding: 0.2rem;
+    text-align: center;
+  }
 }
