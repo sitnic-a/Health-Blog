@@ -4,6 +4,10 @@ main {
   box-sizing: border-box;
 }
 
+.list-of-posts-header {
+  border: 1px solid red;
+}
+
 .list-of-posts-author {
   /* margin: 0.5rem; */
   padding: 0.5rem;
@@ -14,14 +18,11 @@ main {
   flex-wrap: wrap;
   justify-content: left;
   gap: 0.8rem;
-  /* border: 1px solid red; */
-  margin: 0.5rem;
-  /* background: #ffb81d; */
-  /* padding: 0.5rem; */
   color: #fff;
+  margin-top: 0.3rem;
 }
 
-button[data-action-update='update'] {
+button[data-action-update="update"] {
   position: absolute;
   background: none;
   outline: none;
@@ -30,7 +31,7 @@ button[data-action-update='update'] {
   left: 0;
 }
 
-button[data-action-delete='delete'] {
+button[data-action-delete="delete"] {
   position: absolute;
   background: none;
   outline: none;
@@ -39,52 +40,77 @@ button[data-action-delete='delete'] {
   right: 0;
 }
 
-button[data-action-update='update'] svg,
-button[data-action-delete='delete'] svg {
+button[data-action-add="add"] {
+  background: none;
+  outline: none;
+  border: none;
+  padding: 1rem;
+  background: #e1e1e1;
+}
+
+button[data-action-update="update"]:hover {
+  cursor: pointer;
+}
+
+button[data-action-delete="delete"]:hover {
+  cursor: pointer;
+}
+
+button[data-action-add="add"]:hover {
+  background: #f4f4f4;
+  cursor: pointer;
+}
+
+button[data-action-add="add"] svg {
+  margin-right: 2rem;
+}
+
+button[data-action-update="update"] svg,
+button[data-action-delete="delete"] svg,
+button[data-action-add="add"] svg {
   transform: scale(1.8);
   /* color: #365c6d; */
-  color: red;
+  color: #000;
+}
+
+.main-container {
+  position: relative;
 }
 
 .post-container {
   margin-top: 0.3rem;
   /* border: 1px solid blue; */
   padding: 0.3rem;
-  position: relative;
   background: #ffeebb;
-
-  .post-container-content {
-    margin-top: 1.5rem;
-  }
-
-  .post-header {
-    background: #89cff0;
-  }
-
-  .post-header h1 {
-    /* border: 1px solid green; */
-    padding: 0.2rem;
-    text-align: center;
-  }
-
-  .post-content {
-    border: none;
-  }
-
-  .overlay-mask {
-    background: transparent;
-    opacity: 0.5;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    visibility: hidden;
-  }
 }
 
 .post-container:hover {
-  .overlay-mask {
-    visibility: visible;
-  }
+  cursor: pointer;
+}
+
+.post-container-content {
+  margin-top: 1.5rem;
+}
+
+.post-header {
+  background: #89cff0;
+}
+
+.post-header h1 {
+  /* border: 1px solid green; */
+  padding: 0.2rem;
+  text-align: center;
+}
+
+.post-content {
+  border: none;
+}
+
+.overlay-mask {
+  position: absolute;
+  top: 0.3rem;
+  background: transparent;
+  width: 100%;
+  height: 10%;
+  visibility: visible;
 }
