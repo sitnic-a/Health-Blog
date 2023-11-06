@@ -5,17 +5,16 @@ import { AddPost } from './AddPost'
 
 export const ListOfPostsHeader = () => {
   let [isCreatingPost, setIsCreatingPost] = useState(false)
+
   return (
     <>
-      {isCreatingPost && <AddPost isOpen={isCreatingPost} />}
+      {isCreatingPost && <AddPost />}
       <section className="list-of-posts-header">
         <h1 className="list-of-posts-author">Written by: ...</h1>
         <button
           data-action-add="add"
           type="button"
-          onClick={() => {
-            setIsCreatingPost(!isCreatingPost)
-          }}
+          onClick={() => setIsCreatingPost(!isCreatingPost)}
         >
           <MdOutlineAddCircleOutline />
           Add new post
