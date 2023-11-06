@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Modal from 'react-modal'
 import axios from 'react-axios'
 
@@ -6,7 +6,10 @@ import { application } from '../application'
 
 const style = application.modal_style
 
-export const AddPost = (props) => {
+export const AddPost = () => {
+  let [modalOpened, setModalOpened] = useState(true)
+  let closeModal = () => setModalOpened(!modalOpened)
+
   let submitForm = async (e) => {
     e.preventDefault()
     let form = new FormData(e.target)
@@ -32,33 +35,35 @@ export const AddPost = (props) => {
       let responseJson = await response.json()
       if (response.status === 200) {
         alert('Added new post')
+        closeModal()
       } else {
         console.log('Some error occured')
+        closeModal()
       }
     } catch (error) {
       console.log(error)
+      closeModal()
     }
 
     console.log('Form submitted')
+    window.location.reload()
   }
 
   return (
-    <Modal
-      isOpen={props.isOpen}
-      style={style}
-      appElement={document.querySelector('#root')}
-    >
-      <form onSubmit={submitForm}>
+    <dialog id="modal" open role="dialog">
+      <form onSubmit={submitForm} id="add-post-form">
         <div className="add-post-modal-header">
-          <h1>New Post</h1>
+          <h2>Post</h2>
         </div>
         <div className="add-post-modal-content">
           <div className="add-post-title-container">
             <label htmlFor="title">Title</label>
+            <br />
             <input type="text" id="title" name="title" />
           </div>
           <div className="add-post-content-container">
             <label htmlFor="content">Content</label>
+            <br />
             <textarea
               name="content"
               id="content"
@@ -69,6 +74,6 @@ export const AddPost = (props) => {
         </div>
         <button type="submit">Save</button>
       </form>
-    </Modal>
+    </dialog>
   )
 }
