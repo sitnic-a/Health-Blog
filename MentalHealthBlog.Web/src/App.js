@@ -1,5 +1,6 @@
 //Main imports
 import './App.css'
+import { AddPost } from './components/AddPost'
 
 //Import components
 import { ListOfPosts } from './components/ListOfPosts'
@@ -7,7 +8,8 @@ import { ListOfPosts } from './components/ListOfPosts'
 function App() {
   return (
     <main>
-      <ListOfPosts />
+      {/* <ListOfPosts /> */}
+      <AddPost isOpen={true} />
     </main>
   )
 }

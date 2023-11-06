@@ -20,9 +20,10 @@ main {
   gap: 0.8rem;
   color: #fff;
   margin-top: 0.3rem;
+  width: 60%;
 }
 
-button[data-action-update="update"] {
+button[data-action-update='update'] {
   position: absolute;
   background: none;
   outline: none;
@@ -31,7 +32,7 @@ button[data-action-update="update"] {
   left: 0;
 }
 
-button[data-action-delete="delete"] {
+button[data-action-delete='delete'] {
   position: absolute;
   background: none;
   outline: none;
@@ -40,7 +41,7 @@ button[data-action-delete="delete"] {
   right: 0;
 }
 
-button[data-action-add="add"] {
+button[data-action-add='add'] {
   background: none;
   outline: none;
   border: none;
@@ -48,26 +49,26 @@ button[data-action-add="add"] {
   background: #e1e1e1;
 }
 
-button[data-action-update="update"]:hover {
+button[data-action-update='update']:hover {
   cursor: pointer;
 }
 
-button[data-action-delete="delete"]:hover {
+button[data-action-delete='delete']:hover {
   cursor: pointer;
 }
 
-button[data-action-add="add"]:hover {
+button[data-action-add='add']:hover {
   background: #f4f4f4;
   cursor: pointer;
 }
 
-button[data-action-add="add"] svg {
+button[data-action-add='add'] svg {
   margin-right: 2rem;
 }
 
-button[data-action-update="update"] svg,
-button[data-action-delete="delete"] svg,
-button[data-action-add="add"] svg {
+button[data-action-update='update'] svg,
+button[data-action-delete='delete'] svg,
+button[data-action-add='add'] svg {
   transform: scale(1.8);
   /* color: #365c6d; */
   color: #000;
