@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import Modal from 'react-modal'
-import axios from 'react-axios'
 
 import { application } from '../application'
 
@@ -50,7 +49,12 @@ export const AddPost = () => {
   }
 
   return (
-    <dialog id="modal" open role="dialog">
+    <Modal
+      isOpen={modalOpened}
+      style={application.modal_style}
+      appElement={document.getElementById('root')}
+      shouldCloseOnOverlayClick={true}
+    >
       <form onSubmit={submitForm} id="add-post-form">
         <div className="add-post-modal-header">
           <h2>Post</h2>
@@ -74,6 +78,6 @@ export const AddPost = () => {
         </div>
         <button type="submit">Save</button>
       </form>
-    </dialog>
+    </Modal>
   )
 }
