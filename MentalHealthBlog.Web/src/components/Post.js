@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 import { MdOutlineModeEditOutline, MdOutlineDelete } from 'react-icons/md'
 import { DeleteConfirmation } from './DeleteConfirmation'
@@ -12,27 +14,31 @@ export const Post = (props) => {
 
   return (
     <div className="main-container">
-      <section className="post-container" onClick={() => alert('Get/{id}')}>
-        <section className="post-container-content">
-          <div className="post-header">
-            <h1>{props.title}</h1>
-          </div>
-          <div className="post-information">
-            <textarea
-              className="post-content"
-              name="content"
-              cols={30}
-              rows={13}
-              value={props.content}
-              disabled={true}
-            ></textarea>
-          </div>
+      <Link to={`post/${props.id}`}>
+        <section className="post-container" onClick={() => alert('Get/{id}')}>
+          <section className="post-container-content">
+            <div className="post-header">
+              <h1>{props.title}</h1>
+            </div>
+            <div className="post-information">
+              <textarea
+                className="post-content"
+                name="content"
+                cols={30}
+                rows={13}
+                value={props.content}
+                disabled={true}
+              ></textarea>
+            </div>
+          </section>
         </section>
-      </section>
+      </Link>
       <div className="overlay-mask">
-        <button data-action-update="update" type="button">
-          <MdOutlineModeEditOutline onClick={() => alert('Edit/{id}')} />
-        </button>
+        <Link to={`/post/${props.id}`}>
+          <button data-action-update="update" type="button">
+            <MdOutlineModeEditOutline />
+          </button>
+        </Link>
         <button data-action-delete="delete" type="button">
           <MdOutlineDelete onClick={() => setOpenModal(!openModal)} />
           {openModal && (
