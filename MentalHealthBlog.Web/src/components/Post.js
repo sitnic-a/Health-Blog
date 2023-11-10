@@ -1,21 +1,21 @@
-import React from 'react'
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React from "react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
-import { MdOutlineModeEditOutline, MdOutlineDelete } from 'react-icons/md'
-import { DeleteConfirmation } from './DeleteConfirmation'
+import { MdOutlineModeEditOutline, MdOutlineDelete } from "react-icons/md";
+import { DeleteConfirmation } from "./DeleteConfirmation";
 
 export const Post = (props) => {
-  let dbObject = { ...props }
-  let [openModal, setOpenModal] = useState(false)
+  let dbObject = { ...props };
+  let [openModal, setOpenModal] = useState(false);
   let changeModalState = (currentState) => {
-    return !currentState
-  }
+    return !currentState;
+  };
 
   return (
     <div className="main-container">
       <Link to={`post/${props.id}`}>
-        <section className="post-container" onClick={() => alert('Get/{id}')}>
+        <section className="post-container">
           <section className="post-container-content">
             <div className="post-header">
               <h1>{props.title}</h1>
@@ -34,7 +34,10 @@ export const Post = (props) => {
         </section>
       </Link>
       <div className="overlay-mask">
-        <Link to={`/post/${props.id}`}>
+        <Link
+          to={`/post/${props.id}`}
+          state={{ postTitle: props.title, postContent: props.content }}
+        >
           <button data-action-update="update" type="button">
             <MdOutlineModeEditOutline />
           </button>
@@ -51,5 +54,5 @@ export const Post = (props) => {
         </button>
       </div>
     </div>
-  )
-}
+  );
+};
