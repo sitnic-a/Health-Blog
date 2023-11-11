@@ -22,6 +22,7 @@ export const PostById = () => {
         setPropsObj({
           postTitle: location.state.postTitle,
           postContent: location.state.postContent,
+          postUserId: location.state.postUserId,
         });
       }
     } catch (error) {

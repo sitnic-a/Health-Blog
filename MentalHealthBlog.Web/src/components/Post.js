@@ -36,7 +36,11 @@ export const Post = (props) => {
       <div className="overlay-mask">
         <Link
           to={`/post/${props.id}`}
-          state={{ postTitle: props.title, postContent: props.content }}
+          state={{
+            postTitle: props.title,
+            postContent: props.content,
+            postUserId: props.userId,
+          }}
         >
           <button data-action-update="update" type="button">
             <MdOutlineModeEditOutline />
