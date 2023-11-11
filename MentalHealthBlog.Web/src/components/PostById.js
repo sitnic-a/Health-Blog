@@ -1,24 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { application } from "../application";
-import { log } from "react-modal/lib/helpers/ariaAppHider";
+import { UpdatePost } from "./UpdatePost";
 
 export const PostById = () => {
   let [stateNull, setStateNull] = useState(true);
-
   const location = useLocation();
   let [propsObj, setPropsObj] = useState({ ...location.state });
   let [post, setPost] = useState({});
-  let [title, setTitle] = useState(propsObj.postTitle);
-  let [content, setContent] = useState(propsObj.postContent);
+
   let { id } = useParams();
 
   let fetchPost = async () => {
     try {
-      let postResponse = await fetch(
-        `${application.application_url}/post/${id}`
-      ).then((response) => response.json());
-      setPost(postResponse);
+      await fetch(`${application.application_url}/post/${id}`)
+        .then((response) => response.json())
+        .then((data) => setPost(data));
+
       if (location.state !== null) {
         setStateNull(false);
         setPropsObj({
@@ -43,29 +41,7 @@ export const PostById = () => {
           <div>{post.content}</div>
         </pre>
       </article>
-      {!stateNull && (
-        <article className="post-by-id-container-edit">
-          <h1>Update post:</h1>
-          <p htmlFor="title">
-            New Title
-            <input
-              name="title"
-              id="title"
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          </p>
-          <textarea
-            name="post-by-id-content-edit-textarea"
-            value={content}
-            cols={70}
-            id="post-by-id-content-edit-textarea"
-            className="post-by-id-content-edit-textarea"
-            onChange={(e) => setContent(e.target.value)}
-          ></textarea>
-        </article>
-      )}
+      {!stateNull && <UpdatePost propsObj={propsObj} />}
     </section>
   );
 };
