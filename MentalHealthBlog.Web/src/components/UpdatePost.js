@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 import { application } from "../application";
 
 export const UpdatePost = ({ propsObj }) => {
-  let [userId, setUserId] = useState(propsObj.postUserId);
   let [title, setTitle] = useState(propsObj.postTitle);
   let [content, setContent] = useState(propsObj.postContent);
   let { id } = useParams();
@@ -17,7 +16,7 @@ export const UpdatePost = ({ propsObj }) => {
     let data = {
       title: formObject.title,
       content: formObject.content,
-      userId: userId,
+      userId: propsObj.postUserId,
     };
 
     console.log(data);
@@ -30,7 +29,7 @@ export const UpdatePost = ({ propsObj }) => {
     });
 
     if (response.status === 200) {
-      alert("Added new post");
+      alert("Sucessfully updated post");
     } else {
       console.log("Some error occured");
     }
