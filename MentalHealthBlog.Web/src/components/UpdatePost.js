@@ -1,11 +1,45 @@
 import React from "react";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { application } from "../application";
 
 export const UpdatePost = ({ propsObj }) => {
+  let [userId, setUserId] = useState(propsObj.postUserId);
   let [title, setTitle] = useState(propsObj.postTitle);
   let [content, setContent] = useState(propsObj.postContent);
+  let { id } = useParams();
+
+  let updatePost = async (e) => {
+    e.preventDefault();
+    let form = new FormData(e.target);
+    let formEntries = [...form.entries()];
+    let formObject = Object.fromEntries(formEntries);
+    let data = {
+      title: formObject.title,
+      content: formObject.content,
+      userId: userId,
+    };
+
+    console.log(data);
+    let response = await fetch(`${application.application_url}/post/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.status === 200) {
+      alert("Added new post");
+    } else {
+      console.log("Some error occured");
+    }
+
+    window.location.href = "/";
+  };
+
   return (
-    <form>
+    <form onSubmit={updatePost}>
       <article className="post-by-id-container-edit">
         <h1> Update post:</h1>
         <p>
@@ -26,11 +60,7 @@ export const UpdatePost = ({ propsObj }) => {
           onChange={(e) => setContent(e.target.value)}
         ></textarea>
       </article>
-      <button
-        className="post-by-id-container-edit-submit-button"
-        type="submit"
-        onClick={() => alert("Updated")}
-      >
+      <button className="post-by-id-container-edit-submit-button" type="submit">
         Update post
       </button>
     </form>

@@ -147,8 +147,9 @@ button[data-action-add="add"] svg {
 }
 
 .post-by-id-container {
-  overflow: scroll;
+  width: 35%;
   height: 80%;
+  overflow-y: scroll;
 }
 
 .post-by-id-container pre {
@@ -163,7 +164,7 @@ pre:hover {
 
 .post-by-id-container-edit {
   height: 80%;
-  overflow: scroll;
+  overflow-y: scroll;
 }
 
 .post-by-id-container-edit input[name="title"] {
