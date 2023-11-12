@@ -16,10 +16,10 @@ namespace MentalHealthBlogAPI.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<User>().HasData(
-                new { Id = 1, Username = "test_01", PasswordHash = "TT1" },
-                new { Id = 2, Username = "test_02", PasswordHash = "TT2" },
-                new { Id = 3, Username = "test_03", PasswordHash = "TT3" },
-                new { Id = 4, Username = "test_04", PasswordHash = "TT4" }
+                new { Id = 1, Username = "test_01", PasswordSalt="!223", PasswordHash = "TT1", },
+                new { Id = 2, Username = "test_02", PasswordSalt = "!223", PasswordHash = "TT2" },
+                new { Id = 3, Username = "test_03", PasswordSalt = "!223", PasswordHash = "TT3" },
+                new { Id = 4, Username = "test_04", PasswordSalt = "!223", PasswordHash = "TT4" }
                 );
 
             modelBuilder.Entity<Post>().HasData(
