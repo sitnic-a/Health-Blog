@@ -1,3 +1,4 @@
+using MentalHealthBlog.API.Services;
 using MentalHealthBlogAPI.Data;
 using MentalHealthBlogAPI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,8 @@ builder.Services.AddCors(options =>
 
 //Custom service registration
 builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
 
 builder.Services.AddDbContext<DataContext>(options =>
 {
