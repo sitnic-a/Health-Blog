@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ExtensionMethods\NewFolder\**" />
+    <Content Remove="ExtensionMethods\NewFolder\**" />
+    <EmbeddedResource Remove="ExtensionMethods\NewFolder\**" />
+    <None Remove="ExtensionMethods\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.12">
