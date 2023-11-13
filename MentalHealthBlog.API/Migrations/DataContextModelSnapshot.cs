@@ -96,10 +96,6 @@ namespace MentalHealthBlogAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PasswordSalt")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -113,28 +109,24 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 1,
                             PasswordHash = "TT1",
-                            PasswordSalt = "!223",
                             Username = "test_01"
                         },
                         new
                         {
                             Id = 2,
                             PasswordHash = "TT2",
-                            PasswordSalt = "!223",
                             Username = "test_02"
                         },
                         new
                         {
                             Id = 3,
                             PasswordHash = "TT3",
-                            PasswordSalt = "!223",
                             Username = "test_03"
                         },
                         new
                         {
                             Id = 4,
                             PasswordHash = "TT4",
-                            PasswordSalt = "!223",
                             Username = "test_04"
                         });
                 });
