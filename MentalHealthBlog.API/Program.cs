@@ -2,8 +2,6 @@ using MentalHealthBlog.API.Services;
 using MentalHealthBlogAPI.Data;
 using MentalHealthBlogAPI.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
