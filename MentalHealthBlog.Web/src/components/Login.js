@@ -1,28 +1,28 @@
-import { useEffect } from "react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from 'react'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 export const Login = () => {
-  let navigate = useNavigate();
-  const _URL_ = "https://type.fit/api/quotes";
+  let navigate = useNavigate()
+  const _URL_ = 'https://type.fit/api/quotes'
   //   const _URL_ = "https://api.api-ninjas.com/v1/quotes";
-  const _TIME_ = 10000;
-  let [zenQuote, setZenQuote] = useState("");
+  const _TIME_ = 10000
+  let [zenQuote, setZenQuote] = useState('')
 
   useEffect(() => {
-    getQuote();
-  }, []);
+    getQuote()
+  }, [])
 
   let getQuote = async () => {
-    let response = await fetch(_URL_).then((response) => response.json());
-    let arraySize = response.length;
-    let randomNumber = Math.floor(Math.random() * arraySize) + 1;
-    let obj = { ...response[randomNumber] };
-    setZenQuote(obj.text);
-    clearInterval(timer);
-  };
+    let response = await fetch(_URL_).then((response) => response.json())
+    let arraySize = response.length
+    let randomNumber = Math.floor(Math.random() * arraySize) + 1
+    let obj = { ...response[randomNumber] }
+    setZenQuote(obj.text)
+    clearInterval(timer)
+  }
 
-  let timer = setInterval(getQuote, _TIME_);
+  let timer = setInterval(getQuote, _TIME_)
 
   return (
     <section className="login">
@@ -47,11 +47,14 @@ export const Login = () => {
           <br />
           <input id="password" type="password" name="password" />
         </div>
+        <div>
+          <Link to={'/register'}>Create an account</Link>
+        </div>
         <button
           type="button"
           id="login-container-button"
           onClick={() => {
-            navigate("/");
+            navigate('/')
           }}
         >
           Login
@@ -61,5 +64,5 @@ export const Login = () => {
         <h1>{zenQuote}</h1>
       </div>
     </section>
-  );
-};
+  )
+}
