@@ -22,7 +22,7 @@ namespace MentalHealthBlog.API.Controllers
             return await _userService.Register(username, password);
         }
 
-        [HttpPost("login")]
+        [HttpPost("login/{username}/{password}")]
         public async Task<User> Login(string username, string password)
         {
             return await _userService.Login(username, password);
