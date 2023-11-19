@@ -1,22 +1,29 @@
 ﻿using MentalHealthBlog.API.ExtensionMethods.ExtensionUserClass;
+using MentalHealthBlog.API.Utils;
 using MentalHealthBlogAPI.Data;
 using MentalHealthBlogAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System.Security.Cryptography;
 
 namespace MentalHealthBlog.API.Services
 {
     public class UserService : IUserService
     {
+        private readonly AppSettings _optionsAppSettings;
+        private readonly IOptions<AppSettings> _options;
         private readonly DataContext _context;
         private const int __KEYSIZE__ = 128;
         private const int __ITERATIONS = 350000;
         private HashAlgorithmName __HASHALGORITHM__ = HashAlgorithmName.SHA512;
         private User user = new();
 
-        public UserService(DataContext context)
+
+        public UserService(DataContext context, IOptions<AppSettings> options)
         {
-            this._context = context;
+            _context = context;
+            _optionsAppSettings = options.Value;
+            _options = options;
         }
         public async Task<User> Register(string username, string password)
         {
@@ -40,6 +47,7 @@ namespace MentalHealthBlog.API.Services
 
         public async Task<User> Login(string username, string password)
         {
+            var jwtMiddleware = new JWTService(_options);
             var authenticated = await VerifyCredentials(username, password);
             var dbUser = await _context.Users.SingleOrDefaultAsync(u => u.Username == username);
             if (authenticated && dbUser is not null)
@@ -52,6 +60,8 @@ namespace MentalHealthBlog.API.Services
                     PasswordHash = dbUser.PasswordHash,
                     Posts = dbUser.Posts
                 };
+
+                var token = jwtMiddleware.GenerateToken(authenticatedUser);
                 return authenticatedUser;
             }
             return user;
