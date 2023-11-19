@@ -28,7 +28,7 @@ namespace MentalHealthBlog.API.Utils
                 Subject = new ClaimsIdentity(claims),
                 Issuer = user.Username,
                 IssuedAt = DateTime.Now,
-                Expires = DateTime.Now.AddHours(2),
+                Expires = DateTime.Now.AddMinutes(10),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
