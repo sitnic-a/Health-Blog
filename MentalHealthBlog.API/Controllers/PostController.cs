@@ -1,9 +1,7 @@
-﻿using MentalHealthBlogAPI.Data;
-using MentalHealthBlogAPI.Models;
+﻿using MentalHealthBlogAPI.Models;
 using MentalHealthBlogAPI.Services;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace MentalHealthBlogAPI.Controllers
 {
@@ -19,6 +17,7 @@ namespace MentalHealthBlogAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IEnumerable<Post>> GetAllPosts()
         {
             return await _postService.GetPosts();

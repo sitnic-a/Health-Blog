@@ -1,6 +1,5 @@
 ﻿using MentalHealthBlog.API.Services;
 using MentalHealthBlogAPI.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MentalHealthBlog.API.Controllers
