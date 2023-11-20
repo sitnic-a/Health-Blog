@@ -1,16 +1,22 @@
-import { useState } from 'react'
+import { useState } from "react";
+import { useLocation } from "react-router";
 
-import { MdOutlineAddCircleOutline } from 'react-icons/md'
-import { AddPost } from './AddPost'
+import { AddPost } from "./AddPost";
+
+import { MdOutlineAddCircleOutline } from "react-icons/md";
 
 export const ListOfPostsHeader = () => {
-  let [isCreatingPost, setIsCreatingPost] = useState(false)
+  let location = useLocation();
+  let [isCreatingPost, setIsCreatingPost] = useState(false);
 
+  let loggedUser = { ...location.state.loggedUser };
   return (
     <>
       {isCreatingPost && <AddPost />}
       <section className="list-of-posts-header">
-        <h1 className="list-of-posts-author">Written by: ...</h1>
+        <h1 className="list-of-posts-author">
+          Written by: {loggedUser.username}
+        </h1>
         <button
           data-action-add="add"
           type="button"
@@ -21,5 +27,5 @@ export const ListOfPostsHeader = () => {
         </button>
       </section>
     </>
-  )
-}
+  );
+};
