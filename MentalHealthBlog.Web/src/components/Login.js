@@ -47,9 +47,19 @@ export const Login = () => {
       }
     );
 
+    let userResponse = await response.json();
+
     if (response.status === 200) {
       alert("Succesfully logged in");
-      navigate("/");
+      navigate("/", {
+        state: {
+          loggedUser: {
+            id: userResponse.id,
+            username: userResponse.username,
+            token: userResponse.jwToken,
+          },
+        },
+      });
     } else {
       alert("Invalid credentials, try again");
       form.set("username", "");
