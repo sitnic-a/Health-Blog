@@ -7,7 +7,11 @@
         public string JWToken { get; set; } = string.Empty;
 
         public UserResponseDto(){}
-
+        public UserResponseDto(int id, string username)
+        {
+            Id = id;
+            Username = username;
+        }
         public UserResponseDto(int id, string username, string jwtoken)
         {
             Id = id;
