@@ -1,4 +1,5 @@
 ﻿using MentalHealthBlog.API.ExtensionMethods.ExtensionUserClass;
+using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Utils;
 using MentalHealthBlogAPI.Data;
 using MentalHealthBlogAPI.Models;
@@ -45,26 +46,18 @@ namespace MentalHealthBlog.API.Services
             return user;
         }
 
-        public async Task<User> Login(string username, string password)
+        public async Task<UserResponseDto> Login(string username, string password)
         {
             var jwtMiddleware = new JWTService(_options);
             var authenticated = await VerifyCredentials(username, password);
             var dbUser = await _context.Users.SingleOrDefaultAsync(u => u.Username == username);
             if (authenticated && dbUser is not null)
             {
-                var authenticatedUser = new User
-                {
-                    Id = dbUser.Id,
-                    Username = dbUser.Username,
-                    PasswordSalt = dbUser.PasswordSalt,
-                    PasswordHash = dbUser.PasswordHash,
-                    Posts = dbUser.Posts
-                };
-
-                var token = jwtMiddleware.GenerateToken(authenticatedUser);
-                return authenticatedUser;
+                var token = jwtMiddleware.GenerateToken(dbUser);
+                var responseUser = new UserResponseDto(dbUser.Id, dbUser.Username, token);
+                return responseUser;
             }
-            return user;
+            return new UserResponseDto();
         }
 
         public async Task<bool> VerifyCredentials(string username, string password)

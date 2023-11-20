@@ -1,4 +1,5 @@
-﻿using MentalHealthBlog.API.Services;
+﻿using MentalHealthBlog.API.Models.ResourceResponse;
+using MentalHealthBlog.API.Services;
 using MentalHealthBlogAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,7 +23,7 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpPost("login/{username}/{password}")]
-        public async Task<User> Login(string username, string password)
+        public async Task<UserResponseDto> Login(string username, string password)
         {
             return await _userService.Login(username, password);
         }
