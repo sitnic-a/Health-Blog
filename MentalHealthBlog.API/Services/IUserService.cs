@@ -5,7 +5,7 @@ namespace MentalHealthBlog.API.Services
 {
     public interface IUserService
     {
-        Task<User> Register(string username, string password);
+        Task<UserResponseDto> Register(string username, string password);
         Task<UserResponseDto> Login(string username, string password);
     }
 }

@@ -17,7 +17,7 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpPost("register/{username}/{password}")]
-        public async Task<User> Register(string username, string password)
+        public async Task<UserResponseDto> Register(string username, string password)
         {
             return await _userService.Register(username, password);
         }
