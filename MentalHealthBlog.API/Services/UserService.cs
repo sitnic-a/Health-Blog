@@ -40,6 +40,11 @@ namespace MentalHealthBlog.API.Services
         {
             try
             {
+                if (user.IsNotValid(username, password))
+                {
+                    _userLoggerService.LogError($"REGISTER: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE}", new {Username= username, Password = password});
+                    return new UserResponseDto();
+                }
                 var dbUsers = _context.Users;
                 var existingUser = await dbUsers.SingleOrDefaultAsync(u => u.Username == username) is not null;
                 if (existingUser)
