@@ -4,6 +4,7 @@ using MentalHealthBlog.API.Services;
 using MentalHealthBlog.API.Utils;
 using MentalHealthBlog.Test.Moq;
 using MentalHealthBlogAPI.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -23,12 +24,12 @@ namespace MentalHealthBlog.Test.Services
         private readonly Mock<IOptions<AppSettings>> _optionAppSettings = new Mock<IOptions<AppSettings>>();
         public UserServiceTest()
         {
-            _userService = new UserService(_context,_optionAppSettings.Object,_userServiceLogger.Object);
+            _userService = new UserService(_context, _optionAppSettings.Object, _userServiceLogger.Object);
         }
 
         [Theory]
-        [InlineData("test","test")]
-        [InlineData("test_999","test_999")]
+        [InlineData("test", "test")]
+        [InlineData("test_999", "test_999")]
         public async void Register_ReturnNewUser(string username, string password)
         {
             //Arrange 
@@ -43,20 +44,42 @@ namespace MentalHealthBlog.Test.Services
         }
 
         [Theory]
-        [InlineData(" ","test_03")]
-        [InlineData("test_03","")]
-        [InlineData("","")]
+        [InlineData(" ", " ")]
+        [InlineData(" ", "test_03")]
+        [InlineData("test_03", " ")]
+        [InlineData("", "")]
+        [InlineData("", "test_03")]
+        [InlineData("test_03", "")]
         public async void Register_ReturnNotCreatedNewUser(string username, string password)
         {
             //Arrange 
 
             //Act
-            var user = await _userService.Register(username,password);
+            var user = await _userService.Register(username, password);
 
             //Assert
             user.Should().NotBeNull();
             user.Should().BeOfType<UserResponseDto>();
             user.Should().BeEquivalentTo(new UserResponseDto());
         }
+
+        [Theory]
+        [InlineData("test_01", "test_01")]
+        [InlineData("test_03", "test_03")]
+        public async void Register_ReturnExistingUser(string username, string password)
+        {
+            //Arrange
+            var dbUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+            var existingUser = dbUser is not null;
+
+            //Act
+            var user = await _userService.Register(username, password);
+
+            //Assert
+            existingUser.Should().BeTrue();
+            user.Should().NotBeNull();
+            user.Should().BeOfType<UserResponseDto>();
+        }
+
     }
 }
