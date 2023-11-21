@@ -19,7 +19,8 @@ namespace MentalHealthBlog.API.ExtensionMethods.ExtensionUserClass
 
         public static bool IsNotValid(this User user, string username, string password)
         {
-            return String.IsNullOrEmpty(username) || String.IsNullOrEmpty(password);
+            return String.IsNullOrEmpty(username) || String.IsNullOrWhiteSpace(username) || 
+                   String.IsNullOrEmpty(password) || String.IsNullOrWhiteSpace(password);
         }
     }
 }
