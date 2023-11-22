@@ -1,16 +1,19 @@
-import React from "react";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import React from 'react'
+import { useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 
-import { MdOutlineModeEditOutline, MdOutlineDelete } from "react-icons/md";
-import { DeleteConfirmation } from "./DeleteConfirmation";
+import { MdOutlineModeEditOutline, MdOutlineDelete } from 'react-icons/md'
+import { DeleteConfirmation } from './DeleteConfirmation'
 
 export const Post = (props) => {
-  let dbObject = { ...props };
-  let [openModal, setOpenModal] = useState(false);
+  let [openModal, setOpenModal] = useState(false)
+  let location = useLocation()
+
+  let dbObject = { ...props }
+  let loggedUser = location.state.loggedUser
   let changeModalState = (currentState) => {
-    return !currentState;
-  };
+    return !currentState
+  }
 
   return (
     <div className="main-container">
@@ -40,6 +43,7 @@ export const Post = (props) => {
             postTitle: props.title,
             postContent: props.content,
             postUserId: props.userId,
+            loggedUser: loggedUser,
           }}
         >
           <button data-action-update="update" type="button">
@@ -58,5 +62,5 @@ export const Post = (props) => {
         </button>
       </div>
     </div>
-  );
-};
+  )
+}
