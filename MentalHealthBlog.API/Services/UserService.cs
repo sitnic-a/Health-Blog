@@ -75,6 +75,11 @@ namespace MentalHealthBlog.API.Services
         {
             try
             {
+                if (user.IsNotValid(username, password))
+                {
+                    _userLoggerService.LogError($"REGISTER: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE}", new { Username = username, Password = password });
+                    return new UserResponseDto();
+                }
                 var jwtMiddleware = new JWTService(_options);
                 var authenticated = await VerifyCredentials(username, password);
                 var dbUser = await _context.Users.SingleOrDefaultAsync(u => u.Username == username);
