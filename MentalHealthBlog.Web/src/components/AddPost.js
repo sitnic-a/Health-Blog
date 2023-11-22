@@ -2,11 +2,15 @@ import React, { useState } from 'react'
 import Modal from 'react-modal'
 
 import { application } from '../application'
+import { useLocation } from 'react-router'
 
 const style = application.modal_style
 
 export const AddPost = () => {
   let [modalOpened, setModalOpened] = useState(true)
+  let location = useLocation()
+  let loggedUser = location.state.loggedUser
+
   let closeModal = () => setModalOpened(!modalOpened)
 
   let submitForm = async (e) => {
@@ -17,7 +21,7 @@ export const AddPost = () => {
     let newPost = {
       title: data.title,
       content: data.content,
-      userId: 1,
+      userId: loggedUser.id,
     }
 
     console.log(newPost)
