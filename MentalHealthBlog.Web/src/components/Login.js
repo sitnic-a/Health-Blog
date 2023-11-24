@@ -36,6 +36,17 @@ export const Login = () => {
       password: data.password,
     };
 
+    if (
+      user.username === "" ||
+      user.username === null ||
+      user.password === "" ||
+      user.password === null
+    ) {
+      //Set validation
+      alert("Fields are required!");
+      return;
+    }
+
     let response = await fetch(
       `${application.application_url}/user/login/${user.username}/${user.password}`,
       {
@@ -49,20 +60,22 @@ export const Login = () => {
 
     let userResponse = await response.json();
 
-    if (response.status === 200) {
+    if (userResponse.statusCode === 200) {
       alert("Succesfully logged in");
+      let authenticatedUser = userResponse.serviceResponseObject;
       navigate("/", {
         state: {
           loggedUser: {
-            id: userResponse.id,
-            username: userResponse.username,
-            token: userResponse.jwToken,
+            id: authenticatedUser.id,
+            username: authenticatedUser.username,
+            token: authenticatedUser.jwToken,
           },
         },
       });
     } else {
       alert("Invalid credentials, try again");
-      form.set("username", "");
+      form.delete("username");
+      form.delete("password");
       form.set("password", "");
     }
   };
