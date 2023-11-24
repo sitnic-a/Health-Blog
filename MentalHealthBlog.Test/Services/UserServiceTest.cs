@@ -6,6 +6,7 @@ using MentalHealthBlog.API.Utils;
 using MentalHealthBlog.Test.Moq;
 using MentalHealthBlogAPI.Data;
 using MentalHealthBlogAPI.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -31,6 +32,8 @@ namespace MentalHealthBlog.Test.Services
             _userService = new UserService(_context, _optionAppSettings.Object, _userServiceLogger.Object);
         }
 
+        #region REGISTER
+
         [Theory]
         [InlineData("test", "test")]
         [InlineData("test_999", "test_999")]
@@ -39,9 +42,11 @@ namespace MentalHealthBlog.Test.Services
             //Arrange 
 
             //Act
-            var user = await _userService.Register(username, password);
+            Response response = await _userService.Register(username, password);
+            UserResponseDto user = response.ServiceResponseObject.As<UserResponseDto>();
 
             //Assert
+            response.StatusCode.Should().Be(StatusCodes.Status201Created);
             user.Should().NotBeNull();
             user.Should().BeOfType<UserResponseDto>();
             user.Id.Should().BeGreaterThanOrEqualTo(3);
@@ -54,17 +59,16 @@ namespace MentalHealthBlog.Test.Services
         [InlineData("", "")]
         [InlineData("", "test_03")]
         [InlineData("test_03", "")]
-        public async void Register_ReturnNotCreatedNewUser(string username, string password)
+        public async void Register_ReturnNotCreatedInvalidData(string username, string password)
         {
             //Arrange 
 
             //Act
-            var user = await _userService.Register(username, password);
+            Response response = await _userService.Register(username, password);
+            UserResponseDto user = response.ServiceResponseObject.As<UserResponseDto>();
 
             //Assert
-            user.Should().NotBeNull();
-            user.Should().BeOfType<UserResponseDto>();
-            user.Should().BeEquivalentTo(new UserResponseDto());
+            response.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }
 
         [Theory]
@@ -77,13 +81,17 @@ namespace MentalHealthBlog.Test.Services
             var existingUser = dbUser is not null;
 
             //Act
-            var user = await _userService.Register(username, password);
+            Response response = await _userService.Register(username, password);
+            UserResponseDto user = response.ServiceResponseObject.As<UserResponseDto>();
 
             //Assert
+            response.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
             existingUser.Should().BeTrue();
-            user.Should().NotBeNull();
-            user.Should().BeOfType<UserResponseDto>();
         }
+
+        #endregion
+
+        #region LOGIN
 
         [Theory]
         [InlineData("", "")]
@@ -97,16 +105,19 @@ namespace MentalHealthBlog.Test.Services
             //Arrange 
 
             //Act
-            var loggedUser = await _userService.Login(username, password);
+            Response response = await _userService.Login(username, password);
+            UserResponseDto loggedUser = response.ServiceResponseObject.As<UserResponseDto>();
+
             if (!user.IsNotValid(username, password))
             {
                 var validCredentials = await _userService.VerifyCredentials(username, password);
 
                 //Assert
+                response.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
                 validCredentials.Should().BeFalse();
                 loggedUser.Should().NotBeNull();
-                loggedUser.Should().BeOfType<UserResponseDto>();
-                loggedUser.Should().BeEquivalentTo(new UserResponseDto());
+                loggedUser.Should().BeOfType<object>();
+                loggedUser.Should().BeEquivalentTo(new object());
             }
         }
 
@@ -138,5 +149,6 @@ namespace MentalHealthBlog.Test.Services
             loggedUser.Should().BeFalse();
         }
 
+        #endregion
     }
 }
