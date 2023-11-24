@@ -17,13 +17,13 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpPost("register/{username}/{password}")]
-        public async Task<UserResponseDto> Register(string username, string password)
+        public async Task<Response> Register(string username, string password)
         {
             return await _userService.Register(username, password);
         }
 
         [HttpPost("login/{username}/{password}")]
-        public async Task<UserResponseDto> Login(string username, string password)
+        public async Task<Response> Login(string username, string password)
         {
             return await _userService.Login(username, password);
         }
