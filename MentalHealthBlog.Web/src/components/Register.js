@@ -16,6 +16,16 @@ export const Register = () => {
       password: data.password,
     };
 
+    if (
+      newUser.username === "" ||
+      newUser.username === null ||
+      newUser.password === "" ||
+      newUser.password === null
+    ) {
+      alert("Fields are required!");
+      return;
+    }
+
     try {
       let response = await fetch(
         `${application.application_url}/user/register/${newUser.username}/${newUser.password}`,
@@ -28,7 +38,10 @@ export const Register = () => {
         }
       );
 
-      if (response.status === 200 || response.status === 204) {
+      let responseJSON = await response.json();
+      console.log(responseJSON);
+
+      if (responseJSON.statusCode === 201) {
         alert("You've succesfully created your account");
         console.log(response);
         navigate("/login");
