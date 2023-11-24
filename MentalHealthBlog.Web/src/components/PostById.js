@@ -10,12 +10,11 @@ export const PostById = () => {
   let [post, setPost] = useState({});
 
   let { id } = useParams();
-
   let fetchPost = async () => {
     try {
       await fetch(`${application.application_url}/post/${id}`)
         .then((response) => response.json())
-        .then((data) => setPost(data));
+        .then((data) => setPost(data.serviceResponseObject));
 
       if (location.state !== null) {
         setStateNull(false);

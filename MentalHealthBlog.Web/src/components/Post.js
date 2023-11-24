@@ -1,19 +1,19 @@
-import React from 'react'
-import { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import React from "react";
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
-import { MdOutlineModeEditOutline, MdOutlineDelete } from 'react-icons/md'
-import { DeleteConfirmation } from './DeleteConfirmation'
+import { MdOutlineModeEditOutline, MdOutlineDelete } from "react-icons/md";
+import { DeleteConfirmation } from "./DeleteConfirmation";
 
 export const Post = (props) => {
-  let [openModal, setOpenModal] = useState(false)
-  let location = useLocation()
+  let [openModal, setOpenModal] = useState(false);
+  let location = useLocation();
 
-  let dbObject = { ...props }
-  let loggedUser = location.state.loggedUser
+  let dbObject = { ...props };
+  let loggedUser = location.state.loggedUser;
   let changeModalState = (currentState) => {
-    return !currentState
-  }
+    return !currentState;
+  };
 
   return (
     <div className="main-container">
@@ -62,5 +62,5 @@ export const Post = (props) => {
         </button>
       </div>
     </div>
-  )
-}
+  );
+};
