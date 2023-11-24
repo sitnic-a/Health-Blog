@@ -1,4 +1,5 @@
-﻿using MentalHealthBlogAPI.Models;
+﻿using MentalHealthBlog.API.Models.ResourceResponse;
+using MentalHealthBlogAPI.Models;
 using MentalHealthBlogAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,31 +19,31 @@ namespace MentalHealthBlogAPI.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IEnumerable<Post>> GetAllPosts()
+        public async Task<Response> GetAllPosts()
         {
             return await _postService.GetPosts();
         }
 
         [HttpGet("{id}")]
-        public async Task<Post> GetById(int id)
+        public async Task<Response> GetById(int id)
         {
             return await _postService.GetById(id);
         }
 
         [HttpPost]
-        public async Task<Post> AddPost([FromBody] Post post)
+        public async Task<Response> AddPost([FromBody] Post post)
         {
             return await _postService.Add(post);
         }
 
         [HttpPut("{id}")]
-        public async Task<Post> UpdatePost(int id, [FromBody] Post post)
+        public async Task<Response> UpdatePost(int id, [FromBody] Post post)
         {
             return await _postService.Update(id, post);
         }
 
         [HttpDelete("{id}")]
-        public async Task<Post> DeletePost(int id)
+        public async Task<Response> DeletePost(int id)
         {
             return await _postService.Delete(id);
         }
