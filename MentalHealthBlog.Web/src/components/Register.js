@@ -2,6 +2,8 @@ import React from "react";
 import { application } from "../application";
 import { useNavigate } from "react-router-dom";
 
+import { toast, ToastContainer } from "react-toastify";
+
 export const Register = () => {
   let navigate = useNavigate();
   let register = async (e) => {
@@ -23,6 +25,10 @@ export const Register = () => {
       newUser.password === null
     ) {
       alert("Fields are required!");
+      toast.error("Invalid fields! Try again", {
+        autoClose: 1500,
+        position: "bottom-right",
+      });
       return;
     }
 
@@ -43,11 +49,24 @@ export const Register = () => {
 
       if (responseJSON.statusCode === 201) {
         alert("You've succesfully created your account");
+        toast.success("You've succesfully created your account", {
+          autoClose: 1500,
+          position: "bottom-right",
+        });
         console.log(response);
         navigate("/login");
+      } else {
+        toast.warning("Couldn't register this user!", {
+          autoClose: 1500,
+          position: "bottom-right",
+        });
       }
     } catch (error) {
       console.log(error);
+      toast.error("You are not registered! Try again!", {
+        autoClose: 1500,
+        position: "bottom-right",
+      });
     }
   };
   return (

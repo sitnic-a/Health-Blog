@@ -1,51 +1,73 @@
-import React from 'react'
-import { useState } from 'react'
-import { useLocation, useParams, useNavigate } from 'react-router-dom'
-import { application } from '../application'
+import React from "react";
+import { useState } from "react";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
+import { application } from "../application";
+import { toast } from "react-toastify";
 
 export const UpdatePost = ({ propsObj }) => {
-  let [title, setTitle] = useState(propsObj.postTitle)
-  let [content, setContent] = useState(propsObj.postContent)
-  let { id } = useParams()
-  let location = useLocation()
-  let navigate = useNavigate()
+  let [title, setTitle] = useState(propsObj.postTitle);
+  let [content, setContent] = useState(propsObj.postContent);
+  let { id } = useParams();
+  let location = useLocation();
+  let navigate = useNavigate();
 
-  let loggedUser = location.state.loggedUser
-  console.log(`Update Post loggedUser`, loggedUser)
+  let loggedUser = location.state.loggedUser;
+  console.log(`Update Post loggedUser`, loggedUser);
 
   let updatePost = async (e) => {
-    e.preventDefault()
-    let form = new FormData(e.target)
-    let formEntries = [...form.entries()]
-    let formObject = Object.fromEntries(formEntries)
+    e.preventDefault();
+    let form = new FormData(e.target);
+    let formEntries = [...form.entries()];
+    let formObject = Object.fromEntries(formEntries);
     let data = {
       title: formObject.title,
       content: formObject.content,
       userId: propsObj.postUserId,
+    };
+
+    console.log(data);
+    if (
+      data.title === "" ||
+      data.title === null ||
+      data.content === "" ||
+      data.content === null
+    ) {
+      toast.error("Fields should be populated!", {
+        autoClose: 1500,
+        position: "bottom-right",
+      });
+      return;
     }
 
-    console.log(data)
     let response = await fetch(`${application.application_url}/post/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(data),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${loggedUser.token}`,
       },
-    })
+    });
 
     if (response.status === 200) {
-      alert('Sucessfully updated post')
+      alert("Sucessfully updated post");
+      toast.success("Succesfully updated", {
+        autoClose: 1500,
+        position: "bottom-right",
+      });
     } else {
-      console.log('Some error occured')
+      console.log("Some error occured");
+      toast.error("Couldn't update post", {
+        autoClose: 1500,
+        position: "bottom-right",
+      });
     }
 
-    navigate('/', {
+    navigate("/", {
       state: {
         loggedUser: loggedUser,
       },
-    })
-  }
+    });
+  };
 
   return (
     <form onSubmit={updatePost}>
@@ -73,5 +95,5 @@ export const UpdatePost = ({ propsObj }) => {
         Update post
       </button>
     </form>
-  )
-}
+  );
+};
