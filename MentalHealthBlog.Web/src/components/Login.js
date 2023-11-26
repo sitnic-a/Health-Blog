@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { application } from "../application";
+import { toast } from "react-toastify";
 
 export const Login = () => {
   let navigate = useNavigate();
@@ -62,6 +63,10 @@ export const Login = () => {
 
     if (userResponse.statusCode === 200) {
       alert("Succesfully logged in");
+      toast.success("Succesfully logged in", {
+        autoClose: 1500,
+        position: "bottom-right",
+      });
       let authenticatedUser = userResponse.serviceResponseObject;
       navigate("/", {
         state: {
@@ -74,6 +79,10 @@ export const Login = () => {
       });
     } else {
       alert("Invalid credentials, try again");
+      toast.error("Your credentials are not correct", {
+        autoClose: 1500,
+        position: "bottom-right",
+      });
       form.delete("username");
       form.delete("password");
       form.set("password", "");
