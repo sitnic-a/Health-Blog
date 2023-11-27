@@ -44,25 +44,26 @@ export const Login = () => {
       user.password === null
     ) {
       //Set validation
-      alert("Fields are required!");
+      toast.error("Fields are required", {
+        autoClose: 1500,
+        position: "bottom-right",
+      });
+      // alert("Fields are required!");
       return;
     }
 
-    let response = await fetch(
-      `${application.application_url}/user/login/${user.username}/${user.password}`,
-      {
-        method: "POST",
-        body: JSON.stringify(user),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    let response = await fetch(`${application.application_url}/user/login`, {
+      method: "POST",
+      body: JSON.stringify(user),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     let userResponse = await response.json();
 
     if (userResponse.statusCode === 200) {
-      alert("Succesfully logged in");
+      // alert("Succesfully logged in");
       toast.success("Succesfully logged in", {
         autoClose: 1500,
         position: "bottom-right",
@@ -78,7 +79,7 @@ export const Login = () => {
         },
       });
     } else {
-      alert("Invalid credentials, try again");
+      // alert("Invalid credentials, try again");
       toast.error("Your credentials are not correct", {
         autoClose: 1500,
         position: "bottom-right",
