@@ -71,18 +71,18 @@ namespace MentalHealthBlog.API.Services
             }
         }
 
-        public async Task<Response> Login(string username, string password)
+        public async Task<Response> Login(UserLoginDto loginCredentials)
         {
             try
             {
-                if (user.IsNotValid(username, password))
+                if (user.IsNotValid(loginCredentials.Username, loginCredentials.Password))
                 {
-                    _userLoggerService.LogError($"REGISTER: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", new { Username = username, Password = password });
+                    _userLoggerService.LogError($"REGISTER: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", loginCredentials);
                     return new Response(new object(), StatusCodes.Status400BadRequest, UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString());
                 }
                 var jwtMiddleware = new JWTService(_options);
-                var authenticated = await VerifyCredentials(username, password);
-                var dbUser = await _context.Users.SingleOrDefaultAsync(u => u.Username == username);
+                var authenticated = await VerifyCredentials(loginCredentials);
+                var dbUser = await _context.Users.SingleOrDefaultAsync(u => u.Username == loginCredentials.Username);
                 if (authenticated && dbUser is not null)
                 {
                     var token = jwtMiddleware.GenerateToken(dbUser);
@@ -105,13 +105,13 @@ namespace MentalHealthBlog.API.Services
             }
         }
 
-        public async Task<bool> VerifyCredentials(string username, string password)
+        public async Task<bool> VerifyCredentials(UserLoginDto loginCredentials)
         {
             var dbUsers = _context.Users;
-            var existingUser = await dbUsers.SingleOrDefaultAsync(u => u.Username == username);
+            var existingUser = await dbUsers.SingleOrDefaultAsync(u => u.Username == loginCredentials.Username);
             if (existingUser is not null)
             {
-                var hashToCompare = user.HashPassword(password, existingUser.PasswordSalt, __ITERATIONS, __HASHALGORITHM__, __KEYSIZE__);
+                var hashToCompare = user.HashPassword(loginCredentials.Password, existingUser.PasswordSalt, __ITERATIONS, __HASHALGORITHM__, __KEYSIZE__);
                 return CryptographicOperations.FixedTimeEquals(Convert.FromBase64String(hashToCompare), Convert.FromBase64String(existingUser.PasswordHash));
             }
             return false;
