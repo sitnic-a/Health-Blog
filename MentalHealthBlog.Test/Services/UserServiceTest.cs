@@ -102,15 +102,18 @@ namespace MentalHealthBlog.Test.Services
         [InlineData(" ", "test_03")]
         public async void Login_ReturnsNewUserInvalidCredentials(string username, string password)
         {
-            //Arrange 
+            //Arrange
+            var loginCredentials = new UserLoginDto();
+            loginCredentials.Username = username;
+            loginCredentials.Password = password;
 
             //Act
-            Response response = await _userService.Login(username, password);
+            Response response = await _userService.Login(loginCredentials);
             UserResponseDto loggedUser = response.ServiceResponseObject.As<UserResponseDto>();
 
             if (!user.IsNotValid(username, password))
             {
-                var validCredentials = await _userService.VerifyCredentials(username, password);
+                var validCredentials = await _userService.VerifyCredentials(loginCredentials);
 
                 //Assert
                 response.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
@@ -127,9 +130,12 @@ namespace MentalHealthBlog.Test.Services
         public async void Login_ReturnsIsAuthenticatedWithCorrectCredentials(string username, string password)
         {
             //Arrange
-            
+            var loginCredentials = new UserLoginDto();
+            loginCredentials.Username = username;
+            loginCredentials.Password = password;
+
             //Act
-            var loggedUser = await _userService.VerifyCredentials(username, password);
+            var loggedUser = await _userService.VerifyCredentials(loginCredentials);
 
             //Assert
             loggedUser.Should().BeTrue();
@@ -141,9 +147,12 @@ namespace MentalHealthBlog.Test.Services
         public async void Login_ReturnsIsNotAuthenticatedWithIncorrectCredentials(string username, string password)
         {
             //Arrange
+            var loginCredentials = new UserLoginDto();
+            loginCredentials.Username = username;
+            loginCredentials.Password = password;
 
             //Act 
-            var loggedUser = await _userService.VerifyCredentials(username, password);
+            var loggedUser = await _userService.VerifyCredentials(loginCredentials);
 
             //Assert
             loggedUser.Should().BeFalse();
