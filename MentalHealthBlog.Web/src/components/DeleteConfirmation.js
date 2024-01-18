@@ -17,6 +17,7 @@ export const DeleteConfirmation = (props) => {
       isOpen={openModal}
       style={application.modal_style}
       appElement={document.getElementById('root')}
+      onRequestClose={() => setOpenModal(!openModal)}
     >
       <div className="confirmation-container">
         <div className="confirmation-title">
