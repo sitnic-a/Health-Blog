@@ -1,92 +1,122 @@
-import React, { useState } from 'react'
-import Modal from 'react-modal'
-import { toast } from 'react-toastify'
+import React, { useCallback, useEffect, useState } from "react";
+import Modal from "react-modal";
+import { toast } from "react-toastify";
 
-import { application } from '../application'
-import { useLocation, useNavigate } from 'react-router'
+import { application } from "../application";
+import { useLocation, useNavigate } from "react-router";
 
-const style = application.modal_style
+const style = application.modal_style;
 
 export const AddPost = () => {
-  let [modalOpened, setModalOpened] = useState(true)
-  let navigate = useNavigate()
-  let location = useLocation()
-  let loggedUser = location.state.loggedUser
+  let [modalOpened, setModalOpened] = useState(true);
+  let [tags, setTags] = useState([]);
 
-  let closeModal = () => setModalOpened(!modalOpened)
+  let navigate = useNavigate();
+  let location = useLocation();
+  let loggedUser = location.state.loggedUser;
+
+  let closeModal = () => setModalOpened(!modalOpened);
+
+  let handleTagAdding = (e) => {
+    if (e.key === "Enter") {
+      let tag = e.target.value;
+      setTags((currentState) => {
+        let newArray = [...currentState, tag];
+        console.log(newArray);
+        return newArray;
+      });
+      e.target.value = "";
+      return;
+    }
+  };
+
+  let handleTagRemoval = (tag) => {
+    setTags((currentState) => {
+      let newArray = [...currentState].filter((t) => t !== tag);
+      console.log(newArray);
+      return newArray;
+    });
+    console.log(tags);
+  };
 
   let submitForm = async (e) => {
-    e.preventDefault()
-    let form = new FormData(e.target)
-    let data = Object.fromEntries([...form.entries()])
+    e.preventDefault();
+    let form = new FormData(e.target);
+    let data = Object.fromEntries([...form.entries()]);
 
     let newPost = {
       title: data.title,
       content: data.content,
       userId: loggedUser.id,
-    }
+    };
 
     if (
-      newPost.title === '' ||
+      newPost.title === "" ||
       newPost.title === null ||
-      newPost.content === '' ||
+      newPost.content === "" ||
       newPost.content === null
     ) {
       toast.error("Couldn't add the post", {
         autoClose: 1500,
-        position: 'bottom-right',
-      })
-      return
+        position: "bottom-right",
+      });
+      return;
     }
 
-    console.log(newPost)
+    console.log(newPost);
 
     try {
       let response = await fetch(`${application.application_url}/post`, {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify(newPost),
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-      })
+      });
 
-      let responseJson = await response.json()
+      let responseJson = await response.json();
       if (response.status === 200) {
-        alert('Added new post')
-        toast.success('New post succesfully added', {
+        alert("Added new post");
+        toast.success("New post succesfully added", {
           autoClose: 1500,
-          position: 'bottom-right',
-        })
-        closeModal()
+          position: "bottom-right",
+        });
+        closeModal();
       } else {
-        console.log('Some error occured')
+        console.log("Some error occured");
         toast.error("Couldn't add the post", {
           autoClose: 1500,
-          position: 'bottom-right',
-        })
-        closeModal()
+          position: "bottom-right",
+        });
+        closeModal();
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       toast.error("Couldn't add the post", {
         autoClose: 1500,
-        position: 'bottom-right',
-      })
-      closeModal()
+        position: "bottom-right",
+      });
+      closeModal();
     }
 
-    console.log('Form submitted')
-    window.location.reload()
-  }
+    console.log("Form submitted");
+    window.location.reload();
+  };
 
   return (
     <Modal
       isOpen={modalOpened}
       style={application.modal_style}
-      appElement={document.getElementById('root')}
+      appElement={document.getElementById("root")}
       onRequestClose={closeModal}
     >
-      <form onSubmit={submitForm} id="add-post-form">
+      <form
+        onSubmit={submitForm}
+        id="add-post-form"
+        onKeyDown={(e) => {
+          e.key === "Enter" && e.preventDefault();
+        }}
+      >
         <div className="add-post-modal-header">
           <h2>Post</h2>
         </div>
@@ -94,21 +124,56 @@ export const AddPost = () => {
           <div className="add-post-title-container">
             <label htmlFor="title">Title</label>
             <br />
-            <input type="text" id="title" name="title" />
+            <input
+              className="add-post-title-input"
+              type="text"
+              id="title"
+              name="title"
+            />
           </div>
           <div className="add-post-content-container">
             <label htmlFor="content">Content</label>
             <br />
             <textarea
+              className="add-post-content-textarea"
               name="content"
               id="content"
-              cols="30"
               rows="10"
             ></textarea>
           </div>
+          <div className="add-post-picked-tags-container">
+            {tags.map((tag) => {
+              return (
+                <span
+                  key={tag}
+                  className="add-post-content-picked-tags-span-tag"
+                >
+                  {tag}
+                  <span
+                    className="add-post-content-picked-tags-span-tag-remove"
+                    onClick={() => handleTagRemoval(tag)}
+                  >
+                    X
+                  </span>
+                </span>
+              );
+            })}
+          </div>
+          <div className="add-post-tags-container">
+            <label htmlFor="tag">Tags</label>
+            <br />
+            <input
+              name="tags"
+              id="tag"
+              type="text"
+              className="add-post-content-tags-input"
+              onKeyUp={(e) => handleTagAdding(e)}
+            />
+          </div>
+          <br />
         </div>
         <button type="submit">Save</button>
       </form>
     </Modal>
-  )
-}
+  );
+};
