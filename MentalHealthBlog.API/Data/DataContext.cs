@@ -13,10 +13,18 @@ namespace MentalHealthBlogAPI.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<PostTag> PostsTags { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<PostTag>().HasKey(pt => new
+            {
+                pt.PostId,
+                pt.TagId
+            });
 
             modelBuilder.Entity<User>().HasData(
                 new { Id = 1, Username = "test_01", PasswordHash = "TT1", PasswordSalt = Encoding.UTF8.GetBytes("SetBytes_TT1") },
