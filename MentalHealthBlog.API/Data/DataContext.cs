@@ -1,4 +1,5 @@
-﻿using MentalHealthBlogAPI.Models;
+﻿using MentalHealthBlog.API.Models;
+using MentalHealthBlogAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 
@@ -11,6 +12,7 @@ namespace MentalHealthBlogAPI.Data
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Post> Posts { get; set; }
+        public DbSet<Tag> Tags { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,6 +31,16 @@ namespace MentalHealthBlogAPI.Data
                 new { Id = 3, Title = "Title_03", Content = "Content_T03", UserId = 2 },
                 new { Id = 4, Title = "Title_04", Content = "Content_T04", UserId = 2 },
                 new { Id = 5, Title = "Title_05", Content = "Content_T05", UserId = 1 }
+                );
+
+            modelBuilder.Entity<Tag>().HasData(
+                new { Id = 1, Name = "Ljubav"},
+                new { Id = 2, Name = "Porodica"},
+                new { Id = 3, Name = "Posao"},
+                new { Id = 4, Name = "Zdravlje"},
+                new { Id = 5, Name = "Prijatelji"},
+                new { Id = 6, Name = "Karijera"},
+                new { Id = 7, Name = "Novac"}
                 );
         }
     }
