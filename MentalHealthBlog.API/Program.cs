@@ -48,6 +48,9 @@ builder.Services.AddSwaggerGen(opt =>
     });
 });
 
+//Automapper
+builder.Services.AddAutoMapper(typeof(Program));
+
 
 //CORS registration
 builder.Services.AddCors(options =>
