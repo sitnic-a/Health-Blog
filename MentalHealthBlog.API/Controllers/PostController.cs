@@ -1,4 +1,5 @@
-﻿using MentalHealthBlog.API.Models.ResourceResponse;
+﻿using MentalHealthBlog.API.Models.ResourceRequest;
+using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Models;
 using MentalHealthBlogAPI.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -31,7 +32,7 @@ namespace MentalHealthBlogAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<Response> AddPost([FromBody] Post post)
+        public async Task<Response> AddPost([FromBody] CreatePostDto post)
         {
             return await _postService.Add(post);
         }

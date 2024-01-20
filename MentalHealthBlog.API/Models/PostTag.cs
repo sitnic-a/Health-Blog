@@ -6,10 +6,13 @@ namespace MentalHealthBlog.API.Models
     public class PostTag
     {
         public int PostId { get; set; }
-        [JsonIgnore]
-        public Post? Post { get; set; } = new Post();
         public int TagId { get; set; }
-        [JsonIgnore]
-        public Tag? Tag { get; set; } = new Tag();
+
+        public PostTag(){}
+        public PostTag(int postId, int tagId)
+        {
+            PostId = postId;
+            TagId = tagId;
+        }
     }
 }
