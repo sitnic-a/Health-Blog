@@ -1,8 +1,10 @@
-﻿using MentalHealthBlog.API.ExtensionMethods.ExtensionPostClass;
+﻿using AutoMapper;
+using MentalHealthBlog.API.ExtensionMethods.ExtensionPostClass;
+using MentalHealthBlog.API.Models;
+using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
 using MentalHealthBlogAPI.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace MentalHealthBlogAPI.Services
@@ -19,10 +21,12 @@ namespace MentalHealthBlogAPI.Services
     {
         private readonly DataContext _context;
         private readonly ILogger<PostService> _postServiceLogger;
+        private readonly IMapper _autoMapper;
 
-        public PostService(DataContext context, ILogger<PostService> postServiceLogger)
+        public PostService(DataContext context, IMapper mapper, ILogger<PostService> postServiceLogger)
         {
             _context = context;
+            _autoMapper = mapper;
             _postServiceLogger = postServiceLogger;
         }
         public async Task<Response> GetPosts()
@@ -65,21 +69,50 @@ namespace MentalHealthBlogAPI.Services
             }
         }
 
-        public async Task<Response> Add(Post post)
+        public async Task<Response> Add(CreatePostDto post)
         {
             try
             {
-                if (post.IsNullOrEmpthy())
+                var mappedPost = _autoMapper.Map<Post>(post);
+                var tagsNumber = post.Tags.Count;
+
+                if (tagsNumber > 0)
+                {
+                    foreach (var item in post.Tags)
+                    {
+                        var existingTag = await _context.Tags.FirstOrDefaultAsync(t => t.Name == item) != null;
+                        if (!existingTag)
+                        {
+                            var newTag = new Tag { Name = item };
+                            await _context.Tags.AddAsync(newTag);
+                        }
+                    }
+                }
+
+                if (mappedPost.IsNullOrEmpthy())
                 {
                     _postServiceLogger.LogWarning($"POST: {PostServiceLogTypes.POST_INVALID_DATA.ToString()}");
                     return new Response(new object(), StatusCodes.Status400BadRequest, PostServiceLogTypes.POST_INVALID_DATA.ToString());
                 }
-                var newPost = await _context.Posts.AddAsync(post);
+
+                var newPost = await _context.Posts.AddAsync(mappedPost);
+                await _context.SaveChangesAsync();
                 if (newPost is null)
                 {
                     _postServiceLogger.LogWarning($"POST: {PostServiceLogTypes.POST_NULL.ToString()}");
                     return new Response(new object(), StatusCodes.Status204NoContent, PostServiceLogTypes.POST_NULL.ToString());
                 }
+
+                foreach (var item in post.Tags)
+                {
+                    var tag = await _context.Tags.FirstOrDefaultAsync(t => t.Name == item);
+                    if (tag != null)
+                    {
+                        var postTag = new PostTag(newPost.Entity.Id, tag.Id);
+                        await _context.PostsTags.AddAsync(postTag);
+                    }
+                }
+
                 await _context.SaveChangesAsync();
                 _postServiceLogger.LogInformation($"POST: {PostServiceLogTypes.POSTS_SUCCESS.ToString()}");
                 return new Response(newPost.Entity, StatusCodes.Status201Created, PostServiceLogTypes.POSTS_SUCCESS.ToString());
