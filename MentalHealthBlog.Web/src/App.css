@@ -170,7 +170,7 @@ dialog::backdrop {
   overflow-y: scroll;
 }
 
-button[data-action-update="update"] {
+button[data-action-update='update'] {
   position: absolute;
   background: none;
   outline: none;
@@ -179,7 +179,7 @@ button[data-action-update="update"] {
   left: 0;
 }
 
-button[data-action-delete="delete"] {
+button[data-action-delete='delete'] {
   position: absolute;
   background: none;
   outline: none;
@@ -188,7 +188,7 @@ button[data-action-delete="delete"] {
   right: 0;
 }
 
-button[data-action-add="add"] {
+button[data-action-add='add'] {
   background: none;
   outline: none;
   border: none;
@@ -196,26 +196,26 @@ button[data-action-add="add"] {
   background: #e1e1e1;
 }
 
-button[data-action-update="update"]:hover {
+button[data-action-update='update']:hover {
   cursor: pointer;
 }
 
-button[data-action-delete="delete"]:hover {
+button[data-action-delete='delete']:hover {
   cursor: pointer;
 }
 
-button[data-action-add="add"]:hover {
+button[data-action-add='add']:hover {
   background: #f4f4f4;
   cursor: pointer;
 }
 
-button[data-action-add="add"] svg {
+button[data-action-add='add'] svg {
   margin-right: 2rem;
 }
 
-button[data-action-update="update"] svg,
-button[data-action-delete="delete"] svg,
-button[data-action-add="add"] svg {
+button[data-action-update='update'] svg,
+button[data-action-delete='delete'] svg,
+button[data-action-add='add'] svg {
   transform: scale(1.8);
   /* color: #365c6d; */
   color: #000;
@@ -223,6 +223,7 @@ button[data-action-add="add"] svg {
 
 .main-container {
   position: relative;
+  width: 25%;
 }
 
 .post-container {
@@ -263,6 +264,14 @@ button[data-action-add="add"] svg {
   visibility: visible;
 }
 
+.post-container-tags {
+  background: #89cff0;
+  color: #000;
+  font-size: 0.9em;
+  margin-top: 0.3rem;
+  border-radius: 0.4rem;
+}
+
 .post-by-id {
   margin: 2rem;
   height: 100vh;
@@ -291,7 +300,7 @@ pre:hover {
   overflow-y: scroll;
 }
 
-.post-by-id-container-edit input[name="title"] {
+.post-by-id-container-edit input[name='title'] {
   margin-inline: 2rem;
   border: none;
   border-bottom: 1px solid #e1e1e1;
@@ -301,7 +310,7 @@ pre:hover {
   border-radius: 3px;
 }
 
-.post-by-id-container-edit input[name="title"]:focus-within {
+.post-by-id-container-edit input[name='title']:focus-within {
   border: 1px solid rgb(188, 188, 253);
 }
 
