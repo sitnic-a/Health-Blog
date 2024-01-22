@@ -31,9 +31,35 @@ namespace MentalHealthBlogAPI.Services
         }
         public async Task<Response> GetPosts()
         {
+            var dbPosts = await _context.Posts.ToListAsync();
+
+            var posts = new List<PostDto>();
+            var postDto = new PostDto();
+
+            foreach (var item in dbPosts)
+            {
+                var dbPostTags = await _context.PostsTags
+                    .Include(t => t.Tag)
+                    .Where(p => p.PostId == item.Id)
+                    .Select(t => new { Tag = t.Tag.Name })
+                    .ToListAsync();
+
+                var tagsOnPost = dbPostTags.Count;
+
+                if (tagsOnPost > 0)
+                {
+                    postDto = _autoMapper.Map<PostDto>(item);
+                    postDto.Tags = dbPostTags.Select(t => t.Tag).ToList();
+                    posts.Add(postDto);
+                    continue;
+                }
+                    postDto = _autoMapper.Map<PostDto>(item);
+                    postDto.Tags = new List<string>();
+                    posts.Add(postDto);
+                    continue;
+            }
             try
             {
-                var posts = await _context.Posts.ToListAsync();
                 if (posts is null)
                 {
                     _postServiceLogger.LogWarning($"GET: {PostServiceLogTypes.POST_NULL.ToString()}");
