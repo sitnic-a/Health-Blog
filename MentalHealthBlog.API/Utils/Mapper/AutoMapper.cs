@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MentalHealthBlog.API.Models.ResourceRequest;
+using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Models;
 
 namespace MentalHealthBlog.API.Utils.Mapper
@@ -9,6 +10,7 @@ namespace MentalHealthBlog.API.Utils.Mapper
         public AutoMapper()
         {
             CreateMap<Post, CreatePostDto>().ReverseMap();
+            CreateMap<Post,PostDto>().ReverseMap();
         }
     }
 }

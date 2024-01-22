@@ -1,5 +1,6 @@
 ﻿namespace MentalHealthBlog.API.Models.ResourceRequest
 {
+    //Class made of form fields
     public class CreatePostDto
     {
         public string Title { get; set; } = string.Empty;
