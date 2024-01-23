@@ -63,7 +63,7 @@ namespace MentalHealthBlogAPI.Services
                 if (posts is null)
                 {
                     _postServiceLogger.LogWarning($"GET: {PostServiceLogTypes.POST_NULL.ToString()}");
-                    return new Response(new object(), StatusCodes.Status204NoContent, PostServiceLogTypes.POST_NULL.ToString()); ;
+                    return new Response(new object(), StatusCodes.Status204NoContent, PostServiceLogTypes.POST_NULL.ToString());
                 }
                 _postServiceLogger.LogInformation($"GET: {PostServiceLogTypes.POSTS_SUCCESS.ToString()}");
                 return new Response(posts, StatusCodes.Status200OK, PostServiceLogTypes.POSTS_SUCCESS.ToString());
@@ -71,7 +71,7 @@ namespace MentalHealthBlogAPI.Services
             catch (Exception e)
             {
                 _postServiceLogger.LogError($"GET: {PostServiceLogTypes.POSTS_FAILED.ToString()}", e);
-                return new Response(e.Data, StatusCodes.Status400BadRequest, PostServiceLogTypes.POSTS_FAILED.ToString()); ;
+                return new Response(e.Data, StatusCodes.Status400BadRequest, PostServiceLogTypes.POSTS_FAILED.ToString());
             }
         }
 
@@ -86,12 +86,12 @@ namespace MentalHealthBlogAPI.Services
                     return new Response(new object(), StatusCodes.Status204NoContent, PostServiceLogTypes.POST_NULL.ToString());
                 }
                 _postServiceLogger.LogInformation($"GET/id: {PostServiceLogTypes.POSTS_SUCCESS.ToString()}");
-                return new Response(searched, StatusCodes.Status200OK, PostServiceLogTypes.POSTS_SUCCESS.ToString()); ;
+                return new Response(searched, StatusCodes.Status200OK, PostServiceLogTypes.POSTS_SUCCESS.ToString());
             }
             catch (Exception e)
             {
                 _postServiceLogger.LogError($"GET/id: {PostServiceLogTypes.POSTS_FAILED.ToString()}", e);
-                return new Response(e.Data, StatusCodes.Status400BadRequest, PostServiceLogTypes.POSTS_FAILED.ToString()); ;
+                return new Response(e.Data, StatusCodes.Status400BadRequest, PostServiceLogTypes.POSTS_FAILED.ToString());
             }
         }
 
