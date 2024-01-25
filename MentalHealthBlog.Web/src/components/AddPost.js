@@ -12,6 +12,8 @@ export const AddPost = (props) => {
   let [chosenTags, setChosenTags] = useState([])
   let [suggestedTags, setSuggestedTags] = useState(props.tags)
   let [displayedSuggestedTags, setDisplayedSuggestedTags] = useState([])
+
+  let [pickedTags, setPickedTags] = useState([])
   let navigate = useNavigate()
   let location = useLocation()
   let loggedUser = location.state.loggedUser
@@ -41,15 +43,42 @@ export const AddPost = (props) => {
   }
 
   let handleSuggestedTagsChange = (e) => {
+    let alreadyPickedTags = [
+      ...suggestedTags.filter((t) => pickedTags.includes(t)),
+    ]
+    console.log('Already chosen', alreadyPickedTags)
+
     if (e.target.value === '') {
+      if (pickedTags.length > 0) {
+        setSuggestedTags((currentState) => {
+          currentState = currentState
+            .filter((t) => !pickedTags.includes(t))
+            .filter((t) => t.name !== e.target.value)
+          return currentState
+        })
+        console.log('New suggested', suggestedTags)
+        let onInputTags = suggestedTags.filter((t) =>
+          t.name.includes(e.target.value)
+        )
+        setDisplayedSuggestedTags(onInputTags)
+      }
       setSuggestedTags(props.tags)
       setDisplayedSuggestedTags([])
       return
     }
-    let onInputTags = suggestedTags.filter((t) =>
-      t.name.includes(e.target.value)
-    )
+
+    let onInputTags = suggestedTags
+      .filter((t) => t.name.includes(e.target.value))
+      .filter((t) => !pickedTags.includes(t))
     setDisplayedSuggestedTags(onInputTags)
+  }
+
+  let handlePickedTagClick = (tag) => {
+    setChosenTags((currentState) => {
+      currentState = [...currentState, tag.name]
+      setPickedTags([...pickedTags, tag])
+      return currentState
+    })
   }
 
   let submitForm = async (e) => {
@@ -192,7 +221,11 @@ export const AddPost = (props) => {
             >
               {displayedSuggestedTags.map((tag) => {
                 return (
-                  <div className="add-post-suggested-tag" key={tag.id}>
+                  <div
+                    className="add-post-suggested-tag"
+                    key={tag.id}
+                    onClick={() => handlePickedTagClick(tag)}
+                  >
                     {tag.name}
                   </div>
                 )
