@@ -74,6 +74,12 @@ export const AddPost = (props) => {
   }
 
   let handlePickedTagClick = (tag) => {
+    let suggestedTagsAfterClick = [...suggestedTags].filter(
+      (t) => t.id !== tag.id
+    )
+    setSuggestedTags(suggestedTagsAfterClick)
+    setDisplayedSuggestedTags([])
+
     setChosenTags((currentState) => {
       currentState = [...currentState, tag.name]
       setPickedTags([...pickedTags, tag])
