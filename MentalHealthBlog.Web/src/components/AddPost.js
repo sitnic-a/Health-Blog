@@ -54,11 +54,6 @@ export const AddPost = (props) => {
   };
 
   let handleSuggestedTagsChange = (e) => {
-    let alreadyPickedTags = [
-      ...suggestedTags.filter((t) => pickedTags.includes(t)),
-    ];
-    console.log("Already chosen", alreadyPickedTags);
-
     if (e.target.value === "") {
       if (pickedTags.length > 0) {
         setSuggestedTags((currentState) => {
@@ -67,11 +62,10 @@ export const AddPost = (props) => {
             .filter((t) => t.name !== e.target.value);
           return currentState;
         });
-        console.log("New suggested", suggestedTags);
-        let onInputTags = suggestedTags.filter((t) =>
-          t.name.includes(e.target.value)
-        );
-        setDisplayedSuggestedTags(onInputTags);
+        //console.log("New suggested", suggestedTags);
+
+        setDisplayedSuggestedTags([]);
+        return;
       }
       setSuggestedTags(props.tags);
       setDisplayedSuggestedTags([]);
