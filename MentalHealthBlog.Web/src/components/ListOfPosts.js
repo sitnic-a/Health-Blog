@@ -14,8 +14,8 @@ export const ListOfPosts = () => {
   let [posts, setPosts] = useState([]);
   let location = useLocation();
 
-  let url = `${application.application_url}/post`;
   let loggedUser = location.state.loggedUser;
+  let url = `${application.application_url}/post?UserId=${loggedUser.id}`;
 
   useEffect(() => {
     let getPosts = async (url) => {
