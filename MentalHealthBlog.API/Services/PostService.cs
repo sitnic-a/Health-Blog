@@ -29,9 +29,11 @@ namespace MentalHealthBlogAPI.Services
             _autoMapper = mapper;
             _postServiceLogger = postServiceLogger;
         }
-        public async Task<Response> GetPosts()
+        public async Task<Response> GetPosts(SearchPostDto query)
         {
-            var dbPosts = await _context.Posts.ToListAsync();
+            var dbPosts = await _context.Posts
+                .Where(p => p.UserId == query.UserId)
+                .ToListAsync();
 
             var posts = new List<PostDto>();
             var postDto = new PostDto();
