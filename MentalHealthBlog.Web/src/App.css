@@ -1,3 +1,13 @@
+input[type='text'],
+textarea {
+  border: 1px solid #a8a8a8;
+  outline: none;
+  padding-inline: 0;
+  padding-block: 0;
+  border-width: 1px;
+  text-indent: 0.2rem;
+}
+
 main {
   margin-inline: 1rem;
   /* border: 1px solid red; */
@@ -152,6 +162,32 @@ dialog::backdrop {
 .add-post-content-textarea,
 .add-post-content-tags-input {
   width: 100%;
+}
+
+.add-post-content-tags-input {
+  font-size: 0.8em;
+}
+
+.add-post-suggested-tags-container {
+  border: 1px solid #a8a8a8;
+  border-radius: 0.4rem;
+  width: 100%;
+  margin-top: 0.15rem;
+  height: 100px;
+  overflow-y: scroll;
+}
+
+.add-post-suggested-tag {
+  padding: 0.2rem;
+  margin: 0.3rem;
+  border: 1px solid #a8a8a8;
+  border-radius: 0.4rem;
+  font-size: 0.8em;
+}
+
+.add-post-suggested-tag:hover {
+  background: #eaeaea;
+  cursor: pointer;
 }
 
 .list-of-posts-author {
