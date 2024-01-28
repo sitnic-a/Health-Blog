@@ -6,7 +6,7 @@ namespace MentalHealthBlogAPI.Services
 {
     public interface IPostService
     {
-        public Task<Response> GetPosts();
+        public Task<Response> GetPosts(SearchPostDto query);
         public Task<Response> GetById(int id);
         public Task<Response> Add(CreatePostDto post);
         public Task<Response> Update(int id, Post post);

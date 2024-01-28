@@ -19,10 +19,10 @@ namespace MentalHealthBlogAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize]
-        public async Task<Response> GetAllPosts()
+        //[Authorize]
+        public async Task<Response> GetAllPosts([FromQuery] SearchPostDto query)
         {
-            return await _postService.GetPosts();
+            return await _postService.GetPosts(query);
         }
 
         [HttpGet("{id}")]
