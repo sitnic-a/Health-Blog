@@ -9,6 +9,7 @@ import { application } from "../application";
 //Import components
 import { Post } from "./Post";
 import { ListOfPostsHeader } from "./ListOfPostsHeader";
+import { PieGraph } from "./PieGraph";
 
 export const ListOfPosts = () => {
   let [posts, setPosts] = useState([]);
@@ -35,11 +36,16 @@ export const ListOfPosts = () => {
   return (
     <>
       <ListOfPostsHeader />
-      <section className="list-of-posts-main-container">
-        {posts.map((post) => {
-          return <Post key={post.id} {...post} />;
-        })}
-      </section>
+      <div className="dashboard">
+        <section className="list-of-posts-main-container">
+          {posts.map((post) => {
+            return <Post key={post.id} {...post} />;
+          })}
+        </section>
+        <section className="pie-graph-main-container">
+          <PieGraph />
+        </section>
+      </div>
     </>
   );
 };

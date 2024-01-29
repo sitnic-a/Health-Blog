@@ -1,4 +1,4 @@
-input[type='text'],
+input[type="text"],
 textarea {
   border: 1px solid #a8a8a8;
   outline: none;
@@ -194,19 +194,25 @@ dialog::backdrop {
   padding: 0.5rem;
 }
 
+.dashboard {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
 .list-of-posts-main-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: left;
-  gap: 0.8rem;
+  gap: 0.1rem;
   color: #fff;
   margin-top: 0.3rem;
-  width: 65%;
-  height: 70vh;
+  width: 45%;
+  height: 80vh;
   overflow-y: scroll;
+  /* background: blue; */
 }
 
-button[data-action-update='update'] {
+button[data-action-update="update"] {
   position: absolute;
   background: none;
   outline: none;
@@ -215,16 +221,16 @@ button[data-action-update='update'] {
   left: 0;
 }
 
-button[data-action-delete='delete'] {
+button[data-action-delete="delete"] {
   position: absolute;
   background: none;
   outline: none;
   border: none;
   top: 0.3rem;
-  right: 0;
+  right: -0.7rem;
 }
 
-button[data-action-add='add'] {
+button[data-action-add="add"] {
   background: none;
   outline: none;
   border: none;
@@ -232,26 +238,26 @@ button[data-action-add='add'] {
   background: #e1e1e1;
 }
 
-button[data-action-update='update']:hover {
+button[data-action-update="update"]:hover {
   cursor: pointer;
 }
 
-button[data-action-delete='delete']:hover {
+button[data-action-delete="delete"]:hover {
   cursor: pointer;
 }
 
-button[data-action-add='add']:hover {
+button[data-action-add="add"]:hover {
   background: #f4f4f4;
   cursor: pointer;
 }
 
-button[data-action-add='add'] svg {
+button[data-action-add="add"] svg {
   margin-right: 2rem;
 }
 
-button[data-action-update='update'] svg,
-button[data-action-delete='delete'] svg,
-button[data-action-add='add'] svg {
+button[data-action-update="update"] svg,
+button[data-action-delete="delete"] svg,
+button[data-action-add="add"] svg {
   transform: scale(1.8);
   /* color: #365c6d; */
   color: #000;
@@ -260,12 +266,14 @@ button[data-action-add='add'] svg {
 .main-container {
   position: relative;
   width: 25%;
+  margin: 0.5rem;
 }
 
 .post-container {
   margin-top: 0.3rem;
   /* border: 1px solid blue; */
   padding: 0.3rem;
+  width: 100%;
   background: #ffeebb;
 }
 
@@ -289,6 +297,7 @@ button[data-action-add='add'] svg {
 
 .post-content {
   border: none;
+  width: 100%;
 }
 
 .overlay-mask {
@@ -306,6 +315,14 @@ button[data-action-add='add'] svg {
   font-size: 0.9em;
   margin-top: 0.3rem;
   border-radius: 0.4rem;
+  width: 100%;
+  padding-right: 0.5rem;
+}
+
+.pie-graph-main-container {
+  width: 50%;
+  margin: auto;
+  background: red;
 }
 
 .post-by-id {
@@ -336,7 +353,7 @@ pre:hover {
   overflow-y: scroll;
 }
 
-.post-by-id-container-edit input[name='title'] {
+.post-by-id-container-edit input[name="title"] {
   margin-inline: 2rem;
   border: none;
   border-bottom: 1px solid #e1e1e1;
@@ -346,7 +363,7 @@ pre:hover {
   border-radius: 3px;
 }
 
-.post-by-id-container-edit input[name='title']:focus-within {
+.post-by-id-container-edit input[name="title"]:focus-within {
   border: 1px solid rgb(188, 188, 253);
 }
 
