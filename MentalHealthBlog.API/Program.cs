@@ -8,6 +8,8 @@ using Microsoft.OpenApi.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
+#pragma warning disable 8604
+
 var builder = WebApplication.CreateBuilder(args);
 
 //Configure services
@@ -67,6 +69,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITagService, TagService>();
+builder.Services.AddScoped<IStatisticsService, StatisticsService>();
 
 
 builder.Services.AddDbContext<DataContext>(options =>
