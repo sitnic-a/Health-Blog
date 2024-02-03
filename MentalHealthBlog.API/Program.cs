@@ -65,6 +65,9 @@ builder.Services.AddCors(options =>
     });
 });
 
+//HttpContextAccesor register
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 //Custom service registration
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IUserService, UserService>();

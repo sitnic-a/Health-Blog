@@ -15,15 +15,29 @@ namespace MentalHealthBlog.API.Services
     public class StatisticsService : IStatisticsService
     {
         private readonly DataContext _context;
+        private readonly IHttpContextAccessor ?_httpContextAccessor;
         private readonly ILogger<StatisticsService> _statisticsServiceLogger;
         private readonly IEnumerable<PostTag> _dbPostTags;
 
-        public StatisticsService(DataContext context, ILogger<StatisticsService> statisticsServiceLogger)
+        private int _loggedUserId = 0;
+        public StatisticsService(DataContext context, IHttpContextAccessor httpContextAccessor, ILogger<StatisticsService> statisticsServiceLogger)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
             _statisticsServiceLogger = statisticsServiceLogger;
+
+            var loggedUser = _httpContextAccessor?.HttpContext?.User;
+            if (loggedUser != null)
+            {
+                var userClaims = loggedUser?.Claims;
+                var userId = userClaims?.FirstOrDefault(c => c?.Type == "Id")?.Value;
+                bool canBeParsed = int.TryParse(userId, out _loggedUserId);
+            }
+
             _dbPostTags = _context.PostsTags
+                .Include(p => p.Post)
                 .Include(t => t.Tag)
+                .Where(p => p.Post.UserId == _loggedUserId)
                 .ToList();
         }
         public async Task<Response> PrepareForMontlyPieGraph()
