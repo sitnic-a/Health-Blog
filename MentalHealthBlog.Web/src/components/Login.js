@@ -1,75 +1,75 @@
-import { useEffect } from "react";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { application } from "../application";
-import { toast } from "react-toastify";
+import { useEffect } from 'react'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { application } from '../application'
+import { toast } from 'react-toastify'
 
 export const Login = () => {
-  let navigate = useNavigate();
-  const _URL_ = "https://type.fit/api/quotes";
+  let navigate = useNavigate()
+  const _URL_ = 'https://type.fit/api/quotes'
   //   const _URL_ = "https://api.api-ninjas.com/v1/quotes";
-  const _TIME_ = 10000;
-  let [zenQuote, setZenQuote] = useState("");
+  const _TIME_ = 10000
+  let [zenQuote, setZenQuote] = useState('')
 
   useEffect(() => {
-    getQuote();
-  }, []);
+    getQuote()
+  }, [])
 
   let getQuote = async () => {
-    let response = await fetch(_URL_).then((response) => response.json());
-    let arraySize = response.length;
-    let randomNumber = Math.floor(Math.random() * arraySize) + 1;
-    let obj = { ...response[randomNumber] };
-    setZenQuote(obj.text);
-    clearInterval(timer);
-  };
+    let response = await fetch(_URL_).then((response) => response.json())
+    let arraySize = response.length
+    let randomNumber = Math.floor(Math.random() * arraySize) + 1
+    let obj = { ...response[randomNumber] }
+    setZenQuote(obj.text)
+    clearInterval(timer)
+  }
 
-  let timer = setInterval(getQuote, _TIME_);
+  let timer = setInterval(getQuote, _TIME_)
 
   let login = async (e) => {
-    e.preventDefault();
-    let form = new FormData(e.target);
-    let formData = form.entries();
-    let data = Object.fromEntries([...formData]);
+    e.preventDefault()
+    let form = new FormData(e.target)
+    let formData = form.entries()
+    let data = Object.fromEntries([...formData])
 
     let user = {
       username: data.username,
       password: data.password,
-    };
+    }
 
     if (
-      user.username === "" ||
+      user.username === '' ||
       user.username === null ||
-      user.password === "" ||
+      user.password === '' ||
       user.password === null
     ) {
       //Set validation
-      toast.error("Fields are required", {
+      toast.error('Fields are required', {
         autoClose: 1500,
-        position: "bottom-right",
-      });
+        position: 'bottom-right',
+      })
       // alert("Fields are required!");
-      return;
+      return
     }
 
     let response = await fetch(`${application.application_url}/user/login`, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(user),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-    });
+    })
 
-    let userResponse = await response.json();
+    let userResponse = await response.json()
 
     if (userResponse.statusCode === 200) {
       // alert("Succesfully logged in");
-      toast.success("Succesfully logged in", {
+      toast.success('Succesfully logged in', {
         autoClose: 1500,
-        position: "bottom-right",
-      });
-      let authenticatedUser = userResponse.serviceResponseObject;
-      navigate("/", {
+        position: 'bottom-right',
+      })
+      let authenticatedUser = userResponse.serviceResponseObject
+      navigate('/', {
         state: {
           loggedUser: {
             id: authenticatedUser.id,
@@ -77,18 +77,18 @@ export const Login = () => {
             token: authenticatedUser.jwToken,
           },
         },
-      });
+      })
     } else {
       // alert("Invalid credentials, try again");
-      toast.error("Your credentials are not correct", {
+      toast.error('Your credentials are not correct', {
         autoClose: 1500,
-        position: "bottom-right",
-      });
-      form.delete("username");
-      form.delete("password");
-      form.set("password", "");
+        position: 'bottom-right',
+      })
+      form.delete('username')
+      form.delete('password')
+      form.set('password', '')
     }
-  };
+  }
 
   return (
     <section className="login">
@@ -115,7 +115,7 @@ export const Login = () => {
             <input id="password" type="password" name="password" />
           </div>
           <div>
-            <Link to={"/register"}>Create an account</Link>
+            <Link to={'/register'}>Create an account</Link>
           </div>
           <button type="submit" id="login-container-button">
             Login
@@ -126,5 +126,5 @@ export const Login = () => {
         <h1>{zenQuote}</h1>
       </div>
     </section>
-  );
-};
+  )
+}
