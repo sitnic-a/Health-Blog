@@ -1,4 +1,4 @@
-input[type="text"],
+input[type='text'],
 textarea {
   border: 1px solid #a8a8a8;
   outline: none;
@@ -197,7 +197,7 @@ dialog::backdrop {
 .dashboard {
   display: flex;
   width: 100%;
-  align-items: center;
+  align-items: normal;
 }
 
 .list-of-posts-main-container {
@@ -205,14 +205,13 @@ dialog::backdrop {
   flex-wrap: wrap;
   gap: 0.1rem;
   color: #fff;
-  margin-top: 0.3rem;
-  width: 45%;
+  width: 55%;
   height: 80vh;
   overflow-y: scroll;
   /* background: blue; */
 }
 
-button[data-action-update="update"] {
+button[data-action-update='update'] {
   position: absolute;
   background: none;
   outline: none;
@@ -221,7 +220,7 @@ button[data-action-update="update"] {
   left: 0;
 }
 
-button[data-action-delete="delete"] {
+button[data-action-delete='delete'] {
   position: absolute;
   background: none;
   outline: none;
@@ -230,34 +229,35 @@ button[data-action-delete="delete"] {
   right: -0.7rem;
 }
 
-button[data-action-add="add"] {
+button[data-action-add='add'] {
   background: none;
   outline: none;
   border: none;
   padding: 1rem;
+  margin-left: 0.5rem;
   background: #e1e1e1;
 }
 
-button[data-action-update="update"]:hover {
+button[data-action-update='update']:hover {
   cursor: pointer;
 }
 
-button[data-action-delete="delete"]:hover {
+button[data-action-delete='delete']:hover {
   cursor: pointer;
 }
 
-button[data-action-add="add"]:hover {
+button[data-action-add='add']:hover {
   background: #f4f4f4;
   cursor: pointer;
 }
 
-button[data-action-add="add"] svg {
+button[data-action-add='add'] svg {
   margin-right: 2rem;
 }
 
-button[data-action-update="update"] svg,
-button[data-action-delete="delete"] svg,
-button[data-action-add="add"] svg {
+button[data-action-update='update'] svg,
+button[data-action-delete='delete'] svg,
+button[data-action-add='add'] svg {
   transform: scale(1.8);
   /* color: #365c6d; */
   color: #000;
@@ -320,9 +320,15 @@ button[data-action-add="add"] svg {
 }
 
 .pie-graph-main-container {
+  text-align: center;
   /* width: 50%; */
   margin: auto;
   /* background: red; */
+}
+
+.pie-graph-section {
+  width: 26rem;
+  margin-top: -10rem;
 }
 
 .post-by-id {
@@ -353,7 +359,7 @@ pre:hover {
   overflow-y: scroll;
 }
 
-.post-by-id-container-edit input[name="title"] {
+.post-by-id-container-edit input[name='title'] {
   margin-inline: 2rem;
   border: none;
   border-bottom: 1px solid #e1e1e1;
@@ -363,7 +369,7 @@ pre:hover {
   border-radius: 3px;
 }
 
-.post-by-id-container-edit input[name="title"]:focus-within {
+.post-by-id-container-edit input[name='title']:focus-within {
   border: 1px solid rgb(188, 188, 253);
 }
 
