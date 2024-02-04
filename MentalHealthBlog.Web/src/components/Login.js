@@ -1,10 +1,17 @@
-import { useEffect } from 'react'
+import { useEffect, useReducer } from 'react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { application } from '../application'
 import { toast } from 'react-toastify'
 
+import globalState from './utils/globalState'
+
 export const Login = () => {
+  let { reducer, initialState } = globalState
+
+  console.log('Reducer', reducer)
+  let [state, dispatch] = useReducer(reducer, initialState)
+
   let navigate = useNavigate()
   const _URL_ = 'https://type.fit/api/quotes'
   //   const _URL_ = "https://api.api-ninjas.com/v1/quotes";
@@ -28,6 +35,7 @@ export const Login = () => {
 
   let login = async (e) => {
     e.preventDefault()
+    dispatch({ type: 'loading' })
     let form = new FormData(e.target)
     let formData = form.entries()
     let data = Object.fromEntries([...formData])
