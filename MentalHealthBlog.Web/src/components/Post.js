@@ -1,20 +1,19 @@
-import React from "react";
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React from 'react'
+import { Link, useLocation } from 'react-router-dom'
 
-import { MdOutlineModeEditOutline, MdOutlineDelete } from "react-icons/md";
-import { DeleteConfirmation } from "./DeleteConfirmation";
+import { MdOutlineModeEditOutline, MdOutlineDelete } from 'react-icons/md'
+import { DeleteConfirmation } from './DeleteConfirmation'
+import { useSelector, useDispatch } from 'react-redux'
+import { openDeleteModal } from './redux-toolkit/features/modalSlice'
 
 export const Post = (props) => {
-  let [openModal, setOpenModal] = useState(false);
-  let location = useLocation();
+  let dispatch = useDispatch()
+  let { isDeleteOpen } = useSelector((store) => store.modal)
 
-  let dbObject = { ...props };
-  let loggedUser = location.state.loggedUser;
-  let changeModalState = (currentState) => {
-    return !currentState;
-  };
+  let location = useLocation()
 
+  let dbObject = { ...props }
+  let loggedUser = location.state.loggedUser
   return (
     <div className="main-container">
       <Link to={`post/${props.id}`}>
@@ -50,14 +49,8 @@ export const Post = (props) => {
           </button>
         </Link>
         <button data-action-delete="delete" type="button">
-          <MdOutlineDelete onClick={() => setOpenModal(!openModal)} />
-          {openModal && (
-            <DeleteConfirmation
-              {...props}
-              modalState={openModal}
-              changeModalState={changeModalState}
-            />
-          )}
+          <MdOutlineDelete onClick={() => dispatch(openDeleteModal(true))} />
+          {isDeleteOpen && <DeleteConfirmation {...props} />}
         </button>
       </div>
       <div className="post-container-tags">
@@ -66,9 +59,9 @@ export const Post = (props) => {
             <span className="add-post-content-picked-tags-span-tag " key={tag}>
               {tag}
             </span>
-          );
+          )
         })}
       </div>
     </div>
-  );
-};
+  )
+}

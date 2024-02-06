@@ -1,24 +1,25 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Modal from 'react-modal'
 import { toast } from 'react-toastify'
 
 import { application } from '../application'
 import { useLocation, useNavigate } from 'react-router'
+import { useDispatch, useSelector } from 'react-redux'
 
-const style = application.modal_style
+import { openAddModal } from './redux-toolkit/features/modalSlice'
 
 export const AddPost = (props) => {
-  let [modalOpened, setModalOpened] = useState(true)
+  let dispatch = useDispatch()
+  let { isAddOpen } = useSelector((store) => store.modal)
+
   let [chosenTags, setChosenTags] = useState([])
   let [suggestedTags, setSuggestedTags] = useState(props.tags)
   let [displayedSuggestedTags, setDisplayedSuggestedTags] = useState([])
-
   let [pickedTags, setPickedTags] = useState([])
+
   let navigate = useNavigate()
   let location = useLocation()
   let loggedUser = location.state.loggedUser
-
-  let closeModal = () => setModalOpened(!modalOpened)
 
   let handleTagAdding = (e) => {
     if (e.key === 'Enter') {
@@ -136,14 +137,14 @@ export const AddPost = (props) => {
           autoClose: 1500,
           position: 'bottom-right',
         })
-        closeModal()
+        dispatch(openAddModal(false))
       } else {
         console.log('Some error occured')
         toast.error("Couldn't add the post", {
           autoClose: 1500,
           position: 'bottom-right',
         })
-        closeModal()
+        dispatch(openAddModal(false))
       }
     } catch (error) {
       console.log(error)
@@ -151,7 +152,7 @@ export const AddPost = (props) => {
         autoClose: 1500,
         position: 'bottom-right',
       })
-      closeModal()
+      dispatch(openAddModal(false))
     }
 
     console.log('Form submitted')
@@ -160,10 +161,10 @@ export const AddPost = (props) => {
 
   return (
     <Modal
-      isOpen={modalOpened}
+      isOpen={isAddOpen}
       style={application.modal_style}
       appElement={document.getElementById('root')}
-      onRequestClose={closeModal}
+      onRequestClose={() => dispatch(openAddModal(false))}
     >
       <form
         onSubmit={submitForm}

@@ -1,10 +1,14 @@
 import React from 'react'
-import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import Modal from 'react-modal'
 import { application } from '../application'
 
+import { openDeleteModal } from './redux-toolkit/features/modalSlice'
+
 export const DeleteConfirmation = (props) => {
-  let [openModal, setOpenModal] = useState(props.modalState)
+  let dispatch = useDispatch()
+  let { isDeleteOpen } = useSelector((store) => store.modal)
+
   let deletePost = async (id) => {
     let request = await fetch(`${application.application_url}/post/${id}`, {
       method: 'DELETE',
@@ -12,12 +16,13 @@ export const DeleteConfirmation = (props) => {
     let data = await request.json()
     window.location.reload()
   }
+
   return (
     <Modal
-      isOpen={openModal}
+      isOpen={isDeleteOpen}
       style={application.modal_style}
       appElement={document.getElementById('root')}
-      onRequestClose={() => setOpenModal(!openModal)}
+      onRequestClose={() => dispatch(openDeleteModal(false))}
     >
       <div className="confirmation-container">
         <div className="confirmation-title">
@@ -29,10 +34,7 @@ export const DeleteConfirmation = (props) => {
           </button>
           <button
             type="button"
-            onClick={(e) => {
-              setOpenModal(!openModal)
-              props.changeModalState(true)
-            }}
+            onClick={() => dispatch(openDeleteModal(false))}
           >
             No
           </button>
