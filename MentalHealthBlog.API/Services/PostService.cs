@@ -33,6 +33,7 @@ namespace MentalHealthBlogAPI.Services
         {
             var dbPosts = await _context.Posts
                 .Where(p => p.UserId == query.UserId)
+                .OrderByDescending(p => p.Id)
                 .ToListAsync();
 
             var posts = new List<PostDto>();
