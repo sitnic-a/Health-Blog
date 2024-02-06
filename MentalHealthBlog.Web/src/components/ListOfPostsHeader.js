@@ -1,33 +1,38 @@
-import { useState, useEffect } from "react";
-import { useLocation } from "react-router";
-import { application } from "../application";
+import { useState, useEffect } from 'react'
+import { useLocation } from 'react-router'
+import { application } from '../application'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { AddPost } from "./AddPost";
+import { openAddModal } from './redux-toolkit/features/modalSlice'
 
-import { MdOutlineAddCircleOutline } from "react-icons/md";
+import { AddPost } from './AddPost'
+
+import { MdOutlineAddCircleOutline } from 'react-icons/md'
 
 export const ListOfPostsHeader = () => {
-  let location = useLocation();
-  let [isCreatingPost, setIsCreatingPost] = useState(false);
-  let [dbTags, setDbTags] = useState([]);
-  let url = `${application.application_url}/tag`;
+  let dispatch = useDispatch()
+  let { isAddOpen } = useSelector((store) => store.modal)
+
+  let location = useLocation()
+  let [dbTags, setDbTags] = useState([])
+  let url = `${application.application_url}/tag`
 
   useEffect(() => {
     let getAllTags = async (url) => {
       await fetch(url)
         .then((response) => response.json())
         .then((data) => {
-          setDbTags(data.serviceResponseObject);
-          console.log(dbTags);
-        });
-    };
-    getAllTags(url);
-  }, []);
+          setDbTags(data.serviceResponseObject)
+          console.log(dbTags)
+        })
+    }
+    getAllTags(url)
+  }, [])
 
-  let loggedUser = { ...location.state.loggedUser };
+  let loggedUser = { ...location.state.loggedUser }
   return (
     <>
-      {isCreatingPost && <AddPost tags={dbTags} />}
+      {isAddOpen && <AddPost tags={dbTags} />}
       <section className="list-of-posts-header">
         <h1 className="list-of-posts-author">
           Written by: {loggedUser.username}
@@ -35,12 +40,12 @@ export const ListOfPostsHeader = () => {
         <button
           data-action-add="add"
           type="button"
-          onClick={() => setIsCreatingPost(!isCreatingPost)}
+          onClick={() => dispatch(openAddModal(true))}
         >
           <MdOutlineAddCircleOutline />
           Add new post
         </button>
       </section>
     </>
-  );
-};
+  )
+}
