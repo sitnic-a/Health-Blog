@@ -1,20 +1,12 @@
 import React from "react";
-import { useEffect, useState, useReducer } from "react";
-//Import hooks
+import { useEffect } from "react";
 import { useLocation } from "react-router";
-
-//Import custom configuration and data
-import { application } from "../application";
-
-//Import components
-import { Post } from "./Post";
-import { ListOfPostsHeader } from "./ListOfPostsHeader";
-import { PieGraph } from "./PieGraph";
-
-import { Loader } from "./Loader";
-import globalState from "./utils/globalState";
 import { useDispatch, useSelector } from "react-redux";
 import { getPosts } from "./redux-toolkit/features/postSlice";
+import { Post } from "./Post";
+import { ListOfPostsHeader } from "./ListOfPostsHeader";
+import { Loader } from "./Loader";
+import { PieGraph } from "./PieGraph";
 
 export const ListOfPosts = () => {
   let dispatch = useDispatch();

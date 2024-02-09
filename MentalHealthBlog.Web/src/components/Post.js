@@ -1,19 +1,18 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-
-import { MdOutlineModeEditOutline, MdOutlineDelete } from "react-icons/md";
 import { DeleteConfirmation } from "./DeleteConfirmation";
+import { MdOutlineModeEditOutline, MdOutlineDelete } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
 import { openDeleteModal } from "./redux-toolkit/features/modalSlice";
+import { setPost } from "./redux-toolkit/features/postSlice";
 
 export const Post = (props) => {
   let dispatch = useDispatch();
   let { isDeleteOpen } = useSelector((store) => store.modal);
 
   let location = useLocation();
-
-  let dbObject = { ...props };
   let loggedUser = location.state.loggedUser;
+
   return (
     <div className="main-container">
       <Link to={`post/${props.id}`}>
@@ -49,8 +48,13 @@ export const Post = (props) => {
         </button>
       </Link>
       <button data-action-delete="delete" type="button">
-        <MdOutlineDelete onClick={() => dispatch(openDeleteModal(true))} />
-        {isDeleteOpen && <DeleteConfirmation {...props} />}
+        <MdOutlineDelete
+          onClick={() => {
+            dispatch(openDeleteModal(true));
+            dispatch(setPost(props));
+          }}
+        />
+        {isDeleteOpen && <DeleteConfirmation />}
       </button>
 
       <div className="post-container-tags">
