@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { application } from "../../../application";
+import { toast } from "react-toastify";
 
 export const getPosts = createAsyncThunk("post/", async (loggedUser) => {
   let url = `${application.application_url}/post?UserId=${loggedUser.id}`;
@@ -64,11 +65,19 @@ let postSlice = createSlice({
       })
       .addCase(deletePostById.rejected, (state) => {
         state.isFailed = true;
+        toast.error("Couldn't delete post", {
+          autoClose: 1500,
+          position: "bottom-right",
+        });
       })
       .addCase(deletePostById.fulfilled, (state, action) => {
         // state.posts = state.posts.filter(
         //   (p) => p.id !== action.payload.serviceResponseObject.id
         // );
+        toast.success("Succesfully deleted post", {
+          autoClose: 1500,
+          position: "bottom-right",
+        });
         window.location.reload();
       });
   },
