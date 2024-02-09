@@ -1,19 +1,19 @@
-import React from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
 
-import { MdOutlineModeEditOutline, MdOutlineDelete } from 'react-icons/md'
-import { DeleteConfirmation } from './DeleteConfirmation'
-import { useSelector, useDispatch } from 'react-redux'
-import { openDeleteModal } from './redux-toolkit/features/modalSlice'
+import { MdOutlineModeEditOutline, MdOutlineDelete } from "react-icons/md";
+import { DeleteConfirmation } from "./DeleteConfirmation";
+import { useSelector, useDispatch } from "react-redux";
+import { openDeleteModal } from "./redux-toolkit/features/modalSlice";
 
 export const Post = (props) => {
-  let dispatch = useDispatch()
-  let { isDeleteOpen } = useSelector((store) => store.modal)
+  let dispatch = useDispatch();
+  let { isDeleteOpen } = useSelector((store) => store.modal);
 
-  let location = useLocation()
+  let location = useLocation();
 
-  let dbObject = { ...props }
-  let loggedUser = location.state.loggedUser
+  let dbObject = { ...props };
+  let loggedUser = location.state.loggedUser;
   return (
     <div className="main-container">
       <Link to={`post/${props.id}`}>
@@ -34,34 +34,34 @@ export const Post = (props) => {
           </section>
         </section>
       </Link>
-      <div className="overlay-mask">
-        <Link
-          to={`/post/${props.id}`}
-          state={{
-            postTitle: props.title,
-            postContent: props.content,
-            postUserId: props.userId,
-            loggedUser: loggedUser,
-          }}
-        >
-          <button data-action-update="update" type="button">
-            <MdOutlineModeEditOutline />
-          </button>
-        </Link>
-        <button data-action-delete="delete" type="button">
-          <MdOutlineDelete onClick={() => dispatch(openDeleteModal(true))} />
-          {isDeleteOpen && <DeleteConfirmation {...props} />}
+
+      <Link
+        to={`/post/${props.id}`}
+        state={{
+          postTitle: props.title,
+          postContent: props.content,
+          postUserId: props.userId,
+          loggedUser: loggedUser,
+        }}
+      >
+        <button data-action-update="update" type="button">
+          <MdOutlineModeEditOutline />
         </button>
-      </div>
+      </Link>
+      <button data-action-delete="delete" type="button">
+        <MdOutlineDelete onClick={() => dispatch(openDeleteModal(true))} />
+        {isDeleteOpen && <DeleteConfirmation {...props} />}
+      </button>
+
       <div className="post-container-tags">
         {props.tags.map((tag) => {
           return (
             <span className="add-post-content-picked-tags-span-tag " key={tag}>
               {tag}
             </span>
-          )
+          );
         })}
       </div>
     </div>
-  )
-}
+  );
+};
