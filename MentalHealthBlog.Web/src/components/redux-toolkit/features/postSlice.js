@@ -2,6 +2,14 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { application } from "../../../application";
 import { toast } from "react-toastify";
 
+let initialState = {
+  posts: [],
+  post: null,
+  isLoading: false,
+  isSuccessful: false,
+  isFailed: false,
+};
+
 export const getPosts = createAsyncThunk("post/", async (loggedUser) => {
   let url = `${application.application_url}/post?UserId=${loggedUser.id}`;
   let request = await fetch(url, {
@@ -15,10 +23,44 @@ export const getPosts = createAsyncThunk("post/", async (loggedUser) => {
   return response;
 });
 
+export const createPost = createAsyncThunk("post/add/", async (addUserObj) => {
+  console.log("Form value", addUserObj.e);
+  console.log("Logged user ", addUserObj.loggedUser);
+  let url = `${application.application_url}/post`;
+  addUserObj.e.preventDefault();
+  let form = new FormData(addUserObj.e.target);
+  let data = Object.fromEntries([...form.entries()]);
+
+  let newPost = {
+    title: data.title,
+    content: data.content,
+    userId: addUserObj.loggedUser.id,
+    tags: addUserObj.chosenTags,
+  };
+
+  if (
+    newPost.title === "" ||
+    newPost.title === null ||
+    newPost.content === "" ||
+    newPost.content === null
+  ) {
+    return;
+  }
+
+  let request = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify(newPost),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  let response = await request.json();
+  return response;
+});
+
 export const deletePostById = createAsyncThunk(
-  "post/{id}",
+  "post/delete/{id}",
   async (deletePostObj) => {
-    console.log("DELETE OBJ", deletePostObj);
     let url = `${application.application_url}/post/${deletePostObj.post.id}`;
     let request = await fetch(url, {
       method: "DELETE",
@@ -34,13 +76,7 @@ export const deletePostById = createAsyncThunk(
 
 let postSlice = createSlice({
   name: "postSlice",
-  initialState: {
-    posts: [],
-    post: null,
-    isLoading: false,
-    isSuccessful: false,
-    isFailed: false,
-  },
+  initialState,
   reducers: {
     setPost: (state, action) => {
       state.post = action.payload;
@@ -57,6 +93,18 @@ let postSlice = createSlice({
       })
       .addCase(getPosts.fulfilled, (state, action) => {
         state.posts = action.payload.serviceResponseObject;
+      })
+
+      //addPost
+      .addCase(createPost.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createPost.rejected, (state) => {
+        state.isFailed = true;
+      })
+      .addCase(createPost.fulfilled, (state, action) => {
+        state.isLoading = false;
+        window.location.reload();
       })
 
       //--- deleteById
