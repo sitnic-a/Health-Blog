@@ -1,5 +1,4 @@
 import React from "react";
-import { useState } from "react";
 import { useLocation } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -15,7 +14,7 @@ import {
   getTags,
 } from "./redux-toolkit/features/tagSlice";
 
-export const AddPost = (props) => {
+export const AddPost = () => {
   let dispatch = useDispatch();
   let { isAddOpen } = useSelector((store) => store.modal);
   let { suggestedTags, displayedSuggestedTags, chosenTags, pickedTags } =
@@ -134,20 +133,15 @@ export const AddPost = (props) => {
     dispatch(setChosenTags(afterPickChosenTags));
     let afterPickPickedTags = [...pickedTags, tag];
     dispatch(setPickedTags(afterPickPickedTags));
-    // setChosenTags((currentState) => {
-    //   currentState = [...currentState, tag.name];
-    //   setPickedTags([...pickedTags, tag]);
-    //   return currentState;
-    // });
   };
 
   let submitForm = async (e) => {
-    let addUserObj = {
+    let addPostObj = {
       e,
       loggedUser,
       chosenTags,
     };
-    dispatch(createPost(addUserObj));
+    dispatch(createPost(addPostObj));
     dispatch(openAddModal(false));
 
     // e.preventDefault();

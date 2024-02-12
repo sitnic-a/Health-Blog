@@ -23,19 +23,17 @@ export const getPosts = createAsyncThunk("post/", async (loggedUser) => {
   return response;
 });
 
-export const createPost = createAsyncThunk("post/add/", async (addUserObj) => {
-  console.log("Form value", addUserObj.e);
-  console.log("Logged user ", addUserObj.loggedUser);
+export const createPost = createAsyncThunk("post/add/", async (addPostObj) => {
   let url = `${application.application_url}/post`;
-  addUserObj.e.preventDefault();
-  let form = new FormData(addUserObj.e.target);
+  addPostObj.e.preventDefault();
+  let form = new FormData(addPostObj.e.target);
   let data = Object.fromEntries([...form.entries()]);
 
   let newPost = {
     title: data.title,
     content: data.content,
-    userId: addUserObj.loggedUser.id,
-    tags: addUserObj.chosenTags,
+    userId: addPostObj.loggedUser.id,
+    tags: addPostObj.chosenTags,
   };
 
   if (
