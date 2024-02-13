@@ -1,10 +1,9 @@
 import React from "react";
 import { useLocation } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
+import { application } from "../application";
 import Modal from "react-modal";
 import { openAddModal } from "./redux-toolkit/features/modalSlice";
-import { application } from "../application";
 import { createPost } from "./redux-toolkit/features/postSlice";
 import {
   setSuggestedTags,
@@ -143,69 +142,6 @@ export const AddPost = () => {
     };
     dispatch(createPost(addPostObj));
     dispatch(openAddModal(false));
-
-    // e.preventDefault();
-    // let form = new FormData(e.target);
-    // let data = Object.fromEntries([...form.entries()]);
-
-    // let newPost = {
-    //   title: data.title,
-    //   content: data.content,
-    //   userId: loggedUser.id,
-    //   tags: chosenTags,
-    // };
-
-    // if (
-    //   newPost.title === "" ||
-    //   newPost.title === null ||
-    //   newPost.content === "" ||
-    //   newPost.content === null
-    // ) {
-    //   toast.error("Couldn't add the post", {
-    //     autoClose: 1500,
-    //     position: "bottom-right",
-    //   });
-    //   return;
-    // }
-
-    // console.log(newPost);
-
-    // try {
-    //   let response = await fetch(`${application.application_url}/post`, {
-    //     method: "POST",
-    //     body: JSON.stringify(newPost),
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   });
-
-    //   let responseJson = await response.json();
-    //   if (response.status === 200) {
-    //     alert("Added new post");
-    //     toast.success("New post succesfully added", {
-    //       autoClose: 1500,
-    //       position: "bottom-right",
-    //     });
-    //     dispatch(openAddModal(false));
-    //   } else {
-    //     console.log("Some error occured");
-    //     toast.error("Couldn't add the post", {
-    //       autoClose: 1500,
-    //       position: "bottom-right",
-    //     });
-    //     dispatch(openAddModal(false));
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    //   toast.error("Couldn't add the post", {
-    //     autoClose: 1500,
-    //     position: "bottom-right",
-    //   });
-    //   dispatch(openAddModal(false));
-    // }
-
-    // console.log("Form submitted");
-    // window.location.reload();
   };
 
   return (

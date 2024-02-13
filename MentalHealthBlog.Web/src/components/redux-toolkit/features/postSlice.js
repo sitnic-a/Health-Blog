@@ -5,9 +5,11 @@ import { toast } from "react-toastify";
 let initialState = {
   posts: [],
   post: null,
+  loggedUser: null,
   isLoading: false,
   isSuccessful: false,
   isFailed: false,
+  isToasting: false,
 };
 
 export const getPosts = createAsyncThunk("post/", async (loggedUser) => {
@@ -24,6 +26,7 @@ export const getPosts = createAsyncThunk("post/", async (loggedUser) => {
 });
 
 export const createPost = createAsyncThunk("post/add/", async (addPostObj) => {
+  initialState.loggedUser = addPostObj.loggedUser;
   let url = `${application.application_url}/post`;
   addPostObj.e.preventDefault();
   let form = new FormData(addPostObj.e.target);
@@ -55,6 +58,48 @@ export const createPost = createAsyncThunk("post/add/", async (addPostObj) => {
   let response = await request.json();
   return response;
 });
+
+export const updatePost = createAsyncThunk(
+  "post/update/{id}",
+  async (updatePostObj) => {
+    console.log("Update post obj ", updatePostObj);
+    updatePostObj.e.preventDefault();
+    let form = new FormData(updatePostObj.e.target);
+    let formEntries = [...form.entries()];
+    let formObject = Object.fromEntries(formEntries);
+    let data = {
+      title: formObject.title,
+      content: formObject.content,
+      userId: updatePostObj.post.userId,
+    };
+
+    console.log(data);
+    if (
+      data.title === "" ||
+      data.title === null ||
+      data.content === "" ||
+      data.content === null
+    ) {
+      toast.error("Fields should be populated!", {
+        autoClose: 1500,
+        position: "bottom-right",
+      });
+      return;
+    }
+
+    let url = `${application.application_url}/post/${updatePostObj.post.id}`;
+    let request = await fetch(url, {
+      method: "PUT",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${updatePostObj.loggedUser.token}`,
+      },
+    });
+    let response = await request.json();
+    return response;
+  }
+);
 
 export const deletePostById = createAsyncThunk(
   "post/delete/{id}",
@@ -93,7 +138,7 @@ let postSlice = createSlice({
         state.posts = action.payload.serviceResponseObject;
       })
 
-      //addPost
+      //--- addPost
       .addCase(createPost.pending, (state) => {
         state.isLoading = true;
       })
@@ -103,6 +148,21 @@ let postSlice = createSlice({
       .addCase(createPost.fulfilled, (state, action) => {
         state.isLoading = false;
         window.location.reload();
+      })
+
+      //--- updatePost
+      .addCase(updatePost.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updatePost.rejected, (state) => {
+        state.isFailed = true;
+        toast.error("Couldn't update post", {
+          autoClose: 1500,
+          position: "bottom-right",
+        });
+      })
+      .addCase(updatePost.fulfilled, (state, action) => {
+        state.isLoading = false;
       })
 
       //--- deleteById

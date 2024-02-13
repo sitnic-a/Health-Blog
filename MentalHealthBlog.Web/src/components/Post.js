@@ -44,7 +44,7 @@ export const Post = (props) => {
         }}
       >
         <button data-action-update="update" type="button">
-          <MdOutlineModeEditOutline />
+          <MdOutlineModeEditOutline onClick={() => dispatch(setPost(props))} />
         </button>
       </Link>
       <button data-action-delete="delete" type="button">
