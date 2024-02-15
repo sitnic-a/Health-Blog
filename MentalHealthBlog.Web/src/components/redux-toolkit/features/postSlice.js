@@ -5,11 +5,9 @@ import { toast } from "react-toastify";
 let initialState = {
   posts: [],
   post: null,
-  loggedUser: null,
   isLoading: false,
   isSuccessful: false,
   isFailed: false,
-  isToasting: false,
 };
 
 export const getPosts = createAsyncThunk("post/", async (loggedUser) => {
@@ -26,7 +24,6 @@ export const getPosts = createAsyncThunk("post/", async (loggedUser) => {
 });
 
 export const createPost = createAsyncThunk("post/add/", async (addPostObj) => {
-  initialState.loggedUser = addPostObj.loggedUser;
   let url = `${application.application_url}/post`;
   addPostObj.e.preventDefault();
   let form = new FormData(addPostObj.e.target);
@@ -147,7 +144,13 @@ let postSlice = createSlice({
       })
       .addCase(createPost.fulfilled, (state, action) => {
         state.isLoading = false;
-        window.location.reload();
+        toast.success("Succesfully added post", {
+          autoClose: 1500,
+          position: "bottom-right",
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       })
 
       //--- updatePost
@@ -161,9 +164,7 @@ let postSlice = createSlice({
           position: "bottom-right",
         });
       })
-      .addCase(updatePost.fulfilled, (state, action) => {
-        state.isLoading = false;
-      })
+      .addCase(updatePost.fulfilled, (state, action) => {})
 
       //--- deleteById
       .addCase(deletePostById.pending, (state) => {
@@ -172,19 +173,12 @@ let postSlice = createSlice({
       .addCase(deletePostById.rejected, (state) => {
         state.isFailed = true;
         toast.error("Couldn't delete post", {
-          autoClose: 1500,
+          autoClose: 5000,
           position: "bottom-right",
         });
       })
       .addCase(deletePostById.fulfilled, (state, action) => {
-        // state.posts = state.posts.filter(
-        //   (p) => p.id !== action.payload.serviceResponseObject.id
-        // );
-        toast.success("Succesfully deleted post", {
-          autoClose: 1500,
-          position: "bottom-right",
-        });
-        window.location.reload();
+        toast.isActive = false;
       });
   },
 });

@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect } from "react";
 import { useLocation } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { application } from "../application";
@@ -14,6 +15,10 @@ import {
 } from "./redux-toolkit/features/tagSlice";
 
 export const AddPost = () => {
+  useEffect(() => {
+    dispatch(getTags());
+  }, []);
+
   let dispatch = useDispatch();
   let { isAddOpen } = useSelector((store) => store.modal);
   let { suggestedTags, displayedSuggestedTags, chosenTags, pickedTags } =
@@ -134,7 +139,7 @@ export const AddPost = () => {
     dispatch(setPickedTags(afterPickPickedTags));
   };
 
-  let submitForm = async (e) => {
+  let submitForm = (e) => {
     let addPostObj = {
       e,
       loggedUser,

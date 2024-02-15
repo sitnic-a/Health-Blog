@@ -15,7 +15,15 @@ export const Post = (props) => {
 
   return (
     <div className="main-container">
-      <Link to={`post/${props.id}`}>
+      <Link
+        onClick={() => {
+          dispatch(setPost(props));
+        }}
+        to={`post/${props.id}`}
+        state={{
+          loggedUser: loggedUser,
+        }}
+      >
         <section className="post-container">
           <section className="post-container-content">
             <div className="post-header">

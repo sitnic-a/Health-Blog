@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { openDeleteModal } from "./redux-toolkit/features/modalSlice";
 import { deletePostById } from "./redux-toolkit/features/postSlice";
 import { application } from "../application";
+import { toast } from "react-toastify";
 
 export const DeleteConfirmation = () => {
   let dispatch = useDispatch();
@@ -37,6 +38,13 @@ export const DeleteConfirmation = () => {
               dispatch(deletePostById(deletePostObj));
               //Napraviti da se reloada i pie chart kada se obrise post
               dispatch(openDeleteModal(false));
+              toast.success("Succesfully deleted post", {
+                autoClose: 1500,
+                position: "bottom-right",
+              });
+              setTimeout(() => {
+                window.location.reload();
+              }, 1500);
             }}
           >
             Yes
