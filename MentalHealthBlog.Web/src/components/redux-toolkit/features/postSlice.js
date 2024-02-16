@@ -164,7 +164,15 @@ let postSlice = createSlice({
           position: "bottom-right",
         });
       })
-      .addCase(updatePost.fulfilled, (state, action) => {})
+      .addCase(updatePost.fulfilled, (state, action) => {
+        toast.success("Succesfully updated post", {
+          autoClose: 1500,
+          position: "bottom-right",
+        });
+        toast.done = () => {
+          window.location.reload();
+        };
+      })
 
       //--- deleteById
       .addCase(deletePostById.pending, (state) => {

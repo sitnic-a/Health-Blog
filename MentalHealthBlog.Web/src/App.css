@@ -92,6 +92,8 @@ main {
 }
 
 .login {
+  width: 70%;
+  margin: auto;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -99,6 +101,12 @@ main {
 
 .login-container {
   padding: 1rem;
+}
+
+.quote-container {
+  /* border: 1px solid red; */
+  text-align: center;
+  margin-top: 4rem;
 }
 
 #modal {

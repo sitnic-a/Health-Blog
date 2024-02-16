@@ -1,30 +1,25 @@
 import { useEffect } from "react";
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { application } from "../application";
 import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { getQuote } from "./redux-toolkit/features/userSlice";
 
 export const Login = () => {
+  let dispatch = useDispatch();
+  let { quote } = useSelector((store) => store.user);
+
   let navigate = useNavigate();
-  const _URL_ = "https://type.fit/api/quotes";
-  //   const _URL_ = "https://api.api-ninjas.com/v1/quotes";
-  const _TIME_ = 10000;
-  let [zenQuote, setZenQuote] = useState("");
+  const _TIME_ = 5000;
 
   useEffect(() => {
-    getQuote();
+    dispatch(getQuote());
   }, []);
 
-  let getQuote = async () => {
-    let response = await fetch(_URL_).then((response) => response.json());
-    let arraySize = response.length;
-    let randomNumber = Math.floor(Math.random() * arraySize) + 1;
-    let obj = { ...response[randomNumber] };
-    setZenQuote(obj.text);
-    clearInterval(timer);
-  };
-
-  let timer = setInterval(getQuote, _TIME_);
+  let timer = setInterval(() => {
+    dispatch(getQuote());
+    return clearInterval(timer);
+  }, _TIME_);
 
   let login = async (e) => {
     e.preventDefault();
@@ -122,9 +117,14 @@ export const Login = () => {
           </button>
         </div>
       </form>
-      <div className="quote-container">
-        <h1>{zenQuote}</h1>
-      </div>
+      {quote !== null && (
+        <div className="quote-container">
+          <div>
+            <h1>{quote.text}</h1>
+            <h4>-{quote.author}-</h4>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

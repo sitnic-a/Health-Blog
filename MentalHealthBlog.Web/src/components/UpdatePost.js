@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { updatePost } from "./redux-toolkit/features/postSlice";
-import { toast } from "react-toastify";
 export const UpdatePost = () => {
   let dispatch = useDispatch();
 
@@ -29,13 +28,6 @@ export const UpdatePost = () => {
         loggedUser: updatePostObj.loggedUser,
       },
     });
-    toast.success("Succesfully updated post", {
-      autoClose: 1500,
-      position: "bottom-right",
-    });
-    toast.done = () => {
-      navigate(0);
-    };
   };
 
   return (
