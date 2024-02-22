@@ -19,11 +19,8 @@ export const Login = () => {
   const _TIME_ = 5000;
 
   if (isAuthenticated) {
-    toast.success("Succesfully logged in", {
-      autoClose: 1500,
-      position: "bottom-right",
-    });
     navigate("/", {
+      replace: true,
       state: {
         loggedUser: {
           id: authenticatedUser.id,
@@ -32,6 +29,9 @@ export const Login = () => {
         },
       },
     });
+  }
+  if (!isAuthenticated) {
+    navigate("/login");
   }
 
   useEffect(() => {
@@ -67,7 +67,22 @@ export const Login = () => {
       dispatch(setIsFailed(true));
       return;
     }
-    dispatch(login(user));
+    dispatch(login(user)).then((response) => {
+      let statusCode = response.payload.statusCode;
+      let authenticatedUser = response.payload.serviceResponseObject;
+      if (statusCode === 200 || statusCode === 201 || statusCode === 204) {
+        navigate("/", {
+          replace: true,
+          state: {
+            loggedUser: {
+              id: authenticatedUser.id,
+              username: authenticatedUser.username,
+              token: authenticatedUser.jwToken,
+            },
+          },
+        });
+      }
+    });
     form.delete("username");
     form.delete("password");
     form.set("password", "");
