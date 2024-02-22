@@ -22,11 +22,12 @@ export const UpdatePost = () => {
       loggedUser,
     };
     console.log("Update post obj ", updatePostObj);
-    dispatch(updatePost(updatePostObj));
-    navigate("/", {
-      state: {
-        loggedUser: updatePostObj.loggedUser,
-      },
+    dispatch(updatePost(updatePostObj)).then(() => {
+      navigate("/", {
+        state: {
+          loggedUser: updatePostObj.loggedUser,
+        },
+      });
     });
   };
 
