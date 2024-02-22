@@ -12,6 +12,7 @@ export const ListOfPosts = () => {
   let dispatch = useDispatch();
   let { isLoading, posts } = useSelector((store) => store.post);
   let { isLogging } = useSelector((store) => store.user);
+  let { statisticsLoading } = useSelector((store) => store.pie);
 
   let location = useLocation();
   let loggedUser = location.state.loggedUser;
@@ -20,7 +21,7 @@ export const ListOfPosts = () => {
     dispatch(getPosts(loggedUser));
   }, []);
 
-  if (isLoading && isLogging) {
+  if (isLoading && isLogging && statisticsLoading) {
     <Loader />;
   }
 
