@@ -1,12 +1,15 @@
 import React from "react";
-import { application } from "../application";
 import { useNavigate } from "react-router-dom";
 
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { register } from "./redux-toolkit/features/userSlice";
 
 export const Register = () => {
   let navigate = useNavigate();
-  let register = async (e) => {
+  let dispatch = useDispatch();
+
+  let registerUser = async (e) => {
     e.preventDefault();
     console.log("Register invoked");
     let form = new FormData(e.target);
@@ -32,46 +35,16 @@ export const Register = () => {
       return;
     }
 
-    try {
-      let response = await fetch(
-        `${application.application_url}/user/register/${newUser.username}/${newUser.password}`,
-        {
-          method: "POST",
-          body: JSON.stringify(newUser),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      let responseJSON = await response.json();
-      console.log(responseJSON);
-
-      if (responseJSON.statusCode === 201) {
-        alert("You've succesfully created your account");
-        toast.success("You've succesfully created your account", {
-          autoClose: 1500,
-          position: "bottom-right",
-        });
-        console.log(response);
+    dispatch(register(newUser)).then((response) => {
+      let statusCode = response.payload.statusCode;
+      if (statusCode === 201) {
         navigate("/login");
-      } else {
-        toast.warning("Couldn't register this user!", {
-          autoClose: 1500,
-          position: "bottom-right",
-        });
       }
-    } catch (error) {
-      console.log(error);
-      toast.error("You are not registered! Try again!", {
-        autoClose: 1500,
-        position: "bottom-right",
-      });
-    }
+    });
   };
   return (
     <section className="register-container">
-      <form onSubmit={register}>
+      <form onSubmit={registerUser}>
         <div>
           <label htmlFor="register-username">Username:</label>
           <input

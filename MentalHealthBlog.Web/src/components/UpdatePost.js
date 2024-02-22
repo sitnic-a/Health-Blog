@@ -1,76 +1,38 @@
 import React from "react";
 import { useState } from "react";
-import { useLocation, useParams, useNavigate } from "react-router-dom";
-import { application } from "../application";
-import { toast } from "react-toastify";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { updatePost } from "./redux-toolkit/features/postSlice";
+export const UpdatePost = () => {
+  let dispatch = useDispatch();
 
-export const UpdatePost = ({ propsObj }) => {
-  let [title, setTitle] = useState(propsObj.postTitle);
-  let [content, setContent] = useState(propsObj.postContent);
-  let { id } = useParams();
+  let { post } = useSelector((store) => store.post);
+
+  let [title, setTitle] = useState(post.title);
+  let [content, setContent] = useState(post.content);
   let location = useLocation();
   let navigate = useNavigate();
 
   let loggedUser = location.state.loggedUser;
-  console.log(`Update Post loggedUser`, loggedUser);
 
-  let updatePost = async (e) => {
-    e.preventDefault();
-    let form = new FormData(e.target);
-    let formEntries = [...form.entries()];
-    let formObject = Object.fromEntries(formEntries);
-    let data = {
-      title: formObject.title,
-      content: formObject.content,
-      userId: propsObj.postUserId,
+  let update = async (e) => {
+    let updatePostObj = {
+      e,
+      post,
+      loggedUser,
     };
-
-    console.log(data);
-    if (
-      data.title === "" ||
-      data.title === null ||
-      data.content === "" ||
-      data.content === null
-    ) {
-      toast.error("Fields should be populated!", {
-        autoClose: 1500,
-        position: "bottom-right",
+    console.log("Update post obj ", updatePostObj);
+    dispatch(updatePost(updatePostObj)).then(() => {
+      navigate("/", {
+        state: {
+          loggedUser: updatePostObj.loggedUser,
+        },
       });
-      return;
-    }
-
-    let response = await fetch(`${application.application_url}/post/${id}`, {
-      method: "PUT",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${loggedUser.token}`,
-      },
-    });
-
-    if (response.status === 200) {
-      alert("Sucessfully updated post");
-      toast.success("Succesfully updated", {
-        autoClose: 1500,
-        position: "bottom-right",
-      });
-    } else {
-      console.log("Some error occured");
-      toast.error("Couldn't update post", {
-        autoClose: 1500,
-        position: "bottom-right",
-      });
-    }
-
-    navigate("/", {
-      state: {
-        loggedUser: loggedUser,
-      },
     });
   };
 
   return (
-    <form onSubmit={updatePost}>
+    <form onSubmit={update}>
       <article className="post-by-id-container-edit">
         <h1> Update post:</h1>
         <p>

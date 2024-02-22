@@ -1,176 +1,166 @@
-import React, { useState } from 'react'
-import Modal from 'react-modal'
-import { toast } from 'react-toastify'
+import React from "react";
+import { useEffect } from "react";
+import { useLocation } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { application } from "../application";
+import Modal from "react-modal";
+import { openAddModal } from "./redux-toolkit/features/modalSlice";
+import { createPost } from "./redux-toolkit/features/postSlice";
+import {
+  setSuggestedTags,
+  setDisplayedSuggestedTags,
+  setChosenTags,
+  setPickedTags,
+  getTags,
+} from "./redux-toolkit/features/tagSlice";
 
-import { application } from '../application'
-import { useLocation, useNavigate } from 'react-router'
-import { useDispatch, useSelector } from 'react-redux'
+export const AddPost = () => {
+  useEffect(() => {
+    dispatch(getTags());
+  }, []);
 
-import { openAddModal } from './redux-toolkit/features/modalSlice'
+  let dispatch = useDispatch();
+  let { isAddOpen } = useSelector((store) => store.modal);
+  let { suggestedTags, displayedSuggestedTags, chosenTags, pickedTags } =
+    useSelector((store) => store.tag);
 
-export const AddPost = (props) => {
-  let dispatch = useDispatch()
-  let { isAddOpen } = useSelector((store) => store.modal)
+  console.log("Suggested tags ", suggestedTags);
 
-  let [chosenTags, setChosenTags] = useState([])
-  let [suggestedTags, setSuggestedTags] = useState(props.tags)
-  let [displayedSuggestedTags, setDisplayedSuggestedTags] = useState([])
-  let [pickedTags, setPickedTags] = useState([])
-
-  let navigate = useNavigate()
-  let location = useLocation()
-  let loggedUser = location.state.loggedUser
+  let location = useLocation();
+  let loggedUser = location.state.loggedUser;
 
   let handleTagAdding = (e) => {
-    if (e.key === 'Enter') {
-      let tag = e.target.value
-      setChosenTags((currentState) => {
-        let newArray = [...currentState, tag]
-        console.log(newArray)
-        return newArray
-      })
-      e.target.value = ''
-      return
+    let existingTag;
+    if (e.key === "Enter" && e.target.value === "") {
+      return;
     }
-  }
+
+    if (
+      e.key === "Enter" &&
+      suggestedTags.find((t) => t.name === e.target.value)
+    ) {
+      existingTag = suggestedTags.find((t) => t.name === e.target.value);
+      if (existingTag !== null || existingTag !== undefined) {
+        let afterEnterPickedTags = [...pickedTags, existingTag];
+        dispatch(setPickedTags(afterEnterPickedTags));
+        let updatedSuggestedTags = suggestedTags.filter(
+          (t) => t.id !== existingTag.id
+        );
+        dispatch(setSuggestedTags(updatedSuggestedTags));
+        let tag = e.target.value;
+        let afterAddChosenTags = [...chosenTags, tag];
+        dispatch(setChosenTags(afterAddChosenTags));
+        dispatch(setDisplayedSuggestedTags([]));
+        e.target.value = "";
+
+        return;
+      }
+    }
+
+    if (e.key === "Enter") {
+      let tag = e.target.value;
+      let afterAddChosenTags = [...chosenTags, tag];
+      let tagToAdd = {
+        id: -1,
+        name: e.target.value,
+      };
+      let afterEnterPickedTags = [...pickedTags, tagToAdd];
+      dispatch(setPickedTags(afterEnterPickedTags));
+      dispatch(setChosenTags(afterAddChosenTags));
+      e.target.value = "";
+      return;
+    }
+  };
 
   let handleTagRemoval = (tagName) => {
-    let dbTags = [...props.tags]
-    let tag = dbTags.find((t) => t.name === tagName)
-    setPickedTags((currentState) => {
-      let updatedSuggestedTags = [...suggestedTags, tag]
-      currentState = [...currentState].filter((t) => t.id !== tag.id)
+    let tagThatIsNotRecorded;
+    if (pickedTags.find((t) => t.id <= 0)) {
+      tagThatIsNotRecorded = pickedTags.find((t) => t.name === tagName);
+    }
+
+    if (tagThatIsNotRecorded !== undefined || tagThatIsNotRecorded !== null) {
+      let afterRemovePickedTags = pickedTags.filter((t) => t.name !== tagName);
+      dispatch(setPickedTags(afterRemovePickedTags));
+      let updatedSuggestedTagsForTagThatIsNotRecorded = [
+        ...suggestedTags,
+      ].filter((t) => !afterRemovePickedTags.includes(t));
+      dispatch(setSuggestedTags(updatedSuggestedTagsForTagThatIsNotRecorded));
+      let afterDeleteChosenTags = [...chosenTags].filter((t) => t !== tagName);
+      dispatch(setChosenTags(afterDeleteChosenTags));
+    }
+
+    if (pickedTags.find((t) => t.id > 0)) {
+      let tag = pickedTags.find((t) => t.name === tagName);
+      let updatedSuggestedTags = [...suggestedTags, tag];
+      let afterRemovePickedTags = pickedTags.filter((t) => t.id !== tag.id);
+      dispatch(setPickedTags(afterRemovePickedTags));
       updatedSuggestedTags = [...updatedSuggestedTags].filter(
-        (t) => !currentState.includes(t)
-      )
-      setSuggestedTags(updatedSuggestedTags)
-      return currentState
-    })
-    setChosenTags((currentState) => {
-      let newArray = [...currentState].filter((t) => t !== tagName)
-      console.log(newArray)
-      return newArray
-    })
-    console.log(chosenTags)
-  }
+        (t) => !afterRemovePickedTags.includes(t)
+      );
+      dispatch(setSuggestedTags(updatedSuggestedTags));
+      let afterDeleteChosenTags = [...chosenTags].filter((t) => t !== tagName);
+      dispatch(setChosenTags(afterDeleteChosenTags));
+    }
+  };
 
   let handleSuggestedTagsChange = (e) => {
-    if (e.target.value === '') {
+    if (e.target.value === "") {
       if (pickedTags.length > 0) {
-        setSuggestedTags((currentState) => {
-          currentState = currentState
-            .filter((t) => !pickedTags.includes(t))
-            .filter((t) => t.name !== e.target.value)
-          return currentState
-        })
-        //console.log("New suggested", suggestedTags);
+        let currentState = suggestedTags
+          .filter((t) => !pickedTags.includes(t))
+          .filter((t) => t.name !== e.target.value);
 
-        setDisplayedSuggestedTags([])
-        return
+        dispatch(setSuggestedTags(currentState));
+        dispatch(setDisplayedSuggestedTags([]));
+        return;
       }
-      setSuggestedTags(props.tags)
-      setDisplayedSuggestedTags([])
-      return
+      dispatch(getTags());
+      dispatch(setDisplayedSuggestedTags([]));
+      return;
     }
 
     let onInputTags = suggestedTags
       .filter((t) => t.name.includes(e.target.value))
-      .filter((t) => !pickedTags.includes(t))
-    setDisplayedSuggestedTags(onInputTags)
-  }
+      .filter((t) => !pickedTags.includes(t));
+    dispatch(setDisplayedSuggestedTags(onInputTags));
+  };
 
   let handlePickedTagClick = (tag) => {
-    document.querySelector('#tag').value = ''
+    document.querySelector("#tag").value = "";
     let suggestedTagsAfterClick = [...suggestedTags].filter(
       (t) => t.id !== tag.id
-    )
-    setSuggestedTags(suggestedTagsAfterClick)
-    setDisplayedSuggestedTags([])
+    );
+    dispatch(setSuggestedTags(suggestedTagsAfterClick));
+    dispatch(setDisplayedSuggestedTags([]));
 
-    setChosenTags((currentState) => {
-      currentState = [...currentState, tag.name]
-      setPickedTags([...pickedTags, tag])
-      return currentState
-    })
-  }
+    let afterPickChosenTags = [...chosenTags, tag.name];
+    dispatch(setChosenTags(afterPickChosenTags));
+    let afterPickPickedTags = [...pickedTags, tag];
+    dispatch(setPickedTags(afterPickPickedTags));
+  };
 
-  let submitForm = async (e) => {
-    e.preventDefault()
-    let form = new FormData(e.target)
-    let data = Object.fromEntries([...form.entries()])
-
-    let newPost = {
-      title: data.title,
-      content: data.content,
-      userId: loggedUser.id,
-      tags: chosenTags,
-    }
-
-    if (
-      newPost.title === '' ||
-      newPost.title === null ||
-      newPost.content === '' ||
-      newPost.content === null
-    ) {
-      toast.error("Couldn't add the post", {
-        autoClose: 1500,
-        position: 'bottom-right',
-      })
-      return
-    }
-
-    console.log(newPost)
-
-    try {
-      let response = await fetch(`${application.application_url}/post`, {
-        method: 'POST',
-        body: JSON.stringify(newPost),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-
-      let responseJson = await response.json()
-      if (response.status === 200) {
-        alert('Added new post')
-        toast.success('New post succesfully added', {
-          autoClose: 1500,
-          position: 'bottom-right',
-        })
-        dispatch(openAddModal(false))
-      } else {
-        console.log('Some error occured')
-        toast.error("Couldn't add the post", {
-          autoClose: 1500,
-          position: 'bottom-right',
-        })
-        dispatch(openAddModal(false))
-      }
-    } catch (error) {
-      console.log(error)
-      toast.error("Couldn't add the post", {
-        autoClose: 1500,
-        position: 'bottom-right',
-      })
-      dispatch(openAddModal(false))
-    }
-
-    console.log('Form submitted')
-    window.location.reload()
-  }
+  let submitForm = (e) => {
+    let addPostObj = {
+      e,
+      loggedUser,
+      chosenTags,
+    };
+    dispatch(createPost(addPostObj));
+    dispatch(openAddModal(false));
+  };
 
   return (
     <Modal
       isOpen={isAddOpen}
       style={application.modal_style}
-      appElement={document.getElementById('root')}
+      appElement={document.getElementById("root")}
       onRequestClose={() => dispatch(openAddModal(false))}
     >
       <form
         onSubmit={submitForm}
         id="add-post-form"
         onKeyDown={(e) => {
-          e.key === 'Enter' && e.preventDefault()
+          e.key === "Enter" && e.preventDefault();
         }}
       >
         <div className="add-post-modal-header">
@@ -212,7 +202,7 @@ export const AddPost = (props) => {
                     X
                   </span>
                 </span>
-              )
+              );
             })}
           </div>
           <div className="add-post-tags-container">
@@ -241,7 +231,7 @@ export const AddPost = (props) => {
                   >
                     {tag.name}
                   </div>
-                )
+                );
               })}
             </div>
           )}
@@ -250,5 +240,5 @@ export const AddPost = (props) => {
         <button type="submit">Save</button>
       </form>
     </Modal>
-  )
-}
+  );
+};

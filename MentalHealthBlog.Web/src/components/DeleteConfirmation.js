@@ -1,27 +1,30 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import Modal from 'react-modal'
-import { application } from '../application'
+import React from "react";
+import Modal from "react-modal";
+import { useLocation } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { openDeleteModal } from "./redux-toolkit/features/modalSlice";
+import { deletePostById } from "./redux-toolkit/features/postSlice";
+import { application } from "../application";
+import { toast } from "react-toastify";
 
-import { openDeleteModal } from './redux-toolkit/features/modalSlice'
+export const DeleteConfirmation = () => {
+  let dispatch = useDispatch();
+  let { isDeleteOpen } = useSelector((store) => store.modal);
+  let { post } = useSelector((store) => store.post);
 
-export const DeleteConfirmation = (props) => {
-  let dispatch = useDispatch()
-  let { isDeleteOpen } = useSelector((store) => store.modal)
+  let location = useLocation();
+  let loggedUser = location.state.loggedUser;
 
-  let deletePost = async (id) => {
-    let request = await fetch(`${application.application_url}/post/${id}`, {
-      method: 'DELETE',
-    })
-    let data = await request.json()
-    window.location.reload()
-  }
+  let deletePostObj = {
+    post: post,
+    loggedUser: loggedUser,
+  };
 
   return (
     <Modal
       isOpen={isDeleteOpen}
       style={application.modal_style}
-      appElement={document.getElementById('root')}
+      appElement={document.getElementById("root")}
       onRequestClose={() => dispatch(openDeleteModal(false))}
     >
       <div className="confirmation-container">
@@ -29,7 +32,21 @@ export const DeleteConfirmation = (props) => {
           <h2>Are you sure you want to delete this post?</h2>
         </div>
         <div className="confirmation-actions">
-          <button type="button" onClick={() => deletePost(props.id)}>
+          <button
+            type="button"
+            onClick={() => {
+              dispatch(deletePostById(deletePostObj));
+              //Napraviti da se reloada i pie chart kada se obrise post
+              dispatch(openDeleteModal(false));
+              toast.success("Succesfully deleted post", {
+                autoClose: 1500,
+                position: "bottom-right",
+              });
+              setTimeout(() => {
+                window.location.reload();
+              }, 1500);
+            }}
+          >
             Yes
           </button>
           <button
@@ -41,5 +58,5 @@ export const DeleteConfirmation = (props) => {
         </div>
       </div>
     </Modal>
-  )
-}
+  );
+};

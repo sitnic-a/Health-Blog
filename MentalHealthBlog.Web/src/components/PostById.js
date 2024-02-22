@@ -1,36 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
-import { application } from "../application";
+import React from "react";
 import { UpdatePost } from "./UpdatePost";
+import { useSelector } from "react-redux";
 
 export const PostById = () => {
-  let [stateNull, setStateNull] = useState(true);
-  const location = useLocation();
-  let [propsObj, setPropsObj] = useState({ ...location.state });
-  let [post, setPost] = useState({});
-
-  let { id } = useParams();
-  let fetchPost = async () => {
-    try {
-      await fetch(`${application.application_url}/post/${id}`)
-        .then((response) => response.json())
-        .then((data) => setPost(data.serviceResponseObject));
-
-      if (location.state !== null) {
-        setStateNull(false);
-        setPropsObj({
-          postTitle: location.state.postTitle,
-          postContent: location.state.postContent,
-          postUserId: location.state.postUserId,
-        });
-      }
-    } catch (error) {
-      console.log(error.name);
-    }
-  };
-  useEffect(() => {
-    fetchPost();
-  }, []);
+  let { post } = useSelector((store) => store.post);
+  console.log("Post by id ", post);
 
   return (
     <section className="post-by-id">
@@ -41,7 +15,7 @@ export const PostById = () => {
           <div>{post.content}</div>
         </pre>
       </article>
-      {!stateNull && <UpdatePost propsObj={propsObj} />}
+      {post !== undefined && <UpdatePost />}
     </section>
   );
 };
