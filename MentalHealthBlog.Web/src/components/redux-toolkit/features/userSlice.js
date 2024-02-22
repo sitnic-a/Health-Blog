@@ -9,7 +9,8 @@ let initialState = {
   quote: null,
   authenticatedUser: null,
   isAuthenticated: false,
-  loginStatusCode: null,
+  isRegistered: false,
+  statusCode: null,
 };
 
 export const getQuote = createAsyncThunk("quote", async () => {
@@ -34,6 +35,20 @@ export const login = createAsyncThunk("/user/login", async (user) => {
   return response;
 });
 
+export const register = createAsyncThunk("/user/register", async (user) => {
+  console.log("User on submit ", user);
+  let url = `${application.application_url}/user/register/${user.username}/${user.password}`;
+  let request = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify(user),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  let response = await request.json();
+  return response;
+});
+
 export const userSlice = createSlice({
   name: "userSlice",
   initialState,
@@ -55,8 +70,8 @@ export const userSlice = createSlice({
         state.isAuthenticated = true;
       })
       .addCase(login.fulfilled, (state, action) => {
-        state.loginStatusCode = action.payload.statusCode;
-        if (state.loginStatusCode === 200) {
+        state.statusCode = action.payload.statusCode;
+        if (state.statusCode === 200) {
           state.authenticatedUser = action.payload.serviceResponseObject;
           state.isLogging = false;
           state.isLoading = false;
@@ -65,9 +80,9 @@ export const userSlice = createSlice({
           return;
         }
         if (
-          state.loginStatusCode !== 200 ||
-          state.loginStatusCode !== 201 ||
-          state.loginStatusCode !== 204
+          state.statusCode !== 200 ||
+          state.statusCode !== 201 ||
+          state.statusCode !== 204
         ) {
           toast.error("Invalid credentials, try again", {
             autoClose: 1500,
@@ -78,6 +93,43 @@ export const userSlice = createSlice({
           state.isLogging = false;
           state.isAuthenticated = false;
           state.authenticatedUser = null;
+          return;
+        }
+      })
+
+      //--- register
+      .addCase(register.pending, (state) => {
+        state.isLoading = true;
+        state.isRegistered = false;
+      })
+      .addCase(register.rejected, (state) => {
+        state.isFailed = true;
+        state.isRegistered = false;
+      })
+      .addCase(register.fulfilled, (state, action) => {
+        console.log("Register fulfilled ", action.payload);
+        state.statusCode = action.payload.statusCode;
+        if (state.statusCode === 201) {
+          toast.success("You've successfully created an account", {
+            autoClose: 1500,
+            position: "bottom-right",
+          });
+          state.isRegistered = true;
+          state.isLoading = false;
+          return;
+        }
+        if (
+          state.statusCode !== 200 ||
+          state.statusCode !== 201 ||
+          state.statusCode !== 204
+        ) {
+          toast.error("Couldn't register this user", {
+            autoClose: 1500,
+            position: "bottom-right",
+          });
+          // console.log("Logged unsuccessfully");
+          state.isLoading = false;
+          return;
         }
       })
 
