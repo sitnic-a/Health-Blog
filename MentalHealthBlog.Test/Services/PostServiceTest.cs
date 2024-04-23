@@ -1,5 +1,8 @@
-﻿using FluentAssertions;
+﻿using AutoMapper;
+using FluentAssertions;
+using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
+using MentalHealthBlog.API.Utils.Mapper;
 using MentalHealthBlog.Test.Moq;
 using MentalHealthBlog.Test.TestData;
 using MentalHealthBlogAPI.Data;
@@ -14,29 +17,41 @@ namespace MentalHealthBlog.Test.PostTest
     public class PostServiceTest
     {
         private readonly Mock<ILogger<PostService>> _postServiceLogger = new Mock<ILogger<PostService>>();
+        private readonly IMapper _mapper;
         private readonly DataContext _context = DataContextTestHelper.LoadDataContext();
         private readonly PostService _postService;
         public PostServiceTest()
         {
-            _postService = new PostService(_context, _postServiceLogger.Object);
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new HealthBlogMapper());
+            });
+            IMapper mapper = mappingConfig.CreateMapper();
+            _mapper = mapper;
+            _postService = new PostService(_context, _mapper, _postServiceLogger.Object);
         }
 
         #region GET
 
-        [Fact]
-        public async void GetPosts_ReturnsNonNull()
+        [Theory]
+        [MemberData(memberName: nameof(Data.ValidSearchPostDto), MemberType = typeof(Data))]
+        public async void GetPosts_ReturnsNonNull(int userId)
         {
             //Arrange
+            SearchPostDto query = new SearchPostDto
+            {
+                UserId = userId
+            };
 
             //Act
-            Response response = await _postService.GetPosts();
-            IEnumerable<Post> posts = response.ServiceResponseObject.As<IEnumerable<Post>>();
+            Response response = await _postService.GetPosts(query);
+            IEnumerable<Post> posts = _mapper.Map<IEnumerable<Post>>(response.ServiceResponseObject);
             var numberOfPosts = posts.Count();
 
             //Assert
             response.StatusCode.Should().Be(StatusCodes.Status200OK);
             posts.Should().NotBeNull();
-            Assert.Equal(5, numberOfPosts);
+            Assert.Equal(3, numberOfPosts);
         }
 
         [Theory]
@@ -69,7 +84,6 @@ namespace MentalHealthBlog.Test.PostTest
 
             //Act
             Response response = await _postService.GetById(id);
-            Post dbPost = response.ServiceResponseObject.As<Post>();
 
             //Assert
             response.StatusCode.Should().Be(StatusCodes.Status204NoContent);
@@ -84,7 +98,13 @@ namespace MentalHealthBlog.Test.PostTest
         public async Task Add_ReturnNonCreatedNewPost(string title, string content, int userId)
         {
             //Arrange
-            var post = new Post(title, content, userId);
+            CreatePostDto post = new CreatePostDto
+            {
+                Title = title,
+                Content = content,
+                UserId = userId
+            };
+
             //Act
             Response response = await _postService.Add(post);
             Post newPost = response.ServiceResponseObject.As<Post>();
@@ -98,7 +118,13 @@ namespace MentalHealthBlog.Test.PostTest
         public async Task Add_ReturnCreatedPost(string title, string content, int userId)
         {
             //Arrange
-            var post = new Post(title, content, userId);
+            CreatePostDto post = new CreatePostDto
+            {
+                Title = title,
+                Content = content,
+                UserId = userId,
+                Tags = new List<string>()
+            };
 
             //Act
             Response response = await _postService.Add(post);
@@ -106,10 +132,9 @@ namespace MentalHealthBlog.Test.PostTest
 
             //Assert
             response.StatusCode.Should().Be(StatusCodes.Status201Created);
-            newPost.Should().BeEquivalentTo(post);
             newPost.Should().NotBeNull();
             newPost.Should().BeOfType(typeof(Post));
-            newPost.Content.Should().BeEquivalentTo(content);
+            newPost.Content.Should().BeEquivalentTo(post.Content);
         }
         #endregion
 
@@ -150,7 +175,7 @@ namespace MentalHealthBlog.Test.PostTest
         }
 
         [Theory]
-        [MemberData(memberName:nameof(Data.UpdateMethodsValidData), MemberType =typeof(Data))]
+        [MemberData(memberName: nameof(Data.UpdateMethodsValidData), MemberType = typeof(Data))]
         public async Task Update_ReturnsUpdatedPost(int postId, string title, string content, int userId)
         {
             //Arrange
@@ -200,7 +225,7 @@ namespace MentalHealthBlog.Test.PostTest
             Post dbPost = responseGetById.ServiceResponseObject.As<Post>();
 
             //Act
-            Response response  = await _postService.Delete(id);
+            Response response = await _postService.Delete(id);
             Post deletedPost = response.ServiceResponseObject.As<Post>();
 
             //Assert
