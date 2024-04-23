@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace MentalHealthBlogAPI.Models
 {
@@ -10,6 +11,7 @@ namespace MentalHealthBlogAPI.Models
         public int UserId { get; set; }
         [JsonIgnore]
         public User? User { get; set; }
+        public DateTime CreatedAt { get; set; }
 
         public Post(){  }
         public Post(string title, string content, int userId)
@@ -17,6 +19,7 @@ namespace MentalHealthBlogAPI.Models
             Title = title;
             Content = content;
             UserId = userId;
+            CreatedAt = DateTime.Now;
         }
     }
 }
