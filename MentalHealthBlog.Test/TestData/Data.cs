@@ -1,7 +1,14 @@
-﻿namespace MentalHealthBlog.Test.TestData
+﻿using MentalHealthBlog.API.Models.ResourceRequest;
+
+namespace MentalHealthBlog.Test.TestData
 {
     public class Data
     {
+        public static IEnumerable<object[]> ValidSearchPostDto =>
+            new List<object[]>
+            {
+                new object[] {1},
+            };
         public static IEnumerable<object[]> PostMethodsInvalidTestData =>
             new List<object[]>
             {

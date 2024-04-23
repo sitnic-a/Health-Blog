@@ -5,12 +5,13 @@ using MentalHealthBlogAPI.Models;
 
 namespace MentalHealthBlog.API.Utils.Mapper
 {
-    public class AutoMapper : Profile
+    public class HealthBlogMapper : Profile
     {
-        public AutoMapper()
+        public HealthBlogMapper()
         {
             CreateMap<Post, CreatePostDto>().ReverseMap();
             CreateMap<Post,PostDto>().ReverseMap();
+            CreateMap<IEnumerable<Post>, IEnumerable<Post>>();
         }
     }
 }
