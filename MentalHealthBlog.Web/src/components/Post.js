@@ -6,12 +6,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { openDeleteModal } from "./redux-toolkit/features/modalSlice";
 import { setPost } from "./redux-toolkit/features/postSlice";
 
+import { formatDate } from "./utils/helper-methods/methods";
+
 export const Post = (props) => {
   let dispatch = useDispatch();
   let { isDeleteOpen } = useSelector((store) => store.modal);
 
   let location = useLocation();
   let loggedUser = location.state.loggedUser;
+
+  //Helpers
+  let createdAt = formatDate(props.createdAt);
 
   return (
     <div className="main-container">
@@ -37,6 +42,11 @@ export const Post = (props) => {
                 value={props.content}
                 disabled={true}
               ></textarea>
+            </div>
+            <div className="post-date">
+              <p>
+                Created at: <span>{createdAt}</span>
+              </p>
             </div>
           </section>
         </section>
