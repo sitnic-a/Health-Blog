@@ -34,11 +34,11 @@ namespace MentalHealthBlogAPI.Data
                 );
 
             modelBuilder.Entity<Post>().HasData(
-                new { Id = 1, Title = "Title_01", Content = "Content_T01", UserId = 1 },
-                new { Id = 2, Title = "Title_02", Content = "Content_T02", UserId = 1 },
-                new { Id = 3, Title = "Title_03", Content = "Content_T03", UserId = 2 },
-                new { Id = 4, Title = "Title_04", Content = "Content_T04", UserId = 2 },
-                new { Id = 5, Title = "Title_05", Content = "Content_T05", UserId = 1 }
+                new { Id = 1, Title = "Title_01", Content = "Content_T01", UserId = 1, CreatedAt = DateTime.Now },
+                new { Id = 2, Title = "Title_02", Content = "Content_T02", UserId = 1, CreatedAt = DateTime.Now },
+                new { Id = 3, Title = "Title_03", Content = "Content_T03", UserId = 2, CreatedAt = DateTime.Now },
+                new { Id = 4, Title = "Title_04", Content = "Content_T04", UserId = 2, CreatedAt = DateTime.Now },
+                new { Id = 5, Title = "Title_05", Content = "Content_T05", UserId = 1, CreatedAt = DateTime.Now }
                 );
 
             modelBuilder.Entity<Tag>().HasData(
