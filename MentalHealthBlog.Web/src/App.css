@@ -212,7 +212,6 @@ dialog::backdrop {
   display: flex;
   flex-wrap: wrap;
   gap: 0.1rem;
-  color: #fff;
   width: 55%;
   height: 80vh;
   overflow-y: scroll;
@@ -277,6 +276,10 @@ button[data-action-add="add"] svg {
   margin: 0.5rem;
 }
 
+.main-container > a {
+  text-decoration: none;
+}
+
 .post-container {
   margin-top: 0.3rem;
   /* border: 1px solid blue; */
@@ -308,13 +311,21 @@ button[data-action-add="add"] svg {
   width: 100%;
 }
 
-.overlay-mask {
-  position: absolute;
-  top: 0.3rem;
-  background: transparent;
-  width: 100%;
-  height: 10%;
-  visibility: visible;
+.post-date {
+  margin-top: 0.4rem;
+}
+
+.post-date p {
+  font-size: 0.8em;
+  color: #920d0d;
+  font-family: "serif";
+  font-weight: 550;
+  margin-block: 0;
+  text-decoration: none;
+}
+
+.post-date p > span {
+  margin-left: 0.7rem;
 }
 
 .post-container-tags {
