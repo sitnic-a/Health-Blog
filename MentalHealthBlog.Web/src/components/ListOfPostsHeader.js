@@ -1,21 +1,21 @@
-import { useEffect } from "react";
-import { useLocation } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
-import { AddPost } from "./AddPost";
-import { MdOutlineAddCircleOutline } from "react-icons/md";
-import { openAddModal } from "./redux-toolkit/features/modalSlice";
-import { getTags } from "./redux-toolkit/features/tagSlice";
+import { useEffect } from 'react'
+import { useLocation } from 'react-router'
+import { useDispatch, useSelector } from 'react-redux'
+import { AddPost } from './AddPost'
+import { MdOutlineAddCircleOutline } from 'react-icons/md'
+import { openAddModal } from './redux-toolkit/features/modalSlice'
+import { getTags } from './redux-toolkit/features/tagSlice'
 
 export const ListOfPostsHeader = () => {
-  let dispatch = useDispatch();
-  let { isAddOpen } = useSelector((store) => store.modal);
+  let dispatch = useDispatch()
+  let { isAddOpen } = useSelector((store) => store.modal)
 
-  let location = useLocation();
-  let loggedUser = { ...location.state.loggedUser };
+  let location = useLocation()
+  let loggedUser = { ...location.state.loggedUser }
 
   useEffect(() => {
-    dispatch(getTags());
-  }, []);
+    dispatch(getTags())
+  }, [])
 
   return (
     <>
@@ -32,7 +32,11 @@ export const ListOfPostsHeader = () => {
           <MdOutlineAddCircleOutline />
           Add new post
         </button>
+
+        <button data-action-add="filter" type="button">
+          Filter
+        </button>
       </section>
     </>
-  );
-};
+  )
+}
