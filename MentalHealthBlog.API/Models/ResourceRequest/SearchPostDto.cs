@@ -3,5 +3,6 @@
     public class SearchPostDto
     {
         public int UserId { get; set; }
+        public int? MonthOfPostCreation { get; set; }
     }
 }

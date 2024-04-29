@@ -3,6 +3,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 let initialState = {
   labels: [],
+  rerendering: false,
   numberOfTags: [],
   statisticsData: null,
   statisticsLoading: false,
@@ -11,13 +12,14 @@ let initialState = {
 
 export const prepareForPieGraph = createAsyncThunk(
   "/statistics/pie",
-  async (loggedUser) => {
-    let url = `${application.application_url}/statistics/pie`;
+  async (filteringObject) => {
+    console.log("Filtering object ", filteringObject);
+    let url = `${application.application_url}/statistics/pie?MonthOfPostCreation=${filteringObject.monthOfPostCreation}`;
     let request = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${loggedUser.token}`,
+        Authorization: `Bearer ${filteringObject.loggedUser.token}`,
       },
     });
     let response = await request.json();
@@ -28,6 +30,11 @@ export const prepareForPieGraph = createAsyncThunk(
 export const pieSlice = createSlice({
   name: "pieSlice",
   initialState,
+  reducers: {
+    setRerendering: (state) => {
+      state.rerendering = true;
+    },
+  },
   extraReducers: (builder) => {
     builder
 
@@ -42,7 +49,13 @@ export const pieSlice = createSlice({
         state.statisticsLoading = false;
         let data = action.payload.serviceResponseObject;
         state.statisticsData = [...data];
-        if (state.labels.length <= 0 && state.numberOfTags.length <= 0) {
+
+        state.labels = []; //Clearing previous data
+        state.numberOfTags = []; //Clearing previous data
+        if (
+          (state.labels.length <= 0 && state.numberOfTags.length <= 0) ||
+          state.rerendering === true
+        ) {
           for (var i = 0; i < state.statisticsData.length; i++) {
             state.labels.push(state.statisticsData[i].tagName);
             state.numberOfTags.push(state.statisticsData[i].numberOfTags);
@@ -51,5 +64,7 @@ export const pieSlice = createSlice({
       });
   },
 });
+
+export const { setRerendering } = pieSlice.actions;
 
 export default pieSlice.reducer;

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AddPost } from "./AddPost";
 import { MdOutlineAddCircleOutline } from "react-icons/md";
 import { openAddModal } from "./redux-toolkit/features/modalSlice";
+import { setVisibility } from "./redux-toolkit/features/filterSlice";
 import { getTags } from "./redux-toolkit/features/tagSlice";
 
 export const ListOfPostsHeader = () => {
@@ -31,6 +32,16 @@ export const ListOfPostsHeader = () => {
         >
           <MdOutlineAddCircleOutline />
           Add new post
+        </button>
+
+        <button
+          data-action-add="filter"
+          type="button"
+          onClick={() => {
+            dispatch(setVisibility());
+          }}
+        >
+          Filter
         </button>
       </section>
     </>
