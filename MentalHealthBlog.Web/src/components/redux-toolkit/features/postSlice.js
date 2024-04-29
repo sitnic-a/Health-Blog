@@ -10,13 +10,13 @@ let initialState = {
   isFailed: false,
 };
 
-export const getPosts = createAsyncThunk("post/", async (loggedUser) => {
-  let url = `${application.application_url}/post?UserId=${loggedUser.id}`;
+export const getPosts = createAsyncThunk("post/", async (filteringObject) => {
+  let url = `${application.application_url}/post?UserId=${filteringObject.loggedUser.id}&MonthOfPostCreation=${filteringObject.monthOfPostCreation}`;
   let request = await fetch(url, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${loggedUser.token}`,
+      Authorization: `Bearer ${filteringObject.loggedUser.token}`,
     },
   });
   let response = await request.json();
