@@ -23,6 +23,7 @@ export const ListOfPosts = () => {
   let { isLoading, posts } = useSelector((store) => store.post);
   let { isLogging } = useSelector((store) => store.user);
   let { statisticsLoading } = useSelector((store) => store.pie);
+  let { isFiltering } = useSelector((store) => store.filter);
 
   let location = useLocation();
   let loggedUser = location.state.loggedUser;
@@ -56,28 +57,30 @@ export const ListOfPosts = () => {
     <div className="dashboard">
       <ListOfPostsHeader />
 
-      <div className="dashboard-filter-container">
-        <h3>Filter:</h3>
-        <div className="dashboard-filter-options">
-          <div className="filter-by-month">
-            <p>Month:</p>
-            <select
-              name="filter-by-month"
-              id="filter-by-month"
-              onChange={(e) => filterPosts(e)}
-            >
-              <option>Pick a month</option>
-              {months.map((month, index) => {
-                return (
-                  <option key={index} value={index + 1}>
-                    {month}
-                  </option>
-                );
-              })}
-            </select>
+      {isFiltering && (
+        <div className="dashboard-filter-container">
+          <h3>Filter:</h3>
+          <div className="dashboard-filter-options">
+            <div className="filter-by-month">
+              <p>Month:</p>
+              <select
+                name="filter-by-month"
+                id="filter-by-month"
+                onChange={(e) => filterPosts(e)}
+              >
+                <option>Pick a month</option>
+                {months.map((month, index) => {
+                  return (
+                    <option key={index} value={index + 1}>
+                      {month}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       <div className="dashboard-cols">
         <section className="list-of-posts-main-container">

@@ -1,4 +1,4 @@
-input[type='text'],
+input[type="text"],
 textarea {
   border: 1px solid #a8a8a8;
   outline: none;
@@ -222,7 +222,7 @@ dialog::backdrop {
   /* background: blue; */
 }
 
-button[data-action-update='update'] {
+button[data-action-update="update"] {
   position: absolute;
   background: none;
   outline: none;
@@ -231,7 +231,7 @@ button[data-action-update='update'] {
   left: 0;
 }
 
-button[data-action-delete='delete'] {
+button[data-action-delete="delete"] {
   position: absolute;
   background: none;
   outline: none;
@@ -240,7 +240,7 @@ button[data-action-delete='delete'] {
   right: -0.7rem;
 }
 
-button[data-action-add='add'] {
+button[data-action-add="add"] {
   background: none;
   outline: none;
   border: none;
@@ -249,7 +249,7 @@ button[data-action-add='add'] {
   background: #e1e1e1;
 }
 
-button[data-action-add='filter'] {
+button[data-action-add="filter"] {
   background: none;
   outline: none;
   border: none;
@@ -259,26 +259,27 @@ button[data-action-add='filter'] {
   width: 8rem;
 }
 
-button[data-action-update='update']:hover {
+button[data-action-update="update"]:hover {
   cursor: pointer;
 }
 
-button[data-action-delete='delete']:hover {
+button[data-action-delete="delete"]:hover {
   cursor: pointer;
 }
 
-button[data-action-add='add']:hover {
+button[data-action-add="add"]:hover,
+button[data-action-add="filter"]:hover {
   background: #f4f4f4;
   cursor: pointer;
 }
 
-button[data-action-add='add'] svg {
+button[data-action-add="add"] svg {
   margin-right: 2rem;
 }
 
-button[data-action-update='update'] svg,
-button[data-action-delete='delete'] svg,
-button[data-action-add='add'] svg {
+button[data-action-update="update"] svg,
+button[data-action-delete="delete"] svg,
+button[data-action-add="add"] svg {
   transform: scale(1.8);
   /* color: #365c6d; */
   color: #000;
@@ -287,9 +288,13 @@ button[data-action-add='add'] svg {
 .dashboard-filter-container {
   margin-top: 0.5rem;
   margin-left: 0.5rem;
-  border: 1px solid red;
+  background: #eeeeee;
   width: 40%;
   padding: 0.3rem;
+}
+
+.dashboard-filter-container h3 {
+  color: #424242;
 }
 
 .filter-by-month {
@@ -297,11 +302,12 @@ button[data-action-add='add'] svg {
   align-items: center;
 }
 
-select[name='filter-by-month'] {
+select[name="filter-by-month"] {
   margin-left: 1rem;
-  width: 8rem;
+  width: 10rem;
   height: 1.8rem;
   text-align: center;
+  border: 0.8px solid #89cff0;
 }
 
 .main-container {
@@ -352,7 +358,7 @@ select[name='filter-by-month'] {
 .post-date p {
   font-size: 0.8em;
   color: #920d0d;
-  font-family: 'serif';
+  font-family: "serif";
   font-weight: 550;
   margin-block: 0;
   text-decoration: none;
@@ -412,7 +418,7 @@ pre:hover {
   overflow-y: scroll;
 }
 
-.post-by-id-container-edit input[name='title'] {
+.post-by-id-container-edit input[name="title"] {
   margin-inline: 2rem;
   border: none;
   border-bottom: 1px solid #e1e1e1;
@@ -422,7 +428,7 @@ pre:hover {
   border-radius: 3px;
 }
 
-.post-by-id-container-edit input[name='title']:focus-within {
+.post-by-id-container-edit input[name="title"]:focus-within {
   border: 1px solid rgb(188, 188, 253);
 }
 
