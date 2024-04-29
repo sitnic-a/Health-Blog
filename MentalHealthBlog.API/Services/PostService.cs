@@ -31,15 +31,20 @@ namespace MentalHealthBlogAPI.Services
         }
         public async Task<Response> GetPosts(SearchPostDto query)
         {
-            var dbPosts = await _context.Posts
-                .Where(p => p.UserId == query.UserId)
-                .OrderByDescending(p => p.Id)
-                .ToListAsync();
+            var dbPosts = _context.Posts
+                                    .Where(p => p.UserId == query.UserId);
+
+            if (query.MonthOfPostCreation.HasValue && query.MonthOfPostCreation > 0)
+            {
+                dbPosts = dbPosts.Where(p => p.CreatedAt.Month == query.MonthOfPostCreation);
+            }
+
+            var filteredPosts = await dbPosts.OrderByDescending(p => p.Id).ToListAsync();
 
             var posts = new List<PostDto>();
             var postDto = new PostDto();
 
-            foreach (var item in dbPosts)
+            foreach (var item in filteredPosts)
             {
                 var dbPostTags = await _context.PostsTags
                     .Include(t => t.Tag)
