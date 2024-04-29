@@ -1,4 +1,5 @@
 ﻿using MentalHealthBlog.API.Models;
+using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,7 @@ namespace MentalHealthBlog.API.Services
     public class StatisticsService : IStatisticsService
     {
         private readonly DataContext _context;
-        private readonly IHttpContextAccessor ?_httpContextAccessor;
+        private readonly IHttpContextAccessor? _httpContextAccessor;
         private readonly ILogger<StatisticsService> _statisticsServiceLogger;
         private readonly IEnumerable<PostTag> _dbPostTags;
 
@@ -40,16 +41,24 @@ namespace MentalHealthBlog.API.Services
                 .Where(p => p.Post.UserId == _loggedUserId)
                 .ToList();
         }
-        public async Task<Response> PrepareForMontlyPieGraph()
+        public async Task<Response> PrepareForMontlyPieGraph(SearchPostDto query)
         {
             try
             {
+
                 if (await _context.PostsTags.AnyAsync())
                 {
-                    var tagsById = new List<StatisticsPostTagDto>();
+                    IEnumerable<IGrouping<int, PostTag>> groupedTagsByTagId = _dbPostTags
+                            .GroupBy(t => t.TagId);
 
-                    var groupedTagsByTagId = _dbPostTags
-                        .GroupBy(t => t.TagId);
+                    if (query.MonthOfPostCreation.HasValue && query.MonthOfPostCreation > 0)
+                    {
+                        groupedTagsByTagId = _dbPostTags
+                             .Where(pt => pt.Post?.CreatedAt.Month == query.MonthOfPostCreation)
+                             .GroupBy(t => t.TagId);
+                    }
+
+                    var tagsById = new List<StatisticsPostTagDto>();
 
                     foreach (var item in groupedTagsByTagId)
                     {
@@ -76,7 +85,7 @@ namespace MentalHealthBlog.API.Services
             }
             catch (Exception e)
             {
-                _statisticsServiceLogger.LogError($"GET: {StatisticsServiceLogTypes.FAILED.ToString()}",e);
+                _statisticsServiceLogger.LogError($"GET: {StatisticsServiceLogTypes.FAILED.ToString()}", e);
                 return new Response(e.Data, StatusCodes.Status400BadRequest, e.Message);
             }
         }
