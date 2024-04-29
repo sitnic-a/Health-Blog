@@ -3,6 +3,11 @@ import { useEffect } from "react";
 import { useLocation } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { getPosts } from "./redux-toolkit/features/postSlice";
+import {
+  prepareForPieGraph,
+  setRerendering,
+} from "./redux-toolkit/features/pieSlice";
+
 import { Post } from "./Post";
 import { ListOfPostsHeader } from "./ListOfPostsHeader";
 import { Loader } from "./Loader";
@@ -32,7 +37,10 @@ export const ListOfPosts = () => {
       loggedUser,
       monthOfPostCreation: e.target.selectedIndex,
     };
+    console.log("On change obj ", searchPostDto);
     dispatch(getPosts(searchPostDto));
+    dispatch(setRerendering());
+    dispatch(prepareForPieGraph(searchPostDto));
   };
 
   useEffect(() => {
@@ -79,7 +87,7 @@ export const ListOfPosts = () => {
         </section>
 
         <section className="pie-graph-main-container">
-          <PieGraph />
+          <PieGraph searchPostDto={searchPostDto} />
         </section>
       </div>
     </div>

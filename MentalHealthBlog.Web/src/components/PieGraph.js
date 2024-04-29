@@ -9,7 +9,7 @@ import { prepareForPieGraph } from "./redux-toolkit/features/pieSlice";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export const PieGraph = () => {
+export const PieGraph = ({ searchPostDto }) => {
   let dispatch = useDispatch();
   let { labels, numberOfTags } = useSelector((store) => store.pie);
   let location = useLocation();
@@ -43,7 +43,7 @@ export const PieGraph = () => {
   };
 
   useEffect(() => {
-    dispatch(prepareForPieGraph(loggedUser));
+    dispatch(prepareForPieGraph(searchPostDto));
   }, []);
 
   return (
