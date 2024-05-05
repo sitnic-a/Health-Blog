@@ -22,7 +22,7 @@ export const FilterOptions = (props) => {
 
   useEffect(() => {
     setMonths(moment.months());
-  });
+  }, []);
 
   let filterPosts = (e) => {
     searchPostDto = {
