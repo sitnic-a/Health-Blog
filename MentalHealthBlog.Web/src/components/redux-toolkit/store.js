@@ -5,6 +5,7 @@ import modalReducer from "./features/modalSlice";
 import userReducer from "./features/userSlice";
 import pieReducer from "./features/pieSlice";
 import filterReducer from "./features/filterSlice";
+import tagGradeReducer from "./features/tagGradeSlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export const store = configureStore({
     modal: modalReducer,
     pie: pieReducer,
     filter: filterReducer,
+    tagGrade: tagGradeReducer,
   },
 });
