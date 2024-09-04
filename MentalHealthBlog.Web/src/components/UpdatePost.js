@@ -25,6 +25,7 @@ export const UpdatePost = () => {
     dispatch(updatePost(updatePostObj)).then(() => {
       navigate("/", {
         state: {
+          prevUrl: window.location.href,
           loggedUser: updatePostObj.loggedUser,
         },
       });

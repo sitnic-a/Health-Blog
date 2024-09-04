@@ -62,8 +62,10 @@ export const userSlice = createSlice({
 
       //--- login
       .addCase(login.pending, (state) => {
-        state.isLogging = true;
-        state.isLoading = true;
+        if (state.statusCode === 200) {
+          state.isLogging = true;
+          state.isLoading = true;
+        }
       })
       .addCase(login.rejected, (state) => {
         state.isFailed = true;
@@ -131,26 +133,6 @@ export const userSlice = createSlice({
           state.isLoading = false;
           return;
         }
-      })
-
-      //--- getQuote
-      .addCase(getQuote.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(getQuote.rejected, (state) => {
-        state.isFailed = true;
-      })
-      .addCase(getQuote.fulfilled, (state, action) => {
-        // console.log("Get quote ", action.payload);
-        let response = action.payload;
-        let arraySize = response.length;
-        let randomNumber = Math.floor(Math.random() * arraySize) + 1;
-        let obj = { ...response[randomNumber] };
-        state.quote = {
-          text: obj.text,
-          author: obj.author,
-        };
-        //console.log("Quote object ", obj);
       });
   },
 });

@@ -1,27 +1,11 @@
-import { useDispatch } from 'react-redux'
-import {
-  setIsHovered,
-  setHoveredPost,
-  setHoveredTag,
-} from './redux-toolkit/features/tagGradeSlice'
-
 export const TagGrade = (props) => {
-  let dispatch = useDispatch()
-
-  const GRADE_COUNT = new Array(10).fill(0)
-  let post = props.post
-  let tag = props.tag
+  const GRADE_COUNT = new Array(10).fill(0);
+  let post = props.post;
+  let tag = props.tag;
 
   return (
     <section className="post-tag-grade-container">
-      <div
-        className="tag-grade-container"
-        onMouseLeave={() => {
-          dispatch(setIsHovered(false))
-          dispatch(setHoveredPost(null))
-          dispatch(setHoveredTag(null))
-        }}
-      >
+      <div className="tag-grade-container">
         <p>
           Grade tag {tag} for post {post.title}
         </p>
@@ -41,11 +25,11 @@ export const TagGrade = (props) => {
                     5 stars
                   </label>
                 </div>
-              )
+              );
             })}
           </form>
         </section>
       </div>
     </section>
-  )
-}
+  );
+};

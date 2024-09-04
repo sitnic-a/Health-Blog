@@ -28,6 +28,7 @@ export const Post = (props) => {
         to={`post/${props.id}`}
         state={{
           loggedUser: loggedUser,
+          prevUrl: window.location.href,
         }}
       >
         <section className="post-container">
