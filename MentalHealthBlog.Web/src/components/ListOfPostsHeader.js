@@ -25,24 +25,26 @@ export const ListOfPostsHeader = () => {
         <h1 className="list-of-posts-author">
           Written by: {loggedUser.username}
         </h1>
-        <button
-          data-action-add="add"
-          type="button"
-          onClick={() => dispatch(openAddModal(true))}
-        >
-          <MdOutlineAddCircleOutline />
-          Add new post
-        </button>
+        <div className="header-actions">
+          <button
+            data-action-add="add"
+            type="button"
+            onClick={() => dispatch(openAddModal(true))}
+          >
+            <MdOutlineAddCircleOutline />
+            Add new post
+          </button>
 
-        <button
-          data-action-add="filter"
-          type="button"
-          onClick={() => {
-            dispatch(setVisibility());
-          }}
-        >
-          Filter
-        </button>
+          <button
+            data-action-add="filter"
+            type="button"
+            onClick={() => {
+              dispatch(setVisibility());
+            }}
+          >
+            Filter
+          </button>
+        </div>
       </section>
     </>
   );

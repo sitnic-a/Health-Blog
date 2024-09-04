@@ -1,48 +1,14 @@
-import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  login,
-  getQuote,
-  setIsFailed,
-} from "./redux-toolkit/features/userSlice";
+import { login, setIsFailed } from "./redux-toolkit/features/userSlice";
 import { Loader } from "./Loader";
 
 export const Login = () => {
   let dispatch = useDispatch();
-  let { authenticatedUser, isAuthenticated, isLogging, quote } = useSelector(
-    (store) => store.user
-  );
+  let { authenticatedUser, isLogging } = useSelector((store) => store.user);
 
   let navigate = useNavigate();
-  const _TIME_ = 5000;
-
-  if (isAuthenticated) {
-    navigate("/", {
-      replace: true,
-      state: {
-        loggedUser: {
-          id: authenticatedUser.id,
-          username: authenticatedUser.username,
-          token: authenticatedUser.jwToken,
-        },
-      },
-    });
-  }
-  if (!isAuthenticated) {
-    navigate("/login");
-  }
-
-  useEffect(() => {
-    dispatch(getQuote());
-  }, []);
-
-  let timer = setInterval(() => {
-    dispatch(getQuote());
-    return clearInterval(timer);
-  }, _TIME_);
-
   let loginUser = async (e) => {
     e.preventDefault();
     let form = new FormData(e.target);
@@ -67,6 +33,7 @@ export const Login = () => {
       dispatch(setIsFailed(true));
       return;
     }
+
     dispatch(login(user)).then((response) => {
       let statusCode = response.payload.statusCode;
       let authenticatedUser = response.payload.serviceResponseObject;
@@ -74,6 +41,7 @@ export const Login = () => {
         navigate("/", {
           replace: true,
           state: {
+            prevUrl: window.location.href,
             loggedUser: {
               id: authenticatedUser.id,
               username: authenticatedUser.username,
@@ -124,14 +92,6 @@ export const Login = () => {
               </button>
             </div>
           </form>
-          {quote !== null && (
-            <div className="quote-container">
-              <div>
-                <h1>{quote.text}</h1>
-                <h4>{quote.author}</h4>
-              </div>
-            </div>
-          )}
         </section>
       )}
     </>

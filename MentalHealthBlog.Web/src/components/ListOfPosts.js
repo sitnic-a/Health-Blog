@@ -11,10 +11,12 @@ import { PieGraph } from "./PieGraph";
 
 import { FilterOptions } from "./FilterOptions";
 
+import { toast } from "react-toastify";
+
 export const ListOfPosts = () => {
   let dispatch = useDispatch();
   let { isLoading, posts } = useSelector((store) => store.post);
-  let { isLogging } = useSelector((store) => store.user);
+  let { isLogging, isAuthenticated } = useSelector((store) => store.user);
   let { statisticsLoading } = useSelector((store) => store.pie);
 
   let location = useLocation();
@@ -26,6 +28,14 @@ export const ListOfPosts = () => {
   };
 
   useEffect(() => {
+    let prevUrl = location.state.prevUrl;
+
+    if (isAuthenticated === true && prevUrl.includes("login")) {
+      toast.success("Succesfully logged in", {
+        autoClose: 1500,
+        position: "bottom-right",
+      });
+    }
     dispatch(getPosts(searchPostDto));
   }, []);
 

@@ -141,7 +141,7 @@ dialog::backdrop {
 
 .add-post-content-picked-tags-span-tag {
   display: inline-block;
-  padding: 0.5rem 0.7rem;
+  padding: 0.5rem 0.6rem;
   font-size: 0.9em;
   background: #eeeeee;
   margin: 0.3rem 0.3rem;
@@ -202,23 +202,35 @@ dialog::backdrop {
   padding: 0.5rem;
 }
 
+.header-actions {
+  display: flex;
+  max-width: 780px;
+  flex-wrap: wrap;
+  row-gap: 10px;
+}
+
 .dashboard {
-  width: 100%;
+  max-width: 1440px;
+  /* background: red; */
   align-items: normal;
 }
 
 .dashboard-cols {
   display: flex;
+  max-width: 1440px;
+  flex-wrap: wrap;
+  row-gap: 50px;
 }
 
 .list-of-posts-main-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.1rem;
-  width: 55%;
-  height: 80vh;
+  gap: 10px;
+  max-width: 700px;
+  height: 800px;
   overflow-y: scroll;
   margin-top: 0.8rem;
+  margin-inline: auto;
   /* background: blue; */
 }
 
@@ -228,7 +240,7 @@ button[data-action-update="update"] {
   outline: none;
   border: none;
   top: 0.6rem;
-  left: 0;
+  left: 0.3rem;
 }
 
 button[data-action-delete="delete"] {
@@ -237,7 +249,7 @@ button[data-action-delete="delete"] {
   outline: none;
   border: none;
   top: 0.6rem;
-  right: -0.7rem;
+  right: -0.3rem;
 }
 
 button[data-action-add="add"] {
@@ -289,8 +301,11 @@ button[data-action-add="add"] svg {
   margin-top: 0.5rem;
   margin-left: 0.5rem;
   background: #eeeeee;
-  width: 40%;
+  max-width: 680px;
   padding: 0.3rem;
+}
+
+.dashboard-filter-options {
 }
 
 .dashboard-filter-container h3 {
@@ -299,20 +314,29 @@ button[data-action-add="add"] svg {
 
 .filter-by-month {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
 }
 
 select[name="filter-by-month"] {
-  margin-left: 1rem;
-  width: 10rem;
+  margin-left: 0.5rem;
+  max-width: 10rem;
   height: 1.8rem;
   text-align: center;
   border: 0.8px solid #89cff0;
+  width: 100%;
+}
+
+@media (width<270px) {
+  select[name="filter-by-month"] {
+    margin-left: 0rem;
+  }
 }
 
 .main-container {
   position: relative;
-  width: 25%;
+  max-width: 250px;
+  width: 100%;
   margin: 0.5rem;
 }
 
@@ -380,14 +404,9 @@ select[name="filter-by-month"] {
 
 .pie-graph-main-container {
   text-align: center;
-  /* width: 50%; */
+  max-width: 550px;
+  width: 100%;
   margin: auto;
-  /* background: red; */
-}
-
-.pie-graph-section {
-  width: 26rem;
-  margin-top: -10rem;
 }
 
 .post-by-id {
