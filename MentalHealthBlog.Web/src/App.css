@@ -147,6 +147,7 @@ dialog::backdrop {
   margin: 0.3rem 0.3rem;
   border-radius: 0.7rem;
   position: relative;
+  min-height: 20px;
 }
 
 .add-post-content-picked-tags-span-tag-remove {
@@ -211,27 +212,29 @@ dialog::backdrop {
 
 .dashboard {
   max-width: 1440px;
-  /* background: red; */
   align-items: normal;
+  margin: auto;
 }
 
 .dashboard-cols {
   display: flex;
   max-width: 1440px;
+  /* background: red; */
   flex-wrap: wrap;
   row-gap: 50px;
+  /* margin: auto; */
 }
 
 .list-of-posts-main-container {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  max-width: 700px;
+  max-width: 750px;
+  width: 100%;
   height: 800px;
   overflow-y: scroll;
   margin-top: 0.8rem;
-  margin-inline: auto;
-  /* background: blue; */
+  margin-left: 0.5rem;
 }
 
 button[data-action-update="update"] {
@@ -249,7 +252,7 @@ button[data-action-delete="delete"] {
   outline: none;
   border: none;
   top: 0.6rem;
-  right: -0.3rem;
+  right: 0.3rem;
 }
 
 button[data-action-add="add"] {
@@ -305,9 +308,6 @@ button[data-action-add="add"] svg {
   padding: 0.3rem;
 }
 
-.dashboard-filter-options {
-}
-
 .dashboard-filter-container h3 {
   color: #424242;
 }
@@ -335,9 +335,11 @@ select[name="filter-by-month"] {
 
 .main-container {
   position: relative;
-  max-width: 250px;
+  max-width: 280px;
   width: 100%;
   margin: 0.5rem;
+  height: fit-content;
+  /* border: 1px solid blue; */
 }
 
 .main-container > a {
@@ -348,7 +350,7 @@ select[name="filter-by-month"] {
   margin-top: 0.3rem;
   /* border: 1px solid blue; */
   padding: 0.3rem;
-  width: 100%;
+  max-width: 280px;
   background: #ffeebb;
 }
 
@@ -398,15 +400,22 @@ select[name="filter-by-month"] {
   font-size: 0.9em;
   margin-top: 0.3rem;
   border-radius: 0.4rem;
-  width: 100%;
+  max-width: 280px;
   padding-right: 0.5rem;
 }
 
 .pie-graph-main-container {
   text-align: center;
-  max-width: 550px;
+  max-width: 450px;
   width: 100%;
-  margin: auto;
+  position: fixed;
+  right: 4%;
+}
+
+@media (width < 1220px) {
+  .pie-graph-main-container {
+    position: unset;
+  }
 }
 
 .post-by-id {
