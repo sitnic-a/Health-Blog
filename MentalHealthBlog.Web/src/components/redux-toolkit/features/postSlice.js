@@ -8,6 +8,7 @@ let initialState = {
   isLoading: false,
   isSuccessful: false,
   isFailed: false,
+  isSharingExporting: false,
 };
 
 export const getPosts = createAsyncThunk("post/", async (filteringObject) => {
@@ -121,6 +122,23 @@ let postSlice = createSlice({
     setPost: (state, action) => {
       state.post = action.payload;
     },
+    setIsSharingExporting: (state, action) => {
+      state.isSharingExporting = action.payload;
+      let shareExportBtns = document.querySelectorAll(
+        'input[name="share-export"]'
+      );
+      console.log("Share btns", shareExportBtns.length);
+
+      let overlays = document.querySelectorAll(".post-overlay");
+      shareExportBtns.forEach((btn) => {
+        if (action.payload === true) btn.style.visibility = "visible";
+        else btn.style.visibility = "hidden";
+      });
+      overlays.forEach((overlay) => {
+        if (action.payload === true) overlay.style.visibility = "visible";
+        else overlay.style.visibility = "hidden";
+      });
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -191,6 +209,6 @@ let postSlice = createSlice({
   },
 });
 
-export const { setPost } = postSlice.actions;
+export const { setPost, setIsSharingExporting } = postSlice.actions;
 
 export default postSlice.reducer;

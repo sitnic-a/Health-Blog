@@ -5,7 +5,10 @@ import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 
-import { getPosts } from "./redux-toolkit/features/postSlice";
+import {
+  getPosts,
+  setIsSharingExporting,
+} from "./redux-toolkit/features/postSlice";
 import {
   prepareForPieGraph,
   setRerendering,
@@ -15,6 +18,8 @@ export const FilterOptions = (props) => {
   let location = useLocation();
   let dispatch = useDispatch();
   let { isFiltering } = useSelector((store) => store.filter);
+  let { isSharingExporting, posts } = useSelector((store) => store.post);
+
   let searchPostDto = props.searchPostDto;
   let loggedUser = location.state.loggedUser;
 
@@ -29,10 +34,12 @@ export const FilterOptions = (props) => {
       loggedUser,
       monthOfPostCreation: e.target.selectedIndex,
     };
-    console.log("On change obj ", searchPostDto);
+    // console.log("On change obj ", searchPostDto);
     dispatch(getPosts(searchPostDto));
     dispatch(setRerendering());
     dispatch(prepareForPieGraph(searchPostDto));
+    dispatch(setIsSharingExporting(isSharingExporting));
+    // console.log("Posts ", posts);
   };
 
   return (
@@ -45,7 +52,9 @@ export const FilterOptions = (props) => {
             <select
               name="filter-by-month"
               id="filter-by-month"
-              onChange={(e) => filterPosts(e)}
+              onChange={(e) => {
+                filterPosts(e);
+              }}
             >
               <option>Pick a month</option>
               {months.map((month, index) => {

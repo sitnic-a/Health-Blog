@@ -12,6 +12,7 @@ import { PostTags } from "./PostTags";
 export const Post = (props) => {
   let dispatch = useDispatch();
   let { isDeleteOpen } = useSelector((store) => store.modal);
+  let { isSharingExporting } = useSelector((store) => store.post);
 
   let location = useLocation();
   let loggedUser = location.state.loggedUser;
@@ -53,30 +54,36 @@ export const Post = (props) => {
           </section>
         </section>
       </Link>
-
-      <Link
-        to={`/post/${props.id}`}
-        state={{
-          postTitle: props.title,
-          postContent: props.content,
-          postUserId: props.userId,
-          loggedUser: loggedUser,
-        }}
-      >
-        <button data-action-update="update" type="button">
-          <MdOutlineModeEditOutline onClick={() => dispatch(setPost(props))} />
-        </button>
-      </Link>
-      <button data-action-delete="delete" type="button">
-        <MdOutlineDelete
-          onClick={() => {
-            dispatch(openDeleteModal(true));
-            dispatch(setPost(props));
-          }}
-        />
-        {isDeleteOpen && <DeleteConfirmation />}
-      </button>
-
+      {isSharingExporting === false && (
+        <>
+          <Link
+            to={`/post/${props.id}`}
+            state={{
+              postTitle: props.title,
+              postContent: props.content,
+              postUserId: props.userId,
+              loggedUser: loggedUser,
+            }}
+          >
+            <button data-action-update="update" type="button">
+              <MdOutlineModeEditOutline
+                onClick={() => dispatch(setPost(props))}
+              />
+            </button>
+          </Link>
+          <button data-action-delete="delete" type="button">
+            <MdOutlineDelete
+              onClick={() => {
+                dispatch(openDeleteModal(true));
+                dispatch(setPost(props));
+              }}
+            />
+            {isDeleteOpen && <DeleteConfirmation />}
+          </button>
+        </>
+      )}
+      <div className="post-overlay"></div>
+      <input type="checkbox" name="share-export" id="share-export" />
       <PostTags post={props} />
     </div>
   );

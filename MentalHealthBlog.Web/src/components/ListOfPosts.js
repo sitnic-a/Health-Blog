@@ -2,7 +2,10 @@ import React from "react";
 import { useEffect } from "react";
 import { useLocation } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { getPosts } from "./redux-toolkit/features/postSlice";
+import {
+  getPosts,
+  setIsSharingExporting,
+} from "./redux-toolkit/features/postSlice";
 
 import { Post } from "./Post";
 import { ListOfPostsHeader } from "./ListOfPostsHeader";
@@ -17,6 +20,8 @@ export const ListOfPosts = () => {
   let dispatch = useDispatch();
   let { isLoading, posts } = useSelector((store) => store.post);
   let { isLogging, isAuthenticated } = useSelector((store) => store.user);
+  let { isSharingExporting } = useSelector((store) => store.post);
+
   let { statisticsLoading } = useSelector((store) => store.pie);
 
   let location = useLocation();
