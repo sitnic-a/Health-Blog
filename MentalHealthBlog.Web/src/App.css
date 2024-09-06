@@ -1,4 +1,4 @@
-input[type="text"],
+input[type='text'],
 textarea {
   border: 1px solid #a8a8a8;
   outline: none;
@@ -232,7 +232,7 @@ dialog::backdrop {
   gap: 10px;
   max-width: 750px;
   width: 100%;
-  height: 800px;
+  height: 450px;
   overflow-y: scroll;
   margin-top: 0.8rem;
 }
@@ -243,7 +243,7 @@ dialog::backdrop {
   }
 }
 
-button[data-action-update="update"] {
+button[data-action-update='update'] {
   position: absolute;
   background: none;
   outline: none;
@@ -252,7 +252,7 @@ button[data-action-update="update"] {
   left: 0.3rem;
 }
 
-button[data-action-delete="delete"] {
+button[data-action-delete='delete'] {
   position: absolute;
   background: none;
   outline: none;
@@ -272,11 +272,11 @@ button[data-action-delete="delete"] {
   background: #000;
   opacity: 0.2;
   z-index: 1;
-  visibility: hidden;
+  display: block;
   border-radius: 0.4rem;
 }
 
-input[name="share-export"] {
+input[name='share-export'] {
   position: absolute;
   top: 0.45rem;
   width: 20px;
@@ -285,10 +285,10 @@ input[name="share-export"] {
   border: none;
   outline: none;
   z-index: 2;
-  visibility: hidden;
+  display: block;
 }
 
-button[data-action-add="add"] {
+button[data-action-add='add'] {
   background: none;
   outline: none;
   border: none;
@@ -297,7 +297,7 @@ button[data-action-add="add"] {
   background: #e1e1e1;
 }
 
-button[data-action-add="filter"] {
+button[data-action-add='filter'] {
   background: none;
   outline: none;
   border: none;
@@ -307,14 +307,7 @@ button[data-action-add="filter"] {
   width: 8rem;
 }
 
-button[data-action-share="share"] {
-  background: none;
-  outline: none;
-  border: none;
-  cursor: pointer;
-}
-
-button[data-action-export="export"] {
+button[data-action-select='select'] {
   background: none;
   outline: none;
   border: none;
@@ -325,7 +318,7 @@ button[data-action-export="export"] {
   width: 100%;
   max-width: 60px;
   min-height: 40px;
-  padding: 0.5rem;
+  padding: 0.1rem;
   background: #e1e1e1;
   margin-left: 0.5rem;
   cursor: pointer;
@@ -335,8 +328,7 @@ button[data-action-export="export"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-wrap: nowrap;
-  transform: translateY(30%);
+  transform: translateY(40%);
   top: 50%;
 }
 
@@ -383,29 +375,28 @@ div[data-tooltip-title]:after {
   color: #f4f4f4;
 }
 
-button[data-action-update="update"]:hover {
+button[data-action-update='update']:hover {
   cursor: pointer;
 }
 
-button[data-action-delete="delete"]:hover {
+button[data-action-delete='delete']:hover {
   cursor: pointer;
 }
 
-button[data-action-add="add"]:hover,
-button[data-action-add="filter"]:hover {
+button[data-action-add='add']:hover,
+button[data-action-add='filter']:hover {
   background: #f4f4f4;
   cursor: pointer;
 }
 
-button[data-action-add="add"] svg {
+button[data-action-add='add'] svg {
   margin-right: 2rem;
 }
 
-button[data-action-update="update"] svg,
-button[data-action-delete="delete"] svg,
-button[data-action-add="add"] svg {
+button[data-action-update='update'] svg,
+button[data-action-delete='delete'] svg,
+button[data-action-add='add'] svg {
   transform: scale(1.8);
-  /* color: #365c6d; */
   color: #000;
 }
 
@@ -427,7 +418,7 @@ button[data-action-add="add"] svg {
   align-items: center;
 }
 
-select[name="filter-by-month"] {
+select[name='filter-by-month'] {
   margin-left: 0.5rem;
   max-width: 10rem;
   height: 1.8rem;
@@ -437,7 +428,7 @@ select[name="filter-by-month"] {
 }
 
 @media (width<270px) {
-  select[name="filter-by-month"] {
+  select[name='filter-by-month'] {
     margin-left: 0rem;
   }
 }
@@ -494,7 +485,7 @@ select[name="filter-by-month"] {
 .post-date p {
   font-size: 0.8em;
   color: #920d0d;
-  font-family: "serif";
+  font-family: 'serif';
   font-weight: 550;
   margin-block: 0;
   text-decoration: none;
@@ -559,7 +550,7 @@ pre:hover {
   overflow-y: scroll;
 }
 
-.post-by-id-container-edit input[name="title"] {
+.post-by-id-container-edit input[name='title'] {
   margin-inline: 2rem;
   border: none;
   border-bottom: 1px solid #e1e1e1;
@@ -569,7 +560,7 @@ pre:hover {
   border-radius: 3px;
 }
 
-.post-by-id-container-edit input[name="title"]:focus-within {
+.post-by-id-container-edit input[name='title']:focus-within {
   border: 1px solid rgb(188, 188, 253);
 }
 
