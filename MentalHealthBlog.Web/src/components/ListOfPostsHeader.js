@@ -28,7 +28,7 @@ export const ListOfPostsHeader = () => {
       {isAddOpen && <AddPost />}
       <section className="list-of-posts-header">
         <h1 className="list-of-posts-author">
-          Written by: {loggedUser.username}
+          Written by: <span>{loggedUser.username}</span>
         </h1>
         <div className="header-actions">
           <button

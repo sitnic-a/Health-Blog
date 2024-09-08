@@ -6,7 +6,10 @@ import { useSelector, useDispatch } from 'react-redux'
 import { openDeleteModal } from './redux-toolkit/features/modalSlice'
 import { setPost } from './redux-toolkit/features/postSlice'
 
-import { formatDateToString } from './utils/helper-methods/methods'
+import {
+  formatDateToString,
+  getSelectedPosts,
+} from './utils/helper-methods/methods'
 import { PostTags } from './PostTags'
 
 export const Post = (props) => {
@@ -90,10 +93,7 @@ export const Post = (props) => {
             name="share-export"
             id="share-export"
             onChange={() => {
-              var posts = document.querySelectorAll(
-                '.main-container:has(input[name="share-export"]:checked)'
-              )
-              console.log(posts)
+              let postsToShareExport = getSelectedPosts()
             }}
           />
         </>
