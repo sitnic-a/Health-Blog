@@ -1,33 +1,33 @@
-import React from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { DeleteConfirmation } from './DeleteConfirmation'
-import { MdOutlineModeEditOutline, MdOutlineDelete } from 'react-icons/md'
-import { useSelector, useDispatch } from 'react-redux'
-import { openDeleteModal } from './redux-toolkit/features/modalSlice'
-import { setPost } from './redux-toolkit/features/postSlice'
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
+import { DeleteConfirmation } from "./DeleteConfirmation";
+import { MdOutlineModeEditOutline, MdOutlineDelete } from "react-icons/md";
+import { useSelector, useDispatch } from "react-redux";
+import { openDeleteModal } from "./redux-toolkit/features/modalSlice";
+import { setPost } from "./redux-toolkit/features/postSlice";
 
 import {
   formatDateToString,
   getSelectedPosts,
-} from './utils/helper-methods/methods'
-import { PostTags } from './PostTags'
+} from "./utils/helper-methods/methods";
+import { PostTags } from "./PostTags";
 
 export const Post = (props) => {
-  let dispatch = useDispatch()
-  let { isDeleteOpen } = useSelector((store) => store.modal)
-  let { isSharingExporting } = useSelector((store) => store.post)
+  let dispatch = useDispatch();
+  let { isDeleteOpen } = useSelector((store) => store.modal);
+  let { isSharingExporting } = useSelector((store) => store.post);
 
-  let location = useLocation()
-  let loggedUser = location.state.loggedUser
+  let location = useLocation();
+  let loggedUser = location.state.loggedUser;
 
   //Helpers
-  let createdAt = formatDateToString(props.createdAt)
+  let createdAt = formatDateToString(props.createdAt);
 
   return (
     <div className="main-container">
       <Link
         onClick={() => {
-          dispatch(setPost(props))
+          dispatch(setPost(props));
         }}
         to={`post/${props.id}`}
         state={{
@@ -77,8 +77,8 @@ export const Post = (props) => {
           <button data-action-delete="delete" type="button">
             <MdOutlineDelete
               onClick={() => {
-                dispatch(openDeleteModal(true))
-                dispatch(setPost(props))
+                dispatch(openDeleteModal(true));
+                dispatch(setPost(props));
               }}
             />
             {isDeleteOpen && <DeleteConfirmation />}
@@ -93,7 +93,46 @@ export const Post = (props) => {
             name="share-export"
             id="share-export"
             onChange={() => {
-              let postsToShareExport = getSelectedPosts()
+              let postsToShareExport = getSelectedPosts();
+
+              let main = document.querySelector("main");
+              let shareExportBox = document.querySelector(
+                ".share-export-main-container"
+              );
+              let selectDataButton = document.querySelector(
+                "button[data-action-select='select']"
+              );
+              let uncheckReminder = document.querySelector(".reminder");
+
+              if (postsToShareExport.length > 0) {
+                uncheckReminder.style.opacity = "1";
+                uncheckReminder.style.visibility = "visible";
+                selectDataButton.setAttribute("disabled", "");
+                selectDataButton.style.cursor = "not-allowed";
+
+                main.classList.add("selecting");
+                if (
+                  shareExportBox.classList.contains("share-export-position-out")
+                ) {
+                  shareExportBox.classList.remove("share-export-position-out");
+                  shareExportBox.classList.add("share-export-position-in");
+                }
+                let selecting = document.querySelector(".selecting");
+                selecting.style.opacity = "1";
+              } else {
+                uncheckReminder.style.opacity = "0";
+                uncheckReminder.style.visibility = "hidden";
+
+                selectDataButton.removeAttribute("disabled");
+                selectDataButton.style.cursor = "pointer";
+                main.classList.remove("selecting");
+                if (
+                  shareExportBox.classList.contains("share-export-position-in")
+                ) {
+                  shareExportBox.classList.remove("share-export-position-in");
+                  shareExportBox.classList.add("share-export-position-out");
+                }
+              }
             }}
           />
         </>
@@ -101,5 +140,5 @@ export const Post = (props) => {
 
       <PostTags post={props} />
     </div>
-  )
-}
+  );
+};

@@ -1,4 +1,4 @@
-input[type='text'],
+input[type="text"],
 textarea {
   border: 1px solid #a8a8a8;
   outline: none;
@@ -9,6 +9,7 @@ textarea {
 }
 
 main {
+  padding-top: 1rem;
   margin-inline: 1rem;
   /* border: 1px solid red; */
   box-sizing: border-box;
@@ -216,6 +217,14 @@ dialog::backdrop {
   margin: auto;
 }
 
+.selecting {
+  opacity: 0;
+  height: 970px;
+  background: linear-gradient(90deg, #270860 1%, #631e84 98%);
+  color: #fff;
+  transition: 500ms;
+}
+
 .dashboard-cols {
   display: flex;
   max-width: 1440px;
@@ -223,6 +232,7 @@ dialog::backdrop {
   flex-wrap: wrap;
   row-gap: 20px;
   padding-bottom: 2rem;
+  /* margin-top: 40px; */
   /* margin: auto; */
 }
 
@@ -234,7 +244,7 @@ dialog::backdrop {
   width: 100%;
   height: 450px;
   overflow-y: scroll;
-  margin-top: 0.8rem;
+  /* margin-top: 0.8rem; */
 }
 
 @media (width < 500px) {
@@ -243,7 +253,7 @@ dialog::backdrop {
   }
 }
 
-button[data-action-update='update'] {
+button[data-action-update="update"] {
   position: absolute;
   background: none;
   outline: none;
@@ -252,7 +262,7 @@ button[data-action-update='update'] {
   left: 0.3rem;
 }
 
-button[data-action-delete='delete'] {
+button[data-action-delete="delete"] {
   position: absolute;
   background: none;
   outline: none;
@@ -263,20 +273,20 @@ button[data-action-delete='delete'] {
 
 .post-overlay {
   position: absolute;
-  top: 3px;
+  top: 4.3px;
   left: 0;
   max-width: 400px;
   width: 100%;
-  height: 99%;
+  min-height: 99.4%;
   border-radius: 0.4rem;
   background: #000;
-  opacity: 0.2;
+  opacity: 0.7;
   z-index: 1;
   display: block;
   border-radius: 0.4rem;
 }
 
-input[name='share-export'] {
+input[name="share-export"] {
   position: absolute;
   top: 0.45rem;
   width: 20px;
@@ -288,7 +298,7 @@ input[name='share-export'] {
   display: block;
 }
 
-button[data-action-add='add'] {
+button[data-action-add="add"] {
   background: none;
   outline: none;
   border: none;
@@ -297,7 +307,7 @@ button[data-action-add='add'] {
   background: #e1e1e1;
 }
 
-button[data-action-add='filter'] {
+button[data-action-add="filter"] {
   background: none;
   outline: none;
   border: none;
@@ -307,16 +317,16 @@ button[data-action-add='filter'] {
   width: 8rem;
 }
 
-button[data-action-select='select'] {
+button[data-action-select="select"] {
   background: none;
   outline: none;
   border: none;
   cursor: pointer;
 }
 
-.export-share {
-  width: 100%;
+.share-export {
   max-width: 60px;
+  width: 100%;
   min-height: 40px;
   padding: 0.1rem;
   background: #e1e1e1;
@@ -324,11 +334,11 @@ button[data-action-select='select'] {
   cursor: pointer;
 }
 
-.export-share > .actions {
+.share-export-select {
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: translateY(40%);
+  transform: translateY(50%);
   top: 50%;
 }
 
@@ -365,39 +375,106 @@ div[data-tooltip-title]:after {
   }
 }
 
-.export-share > .actions svg {
+.share-export-select svg {
   color: #707070;
   width: 20px;
   height: 20px;
 }
 
-.export-share > .actions svg:hover {
+.share-export-select svg:hover {
   color: #f4f4f4;
 }
 
-button[data-action-update='update']:hover {
+.reminder {
+  max-width: 720px;
+  width: 100%;
+  min-height: 40px;
+  height: 100%;
+  position: relative;
+  padding: 0.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: 300ms;
+}
+
+.unselect-data-reminder {
+  width: fit-content;
+  margin-right: 1rem;
+  font-size: 0.78rem;
+  color: #e43d3d;
+  font-weight: 700;
+  letter-spacing: 0.06px;
+  border: 1px solid red;
+  padding: 0.3rem;
+}
+
+button[data-action-update="update"]:hover {
   cursor: pointer;
 }
 
-button[data-action-delete='delete']:hover {
+button[data-action-delete="delete"]:hover {
   cursor: pointer;
 }
 
-button[data-action-add='add']:hover,
-button[data-action-add='filter']:hover {
+button[data-action-add="add"]:hover,
+button[data-action-add="filter"]:hover {
   background: #f4f4f4;
   cursor: pointer;
 }
 
-button[data-action-add='add'] svg {
+button[data-action-add="add"] svg {
   margin-right: 2rem;
 }
 
-button[data-action-update='update'] svg,
-button[data-action-delete='delete'] svg,
-button[data-action-add='add'] svg {
+button[data-action-update="update"] svg,
+button[data-action-delete="delete"] svg,
+button[data-action-add="add"] svg {
   transform: scale(1.8);
   color: #000;
+}
+
+.share-export-main-container {
+  position: fixed;
+  z-index: 3;
+  left: 50%;
+  transition: 500ms;
+}
+
+.share-export-position-in {
+  transform: translateX(-50%);
+  bottom: 30px;
+}
+
+.share-export-position-out {
+  transform: translateX(-50%);
+  bottom: -50px;
+}
+
+.share-export-container {
+  display: flex;
+  gap: 10px;
+}
+
+.share-export-icon {
+  width: 35px;
+  height: 35px;
+  background: #cab587;
+  color: #fff;
+  padding: 0.3rem;
+  display: flex;
+  border-radius: 50%;
+  transition: 300ms ease-in-out;
+  cursor: pointer;
+}
+
+.share-export-icon:hover {
+  background: #fff;
+  color: #cab587;
+}
+
+.export-icon-container svg {
+  /* background: red; */
+  /* padding-left: 0.5rem; */
 }
 
 .dashboard-filter-container {
@@ -418,7 +495,7 @@ button[data-action-add='add'] svg {
   align-items: center;
 }
 
-select[name='filter-by-month'] {
+select[name="filter-by-month"] {
   margin-left: 0.5rem;
   max-width: 10rem;
   height: 1.8rem;
@@ -428,7 +505,7 @@ select[name='filter-by-month'] {
 }
 
 @media (width<270px) {
-  select[name='filter-by-month'] {
+  select[name="filter-by-month"] {
     margin-left: 0rem;
   }
 }
@@ -449,6 +526,8 @@ select[name='filter-by-month'] {
 
 .post-container {
   margin-top: 0.3rem;
+  border-radius: 0.4rem;
+
   /* border: 1px solid blue; */
   padding: 0.3rem;
   max-width: 280px;
@@ -485,7 +564,7 @@ select[name='filter-by-month'] {
 .post-date p {
   font-size: 0.8em;
   color: #920d0d;
-  font-family: 'serif';
+  font-family: "serif";
   font-weight: 550;
   margin-block: 0;
   text-decoration: none;
@@ -513,12 +592,14 @@ select[name='filter-by-month'] {
   right: 8%;
   top: 50%;
   transform: translateY(-50%);
+  margin-bottom: 1rem;
 }
 
 @media (width < 1220px) {
   .pie-graph-main-container {
-    position: static;
-    transform: translateY(0%);
+    position: relative;
+    right: -8%;
+    transform: translateY(20%);
   }
 }
 
@@ -550,7 +631,7 @@ pre:hover {
   overflow-y: scroll;
 }
 
-.post-by-id-container-edit input[name='title'] {
+.post-by-id-container-edit input[name="title"] {
   margin-inline: 2rem;
   border: none;
   border-bottom: 1px solid #e1e1e1;
@@ -560,7 +641,7 @@ pre:hover {
   border-radius: 3px;
 }
 
-.post-by-id-container-edit input[name='title']:focus-within {
+.post-by-id-container-edit input[name="title"]:focus-within {
   border: 1px solid rgb(188, 188, 253);
 }
 
