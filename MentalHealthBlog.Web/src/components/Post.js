@@ -4,7 +4,10 @@ import { DeleteConfirmation } from "./DeleteConfirmation";
 import { MdOutlineModeEditOutline, MdOutlineDelete } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
 import { openDeleteModal } from "./redux-toolkit/features/modalSlice";
-import { setPost } from "./redux-toolkit/features/postSlice";
+import {
+  setIsSharingExporting,
+  setPost,
+} from "./redux-toolkit/features/postSlice";
 
 import {
   formatDateToString,
@@ -132,6 +135,7 @@ export const Post = (props) => {
                   shareExportBox.classList.remove("share-export-position-in");
                   shareExportBox.classList.add("share-export-position-out");
                 }
+                dispatch(setIsSharingExporting(false));
               }
             }}
           />
