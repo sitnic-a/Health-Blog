@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 
 import { FaShare } from "react-icons/fa";
 import { FaFileExport } from "react-icons/fa";
+import { getSelectedPosts } from "./utils/helper-methods/methods";
 
 export const ListOfPosts = () => {
   let dispatch = useDispatch();
@@ -64,7 +65,9 @@ export const ListOfPosts = () => {
           <section
             className="export-icon-container"
             onClick={() => {
+              let postsToExport = getSelectedPosts();
               alert("Export activated");
+              console.log(postsToExport);
             }}
           >
             <FaFileExport className="share-export-icon" />
