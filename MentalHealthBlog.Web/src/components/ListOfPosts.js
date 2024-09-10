@@ -15,12 +15,15 @@ import { toast } from "react-toastify";
 
 import { FaShare } from "react-icons/fa";
 import { FaFileExport } from "react-icons/fa";
+import { GrDocumentPdf } from "react-icons/gr";
 import { getSelectedPosts } from "./utils/helper-methods/methods";
+import { openExportModal } from "./redux-toolkit/features/modalSlice";
 
 export const ListOfPosts = () => {
   let dispatch = useDispatch();
   let { isLoading, posts } = useSelector((store) => store.post);
   let { isLogging, isAuthenticated } = useSelector((store) => store.user);
+  let { isExportOpen } = useSelector((store) => store.modal);
 
   let { statisticsLoading } = useSelector((store) => store.pie);
 
@@ -52,6 +55,50 @@ export const ListOfPosts = () => {
     <div className="dashboard">
       <ListOfPostsHeader />
 
+      {isExportOpen && (
+        <>
+          <section className="export-modal-overlay">
+            <section className="export-modal-container">
+              <span
+                onClick={() => {
+                  dispatch(openExportModal(!isExportOpen));
+                  let shareExportContainer = document.querySelector(
+                    ".share-export-container"
+                  );
+                  shareExportContainer.style.display = "flex";
+                }}
+              >
+                X
+              </span>
+              <div className="export-modal">
+                <div className="export-modal-content">
+                  <h4>Exporting files...</h4>
+                  <div className="export-modal-files-container">
+                    <div className="export-modal-file-wrapper">
+                      <GrDocumentPdf className="export-modal-document-icon" />
+                      <p>Test 1.pdf</p>
+                    </div>
+                    <div className="export-modal-file-wrapper">
+                      <GrDocumentPdf className="export-modal-document-icon" />
+                      <p>Test 2.pdf</p>
+                    </div>
+                    <div className="export-modal-file-wrapper">
+                      <GrDocumentPdf className="export-modal-document-icon" />
+                      <p>Test 3.pdf</p>
+                    </div>
+                  </div>
+
+                  <div className="export-modal-progress-bar">
+                    <progress />
+                    <p>Exported: 0%</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </section>
+        </>
+      )}
+
       <section className="share-export-main-container share-export-position-out">
         <div className="share-export-container ">
           <section
@@ -66,7 +113,12 @@ export const ListOfPosts = () => {
             className="export-icon-container"
             onClick={() => {
               let postsToExport = getSelectedPosts();
-              alert("Export activated");
+              dispatch(openExportModal(!isExportOpen));
+              let shareExportContainer = document.querySelector(
+                ".share-export-container"
+              );
+              shareExportContainer.style.display = "none";
+
               console.log(postsToExport);
             }}
           >

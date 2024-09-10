@@ -443,6 +443,120 @@ button[data-action-add="add"] svg {
   color: #000;
 }
 
+.export-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: 100vw;
+  width: 100%;
+  min-height: 100vh;
+  height: 100%;
+  z-index: 3;
+  background: rgba(96, 96, 96, 0.28);
+  text-align: center;
+}
+
+.export-modal-container {
+  border-radius: 0.4rem;
+  max-width: 430px;
+  width: 100%;
+  min-height: 230px;
+  background: #fff;
+  margin: auto;
+  top: 35%;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 1rem;
+}
+
+.export-modal-container > span {
+  position: absolute;
+  top: 0;
+  right: 0px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.2rem;
+  transition: 150ms;
+  background: #b10000;
+  padding: 5px;
+  border-top-right-radius: 0.4rem;
+  cursor: pointer;
+}
+
+.export-modal-container > span:hover {
+  color: #b10000;
+  background: #fff;
+}
+
+@media (width <= 490px) {
+  .export-modal-container {
+    max-width: 250px;
+    min-height: 190px;
+    margin-inline: auto;
+  }
+
+  .export-modal-container > span {
+    right: 10px;
+    font-size: 1rem;
+  }
+}
+
+.export-modal {
+  padding-inline: 1rem;
+  margin-inline: -1rem;
+  margin-block: -1rem;
+}
+
+.export-modal-content {
+  position: relative;
+  min-height: 220px;
+  color: #000;
+  padding-inline: 1rem;
+  margin-inline: -1rem;
+  margin-block: -1rem;
+}
+
+.export-modal-content > h4 {
+  padding-block: 0.2rem;
+}
+
+.export-modal-files-container {
+  padding-inline: 1rem;
+  margin-inline: -1rem;
+  margin-top: 0.5rem;
+}
+
+.export-modal-file-wrapper {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding-inline: 1rem;
+  margin-top: 0;
+  padding: 0.1rem;
+}
+
+/* 
+.export-modal-document-icon {
+  -webkit-filter: invert();
+} */
+
+.export-modal-file-wrapper > p {
+  margin-block: -0.1rem;
+  padding-block: 0.2rem;
+  display: flex;
+  flex-direction: row;
+  gap: 1px;
+  font-size: 0.9rem;
+}
+
+.export-modal-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 .share-export-main-container {
   position: fixed;
   z-index: 3;
