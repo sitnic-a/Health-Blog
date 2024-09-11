@@ -2,6 +2,7 @@
 using MentalHealthBlog.API.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
 
 namespace MentalHealthBlog.API.Controllers
 {
@@ -16,9 +17,15 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpPost]
-        public void ExportToPDF(List<PostDto> posts)
+        public async Task<byte[]> ExportToPDF(List<PostDto> posts)
         {
-            _exportService.ExportToPDF();
+            if (posts == null || posts.Count == 0)
+            {
+                var bytes = Encoding.UTF8.GetBytes("");
+                return bytes;
+            }
+                
+           return await _exportService.ExportToPDF(posts);
         }
     }
 }
