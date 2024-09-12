@@ -97,7 +97,7 @@ export const Post = (props) => {
             name="share-export"
             id="share-export"
             onChange={() => {
-              dispatch(setOverlayForShareExport());
+              dispatch(setOverlayForShareExport(loggedUser));
             }}
           />
         </>

@@ -17,15 +17,15 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpPost]
-        public async Task<byte[]> ExportToPDF(List<PostDto> posts)
+        public async Task<byte[]> ExportToPDF([FromBody] List<PostDto> postsToExport)
         {
-            if (posts == null || posts.Count == 0)
+            if (postsToExport == null || postsToExport.Count == 0)
             {
                 var bytes = Encoding.UTF8.GetBytes("");
                 return bytes;
             }
                 
-           return await _exportService.ExportToPDF(posts);
+           return await _exportService.ExportToPDF(postsToExport);
         }
     }
 }

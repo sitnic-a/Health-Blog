@@ -18,12 +18,14 @@ import { FaFileExport } from "react-icons/fa";
 import { GrDocumentPdf } from "react-icons/gr";
 import { getSelectedPosts } from "./utils/helper-methods/methods";
 import { openExportModal } from "./redux-toolkit/features/modalSlice";
+import { exportToPDF } from "./redux-toolkit/features/shareExportSlice";
 
 export const ListOfPosts = () => {
   let dispatch = useDispatch();
   let { isLoading, posts } = useSelector((store) => store.post);
   let { isLogging, isAuthenticated } = useSelector((store) => store.user);
   let { isExportOpen } = useSelector((store) => store.modal);
+  let { postsToExport } = useSelector((store) => store.shareExport);
 
   let { statisticsLoading } = useSelector((store) => store.pie);
 
@@ -112,14 +114,14 @@ export const ListOfPosts = () => {
           <section
             className="export-icon-container"
             onClick={() => {
-              let postsToExport = getSelectedPosts();
+              // let postsToExport = getSelectedPosts();/
               dispatch(openExportModal(!isExportOpen));
               let shareExportContainer = document.querySelector(
                 ".share-export-container"
               );
               shareExportContainer.style.display = "none";
-
-              console.log(postsToExport);
+              console.log("Exporting to PDF ", postsToExport);
+              dispatch(exportToPDF(postsToExport));
             }}
           >
             <FaFileExport className="share-export-icon" />

@@ -1,18 +1,37 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getSelectedPosts } from "../../utils/helper-methods/methods";
 import { setIsSharingExporting } from "./postSlice";
+import { application } from "../../../application";
 
 let initialState = {
   postsToShare: [],
   postsToExport: [],
 };
 
+export const exportToPDF = createAsyncThunk(
+  "/export",
+  async (postsToExport) => {
+    console.log("Posts to export ", postsToExport);
+    let request = await fetch(`${application.application_url}/export`, {
+      method: "POST",
+      body: JSON.stringify(postsToExport),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    let response = request.json();
+    return response;
+  }
+);
+
 let shareExportSlice = createSlice({
   name: "shareExportSlice",
   initialState,
   reducers: {
-    setOverlayForShareExport: () => {
-      let postsToShareExport = getSelectedPosts();
+    setOverlayForShareExport: (state, action) => {
+      let postsToShareExport = getSelectedPosts(action.payload);
+      state.postsToExport = postsToShareExport;
 
       let main = document.querySelector("main");
       let shareExportBox = document.querySelector(
@@ -23,7 +42,7 @@ let shareExportSlice = createSlice({
       );
       let uncheckReminder = document.querySelector(".reminder");
 
-      if (postsToShareExport.length > 0) {
+      if (state.postsToExport.length > 0) {
         uncheckReminder.style.opacity = "1";
         uncheckReminder.style.visibility = "visible";
         selectDataButton.setAttribute("disabled", "");
@@ -50,6 +69,18 @@ let shareExportSlice = createSlice({
         setIsSharingExporting(false);
       }
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(exportToPDF.pending, (state) => {
+        console.log("Pending");
+      })
+      .addCase(exportToPDF.fulfilled, (state, action) => {
+        console.log("Successfully implemented");
+      })
+      .addCase(exportToPDF.rejected, (state, action) => {
+        console.log("FAILED");
+      });
   },
 });
 

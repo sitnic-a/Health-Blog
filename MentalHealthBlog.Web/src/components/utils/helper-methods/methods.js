@@ -15,7 +15,7 @@ export function formatStringToDate(date) {
   return new Date(date);
 }
 
-export function getSelectedPosts() {
+export function getSelectedPosts(loggedUser) {
   let postsToShareExport = [];
   let postTags = [];
 
@@ -39,9 +39,11 @@ export function getSelectedPosts() {
       ".post-information > .post-content"
     ).innerHTML;
 
-    let postDate = postContainerContent.querySelector(
+    let postDateString = postContainerContent.querySelector(
       ".post-date > p > span"
     ).innerHTML;
+
+    let postDate = new Date(postDateString);
 
     let postContainerTags = checked.querySelectorAll(
       ".post-container-tags .add-post-content-picked-tags-span-tag"
@@ -52,11 +54,12 @@ export function getSelectedPosts() {
     });
 
     let post = {
+      id: loggedUser.id,
       title: postTitle,
       user: author,
       content: postContent,
       createdAt: postDate,
-      postTags: postTags,
+      tags: postTags,
     };
 
     postsToShareExport.push(post);
