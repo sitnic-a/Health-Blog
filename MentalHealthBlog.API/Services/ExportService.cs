@@ -20,12 +20,11 @@ namespace MentalHealthBlog.API.Services
 {
     public class ExportService : IExportService
     {
-        public async Task<byte[]> ExportToPDF(List<PostDto> posts)
+        public async Task<FileDto> ExportToPDF(List<PostDto> posts)
         {
             PDFGenerators generator = new PDFGenerators();
-            byte[] data = await generator.CreatePdfFile(posts);
-
-            return data;
+            FileDto file = await generator.CreatePdfFile(posts);
+            return file;
 
             //Return PDF file
 
