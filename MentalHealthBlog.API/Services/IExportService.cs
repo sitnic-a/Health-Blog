@@ -4,6 +4,6 @@ namespace MentalHealthBlog.API.Services
 {
     public interface IExportService
     {
-        Task<byte[]> ExportToPDF(List<PostDto> posts);
+        Task<FileDto> ExportToPDF(List<PostDto> posts);
     }
 }
