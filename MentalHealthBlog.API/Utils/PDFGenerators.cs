@@ -12,14 +12,15 @@ namespace MentalHealthBlog.API.Utils
 {
     public class PDFGenerators
     {
-        public async Task<byte[]> CreatePdfFile(List<PostDto> posts)
+        public async Task<FileDto> CreatePdfFile(List<PostDto> posts)
         {
                 string date = DateTime.Now.ToString("ddMMyyyy");
                 string time = DateTime.Now.ToString("Hmmss");
+                string fileName = $"exported-posts {date}-{time}.pdf";
                 string currentDir = Environment.CurrentDirectory;
                 string fileDirectory = System.IO.Directory.GetCurrentDirectory();
                 DirectoryInfo directory = new DirectoryInfo(
-                    System.IO.Path.GetFullPath(System.IO.Path.Combine(currentDir, "pdfs\\" + $"exported-posts {date}-{time}.pdf")));
+                    System.IO.Path.GetFullPath(System.IO.Path.Combine(currentDir, "pdfs\\" + $"{fileName}")));
 
                 if (Directory.Exists(directory.Parent?.Name))
                 {
@@ -96,7 +97,8 @@ namespace MentalHealthBlog.API.Utils
                     doc.Close();
 
                     var pdf = await File.ReadAllBytesAsync(directory.FullName);
-                    return pdf;
+                    FileDto file = new FileDto(pdf, directory.FullName, fileName);
+                    return file;
 
                 }
                 else
@@ -176,8 +178,9 @@ namespace MentalHealthBlog.API.Utils
                     doc.Close();
 
                     var pdf = await File.ReadAllBytesAsync(directory.FullName);
-                    return pdf;
-                }
+                    FileDto file = new FileDto(pdf, directory.FullName, fileName);
+                    return file;
+            }
         }
     }
 }
