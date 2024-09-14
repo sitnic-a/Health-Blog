@@ -4,14 +4,22 @@ import { DeleteConfirmation } from "./DeleteConfirmation";
 import { MdOutlineModeEditOutline, MdOutlineDelete } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
 import { openDeleteModal } from "./redux-toolkit/features/modalSlice";
-import { setPost } from "./redux-toolkit/features/postSlice";
+import {
+  setIsSharingExporting,
+  setPost,
+} from "./redux-toolkit/features/postSlice";
 
-import { formatDateToString } from "./utils/helper-methods/methods";
+import {
+  formatDateToString,
+  getSelectedPosts,
+} from "./utils/helper-methods/methods";
 import { PostTags } from "./PostTags";
+import { setOverlayForShareExport } from "./redux-toolkit/features/shareExportSlice";
 
 export const Post = (props) => {
   let dispatch = useDispatch();
   let { isDeleteOpen } = useSelector((store) => store.modal);
+  let { isSharingExporting } = useSelector((store) => store.post);
 
   let location = useLocation();
   let loggedUser = location.state.loggedUser;
@@ -53,29 +61,47 @@ export const Post = (props) => {
           </section>
         </section>
       </Link>
-
-      <Link
-        to={`/post/${props.id}`}
-        state={{
-          postTitle: props.title,
-          postContent: props.content,
-          postUserId: props.userId,
-          loggedUser: loggedUser,
-        }}
-      >
-        <button data-action-update="update" type="button">
-          <MdOutlineModeEditOutline onClick={() => dispatch(setPost(props))} />
-        </button>
-      </Link>
-      <button data-action-delete="delete" type="button">
-        <MdOutlineDelete
-          onClick={() => {
-            dispatch(openDeleteModal(true));
-            dispatch(setPost(props));
-          }}
-        />
-        {isDeleteOpen && <DeleteConfirmation />}
-      </button>
+      {isSharingExporting === false && (
+        <>
+          <Link
+            to={`/post/${props.id}`}
+            state={{
+              postTitle: props.title,
+              postContent: props.content,
+              postUserId: props.userId,
+              loggedUser: loggedUser,
+            }}
+          >
+            <button data-action-update="update" type="button">
+              <MdOutlineModeEditOutline
+                onClick={() => dispatch(setPost(props))}
+              />
+            </button>
+          </Link>
+          <button data-action-delete="delete" type="button">
+            <MdOutlineDelete
+              onClick={() => {
+                dispatch(openDeleteModal(true));
+                dispatch(setPost(props));
+              }}
+            />
+            {isDeleteOpen && <DeleteConfirmation />}
+          </button>
+        </>
+      )}
+      {isSharingExporting === true && (
+        <>
+          <div className="post-overlay"></div>
+          <input
+            type="checkbox"
+            name="share-export"
+            id="share-export"
+            onChange={() => {
+              dispatch(setOverlayForShareExport(loggedUser));
+            }}
+          />
+        </>
+      )}
 
       <PostTags post={props} />
     </div>

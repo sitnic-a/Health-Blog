@@ -8,6 +8,7 @@ let initialState = {
   isLoading: false,
   isSuccessful: false,
   isFailed: false,
+  isSharingExporting: false,
 };
 
 export const getPosts = createAsyncThunk("post/", async (filteringObject) => {
@@ -121,6 +122,9 @@ let postSlice = createSlice({
     setPost: (state, action) => {
       state.post = action.payload;
     },
+    setIsSharingExporting: (state, action) => {
+      state.isSharingExporting = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -191,6 +195,6 @@ let postSlice = createSlice({
   },
 });
 
-export const { setPost } = postSlice.actions;
+export const { setPost, setIsSharingExporting } = postSlice.actions;
 
 export default postSlice.reducer;
