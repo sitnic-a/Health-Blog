@@ -20,7 +20,7 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ExportToPDF(List<PostDto> posts)
+       public async Task<IActionResult> ExportToPDF(List<PostDto> posts)
         {
             FileDto file = await _exportService.ExportToPDF(posts);
             return File(file.Data, "application/octet-stream", file.FileName);
