@@ -1,11 +1,6 @@
 ﻿using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Crypto.Tls;
-using System;
-using System.IO;
-using System.Text;
 
 namespace MentalHealthBlog.API.Controllers
 {
@@ -20,10 +15,14 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpPost]
-       public async Task<IActionResult> ExportToPDF(List<PostDto> posts)
+       public async Task<FileDto> ExportToPDF([FromBody] List<PostDto> posts)
         {
             FileDto file = await _exportService.ExportToPDF(posts);
-            return File(file.Data, "application/octet-stream", file.FileName);
+
+            string pdf = file.Base64(file.FilePath);
+            FileDto exportedFile = new FileDto(file.Data, file.FilePath,file.FileName, pdf,file.FileLength);
+
+            return exportedFile != null ? exportedFile : new FileDto();
         }
     }
 }
