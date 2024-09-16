@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-using System.IO;
-using iText.Kernel.Colors;
+﻿using iText.Kernel.Colors;
 using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Borders;
@@ -97,7 +95,8 @@ namespace MentalHealthBlog.API.Utils
                     doc.Close();
 
                     var pdf = await File.ReadAllBytesAsync(directory.FullName);
-                    FileDto file = new FileDto(pdf, directory.FullName, fileName);
+                    int fileLength = pdf.Length;
+                    FileDto file = new FileDto(pdf, directory.FullName, fileName, directory.FullName, fileLength);
                     return file;
 
                 }
@@ -178,7 +177,8 @@ namespace MentalHealthBlog.API.Utils
                     doc.Close();
 
                     var pdf = await File.ReadAllBytesAsync(directory.FullName);
-                    FileDto file = new FileDto(pdf, directory.FullName, fileName);
+                    int fileLength = pdf.Length;
+                    FileDto file = new FileDto(pdf, directory.FullName, fileName, directory.FullName, fileLength);
                     return file;
             }
         }

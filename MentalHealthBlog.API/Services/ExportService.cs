@@ -13,8 +13,6 @@ using MentalHealthBlog.API.Utils;
 using Org.BouncyCastle.Asn1.Cms;
 using Org.BouncyCastle.Utilities;
 using System.Drawing;
-using System.IO;
-using System.Text;
 
 namespace MentalHealthBlog.API.Services
 {
