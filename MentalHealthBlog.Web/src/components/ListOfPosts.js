@@ -1,56 +1,61 @@
-import React from "react";
-import { useEffect } from "react";
-import { useLocation } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
-import { getPosts } from "./redux-toolkit/features/postSlice";
+import React from 'react'
+import { useEffect } from 'react'
+import { useLocation } from 'react-router'
+import { useDispatch, useSelector } from 'react-redux'
+import { getPosts } from './redux-toolkit/features/postSlice'
 
-import { Post } from "./Post";
-import { ListOfPostsHeader } from "./ListOfPostsHeader";
-import { Loader } from "./Loader";
-import { PieGraph } from "./PieGraph";
+import { Post } from './Post'
+import { ListOfPostsHeader } from './ListOfPostsHeader'
+import { Loader } from './Loader'
+import { PieGraph } from './PieGraph'
 
-import { FilterOptions } from "./FilterOptions";
+import { FilterOptions } from './FilterOptions'
 
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify'
 
-import { FaShare } from "react-icons/fa";
-import { FaFileExport } from "react-icons/fa";
-import { GrDocumentPdf } from "react-icons/gr";
-import { getSelectedPosts } from "./utils/helper-methods/methods";
-import { openExportModal } from "./redux-toolkit/features/modalSlice";
-import { exportToPDF } from "./redux-toolkit/features/shareExportSlice";
+import { FaShare } from 'react-icons/fa'
+import { FaFileExport } from 'react-icons/fa'
+import { GrDocumentPdf } from 'react-icons/gr'
+import {
+  base64ToArrayBuffer,
+  getSelectedPosts,
+} from './utils/helper-methods/methods'
+import { openExportModal } from './redux-toolkit/features/modalSlice'
+import { exportToPDF } from './redux-toolkit/features/shareExportSlice'
 
 export const ListOfPosts = () => {
-  let dispatch = useDispatch();
-  let { isLoading, posts } = useSelector((store) => store.post);
-  let { isLogging, isAuthenticated } = useSelector((store) => store.user);
-  let { isExportOpen } = useSelector((store) => store.modal);
-  let { postsToExport } = useSelector((store) => store.shareExport);
+  let dispatch = useDispatch()
+  let { isLoading, posts } = useSelector((store) => store.post)
+  let { isLogging, isAuthenticated } = useSelector((store) => store.user)
+  let { isExportOpen } = useSelector((store) => store.modal)
+  let { postsToExport, isExported, exportedDocument } = useSelector(
+    (store) => store.shareExport
+  )
 
-  let { statisticsLoading } = useSelector((store) => store.pie);
+  let { statisticsLoading } = useSelector((store) => store.pie)
 
-  let location = useLocation();
-  let loggedUser = location.state.loggedUser;
+  let location = useLocation()
+  let loggedUser = location.state.loggedUser
 
   let searchPostDto = {
     loggedUser,
     monthOfPostCreation: 0,
-  };
+  }
 
   useEffect(() => {
-    let prevUrl = location.state.prevUrl;
+    let prevUrl = location.state.prevUrl
 
-    if (isAuthenticated === true && prevUrl.includes("login")) {
-      toast.success("Succesfully logged in", {
+    if (isAuthenticated === true && prevUrl.includes('login')) {
+      toast.success('Succesfully logged in', {
         autoClose: 1500,
-        position: "bottom-right",
-      });
+        position: 'bottom-right',
+      })
     }
-    dispatch(getPosts(searchPostDto));
-  }, []);
+    dispatch(getPosts(searchPostDto))
+  }, [])
 
   if (isLoading && isLogging && statisticsLoading) {
-    <Loader />;
+    ;<Loader />
   }
 
   return (
@@ -63,37 +68,32 @@ export const ListOfPosts = () => {
             <section className="export-modal-container">
               <span
                 onClick={() => {
-                  dispatch(openExportModal(!isExportOpen));
+                  dispatch(openExportModal(!isExportOpen))
                   let shareExportContainer = document.querySelector(
-                    ".share-export-container"
-                  );
-                  shareExportContainer.style.display = "flex";
+                    '.share-export-container'
+                  )
+                  shareExportContainer.style.display = 'flex'
                 }}
               >
                 X
               </span>
               <div className="export-modal">
                 <div className="export-modal-content">
-                  <h4>Exporting files...</h4>
+                  <h4>Exporting posts...</h4>
                   <div className="export-modal-files-container">
-                    <div className="export-modal-file-wrapper">
-                      <GrDocumentPdf className="export-modal-document-icon" />
-                      <p>Test 1.pdf</p>
-                    </div>
-                    <div className="export-modal-file-wrapper">
-                      <GrDocumentPdf className="export-modal-document-icon" />
-                      <p>Test 2.pdf</p>
-                    </div>
-                    <div className="export-modal-file-wrapper">
-                      <GrDocumentPdf className="export-modal-document-icon" />
-                      <p>Test 3.pdf</p>
-                    </div>
+                    {postsToExport.map((post) => {
+                      return (
+                        <div className="export-modal-file-wrapper">
+                          <p>{post.title}</p>
+                        </div>
+                      )
+                    })}
                   </div>
-
-                  <div className="export-modal-progress-bar">
-                    <progress />
-                    <p>Exported: 0%</p>
-                  </div>
+                  {isExported && (
+                    <div className="export-modal-progress-bar">
+                      <p>Successfully exported!</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </section>
@@ -106,7 +106,7 @@ export const ListOfPosts = () => {
           <section
             className="share-icon-container"
             onClick={() => {
-              alert("Share activated");
+              alert('Share activated')
             }}
           >
             <FaShare className="share-export-icon" />
@@ -115,13 +115,30 @@ export const ListOfPosts = () => {
             className="export-icon-container"
             onClick={() => {
               // let postsToExport = getSelectedPosts();/
-              dispatch(openExportModal(!isExportOpen));
+              dispatch(openExportModal(!isExportOpen))
               let shareExportContainer = document.querySelector(
-                ".share-export-container"
-              );
-              shareExportContainer.style.display = "none";
-              console.log("Exporting to PDF ", postsToExport);
-              dispatch(exportToPDF(postsToExport));
+                '.share-export-container'
+              )
+              shareExportContainer.style.display = 'none'
+              dispatch(exportToPDF(postsToExport)).then((response) => {
+                var arrBuffer = base64ToArrayBuffer(response.payload.data)
+
+                // It is necessary to create a new blob object with mime-type explicitly set
+                // otherwise only Chrome works like it should
+                var newBlob = new Blob([arrBuffer], { type: 'application/pdf' })
+
+                // For other browsers:
+                // Create a link pointing to the ObjectURL containing the blob.
+                var data = window.URL.createObjectURL(newBlob)
+
+                var link = document.createElement('a')
+                document.body.appendChild(link) //required in FF, optional for Chrome
+                link.href = data
+                link.download = response.payload.fileName
+                link.click()
+                window.URL.revokeObjectURL(data)
+                link.remove()
+              })
             }}
           >
             <FaFileExport className="share-export-icon" />
@@ -138,7 +155,7 @@ export const ListOfPosts = () => {
       <div className="dashboard-cols">
         <section className="list-of-posts-main-container">
           {posts.map((post) => {
-            return <Post key={post.id} {...post} />;
+            return <Post key={post.id} {...post} />
           })}
         </section>
 
@@ -147,5 +164,5 @@ export const ListOfPosts = () => {
         </section>
       </div>
     </div>
-  );
-};
+  )
+}
