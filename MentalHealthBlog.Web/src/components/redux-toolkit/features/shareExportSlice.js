@@ -1,89 +1,95 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getSelectedPosts } from "../../utils/helper-methods/methods";
-import { setIsSharingExporting } from "./postSlice";
-import { application } from "../../../application";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { getSelectedPosts } from '../../utils/helper-methods/methods'
+import { setIsSharingExporting } from './postSlice'
+import { application } from '../../../application'
 
 let initialState = {
   postsToShare: [],
   postsToExport: [],
-};
+  exportedDocument: null,
+  isExported: false,
+}
 
 export const exportToPDF = createAsyncThunk(
-  "/export",
+  '/export',
   async (postsToExport) => {
-    console.log("Posts to export ", postsToExport);
+    console.log('Posts to export ', postsToExport)
     let request = await fetch(`${application.application_url}/export`, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(postsToExport),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-    });
+    })
 
-    let response = request.json();
-    return response;
+    let response = request.json()
+    return response
   }
-);
+)
 
 let shareExportSlice = createSlice({
-  name: "shareExportSlice",
+  name: 'shareExportSlice',
   initialState,
   reducers: {
     setOverlayForShareExport: (state, action) => {
-      let postsToShareExport = getSelectedPosts(action.payload);
-      state.postsToExport = postsToShareExport;
+      let postsToShareExport = getSelectedPosts(action.payload)
+      state.postsToExport = postsToShareExport
 
-      let main = document.querySelector("main");
+      let main = document.querySelector('main')
       let shareExportBox = document.querySelector(
-        ".share-export-main-container"
-      );
+        '.share-export-main-container'
+      )
       let selectDataButton = document.querySelector(
         "button[data-action-select='select']"
-      );
-      let uncheckReminder = document.querySelector(".reminder");
+      )
+      let uncheckReminder = document.querySelector('.reminder')
 
       if (state.postsToExport.length > 0) {
-        uncheckReminder.style.opacity = "1";
-        uncheckReminder.style.visibility = "visible";
-        selectDataButton.setAttribute("disabled", "");
-        selectDataButton.style.cursor = "not-allowed";
+        uncheckReminder.style.opacity = '1'
+        uncheckReminder.style.visibility = 'visible'
+        selectDataButton.setAttribute('disabled', '')
+        selectDataButton.style.cursor = 'not-allowed'
 
-        main.classList.add("selecting");
-        if (shareExportBox.classList.contains("share-export-position-out")) {
-          shareExportBox.classList.remove("share-export-position-out");
-          shareExportBox.classList.add("share-export-position-in");
+        main.classList.add('selecting')
+        if (shareExportBox.classList.contains('share-export-position-out')) {
+          shareExportBox.classList.remove('share-export-position-out')
+          shareExportBox.classList.add('share-export-position-in')
         }
-        let selecting = document.querySelector(".selecting");
-        selecting.style.opacity = "1";
+        let selecting = document.querySelector('.selecting')
+        selecting.style.opacity = '1'
       } else {
-        uncheckReminder.style.opacity = "0";
-        uncheckReminder.style.visibility = "hidden";
+        uncheckReminder.style.opacity = '0'
+        uncheckReminder.style.visibility = 'hidden'
 
-        selectDataButton.removeAttribute("disabled");
-        selectDataButton.style.cursor = "pointer";
-        main.classList.remove("selecting");
-        if (shareExportBox.classList.contains("share-export-position-in")) {
-          shareExportBox.classList.remove("share-export-position-in");
-          shareExportBox.classList.add("share-export-position-out");
+        selectDataButton.removeAttribute('disabled')
+        selectDataButton.style.cursor = 'pointer'
+        main.classList.remove('selecting')
+        if (shareExportBox.classList.contains('share-export-position-in')) {
+          shareExportBox.classList.remove('share-export-position-in')
+          shareExportBox.classList.add('share-export-position-out')
         }
-        setIsSharingExporting(false);
+        setIsSharingExporting(false)
       }
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(exportToPDF.pending, (state) => {
-        console.log("Pending");
+        console.log('Pending')
       })
       .addCase(exportToPDF.fulfilled, (state, action) => {
-        console.log("Successfully implemented");
+        console.log('Successfully implemented')
+        state.isExported = true
+        console.log('Payload ---- ', action.payload)
+
+        state.exportedDocument = action.payload
       })
       .addCase(exportToPDF.rejected, (state, action) => {
-        console.log("FAILED");
-      });
+        console.log('FAILED')
+      })
   },
-});
+})
 
-export const { setOverlayForShareExport } = shareExportSlice.actions;
+export const { setOverlayForShareExport } = shareExportSlice.actions
 
-export default shareExportSlice.reducer;
+export default shareExportSlice.reducer
