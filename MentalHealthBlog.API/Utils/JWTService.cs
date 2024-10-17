@@ -1,4 +1,6 @@
-﻿using MentalHealthBlogAPI.Models;
+﻿using MentalHealthBlog.API.Models;
+using MentalHealthBlogAPI.Data;
+using MentalHealthBlogAPI.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -10,10 +12,12 @@ namespace MentalHealthBlog.API.Utils
     public class JWTService
     {
         private readonly AppSettings _options;
+        private readonly DataContext _context;
 
-        public JWTService(IOptions<AppSettings> options)
+        public JWTService(IOptions<AppSettings> options, DataContext context)
         {
             _options = options.Value;
+            _context = context;
         }
 
         public string GenerateToken(User user)
@@ -37,13 +41,46 @@ namespace MentalHealthBlog.API.Utils
 
         public List<Claim> GetClaims(User user)
         {
+            var roles = GetRoles(user);
+
             var claims = new List<Claim>
             {
                 new Claim("Id", user.Id.ToString()),
-                new Claim("Username", user.Username)
+                new Claim("Username", user.Username),
             };
-            return claims;
 
+            if (roles != null)
+            {
+                foreach (var role in roles)
+                {
+                    if (role != null)
+                    {
+                        claims.Add(new Claim(ClaimTypes.Role, role.Name));
+                        claims.Add(new Claim("RoleId", role.Id.ToString()));
+                    }
+                }
+            }
+
+            return claims;
+        }
+
+        public List<Role> GetRoles(User user)
+        {
+            if (user != null)
+            {
+                var userRoleIds = _context.UserRoles.Where(ur => ur.UserId == user.Id)
+                    .Select(r => r.RoleId)
+                    .ToList();
+
+                var roles = new List<Role>();
+                foreach (var roleId in userRoleIds)
+                {
+                    var dbRole = _context.Roles.Find(roleId);
+                    if (dbRole != null) roles.Add(dbRole);
+                }
+                return roles;
+            }
+            return new List<Role>();
         }
     }
 }

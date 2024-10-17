@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         public string Username { get; set; } = string.Empty;
+        public List<Role> UserRoles { get; set; }
         public string JWToken { get; set; } = string.Empty;
 
         public UserResponseDto(){}
@@ -12,11 +13,12 @@
             Id = id;
             Username = username;
         }
-        public UserResponseDto(int id, string username, string jwtoken)
+        public UserResponseDto(int id, string username, string jwtoken, List<Role> roles)
         {
             Id = id;
             Username = username;
             JWToken = jwtoken;
+            UserRoles = roles;
         }
     }
 }

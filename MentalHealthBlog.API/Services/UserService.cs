@@ -1,4 +1,5 @@
 ﻿using MentalHealthBlog.API.ExtensionMethods.ExtensionUserClass;
+using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Utils;
@@ -66,7 +67,7 @@ namespace MentalHealthBlog.API.Services
 
                 foreach (var role in newUserRequest.Roles)
                 {
-                    await _context.UserRoles.AddAsync(new Models.UserRole(user.Id, int.Parse(role.ToString())));
+                    await _context.UserRoles.AddAsync(new UserRole(user.Id, int.Parse(role.ToString())));
                 }
                 await _context.SaveChangesAsync();
 
@@ -90,18 +91,19 @@ namespace MentalHealthBlog.API.Services
                     _userLoggerService.LogError($"REGISTER: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", loginCredentials);
                     return new Response(new object(), StatusCodes.Status400BadRequest, UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString());
                 }
-                var jwtMiddleware = new JWTService(_options);
+                var jwtMiddleware = new JWTService(_options, _context);
                 var authenticated = await VerifyCredentials(loginCredentials);
                 var dbUser = await _context.Users.SingleOrDefaultAsync(u => u.Username == loginCredentials.Username);
                 if (authenticated && dbUser is not null)
                 {
+                    var dbUserRoles = jwtMiddleware.GetRoles(dbUser);
                     var token = jwtMiddleware.GenerateToken(dbUser);
                     if (String.IsNullOrEmpty(token))
                     {
                         _userLoggerService.LogError($"LOGIN: {UserServiceLogTypes.USER_TOKEN_NOT_CREATED.ToString()}", token);
                         return new Response(new object(), StatusCodes.Status403Forbidden, UserServiceLogTypes.USER_TOKEN_NOT_CREATED.ToString());
                     }
-                    var responseUser = new UserResponseDto(dbUser.Id, dbUser.Username, token);
+                    var responseUser = new UserResponseDto(dbUser.Id, dbUser.Username, token, dbUserRoles);
                     _userLoggerService.LogInformation($"LOGIN: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", responseUser);
                     return new Response(responseUser, StatusCodes.Status200OK, UserServiceLogTypes.USER_SUCCESFULL.ToString());
                 }
