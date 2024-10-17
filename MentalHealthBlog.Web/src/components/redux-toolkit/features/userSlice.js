@@ -38,7 +38,7 @@ export const login = createAsyncThunk('/user/login', async (user) => {
 
 export const register = createAsyncThunk('/user/register', async (user) => {
   console.log('User on submit ', user)
-  let url = `${application.application_url}/user/register/${user.username}/${user.password}`
+  let url = `${application.application_url}/user/register`
   let request = await fetch(url, {
     method: 'POST',
     body: JSON.stringify(user),

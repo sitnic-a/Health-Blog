@@ -17,7 +17,6 @@ export const Register = () => {
 
   let registerUser = async (e) => {
     e.preventDefault()
-    console.log('Register invoked')
     let selectedRoles = document.querySelectorAll(
       'input[type="checkbox"]:checked'
     )
@@ -36,8 +35,6 @@ export const Register = () => {
       roles: roles,
     }
 
-    console.log('New user ', newUser)
-
     if (
       newUser.username === '' ||
       newUser.username === null ||
@@ -53,12 +50,12 @@ export const Register = () => {
       return
     }
 
-    // dispatch(register(newUser)).then((response) => {
-    //   let statusCode = response.payload.statusCode
-    //   if (statusCode === 201) {
-    //     navigate('/login')
-    //   }
-    // })
+    dispatch(register(newUser)).then((response) => {
+      let statusCode = response.payload.statusCode
+      if (statusCode === 201) {
+        navigate('/login')
+      }
+    })
   }
 
   return (
@@ -98,7 +95,6 @@ export const Register = () => {
                 </div>
               )
             })}
-          {/* Show all appropriate roles for user registering*/}
         </div>
 
         <button type="submit">Register</button>
