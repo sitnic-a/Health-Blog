@@ -15,7 +15,9 @@ namespace MentalHealthBlog.API.Services
         USER_EXISTS,
         USER_INVALID_DATA_OR_SOMETHING_ELSE,
         USER_SUCCESFULL,
-        USER_TOKEN_NOT_CREATED
+        USER_TOKEN_NOT_CREATED,
+        ROLES_RETRIEVED,
+        ROLES_NOT_FOUND
     }
     public class UserService : IUserService
     {
@@ -42,7 +44,7 @@ namespace MentalHealthBlog.API.Services
             {
                 if (user.IsNotValid(username, password))
                 {
-                    _userLoggerService.LogError($"REGISTER: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", new {Username= username, Password = password});
+                    _userLoggerService.LogError($"REGISTER: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", new { Username = username, Password = password });
                     return new Response(new object(), StatusCodes.Status400BadRequest, UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString());
                 }
                 var dbUsers = _context.Users;
@@ -95,7 +97,7 @@ namespace MentalHealthBlog.API.Services
                     _userLoggerService.LogInformation($"LOGIN: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", responseUser);
                     return new Response(responseUser, StatusCodes.Status200OK, UserServiceLogTypes.USER_SUCCESFULL.ToString());
                 }
-                _userLoggerService.LogWarning($"LOGIN: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}",$"DB USER: {dbUser}");
+                _userLoggerService.LogWarning($"LOGIN: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", $"DB USER: {dbUser}");
                 return new Response(new object(), StatusCodes.Status400BadRequest, UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString());
             }
             catch (Exception e)
@@ -117,5 +119,25 @@ namespace MentalHealthBlog.API.Services
             return false;
         }
 
+        public async Task<Response> GetRoles()
+        {
+            try
+            {
+                var dbRoles = await _context.Roles.Where(r => r.Name != "Administrator" || r.Name != "Moderator").ToListAsync();
+                if (dbRoles.Any() && dbRoles != null)
+                {
+                    _userLoggerService.LogInformation($"DB_ROLES: {UserServiceLogTypes.ROLES_RETRIEVED.ToString()}", dbRoles);
+                    return new Response(dbRoles, StatusCodes.Status200OK, UserServiceLogTypes.ROLES_RETRIEVED.ToString());
+                }
+                _userLoggerService.LogWarning($"DB_ROLES: {UserServiceLogTypes.ROLES_NOT_FOUND.ToString()}");
+                return new Response();
+            }
+            catch (Exception e)
+            {
+                _userLoggerService.LogWarning($"DB_ROLES: {UserServiceLogTypes.ROLES_NOT_FOUND.ToString()}", e);
+                return new Response();
+            }
+            
+        }
     }
 }

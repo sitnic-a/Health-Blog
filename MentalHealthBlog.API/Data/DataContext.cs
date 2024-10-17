@@ -11,6 +11,8 @@ namespace MentalHealthBlogAPI.Data
         {
         }
         public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<PostTag> PostsTags { get; set; }
@@ -19,6 +21,8 @@ namespace MentalHealthBlogAPI.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<UserRole>().HasKey(ur => new { ur.UserId, ur.RoleId });
 
             modelBuilder.Entity<PostTag>().HasKey(pt => new
             {
@@ -31,6 +35,13 @@ namespace MentalHealthBlogAPI.Data
                 new { Id = 2, Username = "test_02", PasswordHash = "TT2", PasswordSalt = Encoding.UTF8.GetBytes("SetBytes_TT2") },
                 new { Id = 3, Username = "test_03", PasswordHash = "TT3", PasswordSalt = Encoding.UTF8.GetBytes("SetBytes_TT3") },
                 new { Id = 4, Username = "test_04", PasswordHash = "TT4", PasswordSalt = Encoding.UTF8.GetBytes("SetBytes_TT4") }
+                );
+
+            modelBuilder.Entity<Role>().HasData(
+                new { Id = 1, Name = "Administrator" },
+                new { Id = 2, Name = "User" },
+                new { Id = 3, Name = "Parent" },
+                new { Id = 4, Name = "Psychologist / Psychotherapist" }
                 );
 
             modelBuilder.Entity<Post>().HasData(

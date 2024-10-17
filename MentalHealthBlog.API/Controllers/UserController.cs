@@ -27,5 +27,11 @@ namespace MentalHealthBlog.API.Controllers
         {
             return await _userService.Login(loginCredentials);
         }
+
+        [HttpGet("roles")]
+        public async Task<Response> GetDbRoles()
+        {
+            return await _userService.GetRoles();
+        }
     }
 }
