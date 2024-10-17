@@ -1,4 +1,5 @@
-﻿using MentalHealthBlog.API.Models.ResourceResponse;
+﻿using MentalHealthBlog.API.Models.ResourceRequest;
+using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Services;
 using MentalHealthBlogAPI.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -16,10 +17,10 @@ namespace MentalHealthBlog.API.Controllers
             this._userService = userService;
         }
 
-        [HttpPost("register/{username}/{password}")]
-        public async Task<Response> Register(string username, string password)
+        [HttpPost("register")]
+        public async Task<Response> Register(CreateUserDto newUserRequest)
         {
-            return await _userService.Register(username, password);
+            return await _userService.Register(newUserRequest);
         }
 
         [HttpPost("login")]

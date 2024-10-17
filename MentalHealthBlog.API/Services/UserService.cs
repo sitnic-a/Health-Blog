@@ -1,4 +1,5 @@
 ﻿using MentalHealthBlog.API.ExtensionMethods.ExtensionUserClass;
+using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Utils;
 using MentalHealthBlogAPI.Data;
@@ -38,30 +39,37 @@ namespace MentalHealthBlog.API.Services
             _options = options;
             _userLoggerService = userLoggerService;
         }
-        public async Task<Response> Register(string username, string password)
+        public async Task<Response> Register(CreateUserDto newUserRequest)
         {
             try
             {
-                if (user.IsNotValid(username, password))
+                if (user.IsNotValid(newUserRequest.Username, newUserRequest.Password))
                 {
-                    _userLoggerService.LogError($"REGISTER: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", new { Username = username, Password = password });
+                    _userLoggerService.LogError($"REGISTER: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", new { Username = newUserRequest.Username, Password = newUserRequest.Password });
                     return new Response(new object(), StatusCodes.Status400BadRequest, UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString());
                 }
                 var dbUsers = _context.Users;
-                var existingUser = await dbUsers.SingleOrDefaultAsync(u => u.Username == username) is not null;
+                var existingUser = await dbUsers.SingleOrDefaultAsync(u => u.Username == newUserRequest.Username) is not null;
                 if (existingUser)
                 {
                     _userLoggerService.LogWarning($"REGISTER: {UserServiceLogTypes.USER_EXISTS.ToString()}", existingUser);
                     return new Response(new object(), StatusCodes.Status400BadRequest, UserServiceLogTypes.USER_EXISTS.ToString());
                 }
                 var salt = user.GenerateSalt(__KEYSIZE__);
-                var hash = user.HashPassword(password, salt, __ITERATIONS, __HASHALGORITHM__, __KEYSIZE__);
-                user.Username = username;
+                var hash = user.HashPassword(newUserRequest.Password, salt, __ITERATIONS, __HASHALGORITHM__, __KEYSIZE__);
+                user.Username = newUserRequest.Username;
                 user.PasswordSalt = salt;
                 user.PasswordHash = hash;
 
                 await _context.Users.AddAsync(user);
                 await _context.SaveChangesAsync();
+
+                foreach (var role in newUserRequest.Roles)
+                {
+                    await _context.UserRoles.AddAsync(new Models.UserRole(user.Id, int.Parse(role.ToString())));
+                }
+                await _context.SaveChangesAsync();
+
                 _userLoggerService.LogInformation($"REGISTER: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", user);
                 return new Response(new UserResponseDto(user.Id, user.Username), StatusCodes.Status201Created, UserServiceLogTypes.USER_SUCCESFULL.ToString());
 
@@ -137,7 +145,7 @@ namespace MentalHealthBlog.API.Services
                 _userLoggerService.LogWarning($"DB_ROLES: {UserServiceLogTypes.ROLES_NOT_FOUND.ToString()}", e);
                 return new Response();
             }
-            
+
         }
     }
 }

@@ -4,10 +4,8 @@ namespace MentalHealthBlog.API.Models
 {
     public class UserRole
     {
-        public User User { get; set; } = new User();
         public int UserId { get; set; }
 
-        public Role Role { get; set; } = new Role();
         public int RoleId { get; set; }
 
         public UserRole(){}
