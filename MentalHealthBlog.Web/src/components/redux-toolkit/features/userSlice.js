@@ -71,10 +71,8 @@ export const userSlice = createSlice({
 
       //--- login
       .addCase(login.pending, (state) => {
-        if (state.statusCode === 200) {
-          state.isLogging = true
-          state.isLoading = true
-        }
+        state.isLogging = true
+        state.isLoading = true
       })
       .addCase(login.rejected, (state) => {
         state.isFailed = true
