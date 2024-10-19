@@ -1,24 +1,23 @@
-import { ListOfPosts } from '../components/ListOfPosts'
-import { useSelector } from 'react-redux'
+import { ListOfPosts } from "../components/ListOfPosts";
+import { useLocation } from "react-router-dom";
 
 export const Dashboard = () => {
-  let { authenticatedUser } = useSelector((store) => store.user)
-  console.log('Dashboard logged user ', authenticatedUser)
+  let location = useLocation();
+  let loggedUser = location.state.loggedUser;
+  console.log("Dashboard logged user ", loggedUser);
 
-  if (authenticatedUser !== null) {
-    if (authenticatedUser.userRoles.some((ur) => ur.name === 'User')) {
-      return <ListOfPosts />
+  if (loggedUser !== null) {
+    if (loggedUser.roles.some((ur) => ur.name === "User")) {
+      return <ListOfPosts />;
     }
-    if (authenticatedUser.userRoles.some((ur) => ur.name === 'Administrator')) {
-      return <p>Admin page</p>
+    if (loggedUser.roles.some((ur) => ur.name === "Administrator")) {
+      return <p>Admin page</p>;
     }
     if (
-      authenticatedUser.userRoles.some(
-        (ur) => ur.name === 'Psychologist/Psychotherapist'
-      )
+      loggedUser.roles.some((ur) => ur.name === "Psychologist/Psychotherapist")
     ) {
-      return <p>Psychologist page</p>
+      return <p>Psychologist page</p>;
     }
   }
-  return <p>ERROR</p>
-}
+  return <p>ERROR</p>;
+};

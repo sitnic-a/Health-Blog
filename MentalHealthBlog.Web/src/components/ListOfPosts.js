@@ -1,78 +1,126 @@
-import React from 'react'
-import { useEffect } from 'react'
-import { useLocation } from 'react-router'
-import { useDispatch, useSelector } from 'react-redux'
-import { getPosts } from './redux-toolkit/features/postSlice'
+import React from "react";
+import { useEffect } from "react";
+import { useLocation } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { getPosts } from "./redux-toolkit/features/postSlice";
 
-import { Post } from './Post'
-import { ListOfPostsHeader } from './ListOfPostsHeader'
-import { Loader } from './Loader'
-import { PieGraph } from './PieGraph'
+import { Post } from "./Post";
+import { ListOfPostsHeader } from "./ListOfPostsHeader";
+import { Loader } from "./Loader";
+import { PieGraph } from "./PieGraph";
 
-import { FilterOptions } from './FilterOptions'
+import { FilterOptions } from "./FilterOptions";
 
-import { toast } from 'react-toastify'
+import { toast } from "react-toastify";
 
-import { FaShare } from 'react-icons/fa'
-import { FaFileExport } from 'react-icons/fa'
-import { GrDocumentPdf } from 'react-icons/gr'
+import { FaShare } from "react-icons/fa";
+import { FaFileExport } from "react-icons/fa";
+import { IoRemoveCircleOutline } from "react-icons/io5";
+import { LiaSearchSolid } from "react-icons/lia";
 import {
   base64ToArrayBuffer,
   getSelectedPosts,
-} from './utils/helper-methods/methods'
-import { openExportModal } from './redux-toolkit/features/modalSlice'
-import { exportToPDF } from './redux-toolkit/features/shareExportSlice'
+} from "./utils/helper-methods/methods";
+import { openExportModal } from "./redux-toolkit/features/modalSlice";
+import { exportToPDF } from "./redux-toolkit/features/shareExportSlice";
 
 export const ListOfPosts = () => {
-  let dispatch = useDispatch()
-  let { isLoading, posts } = useSelector((store) => store.post)
-  let { isLogging, isAuthenticated } = useSelector((store) => store.user)
-  let { isExportOpen } = useSelector((store) => store.modal)
+  let dispatch = useDispatch();
+  let { isLoading, posts } = useSelector((store) => store.post);
+  let { isLogging, isAuthenticated } = useSelector((store) => store.user);
+  let { isExportOpen } = useSelector((store) => store.modal);
   let { postsToExport, isExported, exportedDocument } = useSelector(
     (store) => store.shareExport
-  )
+  );
 
-  let { statisticsLoading } = useSelector((store) => store.pie)
+  let { statisticsLoading } = useSelector((store) => store.pie);
 
-  let location = useLocation()
-  let loggedUser = location.state.loggedUser
+  let location = useLocation();
+  let loggedUser = location.state.loggedUser;
 
   let searchPostDto = {
     loggedUser,
     monthOfPostCreation: 0,
-  }
+  };
 
   useEffect(() => {
-    let prevUrl = location.state.prevUrl
+    let prevUrl = location.state.prevUrl;
 
-    if (isAuthenticated === true && prevUrl.includes('login')) {
-      toast.success('Succesfully logged in', {
+    if (isAuthenticated === true && prevUrl.includes("login")) {
+      toast.success("Succesfully logged in", {
         autoClose: 1500,
-        position: 'bottom-right',
-      })
+        position: "bottom-right",
+      });
     }
-    dispatch(getPosts(searchPostDto))
-  }, [])
+    dispatch(getPosts(searchPostDto));
+  }, []);
 
   if (isLoading && isLogging && statisticsLoading) {
-    ;<Loader />
+    <Loader />;
   }
 
   return (
     <div className="dashboard">
       <ListOfPostsHeader />
 
+      <section className="share-modal-overlay">
+        <section className="share-modal-container">
+          <span
+            className="share-export-close-modal-btn"
+            onClick={() => {
+              console.log("Display share modal");
+            }}
+          >
+            X
+          </span>
+
+          <h4>Share posts...</h4>
+          <div className="share-posts-container">
+            {/* Array of selected posts */}
+
+            <div className="share-post-container">
+              <p className="share-post-title">Post_01</p>
+              <span className="revoke-btn">
+                <IoRemoveCircleOutline />
+              </span>
+            </div>
+
+            <div className="share-post-container">
+              <p>Post_01</p>
+              <span className="revoke-btn">
+                <IoRemoveCircleOutline />
+              </span>
+            </div>
+          </div>
+
+          <div className="share-people-container">
+            <div className="search-people">
+              <span>
+                <LiaSearchSolid />
+              </span>
+              <input
+                type="text"
+                name="search-by-first-last-name"
+                id="search-by-first-last-name"
+                placeholder="Search by first/last name..."
+              />
+            </div>
+          </div>
+        </section>
+      </section>
+
       {isExportOpen && (
         <>
           <section className="export-modal-overlay">
             <section className="export-modal-container">
               <span
+                className="share-export-close-modal-btn"
                 onClick={() => {
-                  dispatch(openExportModal(!isExportOpen))
+                  dispatch(openExportModal(!isExportOpen));
                   let shareExportContainer = document.querySelector(
-                    '.share-export-container'
-                  )
-                  shareExportContainer.style.display = 'flex'
+                    ".share-export-container"
+                  );
+                  shareExportContainer.style.display = "flex";
                 }}
               >
                 X
@@ -86,7 +134,7 @@ export const ListOfPosts = () => {
                         <div className="export-modal-file-wrapper">
                           <p>{post.title}</p>
                         </div>
-                      )
+                      );
                     })}
                   </div>
                   {isExported && (
@@ -106,7 +154,7 @@ export const ListOfPosts = () => {
           <section
             className="share-icon-container"
             onClick={() => {
-              alert('Share activated')
+              alert("Share activated");
             }}
           >
             <FaShare className="share-export-icon" />
@@ -115,30 +163,32 @@ export const ListOfPosts = () => {
             className="export-icon-container"
             onClick={() => {
               // let postsToExport = getSelectedPosts();/
-              dispatch(openExportModal(!isExportOpen))
+              dispatch(openExportModal(!isExportOpen));
               let shareExportContainer = document.querySelector(
-                '.share-export-container'
-              )
-              shareExportContainer.style.display = 'none'
+                ".share-export-container"
+              );
+              shareExportContainer.style.display = "none";
               dispatch(exportToPDF(postsToExport)).then((response) => {
-                var arrBuffer = base64ToArrayBuffer(response.payload.data)
+                var arrBuffer = base64ToArrayBuffer(response.payload.data);
 
                 // It is necessary to create a new blob object with mime-type explicitly set
                 // otherwise only Chrome works like it should
-                var newBlob = new Blob([arrBuffer], { type: 'application/pdf' })
+                var newBlob = new Blob([arrBuffer], {
+                  type: "application/pdf",
+                });
 
                 // For other browsers:
                 // Create a link pointing to the ObjectURL containing the blob.
-                var data = window.URL.createObjectURL(newBlob)
+                var data = window.URL.createObjectURL(newBlob);
 
-                var link = document.createElement('a')
-                document.body.appendChild(link) //required in FF, optional for Chrome
-                link.href = data
-                link.download = response.payload.fileName
-                link.click()
-                window.URL.revokeObjectURL(data)
-                link.remove()
-              })
+                var link = document.createElement("a");
+                document.body.appendChild(link); //required in FF, optional for Chrome
+                link.href = data;
+                link.download = response.payload.fileName;
+                link.click();
+                window.URL.revokeObjectURL(data);
+                link.remove();
+              });
             }}
           >
             <FaFileExport className="share-export-icon" />
@@ -155,7 +205,7 @@ export const ListOfPosts = () => {
       <div className="dashboard-cols">
         <section className="list-of-posts-main-container">
           {posts.map((post) => {
-            return <Post key={post.id} {...post} />
+            return <Post key={post.id} {...post} />;
           })}
         </section>
 
@@ -164,5 +214,5 @@ export const ListOfPosts = () => {
         </section>
       </div>
     </div>
-  )
-}
+  );
+};

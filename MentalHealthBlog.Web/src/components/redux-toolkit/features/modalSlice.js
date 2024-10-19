@@ -6,6 +6,7 @@ let modalSlice = createSlice({
     isAddOpen: false,
     isDeleteOpen: false,
     isExportOpen: false,
+    isShareOpen: false,
   },
   reducers: {
     openAddModal: (state, action) => {
