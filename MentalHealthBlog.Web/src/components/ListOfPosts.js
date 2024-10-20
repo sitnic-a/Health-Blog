@@ -17,6 +17,7 @@ import { FaShare } from "react-icons/fa";
 import { FaFileExport } from "react-icons/fa";
 import { IoRemoveCircleOutline } from "react-icons/io5";
 import { LiaSearchSolid } from "react-icons/lia";
+import { IoPersonOutline } from "react-icons/io5";
 import {
   base64ToArrayBuffer,
   getSelectedPosts,
@@ -24,7 +25,11 @@ import {
 import { openExportModal } from "./redux-toolkit/features/modalSlice";
 import { exportToPDF } from "./redux-toolkit/features/shareExportSlice";
 
+import defaultAvatar from "../images/default-avatar.png";
+
 export const ListOfPosts = () => {
+  console.log(defaultAvatar);
+
   let dispatch = useDispatch();
   let { isLoading, posts } = useSelector((store) => store.post);
   let { isLogging, isAuthenticated } = useSelector((store) => store.user);
@@ -105,6 +110,70 @@ export const ListOfPosts = () => {
                 placeholder="Search by first/last name..."
               />
             </div>
+
+            <div className="people-to-give-permission-container">
+              <div className="people-to-give-permission">
+                <div className="person-to-give-permission-container">
+                  <div className="permission-action">
+                    <input
+                      type="checkbox"
+                      name="person-to-give-permission-checkbox"
+                      id="person-to-give-permission-checkbox"
+                    />
+                  </div>
+
+                  <div className="person-to-give-permission-information">
+                    <div className="person-to-give-permission-img-container">
+                      <img
+                        className="person-to-give-permission-img"
+                        src={defaultAvatar}
+                        alt="Person photo"
+                      />
+                    </div>
+                    <div className="person-to-give-permission-basic-information">
+                      <p className="person-permission-info">
+                        First and last name
+                      </p>
+                      <p className="person-permission-info">Specialized at</p>
+                      <p className="person-permission-info">Phone number</p>
+                      <hr />
+                      <p className="person-permission-info">Organization</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="person-to-give-permission-container">
+                  <div className="permission-action">
+                    <input
+                      type="checkbox"
+                      name="person-to-give-permission-checkbox"
+                      id="person-to-give-permission-checkbox"
+                    />
+                  </div>
+
+                  <div className="person-to-give-permission-information">
+                    <div className="person-to-give-permission-img-container">
+                      <img
+                        className="person-to-give-permission-img"
+                        src={defaultAvatar}
+                        alt="Person photo"
+                      />
+                    </div>
+                    <div className="person-to-give-permission-basic-information">
+                      <p className="person-permission-info">
+                        First and last name
+                      </p>
+                      <p className="person-permission-info">Specialized at</p>
+                      <p className="person-permission-info">Phone number</p>
+                      <hr />
+                      <p className="person-permission-info">Organization</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p>Number of persons content is shared with</p>
+            </div>
+            <button type="button">Share content</button>
           </div>
         </section>
       </section>
