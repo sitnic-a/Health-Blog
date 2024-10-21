@@ -452,7 +452,7 @@ button[data-action-add="add"] svg {
   min-height: 100vh;
   top: 0;
   left: 0;
-  background: rgba(255, 0, 0, 0.5);
+  /* background: rgba(255, 0, 0, 0.5); */
   z-index: 3;
 }
 
@@ -521,6 +521,7 @@ button[data-action-add="add"] svg {
 }
 
 .share-modal-container > h4 {
+  color: #000;
   text-align: center;
   padding-block: 0.3rem;
 }
@@ -535,11 +536,12 @@ button[data-action-add="add"] svg {
 .share-post-container {
   display: flex;
   align-items: center;
-  margin-bottom: -0.8rem;
+  margin-bottom: 0rem;
 }
 
 .share-post-title {
   margin-block: 0;
+  color: #000;
 }
 
 .revoke-btn {
@@ -551,13 +553,14 @@ button[data-action-add="add"] svg {
   fill: #b10000;
   stroke: #b10000;
   font-size: 1.2rem;
-  transition: 100ms;
+  transition: 200ms;
+  cursor: pointer;
 }
 
 .revoke-btn > svg:hover {
   fill: #3a0000;
   stroke: #3a0000;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
 }
 
 .share-people-container {
@@ -567,6 +570,7 @@ button[data-action-add="add"] svg {
   max-width: 750px;
   /* height: 350px; */
   border: 1px solid lightgray;
+  padding-bottom: 0.5rem;
 }
 
 .search-people {
@@ -574,13 +578,13 @@ button[data-action-add="add"] svg {
   max-width: 280px;
   width: 100%;
   right: 1px;
-  top: -11.8%;
+  top: -13%;
   border-radius: 0.4rem;
 }
 
 @media (width<=400px) {
   .search-people {
-    top: -6.6%;
+    top: -7.6%;
   }
 }
 
@@ -624,15 +628,18 @@ button[data-action-add="add"] svg {
 }
 
 .people-to-give-permission-container {
+  position: relative;
   max-width: 750px;
   margin: 0.5rem;
   background: yellow;
+  padding-bottom: 2.5rem;
 }
 
 .people-to-give-permission {
   /* background: red; */
   display: flex;
   gap: 10px;
+  margin-bottom: 0.5rem;
 }
 
 @media (width<=400px) {
@@ -651,7 +658,6 @@ button[data-action-add="add"] svg {
   position: relative;
   max-width: 230px;
   width: 100%;
-  min-height: 250px;
   background: #e2e2e2;
 }
 
@@ -674,11 +680,12 @@ input[name="person-to-give-permission-checkbox"] {
   width: 15px;
   height: 15px;
   border-radius: 0px;
+  cursor: pointer;
 }
 
 .person-to-give-permission-information {
+  padding-bottom: 2rem;
   max-width: 250px;
-  min-height: 250px;
   background: lightblue;
 }
 
@@ -701,6 +708,41 @@ input[name="person-to-give-permission-checkbox"] {
   font-size: 0.9rem;
   margin: 0;
   margin-bottom: 0.2rem;
+  color: #000;
+}
+
+.people-to-give-permission-count {
+  color: #000;
+  position: absolute;
+  bottom: 0;
+  right: 30px;
+  margin: 0;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+@media (width <=400px) {
+  .people-to-give-permission-count {
+    left: 4px;
+    right: 0px;
+  }
+}
+
+.share-btn {
+  margin-inline: 0.5rem;
+  outline: none;
+  border: none;
+  padding: 0.5rem 0.7rem;
+  background: #efefef;
+  color: #666;
+  cursor: pointer;
+  transition: 300ms;
+}
+
+.share-btn:hover {
+  background: #666;
+  color: #efefef;
 }
 
 .export-modal-overlay {

@@ -22,7 +22,10 @@ import {
   base64ToArrayBuffer,
   getSelectedPosts,
 } from "./utils/helper-methods/methods";
-import { openExportModal } from "./redux-toolkit/features/modalSlice";
+import {
+  openExportModal,
+  openShareModal,
+} from "./redux-toolkit/features/modalSlice";
 import { exportToPDF } from "./redux-toolkit/features/shareExportSlice";
 
 import defaultAvatar from "../images/default-avatar.png";
@@ -33,7 +36,7 @@ export const ListOfPosts = () => {
   let dispatch = useDispatch();
   let { isLoading, posts } = useSelector((store) => store.post);
   let { isLogging, isAuthenticated } = useSelector((store) => store.user);
-  let { isExportOpen } = useSelector((store) => store.modal);
+  let { isExportOpen, isShareOpen } = useSelector((store) => store.modal);
   let { postsToExport, isExported, exportedDocument } = useSelector(
     (store) => store.shareExport
   );
@@ -68,115 +71,136 @@ export const ListOfPosts = () => {
     <div className="dashboard">
       <ListOfPostsHeader />
 
-      <section className="share-modal-overlay">
-        <section className="share-modal-container">
-          <span
-            className="share-export-close-modal-btn"
-            onClick={() => {
-              console.log("Display share modal");
-            }}
-          >
-            X
-          </span>
+      {isShareOpen && (
+        <section className="share-modal-overlay">
+          <section className="share-modal-container">
+            <span
+              className="share-export-close-modal-btn"
+              onClick={() => {
+                dispatch(openShareModal(!isShareOpen));
+                let shareExportContainer = document.querySelector(
+                  ".share-export-container"
+                );
+                shareExportContainer.style.display = "flex";
+              }}
+            >
+              X
+            </span>
 
-          <h4>Share posts...</h4>
-          <div className="share-posts-container">
-            {/* Array of selected posts */}
+            <h4>Share posts...</h4>
+            <div className="share-posts-container">
+              {/* Array of selected posts */}
 
-            <div className="share-post-container">
-              <p className="share-post-title">Post_01</p>
-              <span className="revoke-btn">
-                <IoRemoveCircleOutline />
-              </span>
-            </div>
-
-            <div className="share-post-container">
-              <p>Post_01</p>
-              <span className="revoke-btn">
-                <IoRemoveCircleOutline />
-              </span>
-            </div>
-          </div>
-
-          <div className="share-people-container">
-            <div className="search-people">
-              <span>
-                <LiaSearchSolid />
-              </span>
-              <input
-                type="text"
-                name="search-by-first-last-name"
-                id="search-by-first-last-name"
-                placeholder="Search by first/last name..."
-              />
-            </div>
-
-            <div className="people-to-give-permission-container">
-              <div className="people-to-give-permission">
-                <div className="person-to-give-permission-container">
-                  <div className="permission-action">
-                    <input
-                      type="checkbox"
-                      name="person-to-give-permission-checkbox"
-                      id="person-to-give-permission-checkbox"
-                    />
-                  </div>
-
-                  <div className="person-to-give-permission-information">
-                    <div className="person-to-give-permission-img-container">
-                      <img
-                        className="person-to-give-permission-img"
-                        src={defaultAvatar}
-                        alt="Person photo"
-                      />
-                    </div>
-                    <div className="person-to-give-permission-basic-information">
-                      <p className="person-permission-info">
-                        First and last name
-                      </p>
-                      <p className="person-permission-info">Specialized at</p>
-                      <p className="person-permission-info">Phone number</p>
-                      <hr />
-                      <p className="person-permission-info">Organization</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="person-to-give-permission-container">
-                  <div className="permission-action">
-                    <input
-                      type="checkbox"
-                      name="person-to-give-permission-checkbox"
-                      id="person-to-give-permission-checkbox"
-                    />
-                  </div>
-
-                  <div className="person-to-give-permission-information">
-                    <div className="person-to-give-permission-img-container">
-                      <img
-                        className="person-to-give-permission-img"
-                        src={defaultAvatar}
-                        alt="Person photo"
-                      />
-                    </div>
-                    <div className="person-to-give-permission-basic-information">
-                      <p className="person-permission-info">
-                        First and last name
-                      </p>
-                      <p className="person-permission-info">Specialized at</p>
-                      <p className="person-permission-info">Phone number</p>
-                      <hr />
-                      <p className="person-permission-info">Organization</p>
-                    </div>
-                  </div>
-                </div>
+              <div className="share-post-container">
+                <p className="share-post-title">Post_01</p>
+                <span
+                  className="revoke-btn"
+                  onClick={() => {
+                    console.log("Content removed from the list!");
+                  }}
+                >
+                  <IoRemoveCircleOutline />
+                </span>
               </div>
-              <p>Number of persons content is shared with</p>
+
+              <div className="share-post-container">
+                <p className="share-post-title">Post_01</p>
+                <span className="revoke-btn">
+                  <IoRemoveCircleOutline />
+                </span>
+              </div>
             </div>
-            <button type="button">Share content</button>
-          </div>
+
+            <div className="share-people-container">
+              <div className="search-people">
+                <span>
+                  <LiaSearchSolid />
+                </span>
+                <input
+                  type="text"
+                  name="search-by-first-last-name"
+                  id="search-by-first-last-name"
+                  placeholder="Search by first/last name..."
+                />
+              </div>
+
+              <div className="people-to-give-permission-container">
+                <div className="people-to-give-permission">
+                  <div className="person-to-give-permission-container">
+                    <div className="permission-action">
+                      <input
+                        type="checkbox"
+                        name="person-to-give-permission-checkbox"
+                        id="person-to-give-permission-checkbox"
+                      />
+                    </div>
+
+                    <div className="person-to-give-permission-information">
+                      <div className="person-to-give-permission-img-container">
+                        <img
+                          className="person-to-give-permission-img"
+                          src={defaultAvatar}
+                          alt="Person photo"
+                        />
+                      </div>
+                      <div className="person-to-give-permission-basic-information">
+                        <p className="person-permission-info">
+                          First and last name
+                        </p>
+                        <p className="person-permission-info">Specialized at</p>
+                        <p className="person-permission-info">Phone number</p>
+                        <hr />
+                        <p className="person-permission-info">Organization</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="person-to-give-permission-container">
+                    <div className="permission-action">
+                      <input
+                        type="checkbox"
+                        name="person-to-give-permission-checkbox"
+                        id="person-to-give-permission-checkbox"
+                      />
+                    </div>
+
+                    <div className="person-to-give-permission-information">
+                      <div className="person-to-give-permission-img-container">
+                        <img
+                          className="person-to-give-permission-img"
+                          src={defaultAvatar}
+                          alt="Person photo"
+                        />
+                      </div>
+                      <div className="person-to-give-permission-basic-information">
+                        <p className="person-permission-info">
+                          First and last name
+                        </p>
+                        <p className="person-permission-info">Specialized at</p>
+                        <p className="person-permission-info">Phone number</p>
+                        <hr />
+                        <p className="person-permission-info">Organization</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <p className="people-to-give-permission-count">
+                  Number of persons content is shared with
+                </p>
+              </div>
+              <button
+                className="share-btn"
+                type="button"
+                onClick={() => {
+                  console.log("Content is being shared... Loadingg...");
+                }}
+              >
+                Share content
+              </button>
+            </div>
+          </section>
         </section>
-      </section>
+      )}
 
       {isExportOpen && (
         <>
@@ -223,7 +247,12 @@ export const ListOfPosts = () => {
           <section
             className="share-icon-container"
             onClick={() => {
-              alert("Share activated");
+              dispatch(openShareModal(!isShareOpen));
+              let shareExportContainer = document.querySelector(
+                ".share-export-container"
+              );
+              shareExportContainer.style.display = "none";
+              // alert("Share activated");
             }}
           >
             <FaShare className="share-export-icon" />
