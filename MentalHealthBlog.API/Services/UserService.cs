@@ -72,7 +72,7 @@ namespace MentalHealthBlog.API.Services
                 await _context.SaveChangesAsync();
 
                 _userLoggerService.LogInformation($"REGISTER: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", user);
-                return new Response(new UserResponseDto(user.Id, user.Username), StatusCodes.Status201Created, UserServiceLogTypes.USER_SUCCESFULL.ToString());
+                return new Response(new SignedUserDto(user.Id, user.Username), StatusCodes.Status201Created, UserServiceLogTypes.USER_SUCCESFULL.ToString());
 
             }
             catch (Exception e)
@@ -103,7 +103,7 @@ namespace MentalHealthBlog.API.Services
                         _userLoggerService.LogError($"LOGIN: {UserServiceLogTypes.USER_TOKEN_NOT_CREATED.ToString()}", token);
                         return new Response(new object(), StatusCodes.Status403Forbidden, UserServiceLogTypes.USER_TOKEN_NOT_CREATED.ToString());
                     }
-                    var responseUser = new UserResponseDto(dbUser.Id, dbUser.Username, token, dbUserRoles);
+                    var responseUser = new SignedUserDto(dbUser.Id, dbUser.Username, token, dbUserRoles);
                     _userLoggerService.LogInformation($"LOGIN: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", responseUser);
                     return new Response(responseUser, StatusCodes.Status200OK, UserServiceLogTypes.USER_SUCCESFULL.ToString());
                 }
