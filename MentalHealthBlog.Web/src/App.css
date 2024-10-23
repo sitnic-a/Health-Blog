@@ -1,4 +1,4 @@
-input[type='text'],
+input[type="text"],
 textarea {
   border: 1px solid #a8a8a8;
   outline: none;
@@ -265,7 +265,7 @@ dialog::backdrop {
   }
 }
 
-button[data-action-update='update'] {
+button[data-action-update="update"] {
   position: absolute;
   background: none;
   outline: none;
@@ -274,7 +274,7 @@ button[data-action-update='update'] {
   left: 0.3rem;
 }
 
-button[data-action-delete='delete'] {
+button[data-action-delete="delete"] {
   position: absolute;
   background: none;
   outline: none;
@@ -298,7 +298,7 @@ button[data-action-delete='delete'] {
   border-radius: 0.4rem;
 }
 
-input[name='share-export'] {
+input[name="share-export"] {
   position: absolute;
   top: 0.45rem;
   width: 20px;
@@ -310,7 +310,7 @@ input[name='share-export'] {
   display: block;
 }
 
-button[data-action-add='add'] {
+button[data-action-add="add"] {
   background: none;
   outline: none;
   border: none;
@@ -319,7 +319,7 @@ button[data-action-add='add'] {
   background: #e1e1e1;
 }
 
-button[data-action-add='filter'] {
+button[data-action-add="filter"] {
   background: none;
   outline: none;
   border: none;
@@ -329,7 +329,7 @@ button[data-action-add='filter'] {
   width: 5.3rem;
 }
 
-button[data-action-select='select'] {
+button[data-action-select="select"] {
   background: none;
   outline: none;
   border: none;
@@ -420,27 +420,27 @@ div[data-tooltip-title]:after {
   padding: 0.3rem;
 }
 
-button[data-action-update='update']:hover {
+button[data-action-update="update"]:hover {
   cursor: pointer;
 }
 
-button[data-action-delete='delete']:hover {
+button[data-action-delete="delete"]:hover {
   cursor: pointer;
 }
 
-button[data-action-add='add']:hover,
-button[data-action-add='filter']:hover {
+button[data-action-add="add"]:hover,
+button[data-action-add="filter"]:hover {
   background: #f4f4f4;
   cursor: pointer;
 }
 
-button[data-action-add='add'] svg {
+button[data-action-add="add"] svg {
   margin-right: 2rem;
 }
 
-button[data-action-update='update'] svg,
-button[data-action-delete='delete'] svg,
-button[data-action-add='add'] svg {
+button[data-action-update="update"] svg,
+button[data-action-delete="delete"] svg,
+button[data-action-add="add"] svg {
   transform: scale(1.8);
   color: #000;
 }
@@ -661,7 +661,7 @@ button[data-action-add='add'] svg {
 .person-to-give-permission-container {
   position: relative;
   max-width: 230px;
-  width: 100%;
+  width: fit-content;
   background: #e2e2e2;
 }
 
@@ -680,7 +680,7 @@ button[data-action-add='add'] svg {
   height: 15px;
 }
 
-input[name='person-to-give-permission-checkbox'] {
+input[name="person-to-give-permission-checkbox"] {
   width: 15px;
   height: 15px;
   border-radius: 0px;
@@ -937,7 +937,7 @@ input[name='person-to-give-permission-checkbox'] {
   font-size: 0.8rem;
 }
 
-select[name='filter-by-month'] {
+select[name="filter-by-month"] {
   margin-left: 0.5rem;
   max-width: 10rem;
   height: 1.8rem;
@@ -947,7 +947,7 @@ select[name='filter-by-month'] {
 }
 
 @media (width<322px) {
-  select[name='filter-by-month'] {
+  select[name="filter-by-month"] {
     margin: 0rem;
   }
 }
@@ -1003,7 +1003,7 @@ select[name='filter-by-month'] {
 .post-date p {
   font-size: 0.8em;
   color: #920d0d;
-  font-family: 'serif';
+  font-family: "serif";
   font-weight: 550;
   margin-block: 0;
   text-decoration: none;
@@ -1070,7 +1070,7 @@ pre:hover {
   overflow-y: scroll;
 }
 
-.post-by-id-container-edit input[name='title'] {
+.post-by-id-container-edit input[name="title"] {
   margin-inline: 2rem;
   border: none;
   border-bottom: 1px solid #e1e1e1;
@@ -1080,7 +1080,7 @@ pre:hover {
   border-radius: 3px;
 }
 
-.post-by-id-container-edit input[name='title']:focus-within {
+.post-by-id-container-edit input[name="title"]:focus-within {
   border: 1px solid rgb(188, 188, 253);
 }
 
