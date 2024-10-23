@@ -1,70 +1,72 @@
-import React from "react";
-import { useEffect } from "react";
-import { useLocation } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
-import { getPosts } from "./redux-toolkit/features/postSlice";
+import React from 'react'
+import { useEffect } from 'react'
+import { useLocation } from 'react-router'
+import { useDispatch, useSelector } from 'react-redux'
+import { getPosts } from './redux-toolkit/features/postSlice'
 
-import { Post } from "./Post";
-import { ListOfPostsHeader } from "./ListOfPostsHeader";
-import { Loader } from "./Loader";
-import { PieGraph } from "./PieGraph";
+import { Post } from './Post'
+import { ListOfPostsHeader } from './ListOfPostsHeader'
+import { Loader } from './Loader'
+import { PieGraph } from './PieGraph'
 
-import { FilterOptions } from "./FilterOptions";
+import { FilterOptions } from './FilterOptions'
 
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify'
 
-import { FaShare } from "react-icons/fa";
-import { FaFileExport } from "react-icons/fa";
-import { IoRemoveCircleOutline } from "react-icons/io5";
-import { LiaSearchSolid } from "react-icons/lia";
-import { IoPersonOutline } from "react-icons/io5";
+import { FaShare } from 'react-icons/fa'
+import { FaFileExport } from 'react-icons/fa'
+import { IoRemoveCircleOutline } from 'react-icons/io5'
+import { LiaSearchSolid } from 'react-icons/lia'
+import { IoPersonOutline } from 'react-icons/io5'
 import {
   base64ToArrayBuffer,
   getSelectedPosts,
-} from "./utils/helper-methods/methods";
+} from './utils/helper-methods/methods'
 import {
   openExportModal,
   openShareModal,
-} from "./redux-toolkit/features/modalSlice";
-import { exportToPDF } from "./redux-toolkit/features/shareExportSlice";
+} from './redux-toolkit/features/modalSlice'
+import {
+  exportToPDF,
+  getExpertsAndRelatives,
+} from './redux-toolkit/features/shareExportSlice'
 
-import defaultAvatar from "../images/default-avatar.png";
+import defaultAvatar from '../images/default-avatar.png'
 
 export const ListOfPosts = () => {
-  console.log(defaultAvatar);
+  console.log(defaultAvatar)
 
-  let dispatch = useDispatch();
-  let { isLoading, posts } = useSelector((store) => store.post);
-  let { isLogging, isAuthenticated } = useSelector((store) => store.user);
-  let { isExportOpen, isShareOpen } = useSelector((store) => store.modal);
-  let { postsToExport, isExported, exportedDocument } = useSelector(
-    (store) => store.shareExport
-  );
+  let dispatch = useDispatch()
+  let { isLoading, posts } = useSelector((store) => store.post)
+  let { isLogging, isAuthenticated } = useSelector((store) => store.user)
+  let { isExportOpen, isShareOpen } = useSelector((store) => store.modal)
+  let { postsToExport, isExported, exportedDocument, possibleToShareWith } =
+    useSelector((store) => store.shareExport)
 
-  let { statisticsLoading } = useSelector((store) => store.pie);
+  let { statisticsLoading } = useSelector((store) => store.pie)
 
-  let location = useLocation();
-  let loggedUser = location.state.loggedUser;
+  let location = useLocation()
+  let loggedUser = location.state.loggedUser
 
   let searchPostDto = {
     loggedUser,
     monthOfPostCreation: 0,
-  };
+  }
 
   useEffect(() => {
-    let prevUrl = location.state.prevUrl;
+    let prevUrl = location.state.prevUrl
 
-    if (isAuthenticated === true && prevUrl.includes("login")) {
-      toast.success("Succesfully logged in", {
+    if (isAuthenticated === true && prevUrl.includes('login')) {
+      toast.success('Succesfully logged in', {
         autoClose: 1500,
-        position: "bottom-right",
-      });
+        position: 'bottom-right',
+      })
     }
-    dispatch(getPosts(searchPostDto));
-  }, []);
+    dispatch(getPosts(searchPostDto))
+  }, [])
 
   if (isLoading && isLogging && statisticsLoading) {
-    <Loader />;
+    ;<Loader />
   }
 
   return (
@@ -77,11 +79,11 @@ export const ListOfPosts = () => {
             <span
               className="share-export-close-modal-btn"
               onClick={() => {
-                dispatch(openShareModal(!isShareOpen));
+                dispatch(openShareModal(!isShareOpen))
                 let shareExportContainer = document.querySelector(
-                  ".share-export-container"
-                );
-                shareExportContainer.style.display = "flex";
+                  '.share-export-container'
+                )
+                shareExportContainer.style.display = 'flex'
               }}
             >
               X
@@ -96,7 +98,7 @@ export const ListOfPosts = () => {
                 <span
                   className="revoke-btn"
                   onClick={() => {
-                    console.log("Content removed from the list!");
+                    console.log('Content removed from the list!')
                   }}
                 >
                   <IoRemoveCircleOutline />
@@ -126,63 +128,44 @@ export const ListOfPosts = () => {
 
               <div className="people-to-give-permission-container">
                 <div className="people-to-give-permission">
-                  <div className="person-to-give-permission-container">
-                    <div className="permission-action">
-                      <input
-                        type="checkbox"
-                        name="person-to-give-permission-checkbox"
-                        id="person-to-give-permission-checkbox"
-                      />
-                    </div>
+                  {possibleToShareWith.map((personToShareWith) => {
+                    return (
+                      <div className="person-to-give-permission-container">
+                        <div className="permission-action">
+                          <input
+                            type="checkbox"
+                            name="person-to-give-permission-checkbox"
+                            id="person-to-give-permission-checkbox"
+                          />
+                        </div>
 
-                    <div className="person-to-give-permission-information">
-                      <div className="person-to-give-permission-img-container">
-                        <img
-                          className="person-to-give-permission-img"
-                          src={defaultAvatar}
-                          alt="Person photo"
-                        />
+                        <div className="person-to-give-permission-information">
+                          <div className="person-to-give-permission-img-container">
+                            <img
+                              className="person-to-give-permission-img"
+                              src={defaultAvatar}
+                              alt="Person photo"
+                            />
+                          </div>
+                          <div className="person-to-give-permission-basic-information">
+                            <p className="person-permission-info">
+                              {personToShareWith.username}
+                            </p>
+                            <p className="person-permission-info">
+                              {personToShareWith.roles[0].name}
+                            </p>
+                            <p className="person-permission-info">
+                              {personToShareWith.phoneNumber}
+                            </p>
+                            <hr />
+                            <p className="person-permission-info">
+                              {personToShareWith.organization}
+                            </p>
+                          </div>
+                        </div>
                       </div>
-                      <div className="person-to-give-permission-basic-information">
-                        <p className="person-permission-info">
-                          First and last name
-                        </p>
-                        <p className="person-permission-info">Specialized at</p>
-                        <p className="person-permission-info">Phone number</p>
-                        <hr />
-                        <p className="person-permission-info">Organization</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="person-to-give-permission-container">
-                    <div className="permission-action">
-                      <input
-                        type="checkbox"
-                        name="person-to-give-permission-checkbox"
-                        id="person-to-give-permission-checkbox"
-                      />
-                    </div>
-
-                    <div className="person-to-give-permission-information">
-                      <div className="person-to-give-permission-img-container">
-                        <img
-                          className="person-to-give-permission-img"
-                          src={defaultAvatar}
-                          alt="Person photo"
-                        />
-                      </div>
-                      <div className="person-to-give-permission-basic-information">
-                        <p className="person-permission-info">
-                          First and last name
-                        </p>
-                        <p className="person-permission-info">Specialized at</p>
-                        <p className="person-permission-info">Phone number</p>
-                        <hr />
-                        <p className="person-permission-info">Organization</p>
-                      </div>
-                    </div>
-                  </div>
+                    )
+                  })}
                 </div>
                 <p className="people-to-give-permission-count">
                   Number of persons content is shared with
@@ -192,7 +175,7 @@ export const ListOfPosts = () => {
                 className="share-btn"
                 type="button"
                 onClick={() => {
-                  console.log("Content is being shared... Loadingg...");
+                  console.log('Content is being shared... Loadingg...')
                 }}
               >
                 Share content
@@ -209,11 +192,11 @@ export const ListOfPosts = () => {
               <span
                 className="share-export-close-modal-btn"
                 onClick={() => {
-                  dispatch(openExportModal(!isExportOpen));
+                  dispatch(openExportModal(!isExportOpen))
                   let shareExportContainer = document.querySelector(
-                    ".share-export-container"
-                  );
-                  shareExportContainer.style.display = "flex";
+                    '.share-export-container'
+                  )
+                  shareExportContainer.style.display = 'flex'
                 }}
               >
                 X
@@ -227,7 +210,7 @@ export const ListOfPosts = () => {
                         <div className="export-modal-file-wrapper">
                           <p>{post.title}</p>
                         </div>
-                      );
+                      )
                     })}
                   </div>
                   {isExported && (
@@ -247,11 +230,12 @@ export const ListOfPosts = () => {
           <section
             className="share-icon-container"
             onClick={() => {
-              dispatch(openShareModal(!isShareOpen));
+              dispatch(openShareModal(!isShareOpen))
               let shareExportContainer = document.querySelector(
-                ".share-export-container"
-              );
-              shareExportContainer.style.display = "none";
+                '.share-export-container'
+              )
+              shareExportContainer.style.display = 'none'
+              dispatch(getExpertsAndRelatives())
               // alert("Share activated");
             }}
           >
@@ -261,32 +245,32 @@ export const ListOfPosts = () => {
             className="export-icon-container"
             onClick={() => {
               // let postsToExport = getSelectedPosts();/
-              dispatch(openExportModal(!isExportOpen));
+              dispatch(openExportModal(!isExportOpen))
               let shareExportContainer = document.querySelector(
-                ".share-export-container"
-              );
-              shareExportContainer.style.display = "none";
+                '.share-export-container'
+              )
+              shareExportContainer.style.display = 'none'
               dispatch(exportToPDF(postsToExport)).then((response) => {
-                var arrBuffer = base64ToArrayBuffer(response.payload.data);
+                var arrBuffer = base64ToArrayBuffer(response.payload.data)
 
                 // It is necessary to create a new blob object with mime-type explicitly set
                 // otherwise only Chrome works like it should
                 var newBlob = new Blob([arrBuffer], {
-                  type: "application/pdf",
-                });
+                  type: 'application/pdf',
+                })
 
                 // For other browsers:
                 // Create a link pointing to the ObjectURL containing the blob.
-                var data = window.URL.createObjectURL(newBlob);
+                var data = window.URL.createObjectURL(newBlob)
 
-                var link = document.createElement("a");
-                document.body.appendChild(link); //required in FF, optional for Chrome
-                link.href = data;
-                link.download = response.payload.fileName;
-                link.click();
-                window.URL.revokeObjectURL(data);
-                link.remove();
-              });
+                var link = document.createElement('a')
+                document.body.appendChild(link) //required in FF, optional for Chrome
+                link.href = data
+                link.download = response.payload.fileName
+                link.click()
+                window.URL.revokeObjectURL(data)
+                link.remove()
+              })
             }}
           >
             <FaFileExport className="share-export-icon" />
@@ -303,7 +287,7 @@ export const ListOfPosts = () => {
       <div className="dashboard-cols">
         <section className="list-of-posts-main-container">
           {posts.map((post) => {
-            return <Post key={post.id} {...post} />;
+            return <Post key={post.id} {...post} />
           })}
         </section>
 
@@ -312,5 +296,5 @@ export const ListOfPosts = () => {
         </section>
       </div>
     </div>
-  );
-};
+  )
+}

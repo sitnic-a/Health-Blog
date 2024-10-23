@@ -8,6 +8,7 @@ let initialState = {
   postsToExport: [],
   exportedDocument: null,
   isExported: false,
+  possibleToShareWith: [],
 }
 
 export const exportToPDF = createAsyncThunk(
@@ -23,6 +24,19 @@ export const exportToPDF = createAsyncThunk(
     })
 
     let response = request.json()
+    return response
+  }
+)
+
+export const getExpertsAndRelatives = createAsyncThunk(
+  '/share/experts-relatives',
+  async () => {
+    console.log('Get expert and relatives users invoked...')
+    let url = `${application.application_url}/share/experts-relatives`
+    let request = await fetch(url)
+    let response = request.json()
+    console.log('Response in slice ', response)
+
     return response
   }
 )
@@ -74,6 +88,7 @@ let shareExportSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      //Export
       .addCase(exportToPDF.pending, (state) => {
         console.log('Pending')
       })
@@ -86,6 +101,19 @@ let shareExportSlice = createSlice({
       })
       .addCase(exportToPDF.rejected, (state, action) => {
         console.log('FAILED')
+      })
+
+      //Share
+      .addCase(getExpertsAndRelatives.pending, (state, action) => {
+        console.log('Started with get experts and relatives...')
+      })
+      .addCase(getExpertsAndRelatives.fulfilled, (state, action) => {
+        console.log('Get experts and relatives succesfully finished')
+        console.log('Case gER payload ', action.payload)
+        state.possibleToShareWith = action.payload
+      })
+      .addCase(getExpertsAndRelatives.rejected, (state, action) => {
+        console.log('Get experts and relatives rejected')
       })
   },
 })
