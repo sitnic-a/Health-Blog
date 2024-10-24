@@ -690,6 +690,7 @@ input[name="person-to-give-permission-checkbox"] {
 .person-to-give-permission-information {
   padding-bottom: 2rem;
   width: 180px;
+  min-height: 200px;
   background: lightblue;
 }
 
@@ -724,11 +725,11 @@ input[name="person-to-give-permission-checkbox"] {
 
 .person-permission-info {
   max-width: 160px;
-  overflow-x: auto;
+  overflow-x: hidden;
   margin-inline: auto;
   font-size: 0.9rem;
   margin: 0;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.1rem;
   color: #000;
 }
 
