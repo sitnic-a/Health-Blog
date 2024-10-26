@@ -1,4 +1,6 @@
-﻿using MentalHealthBlog.API.Models;
+﻿using System.Collections.Generic;
+using MentalHealthBlog.API.Models;
+using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
 using MentalHealthBlogAPI.Models;
@@ -59,6 +61,33 @@ namespace MentalHealthBlog.API.Services
                 throw new Exception(e.Message);
             }
 
+        }
+
+        public async Task<List<Share>> ShareContent(List<ShareContentDto> contentToBeShared)
+        {
+            if (contentToBeShared.IsNullOrEmpty()) return new List<Share>();
+
+            var sharedContent = new List<Share>();
+            var shareGuid = Guid.NewGuid();
+
+            foreach (var item in contentToBeShared)
+            {
+                var newShare = new Share
+                {
+                    ShareGuid = shareGuid.ToString(),
+                    SharedPostId = item.PostId,
+                    SharedWithId = item.SharedWithId,
+                    SharedAt = item.SharedAt.Value
+                };
+                sharedContent.Add(newShare);
+                await _context.Shares.AddAsync(newShare);
+            }
+
+            await _context.SaveChangesAsync();
+
+            if (sharedContent.Any()) return sharedContent;
+
+            return new List<Share>();
         }
     }
 }

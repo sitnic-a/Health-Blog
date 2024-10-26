@@ -16,7 +16,7 @@ namespace MentalHealthBlogAPI.Data
         public DbSet<Post> Posts { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<PostTag> PostsTags { get; set; }
-        
+        public DbSet<Share> Shares { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

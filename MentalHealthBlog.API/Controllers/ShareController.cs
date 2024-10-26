@@ -1,4 +1,6 @@
-﻿using MentalHealthBlog.API.Models.ResourceResponse;
+﻿using MentalHealthBlog.API.Models;
+using MentalHealthBlog.API.Models.ResourceRequest;
+using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +16,12 @@ namespace MentalHealthBlog.API.Controllers
         public ShareController(IShareService shareService)
         {
             _shareService = shareService;
+        }
+
+        [HttpPost]
+        public async Task<List<Share>> ShareContent(List<ShareContentDto> contentToBeShared)
+        {
+            return await _shareService.ShareContent(contentToBeShared);
         }
 
         [HttpGet("experts-relatives")]
