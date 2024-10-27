@@ -19,7 +19,7 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpPost]
-        public async Task<List<Share>> ShareContent(List<ShareContentDto> contentToBeShared)
+        public async Task<List<Share>> ShareContent(ShareContentDto contentToBeShared)
         {
             return await _shareService.ShareContent(contentToBeShared);
         }

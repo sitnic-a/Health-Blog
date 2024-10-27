@@ -5,16 +5,16 @@ namespace MentalHealthBlog.API.Models.ResourceRequest
 {
     public class ShareContentDto
     {
-        public int PostId { get; set; }
-        public int SharedWithId { get; set; }
+        public List<int> PostIds { get; set; }
+        public List<int> SharedWithIds { get; set; }
         public DateTime? SharedAt { get; set; }
 
         public ShareContentDto(){}
 
-        public ShareContentDto(int postId, int sharedWithId, DateTime? sharedAt)
+        public ShareContentDto(List<int> postIds, List<int> sharedWithIds, DateTime? sharedAt)
         {
-            PostId = postId;
-            SharedWithId= sharedWithId;
+            PostIds = postIds;
+            SharedWithIds= sharedWithIds;
             if (sharedAt.HasValue) SharedAt = sharedAt;
             else SharedAt = DateTime.Now;
 

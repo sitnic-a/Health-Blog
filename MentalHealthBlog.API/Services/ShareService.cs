@@ -43,7 +43,7 @@ namespace MentalHealthBlog.API.Services
                     user = dbUsers.FirstOrDefault(r => r.Id == item.Key);
 
                     if (user == null || dbUserRoles.IsNullOrEmpty()) return new List<UserDto>();
-                    
+
                     possibleToShareWith.Add(new UserDto
                     {
                         Id = user.Id,
@@ -63,26 +63,32 @@ namespace MentalHealthBlog.API.Services
 
         }
 
-        public async Task<List<Share>> ShareContent(List<ShareContentDto> contentToBeShared)
+        public async Task<List<Share>> ShareContent(ShareContentDto contentToBeShared)
         {
-            if (contentToBeShared.IsNullOrEmpty()) return new List<Share>();
+            if (contentToBeShared.PostIds.IsNullOrEmpty() ||
+                contentToBeShared.SharedWithIds.IsNullOrEmpty() ||
+                contentToBeShared.PostIds.Contains(0) ||
+                contentToBeShared.SharedWithIds.Contains(0)) return new List<Share>();
 
             var sharedContent = new List<Share>();
             var shareGuid = Guid.NewGuid();
 
-            foreach (var item in contentToBeShared)
+            foreach (var post in contentToBeShared.PostIds)
             {
-                var newShare = new Share
+                foreach (var shareWith in contentToBeShared.SharedWithIds)
                 {
-                    ShareGuid = shareGuid.ToString(),
-                    SharedPostId = item.PostId,
-                    SharedWithId = item.SharedWithId,
-                    SharedAt = item.SharedAt.Value
-                };
-                sharedContent.Add(newShare);
-                await _context.Shares.AddAsync(newShare);
-            }
+                    var newShare = new Share
+                    {
+                        ShareGuid = shareGuid.ToString(),
+                        SharedPostId = post,
+                        SharedWithId = shareWith,
+                        SharedAt = contentToBeShared.SharedAt.Value
+                    };
 
+                    sharedContent.Add(newShare);
+                    await _context.Shares.AddAsync(newShare);
+                }
+            }
             await _context.SaveChangesAsync();
 
             if (sharedContent.Any()) return sharedContent;
