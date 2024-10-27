@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { getSelectedPosts } from '../../utils/helper-methods/methods'
 import { setIsSharingExporting } from './postSlice'
 import { application } from '../../../application'
+import { act } from 'react'
 
 let initialState = {
   postsToShare: [],
@@ -18,6 +19,24 @@ export const exportToPDF = createAsyncThunk(
     let request = await fetch(`${application.application_url}/export`, {
       method: 'POST',
       body: JSON.stringify(postsToExport),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    let response = request.json()
+    return response
+  }
+)
+
+export const shareContent = createAsyncThunk(
+  '/share',
+  async (contentToBeShared) => {
+    console.log('Content to be shared ', contentToBeShared)
+
+    let request = await fetch(`${application.application_url}/share`, {
+      method: 'POST',
+      body: JSON.stringify(contentToBeShared),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -104,6 +123,17 @@ let shareExportSlice = createSlice({
       })
 
       //Share
+      .addCase(shareContent.pending, (state, action) => {
+        console.log('Pending...')
+      })
+      .addCase(shareContent.fulfilled, (state, action) => {
+        console.log('Success')
+      })
+      .addCase(shareContent.rejected, (state, action) => {
+        console.log('Error ', action.payload)
+      })
+
+      //get suggested experts or relatives
       .addCase(getExpertsAndRelatives.pending, (state, action) => {
         console.log('Started with get experts and relatives...')
       })
