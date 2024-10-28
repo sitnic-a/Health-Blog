@@ -18,6 +18,9 @@ import { FaFileExport } from 'react-icons/fa'
 import { IoRemoveCircleOutline } from 'react-icons/io5'
 import { LiaSearchSolid } from 'react-icons/lia'
 import { IoPersonOutline } from 'react-icons/io5'
+
+import { setIsSharingExporting } from './redux-toolkit/features/postSlice'
+
 import {
   base64ToArrayBuffer,
   getPeopleToShareContentWith,
@@ -30,7 +33,9 @@ import {
 import {
   exportToPDF,
   getExpertsAndRelatives,
+  setOverlayForShareExport,
   shareContent,
+  revokeShareContent,
 } from './redux-toolkit/features/shareExportSlice'
 
 import defaultAvatar from '../images/default-avatar.png'
@@ -40,7 +45,9 @@ export const ListOfPosts = () => {
   console.log(defaultAvatar)
 
   let dispatch = useDispatch()
-  let { isLoading, posts } = useSelector((store) => store.post)
+  let { isLoading, posts, isSharingExporting } = useSelector(
+    (store) => store.post
+  )
   let { isLogging, isAuthenticated } = useSelector((store) => store.user)
   let { isExportOpen, isShareOpen } = useSelector((store) => store.modal)
   let { postsToExport, isExported, exportedDocument, possibleToShareWith } =
@@ -76,7 +83,7 @@ export const ListOfPosts = () => {
     <div className="dashboard">
       <ListOfPostsHeader />
 
-      {isShareOpen && (
+      {postsToExport.length > 0 && isShareOpen && (
         <section className="share-modal-overlay">
           <section className="share-modal-container">
             <span
@@ -96,24 +103,21 @@ export const ListOfPosts = () => {
             <div className="share-posts-container">
               {/* Array of selected posts */}
 
-              <div className="share-post-container">
-                <p className="share-post-title">Post_01</p>
-                <span
-                  className="revoke-btn"
-                  onClick={() => {
-                    console.log('Content removed from the list!')
-                  }}
-                >
-                  <IoRemoveCircleOutline />
-                </span>
-              </div>
-
-              <div className="share-post-container">
-                <p className="share-post-title">Post_01</p>
-                <span className="revoke-btn">
-                  <IoRemoveCircleOutline />
-                </span>
-              </div>
+              {postsToExport.map((post) => {
+                return (
+                  <div className="share-post-container" key={post.id}>
+                    <p className="share-post-title">{post.title}</p>
+                    <span
+                      className="revoke-btn"
+                      onClick={() => {
+                        dispatch(revokeShareContent(post.id))
+                      }}
+                    >
+                      <IoRemoveCircleOutline />
+                    </span>
+                  </div>
+                )
+              })}
             </div>
 
             <div className="share-people-container">
@@ -196,7 +200,7 @@ export const ListOfPosts = () => {
               <button
                 className="share-btn"
                 type="button"
-                onClick={async () => {
+                onClick={() => {
                   let postsToShareIds = postsToExport.map((post) => post.id)
                   let shareContentWithIds = getPeopleToShareContentWith()
 
@@ -206,14 +210,8 @@ export const ListOfPosts = () => {
                     sharedAt: new Date(),
                   }
 
-                  console.log(
-                    'Posts to share ',
-                    postsToShareIds,
-                    ' Sharing with ',
-                    shareContentWithIds
-                  )
-
                   dispatch(shareContent(contentToBeShared))
+                  // dispatch(openShareModal(!isShareOpen))
                 }}
               >
                 Share content
