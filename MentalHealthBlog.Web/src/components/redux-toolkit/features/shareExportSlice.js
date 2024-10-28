@@ -3,6 +3,7 @@ import { getSelectedPosts } from '../../utils/helper-methods/methods'
 import { setIsSharingExporting } from './postSlice'
 import { application } from '../../../application'
 import { act } from 'react'
+import { toast } from 'react-toastify'
 
 let initialState = {
   postsToShare: [],
@@ -104,6 +105,16 @@ let shareExportSlice = createSlice({
         setIsSharingExporting(false)
       }
     },
+
+    revokeShareContent: (state, action) => {
+      state.postsToExport = state.postsToExport.filter(
+        (post) => post.id !== action.payload
+      )
+      toast.success('The post is removed from list to share  ', {
+        autoClose: 2000,
+        position: 'bottom-right',
+      })
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -127,10 +138,16 @@ let shareExportSlice = createSlice({
         console.log('Pending...')
       })
       .addCase(shareContent.fulfilled, (state, action) => {
-        console.log('Success')
+        toast.success('You have succesfully shared content!', {
+          autoClose: 2000,
+          position: 'bottom-right',
+        })
       })
-      .addCase(shareContent.rejected, (state, action) => {
-        console.log('Error ', action.payload)
+      .addCase(shareContent.rejected, () => {
+        toast.error('Something went wrong. Try again!', {
+          autoClose: 2000,
+          position: 'bottom-right',
+        })
       })
 
       //get suggested experts or relatives
@@ -148,6 +165,7 @@ let shareExportSlice = createSlice({
   },
 })
 
-export const { setOverlayForShareExport } = shareExportSlice.actions
+export const { setOverlayForShareExport, revokeShareContent } =
+  shareExportSlice.actions
 
 export default shareExportSlice.reducer
