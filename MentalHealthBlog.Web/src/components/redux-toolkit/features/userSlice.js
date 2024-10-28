@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { application } from "../../../application";
-import { toast } from "react-toastify";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { application } from '../../../application'
+import { toast } from 'react-toastify'
 
 let initialState = {
   isLoading: false,
@@ -11,50 +11,59 @@ let initialState = {
   isAuthenticated: false,
   isRegistered: false,
   statusCode: null,
-};
+  dbRoles: [],
+}
 
-export const getQuote = createAsyncThunk("quote", async () => {
-  let url = "https://type.fit/api/quotes";
-  let request = await fetch(url);
-  let response = request.json();
-  return response;
-});
+export const getQuote = createAsyncThunk('quote', async () => {
+  let url = 'https://type.fit/api/quotes'
+  let request = await fetch(url)
+  let response = request.json()
+  return response
+})
 
-export const login = createAsyncThunk("/user/login", async (user) => {
-  console.log("User on submit ", user);
-  let url = `${application.application_url}/user/login`;
+export const login = createAsyncThunk('/user/login', async (user) => {
+  console.log('User on submit ', user)
+  let url = `${application.application_url}/user/login`
   let request = await fetch(url, {
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify(user),
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
-  });
-  let response = await request.json();
-  console.log("Response ", response);
-  return response;
-});
+  })
+  let response = await request.json()
+  console.log('Response ', response)
+  return response
+})
 
-export const register = createAsyncThunk("/user/register", async (user) => {
-  console.log("User on submit ", user);
-  let url = `${application.application_url}/user/register/${user.username}/${user.password}`;
+export const register = createAsyncThunk('/user/register', async (user) => {
+  console.log('User on submit ', user)
+  let url = `${application.application_url}/user/register`
   let request = await fetch(url, {
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify(user),
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
-  });
-  let response = await request.json();
-  return response;
-});
+  })
+  let response = await request.json()
+  return response
+})
+
+export const getDbRoles = createAsyncThunk('/user/roles', async () => {
+  console.log('Get roles invoked')
+  let url = `${application.application_url}/user/roles`
+  let request = await fetch(url)
+  let response = await request.json()
+  return response
+})
 
 export const userSlice = createSlice({
-  name: "userSlice",
+  name: 'userSlice',
   initialState,
   reducers: {
     setIsFailed: (state, action) => {
-      state.isFailed = action.payload;
+      state.isFailed = action.payload
     },
   },
   extraReducers: (builder) => {
@@ -62,63 +71,61 @@ export const userSlice = createSlice({
 
       //--- login
       .addCase(login.pending, (state) => {
-        if (state.statusCode === 200) {
-          state.isLogging = true;
-          state.isLoading = true;
-        }
+        state.isLogging = true
+        state.isLoading = true
       })
       .addCase(login.rejected, (state) => {
-        state.isFailed = true;
-        state.isAuthenticated = true;
+        state.isFailed = true
+        state.isAuthenticated = true
       })
       .addCase(login.fulfilled, (state, action) => {
-        state.statusCode = action.payload.statusCode;
+        state.statusCode = action.payload.statusCode
         if (state.statusCode === 200) {
-          state.authenticatedUser = action.payload.serviceResponseObject;
-          state.isLogging = false;
-          state.isLoading = false;
-          state.isAuthenticated = true;
+          state.authenticatedUser = action.payload.serviceResponseObject
+          state.isLogging = false
+          state.isLoading = false
+          state.isAuthenticated = true
           // console.log("Logged succesfully ", action.payload);
-          return;
+          return
         }
         if (
           state.statusCode !== 200 ||
           state.statusCode !== 201 ||
           state.statusCode !== 204
         ) {
-          toast.error("Invalid credentials, try again", {
+          toast.error('Invalid credentials, try again', {
             autoClose: 1500,
-            position: "bottom-right",
-          });
+            position: 'bottom-right',
+          })
           // console.log("Logged unsuccessfully");
-          state.isLoading = false;
-          state.isLogging = false;
-          state.isAuthenticated = false;
-          state.authenticatedUser = null;
-          return;
+          state.isLoading = false
+          state.isLogging = false
+          state.isAuthenticated = false
+          state.authenticatedUser = null
+          return
         }
       })
 
       //--- register
       .addCase(register.pending, (state) => {
-        state.isLoading = true;
-        state.isRegistered = false;
+        state.isLoading = true
+        state.isRegistered = false
       })
       .addCase(register.rejected, (state) => {
-        state.isFailed = true;
-        state.isRegistered = false;
+        state.isFailed = true
+        state.isRegistered = false
       })
       .addCase(register.fulfilled, (state, action) => {
-        console.log("Register fulfilled ", action.payload);
-        state.statusCode = action.payload.statusCode;
+        console.log('Register fulfilled ', action.payload)
+        state.statusCode = action.payload.statusCode
         if (state.statusCode === 201) {
           toast.success("You've successfully created an account", {
             autoClose: 1500,
-            position: "bottom-right",
-          });
-          state.isRegistered = true;
-          state.isLoading = false;
-          return;
+            position: 'bottom-right',
+          })
+          state.isRegistered = true
+          state.isLoading = false
+          return
         }
         if (
           state.statusCode !== 200 ||
@@ -127,15 +134,22 @@ export const userSlice = createSlice({
         ) {
           toast.error("Couldn't register this user", {
             autoClose: 1500,
-            position: "bottom-right",
-          });
+            position: 'bottom-right',
+          })
           // console.log("Logged unsuccessfully");
-          state.isLoading = false;
-          return;
+          state.isLoading = false
+          return
         }
-      });
-  },
-});
+      })
 
-export const { setIsFailed } = userSlice.actions;
-export default userSlice.reducer;
+      //getDbRoles
+      .addCase(getDbRoles.pending, (state, action) => {})
+      .addCase(getDbRoles.fulfilled, (state, action) => {
+        console.log('Fetched roles -> ', action.payload)
+        state.dbRoles = action.payload.serviceResponseObject
+      })
+  },
+})
+
+export const { setIsFailed } = userSlice.actions
+export default userSlice.reducer

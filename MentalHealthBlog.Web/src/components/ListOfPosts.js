@@ -15,22 +15,36 @@ import { toast } from 'react-toastify'
 
 import { FaShare } from 'react-icons/fa'
 import { FaFileExport } from 'react-icons/fa'
-import { GrDocumentPdf } from 'react-icons/gr'
+import { IoRemoveCircleOutline } from 'react-icons/io5'
+import { LiaSearchSolid } from 'react-icons/lia'
+import { IoPersonOutline } from 'react-icons/io5'
 import {
   base64ToArrayBuffer,
+  getPeopleToShareContentWith,
   getSelectedPosts,
 } from './utils/helper-methods/methods'
-import { openExportModal } from './redux-toolkit/features/modalSlice'
-import { exportToPDF } from './redux-toolkit/features/shareExportSlice'
+import {
+  openExportModal,
+  openShareModal,
+} from './redux-toolkit/features/modalSlice'
+import {
+  exportToPDF,
+  getExpertsAndRelatives,
+  shareContent,
+} from './redux-toolkit/features/shareExportSlice'
+
+import defaultAvatar from '../images/default-avatar.png'
+import { application } from '../application'
 
 export const ListOfPosts = () => {
+  console.log(defaultAvatar)
+
   let dispatch = useDispatch()
   let { isLoading, posts } = useSelector((store) => store.post)
   let { isLogging, isAuthenticated } = useSelector((store) => store.user)
-  let { isExportOpen } = useSelector((store) => store.modal)
-  let { postsToExport, isExported, exportedDocument } = useSelector(
-    (store) => store.shareExport
-  )
+  let { isExportOpen, isShareOpen } = useSelector((store) => store.modal)
+  let { postsToExport, isExported, exportedDocument, possibleToShareWith } =
+    useSelector((store) => store.shareExport)
 
   let { statisticsLoading } = useSelector((store) => store.pie)
 
@@ -62,11 +76,159 @@ export const ListOfPosts = () => {
     <div className="dashboard">
       <ListOfPostsHeader />
 
+      {isShareOpen && (
+        <section className="share-modal-overlay">
+          <section className="share-modal-container">
+            <span
+              className="share-export-close-modal-btn"
+              onClick={() => {
+                dispatch(openShareModal(!isShareOpen))
+                let shareExportContainer = document.querySelector(
+                  '.share-export-container'
+                )
+                shareExportContainer.style.display = 'flex'
+              }}
+            >
+              X
+            </span>
+
+            <h4>Share posts...</h4>
+            <div className="share-posts-container">
+              {/* Array of selected posts */}
+
+              <div className="share-post-container">
+                <p className="share-post-title">Post_01</p>
+                <span
+                  className="revoke-btn"
+                  onClick={() => {
+                    console.log('Content removed from the list!')
+                  }}
+                >
+                  <IoRemoveCircleOutline />
+                </span>
+              </div>
+
+              <div className="share-post-container">
+                <p className="share-post-title">Post_01</p>
+                <span className="revoke-btn">
+                  <IoRemoveCircleOutline />
+                </span>
+              </div>
+            </div>
+
+            <div className="share-people-container">
+              <div className="search-people">
+                <span>
+                  <LiaSearchSolid />
+                </span>
+                <input
+                  type="text"
+                  name="search-by-first-last-name"
+                  id="search-by-first-last-name"
+                  placeholder="Search by first/last name..."
+                />
+              </div>
+
+              <div className="people-to-give-permission-container">
+                <div className="people-to-give-permission">
+                  {possibleToShareWith.map((personToShareWith) => {
+                    return (
+                      <div className="person-to-give-permission-container">
+                        <div className="permission-action">
+                          <input
+                            type="checkbox"
+                            name="person-to-give-permission-checkbox"
+                            id="person-to-give-permission-checkbox"
+                            onClick={() => getPeopleToShareContentWith()}
+                          />
+                        </div>
+
+                        <div className="person-to-give-permission-information">
+                          <div className="person-to-give-permission-img-container">
+                            <img
+                              className="person-to-give-permission-img"
+                              src={defaultAvatar}
+                              alt="Person photo"
+                            />
+                          </div>
+                          <div className="person-to-give-permission-basic-information">
+                            <input
+                              type="hidden"
+                              name="person-permission-info"
+                              className="person-permission-info info-id"
+                              value={personToShareWith.id}
+                            />
+                            <p
+                              className="person-permission-info info-username"
+                              title={personToShareWith.username}
+                            >
+                              {personToShareWith.username}
+                            </p>
+                            <p
+                              className="person-permission-info info-role"
+                              title={personToShareWith.roles[0].name}
+                            >
+                              {personToShareWith.roles[0].name}
+                            </p>
+                            <p
+                              className="person-permission-info info-phoneNumber"
+                              title={personToShareWith.phoneNumber}
+                            >
+                              {personToShareWith.phoneNumber}
+                            </p>
+                            <hr />
+                            <p
+                              className="person-permission-info info-organization"
+                              title={personToShareWith.organization}
+                            >
+                              {personToShareWith.organization}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+                <p className="people-to-give-permission-count">
+                  Number of persons content is shared with
+                </p>
+              </div>
+              <button
+                className="share-btn"
+                type="button"
+                onClick={async () => {
+                  let postsToShareIds = postsToExport.map((post) => post.id)
+                  let shareContentWithIds = getPeopleToShareContentWith()
+
+                  let contentToBeShared = {
+                    postIds: postsToShareIds,
+                    sharedWithIds: shareContentWithIds,
+                    sharedAt: new Date(),
+                  }
+
+                  console.log(
+                    'Posts to share ',
+                    postsToShareIds,
+                    ' Sharing with ',
+                    shareContentWithIds
+                  )
+
+                  dispatch(shareContent(contentToBeShared))
+                }}
+              >
+                Share content
+              </button>
+            </div>
+          </section>
+        </section>
+      )}
+
       {isExportOpen && (
         <>
           <section className="export-modal-overlay">
             <section className="export-modal-container">
               <span
+                className="share-export-close-modal-btn"
                 onClick={() => {
                   dispatch(openExportModal(!isExportOpen))
                   let shareExportContainer = document.querySelector(
@@ -106,7 +268,16 @@ export const ListOfPosts = () => {
           <section
             className="share-icon-container"
             onClick={() => {
-              alert('Share activated')
+              dispatch(openShareModal(!isShareOpen))
+              let shareExportContainer = document.querySelector(
+                '.share-export-container'
+              )
+              shareExportContainer.style.display = 'none'
+              dispatch(getExpertsAndRelatives())
+              let selectedPosts = getSelectedPosts(loggedUser)
+              console.log('In LIST on Share ', selectedPosts)
+
+              // alert("Share activated");
             }}
           >
             <FaShare className="share-export-icon" />
@@ -125,7 +296,9 @@ export const ListOfPosts = () => {
 
                 // It is necessary to create a new blob object with mime-type explicitly set
                 // otherwise only Chrome works like it should
-                var newBlob = new Blob([arrBuffer], { type: 'application/pdf' })
+                var newBlob = new Blob([arrBuffer], {
+                  type: 'application/pdf',
+                })
 
                 // For other browsers:
                 // Create a link pointing to the ObjectURL containing the blob.

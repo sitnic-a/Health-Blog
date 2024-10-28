@@ -74,6 +74,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<IStatisticsService, StatisticsService>();
 builder.Services.AddScoped<IExportService, ExportService>();
+builder.Services.AddScoped<IShareService, ShareService>();
 
 
 builder.Services.AddDbContext<DataContext>(options =>

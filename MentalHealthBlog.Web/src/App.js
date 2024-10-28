@@ -1,18 +1,19 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 //Main imports
-import "./App.css";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import './App.css'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 //Import components
-import { ListOfPosts } from "./components/ListOfPosts";
-import { PostById } from "./components/PostById";
-import { Login } from "./components/Login";
-import { Register } from "./components/Register";
-import { Loader } from "./components/Loader";
+import { ListOfPosts } from './components/ListOfPosts'
+import { PostById } from './components/PostById'
+import { Login } from './components/Login'
+import { Register } from './components/Register'
+import { Loader } from './components/Loader'
 
-import { store } from "./components/redux-toolkit/store";
-import { Provider } from "react-redux";
+import { store } from './components/redux-toolkit/store'
+import { Provider } from 'react-redux'
+import { Dashboard } from './pages/Dashboard'
 
 function App() {
   return (
@@ -21,7 +22,7 @@ function App() {
         <main>
           <Routes>
             <Route exact path="/login" element={<Login />} />
-            <Route path="/" element={<ListOfPosts />} />
+            <Route path="/" element={<Dashboard />} />
             <Route path="/post/:id" element={<PostById />}></Route>
             <Route path="/register" element={<Register />}></Route>
           </Routes>
@@ -29,7 +30,7 @@ function App() {
         </main>
       </Router>
     </Provider>
-  );
+  )
 }
 
-export default App;
+export default App

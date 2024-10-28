@@ -6,6 +6,7 @@ let modalSlice = createSlice({
     isAddOpen: false,
     isDeleteOpen: false,
     isExportOpen: false,
+    isShareOpen: false,
   },
   reducers: {
     openAddModal: (state, action) => {
@@ -17,10 +18,17 @@ let modalSlice = createSlice({
     openExportModal: (state, action) => {
       state.isExportOpen = action.payload;
     },
+    openShareModal: (state, action) => {
+      state.isShareOpen = action.payload;
+    },
   },
 });
 
-export const { openAddModal, openDeleteModal, openExportModal } =
-  modalSlice.actions;
+export const {
+  openAddModal,
+  openDeleteModal,
+  openExportModal,
+  openShareModal,
+} = modalSlice.actions;
 
 export default modalSlice.reducer;

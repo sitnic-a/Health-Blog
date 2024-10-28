@@ -4,6 +4,7 @@ using MentalHealthBlogAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MentalHealthBlogAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20241017130607_Role-UserRole-Default App roles")]
+    partial class RoleUserRoleDefaultApproles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,38 +75,8 @@ namespace MentalHealthBlogAPI.Migrations
                         new
                         {
                             Id = 4,
-                            Name = "Psychologist / Psychotherapist"
+                            Name = "Psychologist/Psychotherapist"
                         });
-                });
-
-            modelBuilder.Entity("MentalHealthBlog.API.Models.Share", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ShareGuid")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("SharedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("SharedPostId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SharedWithId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SharedPostId");
-
-                    b.HasIndex("SharedWithId");
-
-                    b.ToTable("Shares");
                 });
 
             modelBuilder.Entity("MentalHealthBlog.API.Models.Tag", b =>
@@ -208,7 +181,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 1,
                             Content = "Content_T01",
-                            CreatedAt = new DateTime(2024, 10, 26, 17, 59, 54, 76, DateTimeKind.Local).AddTicks(7789),
+                            CreatedAt = new DateTime(2024, 10, 17, 15, 6, 7, 681, DateTimeKind.Local).AddTicks(9891),
                             Title = "Title_01",
                             UserId = 1
                         },
@@ -216,7 +189,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 2,
                             Content = "Content_T02",
-                            CreatedAt = new DateTime(2024, 10, 26, 17, 59, 54, 76, DateTimeKind.Local).AddTicks(7956),
+                            CreatedAt = new DateTime(2024, 10, 17, 15, 6, 7, 681, DateTimeKind.Local).AddTicks(9955),
                             Title = "Title_02",
                             UserId = 1
                         },
@@ -224,7 +197,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 3,
                             Content = "Content_T03",
-                            CreatedAt = new DateTime(2024, 10, 26, 17, 59, 54, 76, DateTimeKind.Local).AddTicks(7961),
+                            CreatedAt = new DateTime(2024, 10, 17, 15, 6, 7, 681, DateTimeKind.Local).AddTicks(9957),
                             Title = "Title_03",
                             UserId = 2
                         },
@@ -232,7 +205,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 4,
                             Content = "Content_T04",
-                            CreatedAt = new DateTime(2024, 10, 26, 17, 59, 54, 76, DateTimeKind.Local).AddTicks(7965),
+                            CreatedAt = new DateTime(2024, 10, 17, 15, 6, 7, 681, DateTimeKind.Local).AddTicks(9959),
                             Title = "Title_04",
                             UserId = 2
                         },
@@ -240,7 +213,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 5,
                             Content = "Content_T05",
-                            CreatedAt = new DateTime(2024, 10, 26, 17, 59, 54, 76, DateTimeKind.Local).AddTicks(7972),
+                            CreatedAt = new DateTime(2024, 10, 17, 15, 6, 7, 681, DateTimeKind.Local).AddTicks(9960),
                             Title = "Title_05",
                             UserId = 1
                         });
@@ -318,25 +291,6 @@ namespace MentalHealthBlogAPI.Migrations
                     b.Navigation("Post");
 
                     b.Navigation("Tag");
-                });
-
-            modelBuilder.Entity("MentalHealthBlog.API.Models.Share", b =>
-                {
-                    b.HasOne("MentalHealthBlogAPI.Models.Post", "SharedPost")
-                        .WithMany()
-                        .HasForeignKey("SharedPostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MentalHealthBlogAPI.Models.User", "SharedWith")
-                        .WithMany()
-                        .HasForeignKey("SharedWithId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("SharedPost");
-
-                    b.Navigation("SharedWith");
                 });
 
             modelBuilder.Entity("MentalHealthBlog.API.Models.UserRole", b =>

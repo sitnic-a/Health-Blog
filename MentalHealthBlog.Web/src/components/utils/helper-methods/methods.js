@@ -32,6 +32,9 @@ export function getSelectedPosts(loggedUser) {
       'a > .post-container > .post-container-content'
     )
 
+    let id = postContainerContent.querySelector('input[data-post-id]').dataset
+      .postId
+
     let postTitle =
       postContainerContent.querySelector('.post-header > h1').innerHTML
 
@@ -54,7 +57,8 @@ export function getSelectedPosts(loggedUser) {
     })
 
     let post = {
-      id: loggedUser.id,
+      id: parseInt(id),
+      userId: loggedUser.id,
       title: postTitle,
       user: author,
       content: postContent,
@@ -67,6 +71,28 @@ export function getSelectedPosts(loggedUser) {
   })
 
   return postsToShareExport
+}
+
+export function getPeopleToShareContentWith() {
+  let peopleToShareIds = []
+
+  let selectedPeopleToShareContentWithContainers = document.querySelectorAll(
+    '.person-to-give-permission-container:has(.permission-action > input[name="person-to-give-permission-checkbox"]:checked)'
+  )
+
+  selectedPeopleToShareContentWithContainers.forEach((person) => {
+    let permissionInformation = person.querySelector(
+      '.person-to-give-permission-information'
+    )
+    let basicInformation = permissionInformation.querySelector(
+      '.person-to-give-permission-basic-information'
+    )
+
+    let id = parseInt(basicInformation.querySelector('.info-id').value)
+
+    peopleToShareIds.push(id)
+  })
+  return peopleToShareIds
 }
 
 export function base64ToArrayBuffer(data) {

@@ -2,12 +2,14 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { getSelectedPosts } from '../../utils/helper-methods/methods'
 import { setIsSharingExporting } from './postSlice'
 import { application } from '../../../application'
+import { act } from 'react'
 
 let initialState = {
   postsToShare: [],
   postsToExport: [],
   exportedDocument: null,
   isExported: false,
+  possibleToShareWith: [],
 }
 
 export const exportToPDF = createAsyncThunk(
@@ -23,6 +25,37 @@ export const exportToPDF = createAsyncThunk(
     })
 
     let response = request.json()
+    return response
+  }
+)
+
+export const shareContent = createAsyncThunk(
+  '/share',
+  async (contentToBeShared) => {
+    console.log('Content to be shared ', contentToBeShared)
+
+    let request = await fetch(`${application.application_url}/share`, {
+      method: 'POST',
+      body: JSON.stringify(contentToBeShared),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    let response = request.json()
+    return response
+  }
+)
+
+export const getExpertsAndRelatives = createAsyncThunk(
+  '/share/experts-relatives',
+  async () => {
+    console.log('Get expert and relatives users invoked...')
+    let url = `${application.application_url}/share/experts-relatives`
+    let request = await fetch(url)
+    let response = request.json()
+    console.log('Response in slice ', response)
+
     return response
   }
 )
@@ -74,6 +107,7 @@ let shareExportSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      //Export
       .addCase(exportToPDF.pending, (state) => {
         console.log('Pending')
       })
@@ -86,6 +120,30 @@ let shareExportSlice = createSlice({
       })
       .addCase(exportToPDF.rejected, (state, action) => {
         console.log('FAILED')
+      })
+
+      //Share
+      .addCase(shareContent.pending, (state, action) => {
+        console.log('Pending...')
+      })
+      .addCase(shareContent.fulfilled, (state, action) => {
+        console.log('Success')
+      })
+      .addCase(shareContent.rejected, (state, action) => {
+        console.log('Error ', action.payload)
+      })
+
+      //get suggested experts or relatives
+      .addCase(getExpertsAndRelatives.pending, (state, action) => {
+        console.log('Started with get experts and relatives...')
+      })
+      .addCase(getExpertsAndRelatives.fulfilled, (state, action) => {
+        console.log('Get experts and relatives succesfully finished')
+        console.log('Case gER payload ', action.payload)
+        state.possibleToShareWith = action.payload
+      })
+      .addCase(getExpertsAndRelatives.rejected, (state, action) => {
+        console.log('Get experts and relatives rejected')
       })
   },
 })
