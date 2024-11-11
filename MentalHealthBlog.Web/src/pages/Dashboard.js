@@ -14,7 +14,9 @@ export const Dashboard = () => {
       return <p>Admin page</p>;
     }
     if (
-      loggedUser.roles.some((ur) => ur.name === "Psychologist/Psychotherapist")
+      loggedUser.roles.some(
+        (ur) => ur.name === "Psychologist / Psychotherapist"
+      )
     ) {
       return <p>Psychologist page</p>;
     }

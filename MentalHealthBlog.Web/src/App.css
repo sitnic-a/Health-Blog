@@ -578,13 +578,13 @@ button[data-action-add="add"] svg {
   max-width: 280px;
   width: 100%;
   right: 1px;
-  top: -13%;
+  top: -11.8%;
   border-radius: 0.4rem;
 }
 
 @media (width<=400px) {
   .search-people {
-    top: -10%;
+    top: -11.8%;
   }
 }
 
@@ -742,6 +742,7 @@ input[name="person-to-give-permission-checkbox"] {
   text-align: center;
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
+  height: min-content;
 }
 
 @media (width <=400px) {
