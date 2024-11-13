@@ -1,4 +1,5 @@
 ﻿using MentalHealthBlog.API.Models;
+using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -17,9 +18,9 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpGet("shares-per-user")]
-        public Task<List<SharesPerUserDto>> GetSharesPerUser()
+        public async Task<Response> GetSharesPerUser([FromQuery] ExpertSearchContentDto query)
         {
-            return _mentalExpertService.GetSharesPerUser();
+            return await _mentalExpertService.GetSharesPerUser(query);
         }
 
     }
