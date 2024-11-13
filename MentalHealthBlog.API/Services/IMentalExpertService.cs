@@ -5,6 +5,6 @@ namespace MentalHealthBlog.API.Services
 {
     public interface IMentalExpertService
     {
-        public Task<ExpertSharesDto> GetSharesPerUser(); 
+        public Task<List<SharesPerUserDto>> GetSharesPerUser(); 
     }
 }

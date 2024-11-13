@@ -17,7 +17,7 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpGet("shares-per-user")]
-        public Task<ExpertSharesDto> GetSharesPerUser()
+        public Task<List<SharesPerUserDto>> GetSharesPerUser()
         {
             return _mentalExpertService.GetSharesPerUser();
         }
