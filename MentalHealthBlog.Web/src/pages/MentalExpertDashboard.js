@@ -3,9 +3,10 @@ import { ListSharingContentUsers } from '../components/ListSharingContentUsers'
 
 export const MentalExpertDashboard = () => {
   return (
-    <section>
-      <h1>Psychologist page</h1>
-      <ListSharingContentUsers />
+    <section className="mental-expert-dashboard">
+      <section id="sharing-users-main-container">
+        <ListSharingContentUsers />
+      </section>
     </section>
   )
 }

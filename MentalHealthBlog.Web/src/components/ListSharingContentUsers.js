@@ -2,7 +2,10 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { getSharesPerUser } from './redux-toolkit/features/mentalExpertSlice'
+import {
+  getOnlyUsersThatSharedContent,
+  getSharesPerUser,
+} from './redux-toolkit/features/mentalExpertSlice'
 
 export const ListSharingContentUsers = () => {
   let dispatch = useDispatch()
@@ -15,22 +18,23 @@ export const ListSharingContentUsers = () => {
   }
 
   useEffect(() => {
-    dispatch(getSharesPerUser(query))
-    console.log('Users ', usersThatSharedContent)
+    dispatch(getSharesPerUser(query)).then((data) => {
+      dispatch(getOnlyUsersThatSharedContent(data))
+    })
   }, [])
 
   return (
-    <section id="sharing-users-main-container">
-      <section className="sharing-users-users-container">
+    <section className="sharing-users-main-users-container">
+      <div className="sharing-users-users-container">
         {usersThatSharedContent.length > 0 &&
           usersThatSharedContent.map((user) => {
             return (
-              <div key={user.id}>
-                <span>{user.username}</span>
+              <div className="sharing-user-user-container" key={user.id}>
+                <span className="sharing-user-title">{user.username}</span>
               </div>
             )
           })}
-      </section>
+      </div>
     </section>
   )
 }

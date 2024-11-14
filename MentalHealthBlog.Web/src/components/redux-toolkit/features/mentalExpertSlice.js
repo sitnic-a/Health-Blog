@@ -4,7 +4,7 @@ import { application } from '../../../application'
 let initialState = {
   usersThatSharedContent: [],
   sharedContent: [],
-  userThatSharedIncludingItsContent: {},
+  usersThatSharedIncludingItsContent: {},
 }
 
 export const getSharesPerUser = createAsyncThunk(
@@ -21,7 +21,22 @@ export const getSharesPerUser = createAsyncThunk(
 export const mentalExpertSlice = createSlice({
   name: 'mentalExpert',
   initialState,
-  reducers: {},
+  reducers: {
+    getOnlyUsersThatSharedContent: (state, action) => {
+      let response = action.payload.payload.serviceResponseObject
+      let usersThatSharedContent = []
+
+      response.map((obj) => {
+        let responseUser = obj.userThatSharedContent
+        let userThatShared = {
+          id: responseUser.id,
+          username: responseUser.username,
+        }
+        usersThatSharedContent.push(userThatShared)
+      })
+      state.usersThatSharedContent = usersThatSharedContent
+    },
+  },
   extraReducers: (builder) => {
     //shares-per-user
     builder
@@ -29,18 +44,21 @@ export const mentalExpertSlice = createSlice({
         console.log('Pending request for shares per user')
       })
       .addCase(getSharesPerUser.fulfilled, (state, action) => {
-        let response = action.payload.serviceResponseObject
-        let usersThatSharedContent = []
-        response.map((obj) => {
-          let responseUser = obj.userThatSharedContent
+        state.usersThatSharedIncludingItsContent = action.payload
+        console.log('Response ', state.usersThatSharedIncludingItsContent)
 
-          let userThatShared = {
-            id: responseUser.id,
-            username: responseUser.username,
-          }
-          usersThatSharedContent.push(userThatShared)
-        })
-        state.usersThatSharedContent = usersThatSharedContent
+        // let response = action.payload.serviceResponseObject
+        // let usersThatSharedContent = []
+        // response.map((obj) => {
+        //   let responseUser = obj.userThatSharedContent
+
+        //   let userThatShared = {
+        //     id: responseUser.id,
+        //     username: responseUser.username,
+        //   }
+        //   usersThatSharedContent.push(userThatShared)
+        // })
+        // state.usersThatSharedContent = usersThatSharedContent
       })
       .addCase(getSharesPerUser.rejected, (action) => {
         console.log('Request rejected ', action.payload)
@@ -48,4 +66,5 @@ export const mentalExpertSlice = createSlice({
   },
 })
 
+export const { getOnlyUsersThatSharedContent } = mentalExpertSlice.actions
 export default mentalExpertSlice.reducer

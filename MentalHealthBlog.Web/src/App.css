@@ -1116,3 +1116,39 @@ pre:hover {
   color: #000;
   font-weight: 500;
 }
+
+/* Mental Expert CSS */
+.mental-expert-dashboard {
+}
+
+#sharing-users-main-container {
+  height: 100vh;
+  background: beige;
+}
+
+.sharing-users-main-users-container {
+  background: #ffeebb;
+
+  max-width: 280px;
+  height: 100%;
+}
+
+.sharing-users-users-container {
+  margin: 0.5rem;
+  padding-block: 0.2rem;
+}
+
+.sharing-user-user-container {
+  background: #89cff0;
+  padding-block: 0.3rem;
+  text-align: center;
+  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
+  border-radius: 0.15rem;
+  cursor: pointer;
+}
+
+.sharing-user-title {
+  color: #0000ee;
+  font-weight: 500;
+}
