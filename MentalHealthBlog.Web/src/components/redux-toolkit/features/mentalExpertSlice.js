@@ -36,6 +36,15 @@ export const mentalExpertSlice = createSlice({
       })
       state.usersThatSharedContent = usersThatSharedContent
     },
+    getSharedContentOfPickedUser: (state, action) => {
+      let userId = action.payload.userId
+      let response =
+        action.payload.usersThatSharedIncludingItsContent.serviceResponseObject
+      let pickedObj = response.find(
+        (u) => u.userThatSharedContent.id === userId
+      )
+      state.sharedContent = [...pickedObj.sharedContent]
+    },
   },
   extraReducers: (builder) => {
     //shares-per-user
@@ -45,20 +54,6 @@ export const mentalExpertSlice = createSlice({
       })
       .addCase(getSharesPerUser.fulfilled, (state, action) => {
         state.usersThatSharedIncludingItsContent = action.payload
-        console.log('Response ', state.usersThatSharedIncludingItsContent)
-
-        // let response = action.payload.serviceResponseObject
-        // let usersThatSharedContent = []
-        // response.map((obj) => {
-        //   let responseUser = obj.userThatSharedContent
-
-        //   let userThatShared = {
-        //     id: responseUser.id,
-        //     username: responseUser.username,
-        //   }
-        //   usersThatSharedContent.push(userThatShared)
-        // })
-        // state.usersThatSharedContent = usersThatSharedContent
       })
       .addCase(getSharesPerUser.rejected, (action) => {
         console.log('Request rejected ', action.payload)
@@ -66,5 +61,6 @@ export const mentalExpertSlice = createSlice({
   },
 })
 
-export const { getOnlyUsersThatSharedContent } = mentalExpertSlice.actions
+export const { getOnlyUsersThatSharedContent, getSharedContentOfPickedUser } =
+  mentalExpertSlice.actions
 export default mentalExpertSlice.reducer
