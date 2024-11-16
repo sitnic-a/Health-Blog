@@ -12,7 +12,13 @@ export const ListSharedContent = (props) => {
           sharedContent.map((content) => {
             let date = formatDateToString(content.createdAt);
             return (
-              <div className="sharing-users-post-container" key={content.id}>
+              <div
+                className="sharing-users-post-container"
+                onClick={() => {
+                  console.log("ABORT MISSION");
+                }}
+                key={content.id}
+              >
                 <div className="sharing-users-post-title">
                   <h2>{content.title}</h2>
                   <p>{date}</p>
