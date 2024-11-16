@@ -1,10 +1,10 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
-import { ListSharingContentUsers } from '../components/ListSharingContentUsers'
-import { ListSharedContent } from '../components/ListSharedContent'
+import React from "react";
+import { useSelector } from "react-redux";
+import { ListSharingContentUsers } from "../components/ListSharingContentUsers";
+import { ListSharedContent } from "../components/ListSharedContent";
 
 export const MentalExpertDashboard = () => {
-  let { sharedContent } = useSelector((store) => store.mentalExpert)
+  let { sharedContent } = useSelector((store) => store.mentalExpert);
 
   return (
     <section className="mental-expert-dashboard">
@@ -15,5 +15,5 @@ export const MentalExpertDashboard = () => {
         )}
       </section>
     </section>
-  )
-}
+  );
+};

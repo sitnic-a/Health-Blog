@@ -1,7 +1,8 @@
-import React from 'react'
+import React from "react";
+import { formatDateToString } from "./utils/helper-methods/methods";
 
 export const ListSharedContent = (props) => {
-  let sharedContent = [...props.sharedContent]
+  let sharedContent = [...props.sharedContent];
   return (
     <section className="sharing-users-content-container">
       <h1>Shared content</h1>
@@ -9,10 +10,12 @@ export const ListSharedContent = (props) => {
       <div className="sharing-users-posts">
         {sharedContent.length > 0 &&
           sharedContent.map((content) => {
+            let date = formatDateToString(content.createdAt);
             return (
               <div className="sharing-users-post-container" key={content.id}>
                 <div className="sharing-users-post-title">
                   <h2>{content.title}</h2>
+                  <p>{date}</p>
                 </div>
 
                 <div className="sharing-users-post-content">
@@ -20,14 +23,19 @@ export const ListSharedContent = (props) => {
                 </div>
 
                 <div className="sharing-users-post-tags">
+                  <span>Tagovi: </span>
                   {content.tags.map((tag) => {
-                    return <span key={tag}>{tag}</span>
+                    return (
+                      <span className="sharing-users-post-tag" key={tag}>
+                        {tag}
+                      </span>
+                    );
                   })}
                 </div>
               </div>
-            )
+            );
           })}
       </div>
     </section>
-  )
-}
+  );
+};
