@@ -123,7 +123,7 @@ namespace MentalHealthBlogAPI.Services
                     }
                 }
 
-                if (mappedPost.IsNullOrEmpthy())
+                if (mappedPost.IsNullOrEmpthy() || tagsNumber <= 0)
                 {
                     _postServiceLogger.LogWarning($"POST: {PostServiceLogTypes.POST_INVALID_DATA.ToString()}");
                     return new Response(new object(), StatusCodes.Status400BadRequest, PostServiceLogTypes.POST_INVALID_DATA.ToString());
