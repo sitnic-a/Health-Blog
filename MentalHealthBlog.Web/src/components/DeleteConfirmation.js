@@ -1,30 +1,30 @@
-import React from "react";
-import Modal from "react-modal";
-import { useLocation } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
-import { openDeleteModal } from "./redux-toolkit/features/modalSlice";
-import { deletePostById } from "./redux-toolkit/features/postSlice";
-import { application } from "../application";
-import { toast } from "react-toastify";
+import React from 'react'
+import Modal from 'react-modal'
+import { useLocation } from 'react-router'
+import { useDispatch, useSelector } from 'react-redux'
+import { openDeleteModal } from './redux-toolkit/features/modalSlice'
+import { deletePostById } from './redux-toolkit/features/postSlice'
+import { application } from '../application'
+import { toast } from 'react-toastify'
 
 export const DeleteConfirmation = () => {
-  let dispatch = useDispatch();
-  let { isDeleteOpen } = useSelector((store) => store.modal);
-  let { post } = useSelector((store) => store.post);
+  let dispatch = useDispatch()
+  let { isDeleteOpen } = useSelector((store) => store.modal)
+  let { post } = useSelector((store) => store.post)
 
-  let location = useLocation();
-  let loggedUser = location.state.loggedUser;
+  let location = useLocation()
+  let loggedUser = location.state.loggedUser
 
   let deletePostObj = {
     post: post,
     loggedUser: loggedUser,
-  };
+  }
 
   return (
     <Modal
       isOpen={isDeleteOpen}
       style={application.modal_style}
-      appElement={document.getElementById("root")}
+      appElement={document.getElementById('root')}
       onRequestClose={() => dispatch(openDeleteModal(false))}
     >
       <div className="confirmation-container">
@@ -35,16 +35,18 @@ export const DeleteConfirmation = () => {
           <button
             type="button"
             onClick={() => {
-              dispatch(deletePostById(deletePostObj));
-              //Napraviti da se reloada i pie chart kada se obrise post
-              dispatch(openDeleteModal(false));
-              toast.success("Succesfully deleted post", {
-                autoClose: 1500,
-                position: "bottom-right",
-              });
-              setTimeout(() => {
-                window.location.reload();
-              }, 1500);
+              dispatch(deletePostById(deletePostObj)).then((response) => {
+                //Napraviti da se reloada i pie chart kada se obrise post
+                dispatch(openDeleteModal(false))
+                setTimeout(() => {
+                  window.location.reload()
+                }, 1500)
+
+                toast.success('Succesfully deleted post', {
+                  autoClose: 1500,
+                  position: 'bottom-right',
+                })
+              })
             }}
           >
             Yes
@@ -58,5 +60,5 @@ export const DeleteConfirmation = () => {
         </div>
       </div>
     </Modal>
-  );
-};
+  )
+}
