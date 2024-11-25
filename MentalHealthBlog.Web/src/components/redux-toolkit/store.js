@@ -7,6 +7,7 @@ import pieReducer from './features/pieSlice'
 import filterReducer from './features/filterSlice'
 import tagGradeReducer from './features/tagGradeSlice'
 import shareExportReducer from './features/shareExportSlice'
+import mentalExpertReducer from './features/mentalExpertSlice'
 
 export const store = configureStore({
   reducer: {
@@ -18,5 +19,6 @@ export const store = configureStore({
     filter: filterReducer,
     tagGrade: tagGradeReducer,
     shareExport: shareExportReducer,
+    mentalExpert: mentalExpertReducer,
   },
 })

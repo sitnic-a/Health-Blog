@@ -48,7 +48,11 @@ namespace MentalHealthBlog.API.Services
                 if (!dbShares.IsNullOrEmpty())
                 {
                     var groupedUsersAndTheirShares = dbShares
-                        .Distinct()
+                        .DistinctBy(p => new
+                        {
+                            p.SharedPostId,
+                            p.SharedWithId
+                        })
                         .Where(ex => ex.SharedWithId == query.LoggedExpertId)
                         .GroupBy(u => u.SharedPost.User);
 

@@ -578,13 +578,13 @@ button[data-action-add="add"] svg {
   max-width: 280px;
   width: 100%;
   right: 1px;
-  top: -13%;
+  top: -11.8%;
   border-radius: 0.4rem;
 }
 
 @media (width<=400px) {
   .search-people {
-    top: -10%;
+    top: -11.8%;
   }
 }
 
@@ -742,6 +742,7 @@ input[name="person-to-give-permission-checkbox"] {
   text-align: center;
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
+  height: min-content;
 }
 
 @media (width <=400px) {
@@ -1114,4 +1115,120 @@ pre:hover {
   border: none;
   color: #000;
   font-weight: 500;
+}
+
+/* Mental Expert CSS */
+.mental-expert-dashboard {
+}
+
+#sharing-users-main-container {
+  height: 100vh;
+  border: 1px solid beige;
+  display: flex;
+}
+
+.sharing-users-main-users-container {
+  border: 1px solid #eee;
+  border-block: none;
+  max-width: 200px;
+  width: 100%;
+  height: 100%;
+}
+
+.sharing-users-users-container {
+  margin: 0.5rem;
+  padding-block: 0.2rem;
+}
+
+.sharing-user-user-container {
+  background: #89cff0;
+  padding-block: 0.3rem;
+  text-align: center;
+  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
+  border-radius: 0.15rem;
+  cursor: pointer;
+}
+
+.sharing-user-title {
+  color: #0000ee;
+  font-weight: 500;
+}
+
+.sharing-users-content-container {
+  max-width: 1200px;
+  width: 100%;
+  height: 100vh;
+  overflow-y: scroll;
+  /* background: red; */
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.sharing-users-content-container > h1 {
+  font-size: 1.5rem;
+  text-transform: capitalize;
+  margin-left: 0.5rem;
+}
+
+.sharing-users-posts {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-inline: 0.5rem;
+  max-width: 1200px;
+  height: auto;
+  /* background: yellow; */
+}
+
+.sharing-users-post-container {
+  padding-inline: 0.5rem;
+  padding-bottom: 0.5rem;
+  background: #eee;
+  max-width: 220px;
+  height: 300px;
+  overflow-y: scroll;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.sharing-users-post-title {
+  cursor: pointer;
+  /* font-size: 0.88rem; */
+}
+
+.sharing-users-post-title > p {
+  font-size: 0.75rem;
+  margin-top: -12px;
+  cursor: pointer;
+}
+
+.sharing-users-post-content {
+  cursor: pointer;
+}
+
+.sharing-users-post-content > p {
+  text-align: justify;
+  cursor: pointer;
+}
+
+.sharing-users-post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  cursor: pointer;
+}
+
+.sharing-users-post-tag {
+  display: flex;
+  align-self: start;
+  padding: 0.15rem;
+  padding-inline: 0.3rem;
+  background: #89cff0;
+  margin-right: 5px;
+  margin-top: 5px;
+  color: #fff;
+  font-size: 0.8rem;
 }
