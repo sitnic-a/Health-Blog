@@ -1,4 +1,6 @@
-﻿namespace MentalHealthBlog.API.Models.ResourceResponse
+﻿#pragma warning disable CS8618
+
+namespace MentalHealthBlog.API.Models.ResourceResponse
 {
     public class UserDto
     {
@@ -15,6 +17,12 @@
             Roles = roles;
             PhoneNumber = phoneNumber;
             Organization = organization;
+        }
+
+        public UserDto(int id, string username)
+        {
+            Id=id;
+            Username = username;
         }
     }
 }

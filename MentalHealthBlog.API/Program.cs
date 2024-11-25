@@ -75,6 +75,7 @@ builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<IStatisticsService, StatisticsService>();
 builder.Services.AddScoped<IExportService, ExportService>();
 builder.Services.AddScoped<IShareService, ShareService>();
+builder.Services.AddScoped<IMentalExpertService, MentalExpertService>();
 
 
 builder.Services.AddDbContext<DataContext>(options =>

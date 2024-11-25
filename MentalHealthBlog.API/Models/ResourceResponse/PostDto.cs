@@ -1,4 +1,6 @@
-﻿namespace MentalHealthBlog.API.Models.ResourceResponse
+﻿#pragma warning disable CS8618
+
+namespace MentalHealthBlog.API.Models.ResourceResponse
 {
     public class PostDto
     {
@@ -10,5 +12,15 @@
         public List<string> Tags { get; set; }
 
         public PostDto() { }
+
+        public PostDto(int id, string title, string content, int userId, DateTime createdAt, List<string> tags)
+        {
+            Id = id;
+            Title = title;
+            Content = content;
+            UserId = userId;
+            CreatedAt = createdAt;
+            Tags = new List<string>(tags);
+        }
     }
 }
