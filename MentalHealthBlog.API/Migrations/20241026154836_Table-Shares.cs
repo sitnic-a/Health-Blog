@@ -29,7 +29,7 @@ namespace MentalHealthBlogAPI.Migrations
                         column: x => x.SharedPostId,
                         principalTable: "Posts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Shares_Users_SharedWithId",
                         column: x => x.SharedWithId,
