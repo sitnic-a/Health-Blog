@@ -1,12 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
-import { getPeopleToShareContentWith } from "../utils/helper-methods/methods";
+import { getPeopleToShareContentWith } from "../../utils/helper-methods/methods";
 
 import {
   shareContent,
   revokeShareContent,
-} from "../redux-toolkit/features/shareExportSlice";
+} from "../../redux-toolkit/features/shareExportSlice";
 
-import { openShareModal } from "../redux-toolkit/features/modalSlice";
+import { openShareModal } from "../../redux-toolkit/features/modalSlice";
 import { ExpertsToShareContentWith } from "./ExpertsToShareContentWith";
 
 import { IoRemoveCircleOutline } from "react-icons/io5";

@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
-import { getPeopleToShareContentWith } from "../utils/helper-methods/methods";
-import defaultAvatar from "../../images/default-avatar.png";
+import { getPeopleToShareContentWith } from "../../utils/helper-methods/methods";
+import defaultAvatar from "../../../images/default-avatar.png";
 import { LiaSearchSolid } from "react-icons/lia";
 
 export const ExpertsToShareContentWith = () => {

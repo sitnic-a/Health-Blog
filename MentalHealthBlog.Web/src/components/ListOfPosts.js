@@ -14,8 +14,8 @@ import { FilterOptions } from "./FilterOptions";
 import { toast } from "react-toastify";
 
 import { ShareExportOverlay } from "./share-export/ShareExportOverlay";
-import { ShareModal } from "./share-export/ShareModal";
-import { ExportModal } from "./share-export/ExportModal";
+import { ShareModal } from "./share-export/share/ShareModal";
+import { ExportModal } from "./share-export/export/ExportModal";
 
 export const ListOfPosts = () => {
   let dispatch = useDispatch();
