@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { ListSharingContentUsers } from "../components/ListSharingContentUsers";
-import { ListSharedContent } from "../components/ListSharedContent";
+import { ListSharingContentUsers } from "../components/mental-expert-dashboard/shared-content/ListSharingContentUsers";
+import { ListSharedContent } from "../components/mental-expert-dashboard/shared-content/ListSharedContent";
 
 export const MentalExpertDashboard = () => {
   let { sharedContent } = useSelector((store) => store.mentalExpert);

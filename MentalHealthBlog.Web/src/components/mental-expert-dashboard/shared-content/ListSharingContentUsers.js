@@ -1,13 +1,12 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getOnlyUsersThatSharedContent,
   getSharedContentOfPickedUser,
   getSharesPerUser,
-  setSharedContentToEmptyArray,
-} from "./redux-toolkit/features/mentalExpertSlice";
+} from "../../redux-toolkit/features/mentalExpertSlice";
 
 export const ListSharingContentUsers = () => {
   let dispatch = useDispatch();
