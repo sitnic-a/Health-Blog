@@ -1,7 +1,8 @@
 import React from "react";
 import { useEffect } from "react";
-import { useLocation } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
+import useFetchLocationState from "./custom/hooks/useFetchLocationState";
+import { toast } from "react-toastify";
 import { getPosts } from "./redux-toolkit/features/postSlice";
 
 import { Post } from "./Post";
@@ -11,21 +12,17 @@ import { PieGraph } from "./PieGraph";
 
 import { FilterOptions } from "./FilterOptions";
 
-import { toast } from "react-toastify";
-
 import { ShareExportOverlay } from "./share-export/ShareExportOverlay";
 import { ShareModal } from "./share-export/share/ShareModal";
 import { ExportModal } from "./share-export/export/ExportModal";
 
 export const ListOfPosts = () => {
   let dispatch = useDispatch();
+  let { loggedUser } = useFetchLocationState();
   let { isLoading, posts } = useSelector((store) => store.post);
   let { isLogging, isAuthenticated } = useSelector((store) => store.user);
 
   let { statisticsLoading } = useSelector((store) => store.pie);
-
-  let location = useLocation();
-  let loggedUser = location.state.loggedUser;
 
   let searchPostDto = {
     loggedUser,

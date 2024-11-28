@@ -1,12 +1,12 @@
 import React from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import useFetchLocationState from "../../custom/hooks/useFetchLocationState";
 import {
   getOnlyUsersThatSharedContent,
   getSharedContentOfPickedUser,
   getSharesPerUser,
 } from "../../redux-toolkit/features/mentalExpertSlice";
-import useFetchLocationState from "../../custom/hooks/useFetchLocationState";
 
 export const ListSharingContentUsers = () => {
   let dispatch = useDispatch();

@@ -1,46 +1,46 @@
-import { Link, useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import { useDispatch, useSelector } from 'react-redux'
-import { login, setIsFailed } from './redux-toolkit/features/userSlice'
-import { Loader } from './Loader'
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { login, setIsFailed } from "./redux-toolkit/features/userSlice";
+import { toast } from "react-toastify";
+import { Loader } from "./Loader";
 
 export const Login = () => {
-  let dispatch = useDispatch()
-  let { authenticatedUser, isLogging } = useSelector((store) => store.user)
+  let dispatch = useDispatch();
+  let { isLogging } = useSelector((store) => store.user);
 
-  let navigate = useNavigate()
+  let navigate = useNavigate();
   let loginUser = async (e) => {
-    e.preventDefault()
-    let form = new FormData(e.target)
-    let formData = form.entries()
-    let data = Object.fromEntries([...formData])
+    e.preventDefault();
+    let form = new FormData(e.target);
+    let formData = form.entries();
+    let data = Object.fromEntries([...formData]);
 
     let user = {
       username: data.username,
       password: data.password,
-    }
+    };
 
     if (
-      user.username === '' ||
+      user.username === "" ||
       user.username === null ||
-      user.password === '' ||
+      user.password === "" ||
       user.password === null
     ) {
-      toast.error('Fields are required', {
+      toast.error("Fields are required", {
         autoClose: 1500,
-        position: 'bottom-right',
-      })
-      dispatch(setIsFailed(true))
-      return
+        position: "bottom-right",
+      });
+      dispatch(setIsFailed(true));
+      return;
     }
 
     dispatch(login(user)).then((response) => {
-      let statusCode = response.payload.statusCode
-      let authenticatedUser = response.payload.serviceResponseObject
-      console.log('AUTH USER ', authenticatedUser)
+      let statusCode = response.payload.statusCode;
+      let authenticatedUser = response.payload.serviceResponseObject;
+      console.log("AUTH USER ", authenticatedUser);
 
       if (statusCode === 200 || statusCode === 201 || statusCode === 204) {
-        navigate('/', {
+        navigate("/", {
           replace: true,
           state: {
             prevUrl: window.location.href,
@@ -51,13 +51,13 @@ export const Login = () => {
               roles: authenticatedUser.userRoles,
             },
           },
-        })
+        });
       }
-    })
-    form.delete('username')
-    form.delete('password')
-    form.set('password', '')
-  }
+    });
+    form.delete("username");
+    form.delete("password");
+    form.set("password", "");
+  };
 
   return (
     <>
@@ -88,7 +88,7 @@ export const Login = () => {
                 <input id="password" type="password" name="password" />
               </div>
               <div>
-                <Link to={'/register'}>Create an account</Link>
+                <Link to={"/register"}>Create an account</Link>
               </div>
               <button type="submit" id="login-container-button">
                 Login
@@ -98,5 +98,5 @@ export const Login = () => {
         </section>
       )}
     </>
-  )
-}
+  );
+};

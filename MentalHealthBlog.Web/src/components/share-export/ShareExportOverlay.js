@@ -1,16 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
-
+import useFetchLocationState from "../custom/hooks/useFetchLocationState";
 import {
   openShareModal,
   openExportModal,
 } from "../redux-toolkit/features/modalSlice";
-
 import {
   exportToPDF,
   getExpertsAndRelatives,
 } from "../redux-toolkit/features/shareExportSlice";
-
 import {
   getSelectedPosts,
   base64ToArrayBuffer,
@@ -21,11 +18,9 @@ import { FaFileExport } from "react-icons/fa";
 
 export const ShareExportOverlay = () => {
   let dispatch = useDispatch();
+  let { loggedUser } = useFetchLocationState();
   let { isShareOpen, isExportOpen } = useSelector((store) => store.modal);
   let { postsToExport } = useSelector((store) => store.shareExport);
-
-  let location = useLocation();
-  let loggedUser = location.state.loggedUser;
 
   return (
     <section className="share-export-main-container share-export-position-out">

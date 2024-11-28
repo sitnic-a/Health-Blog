@@ -1,11 +1,11 @@
 import React from "react";
-import Tag from "./Tag";
 import { useDispatch } from "react-redux";
 import {
   setIsHovered,
   setHoveredPost,
   setHoveredTag,
 } from "./redux-toolkit/features/tagGradeSlice";
+import Tag from "./Tag";
 
 export const PostTags = (props) => {
   let dispatch = useDispatch();

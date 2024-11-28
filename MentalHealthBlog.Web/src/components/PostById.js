@@ -1,6 +1,6 @@
 import React from "react";
-import { UpdatePost } from "./UpdatePost";
 import { useSelector } from "react-redux";
+import { UpdatePost } from "./UpdatePost";
 
 export const PostById = () => {
   let { post } = useSelector((store) => store.post);
