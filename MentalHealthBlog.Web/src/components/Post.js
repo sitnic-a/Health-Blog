@@ -1,28 +1,28 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
-import { DeleteConfirmation } from "./DeleteConfirmation";
-import { MdOutlineModeEditOutline, MdOutlineDelete } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
-import { openDeleteModal } from "./redux-toolkit/features/modalSlice";
+import { Link } from "react-router-dom";
+import useFetchLocationState from "./custom/hooks/useFetchLocationState";
 import {
   setIsSharingExporting,
   setPost,
 } from "./redux-toolkit/features/postSlice";
-
+import { openDeleteModal } from "./redux-toolkit/features/modalSlice";
+import { setOverlayForShareExport } from "./redux-toolkit/features/shareExportSlice";
 import {
   formatDateToString,
   getSelectedPosts,
 } from "./utils/helper-methods/methods";
 import { PostTags } from "./PostTags";
-import { setOverlayForShareExport } from "./redux-toolkit/features/shareExportSlice";
+
+import { DeleteConfirmation } from "./DeleteConfirmation";
+import { MdOutlineModeEditOutline, MdOutlineDelete } from "react-icons/md";
 
 export const Post = (props) => {
   let dispatch = useDispatch();
   let { isDeleteOpen } = useSelector((store) => store.modal);
   let { isSharingExporting } = useSelector((store) => store.post);
 
-  let location = useLocation();
-  let loggedUser = location.state.loggedUser;
+  let { loggedUser } = useFetchLocationState();
 
   //Helpers
   let createdAt = formatDateToString(props.createdAt);

@@ -1,19 +1,19 @@
 import React from "react";
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getOnlyUsersThatSharedContent,
   getSharedContentOfPickedUser,
   getSharesPerUser,
 } from "../../redux-toolkit/features/mentalExpertSlice";
+import useFetchLocationState from "../../custom/hooks/useFetchLocationState";
 
 export const ListSharingContentUsers = () => {
   let dispatch = useDispatch();
   let { usersThatSharedIncludingItsContent, usersThatSharedContent } =
     useSelector((store) => store.mentalExpert);
-  let location = useLocation();
-  let loggedUser = location.state.loggedUser;
+
+  let { loggedUser } = useFetchLocationState();
 
   let query = {
     loggedExpertId: loggedUser.id,

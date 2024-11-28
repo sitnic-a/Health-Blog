@@ -1,9 +1,8 @@
 import React from "react";
-import { useEffect } from "react";
-import { useLocation } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
-import { application } from "../application";
 import Modal from "react-modal";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import useFetchLocationState from "./custom/hooks/useFetchLocationState";
 import { openAddModal } from "./redux-toolkit/features/modalSlice";
 import { createPost } from "./redux-toolkit/features/postSlice";
 import {
@@ -13,6 +12,8 @@ import {
   setPickedTags,
   getTags,
 } from "./redux-toolkit/features/tagSlice";
+
+import { application } from "../application";
 import { TagsOnPostCreation } from "./TagsOnPostCreation";
 
 export const AddPost = () => {
@@ -21,11 +22,9 @@ export const AddPost = () => {
   }, []);
 
   let dispatch = useDispatch();
+  let { loggedUser } = useFetchLocationState();
   let { isAddOpen } = useSelector((store) => store.modal);
   let { chosenTags } = useSelector((store) => store.tag);
-
-  let location = useLocation();
-  let loggedUser = location.state.loggedUser;
 
   let submitForm = (e) => {
     let addPostObj = {
