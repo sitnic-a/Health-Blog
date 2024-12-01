@@ -1,19 +1,16 @@
 import React from "react";
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { updatePost } from "./redux-toolkit/features/postSlice";
+import useFetchLocationState from "./custom/hooks/useFetchLocationState";
 export const UpdatePost = () => {
   let dispatch = useDispatch();
-
+  let { loggedUser } = useFetchLocationState();
   let { post } = useSelector((store) => store.post);
-
   let [title, setTitle] = useState(post.title);
   let [content, setContent] = useState(post.content);
-  let location = useLocation();
   let navigate = useNavigate();
-
-  let loggedUser = location.state.loggedUser;
 
   let update = async (e) => {
     let updatePostObj = {

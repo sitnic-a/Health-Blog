@@ -1,62 +1,62 @@
-import React, { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { toast } from 'react-toastify'
-import { useDispatch, useSelector } from 'react-redux'
-import { register, getDbRoles } from './redux-toolkit/features/userSlice'
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { register, getDbRoles } from "./redux-toolkit/features/userSlice";
 
 export const Register = () => {
-  let { dbRoles } = useSelector((store) => store.user)
+  let { dbRoles } = useSelector((store) => store.user);
 
   useEffect(() => {
-    dispatch(getDbRoles())
-  }, [])
+    dispatch(getDbRoles());
+  }, []);
 
-  let navigate = useNavigate()
-  let dispatch = useDispatch()
+  let navigate = useNavigate();
+  let dispatch = useDispatch();
 
   let registerUser = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     let selectedRoles = document.querySelectorAll(
       'input[type="checkbox"]:checked'
-    )
-    let roles = []
+    );
+    let roles = [];
     selectedRoles.forEach((role) => {
-      roles.push(role.value)
-    })
+      roles.push(role.value);
+    });
 
-    let form = new FormData(e.target)
-    let formData = form.entries()
-    let data = Object.fromEntries([...formData])
+    let form = new FormData(e.target);
+    let formData = form.entries();
+    let data = Object.fromEntries([...formData]);
 
     let newUser = {
       username: data.username,
       password: data.password,
       roles: roles,
-    }
+    };
 
     if (
-      newUser.username === '' ||
+      newUser.username === "" ||
       newUser.username === null ||
-      newUser.password === '' ||
+      newUser.password === "" ||
       newUser.password === null ||
       newUser.roles.length <= 0
     ) {
-      alert('Fields are required!')
-      toast.error('Invalid fields! Try again', {
+      alert("Fields are required!");
+      toast.error("Invalid fields! Try again", {
         autoClose: 1500,
-        position: 'bottom-right',
-      })
-      return
+        position: "bottom-right",
+      });
+      return;
     }
 
     dispatch(register(newUser)).then((response) => {
-      let statusCode = response.payload.statusCode
+      let statusCode = response.payload.statusCode;
       if (statusCode === 201) {
-        navigate('/login')
+        navigate("/login");
       }
-    })
-  }
+    });
+  };
 
   return (
     <section className="register-container">
@@ -93,12 +93,12 @@ export const Register = () => {
                   <label htmlFor="db-role-name">{role.name}</label>
                   <br />
                 </div>
-              )
+              );
             })}
         </div>
 
         <button type="submit">Register</button>
       </form>
     </section>
-  )
-}
+  );
+};
