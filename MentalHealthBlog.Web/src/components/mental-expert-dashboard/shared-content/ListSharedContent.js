@@ -1,8 +1,8 @@
-import React from "react";
-import { SharedContent } from "./SharedContent";
+import React from 'react'
+import { SharedContent } from './SharedContent'
 
 export const ListSharedContent = (props) => {
-  let sharedContent = [...props.sharedContent];
+  let sharedContent = [...props.sharedContent]
   return (
     <section className="sharing-users-content-container">
       <h1>Shared content</h1>
@@ -11,12 +11,15 @@ export const ListSharedContent = (props) => {
         {sharedContent.length > 0 &&
           sharedContent.map((content) => {
             return (
-              <div key={content.id}>
+              <div
+                className="sharing-users-main-post-container"
+                key={content.id}
+              >
                 <SharedContent content={content} />
               </div>
-            );
+            )
           })}
       </div>
     </section>
-  );
-};
+  )
+}

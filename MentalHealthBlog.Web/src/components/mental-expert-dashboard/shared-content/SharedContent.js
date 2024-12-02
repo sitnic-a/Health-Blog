@@ -1,14 +1,14 @@
-import { formatDateToString } from "../../utils/helper-methods/methods";
+import { formatDateToString } from '../../utils/helper-methods/methods'
 
 export const SharedContent = (props) => {
-  let content = props.content;
-  let date = formatDateToString(content.createdAt);
+  let content = props.content
+  let date = formatDateToString(content.createdAt)
 
   return (
     <div
       className="sharing-users-post-container"
       onClick={() => {
-        console.log("ABORT MISSION");
+        console.log('ABORT MISSION')
       }}
     >
       <div className="sharing-users-post-title">
@@ -27,9 +27,9 @@ export const SharedContent = (props) => {
             <span className="sharing-users-post-tag" key={tag}>
               {tag}
             </span>
-          );
+          )
         })}
       </div>
     </div>
-  );
-};
+  )
+}
