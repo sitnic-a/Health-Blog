@@ -7,6 +7,7 @@ import {
   getSharedContentOfPickedUser,
   getSharesPerUser,
 } from '../../redux-toolkit/features/mentalExpertSlice'
+import { expandShrinkSidebar } from '../../utils/helper-methods/methods'
 
 import { BiExpandAlt } from 'react-icons/bi'
 
@@ -33,34 +34,7 @@ export const ListSharingContentUsers = () => {
         <span
           className="sharing-users-expander-icon"
           onClick={() => {
-            let sharingUsersMainUsersContainer = document.querySelector(
-              '.sharing-users-main-users-container'
-            )
-            sharingUsersMainUsersContainer.classList.toggle(
-              'sharing-users-main-users-container-expanded'
-            )
-
-            let sharingUsersUserContainer = document.querySelector(
-              '.sharing-user-user-container'
-            )
-            sharingUsersUserContainer.classList.toggle(
-              'sharing-user-user-container-expanded'
-            )
-
-            let sharingUserTitle = document.querySelector('.sharing-user-title')
-            sharingUserTitle.classList.toggle('sharing-user-title-expanded')
-
-            let sharingUsersContentContainer = document.querySelector(
-              '.sharing-users-content-container'
-            )
-            if (sharingUsersContentContainer !== null) {
-              sharingUsersContentContainer.classList.toggle(
-                'sharing-users-content-container-shrinked'
-              )
-              // sharingUsersMainUsersContainer.classList.toggle(
-              //   'sharing-users-main-users-container-expanded'
-              // )
-            }
+            expandShrinkSidebar()
           }}
         >
           <BiExpandAlt />
@@ -79,39 +53,7 @@ export const ListSharingContentUsers = () => {
                     usersThatSharedIncludingItsContent,
                   }
                   dispatch(getSharedContentOfPickedUser(contentAndQuery))
-
-                  let sharingUsersMainUsersContainer = document.querySelector(
-                    '.sharing-users-main-users-container'
-                  )
-                  sharingUsersMainUsersContainer.classList.toggle(
-                    'sharing-users-main-users-container-expanded'
-                  )
-
-                  let sharingUsersUserContainer = document.querySelector(
-                    '.sharing-user-user-container'
-                  )
-                  sharingUsersUserContainer.classList.toggle(
-                    'sharing-user-user-container-expanded'
-                  )
-
-                  let sharingUserTitle = document.querySelector(
-                    '.sharing-user-title'
-                  )
-                  sharingUserTitle.classList.toggle(
-                    'sharing-user-title-expanded'
-                  )
-
-                  let sharingUsersContentContainer = document.querySelector(
-                    '.sharing-users-content-container'
-                  )
-                  if (sharingUsersContentContainer !== null) {
-                    sharingUsersContentContainer.classList.toggle(
-                      'sharing-users-content-container-shrinked'
-                    )
-                    // sharingUsersMainUsersContainer.classList.toggle(
-                    //   'sharing-users-main-users-container-expanded'
-                    // )
-                  }
+                  expandShrinkSidebar()
                 }}
               >
                 <span className="sharing-user-title">{user.username}</span>

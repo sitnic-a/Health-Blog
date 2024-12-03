@@ -105,3 +105,30 @@ export function base64ToArrayBuffer(data) {
   }
   return bytes
 }
+
+export function expandShrinkSidebar() {
+  let mainUsersContainer = document.querySelector(
+    '.sharing-users-main-users-container'
+  )
+  let usersContainer = document.querySelectorAll('.sharing-user-user-container')
+  let usersTitle = document.querySelectorAll('.sharing-user-title')
+  let contentContainer = document.querySelector(
+    '.sharing-users-content-container'
+  )
+
+  mainUsersContainer.classList.toggle(
+    'sharing-users-main-users-container-expanded'
+  )
+  usersContainer.forEach((user) => {
+    user.classList.toggle('sharing-user-user-container-expanded')
+  })
+  usersTitle.forEach((user) => {
+    user.classList.toggle('sharing-user-title-expanded')
+  })
+
+  if (contentContainer !== null) {
+    contentContainer.classList.toggle(
+      'sharing-users-content-container-shrinked'
+    )
+  }
+}
