@@ -57,6 +57,9 @@ export const ListSharingContentUsers = () => {
               sharingUsersContentContainer.classList.toggle(
                 'sharing-users-content-container-shrinked'
               )
+              // sharingUsersMainUsersContainer.classList.toggle(
+              //   'sharing-users-main-users-container-expanded'
+              // )
             }
           }}
         >
@@ -97,6 +100,18 @@ export const ListSharingContentUsers = () => {
                   sharingUserTitle.classList.toggle(
                     'sharing-user-title-expanded'
                   )
+
+                  let sharingUsersContentContainer = document.querySelector(
+                    '.sharing-users-content-container'
+                  )
+                  if (sharingUsersContentContainer !== null) {
+                    sharingUsersContentContainer.classList.toggle(
+                      'sharing-users-content-container-shrinked'
+                    )
+                    // sharingUsersMainUsersContainer.classList.toggle(
+                    //   'sharing-users-main-users-container-expanded'
+                    // )
+                  }
                 }}
               >
                 <span className="sharing-user-title">{user.username}</span>

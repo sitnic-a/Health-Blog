@@ -1137,11 +1137,17 @@ pre:hover {
   padding: 0.3rem;
 }
 
+@media (width > 550px) {
+  .sharing-users-main-users-container {
+    max-width: 200px;
+  }
+}
+
 @media (width<=550px) {
   .sharing-users-main-users-container {
-    transition: 1s;
     max-width: 20px;
     width: 100%;
+    transition: 250ms;
   }
 }
 
@@ -1183,14 +1189,12 @@ pre:hover {
 @media (width<=550px) {
   .sharing-user-user-container {
     max-width: 0px;
-    transition: 1s;
   }
 }
 
 .sharing-user-user-container-expanded {
   max-width: 550px;
   opacity: 1;
-  transition: 1s;
 }
 
 .sharing-user-title {
@@ -1206,7 +1210,6 @@ pre:hover {
 
 .sharing-user-title-expanded {
   opacity: 1;
-  /* transition: 1s; */
 }
 
 .sharing-users-content-container {
