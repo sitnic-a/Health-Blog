@@ -5,6 +5,7 @@ let initialState = {
   usersThatSharedContent: [],
   sharedContent: [],
   usersThatSharedIncludingItsContent: {},
+  overlayPost: null,
 };
 
 export const getSharesPerUser = createAsyncThunk(
@@ -47,6 +48,14 @@ export const mentalExpertSlice = createSlice({
       );
       state.sharedContent = [...pickedObj.sharedContent];
     },
+    setOverlayPost: (state, action) => {
+      console.log(action.payload);
+
+      let contentPost = action.payload;
+      if (contentPost !== null || contentPost !== undefined) {
+        state.overlayPost = contentPost;
+      }
+    },
   },
   extraReducers: (builder) => {
     //shares-per-user
@@ -63,6 +72,9 @@ export const mentalExpertSlice = createSlice({
   },
 });
 
-export const { getOnlyUsersThatSharedContent, getSharedContentOfPickedUser } =
-  mentalExpertSlice.actions;
+export const {
+  getOnlyUsersThatSharedContent,
+  getSharedContentOfPickedUser,
+  setOverlayPost,
+} = mentalExpertSlice.actions;
 export default mentalExpertSlice.reducer;
