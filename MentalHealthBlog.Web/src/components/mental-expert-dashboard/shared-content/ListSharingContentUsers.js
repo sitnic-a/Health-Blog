@@ -49,12 +49,20 @@ export const ListSharingContentUsers = () => {
                 className="sharing-user-user-container"
                 key={user.id}
                 onClick={() => {
+                  if (window.screen.width <= 550) {
+                    expandShrinkSidebar();
+                    let contentAndQuery = {
+                      userId: user.id,
+                      usersThatSharedIncludingItsContent,
+                    };
+                    dispatch(getSharedContentOfPickedUser(contentAndQuery));
+                    dispatch(setOverlayPost(null));
+                  }
                   let contentAndQuery = {
                     userId: user.id,
                     usersThatSharedIncludingItsContent,
                   };
                   dispatch(getSharedContentOfPickedUser(contentAndQuery));
-                  expandShrinkSidebar();
                   dispatch(setOverlayPost(null));
                 }}
               >

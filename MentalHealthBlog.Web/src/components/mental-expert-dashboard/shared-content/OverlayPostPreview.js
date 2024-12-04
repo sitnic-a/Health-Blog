@@ -10,15 +10,20 @@ export const OverlayPostPreview = (props) => {
   return (
     contentPost !== null && (
       <div className="overlay-post-main-container">
-        <div className="overlay-post-content-container">
-          <div className="overlay-post-title">
-            <h1>{contentPost.title}</h1>
+        <div className="overlay-post-container">
+          <div className="overlay-post-actions">
+            <span>X</span>
           </div>
-          <div className="overlay-post-content">
-            <p>{contentPost.content}</p>
-          </div>
-          <div className="overlay-post-date">
-            <p>{createdAt}</p>
+          <div className="overlay-post-content-container">
+            <div className="overlay-post-title">
+              <h1>{contentPost.title}</h1>
+            </div>
+            <div className="overlay-post-content">
+              <pre>{contentPost.content}</pre>
+            </div>
+            <div className="overlay-post-date">
+              <p>{createdAt}</p>
+            </div>
           </div>
         </div>
       </div>
