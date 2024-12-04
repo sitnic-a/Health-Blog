@@ -1263,6 +1263,11 @@ pre:hover {
   margin-block: 2rem;
   /* background: yellow; */
   cursor: default;
+  overflow-y: scroll;
+}
+
+.overlay-post-container::-webkit-scrollbar {
+  display: none;
 }
 
 @media (width<=760px) {
@@ -1353,8 +1358,6 @@ pre:hover {
   display: flex;
   flex-wrap: wrap;
   row-gap: 3px;
-  position: absolute;
-  bottom: 50px;
   /* background: red; */
   cursor: default;
 }
@@ -1371,8 +1374,6 @@ pre:hover {
 }
 
 .overlay-post-date {
-  position: absolute;
-  bottom: 0;
   font-size: 0.8rem;
   cursor: default;
 }
