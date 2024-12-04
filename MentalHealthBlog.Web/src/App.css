@@ -1122,7 +1122,7 @@ pre:hover {
 }
 
 #sharing-users-main-container {
-  /* max-width: 100%; */
+  max-width: 100%;
   height: 100vh;
   border: 1px solid beige;
   display: flex;
@@ -1134,7 +1134,6 @@ pre:hover {
   width: 100%;
   position: relative;
   border: 1px solid #eee;
-  border-block: none;
   height: 100%;
   padding: 0.3rem;
 }
@@ -1194,6 +1193,10 @@ pre:hover {
   cursor: pointer;
 }
 
+.sharing-user-user-container:hover {
+  background: #aed9ed;
+}
+
 @media (width<=550px) {
   .sharing-user-user-container {
     max-width: 0px;
@@ -1228,12 +1231,12 @@ pre:hover {
   /* background: red; */
 }
 
-.sharing-users-content-container-shrinked {
-  max-width: 0;
+.sharing-users-content-container::-webkit-scrollbar {
+  display: none;
 }
 
-::-webkit-scrollbar {
-  display: none;
+.sharing-users-content-container-shrinked {
+  max-width: 0;
 }
 
 .sharing-users-content-container > h1 {
@@ -1249,6 +1252,7 @@ pre:hover {
   top: 0;
   left: 0;
   background: rgba(0, 0, 0, 0.8);
+  cursor: pointer;
 }
 
 .overlay-post-container {
@@ -1258,21 +1262,28 @@ pre:hover {
   margin-inline: auto;
   margin-block: 2rem;
   /* background: yellow; */
+  cursor: default;
 }
 
-@media (width<=740px) {
+@media (width<=760px) {
   .overlay-post-container {
     max-width: 400px;
   }
 }
 
-@media (width<=700px) {
+@media (width<=720px) {
   .overlay-post-container {
-    max-width: 300px;
+    max-width: 340px;
   }
 }
 
-@media (width<=440px) {
+@media ((width<=660px) and (width>550px)) {
+  .overlay-post-container {
+    margin-inline: 1rem;
+  }
+}
+
+@media (width<=460px) {
   .overlay-post-container {
     margin-inline: 1rem;
   }
@@ -1282,7 +1293,15 @@ pre:hover {
   position: absolute;
   top: 0;
   right: 0;
-  padding: 0.4rem;
+  padding: 0.3rem 0.5rem;
+  z-index: 1;
+  background: red;
+  color: #fff;
+  cursor: pointer;
+}
+
+.overlay-post-actions:hover {
+  background: #920d0d;
 }
 
 .overlay-post-content-container {
@@ -1293,10 +1312,18 @@ pre:hover {
   min-height: 90%;
   position: relative;
   background: #fff;
+  cursor: default;
+}
+
+@media (width<440px) {
+  .overlay-post-content-container {
+    padding: 0.5rem;
+  }
 }
 
 .overlay-post-title {
   text-align: center;
+  cursor: default;
 }
 
 .overlay-post-content > pre {
@@ -1307,6 +1334,7 @@ pre:hover {
   height: 550px;
   overflow-y: scroll;
   text-wrap: wrap;
+  cursor: default;
 }
 
 @media (width<=740px) {
@@ -1321,15 +1349,32 @@ pre:hover {
   }
 }
 
-@media (width<=440px) {
-  .overlay-post-content > pre {
-    margin-inline: 1rem;
-  }
+.overlay-post-tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 3px;
+  position: absolute;
+  bottom: 50px;
+  /* background: red; */
+  cursor: default;
+}
+
+.overlay-post-tag {
+  font-size: 0.85rem;
+  background: #89cff0;
+  color: #fff;
+  padding-inline: 0.25rem;
+  padding-block: 0.07rem;
+  border-radius: 0.2rem;
+  margin-right: 5px;
+  cursor: default;
 }
 
 .overlay-post-date {
   position: absolute;
   bottom: 0;
+  font-size: 0.8rem;
+  cursor: default;
 }
 
 @media (width<=550px) {
@@ -1349,6 +1394,16 @@ pre:hover {
   /* background: yellow; */
 }
 
+.sharing-users-posts::-webkit-scrollbar {
+  display: none;
+}
+
+@media (width<=550px) {
+  .sharing-users-posts::-webkit-scrollbar {
+    display: block;
+  }
+}
+
 .sharing-users-main-post-container {
   padding-inline: 0.5rem;
   padding-bottom: 0.5rem;
@@ -1359,6 +1414,15 @@ pre:hover {
   overflow-y: scroll;
   border-radius: 0.5rem;
   cursor: pointer;
+}
+
+.sharing-users-main-post-container:hover {
+  background: #eaeaea;
+  box-shadow: -3px 1px 20px #8a8a8a;
+}
+
+.sharing-users-main-post-container::-webkit-scrollbar {
+  display: none;
 }
 
 @media (width<=550px) {
