@@ -7,10 +7,15 @@ export const UserDashboard = () => {
       {/* Navigation bar */}
       <section className="navigation-container">
         <div className="navbar">
-          <ul>
-            <Link to={'shared-content'}>
-              <li>Shared Content</li>
-            </Link>
+          <ul className="navbar-list">
+            <li>
+              <Link
+                to={'shared-content'}
+                className="navbar-action-shared-content"
+              >
+                Shared Content
+              </Link>
+            </li>
           </ul>
         </div>
       </section>
