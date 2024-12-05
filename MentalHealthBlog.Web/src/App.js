@@ -14,6 +14,7 @@ import { Loader } from './components/Loader'
 import { store } from './components/redux-toolkit/store'
 import { Provider } from 'react-redux'
 import { Dashboard } from './pages/Dashboard'
+import { SharedPosts } from './components/SharedPosts'
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/post/:id" element={<PostById />}></Route>
             <Route path="/register" element={<Register />}></Route>
+            <Route path="/shared-content" element={<SharedPosts />}></Route>
           </Routes>
           <ToastContainer />
         </main>
