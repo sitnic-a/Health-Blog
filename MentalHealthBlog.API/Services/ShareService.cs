@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using MentalHealthBlog.API.Methods;
 using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
@@ -65,33 +66,50 @@ namespace MentalHealthBlog.API.Services
 
         public async Task<List<Share>> ShareContent(ShareContentDto contentToBeShared)
         {
-            if (contentToBeShared.PostIds.IsNullOrEmpty() ||
-                contentToBeShared.SharedWithIds.IsNullOrEmpty() ||
-                contentToBeShared.PostIds.Contains(0) ||
-                contentToBeShared.SharedWithIds.Contains(0)) return new List<Share>();
+            var shareHelper = new ShareHelper();
 
-            var sharedContent = new List<Share>();
-            var shareGuid = Guid.NewGuid();
-
-            foreach (var post in contentToBeShared.PostIds)
+            if (contentToBeShared.ShareLink == false)
             {
-                foreach (var shareWith in contentToBeShared.SharedWithIds)
-                {
-                    var newShare = new Share
-                    {
-                        ShareGuid = shareGuid.ToString(),
-                        SharedPostId = post,
-                        SharedWithId = shareWith,
-                        SharedAt = contentToBeShared.SharedAt.Value
-                    };
+                if (contentToBeShared.PostIds.IsNullOrEmpty() ||
+                    contentToBeShared.SharedWithIds.IsNullOrEmpty() ||
+                    contentToBeShared.PostIds.Contains(0) ||
+                    contentToBeShared.SharedWithIds.Contains(0)) return new List<Share>();
 
-                    sharedContent.Add(newShare);
-                    await _context.Shares.AddAsync(newShare);
-                }
+                var sharedContent = await shareHelper.CallSaveNewShares(_context, contentToBeShared);
+                if (sharedContent.Any()) return sharedContent;
+                return new List<Share>();
             }
-            await _context.SaveChangesAsync();
+            if (contentToBeShared.ShareLink == true)
+            {
+                if (contentToBeShared.PostIds.IsNullOrEmpty() ||
+                    contentToBeShared.PostIds.Contains(0)) return new List<Share>();
 
-            if (sharedContent.Any()) return sharedContent;
+                var sharedContent = await shareHelper.CallSaveNewShares(_context, contentToBeShared);
+                if (sharedContent.Any()) return sharedContent;
+                return new List<Share>();
+            }
+
+            //var sharedContent = new List<Share>();
+            //var shareGuid = Guid.NewGuid();
+
+            //foreach (var post in contentToBeShared.PostIds)
+            //{
+            //    foreach (var shareWith in contentToBeShared.SharedWithIds)
+            //    {
+            //        var newShare = new Share
+            //        {
+            //            ShareGuid = shareGuid.ToString(),
+            //            SharedPostId = post,
+            //            SharedWithId = shareWith,
+            //            SharedAt = contentToBeShared.SharedAt.Value
+            //        };
+
+            //        sharedContent.Add(newShare);
+            //        await _context.Shares.AddAsync(newShare);
+            //    }
+            //}
+            //await _context.SaveChangesAsync();
+
 
             return new List<Share>();
         }
