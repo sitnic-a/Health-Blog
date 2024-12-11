@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using MentalHealthBlog.API.ExtensionMethods.ExtensionPostClass;
 using MentalHealthBlog.API.Methods;
 using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
@@ -19,6 +20,31 @@ namespace MentalHealthBlog.API.Services
         public ShareService(DataContext context)
         {
             _context = context;
+        }
+
+        public async Task<List<PostDto>> ShareByLink(string shareId)
+        {
+            var shares = await _context
+                .Shares
+                .Include(p => p.SharedPost)
+                .Where(s => s.ShareGuid == shareId).ToListAsync();
+
+            var convertHelper = new PostHelper(_context); 
+
+            var sharedContent = new List<PostDto>();
+
+            foreach (var share in shares)
+            {
+                if (!share.SharedPost.IsNullOrEmpthy())
+                {
+                    var post = share.SharedPost;
+                    var tags = convertHelper.CallReturnPostTags(post.Id);
+                    sharedContent.Add(new PostDto(post.Id, post.Title, post.Content, post.UserId, post.CreatedAt, tags));
+                }
+            }
+
+            if (sharedContent.Any()) return sharedContent;
+            return new List<PostDto>();
         }
         public async Task<List<UserDto>> GetExpertsAndRelatives()
         {
@@ -90,5 +116,7 @@ namespace MentalHealthBlog.API.Services
             }
             return new List<Share>();
         }
+
+
     }
 }
