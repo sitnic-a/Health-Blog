@@ -42,7 +42,7 @@ namespace MentalHealthBlog.API.Methods
                         {
                             ShareGuid = shareGuid.ToString(),
                             SharedPostId = post,
-                            SharedWithId = 0,
+                            SharedWithId = null,
                             SharedAt = contentToBeShared.SharedAt.Value
                         };
 
@@ -50,6 +50,7 @@ namespace MentalHealthBlog.API.Methods
                         await context.Shares.AddAsync(newShare);
                     }
                     await context.SaveChangesAsync();
+                    return sharedContent;
                 }
             }
             return new List<Share>();

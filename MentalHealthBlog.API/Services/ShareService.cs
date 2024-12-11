@@ -88,29 +88,6 @@ namespace MentalHealthBlog.API.Services
                 if (sharedContent.Any()) return sharedContent;
                 return new List<Share>();
             }
-
-            //var sharedContent = new List<Share>();
-            //var shareGuid = Guid.NewGuid();
-
-            //foreach (var post in contentToBeShared.PostIds)
-            //{
-            //    foreach (var shareWith in contentToBeShared.SharedWithIds)
-            //    {
-            //        var newShare = new Share
-            //        {
-            //            ShareGuid = shareGuid.ToString(),
-            //            SharedPostId = post,
-            //            SharedWithId = shareWith,
-            //            SharedAt = contentToBeShared.SharedAt.Value
-            //        };
-
-            //        sharedContent.Add(newShare);
-            //        await _context.Shares.AddAsync(newShare);
-            //    }
-            //}
-            //await _context.SaveChangesAsync();
-
-
             return new List<Share>();
         }
     }
