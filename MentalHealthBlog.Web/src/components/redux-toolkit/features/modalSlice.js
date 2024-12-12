@@ -1,34 +1,39 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit'
 
 let modalSlice = createSlice({
-  name: "modalSlice",
+  name: 'modalSlice',
   initialState: {
     isAddOpen: false,
     isDeleteOpen: false,
     isExportOpen: false,
     isShareOpen: false,
+    isShareViaLinkOpen: false,
   },
   reducers: {
     openAddModal: (state, action) => {
-      state.isAddOpen = action.payload;
+      state.isAddOpen = action.payload
     },
     openDeleteModal: (state, action) => {
-      state.isDeleteOpen = action.payload;
+      state.isDeleteOpen = action.payload
     },
     openExportModal: (state, action) => {
-      state.isExportOpen = action.payload;
+      state.isExportOpen = action.payload
     },
     openShareModal: (state, action) => {
-      state.isShareOpen = action.payload;
+      state.isShareOpen = action.payload
+    },
+    openShareViaLink: (state, action) => {
+      state.isShareViaLinkOpen = action.payload
     },
   },
-});
+})
 
 export const {
   openAddModal,
   openDeleteModal,
   openExportModal,
   openShareModal,
-} = modalSlice.actions;
+  openShareViaLink,
+} = modalSlice.actions
 
-export default modalSlice.reducer;
+export default modalSlice.reducer

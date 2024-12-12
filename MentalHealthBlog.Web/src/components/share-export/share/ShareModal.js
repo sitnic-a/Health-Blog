@@ -6,14 +6,18 @@ import {
   revokeShareContent,
 } from '../../redux-toolkit/features/shareExportSlice'
 
-import { openShareModal } from '../../redux-toolkit/features/modalSlice'
+import {
+  openShareModal,
+  openShareViaLink,
+} from '../../redux-toolkit/features/modalSlice'
 import { ExpertsToShareContentWith } from './ExpertsToShareContentWith'
 
 import { IoRemoveCircleOutline } from 'react-icons/io5'
+import { ShareViaLink } from './ShareViaLink'
 
 export const ShareModal = () => {
   let dispatch = useDispatch()
-  let { isShareOpen } = useSelector((store) => store.modal)
+  let { isShareOpen, isShareViaLinkOpen } = useSelector((store) => store.modal)
   let { postsToExport } = useSelector((store) => store.shareExport)
 
   return (
@@ -89,10 +93,12 @@ export const ShareModal = () => {
                 }
 
                 dispatch(shareContent(contentToBeShared))
+                dispatch(openShareViaLink(!isShareViaLinkOpen))
               }}
             >
-              Share link
+              Share via link
             </button>
+            <ShareViaLink />
           </div>
         </section>
       </section>
