@@ -1,12 +1,12 @@
-import { useDispatch, useSelector } from 'react-redux'
-import { openShareViaLink } from '../../redux-toolkit/features/modalSlice'
+import { useSelector } from "react-redux";
 
-import { SiViber, SiGmail } from 'react-icons/si'
-import { LuCopy } from 'react-icons/lu'
+import { SiViber, SiGmail } from "react-icons/si";
+import { LuCopy } from "react-icons/lu";
+import { Link } from "react-router-dom";
 
 export const ShareViaLink = () => {
-  let dispatch = useDispatch()
-  let { isShareViaLinkOpen } = useSelector((store) => store.modal)
+  let { isShareViaLinkOpen } = useSelector((store) => store.modal);
+  let { shareLinkUrl } = useSelector((store) => store.shareExport);
 
   return (
     isShareViaLinkOpen === true && (
@@ -28,20 +28,21 @@ export const ShareViaLink = () => {
             </div>
           </div>
           <div className="share-via-link-url-main-container">
-            <div className="share-via-link-url-container">
-              {/* Show link if created */}
-              <p className="share-via-link-url">
-                Link:
-                <span className="share-via-link-url-value">
-                  https://localhost:7029/api/share/link/61e6bd5e-45db-4d76-b8f0-fe35e070eba4
-                </span>
-              </p>
+            {shareLinkUrl !== "" && (
+              <div className="share-via-link-url-container">
+                <p className="share-via-link-url">
+                  Link:
+                  <Link to={shareLinkUrl} className="share-via-link-url-value">
+                    {shareLinkUrl}
+                  </Link>
+                </p>
 
-              <LuCopy />
-            </div>
+                <LuCopy />
+              </div>
+            )}
           </div>
         </div>
       </section>
     )
-  )
-}
+  );
+};

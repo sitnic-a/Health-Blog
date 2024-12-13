@@ -11,6 +11,8 @@ let initialState = {
   exportedDocument: null,
   isExported: false,
   possibleToShareWith: [],
+  isSharingLink: false,
+  shareLinkUrl: "",
 };
 
 export const exportToPDF = createAsyncThunk(
@@ -136,8 +138,21 @@ let shareExportSlice = createSlice({
       //Share
       .addCase(shareContent.pending, (state, action) => {
         console.log("Pending...");
+        let contentToBeShared = action.meta.arg;
+
+        if (contentToBeShared.shareLink === true) {
+          state.isSharingLink = true;
+        }
       })
       .addCase(shareContent.fulfilled, (state, action) => {
+        if (state.isSharingLink === true) {
+          let sharedContent = action.payload;
+          if (sharedContent.length > 0) {
+            let shareId = sharedContent[0].shareGuid;
+            state.shareLinkUrl = `${application.application_url}/share/link/${shareId}`;
+          }
+        }
+
         toast.success("You have succesfully shared content!", {
           autoClose: 2000,
           position: "bottom-right",
