@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getSelectedPosts } from "../../utils/helper-methods/methods";
 import { setIsSharingExporting } from "./postSlice";
 import { application } from "../../../application";
-import { act } from "react";
 import { toast } from "react-toastify";
 
 let initialState = {
@@ -13,6 +12,7 @@ let initialState = {
   possibleToShareWith: [],
   isSharingLink: false,
   shareLinkUrl: "",
+  isLoading: false,
 };
 
 export const exportToPDF = createAsyncThunk(
@@ -45,8 +45,6 @@ export const shareByLink = createAsyncThunk(
 export const shareContent = createAsyncThunk(
   "/share",
   async (contentToBeShared) => {
-    console.log("Content to be shared ", contentToBeShared);
-
     let request = await fetch(`${application.application_url}/share`, {
       method: "POST",
       body: JSON.stringify(contentToBeShared),
@@ -146,13 +144,14 @@ let shareExportSlice = createSlice({
       })
 
       .addCase(shareByLink.pending, (state, action) => {
-        console.log("Pending");
+        state.isLoading = true;
       })
       .addCase(shareByLink.fulfilled, (state, action) => {
         state.postsToShare = action.payload;
+        state.isLoading = false;
       })
       .addCase(shareByLink.rejected, (state, action) => {
-        console.log("Rejected ", action.payload);
+        state.isLoading = false;
       })
 
       //Share

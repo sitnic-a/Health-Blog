@@ -2,9 +2,11 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { shareByLink } from "./redux-toolkit/features/shareExportSlice";
 
+import { Loader } from "./Loader";
+
 export const SharedPosts = () => {
   let dispatch = useDispatch();
-  let { postsToShare } = useSelector((store) => store.shareExport);
+  let { postsToShare, isLoading } = useSelector((store) => store.shareExport);
 
   useEffect(() => {
     let url = window.location.href;
@@ -14,6 +16,10 @@ export const SharedPosts = () => {
       dispatch(shareByLink(shareGuid));
     }
   }, []);
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     /* Shares via link */
