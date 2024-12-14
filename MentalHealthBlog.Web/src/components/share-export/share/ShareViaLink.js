@@ -19,10 +19,33 @@ export const ShareViaLink = () => {
             <div className="external-systems-main-container">
               <div className="external-systems-container">
                 <div className="external-system es-viber-container">
-                  <SiViber />
+                  <span>
+                    <SiViber />
+                  </span>
                 </div>
+
+                <svg width="0" height="0">
+                  <linearGradient
+                    id="es-gmail-container-gradient"
+                    x1="100%"
+                    y1="100%"
+                    x2="0%"
+                    y2="0%"
+                  >
+                    <stop stopColor="#34a853" offset="0%" />
+                    <stop stopColor="#fbbc05" offset="20%" />
+                    <stop stopColor="#ea4335" offset="40%" />
+                    <stop stopColor="#bb001b" offset="65%" />
+                    <stop stopColor="#4285f4" offset="100%" />
+                  </linearGradient>
+                </svg>
+
                 <div className="external-system es-gmail-container">
-                  <SiGmail />
+                  <span>
+                    <SiGmail
+                      style={{ stroke: "url(#es-gmail-container-gradient)" }}
+                    />
+                  </span>
                 </div>
               </div>
             </div>
