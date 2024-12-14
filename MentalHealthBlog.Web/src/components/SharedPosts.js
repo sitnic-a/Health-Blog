@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { shareByLink } from "./redux-toolkit/features/shareExportSlice";
 
 import { Loader } from "./Loader";
+import { ListOfSharedPosts } from "./share-export/share/ListOfSharedPosts";
 
 export const SharedPosts = () => {
   let dispatch = useDispatch();
@@ -27,13 +28,7 @@ export const SharedPosts = () => {
     postsToShare.length > 0 && (
       <section className="user-shared-content">
         <h1>Content:</h1>
-        {postsToShare.map((post) => {
-          return (
-            <div key={post.id}>
-              <h1>{post.title}</h1>
-            </div>
-          );
-        })}
+        <ListOfSharedPosts />
       </section>
       /* Shares per doctor to make */
     )
