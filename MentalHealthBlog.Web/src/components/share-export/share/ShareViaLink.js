@@ -32,7 +32,11 @@ export const ShareViaLink = () => {
               <div className="share-via-link-url-container">
                 <p className="share-via-link-url">
                   Link:
-                  <Link to={shareLinkUrl} className="share-via-link-url-value">
+                  <Link
+                    to={shareLinkUrl}
+                    target="_top"
+                    className="share-via-link-url-value"
+                  >
                     {shareLinkUrl}
                   </Link>
                 </p>

@@ -32,6 +32,16 @@ export const exportToPDF = createAsyncThunk(
   }
 );
 
+export const shareByLink = createAsyncThunk(
+  "share/link/{shareId}",
+  async (shareGuid) => {
+    let url = `${application.application_url}/share/link/${shareGuid}`;
+    let request = await fetch(url);
+    let response = await request.json();
+    return response;
+  }
+);
+
 export const shareContent = createAsyncThunk(
   "/share",
   async (contentToBeShared) => {
@@ -135,6 +145,16 @@ let shareExportSlice = createSlice({
         console.log("FAILED");
       })
 
+      .addCase(shareByLink.pending, (state, action) => {
+        console.log("Pending");
+      })
+      .addCase(shareByLink.fulfilled, (state, action) => {
+        state.postsToShare = action.payload;
+      })
+      .addCase(shareByLink.rejected, (state, action) => {
+        console.log("Rejected ", action.payload);
+      })
+
       //Share
       .addCase(shareContent.pending, (state, action) => {
         console.log("Pending...");
@@ -149,7 +169,8 @@ let shareExportSlice = createSlice({
           let sharedContent = action.payload;
           if (sharedContent.length > 0) {
             let shareId = sharedContent[0].shareGuid;
-            state.shareLinkUrl = `${application.application_url}/share/link/${shareId}`;
+            let host = window.location.origin;
+            state.shareLinkUrl = `${host}/share/link/${shareId}`;
           }
         }
 

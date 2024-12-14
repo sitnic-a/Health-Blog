@@ -27,6 +27,10 @@ function App() {
             <Route path="/post/:id" element={<PostById />}></Route>
             <Route path="/register" element={<Register />}></Route>
             <Route path="/shared-content" element={<SharedPosts />}></Route>
+            <Route
+              path="/share/link/:shareGuid"
+              element={<SharedPosts />}
+            ></Route>
           </Routes>
           <ToastContainer />
         </main>
