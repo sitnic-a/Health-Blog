@@ -72,8 +72,24 @@ export const ShareViaLink = () => {
                     {shareLinkUrl}
                   </Link>
                 </p>
+                <div
+                  className="share-via-link-url-copy-container"
+                  onClick={() => {
+                    let urlContainer = document.querySelector(
+                      '.share-via-link-url-container'
+                    )
 
-                <LuCopy />
+                    urlContainer.addEventListener('click', (e) => {
+                      let linkContainer = urlContainer.querySelector(
+                        '.share-via-link-url > .share-via-link-url-value'
+                      )
+                      let contentUrl = linkContainer.href
+                      navigator.clipboard.writeText(contentUrl)
+                    })
+                  }}
+                >
+                  <LuCopy />
+                </div>
               </div>
             )}
           </div>

@@ -903,10 +903,14 @@ input[name='person-to-give-permission-checkbox'] {
   margin-left: 5px;
 }
 
-.share-via-link-url-container > svg {
+.share-via-link-url-copy-container {
+  cursor: pointer;
+}
+
+.share-via-link-url-container .share-via-link-url-copy-container > svg {
   border-left: 1px solid #000;
   padding: 1rem;
-  font-size: 3rem;
+  font-size: 1.3rem;
 }
 
 .export-modal-overlay {
