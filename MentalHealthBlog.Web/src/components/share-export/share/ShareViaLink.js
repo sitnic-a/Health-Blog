@@ -1,12 +1,18 @@
-import { useSelector } from "react-redux";
+import { useSelector } from 'react-redux'
 
-import { SiViber, SiGmail } from "react-icons/si";
-import { LuCopy } from "react-icons/lu";
-import { Link } from "react-router-dom";
+import { SiViber, SiGmail } from 'react-icons/si'
+import { LuCopy } from 'react-icons/lu'
+import { Link } from 'react-router-dom'
 
 export const ShareViaLink = () => {
-  let { isShareViaLinkOpen } = useSelector((store) => store.modal);
-  let { shareLinkUrl } = useSelector((store) => store.shareExport);
+  let { isShareViaLinkOpen } = useSelector((store) => store.modal)
+  let { shareLinkUrl } = useSelector((store) => store.shareExport)
+
+  let openGmail = () => {
+    window.open(
+      `https://mail.google.com/mail/?view=cm&v=b&cs=wh&to=email@domain.example&su=Share content&body=Please review my content: ${shareLinkUrl}`
+    )
+  }
 
   return (
     isShareViaLinkOpen === true && (
@@ -40,10 +46,13 @@ export const ShareViaLink = () => {
                   </linearGradient>
                 </svg>
 
-                <div className="external-system es-gmail-container">
+                <div
+                  className="external-system es-gmail-container"
+                  onClick={() => openGmail()}
+                >
                   <span>
                     <SiGmail
-                      style={{ stroke: "url(#es-gmail-container-gradient)" }}
+                      style={{ stroke: 'url(#es-gmail-container-gradient)' }}
                     />
                   </span>
                 </div>
@@ -51,7 +60,7 @@ export const ShareViaLink = () => {
             </div>
           </div>
           <div className="share-via-link-url-main-container">
-            {shareLinkUrl !== "" && (
+            {shareLinkUrl !== '' && (
               <div className="share-via-link-url-container">
                 <p className="share-via-link-url">
                   Link:
@@ -71,5 +80,5 @@ export const ShareViaLink = () => {
         </div>
       </section>
     )
-  );
-};
+  )
+}
