@@ -24,7 +24,7 @@ namespace MentalHealthBlog.API.Methods
                                 ShareGuid = shareGuid.ToString(),
                                 SharedPostId = post,
                                 SharedWithId = shareWith,
-                                SharedAt = contentToBeShared.SharedAt.Value
+                                SharedAt = contentToBeShared.SharedAt.Value.AddHours(1)
                             };
 
                             sharedContent.Add(newShare);
@@ -43,7 +43,7 @@ namespace MentalHealthBlog.API.Methods
                             ShareGuid = shareGuid.ToString(),
                             SharedPostId = post,
                             SharedWithId = null,
-                            SharedAt = contentToBeShared.SharedAt.Value
+                            SharedAt = contentToBeShared.SharedAt.Value.AddHours(1)
                         };
 
                         sharedContent.Add(newShare);

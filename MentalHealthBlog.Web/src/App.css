@@ -707,14 +707,14 @@ button[data-action-add="add"] svg {
 .permission-action {
   position: absolute;
   top: -2px;
-  right: 5px;
+  right: 8px;
   width: 15px;
   height: 15px;
 }
 
 input[name="person-to-give-permission-checkbox"] {
-  width: 15px;
-  height: 15px;
+  width: 19px;
+  height: 19px;
   border-radius: 0px;
   cursor: pointer;
 }
@@ -799,6 +799,10 @@ input[name="person-to-give-permission-checkbox"] {
 .share-btn:hover {
   background: #666;
   color: #efefef;
+}
+
+.share-btn-experts {
+  display: none;
 }
 
 #share-via-link-main-container {

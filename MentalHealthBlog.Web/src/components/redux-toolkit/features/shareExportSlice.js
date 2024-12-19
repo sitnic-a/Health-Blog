@@ -1,5 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getSelectedPosts } from "../../utils/helper-methods/methods";
+import {
+  getSelectedPosts,
+  getPeopleToShareContentWith,
+} from "../../utils/helper-methods/methods";
 import { setIsSharingExporting } from "./postSlice";
 import { application } from "../../../application";
 import { toast } from "react-toastify";
@@ -125,6 +128,16 @@ let shareExportSlice = createSlice({
         position: "bottom-right",
       });
     },
+
+    checkVisibilityOfShareContentAction: () => {
+      if (getPeopleToShareContentWith().length > 0) {
+        let shareBtn = document.querySelector(".share-btn-experts");
+        shareBtn.style.display = "inline-block";
+      } else {
+        let shareBtn = document.querySelector(".share-btn-experts");
+        shareBtn.style.display = "none";
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -200,7 +213,10 @@ let shareExportSlice = createSlice({
   },
 });
 
-export const { setOverlayForShareExport, revokeShareContent } =
-  shareExportSlice.actions;
+export const {
+  setOverlayForShareExport,
+  revokeShareContent,
+  checkVisibilityOfShareContentAction,
+} = shareExportSlice.actions;
 
 export default shareExportSlice.reducer;

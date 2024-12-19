@@ -1,11 +1,11 @@
-import { useSelector } from "react-redux";
-import { getPeopleToShareContentWith } from "../../utils/helper-methods/methods";
+import { useDispatch, useSelector } from "react-redux";
+import { checkVisibilityOfShareContentAction } from "../../redux-toolkit/features/shareExportSlice";
 import defaultAvatar from "../../../images/default-avatar.png";
 import { LiaSearchSolid } from "react-icons/lia";
 
 export const ExpertsToShareContentWith = () => {
+  let dispatch = useDispatch();
   let { possibleToShareWith } = useSelector((store) => store.shareExport);
-
   return (
     <>
       <div className="search-people">
@@ -30,7 +30,9 @@ export const ExpertsToShareContentWith = () => {
                     type="checkbox"
                     name="person-to-give-permission-checkbox"
                     id="person-to-give-permission-checkbox"
-                    onClick={() => getPeopleToShareContentWith()}
+                    onClick={() => {
+                      dispatch(checkVisibilityOfShareContentAction());
+                    }}
                   />
                 </div>
 
