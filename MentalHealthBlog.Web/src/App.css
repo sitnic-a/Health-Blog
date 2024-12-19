@@ -1531,6 +1531,7 @@ pre:hover {
   row-gap: 3px;
   /* background: red; */
   cursor: default;
+  margin-top: -5px;
 }
 
 .overlay-post-tag {

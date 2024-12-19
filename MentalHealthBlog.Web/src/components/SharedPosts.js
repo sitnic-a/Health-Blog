@@ -23,14 +23,24 @@ export const SharedPosts = () => {
   }
 
   return (
-    /* Shares via link */
-    postsToShare !== null &&
-    postsToShare.length > 0 && (
-      <section className="user-shared-content">
-        <h1>Content:</h1>
-        <ListOfSharedPosts />
-      </section>
-      /* Shares per doctor to make */
-    )
+    <>
+      {
+        /* Shares via link */
+        postsToShare !== null && postsToShare.length > 0 && (
+          <section className="user-shared-content">
+            <h1>Content:</h1>
+            <ListOfSharedPosts />
+          </section>
+        )
+      }
+      {
+        /* Shares per doctor to make */
+        postsToShare.length <= 0 && (
+          <div className="random">
+            <h1>Hello</h1>
+          </div>
+        )
+      }
+    </>
   );
 };
