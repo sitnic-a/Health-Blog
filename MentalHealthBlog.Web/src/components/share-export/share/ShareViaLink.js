@@ -1,16 +1,16 @@
-import { useSelector } from 'react-redux'
+import { useSelector } from "react-redux";
 
-import { SiViber, SiGmail } from 'react-icons/si'
-import { LuCopy } from 'react-icons/lu'
-import { Link } from 'react-router-dom'
+import { SiViber, SiGmail } from "react-icons/si";
+import { LuCopy } from "react-icons/lu";
+import { Link } from "react-router-dom";
 
 export const ShareViaLink = () => {
-  let { isShareViaLinkOpen } = useSelector((store) => store.modal)
-  let { shareLinkUrl } = useSelector((store) => store.shareExport)
+  let { isShareViaLinkOpen } = useSelector((store) => store.modal);
+  let { shareLinkUrl } = useSelector((store) => store.shareExport);
 
   let openExternal = (source) => {
-    window.open(`${source}`)
-  }
+    window.open(`${source}`, "_blank");
+  };
 
   return (
     isShareViaLinkOpen === true && (
@@ -61,7 +61,7 @@ export const ShareViaLink = () => {
                 >
                   <span>
                     <SiGmail
-                      style={{ stroke: 'url(#es-gmail-container-gradient)' }}
+                      style={{ stroke: "url(#es-gmail-container-gradient)" }}
                     />
                   </span>
                 </div>
@@ -69,13 +69,13 @@ export const ShareViaLink = () => {
             </div>
           </div>
           <div className="share-via-link-url-main-container">
-            {shareLinkUrl !== '' && (
+            {shareLinkUrl !== "" && (
               <div className="share-via-link-url-container">
                 <p className="share-via-link-url">
                   Link:
                   <Link
                     to={shareLinkUrl}
-                    target="_top"
+                    target="_blank"
                     className="share-via-link-url-value"
                   >
                     {shareLinkUrl}
@@ -84,17 +84,18 @@ export const ShareViaLink = () => {
                 <div
                   className="share-via-link-url-copy-container"
                   onClick={() => {
-                    let urlContainer = document.querySelector(
-                      '.share-via-link-url-container'
-                    )
+                    let indicator = document.querySelector(".indicator");
+                    var timeout = 0;
 
-                    urlContainer.addEventListener('click', (e) => {
-                      let linkContainer = urlContainer.querySelector(
-                        '.share-via-link-url > .share-via-link-url-value'
-                      )
-                      let contentUrl = linkContainer.href
-                      navigator.clipboard.writeText(contentUrl)
-                    })
+                    navigator.clipboard.writeText(shareLinkUrl);
+
+                    indicator.classList.add("share-via-link-copy-indicator");
+
+                    timeout = setTimeout(function () {
+                      indicator.classList.remove(
+                        "share-via-link-copy-indicator"
+                      );
+                    }, 1500);
                   }}
                 >
                   <LuCopy />
@@ -102,8 +103,9 @@ export const ShareViaLink = () => {
               </div>
             )}
           </div>
+          <div className="indicator">Copied</div>
         </div>
       </section>
     )
-  )
-}
+  );
+};

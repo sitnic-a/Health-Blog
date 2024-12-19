@@ -13,7 +13,7 @@ export const ListOfSharedPosts = () => {
           <div key={post.id}>
             <h1>{post.title}</h1>
             <p>{post.content}</p>
-            <p>{post.date}</p>
+            <p>{date}</p>
             <div>
               {tags.map((tag) => {
                 return <span>{tag} &nbsp;</span>;
