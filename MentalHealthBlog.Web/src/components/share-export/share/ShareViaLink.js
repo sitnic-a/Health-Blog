@@ -13,7 +13,8 @@ export const ShareViaLink = () => {
   };
 
   return (
-    isShareViaLinkOpen === true && (
+    isShareViaLinkOpen === true &&
+    shareLinkUrl !== "" && (
       <section id="share-via-link-main-container">
         <div className="share-via-link-container">
           <div className="share-via-link-heading">
@@ -69,39 +70,35 @@ export const ShareViaLink = () => {
             </div>
           </div>
           <div className="share-via-link-url-main-container">
-            {shareLinkUrl !== "" && (
-              <div className="share-via-link-url-container">
-                <p className="share-via-link-url">
-                  Link:
-                  <Link
-                    to={shareLinkUrl}
-                    target="_blank"
-                    className="share-via-link-url-value"
-                  >
-                    {shareLinkUrl}
-                  </Link>
-                </p>
-                <div
-                  className="share-via-link-url-copy-container"
-                  onClick={() => {
-                    let indicator = document.querySelector(".indicator");
-                    var timeout = 0;
-
-                    navigator.clipboard.writeText(shareLinkUrl);
-
-                    indicator.classList.add("share-via-link-copy-indicator");
-
-                    timeout = setTimeout(function () {
-                      indicator.classList.remove(
-                        "share-via-link-copy-indicator"
-                      );
-                    }, 1500);
-                  }}
+            <div className="share-via-link-url-container">
+              <p className="share-via-link-url">
+                Link:
+                <Link
+                  to={shareLinkUrl}
+                  target="_blank"
+                  className="share-via-link-url-value"
                 >
-                  <LuCopy />
-                </div>
+                  {shareLinkUrl}
+                </Link>
+              </p>
+              <div
+                className="share-via-link-url-copy-container"
+                onClick={() => {
+                  let indicator = document.querySelector(".indicator");
+                  var timeout = 0;
+
+                  navigator.clipboard.writeText(shareLinkUrl);
+
+                  indicator.classList.add("share-via-link-copy-indicator");
+
+                  timeout = setTimeout(function () {
+                    indicator.classList.remove("share-via-link-copy-indicator");
+                  }, 1500);
+                }}
+              >
+                <LuCopy />
               </div>
-            )}
+            </div>
           </div>
           <div className="indicator">Copied</div>
         </div>

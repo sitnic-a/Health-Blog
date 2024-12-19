@@ -7,6 +7,7 @@ import {
 import {
   shareContent,
   revokeShareContent,
+  resetShareLinkUrl,
 } from "../../redux-toolkit/features/shareExportSlice";
 
 import {
@@ -32,6 +33,8 @@ export const ShareModal = () => {
             className="share-export-close-modal-btn"
             onClick={() => {
               dispatch(openShareModal(!isShareOpen));
+              dispatch(openShareViaLink(!isShareViaLinkOpen));
+              dispatch(resetShareLinkUrl());
               let shareExportContainer = document.querySelector(
                 ".share-export-container"
               );

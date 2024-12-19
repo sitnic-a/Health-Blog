@@ -138,6 +138,10 @@ let shareExportSlice = createSlice({
         shareBtn.style.display = "none";
       }
     },
+
+    resetShareLinkUrl: (state) => {
+      state.shareLinkUrl = "";
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -217,6 +221,7 @@ export const {
   setOverlayForShareExport,
   revokeShareContent,
   checkVisibilityOfShareContentAction,
+  resetShareLinkUrl,
 } = shareExportSlice.actions;
 
 export default shareExportSlice.reducer;
