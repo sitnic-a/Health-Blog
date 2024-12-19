@@ -8,10 +8,8 @@ export const ShareViaLink = () => {
   let { isShareViaLinkOpen } = useSelector((store) => store.modal)
   let { shareLinkUrl } = useSelector((store) => store.shareExport)
 
-  let openGmail = () => {
-    window.open(
-      `https://mail.google.com/mail/?view=cm&v=b&cs=wh&to=email@domain.example&su=Share content&body=Please review my content: ${shareLinkUrl}`
-    )
+  let openExternal = (source) => {
+    window.open(`${source}`)
   }
 
   return (
@@ -24,7 +22,14 @@ export const ShareViaLink = () => {
           <div className="share-via-link-systems">
             <div className="external-systems-main-container">
               <div className="external-systems-container">
-                <div className="external-system es-viber-container">
+                <div
+                  className="external-system es-viber-container"
+                  onClick={() =>
+                    openExternal(
+                      `viber://forward?text=Please review my content: ${shareLinkUrl}`
+                    )
+                  }
+                >
                   <span>
                     <SiViber />
                   </span>
@@ -48,7 +53,11 @@ export const ShareViaLink = () => {
 
                 <div
                   className="external-system es-gmail-container"
-                  onClick={() => openGmail()}
+                  onClick={() =>
+                    openExternal(
+                      `https://mail.google.com/mail/?view=cm&v=b&cs=wh&to=email@domain.example&su=Share content&body=Please review my content: ${shareLinkUrl}`
+                    )
+                  }
                 >
                   <span>
                     <SiGmail
