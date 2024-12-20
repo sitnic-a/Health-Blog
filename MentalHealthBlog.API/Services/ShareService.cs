@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using MentalHealthBlog.API.ExtensionMethods.ExtensionPostClass;
+using MentalHealthBlog.API.Methods;
 using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
@@ -18,6 +20,31 @@ namespace MentalHealthBlog.API.Services
         public ShareService(DataContext context)
         {
             _context = context;
+        }
+
+        public async Task<List<PostDto>> ShareByLink(string shareId)
+        {
+            var shares = await _context
+                .Shares
+                .Include(p => p.SharedPost)
+                .Where(s => s.ShareGuid == shareId).ToListAsync();
+
+            var convertHelper = new PostHelper(_context); 
+
+            var sharedContent = new List<PostDto>();
+
+            foreach (var share in shares)
+            {
+                if (!share.SharedPost.IsNullOrEmpthy())
+                {
+                    var post = share.SharedPost;
+                    var tags = convertHelper.CallReturnPostTags(post.Id);
+                    sharedContent.Add(new PostDto(post.Id, post.Title, post.Content, post.UserId, post.CreatedAt, tags));
+                }
+            }
+
+            if (sharedContent.Any()) return sharedContent;
+            return new List<PostDto>();
         }
         public async Task<List<UserDto>> GetExpertsAndRelatives()
         {
@@ -65,35 +92,31 @@ namespace MentalHealthBlog.API.Services
 
         public async Task<List<Share>> ShareContent(ShareContentDto contentToBeShared)
         {
-            if (contentToBeShared.PostIds.IsNullOrEmpty() ||
-                contentToBeShared.SharedWithIds.IsNullOrEmpty() ||
-                contentToBeShared.PostIds.Contains(0) ||
-                contentToBeShared.SharedWithIds.Contains(0)) return new List<Share>();
+            var shareHelper = new ShareHelper();
 
-            var sharedContent = new List<Share>();
-            var shareGuid = Guid.NewGuid();
-
-            foreach (var post in contentToBeShared.PostIds)
+            if (contentToBeShared.ShareLink == false)
             {
-                foreach (var shareWith in contentToBeShared.SharedWithIds)
-                {
-                    var newShare = new Share
-                    {
-                        ShareGuid = shareGuid.ToString(),
-                        SharedPostId = post,
-                        SharedWithId = shareWith,
-                        SharedAt = contentToBeShared.SharedAt.Value
-                    };
+                if (contentToBeShared.PostIds.IsNullOrEmpty() ||
+                    contentToBeShared.SharedWithIds.IsNullOrEmpty() ||
+                    contentToBeShared.PostIds.Contains(0) ||
+                    contentToBeShared.SharedWithIds.Contains(0)) return new List<Share>();
 
-                    sharedContent.Add(newShare);
-                    await _context.Shares.AddAsync(newShare);
-                }
+                var sharedContent = await shareHelper.CallSaveNewShares(_context, contentToBeShared);
+                if (sharedContent.Any()) return sharedContent;
+                return new List<Share>();
             }
-            await _context.SaveChangesAsync();
+            if (contentToBeShared.ShareLink == true)
+            {
+                if (contentToBeShared.PostIds.IsNullOrEmpty() ||
+                    contentToBeShared.PostIds.Contains(0)) return new List<Share>();
 
-            if (sharedContent.Any()) return sharedContent;
-
+                var sharedContent = await shareHelper.CallSaveNewShares(_context, contentToBeShared);
+                if (sharedContent.Any()) return sharedContent;
+                return new List<Share>();
+            }
             return new List<Share>();
         }
+
+
     }
 }

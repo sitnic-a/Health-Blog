@@ -18,6 +18,12 @@ namespace MentalHealthBlog.API.Controllers
             _shareService = shareService;
         }
 
+        [HttpGet("link/{shareId}")]
+        public async Task<List<PostDto>> ShareByLink(string shareId)
+        {
+            return await _shareService.ShareByLink(shareId);
+        }
+
         [HttpPost]
         public async Task<List<Share>> ShareContent(ShareContentDto contentToBeShared)
         {

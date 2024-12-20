@@ -1,20 +1,20 @@
-import { useDispatch, useSelector } from "react-redux";
-import { getPeopleToShareContentWith } from "../../utils/helper-methods/methods";
+import { useDispatch, useSelector } from 'react-redux'
+import { getPeopleToShareContentWith } from '../../utils/helper-methods/methods'
 
 import {
   shareContent,
   revokeShareContent,
-} from "../../redux-toolkit/features/shareExportSlice";
+} from '../../redux-toolkit/features/shareExportSlice'
 
-import { openShareModal } from "../../redux-toolkit/features/modalSlice";
-import { ExpertsToShareContentWith } from "./ExpertsToShareContentWith";
+import { openShareModal } from '../../redux-toolkit/features/modalSlice'
+import { ExpertsToShareContentWith } from './ExpertsToShareContentWith'
 
-import { IoRemoveCircleOutline } from "react-icons/io5";
+import { IoRemoveCircleOutline } from 'react-icons/io5'
 
 export const ShareModal = () => {
-  let dispatch = useDispatch();
-  let { isShareOpen } = useSelector((store) => store.modal);
-  let { postsToExport } = useSelector((store) => store.shareExport);
+  let dispatch = useDispatch()
+  let { isShareOpen } = useSelector((store) => store.modal)
+  let { postsToExport } = useSelector((store) => store.shareExport)
 
   return (
     postsToExport.length > 0 &&
@@ -24,11 +24,11 @@ export const ShareModal = () => {
           <span
             className="share-export-close-modal-btn"
             onClick={() => {
-              dispatch(openShareModal(!isShareOpen));
+              dispatch(openShareModal(!isShareOpen))
               let shareExportContainer = document.querySelector(
-                ".share-export-container"
-              );
-              shareExportContainer.style.display = "flex";
+                '.share-export-container'
+              )
+              shareExportContainer.style.display = 'flex'
             }}
           >
             X
@@ -43,13 +43,13 @@ export const ShareModal = () => {
                   <span
                     className="revoke-btn"
                     onClick={() => {
-                      dispatch(revokeShareContent(post.id));
+                      dispatch(revokeShareContent(post.id))
                     }}
                   >
                     <IoRemoveCircleOutline />
                   </span>
                 </div>
-              );
+              )
             })}
           </div>
 
@@ -59,24 +59,43 @@ export const ShareModal = () => {
               className="share-btn"
               type="button"
               onClick={() => {
-                let postsToShareIds = postsToExport.map((post) => post.id);
-                let shareContentWithIds = getPeopleToShareContentWith();
+                let postsToShareIds = postsToExport.map((post) => post.id)
+                let shareContentWithIds = getPeopleToShareContentWith()
 
                 let contentToBeShared = {
                   postIds: postsToShareIds,
                   sharedWithIds: shareContentWithIds,
                   sharedAt: new Date(),
-                };
+                  shareLink: false,
+                }
 
-                dispatch(shareContent(contentToBeShared));
-                // dispatch(openShareModal(!isShareOpen))
+                dispatch(shareContent(contentToBeShared))
               }}
             >
               Share content
+            </button>
+            <button
+              className="share-btn"
+              type="button"
+              onClick={() => {
+                let postsToShareIds = postsToExport.map((post) => post.id)
+                let shareContentWithIds = getPeopleToShareContentWith()
+
+                let contentToBeShared = {
+                  postIds: postsToShareIds,
+                  sharedWithIds: shareContentWithIds,
+                  sharedAt: new Date(),
+                  shareLink: true,
+                }
+
+                dispatch(shareContent(contentToBeShared))
+              }}
+            >
+              Share link
             </button>
           </div>
         </section>
       </section>
     )
-  );
-};
+  )
+}
