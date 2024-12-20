@@ -1,8 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getSelectedPosts } from "../../utils/helper-methods/methods";
+import {
+  getSelectedPosts,
+  getPeopleToShareContentWith,
+} from "../../utils/helper-methods/methods";
 import { setIsSharingExporting } from "./postSlice";
 import { application } from "../../../application";
-import { act } from "react";
 import { toast } from "react-toastify";
 
 let initialState = {
@@ -11,6 +13,9 @@ let initialState = {
   exportedDocument: null,
   isExported: false,
   possibleToShareWith: [],
+  isSharingLink: false,
+  shareLinkUrl: "",
+  isLoading: false,
 };
 
 export const exportToPDF = createAsyncThunk(
@@ -30,11 +35,19 @@ export const exportToPDF = createAsyncThunk(
   }
 );
 
+export const shareByLink = createAsyncThunk(
+  "share/link/{shareId}",
+  async (shareGuid) => {
+    let url = `${application.application_url}/share/link/${shareGuid}`;
+    let request = await fetch(url);
+    let response = await request.json();
+    return response;
+  }
+);
+
 export const shareContent = createAsyncThunk(
   "/share",
   async (contentToBeShared) => {
-    console.log("Content to be shared ", contentToBeShared);
-
     let request = await fetch(`${application.application_url}/share`, {
       method: "POST",
       body: JSON.stringify(contentToBeShared),
@@ -115,6 +128,20 @@ let shareExportSlice = createSlice({
         position: "bottom-right",
       });
     },
+
+    checkVisibilityOfShareContentAction: () => {
+      if (getPeopleToShareContentWith().length > 0) {
+        let shareBtn = document.querySelector(".share-btn-experts");
+        shareBtn.style.display = "inline-block";
+      } else {
+        let shareBtn = document.querySelector(".share-btn-experts");
+        shareBtn.style.display = "none";
+      }
+    },
+
+    resetShareLinkUrl: (state) => {
+      state.shareLinkUrl = "";
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -133,11 +160,36 @@ let shareExportSlice = createSlice({
         console.log("FAILED");
       })
 
+      .addCase(shareByLink.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(shareByLink.fulfilled, (state, action) => {
+        state.postsToShare = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(shareByLink.rejected, (state, action) => {
+        state.isLoading = false;
+      })
+
       //Share
       .addCase(shareContent.pending, (state, action) => {
         console.log("Pending...");
+        let contentToBeShared = action.meta.arg;
+
+        if (contentToBeShared.shareLink === true) {
+          state.isSharingLink = true;
+        }
       })
       .addCase(shareContent.fulfilled, (state, action) => {
+        if (state.isSharingLink === true) {
+          let sharedContent = action.payload;
+          if (sharedContent.length > 0) {
+            let shareId = sharedContent[0].shareGuid;
+            let host = window.location.origin;
+            state.shareLinkUrl = `${host}/share/link/${shareId}`;
+          }
+        }
+
         toast.success("You have succesfully shared content!", {
           autoClose: 2000,
           position: "bottom-right",
@@ -165,7 +217,11 @@ let shareExportSlice = createSlice({
   },
 });
 
-export const { setOverlayForShareExport, revokeShareContent } =
-  shareExportSlice.actions;
+export const {
+  setOverlayForShareExport,
+  revokeShareContent,
+  checkVisibilityOfShareContentAction,
+  resetShareLinkUrl,
+} = shareExportSlice.actions;
 
 export default shareExportSlice.reducer;

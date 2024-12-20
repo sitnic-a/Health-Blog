@@ -1,20 +1,28 @@
-import { useDispatch, useSelector } from 'react-redux'
-import { getPeopleToShareContentWith } from '../../utils/helper-methods/methods'
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getPeopleToShareContentWith,
+  prepareContentToShare,
+} from "../../utils/helper-methods/methods";
 
 import {
   shareContent,
   revokeShareContent,
-} from '../../redux-toolkit/features/shareExportSlice'
+  resetShareLinkUrl,
+} from "../../redux-toolkit/features/shareExportSlice";
 
-import { openShareModal } from '../../redux-toolkit/features/modalSlice'
-import { ExpertsToShareContentWith } from './ExpertsToShareContentWith'
+import {
+  openShareModal,
+  openShareViaLink,
+} from "../../redux-toolkit/features/modalSlice";
+import { ExpertsToShareContentWith } from "./ExpertsToShareContentWith";
 
-import { IoRemoveCircleOutline } from 'react-icons/io5'
+import { IoRemoveCircleOutline } from "react-icons/io5";
+import { ShareViaLink } from "./ShareViaLink";
 
 export const ShareModal = () => {
-  let dispatch = useDispatch()
-  let { isShareOpen } = useSelector((store) => store.modal)
-  let { postsToExport } = useSelector((store) => store.shareExport)
+  let dispatch = useDispatch();
+  let { isShareOpen, isShareViaLinkOpen } = useSelector((store) => store.modal);
+  let { postsToExport } = useSelector((store) => store.shareExport);
 
   return (
     postsToExport.length > 0 &&
@@ -24,11 +32,13 @@ export const ShareModal = () => {
           <span
             className="share-export-close-modal-btn"
             onClick={() => {
-              dispatch(openShareModal(!isShareOpen))
+              dispatch(openShareModal(!isShareOpen));
+              dispatch(openShareViaLink(!isShareViaLinkOpen));
+              dispatch(resetShareLinkUrl());
               let shareExportContainer = document.querySelector(
-                '.share-export-container'
-              )
-              shareExportContainer.style.display = 'flex'
+                ".share-export-container"
+              );
+              shareExportContainer.style.display = "flex";
             }}
           >
             X
@@ -43,59 +53,59 @@ export const ShareModal = () => {
                   <span
                     className="revoke-btn"
                     onClick={() => {
-                      dispatch(revokeShareContent(post.id))
+                      dispatch(revokeShareContent(post.id));
                     }}
                   >
                     <IoRemoveCircleOutline />
                   </span>
                 </div>
-              )
+              );
             })}
           </div>
 
           <div className="share-people-container">
             <ExpertsToShareContentWith />
             <button
-              className="share-btn"
+              className="share-btn share-btn-experts"
               type="button"
-              onClick={() => {
-                let postsToShareIds = postsToExport.map((post) => post.id)
-                let shareContentWithIds = getPeopleToShareContentWith()
-
-                let contentToBeShared = {
-                  postIds: postsToShareIds,
-                  sharedWithIds: shareContentWithIds,
-                  sharedAt: new Date(),
+              onClick={async () => {
+                let paramsForPreparation = {
+                  postsToExport,
                   shareLink: false,
-                }
+                };
 
-                dispatch(shareContent(contentToBeShared))
+                let contentToBeShared =
+                  prepareContentToShare(paramsForPreparation);
+                console.log("CTBS ", contentToBeShared);
+
+                dispatch(shareContent(contentToBeShared));
               }}
             >
               Share content
             </button>
+
             <button
               className="share-btn"
               type="button"
               onClick={() => {
-                let postsToShareIds = postsToExport.map((post) => post.id)
-                let shareContentWithIds = getPeopleToShareContentWith()
-
-                let contentToBeShared = {
-                  postIds: postsToShareIds,
-                  sharedWithIds: shareContentWithIds,
-                  sharedAt: new Date(),
+                let paramsForPreparation = {
+                  postsToExport,
                   shareLink: true,
-                }
+                };
 
-                dispatch(shareContent(contentToBeShared))
+                let contentToBeShared =
+                  prepareContentToShare(paramsForPreparation);
+
+                dispatch(shareContent(contentToBeShared));
+                dispatch(openShareViaLink(!isShareViaLinkOpen));
               }}
             >
-              Share link
+              Share via link
             </button>
+            <ShareViaLink />
           </div>
         </section>
       </section>
     )
-  )
-}
+  );
+};
