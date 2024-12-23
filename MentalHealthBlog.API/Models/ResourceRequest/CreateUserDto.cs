@@ -5,17 +5,29 @@
         public string Username { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public List<int> Roles { get; set; }
+        public CreateMentalHealthExpertDto? MentalHealthExpert { get; set; }
 
         public CreateUserDto()
         {
             Roles = new List<int>();
         }
 
-        public CreateUserDto(string username, string password, List<int> roles)
+        public CreateUserDto(string username, string password, List<int> roles, CreateMentalHealthExpertDto? mentalHealthExpertDto)
         {
             Username = username;
             Password = password;
             Roles = roles;
+            if (mentalHealthExpertDto is not null)
+            {
+                MentalHealthExpert = new CreateMentalHealthExpertDto(
+                    mentalHealthExpertDto.FirstName,
+                    mentalHealthExpertDto.LastName,
+                    mentalHealthExpertDto.Organization,
+                    mentalHealthExpertDto.PhoneNumber,
+                    mentalHealthExpertDto?.Email,
+                    mentalHealthExpertDto?.PhotoAsFile,
+                    mentalHealthExpertDto?.PhotoAsPath);
+            }
         }
     }
 }

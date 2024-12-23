@@ -17,6 +17,7 @@ namespace MentalHealthBlogAPI.Data
         public DbSet<Tag> Tags { get; set; }
         public DbSet<PostTag> PostsTags { get; set; }
         public DbSet<Share> Shares { get; set; }
+        public DbSet<MentalHealthExpert> MentalHealthExperts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -61,6 +62,9 @@ namespace MentalHealthBlogAPI.Data
                 new { Id = 6, Name = "Karijera"},
                 new { Id = 7, Name = "Novac"}
                 );
+
+            modelBuilder.Entity<MentalHealthExpert>().HasNoKey();
+
         }
     }
 }
