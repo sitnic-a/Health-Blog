@@ -87,9 +87,26 @@ export const Login = () => {
                 <br />
                 <input id="password" type="password" name="password" />
               </div>
-              <div>
-                <Link to={"/register"}>Create an account</Link>
-              </div>
+              <section id="register-main-container">
+                <div className="register-regular-user-main-container">
+                  <Link
+                    className="register-link regular-user-link"
+                    to={"/register"}
+                    state={{ regularUser: true }}
+                  >
+                    Create an account
+                  </Link>
+                </div>
+                <div className="register-mental-health-expert-main-container">
+                  <Link
+                    className="register-link mental-health-expert-link"
+                    to={"/register"}
+                    state={{ mentalHealthExpert: true }}
+                  >
+                    Register as mental health expert
+                  </Link>
+                </div>
+              </section>
               <button type="submit" id="login-container-button">
                 Login
               </button>
