@@ -1,70 +1,81 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import { register, getDbRoles } from "./redux-toolkit/features/userSlice";
-import useFetchLocationState from "./custom/hooks/useFetchLocationState";
-import { db_roles } from "./enums/roles";
+import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
+import { register, getDbRoles } from './redux-toolkit/features/userSlice'
+import useFetchLocationState from './custom/hooks/useFetchLocationState'
+import { db_roles } from './enums/roles'
 
 export const Register = () => {
-  let { dbRoles } = useSelector((store) => store.user);
-  let { mentalHealthExpert } = useFetchLocationState();
+  let { dbRoles } = useSelector((store) => store.user)
+  let { isMentalHealthExpert } = useFetchLocationState()
 
   useEffect(() => {
-    dispatch(getDbRoles());
-  }, []);
+    dispatch(getDbRoles())
+  }, [])
 
-  let navigate = useNavigate();
-  let dispatch = useDispatch();
+  let navigate = useNavigate()
+  let dispatch = useDispatch()
 
   let registerUser = async (e) => {
-    e.preventDefault();
-    let roles = [];
+    e.preventDefault()
+    let roles = []
+    let mentalHealthExpert
     let selectedRoles = document.querySelectorAll(
       'input[type="checkbox"]:checked'
-    );
+    )
 
-    if (mentalHealthExpert === true) {
-      roles.push(db_roles.PSYCHOLOGIST);
+    let form = new FormData(e.target)
+    let formData = form.entries()
+    let data = Object.fromEntries([...formData])
+
+    if (isMentalHealthExpert === true) {
+      roles.push(db_roles.PSYCHOLOGIST)
+      let prefix = 'mental-health-expert'
+      mentalHealthExpert = {
+        firstName: data[`${prefix}-first-name`],
+        lastName: data[`${prefix}-last-name`],
+        organization: data[`${prefix}-organization`],
+        phoneNumber: data[`${prefix}-phone-number`],
+        email: data[`${prefix}-email`],
+      }
     } else {
       selectedRoles.forEach((role) => {
-        roles.push(role.value);
-      });
+        roles.push(role.value)
+      })
     }
-
-    let form = new FormData(e.target);
-    let formData = form.entries();
-    let data = Object.fromEntries([...formData]);
 
     let newUser = {
       username: data.username,
       password: data.password,
       roles: roles,
-    };
+      mentalHealthExpert,
+      isMentalHealthExpert,
+    }
 
     if (
-      newUser.username === "" ||
+      newUser.username === '' ||
       newUser.username === null ||
-      newUser.password === "" ||
+      newUser.password === '' ||
       newUser.password === null ||
       newUser.roles.length <= 0
     ) {
-      alert("Fields are required!");
-      toast.error("Invalid fields! Try again", {
+      alert('Fields are required!')
+      toast.error('Invalid fields! Try again', {
         autoClose: 1500,
-        position: "bottom-right",
-      });
-      return;
+        position: 'bottom-right',
+      })
+      return
     }
 
     dispatch(register(newUser)).then((response) => {
-      let statusCode = response.payload.statusCode;
+      let statusCode = response.payload.statusCode
       if (statusCode === 201) {
-        navigate("/login");
+        navigate('/login')
       }
-    });
-  };
+    })
+  }
 
   return (
     <section className="register-container">
@@ -84,7 +95,7 @@ export const Register = () => {
           <label htmlFor="register-password">Password:</label>
           <input type="password" name="password" id="register-password" />
         </div>
-        {mentalHealthExpert !== true && (
+        {isMentalHealthExpert !== true && (
           <div>
             <label htmlFor="register-roles">User type:</label>
             <br />
@@ -101,12 +112,12 @@ export const Register = () => {
                     <label htmlFor="db-role-name">{role.name}</label>
                     <br />
                   </div>
-                );
+                )
               })}
           </div>
         )}
 
-        {mentalHealthExpert === true && (
+        {isMentalHealthExpert === true && (
           <div className="mental-health-expert-register-info-main-container">
             <div className="mental-health-expert-register-info name">
               <label htmlFor="mental-health-expert-first-name">
@@ -169,5 +180,5 @@ export const Register = () => {
         <button type="submit">Register</button>
       </form>
     </section>
-  );
-};
+  )
+}
