@@ -15,7 +15,8 @@ namespace MentalHealthBlogAPI.Migrations
                 name: "MentalHealthExperts",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -28,6 +29,7 @@ namespace MentalHealthBlogAPI.Migrations
                 },
                 constraints: table =>
                 {
+                    table.PrimaryKey("PK_MentalHealthExperts", x => x.Id);
                     table.ForeignKey(
                         name: "FK_MentalHealthExperts_Users_UserId",
                         column: x => x.UserId,
@@ -41,35 +43,35 @@ namespace MentalHealthBlogAPI.Migrations
                 keyColumn: "Id",
                 keyValue: 1,
                 column: "CreatedAt",
-                value: new DateTime(2024, 12, 24, 14, 11, 8, 923, DateTimeKind.Local).AddTicks(1239));
+                value: new DateTime(2024, 12, 24, 14, 31, 54, 611, DateTimeKind.Local).AddTicks(3602));
 
             migrationBuilder.UpdateData(
                 table: "Posts",
                 keyColumn: "Id",
                 keyValue: 2,
                 column: "CreatedAt",
-                value: new DateTime(2024, 12, 24, 14, 11, 8, 923, DateTimeKind.Local).AddTicks(1294));
+                value: new DateTime(2024, 12, 24, 14, 31, 54, 611, DateTimeKind.Local).AddTicks(3647));
 
             migrationBuilder.UpdateData(
                 table: "Posts",
                 keyColumn: "Id",
                 keyValue: 3,
                 column: "CreatedAt",
-                value: new DateTime(2024, 12, 24, 14, 11, 8, 923, DateTimeKind.Local).AddTicks(1295));
+                value: new DateTime(2024, 12, 24, 14, 31, 54, 611, DateTimeKind.Local).AddTicks(3649));
 
             migrationBuilder.UpdateData(
                 table: "Posts",
                 keyColumn: "Id",
                 keyValue: 4,
                 column: "CreatedAt",
-                value: new DateTime(2024, 12, 24, 14, 11, 8, 923, DateTimeKind.Local).AddTicks(1297));
+                value: new DateTime(2024, 12, 24, 14, 31, 54, 611, DateTimeKind.Local).AddTicks(3650));
 
             migrationBuilder.UpdateData(
                 table: "Posts",
                 keyColumn: "Id",
                 keyValue: 5,
                 column: "CreatedAt",
-                value: new DateTime(2024, 12, 24, 14, 11, 8, 923, DateTimeKind.Local).AddTicks(1298));
+                value: new DateTime(2024, 12, 24, 14, 31, 54, 611, DateTimeKind.Local).AddTicks(3652));
 
             migrationBuilder.CreateIndex(
                 name: "IX_MentalHealthExperts_UserId",

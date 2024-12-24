@@ -24,15 +24,18 @@ namespace MentalHealthBlogAPI.Migrations
 
             modelBuilder.Entity("MentalHealthBlog.API.Models.MentalHealthExpert", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
 
                     b.Property<bool>("IsApproved")
                         .HasColumnType("bit");
@@ -57,6 +60,8 @@ namespace MentalHealthBlogAPI.Migrations
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
@@ -249,7 +254,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 1,
                             Content = "Content_T01",
-                            CreatedAt = new DateTime(2024, 12, 24, 14, 11, 8, 923, DateTimeKind.Local).AddTicks(1239),
+                            CreatedAt = new DateTime(2024, 12, 24, 14, 31, 54, 611, DateTimeKind.Local).AddTicks(3602),
                             Title = "Title_01",
                             UserId = 1
                         },
@@ -257,7 +262,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 2,
                             Content = "Content_T02",
-                            CreatedAt = new DateTime(2024, 12, 24, 14, 11, 8, 923, DateTimeKind.Local).AddTicks(1294),
+                            CreatedAt = new DateTime(2024, 12, 24, 14, 31, 54, 611, DateTimeKind.Local).AddTicks(3647),
                             Title = "Title_02",
                             UserId = 1
                         },
@@ -265,7 +270,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 3,
                             Content = "Content_T03",
-                            CreatedAt = new DateTime(2024, 12, 24, 14, 11, 8, 923, DateTimeKind.Local).AddTicks(1295),
+                            CreatedAt = new DateTime(2024, 12, 24, 14, 31, 54, 611, DateTimeKind.Local).AddTicks(3649),
                             Title = "Title_03",
                             UserId = 2
                         },
@@ -273,7 +278,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 4,
                             Content = "Content_T04",
-                            CreatedAt = new DateTime(2024, 12, 24, 14, 11, 8, 923, DateTimeKind.Local).AddTicks(1297),
+                            CreatedAt = new DateTime(2024, 12, 24, 14, 31, 54, 611, DateTimeKind.Local).AddTicks(3650),
                             Title = "Title_04",
                             UserId = 2
                         },
@@ -281,7 +286,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 5,
                             Content = "Content_T05",
-                            CreatedAt = new DateTime(2024, 12, 24, 14, 11, 8, 923, DateTimeKind.Local).AddTicks(1298),
+                            CreatedAt = new DateTime(2024, 12, 24, 14, 31, 54, 611, DateTimeKind.Local).AddTicks(3652),
                             Title = "Title_05",
                             UserId = 1
                         });

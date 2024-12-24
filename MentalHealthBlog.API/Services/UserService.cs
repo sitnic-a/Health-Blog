@@ -1,4 +1,5 @@
-﻿using MentalHealthBlog.API.ExtensionMethods.ExtensionUserClass;
+﻿using AutoMapper;
+using MentalHealthBlog.API.ExtensionMethods.ExtensionUserClass;
 using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
@@ -26,6 +27,7 @@ namespace MentalHealthBlog.API.Services
         private readonly ILogger<UserService> _userLoggerService;
         private readonly AppSettings _optionsAppSettings;
         private readonly IOptions<AppSettings> _options;
+        private readonly IMapper _mapper;
         private readonly DataContext _context;
         private const int __KEYSIZE__ = 128;
         private const int __ITERATIONS = 350000;
@@ -33,11 +35,12 @@ namespace MentalHealthBlog.API.Services
         private User user = new();
 
 
-        public UserService(DataContext context, IOptions<AppSettings> options, ILogger<UserService> userLoggerService)
+        public UserService(DataContext context, IOptions<AppSettings> options, IMapper mapper, ILogger<UserService> userLoggerService)
         {
             _context = context;
             _optionsAppSettings = options.Value;
             _options = options;
+            _mapper = mapper;
             _userLoggerService = userLoggerService;
         }
         public async Task<Response> Register(CreateUserDto newUserRequest)
@@ -69,8 +72,19 @@ namespace MentalHealthBlog.API.Services
                 {
                     await _context.UserRoles.AddAsync(new UserRole(user.Id, int.Parse(role.ToString())));
                 }
-                await _context.SaveChangesAsync();
 
+                if (newUserRequest.IsMentalHealthExpert == true)
+                {
+                    var newMentalHealthExpert = _mapper.Map<MentalHealthExpert>(newUserRequest.MentalHealthExpert);
+                    if (newMentalHealthExpert is null)
+                    {
+                        _userLoggerService.LogWarning($"REGISTER: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", newMentalHealthExpert);
+                        return new Response(new object(), StatusCodes.Status400BadRequest, UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString());
+                    }
+                    newMentalHealthExpert.UserId = user.Id;
+                    await _context.MentalHealthExperts.AddAsync(newMentalHealthExpert);
+                }
+                await _context.SaveChangesAsync();
                 _userLoggerService.LogInformation($"REGISTER: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", user);
                 return new Response(new SignedUserDto(user.Id, user.Username), StatusCodes.Status201Created, UserServiceLogTypes.USER_SUCCESFULL.ToString());
 

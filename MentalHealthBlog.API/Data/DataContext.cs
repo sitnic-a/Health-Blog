@@ -62,9 +62,6 @@ namespace MentalHealthBlogAPI.Data
                 new { Id = 6, Name = "Karijera"},
                 new { Id = 7, Name = "Novac"}
                 );
-
-            modelBuilder.Entity<MentalHealthExpert>().HasNoKey();
-
         }
     }
 }
