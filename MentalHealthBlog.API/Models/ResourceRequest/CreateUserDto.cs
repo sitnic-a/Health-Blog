@@ -7,13 +7,15 @@
         public List<int> Roles { get; set; }
         public bool?IsMentalHealthExpert { get; set; }
         public CreateMentalHealthExpertDto? MentalHealthExpert { get; set; }
+        public IFormFile? Photo { get; set; }
+
 
         public CreateUserDto()
         {
             Roles = new List<int>();
         }
 
-        public CreateUserDto(string username, string password, List<int> roles,bool?isMentalHealthExpert=null, CreateMentalHealthExpertDto? mentalHealthExpertDto=null)
+        public CreateUserDto(string username, string password, List<int> roles,bool?isMentalHealthExpert=null, CreateMentalHealthExpertDto? mentalHealthExpertDto=null, IFormFile? photo =null)
         {
             Username = username;
             Password = password;
@@ -27,9 +29,10 @@
                     mentalHealthExpertDto.LastName,
                     mentalHealthExpertDto.Organization,
                     mentalHealthExpertDto.PhoneNumber,
-                    mentalHealthExpertDto?.Email,
-                    mentalHealthExpertDto?.Photo);
+                    mentalHealthExpertDto?.Email);
             }
+
+            Photo = photo;
         }
     }
 }

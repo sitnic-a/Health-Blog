@@ -18,7 +18,7 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<Response> Register(CreateUserDto newUserRequest)
+        public async Task<Response> Register([FromForm] CreateUserDto newUserRequest)
         {
             return await _userService.Register(newUserRequest);
         }
