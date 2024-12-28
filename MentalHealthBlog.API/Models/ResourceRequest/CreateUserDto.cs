@@ -28,8 +28,7 @@
                     mentalHealthExpertDto.Organization,
                     mentalHealthExpertDto.PhoneNumber,
                     mentalHealthExpertDto?.Email,
-                    mentalHealthExpertDto?.PhotoAsFile,
-                    mentalHealthExpertDto?.PhotoAsPath);
+                    mentalHealthExpertDto?.Photo);
             }
         }
     }
