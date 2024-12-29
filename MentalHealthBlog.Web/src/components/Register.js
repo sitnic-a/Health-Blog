@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useDispatch, useSelector } from 'react-redux'
@@ -6,12 +6,11 @@ import { toast } from 'react-toastify'
 import { register, getDbRoles } from './redux-toolkit/features/userSlice'
 import useFetchLocationState from './custom/hooks/useFetchLocationState'
 import { db_roles } from './enums/roles'
+import { previewImage } from './utils/helper-methods/methods'
 
 export const Register = () => {
   let { dbRoles } = useSelector((store) => store.user)
   let { isMentalHealthExpert } = useFetchLocationState()
-  let [photo, setPhoto] = useState()
-  let fileReader = new FileReader()
 
   useEffect(() => {
     dispatch(getDbRoles())
@@ -215,23 +214,9 @@ export const Register = () => {
                 <label htmlFor="mental-health-expert-photo">Photo:</label>
                 <input
                   onChange={(e) => {
-                    setPhoto(e.target.files[0])
-                    console.log('Photo ', photo)
-
-                    let imgPreview = document.getElementById(
-                      'mental-health-expert-register-photo-main-container'
-                    )
-                    const files = e.target.files[0]
-                    if (files) {
-                      const fileReader = new FileReader()
-                      fileReader.readAsDataURL(files)
-                      fileReader.addEventListener('load', function () {
-                        // imgPreview.style.display = 'block'
-                        imgPreview.innerHTML =
-                          '<img src="' + this.result + '" />'
-                      })
-                    }
+                    previewImage(e.target.files[0])
                   }}
+                  accept="image/*"
                   multiple
                   id="register-mental-health-expert-photo"
                   name="mental-health-expert-photo"

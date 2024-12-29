@@ -98,6 +98,7 @@ main {
 
 .mental-health-expert-register-info-main-container {
   display: flex;
+  align-items: center;
 }
 
 #mental-health-expert-register-photo-main-container > img {
