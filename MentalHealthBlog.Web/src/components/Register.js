@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useDispatch, useSelector } from 'react-redux'
@@ -10,6 +10,8 @@ import { db_roles } from './enums/roles'
 export const Register = () => {
   let { dbRoles } = useSelector((store) => store.user)
   let { isMentalHealthExpert } = useFetchLocationState()
+  let [photo, setPhoto] = useState()
+  let fileReader = new FileReader()
 
   useEffect(() => {
     dispatch(getDbRoles())
@@ -150,71 +152,97 @@ export const Register = () => {
 
         {isMentalHealthExpert === true && (
           <div className="mental-health-expert-register-info-main-container">
-            <div className="mental-health-expert-register-info name">
-              <label htmlFor="mental-health-expert-first-name">
-                First name:
-              </label>
-              <input
-                id="register-mental-health-expert-first-name"
-                name="mental-health-expert-first-name"
-                type="text"
-                placeholder="Enter your first name: "
-              ></input>
-            </div>
+            <div className="mental-health-expert-register-info-container">
+              <div className="mental-health-expert-register-info name">
+                <label htmlFor="mental-health-expert-first-name">
+                  First name:
+                </label>
+                <input
+                  id="register-mental-health-expert-first-name"
+                  name="mental-health-expert-first-name"
+                  type="text"
+                  placeholder="Enter your first name: "
+                ></input>
+              </div>
 
-            <div className="mental-health-expert-register-info last-name">
-              <label htmlFor="mental-health-expert-last-name">Last name:</label>
-              <input
-                id="register-mental-health-expert-last-name"
-                name="mental-health-expert-last-name"
-                type="text"
-                placeholder="Enter your last name: "
-              ></input>
-            </div>
+              <div className="mental-health-expert-register-info last-name">
+                <label htmlFor="mental-health-expert-last-name">
+                  Last name:
+                </label>
+                <input
+                  id="register-mental-health-expert-last-name"
+                  name="mental-health-expert-last-name"
+                  type="text"
+                  placeholder="Enter your last name: "
+                ></input>
+              </div>
 
-            <div className="mental-health-expert-register-info organization">
-              <label htmlFor="mental-health-expert-organization">
-                Organization:
-              </label>
-              <input
-                id="register-mental-health-expert-organization"
-                name="mental-health-expert-organization"
-                type="text"
-                placeholder="Enter your organization: "
-              ></input>
-            </div>
+              <div className="mental-health-expert-register-info organization">
+                <label htmlFor="mental-health-expert-organization">
+                  Organization:
+                </label>
+                <input
+                  id="register-mental-health-expert-organization"
+                  name="mental-health-expert-organization"
+                  type="text"
+                  placeholder="Enter your organization: "
+                ></input>
+              </div>
 
-            <div className="mental-health-expert-register-info phone-number">
-              <label htmlFor="mental-health-expert-phone-number">
-                Phone number:
-              </label>
-              <input
-                id="register-mental-health-expert-phone-number"
-                name="mental-health-expert-phone-number"
-                type="text"
-                placeholder="Enter your phone number: "
-              ></input>
-            </div>
+              <div className="mental-health-expert-register-info phone-number">
+                <label htmlFor="mental-health-expert-phone-number">
+                  Phone number:
+                </label>
+                <input
+                  id="register-mental-health-expert-phone-number"
+                  name="mental-health-expert-phone-number"
+                  type="text"
+                  placeholder="Enter your phone number: "
+                ></input>
+              </div>
 
-            <div className="mental-health-expert-register-info email">
-              <label htmlFor="mental-health-expert-email">Email:</label>
-              <input
-                id="register-mental-health-expert-email"
-                name="mental-health-expert-email"
-                type="email"
-                placeholder="Enter your email: "
-              ></input>
-            </div>
+              <div className="mental-health-expert-register-info email">
+                <label htmlFor="mental-health-expert-email">Email:</label>
+                <input
+                  id="register-mental-health-expert-email"
+                  name="mental-health-expert-email"
+                  type="email"
+                  placeholder="Enter your email: "
+                ></input>
+              </div>
 
-            <div className="mental-health-expert-register-info photo">
-              <label htmlFor="mental-health-expert-photo">Photo:</label>
-              <input
-                multiple
-                id="register-mental-health-expert-photo"
-                name="mental-health-expert-photo"
-                type="file"
-              ></input>
+              <div className="mental-health-expert-register-info photo">
+                <label htmlFor="mental-health-expert-photo">Photo:</label>
+                <input
+                  onChange={(e) => {
+                    setPhoto(e.target.files[0])
+                    console.log('Photo ', photo)
+
+                    let imgPreview = document.getElementById(
+                      'mental-health-expert-register-photo-main-container'
+                    )
+                    const files = e.target.files[0]
+                    if (files) {
+                      const fileReader = new FileReader()
+                      fileReader.readAsDataURL(files)
+                      fileReader.addEventListener('load', function () {
+                        // imgPreview.style.display = 'block'
+                        imgPreview.innerHTML =
+                          '<img src="' + this.result + '" />'
+                      })
+                    }
+                  }}
+                  multiple
+                  id="register-mental-health-expert-photo"
+                  name="mental-health-expert-photo"
+                  type="file"
+                ></input>
+              </div>
             </div>
+            <div
+              id="mental-health-expert-register-photo-main-container"
+              className="mental-health-expert-register-photo-main-container"
+            ></div>
           </div>
         )}
 

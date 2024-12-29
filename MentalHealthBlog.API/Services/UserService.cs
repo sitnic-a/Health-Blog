@@ -81,6 +81,15 @@ namespace MentalHealthBlog.API.Services
                         _userLoggerService.LogWarning($"REGISTER: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", newMentalHealthExpert);
                         return new Response(new object(), StatusCodes.Status400BadRequest, UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString());
                     }
+                    if (newUserRequest.Photo != null)
+                    {
+                        MemoryStream memoryStream = new MemoryStream();
+                        await memoryStream.CopyToAsync(memoryStream);
+                        var photoAsFile = memoryStream.ToArray();
+                        var photoAsString = Convert.ToBase64String(photoAsFile);
+                        newMentalHealthExpert.PhotoAsFile = photoAsFile;
+                        newMentalHealthExpert.PhotoAsPath = photoAsString;
+                    }
                     newMentalHealthExpert.UserId = user.Id;
                     await _context.MentalHealthExperts.AddAsync(newMentalHealthExpert);
                 }
