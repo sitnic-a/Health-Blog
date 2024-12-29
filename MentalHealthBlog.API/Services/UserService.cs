@@ -84,7 +84,7 @@ namespace MentalHealthBlog.API.Services
                     if (newUserRequest.Photo != null)
                     {
                         MemoryStream memoryStream = new MemoryStream();
-                        await memoryStream.CopyToAsync(memoryStream);
+                        await newUserRequest.Photo.CopyToAsync(memoryStream);
                         var photoAsFile = memoryStream.ToArray();
                         var photoAsString = Convert.ToBase64String(photoAsFile);
                         newMentalHealthExpert.PhotoAsFile = photoAsFile;
