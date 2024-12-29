@@ -1,11 +1,11 @@
-import { useDispatch, useSelector } from "react-redux";
-import { checkVisibilityOfShareContentAction } from "../../redux-toolkit/features/shareExportSlice";
-import defaultAvatar from "../../../images/default-avatar.png";
-import { LiaSearchSolid } from "react-icons/lia";
+import { useDispatch, useSelector } from 'react-redux'
+import { checkVisibilityOfShareContentAction } from '../../redux-toolkit/features/shareExportSlice'
+import defaultAvatar from '../../../images/default-avatar.png'
+import { LiaSearchSolid } from 'react-icons/lia'
 
 export const ExpertsToShareContentWith = () => {
-  let dispatch = useDispatch();
-  let { possibleToShareWith } = useSelector((store) => store.shareExport);
+  let dispatch = useDispatch()
+  let { possibleToShareWith } = useSelector((store) => store.shareExport)
   return (
     <>
       <div className="search-people">
@@ -23,6 +23,8 @@ export const ExpertsToShareContentWith = () => {
       <div className="people-to-give-permission-container">
         <div className="people-to-give-permission">
           {possibleToShareWith.map((personToShareWith) => {
+            let base64Photo = `data:image/png;base64,${personToShareWith.photoAsFile}`
+
             return (
               <div className="person-to-give-permission-container">
                 <div className="permission-action">
@@ -31,7 +33,7 @@ export const ExpertsToShareContentWith = () => {
                     name="person-to-give-permission-checkbox"
                     id="person-to-give-permission-checkbox"
                     onClick={() => {
-                      dispatch(checkVisibilityOfShareContentAction());
+                      dispatch(checkVisibilityOfShareContentAction())
                     }}
                   />
                 </div>
@@ -40,7 +42,11 @@ export const ExpertsToShareContentWith = () => {
                   <div className="person-to-give-permission-img-container">
                     <img
                       className="person-to-give-permission-img"
-                      src={defaultAvatar}
+                      src={
+                        personToShareWith.photoAsFile
+                          ? base64Photo
+                          : defaultAvatar
+                      }
                       alt="Person photo"
                     />
                   </div>
@@ -79,7 +85,7 @@ export const ExpertsToShareContentWith = () => {
                   </div>
                 </div>
               </div>
-            );
+            )
           })}
         </div>
         <p className="people-to-give-permission-count">
@@ -87,5 +93,5 @@ export const ExpertsToShareContentWith = () => {
         </p>
       </div>
     </>
-  );
-};
+  )
+}
