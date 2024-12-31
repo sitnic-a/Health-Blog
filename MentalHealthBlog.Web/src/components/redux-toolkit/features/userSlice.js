@@ -41,10 +41,8 @@ export const register = createAsyncThunk('/user/register', async (user) => {
   let url = `${application.application_url}/user/register`
   let request = await fetch(url, {
     method: 'POST',
-    body: JSON.stringify(user),
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    body: user,
+    headers: {},
   })
   let response = await request.json()
   return response

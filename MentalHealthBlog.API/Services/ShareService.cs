@@ -29,7 +29,7 @@ namespace MentalHealthBlog.API.Services
                 .Include(p => p.SharedPost)
                 .Where(s => s.ShareGuid == shareId).ToListAsync();
 
-            var convertHelper = new PostHelper(_context); 
+            var convertHelper = new PostHelper(_context);
 
             var sharedContent = new List<PostDto>();
 
@@ -50,7 +50,10 @@ namespace MentalHealthBlog.API.Services
         {
             try
             {
-                var dbUsers = await _context.Users.ToListAsync();
+                var dbMentalHealthExperts = await _context.MentalHealthExperts
+                    .Include(u => u.User)
+                    .ToListAsync();
+
                 var possibleToShareWith = new List<UserDto>();
 
                 var expertsAndRelatives = _context.UserRoles
@@ -59,25 +62,31 @@ namespace MentalHealthBlog.API.Services
                     .Where(ur => ur.Role.Name != _ADMIN_ROLE && ur.Role.Name != _USER_ROLE)
                     .GroupBy(ur => ur.UserId);
 
-                if (expertsAndRelatives.IsNullOrEmpty()) return new List<UserDto>();
+                if (dbMentalHealthExperts.IsNullOrEmpty() || expertsAndRelatives.IsNullOrEmpty()) return new List<UserDto>();
 
                 var dbUserRoles = new List<Role>();
-                User user = new User();
+                MentalHealthExpert mentalHealthExpert = new MentalHealthExpert();
 
                 foreach (var item in expertsAndRelatives)
                 {
-                    dbUserRoles = item.Select(r => new Role(r.RoleId, r.Role.Name)).ToList();
-                    user = dbUsers.FirstOrDefault(r => r.Id == item.Key);
 
-                    if (user == null || dbUserRoles.IsNullOrEmpty()) return new List<UserDto>();
+                    dbUserRoles = item.Select(r => new Role(r.RoleId, r.Role.Name)).ToList();
+                    mentalHealthExpert = dbMentalHealthExperts.FirstOrDefault(u => u.User.Id == item.Key);
+
+                    if (mentalHealthExpert == null ||
+                        mentalHealthExpert.User == null ||
+                        dbUserRoles.IsNullOrEmpty()) return new List<UserDto>();
 
                     possibleToShareWith.Add(new UserDto
                     {
-                        Id = user.Id,
-                        Username = user.Username,
+                        Id = mentalHealthExpert.Id,
+                        Username = mentalHealthExpert.User.Username,
                         Roles = dbUserRoles,
-                        PhoneNumber = "000-111-222",
-                        Organization = "Organization gmBH"
+                        PhoneNumber = mentalHealthExpert.PhoneNumber,
+                        Organization = mentalHealthExpert.Organization,
+                        Email = mentalHealthExpert.Email,
+                        PhotoAsFile = mentalHealthExpert.PhotoAsFile,
+                        PhotoAsPath = mentalHealthExpert.PhotoAsPath
                     });
                 }
                 return possibleToShareWith;
