@@ -79,7 +79,7 @@ namespace MentalHealthBlog.API.Services
 
                     possibleToShareWith.Add(new UserDto
                     {
-                        Id = mentalHealthExpert.Id,
+                        Id = mentalHealthExpert.UserId,
                         Username = mentalHealthExpert.User.Username,
                         Roles = dbUserRoles,
                         PhoneNumber = mentalHealthExpert.PhoneNumber,
