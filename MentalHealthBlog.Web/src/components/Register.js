@@ -34,40 +34,56 @@ export const Register = () => {
       })
     }
 
+    let sendData
     let username = document.getElementById('register-username').value
     let password = document.getElementById('register-password').value
-    let mentalHealthExpertFirstName = document.getElementById(
-      'register-mental-health-expert-first-name'
-    ).value
-    let mentalHealthExpertLastName = document.getElementById(
-      'register-mental-health-expert-last-name'
-    ).value
-    let mentalHealthExpertOrganization = document.getElementById(
-      'register-mental-health-expert-organization'
-    ).value
-    let mentalHealthExpertPhoneNumber = document.getElementById(
-      'register-mental-health-expert-phone-number'
-    ).value
-    let mentalHealthExpertEmail = document.getElementById(
-      'register-mental-health-expert-email'
-    ).value
-    let mentalHealthExpertPhoto = document.getElementById(
-      'register-mental-health-expert-photo'
-    ).files[0]
+    let mentalHealthExpertFirstName
+    let mentalHealthExpertLastName
+    let mentalHealthExpertOrganization
+    let mentalHealthExpertPhoneNumber
+    let mentalHealthExpertEmail
+    let mentalHealthExpertPhoto
 
-    let sendData = {
+    sendData = {
       username: username,
       password: password,
       roles: roles,
-      isMentalHealthExpert: isMentalHealthExpert,
-      mentalHealthExpert: {
-        firstName: mentalHealthExpertFirstName,
-        lastName: mentalHealthExpertLastName,
-        organization: mentalHealthExpertOrganization,
-        phoneNumber: mentalHealthExpertPhoneNumber,
-        email: mentalHealthExpertEmail,
-      },
-      photo: mentalHealthExpertPhoto,
+    }
+
+    if (isMentalHealthExpert === true) {
+      mentalHealthExpertFirstName = document.getElementById(
+        'register-mental-health-expert-first-name'
+      ).value
+      mentalHealthExpertLastName = document.getElementById(
+        'register-mental-health-expert-last-name'
+      ).value
+      mentalHealthExpertOrganization = document.getElementById(
+        'register-mental-health-expert-organization'
+      ).value
+      mentalHealthExpertPhoneNumber = document.getElementById(
+        'register-mental-health-expert-phone-number'
+      ).value
+      mentalHealthExpertEmail = document.getElementById(
+        'register-mental-health-expert-email'
+      ).value
+      mentalHealthExpertPhoto = document.getElementById(
+        'register-mental-health-expert-photo'
+      ).files[0]
+
+      sendData = {
+        username: username,
+        password: password,
+        roles: roles,
+        isMentalHealthExpert: isMentalHealthExpert,
+        mentalHealthExpert: {
+          firstName: mentalHealthExpertFirstName,
+          lastName: mentalHealthExpertLastName,
+          organization: mentalHealthExpertOrganization,
+          phoneNumber: mentalHealthExpertPhoneNumber,
+          email: mentalHealthExpertEmail,
+        },
+        photo: mentalHealthExpertPhoto,
+      }
     }
 
     let form = new FormData()
