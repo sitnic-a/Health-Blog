@@ -13,6 +13,7 @@ import { store } from './components/redux-toolkit/store'
 import { Provider } from 'react-redux'
 import { Dashboard } from './pages/Dashboard'
 import { SharedPosts } from './components/SharedPosts'
+import { NewMentalHealthExpertRequests } from './components/administrator-dashboard/NewMentalHealthExpertRequests'
 
 function App() {
   return (
@@ -28,6 +29,10 @@ function App() {
             <Route
               path="/share/link/:shareGuid"
               element={<SharedPosts />}
+            ></Route>
+            <Route
+              path="/requests"
+              element={<NewMentalHealthExpertRequests />}
             ></Route>
           </Routes>
           <ToastContainer />
