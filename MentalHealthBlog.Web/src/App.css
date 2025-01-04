@@ -118,6 +118,72 @@ main {
   padding: 1rem;
 }
 
+#admin-dashboard-main-container {
+  border: 1px solid red;
+  max-width: 1440px;
+  min-height: 95vh;
+  margin: 0.5rem;
+  /* margin-top: 2rem; -- space for navbar (settings, logout, etc...)  */
+}
+
+.admin-dashboard-container {
+  margin: 0.5rem;
+  border: 1px solid red;
+}
+
+.admin-dashboard-actions-container {
+  margin: 0.2rem;
+  border: 1px solid green;
+}
+
+.admin-dashboard-link-request {
+  display: inline-block;
+  max-width: 250px;
+  width: 100%;
+  padding-block: 6.5rem;
+  text-align: center;
+  margin: 0.4rem;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.admin-dashboard-request-container {
+  font-size: 1.2rem;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-dashboard-mental-health-experts-requests > svg {
+  font-size: 2.1rem;
+}
+
+.admin-link-mental-health-experts-requests {
+  background: #72a32a;
+  color: #fff;
+  transition: 200ms;
+}
+
+.admin-link-mental-health-experts-requests:hover {
+  background: #fff;
+  color: #72a32a;
+  border: 1px solid #72a32a;
+}
+
+.admin-link-users {
+  background: #b3d24b;
+  color: #fff;
+  transition: 200ms;
+}
+
+.admin-link-users:hover {
+  background: #fff;
+  color: #b3d24b;
+  border: 1px solid #b3d24b;
+}
+
 .quote-container {
   /* border: 1px solid red; */
   text-align: center;

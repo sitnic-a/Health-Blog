@@ -14,6 +14,7 @@ import { Provider } from 'react-redux'
 import { Dashboard } from './pages/Dashboard'
 import { SharedPosts } from './components/SharedPosts'
 import { NewMentalHealthExpertRequests } from './components/administrator-dashboard/NewMentalHealthExpertRequests'
+import { ApproveMentalHealthExpert } from './components/administrator-dashboard/ApproveMentalHealthExpert'
 
 function App() {
   return (
@@ -33,6 +34,10 @@ function App() {
             <Route
               path="/requests"
               element={<NewMentalHealthExpertRequests />}
+            ></Route>
+            <Route
+              path="/requests/approve/expert"
+              element={<ApproveMentalHealthExpert />}
             ></Route>
           </Routes>
           <ToastContainer />
