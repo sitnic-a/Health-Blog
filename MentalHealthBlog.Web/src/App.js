@@ -13,8 +13,8 @@ import { store } from './components/redux-toolkit/store'
 import { Provider } from 'react-redux'
 import { Dashboard } from './pages/Dashboard'
 import { SharedPosts } from './components/SharedPosts'
-import { NewMentalHealthExpertRequests } from './components/administrator-dashboard/NewMentalHealthExpertRequests'
-import { ApproveMentalHealthExpert } from './components/administrator-dashboard/ApproveMentalHealthExpert'
+import { Requests } from './components/administrator-dashboard/sections/requests/Requests'
+import { ApproveMentalHealthExpert } from './components/administrator-dashboard/sections/requests/ApproveMentalHealthExpert'
 
 function App() {
   return (
@@ -31,12 +31,9 @@ function App() {
               path="/share/link/:shareGuid"
               element={<SharedPosts />}
             ></Route>
+            <Route path="/requests" element={<Requests />}></Route>
             <Route
-              path="/requests"
-              element={<NewMentalHealthExpertRequests />}
-            ></Route>
-            <Route
-              path="/requests/approve/expert"
+              path="/requests/new-experts"
               element={<ApproveMentalHealthExpert />}
             ></Route>
           </Routes>

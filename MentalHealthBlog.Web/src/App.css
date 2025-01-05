@@ -119,7 +119,7 @@ main {
 }
 
 #admin-dashboard-main-container {
-  border: 1px solid red;
+  /* border: 1px solid red; */
   max-width: 1440px;
   min-height: 95vh;
   margin: 0.5rem;
@@ -128,12 +128,12 @@ main {
 
 .admin-dashboard-container {
   margin: 0.5rem;
-  border: 1px solid red;
+  /* border: 1px solid red; */
 }
 
 .admin-dashboard-actions-container {
   margin: 0.2rem;
-  border: 1px solid green;
+  /* border: 1px solid green; */
 }
 
 .admin-dashboard-link-request {
@@ -182,6 +182,64 @@ main {
   background: #fff;
   color: #b3d24b;
   border: 1px solid #b3d24b;
+}
+
+.requests-main-container {
+  margin-top: 4rem;
+  cursor: pointer;
+  /* border: 1px solid red; */
+}
+
+.new-mental-health-expert-request-link {
+  display: block;
+  max-width: 230px;
+  padding: 1rem;
+  background: #8d8d3b;
+  text-align: center;
+  position: relative;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 0.4rem;
+}
+
+.new-mental-health-expert-request-link:hover {
+  box-shadow: 2px 5px 10px #c37e6b;
+}
+
+.new-mental-health-expert-request-container-notification {
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  padding: 0 0.4rem;
+  border-radius: 360px;
+  background: rgb(255, 0, 0);
+  font-weight: 500;
+  color: #fff;
+}
+
+.new-mental-health-expert-request-container {
+  max-width: 200px;
+  margin: auto;
+  padding-block: 0.5rem;
+  cursor: pointer;
+}
+
+.new-mental-health-expert-request-container-label {
+  font-weight: 800;
+  font-size: 1.4rem;
+  letter-spacing: 0.08rem;
+  cursor: pointer !important;
+  color: #fff;
+}
+
+.new-mental-health-expert-request-container-info {
+  font-size: 0.92rem;
+  cursor: pointer !important;
+  color: #fff;
+}
+
+.new-mental-health-expert-request-container-number-of-registered {
+  margin-left: 5px;
 }
 
 .quote-container {
