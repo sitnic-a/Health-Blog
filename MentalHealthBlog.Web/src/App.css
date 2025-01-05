@@ -1,4 +1,4 @@
-input[type='text'],
+input[type="text"],
 textarea {
   border: 1px solid #a8a8a8;
   outline: none;
@@ -242,6 +242,149 @@ main {
   margin-left: 5px;
 }
 
+.new-experts-main-container {
+  max-width: 1440px;
+  /* border: 1px solid red; */
+}
+
+.new-expert-profile-container {
+  max-width: 280px;
+  border: 1px dashed #c4c4c4;
+  padding: 0.3rem;
+  border-radius: 0.3rem;
+}
+
+.new-expert-profile-basic-info {
+  max-width: 200px;
+  margin: auto;
+}
+
+.new-expert-profile-img-wrapper {
+  max-width: 180px;
+  margin-top: 10px;
+  margin: auto;
+}
+
+.new-expert-profile-img {
+  max-width: 100%;
+  /* margin: auto; */
+}
+
+.new-expert-profile-wrapper {
+  max-width: 200px;
+  margin: auto;
+  /* background: yellow; */
+}
+
+.new-expert-profile-username {
+  margin: 0;
+  text-align: center;
+  font-size: 0.75rem;
+  text-decoration: underline;
+}
+
+.new-expert-profile-bio {
+  max-width: 200px;
+  margin: 14px auto;
+}
+
+.new-expert-profile-bio-info {
+  margin: 6px 0px;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.new-expert-profile-bio-info span {
+  font-weight: 300;
+  font-size: 1.1rem;
+}
+
+.new-expert-profile-phone-number {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.new-expert-profile-email {
+  display: flex;
+  align-items: end;
+  gap: 6px;
+}
+
+.new-expert-profile-bio-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 7px;
+  max-width: 280px;
+  width: 100%;
+  /* background: red; */
+}
+
+.new-expert-profile-action {
+  max-width: 136.5px;
+  width: 100%;
+  /* background-color: yellow; */
+}
+
+.new-expert-profile-action-btn {
+  max-width: 136.5px;
+  width: 100%;
+  background: none;
+  outline: none;
+  border: none;
+  padding-block: 0.3rem;
+  border-radius: 0.5rem;
+  transition: 200ms;
+  cursor: pointer;
+}
+
+.new-expert-profile-accept-btn:hover {
+  background: #deecdb;
+  border: 1px solid #deecdb;
+  .new-expert-profile-action-accept-icon {
+    background: none;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 30px;
+  }
+}
+
+.new-expert-profile-reject-btn:hover {
+  background: #fbbbba;
+  border: 1px solid #fbbbba;
+  .new-expert-profile-action-accept-icon {
+    background: none;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 30px;
+  }
+}
+
+.new-expert-profile-accept-btn {
+  border: 1px solid #54f434;
+}
+
+.new-expert-profile-reject-btn {
+  border: 1px solid #ff1713;
+}
+
+.new-expert-profile-action-icon {
+  font-size: 1.5rem;
+}
+
+.new-expert-profile-action-accept-icon {
+  background: none;
+  fill: none;
+  stroke: #54f434;
+  stroke-width: 12px;
+}
+
+.new-expert-profile-action-reject-icon {
+  fill: none;
+  stroke: #ff1713;
+  stroke-width: 1px;
+}
+
 .quote-container {
   /* border: 1px solid red; */
   text-align: center;
@@ -431,7 +574,7 @@ dialog::backdrop {
   }
 }
 
-button[data-action-update='update'] {
+button[data-action-update="update"] {
   position: absolute;
   background: none;
   outline: none;
@@ -440,7 +583,7 @@ button[data-action-update='update'] {
   left: 0.3rem;
 }
 
-button[data-action-delete='delete'] {
+button[data-action-delete="delete"] {
   position: absolute;
   background: none;
   outline: none;
@@ -464,7 +607,7 @@ button[data-action-delete='delete'] {
   border-radius: 0.4rem;
 }
 
-input[name='share-export'] {
+input[name="share-export"] {
   position: absolute;
   top: 0.45rem;
   width: 20px;
@@ -476,7 +619,7 @@ input[name='share-export'] {
   display: block;
 }
 
-button[data-action-add='add'] {
+button[data-action-add="add"] {
   background: none;
   outline: none;
   border: none;
@@ -485,7 +628,7 @@ button[data-action-add='add'] {
   background: #e1e1e1;
 }
 
-button[data-action-add='filter'] {
+button[data-action-add="filter"] {
   background: none;
   outline: none;
   border: none;
@@ -495,7 +638,7 @@ button[data-action-add='filter'] {
   width: 5.3rem;
 }
 
-button[data-action-select='select'] {
+button[data-action-select="select"] {
   background: none;
   outline: none;
   border: none;
@@ -586,27 +729,27 @@ div[data-tooltip-title]:after {
   padding: 0.3rem;
 }
 
-button[data-action-update='update']:hover {
+button[data-action-update="update"]:hover {
   cursor: pointer;
 }
 
-button[data-action-delete='delete']:hover {
+button[data-action-delete="delete"]:hover {
   cursor: pointer;
 }
 
-button[data-action-add='add']:hover,
-button[data-action-add='filter']:hover {
+button[data-action-add="add"]:hover,
+button[data-action-add="filter"]:hover {
   background: #f4f4f4;
   cursor: pointer;
 }
 
-button[data-action-add='add'] svg {
+button[data-action-add="add"] svg {
   margin-right: 2rem;
 }
 
-button[data-action-update='update'] svg,
-button[data-action-delete='delete'] svg,
-button[data-action-add='add'] svg {
+button[data-action-update="update"] svg,
+button[data-action-delete="delete"] svg,
+button[data-action-add="add"] svg {
   transform: scale(1.8);
   color: #000;
 }
@@ -846,7 +989,7 @@ button[data-action-add='add'] svg {
   height: 15px;
 }
 
-input[name='person-to-give-permission-checkbox'] {
+input[name="person-to-give-permission-checkbox"] {
   width: 19px;
   height: 19px;
   border-radius: 0px;
@@ -1002,7 +1145,7 @@ input[name='person-to-give-permission-checkbox'] {
 }
 
 .es-gmail-container > span > svg:hover {
-  fill: url('#es-gmail-container-gradient');
+  fill: url("#es-gmail-container-gradient");
 }
 
 .share-via-link-url-main-container {
@@ -1244,7 +1387,7 @@ input[name='person-to-give-permission-checkbox'] {
   font-size: 0.8rem;
 }
 
-select[name='filter-by-month'] {
+select[name="filter-by-month"] {
   margin-left: 0.5rem;
   max-width: 10rem;
   height: 1.8rem;
@@ -1254,7 +1397,7 @@ select[name='filter-by-month'] {
 }
 
 @media (width<322px) {
-  select[name='filter-by-month'] {
+  select[name="filter-by-month"] {
     margin: 0rem;
   }
 }
@@ -1310,7 +1453,7 @@ select[name='filter-by-month'] {
 .post-date p {
   font-size: 0.8em;
   color: #920d0d;
-  font-family: 'serif';
+  font-family: "serif";
   font-weight: 550;
   margin-block: 0;
   text-decoration: none;
@@ -1377,7 +1520,7 @@ pre:hover {
   overflow-y: scroll;
 }
 
-.post-by-id-container-edit input[name='title'] {
+.post-by-id-container-edit input[name="title"] {
   margin-inline: 2rem;
   border: none;
   border-bottom: 1px solid #e1e1e1;
@@ -1387,7 +1530,7 @@ pre:hover {
   border-radius: 3px;
 }
 
-.post-by-id-container-edit input[name='title']:focus-within {
+.post-by-id-container-edit input[name="title"]:focus-within {
   border: 1px solid rgb(188, 188, 253);
 }
 
