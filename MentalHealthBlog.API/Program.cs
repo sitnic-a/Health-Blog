@@ -124,7 +124,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("localPolicy");
-app.MapHub<AdminHub>("rt-new-request");
+app.MapHub<AdminHub>("api/rt-new-request");
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
