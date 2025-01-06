@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "/login",
   "dependencies": {
+    "@microsoft/signalr": "^7.0.14",
     "@reduxjs/toolkit": "^2.1.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
