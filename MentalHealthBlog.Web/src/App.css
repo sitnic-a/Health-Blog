@@ -314,7 +314,7 @@ main {
 
 .new-expert-profile-email {
   display: flex;
-  align-items: end;
+  align-items: center;
   gap: 6px;
 }
 
