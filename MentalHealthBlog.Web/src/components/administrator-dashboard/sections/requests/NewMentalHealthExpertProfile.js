@@ -1,11 +1,12 @@
-import { FaCheck } from "react-icons/fa";
-import { HiX } from "react-icons/hi";
-import { MdEmail } from "react-icons/md";
-import { MdLocalPhone } from "react-icons/md";
+import { FaCheck } from 'react-icons/fa'
+import { HiX } from 'react-icons/hi'
+import { MdEmail } from 'react-icons/md'
+import { MdLocalPhone } from 'react-icons/md'
 
 export const NewMentalHealthExpertProfile = (props) => {
-  let expert = props.expert;
-  let base64Photo = `data:image/png;base64,${expert.photoAsFile}`;
+  let expert = props.expert
+  let base64Photo = `data:image/png;base64,${expert.photoAsFile}`
+
   return (
     expert && (
       <div className="new-expert-profile-container">
@@ -74,5 +75,5 @@ export const NewMentalHealthExpertProfile = (props) => {
         </div>
       </div>
     )
-  );
-};
+  )
+}

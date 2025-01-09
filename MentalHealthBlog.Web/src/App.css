@@ -243,12 +243,17 @@ main {
 }
 
 .new-experts-main-container {
+  margin-top: 1rem;
   max-width: 1440px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
   /* border: 1px solid red; */
 }
 
 .new-expert-profile-container {
   max-width: 280px;
+  width: 100%;
   border: 1px dashed #c4c4c4;
   padding: 0.3rem;
   border-radius: 0.3rem;
@@ -267,6 +272,8 @@ main {
 
 .new-expert-profile-img {
   max-width: 100%;
+  height: 180px;
+
   /* margin: auto; */
 }
 
@@ -307,7 +314,7 @@ main {
 
 .new-expert-profile-email {
   display: flex;
-  align-items: end;
+  align-items: center;
   gap: 6px;
 }
 

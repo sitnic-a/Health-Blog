@@ -19,7 +19,6 @@ export const RequestNewExperts = () => {
     newlyRegisteredMentalHealthExperts && (
       <Link
         to={"/requests/new-experts"}
-        state={{ newlyRegisteredMentalHealthExperts }}
         className="request-link new-mental-health-expert-request-link"
       >
         {numberOfNewlyRegisteredMentalHealthExperts && (
