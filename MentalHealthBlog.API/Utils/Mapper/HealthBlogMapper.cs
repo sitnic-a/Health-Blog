@@ -13,6 +13,7 @@ namespace MentalHealthBlog.API.Utils.Mapper
             CreateMap<Post, CreatePostDto>().ReverseMap();
             CreateMap<Post,PostDto>().ReverseMap();
             CreateMap<IEnumerable<Post>, IEnumerable<Post>>();
+            CreateMap<MentalHealthExpert, MentalHealthExpertDto>().ReverseMap();
             CreateMap<CreateMentalHealthExpertDto, MentalHealthExpert>().ReverseMap();
         }
     }

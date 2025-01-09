@@ -1,4 +1,5 @@
 import useFetchLocationState from '../components/custom/hooks/useFetchLocationState'
+import { AdminDashboard } from './AdminDashboard'
 import { MentalExpertDashboard } from './MentalExpertDashboard'
 import { UserDashboard } from './UserDashboard'
 
@@ -10,7 +11,7 @@ export const Dashboard = () => {
       return <UserDashboard />
     }
     if (loggedUser.roles.some((ur) => ur.name === 'Administrator')) {
-      return <p>Admin page</p>
+      return <AdminDashboard />
     }
     if (
       loggedUser.roles.some(

@@ -7,6 +7,7 @@ using MentalHealthBlog.API.Utils;
 using Microsoft.OpenApi.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using MentalHealthBlog.API.Utils.SignalR;
 
 #pragma warning disable 8604
 
@@ -52,7 +53,8 @@ builder.Services.AddSwaggerGen(opt =>
 
 //Automapper
 builder.Services.AddAutoMapper(typeof(Program));
-
+//SignalR
+builder.Services.AddSignalR();
 
 //CORS registration
 builder.Services.AddCors(options =>
@@ -76,6 +78,7 @@ builder.Services.AddScoped<IStatisticsService, StatisticsService>();
 builder.Services.AddScoped<IExportService, ExportService>();
 builder.Services.AddScoped<IShareService, ShareService>();
 builder.Services.AddScoped<IMentalExpertService, MentalExpertService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
 
 
 builder.Services.AddDbContext<DataContext>(options =>
@@ -121,6 +124,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("localPolicy");
+app.MapHub<AdminHub>("rt-new-request");
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
