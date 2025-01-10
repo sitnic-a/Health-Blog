@@ -1,4 +1,5 @@
-﻿using MentalHealthBlog.API.Models.ResourceResponse;
+﻿using MentalHealthBlog.API.Models.ResourceRequest;
+using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,6 +20,12 @@ namespace MentalHealthBlog.API.Controllers
         public async Task<Response> GetNewRegisteredExperts()
         {
             return await _adminService.GetNewRegisteredExperts();
+        }
+
+        [HttpPatch("approval")]
+        public async Task<Response> SetRegisteredExpertStatus(RegisterExpertPatchDto patchDto)
+        {
+            return await _adminService.SetRegisteredExpertStatus(patchDto);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
 using Microsoft.EntityFrameworkCore;
@@ -61,6 +62,33 @@ namespace MentalHealthBlog.API.Services
             {
                 _adminLoggerService.LogError($"NEW-REQUEST: {AdminServiceLogTypes.ERROR}", e.Message);
                 return new Response(e.Data, StatusCodes.Status400BadRequest,AdminServiceLogTypes.ERROR.ToString());
+            }
+        }
+
+        public async Task<Response> SetRegisteredExpertStatus(RegisterExpertPatchDto patchDto)
+        {
+            try
+            {
+                if (patchDto == null)
+                {
+                    return new Response(new object(), StatusCodes.Status404NotFound, AdminServiceLogTypes.NOT_FOUND.ToString());
+                }
+
+                var dbMentalHealthExpert = await _context.MentalHealthExperts
+                    .FirstOrDefaultAsync(u => u.UserId == patchDto.MentalHealthExpertId);
+
+                if (dbMentalHealthExpert is not null)
+                {
+                    dbMentalHealthExpert.IsApproved = patchDto.Approval;
+                    await _context.SaveChangesAsync();
+                    return new Response(dbMentalHealthExpert, StatusCodes.Status200OK, AdminServiceLogTypes.SUCCESS.ToString());
+                }
+                return new Response(new object(), StatusCodes.Status404NotFound, AdminServiceLogTypes.NOT_FOUND.ToString());
+
+            }
+            catch (Exception e)
+            {
+                return new Response(e.Data, StatusCodes.Status500InternalServerError, e.Message);
             }
         }
     }
