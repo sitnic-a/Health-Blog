@@ -51,7 +51,7 @@ export const NewMentalHealthExpertProfile = (props) => {
             </p>
           </div>
         </div>
-        <NewMentalHealthExpertProfileActions />
+        <NewMentalHealthExpertProfileActions expert={expert} />
       </div>
     )
   )

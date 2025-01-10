@@ -81,7 +81,8 @@ namespace MentalHealthBlog.API.Services
                 {
                     dbMentalHealthExpert.IsApproved = patchDto.Approval;
                     await _context.SaveChangesAsync();
-                    return new Response(dbMentalHealthExpert, StatusCodes.Status200OK, AdminServiceLogTypes.SUCCESS.ToString());
+                    var dbMentalHealthExperts = await GetNewRegisteredExperts();
+                    return new Response(dbMentalHealthExperts, StatusCodes.Status200OK, AdminServiceLogTypes.SUCCESS.ToString());
                 }
                 return new Response(new object(), StatusCodes.Status404NotFound, AdminServiceLogTypes.NOT_FOUND.ToString());
 
