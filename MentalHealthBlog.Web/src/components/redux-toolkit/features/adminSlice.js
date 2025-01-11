@@ -70,6 +70,46 @@ let adminSlice = createSlice({
         console.log('Approval: Rejected')
       })
   },
+  reducers: {
+    displayProfilesContainer: () => {
+      let statusActionsContainer = document.querySelector(
+        '.new-experts-status-actions-container'
+      )
+      let profilesContainer = document.querySelector(
+        '.new-experts-main-profiles-container'
+      )
+      let profileContainer = document.querySelector(
+        '.new-expert-profile-container'
+      )
+      let statusHamburger = document.querySelector(
+        '.new-experts-status-hamburger'
+      )
+      if (window.screen.width <= 500) {
+        profilesContainer.style.display = 'flex'
+        profilesContainer.style.maxWidth = '1440px'
+        profileContainer.style.margin = 'auto'
+        statusActionsContainer.style.display = 'none'
+        statusHamburger.style.display = 'block'
+      }
+    },
+    displayStatusActionsContainer: () => {
+      let statusActionsContainer = document.querySelector(
+        '.new-experts-status-actions-container'
+      )
+      let profilesContainer = document.querySelector(
+        '.new-experts-main-profiles-container'
+      )
+      let statusHamburger = document.querySelector(
+        '.new-experts-status-hamburger'
+      )
+
+      profilesContainer.style.display = 'none'
+      statusActionsContainer.style.display = 'block'
+      statusHamburger.style.display = 'none'
+    },
+  },
 })
 
+export const { displayProfilesContainer, displayStatusActionsContainer } =
+  adminSlice.actions
 export default adminSlice.reducer
