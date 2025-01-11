@@ -78,7 +78,7 @@ let adminSlice = createSlice({
       let profilesContainer = document.querySelector(
         '.new-experts-main-profiles-container'
       )
-      let profileContainer = document.querySelector(
+      let profileContainer = document.querySelectorAll(
         '.new-expert-profile-container'
       )
       let statusHamburger = document.querySelector(
@@ -87,7 +87,9 @@ let adminSlice = createSlice({
       if (window.screen.width <= 500) {
         profilesContainer.style.display = 'flex'
         profilesContainer.style.maxWidth = '1440px'
-        profileContainer.style.margin = 'auto'
+        profileContainer.forEach((profile) => {
+          profile.style.margin = 'auto'
+        })
         statusActionsContainer.style.display = 'none'
         statusHamburger.style.display = 'block'
       }
