@@ -8,9 +8,17 @@ let initialState = {
 
 export const getNewRegisteredExperts = createAsyncThunk(
   'new-request',
-  async () => {
+  async (query) => {
+    console.log('On Fetch ', query)
+
     let url = `${application.application_url}/admin/new-request`
-    let request = await fetch(url)
+    let request = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(query),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
     let response = await request.json()
     return response
   }

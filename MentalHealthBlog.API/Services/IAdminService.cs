@@ -5,7 +5,7 @@ namespace MentalHealthBlog.API.Services
 {
     public interface IAdminService
     {
-        public Task<Response> GetNewRegisteredExperts();
+        public Task<Response> GetNewRegisteredExperts(SearchExpertDto? query = null);
         public Task<Response> SetRegisteredExpertStatus(RegisterExpertPatchDto patchDto);
     }
 }

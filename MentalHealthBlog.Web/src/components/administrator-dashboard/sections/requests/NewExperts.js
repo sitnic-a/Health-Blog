@@ -4,6 +4,7 @@ import { NewMentalHealthExpertProfile } from './NewMentalHealthExpertProfile'
 import {
   displayProfilesContainer,
   displayStatusActionsContainer,
+  getNewRegisteredExperts,
 } from '../../../redux-toolkit/features/adminSlice'
 export const NewExperts = () => {
   let dispatch = useDispatch()
@@ -26,21 +27,36 @@ export const NewExperts = () => {
           <button
             className="new-experts-status-button rejected"
             type="button"
-            onClick={() => dispatch(displayProfilesContainer())}
+            onClick={() => {
+              let query = {
+                status: false,
+              }
+              dispatch(displayProfilesContainer())
+              dispatch(getNewRegisteredExperts(query))
+            }}
           >
             Rejected
           </button>
           <button
             className="new-experts-status-button approved"
             type="button"
-            onClick={() => dispatch(displayProfilesContainer())}
+            onClick={() => {
+              let query = {
+                status: true,
+              }
+              dispatch(displayProfilesContainer())
+              dispatch(getNewRegisteredExperts(query))
+            }}
           >
             Approved
           </button>
           <button
             className="new-experts-status-button approved"
             type="button"
-            onClick={() => dispatch(displayProfilesContainer())}
+            onClick={() => {
+              dispatch(displayProfilesContainer())
+              dispatch(getNewRegisteredExperts())
+            }}
           >
             Pending
           </button>

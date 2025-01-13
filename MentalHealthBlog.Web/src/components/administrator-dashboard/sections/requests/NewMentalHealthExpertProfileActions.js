@@ -16,7 +16,8 @@ export const NewMentalHealthExpertProfileActions = (props) => {
           onClick={() => {
             let patchDto = {
               mentalHealthExpertId: expert.userId,
-              approval: true,
+              isApproved: true,
+              isRejected: false,
             }
             dispatch(setRegisteredExpertStatus(patchDto)).then(() =>
               getNewRegisteredExperts()
@@ -34,7 +35,8 @@ export const NewMentalHealthExpertProfileActions = (props) => {
           onClick={() => {
             let patchDto = {
               mentalHealthExpertId: expert.userId,
-              approval: false,
+              isApproved: false,
+              isRejected: true,
             }
             dispatch(setRegisteredExpertStatus(patchDto)).then(() =>
               getNewRegisteredExperts()

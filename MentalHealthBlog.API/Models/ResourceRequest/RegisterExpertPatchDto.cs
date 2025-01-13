@@ -3,7 +3,8 @@
     public class RegisterExpertPatchDto
     {
         public int MentalHealthExpertId { get; set; }
-        public bool Approval { get; set; }
+        public bool IsApproved { get; set; }
+        public bool IsRejected { get; set; }
 
         public RegisterExpertPatchDto()
         {

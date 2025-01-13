@@ -16,10 +16,10 @@ namespace MentalHealthBlog.API.Controllers
             _adminService = adminService;
         }
 
-        [HttpGet("new-request")]
-        public async Task<Response> GetNewRegisteredExperts()
+        [HttpPost("new-request")]
+        public async Task<Response> GetNewRegisteredExperts([FromBody] SearchExpertDto? query = null)
         {
-            return await _adminService.GetNewRegisteredExperts();
+            return await _adminService.GetNewRegisteredExperts(query);
         }
 
         [HttpPatch("approval")]

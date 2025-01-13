@@ -27,14 +27,32 @@ namespace MentalHealthBlog.API.Services
             _mapper = mapper;
         }
 
-        public async Task<Response> GetNewRegisteredExperts()
+        public async Task<Response> GetNewRegisteredExperts(SearchExpertDto? query = null)
         {
             try
             {
                 var dbMentalHealthExperts = await _context.MentalHealthExperts
                     .Include(u => u.User)
-                    .Where(mhe => mhe.IsApproved == false)
+                    .Where(mhe => mhe.IsApproved == false && mhe.IsRejected == false)
                     .ToListAsync();
+
+                if (query is not null)
+                {
+                    if (query.Status == true)
+                    {
+                        dbMentalHealthExperts = await _context.MentalHealthExperts
+                            .Include(u => u.User)
+                            .Where(mhe => mhe.IsApproved == true)
+                            .ToListAsync();
+                    }
+                    else if (query.Status == false)
+                    {
+                        dbMentalHealthExperts = await _context.MentalHealthExperts
+                            .Include(u => u.User)
+                            .Where(mhe => mhe.IsRejected == true)
+                            .ToListAsync();
+                    }
+                }
 
                 if (dbMentalHealthExperts.IsNullOrEmpty())
                 {
@@ -56,12 +74,12 @@ namespace MentalHealthBlog.API.Services
                 }
 
                 _adminLoggerService.LogInformation($"NEW-REQUEST: {AdminServiceLogTypes.SUCCESS.ToString()}", mentalHealthExperts);
-                return new Response(mentalHealthExperts,StatusCodes.Status200OK,AdminServiceLogTypes.SUCCESS.ToString());
+                return new Response(mentalHealthExperts, StatusCodes.Status200OK, AdminServiceLogTypes.SUCCESS.ToString());
             }
             catch (Exception e)
             {
                 _adminLoggerService.LogError($"NEW-REQUEST: {AdminServiceLogTypes.ERROR}", e.Message);
-                return new Response(e.Data, StatusCodes.Status400BadRequest,AdminServiceLogTypes.ERROR.ToString());
+                return new Response(e.Data, StatusCodes.Status400BadRequest, AdminServiceLogTypes.ERROR.ToString());
             }
         }
 
@@ -79,7 +97,8 @@ namespace MentalHealthBlog.API.Services
 
                 if (dbMentalHealthExpert is not null)
                 {
-                    dbMentalHealthExpert.IsApproved = patchDto.Approval;
+                    dbMentalHealthExpert.IsApproved = patchDto.IsApproved;
+                    dbMentalHealthExpert.IsRejected= patchDto.IsRejected;
                     await _context.SaveChangesAsync();
                     var dbMentalHealthExperts = await GetNewRegisteredExperts();
                     return new Response(dbMentalHealthExperts, StatusCodes.Status200OK, AdminServiceLogTypes.SUCCESS.ToString());
