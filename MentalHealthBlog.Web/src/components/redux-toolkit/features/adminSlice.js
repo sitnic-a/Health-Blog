@@ -9,8 +9,6 @@ let initialState = {
 export const getNewRegisteredExperts = createAsyncThunk(
   'new-request',
   async (query) => {
-    console.log('On Fetch ', query)
-
     let url = `${application.application_url}/admin/new-request`
     let request = await fetch(url, {
       method: 'POST',
@@ -72,6 +70,7 @@ let adminSlice = createSlice({
 
         let serviceResponseObject =
           action.payload.serviceResponseObject.serviceResponseObject
+
         state.newlyRegisteredMentalHealthExperts = serviceResponseObject
       })
       .addCase(setRegisteredExpertStatus.rejected, (state, action) => {

@@ -3,6 +3,7 @@ import {
   getNewRegisteredExperts,
   setRegisteredExpertStatus,
 } from '../../../redux-toolkit/features/adminSlice'
+import { toast } from 'react-toastify'
 import { FaCheck } from 'react-icons/fa'
 import { HiX } from 'react-icons/hi'
 
@@ -19,9 +20,17 @@ export const NewMentalHealthExpertProfileActions = (props) => {
               isApproved: true,
               isRejected: false,
             }
-            dispatch(setRegisteredExpertStatus(patchDto)).then(() =>
-              dispatch(getNewRegisteredExperts())
-            )
+            dispatch(setRegisteredExpertStatus(patchDto)).then((data) => {
+              console.log('LOGGG ', data)
+
+              if (data.payload.statusCode === 200) {
+                toast.success('Successfully approved mental health expert', {
+                  autoClose: 2000,
+                  position: 'bottom-right',
+                })
+                dispatch(getNewRegisteredExperts())
+              }
+            })
           }}
           className="new-expert-profile-action-btn new-expert-profile-accept-btn"
           type="button"
@@ -38,9 +47,15 @@ export const NewMentalHealthExpertProfileActions = (props) => {
               isApproved: false,
               isRejected: true,
             }
-            dispatch(setRegisteredExpertStatus(patchDto)).then(() =>
-              dispatch(getNewRegisteredExperts())
-            )
+            dispatch(setRegisteredExpertStatus(patchDto)).then((data) => {
+              if (data.payload.statusCode === 200) {
+                toast.success('Successfully rejected mental health expert', {
+                  autoClose: 2000,
+                  position: 'bottom-right',
+                })
+                dispatch(getNewRegisteredExperts())
+              }
+            })
           }}
           className="new-expert-profile-action-btn new-expert-profile-reject-btn"
           type="button"
