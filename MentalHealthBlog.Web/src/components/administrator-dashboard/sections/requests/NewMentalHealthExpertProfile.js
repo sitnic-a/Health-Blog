@@ -51,7 +51,9 @@ export const NewMentalHealthExpertProfile = (props) => {
             </p>
           </div>
         </div>
-        <NewMentalHealthExpertProfileActions expert={expert} />
+        {expert.isApproved == false && expert.isRejected == false && (
+          <NewMentalHealthExpertProfileActions expert={expert} />
+        )}
       </div>
     )
   )

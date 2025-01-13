@@ -20,7 +20,7 @@ export const NewMentalHealthExpertProfileActions = (props) => {
               isRejected: false,
             }
             dispatch(setRegisteredExpertStatus(patchDto)).then(() =>
-              getNewRegisteredExperts()
+              dispatch(getNewRegisteredExperts())
             )
           }}
           className="new-expert-profile-action-btn new-expert-profile-accept-btn"
@@ -39,7 +39,7 @@ export const NewMentalHealthExpertProfileActions = (props) => {
               isRejected: true,
             }
             dispatch(setRegisteredExpertStatus(patchDto)).then(() =>
-              getNewRegisteredExperts()
+              dispatch(getNewRegisteredExperts())
             )
           }}
           className="new-expert-profile-action-btn new-expert-profile-reject-btn"

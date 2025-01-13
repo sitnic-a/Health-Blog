@@ -13,6 +13,8 @@
         public string? Email { get; set; } = string.Empty;
         public byte[]? PhotoAsFile { get; set; }
         public string? PhotoAsPath { get; set; } = string.Empty;
+        public bool IsApproved { get; set; }
+        public bool IsRejected { get; set; }
         public string Username { get; set; }
 
     }

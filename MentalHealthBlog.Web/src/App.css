@@ -242,6 +242,20 @@ main {
   margin-left: 5px;
 }
 
+.new-experts-header {
+  margin-left: 0.5rem;
+  margin-block: 0;
+}
+
+.new-experts-title {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.new-experts-subtitle {
+  margin-block: 0.5rem;
+}
+
 .new-experts-main-container {
   margin-top: 1rem;
   display: flex;
@@ -307,6 +321,10 @@ main {
 }
 
 .new-experts-status-button:hover {
+  background: #f5f5f5;
+}
+
+.new-experts-status-button:focus {
   background: #f5f5f5;
 }
 
