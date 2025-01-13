@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MentalHealthBlogAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250113111838_Field-IsViewed-Bool-Table-MentalHealthExperts")]
-    partial class FieldIsViewedBoolTableMentalHealthExperts
+    [Migration("20250113124736_Field-IsRejected-Table-MentalHealthExperts")]
+    partial class FieldIsRejectedTableMentalHealthExperts
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,7 +43,7 @@ namespace MentalHealthBlogAPI.Migrations
                     b.Property<bool>("IsApproved")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsViewed")
+                    b.Property<bool>("IsRejected")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastName")
@@ -260,7 +260,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 1,
                             Content = "Content_T01",
-                            CreatedAt = new DateTime(2025, 1, 13, 12, 18, 38, 855, DateTimeKind.Local).AddTicks(62),
+                            CreatedAt = new DateTime(2025, 1, 13, 13, 47, 36, 432, DateTimeKind.Local).AddTicks(4806),
                             Title = "Title_01",
                             UserId = 1
                         },
@@ -268,7 +268,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 2,
                             Content = "Content_T02",
-                            CreatedAt = new DateTime(2025, 1, 13, 12, 18, 38, 855, DateTimeKind.Local).AddTicks(117),
+                            CreatedAt = new DateTime(2025, 1, 13, 13, 47, 36, 432, DateTimeKind.Local).AddTicks(4861),
                             Title = "Title_02",
                             UserId = 1
                         },
@@ -276,7 +276,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 3,
                             Content = "Content_T03",
-                            CreatedAt = new DateTime(2025, 1, 13, 12, 18, 38, 855, DateTimeKind.Local).AddTicks(118),
+                            CreatedAt = new DateTime(2025, 1, 13, 13, 47, 36, 432, DateTimeKind.Local).AddTicks(4863),
                             Title = "Title_03",
                             UserId = 2
                         },
@@ -284,7 +284,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 4,
                             Content = "Content_T04",
-                            CreatedAt = new DateTime(2025, 1, 13, 12, 18, 38, 855, DateTimeKind.Local).AddTicks(120),
+                            CreatedAt = new DateTime(2025, 1, 13, 13, 47, 36, 432, DateTimeKind.Local).AddTicks(4864),
                             Title = "Title_04",
                             UserId = 2
                         },
@@ -292,7 +292,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 5,
                             Content = "Content_T05",
-                            CreatedAt = new DateTime(2025, 1, 13, 12, 18, 38, 855, DateTimeKind.Local).AddTicks(121),
+                            CreatedAt = new DateTime(2025, 1, 13, 13, 47, 36, 432, DateTimeKind.Local).AddTicks(4866),
                             Title = "Title_05",
                             UserId = 1
                         });

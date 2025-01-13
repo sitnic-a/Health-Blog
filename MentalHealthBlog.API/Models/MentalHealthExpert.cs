@@ -16,7 +16,7 @@ namespace MentalHealthBlog.API.Models
         public byte[]? PhotoAsFile { get; set; }
         public string? PhotoAsPath { get; set; } = string.Empty;
         public bool IsApproved { get; set; }
-        public bool IsViewed { get; set; }
+        public bool IsRejected { get; set; }
 
         public MentalHealthExpert(){}
 

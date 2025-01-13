@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MentalHealthBlogAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class FieldIsViewedBoolTableMentalHealthExperts : Migration
+    public partial class FieldIsRejectedTableMentalHealthExperts : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<bool>(
-                name: "IsViewed",
+                name: "IsRejected",
                 table: "MentalHealthExperts",
                 type: "bit",
                 nullable: false,
@@ -23,42 +23,42 @@ namespace MentalHealthBlogAPI.Migrations
                 keyColumn: "Id",
                 keyValue: 1,
                 column: "CreatedAt",
-                value: new DateTime(2025, 1, 13, 12, 18, 38, 855, DateTimeKind.Local).AddTicks(62));
+                value: new DateTime(2025, 1, 13, 13, 47, 36, 432, DateTimeKind.Local).AddTicks(4806));
 
             migrationBuilder.UpdateData(
                 table: "Posts",
                 keyColumn: "Id",
                 keyValue: 2,
                 column: "CreatedAt",
-                value: new DateTime(2025, 1, 13, 12, 18, 38, 855, DateTimeKind.Local).AddTicks(117));
+                value: new DateTime(2025, 1, 13, 13, 47, 36, 432, DateTimeKind.Local).AddTicks(4861));
 
             migrationBuilder.UpdateData(
                 table: "Posts",
                 keyColumn: "Id",
                 keyValue: 3,
                 column: "CreatedAt",
-                value: new DateTime(2025, 1, 13, 12, 18, 38, 855, DateTimeKind.Local).AddTicks(118));
+                value: new DateTime(2025, 1, 13, 13, 47, 36, 432, DateTimeKind.Local).AddTicks(4863));
 
             migrationBuilder.UpdateData(
                 table: "Posts",
                 keyColumn: "Id",
                 keyValue: 4,
                 column: "CreatedAt",
-                value: new DateTime(2025, 1, 13, 12, 18, 38, 855, DateTimeKind.Local).AddTicks(120));
+                value: new DateTime(2025, 1, 13, 13, 47, 36, 432, DateTimeKind.Local).AddTicks(4864));
 
             migrationBuilder.UpdateData(
                 table: "Posts",
                 keyColumn: "Id",
                 keyValue: 5,
                 column: "CreatedAt",
-                value: new DateTime(2025, 1, 13, 12, 18, 38, 855, DateTimeKind.Local).AddTicks(121));
+                value: new DateTime(2025, 1, 13, 13, 47, 36, 432, DateTimeKind.Local).AddTicks(4866));
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "IsViewed",
+                name: "IsRejected",
                 table: "MentalHealthExperts");
 
             migrationBuilder.UpdateData(
