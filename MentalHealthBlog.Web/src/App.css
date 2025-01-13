@@ -1120,6 +1120,7 @@ input[name='person-to-give-permission-checkbox'] {
 
 .person-to-give-permission-img {
   max-width: 70px;
+  min-height: 70px;
 }
 
 .person-to-give-permission-basic-information {
