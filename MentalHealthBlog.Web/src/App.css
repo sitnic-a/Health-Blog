@@ -172,13 +172,13 @@ main {
   border: 1px solid #72a32a;
 }
 
-.admin-link-users {
+.admin-link-manage-users {
   background: #b3d24b;
   color: #fff;
   transition: 200ms;
 }
 
-.admin-link-users:hover {
+.admin-link-manage-users:hover {
   background: #fff;
   color: #b3d24b;
   border: 1px solid #b3d24b;
@@ -188,6 +188,32 @@ main {
   margin-top: 4rem;
   cursor: pointer;
   /* border: 1px solid red; */
+}
+
+.main-manage-users-container {
+  max-width: 1440px;
+  padding-bottom: 1rem;
+  background: yellow;
+}
+
+.manage-users-filter-container {
+  display: flex;
+  flex-grow: 1;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.manage-users-select-role-filter {
+  margin-left: 0.4rem;
+  padding: 0.3rem;
+  max-width: 150px;
+}
+
+input[name='manage-users-name-input-filter'] {
+  padding: 0.3rem;
+  max-width: 150px;
 }
 
 .new-mental-health-expert-request-link {

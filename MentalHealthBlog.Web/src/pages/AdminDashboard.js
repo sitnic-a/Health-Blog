@@ -17,8 +17,8 @@ export const AdminDashboard = () => {
           </Link>
 
           <Link
-            className="admin-dashboard-link-request admin-link-users"
-            to={'requests'}
+            className="admin-dashboard-link-request admin-link-manage-users"
+            to={'manage-users'}
           >
             <div className="admin-dashboard-request-container">
               <FaUser />
