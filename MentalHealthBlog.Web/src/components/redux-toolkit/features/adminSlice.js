@@ -2,9 +2,38 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { application } from '../../../application'
 
 let initialState = {
+  dbUsers: [],
   newlyRegisteredMentalHealthExperts: [],
   numberOfNewlyRegisteredMentalHealthExperts: 0,
+  isLoading: false,
+  isSuccessful: false,
+  isFailed: false,
 }
+
+export const getDbUsers = createAsyncThunk('', async (query) => {
+  console.log('Query value ', query)
+  let url = `${application.application_url}/admin`
+
+  if (query.role > 0) {
+    url += `?role=${query.role}`
+    if (query.searchCondition !== '') {
+      url += `&searchCondition=${query.searchCondition}`
+    }
+  } else if (
+    query.searchCondition !== '' &&
+    query.searchCondition !== undefined &&
+    query.searchCondition !== null
+  ) {
+    url += `?searchCondition=${query.searchCondition}`
+  }
+
+  console.log('URL ', url)
+
+  let request = await fetch(url)
+  let response = await request.json()
+
+  return response
+})
 
 export const getNewRegisteredExperts = createAsyncThunk(
   'new-request',
@@ -44,6 +73,21 @@ let adminSlice = createSlice({
   name: 'adminSlice',
   extraReducers: (builder) => {
     builder
+      //Get Users
+      .addCase(getDbUsers.pending, (state, action) => {
+        state.isLoading = true
+      })
+      .addCase(getDbUsers.fulfilled, (state, action) => {
+        let serviceResponseObject = action.payload
+        state.isLoading = false
+        console.log('SSS ', serviceResponseObject)
+
+        // state.dbUsers = serviceResponseObject
+      })
+      .addCase(getDbUsers.rejected, (state, action) => {
+        state.isLoading = false
+      })
+
       //New registered experts
       .addCase(getNewRegisteredExperts.pending, (state, action) => {
         console.log('New-Request: Pending...')

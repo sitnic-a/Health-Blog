@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
+using MentalHealthBlogAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -9,7 +11,7 @@ namespace MentalHealthBlog.API.Services
 {
     enum AdminServiceLogTypes
     {
-        EMPTY_OR_NULL_TABLE_MENTAL_HEALTH_EXPERTS,
+        EMPTY_OR_NULL_TABLE,
         NOT_FOUND,
         SUCCESS,
         ERROR
@@ -25,6 +27,69 @@ namespace MentalHealthBlog.API.Services
             _context = context;
             _adminLoggerService = adminLoggerService;
             _mapper = mapper;
+        }
+
+        public async Task<Response> Get(SearchUserDto? query = null)
+        {
+            try
+            {
+                var users = new List<UserDto>();
+                var user = new UserDto();
+
+                var _dbUsers = await _context.Users
+                    .ToListAsync();
+
+                if (query is not null)
+                {
+
+                }
+
+                if (_dbUsers.IsNullOrEmpty())
+                {
+                    _adminLoggerService.LogWarning($"GET: {AdminServiceLogTypes.EMPTY_OR_NULL_TABLE.ToString()}", _dbUsers);
+                    return new Response(new List<UserDto>(), StatusCodes.Status204NoContent, AdminServiceLogTypes.EMPTY_OR_NULL_TABLE.ToString());
+                }
+
+                foreach (var dbUser in _dbUsers)
+                {
+                    var dbMentalHeathExpert = await _context.MentalHealthExperts
+                        .FirstOrDefaultAsync(u => u.UserId == dbUser.Id);
+                    var dbUserRoles = _context.UserRoles
+                        .Include(r => r.Role)
+                        .Include(u => u.User)
+                        .Select(r => new
+                        {
+                            Id = r.Role.Id,
+                            Name = r.Role.Name,
+                            UserId = r.User.Id,
+                        })
+                        .Where(u => u.UserId == dbUser.Id)    
+                        .ToList();
+
+                    var roles = dbUserRoles.Select(r => new Role(r.Id,r.Name)).ToList();
+                    
+                    if (dbMentalHeathExpert is not null)
+                    {
+                        user = _mapper.Map<UserDto>(dbMentalHeathExpert);
+                        user.Roles = roles;
+                        user.Username = dbUser.Username;
+                        users.Add(user);
+                        continue;
+                    }
+                    user = _mapper.Map<UserDto>(dbUser);
+                    user.Roles = roles;
+                    users.Add(user);
+                    continue;
+                }
+                _adminLoggerService.LogInformation($"{AdminServiceLogTypes.SUCCESS.ToString()}", users);
+                return new Response(users, StatusCodes.Status200OK, AdminServiceLogTypes.SUCCESS.ToString());
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         public async Task<Response> GetNewRegisteredExperts(SearchExpertDto? query = null)
@@ -56,8 +121,8 @@ namespace MentalHealthBlog.API.Services
 
                 if (dbMentalHealthExperts.IsNullOrEmpty())
                 {
-                    _adminLoggerService.LogWarning($"NEW-REQUEST: {AdminServiceLogTypes.EMPTY_OR_NULL_TABLE_MENTAL_HEALTH_EXPERTS.ToString()}", dbMentalHealthExperts);
-                    return new Response(new object(), StatusCodes.Status404NotFound, AdminServiceLogTypes.EMPTY_OR_NULL_TABLE_MENTAL_HEALTH_EXPERTS.ToString());
+                    _adminLoggerService.LogWarning($"NEW-REQUEST: {AdminServiceLogTypes.EMPTY_OR_NULL_TABLE.ToString()}", dbMentalHealthExperts);
+                    return new Response(new object(), StatusCodes.Status404NotFound, AdminServiceLogTypes.EMPTY_OR_NULL_TABLE.ToString());
                 }
                 List<MentalHealthExpertDto> mentalHealthExperts = new List<MentalHealthExpertDto>();
 
@@ -98,7 +163,7 @@ namespace MentalHealthBlog.API.Services
                 if (dbMentalHealthExpert is not null)
                 {
                     dbMentalHealthExpert.IsApproved = patchDto.IsApproved;
-                    dbMentalHealthExpert.IsRejected= patchDto.IsRejected;
+                    dbMentalHealthExpert.IsRejected = patchDto.IsRejected;
                     await _context.SaveChangesAsync();
                     var dbMentalHealthExperts = await GetNewRegisteredExperts();
                     return new Response(dbMentalHealthExperts, StatusCodes.Status200OK, AdminServiceLogTypes.SUCCESS.ToString());
