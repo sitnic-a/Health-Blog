@@ -35,14 +35,11 @@ namespace MentalHealthBlog.API.Services
             {
                 var users = new List<UserDto>();
                 var user = new UserDto();
+                const int __ADMIN_ROLE__ = 1;
+                const int __MENTAL_HEALTH_EXPERT_ROLE = 4;
 
                 var _dbUsers = await _context.Users
                     .ToListAsync();
-
-                if (query is not null)
-                {
-
-                }
 
                 if (_dbUsers.IsNullOrEmpty())
                 {
@@ -54,6 +51,7 @@ namespace MentalHealthBlog.API.Services
                 {
                     var dbMentalHeathExpert = await _context.MentalHealthExperts
                         .FirstOrDefaultAsync(u => u.UserId == dbUser.Id);
+
                     var dbUserRoles = _context.UserRoles
                         .Include(r => r.Role)
                         .Include(u => u.User)
@@ -63,11 +61,16 @@ namespace MentalHealthBlog.API.Services
                             Name = r.Role.Name,
                             UserId = r.User.Id,
                         })
-                        .Where(u => u.UserId == dbUser.Id)    
+                        .Where(u => u.UserId == dbUser.Id)
                         .ToList();
 
-                    var roles = dbUserRoles.Select(r => new Role(r.Id,r.Name)).ToList();
-                    
+                    if (dbUserRoles.Any(ur => ur.Id == __ADMIN_ROLE__))
+                    {
+                        continue;
+                    }
+
+                    var roles = dbUserRoles.Select(r => new Role(r.Id, r.Name)).ToList();
+
                     if (dbMentalHeathExpert is not null)
                     {
                         user = _mapper.Map<UserDto>(dbMentalHeathExpert);
