@@ -46,8 +46,10 @@ namespace MentalHealthBlog.API.Utils.Filtering.Dashboards.Admin
 
                     if (dbMentalHealthExpert != null)
                     {
+                        user.UserId = dbMentalHealthExpert.UserId;
                         user.FirstName = dbMentalHealthExpert.FirstName;
                         user.LastName = dbMentalHealthExpert.LastName;
+                        user.Email = dbMentalHealthExpert.Email;
                         user.Organization = dbMentalHealthExpert.Organization;
                         user.PhoneNumber = dbMentalHealthExpert.PhoneNumber;
                         user.PhotoAsFile = dbMentalHealthExpert.PhotoAsFile;
@@ -71,9 +73,15 @@ namespace MentalHealthBlog.API.Utils.Filtering.Dashboards.Admin
 
             if (!_dbRegularUsers.IsNullOrEmpty())
             {
+                var userHelper = new UserHelper(_context);
+
                 foreach (var dbRegularUser in _dbRegularUsers)
                 {
-                    var user = _mapper.Map<UserDto>(dbRegularUser);
+                    var user = new UserDto();
+                    user.Id = dbRegularUser.UserId;
+                    user.Username = dbRegularUser.User.Username;
+                    var roles = await userHelper.GetUserRolesAsync(user);
+                    user.Roles = roles;
                     users.Add(user);
                 }
             }
@@ -116,6 +124,7 @@ namespace MentalHealthBlog.API.Utils.Filtering.Dashboards.Admin
                                                      .ToListAsync();
 
                 users = await FillMentalHealthExpertUsers(_dbMentalHealthExperts);
+                return !users.IsNullOrEmpty() ? users : new List<UserDto>();
             }
 
             _dbMentalHealthExperts = await _context.MentalHealthExperts.ToListAsync();

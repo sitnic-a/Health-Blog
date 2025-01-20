@@ -25,7 +25,7 @@ namespace MentalHealthBlog.API.Methods
                                             RoleName = ur.Role.Name,
                                             UserId = ur.User.Id,
                                         })
-                                        .Where(ur => ur.UserId == user.UserId)
+                                        .Where(ur => ur.UserId == user.Id || ur.UserId == user.UserId)
                                         .ToListAsync();
 
             var roles = useRoles.Select(r => new Role(r.RoleId, r.RoleName)).ToList();

@@ -40,7 +40,7 @@ namespace MentalHealthBlog.API.Services
                 const int __USER_ROLE__ = 2;
                 const int __MENTAL_HEALTH_EXPERT_ROLE__ = 4;
 
-                if (query?.Role > 0 && !query.SearchCondition.IsNullOrEmpty())
+                if (query?.Role > 0)
                 {
                     if (query.Role == __USER_ROLE__)
                     {
