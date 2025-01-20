@@ -2,6 +2,7 @@
 using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
+using MentalHealthBlog.API.Utils.Filtering.Dashboards.Admin;
 using MentalHealthBlogAPI.Data;
 using MentalHealthBlogAPI.Models;
 using Microsoft.EntityFrameworkCore;
@@ -33,66 +34,47 @@ namespace MentalHealthBlog.API.Services
         {
             try
             {
+                AdminDashboardFilter filter = new AdminDashboardFilter(_context, _mapper);
+
                 var users = new List<UserDto>();
-                var user = new UserDto();
-                const int __ADMIN_ROLE__ = 1;
-                const int __MENTAL_HEALTH_EXPERT_ROLE = 4;
+                const int __USER_ROLE__ = 2;
+                const int __MENTAL_HEALTH_EXPERT_ROLE__ = 4;
 
-                var _dbUsers = await _context.Users
-                    .ToListAsync();
-
-                if (_dbUsers.IsNullOrEmpty())
+                if (query?.Role > 0 && !query.SearchCondition.IsNullOrEmpty())
                 {
-                    _adminLoggerService.LogWarning($"GET: {AdminServiceLogTypes.EMPTY_OR_NULL_TABLE.ToString()}", _dbUsers);
-                    return new Response(new List<UserDto>(), StatusCodes.Status204NoContent, AdminServiceLogTypes.EMPTY_OR_NULL_TABLE.ToString());
-                }
-
-                foreach (var dbUser in _dbUsers)
-                {
-                    var dbMentalHeathExpert = await _context.MentalHealthExperts
-                        .FirstOrDefaultAsync(u => u.UserId == dbUser.Id);
-
-                    var dbUserRoles = _context.UserRoles
-                        .Include(r => r.Role)
-                        .Include(u => u.User)
-                        .Select(r => new
+                    if (query.Role == __USER_ROLE__)
+                    {
+                        users = await filter.CallGetRegularUsers(query);
+                        if (!users.IsNullOrEmpty())
                         {
-                            Id = r.Role.Id,
-                            Name = r.Role.Name,
-                            UserId = r.User.Id,
-                        })
-                        .Where(u => u.UserId == dbUser.Id)
-                        .ToList();
-
-                    if (dbUserRoles.Any(ur => ur.Id == __ADMIN_ROLE__))
-                    {
-                        continue;
+                            return new Response(users, StatusCodes.Status200OK, AdminServiceLogTypes.SUCCESS.ToString());
+                        }
+                        return new Response(new List<UserDto>(), StatusCodes.Status204NoContent, AdminServiceLogTypes.EMPTY_OR_NULL_TABLE.ToString());
                     }
 
-                    var roles = dbUserRoles.Select(r => new Role(r.Id, r.Name)).ToList();
-
-                    if (dbMentalHeathExpert is not null)
+                    if (query.Role == __MENTAL_HEALTH_EXPERT_ROLE__)
                     {
-                        user = _mapper.Map<UserDto>(dbMentalHeathExpert);
-                        user.Roles = roles;
-                        user.Username = dbUser.Username;
-                        users.Add(user);
-                        continue;
+                        users = await filter.CallGetMentalHealthExpert(query);
+                        if (!users.IsNullOrEmpty())
+                        {
+                            return new Response(users, StatusCodes.Status200OK, AdminServiceLogTypes.SUCCESS.ToString());
+                        }
+                        return new Response(new List<UserDto>(), StatusCodes.Status204NoContent, AdminServiceLogTypes.EMPTY_OR_NULL_TABLE.ToString());
                     }
-                    user = _mapper.Map<UserDto>(dbUser);
-                    user.Roles = roles;
-                    users.Add(user);
-                    continue;
                 }
-                _adminLoggerService.LogInformation($"{AdminServiceLogTypes.SUCCESS.ToString()}", users);
-                return new Response(users, StatusCodes.Status200OK, AdminServiceLogTypes.SUCCESS.ToString());
-
+                var _dbUsers = await _context.Users.ToListAsync();
+                users = await filter.CallGetUnfilteredUsers(_dbUsers);
+                if (!users.IsNullOrEmpty())
+                {
+                    return new Response(users, StatusCodes.Status200OK, AdminServiceLogTypes.SUCCESS.ToString());
+                }
+                return new Response(new List<UserDto>(), StatusCodes.Status204NoContent, AdminServiceLogTypes.EMPTY_OR_NULL_TABLE.ToString());
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
-                throw;
+                return new Response(e.Data, StatusCodes.Status500InternalServerError, AdminServiceLogTypes.ERROR.ToString());
             }
+
         }
 
         public async Task<Response> GetNewRegisteredExperts(SearchExpertDto? query = null)
