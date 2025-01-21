@@ -3,6 +3,7 @@ import { application } from '../../../application'
 
 let initialState = {
   dbUsers: [],
+  selectedRole: 0,
   newlyRegisteredMentalHealthExperts: [],
   numberOfNewlyRegisteredMentalHealthExperts: 0,
   isLoading: false,
@@ -82,7 +83,7 @@ let adminSlice = createSlice({
         state.isLoading = false
         console.log('SSS ', serviceResponseObject)
 
-        // state.dbUsers = serviceResponseObject
+        state.dbUsers = serviceResponseObject.serviceResponseObject
       })
       .addCase(getDbUsers.rejected, (state, action) => {
         state.isLoading = false
@@ -160,9 +161,17 @@ let adminSlice = createSlice({
       statusActionsContainer.style.display = 'block'
       statusHamburger.style.display = 'none'
     },
+    setSelectedRole: (state) => {
+      let select = document.getElementById('manage-users-select-role-filter')
+      state.selectedRole = parseInt(select.value)
+      console.log('Selected role ', state.selectedRole)
+    },
   },
 })
 
-export const { displayProfilesContainer, displayStatusActionsContainer } =
-  adminSlice.actions
+export const {
+  displayProfilesContainer,
+  displayStatusActionsContainer,
+  setSelectedRole,
+} = adminSlice.actions
 export default adminSlice.reducer

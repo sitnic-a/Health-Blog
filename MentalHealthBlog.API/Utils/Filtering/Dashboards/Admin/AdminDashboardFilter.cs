@@ -34,7 +34,9 @@ namespace MentalHealthBlog.API.Utils.Filtering.Dashboards.Admin
                 foreach (var dbUser in dbUsers)
                 {
                     var user = _mapper.Map<UserDto>(dbUser);
+
                     var roles = await userHelper.GetUserRolesAsync(user);
+                    user.Roles = roles;
 
                     if (roles.Any(r => r.Id == __ADMIN_ROLE))
                     {
