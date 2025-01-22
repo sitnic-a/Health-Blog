@@ -193,7 +193,7 @@ main {
 .main-manage-users-container {
   max-width: 1440px;
   padding-bottom: 1rem;
-  background: yellow;
+  /* background: yellow; */
 }
 
 .manage-users-header,
@@ -203,6 +203,7 @@ main {
 
 .manage-users-filter-container {
   display: flex;
+  align-items: center;
   flex-grow: 1;
   flex-wrap: wrap;
   gap: 10px;
@@ -225,10 +226,40 @@ input[name="manage-users-name-input-filter"] {
   max-width: 150px;
 }
 
+.manage-users-search-filter-button {
+  padding: 0.4rem 1.2rem;
+  background: #8f8f8f;
+  outline: none;
+  border: none;
+  color: #fff;
+}
+
+.manage-users-search-filter-button:hover {
+  background: #464646;
+  cursor: pointer;
+}
+
+.manage-users-users-list-main-container {
+  /* background: green; */
+  max-width: 1440px;
+  padding-block: 1rem;
+}
+
+.manage-users-users-list-main-container-header {
+  margin-left: 0.5rem;
+  margin-block: 0;
+}
+
+.manage-users-users-list-main-container-header > h4 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
 .manage-users-table {
   max-width: 1440px;
   width: 100%;
-  border-spacing: 8px;
+  border-spacing: 0px;
+  -webkit-border-vertical-spacing: 10px;
 }
 
 .manage-users-table-row,
@@ -242,13 +273,16 @@ input[name="manage-users-name-input-filter"] {
   border-radius: 0.4rem;
 }
 
-.manage-users-table > tbody > tr:nth-child(odd) {
-  /* background: #e4e4e4; */
-  padding-block: 2px;
-}
-
 .manage-users-table-data-cell {
   padding-block: 4px;
+}
+
+.manage-users-remove-user-button {
+  font-size: 1.2rem;
+}
+
+.manage-users-remove-user-button:hover {
+  color: #ff0000;
 }
 
 .new-mental-health-expert-request-link {
