@@ -161,5 +161,33 @@ namespace MentalHealthBlog.API.Services
                 return new Response(e.Data, StatusCodes.Status500InternalServerError, e.Message);
             }
         }
+
+        public async Task<Response> RemoveUserById(int userId)
+        {
+            try
+            {
+                if (userId <= 0)
+                {
+                    _adminLoggerService.LogWarning($"DELETE/id: {AdminServiceLogTypes.NOT_FOUND.ToString()}", new object());
+                    return new Response(new object(), StatusCodes.Status404NotFound, AdminServiceLogTypes.NOT_FOUND.ToString());
+                }
+                var dbUser = await _context.Users.FindAsync(userId);
+                if (dbUser != null)
+                {
+                    var removedUser = _context.Users.Remove(dbUser);
+                    await _context.SaveChangesAsync();
+                    _adminLoggerService.LogInformation($"DELETE/id: {AdminServiceLogTypes.SUCCESS.ToString()}", dbUser);
+                    return new Response(dbUser,StatusCodes.Status200OK,AdminServiceLogTypes.SUCCESS.ToString());
+                }
+                _adminLoggerService.LogWarning($"DELETE/id: {AdminServiceLogTypes.NOT_FOUND.ToString()}", dbUser);
+                return new Response(new User(), StatusCodes.Status404NotFound, AdminServiceLogTypes.NOT_FOUND.ToString());
+
+            }
+            catch (Exception e)
+            {
+                _adminLoggerService.LogError($"DELETE/id: {e.Message}", e);
+                return new Response(e.Data, StatusCodes.Status500InternalServerError, e.Message);
+            }
+        }
     }
 }

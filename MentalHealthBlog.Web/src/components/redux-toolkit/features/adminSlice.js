@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { application } from '../../../application'
+import { toast } from 'react-toastify'
 
 let initialState = {
   dbUsers: [],
@@ -140,7 +141,20 @@ let adminSlice = createSlice({
         console.log('Remove pending... ')
       })
       .addCase(removeUserById.fulfilled, (state, action) => {
-        console.log('Remove done...')
+        console.log('Remove done...', action.payload)
+
+        let statusCode = action.payload.statusCode
+
+        if (statusCode === 200) {
+          toast.success('Succesfully deleted user', {
+            autoClose: 1500,
+            position: 'bottom-right',
+          })
+          setTimeout(() => {
+            window.location.reload()
+          }, 1000)
+          return
+        }
       })
       .addCase(removeUserById.rejected, (state, action) => {
         console.log('Remove rejected...')

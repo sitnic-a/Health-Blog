@@ -8,5 +8,6 @@ namespace MentalHealthBlog.API.Services
         public Task<Response> Get(SearchUserDto? query = null);
         public Task<Response> GetNewRegisteredExperts(SearchExpertDto? query = null);
         public Task<Response> SetRegisteredExpertStatus(RegisterExpertPatchDto patchDto);
+        public Task<Response> RemoveUserById(int id);
     }
 }
