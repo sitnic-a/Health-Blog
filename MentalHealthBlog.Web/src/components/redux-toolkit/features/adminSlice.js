@@ -69,6 +69,18 @@ export const setRegisteredExpertStatus = createAsyncThunk(
   }
 )
 
+export const removeUserById = createAsyncThunk('id', async (id) => {
+  let url = `${application.application_url}/admin/${id}`
+  let request = await fetch(url, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  let response = await request.json()
+  return response
+})
+
 let adminSlice = createSlice({
   initialState,
   name: 'adminSlice',

@@ -1,15 +1,19 @@
 import { useEffect, useState } from 'react'
+import Modal from 'react-modal'
 import { getDbRoles } from '../../../redux-toolkit/features/userSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { getDbUsers } from '../../../redux-toolkit/features/adminSlice'
 import { setSelectedRole } from '../../../redux-toolkit/features/adminSlice'
 
 import { FaTrash } from 'react-icons/fa'
+import { openDeleteModal } from '../../../redux-toolkit/features/modalSlice'
+import { application } from '../../../../application'
 
 export const ManageUsers = () => {
   let dispatch = useDispatch()
   let { dbRoles } = useSelector((store) => store.user)
   let { dbUsers, selectedRole } = useSelector((store) => store.admin)
+  let { isDeleteOpen } = useSelector((store) => store.modal)
 
   useEffect(() => {
     dispatch(getDbRoles())
@@ -18,6 +22,35 @@ export const ManageUsers = () => {
 
   return (
     <div className="main-manage-users-container">
+      <Modal
+        isOpen={isDeleteOpen}
+        style={application.modal_style}
+        appElement={document.querySelector('.main-manage-users-container')}
+        onRequestClose={() => {
+          dispatch(openDeleteModal(false))
+        }}
+      >
+        <div className="manage-users-modal-content">
+          <div className="manage-users-modal-title">
+            <h2>Are you sure you want to delete this user?</h2>
+          </div>
+          <div className="manage-users-modal-actions">
+            <button
+              type="button"
+              className="manage-users-modal-confirm-delete-button"
+            >
+              DELETE
+            </button>
+            <button
+              type="button"
+              className="manage-users-modal-abort-delete-button"
+              onClick={() => dispatch(openDeleteModal(false))}
+            >
+              LEAVE
+            </button>
+          </div>
+        </div>
+      </Modal>
       <div className="manage-users-header">
         <h2>Manage users</h2>
         <h3>Filter</h3>
@@ -179,7 +212,7 @@ export const ManageUsers = () => {
                         })}
                     </td>
                     <td>
-                      <span>
+                      <span onClick={() => dispatch(openDeleteModal(true))}>
                         <FaTrash className="manage-users-remove-user-button" />
                       </span>
                     </td>

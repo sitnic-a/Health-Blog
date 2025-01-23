@@ -8,7 +8,10 @@ export const application = {
       bottom: 'auto',
       // marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
-      width: '30%',
+      maxWidth: '700px',
+      // width: '30%',
+      // margin: '0',
+      padding: '0',
     },
   },
 }
