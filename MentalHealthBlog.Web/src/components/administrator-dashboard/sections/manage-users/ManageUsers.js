@@ -2,7 +2,11 @@ import { useEffect, useState } from 'react'
 import Modal from 'react-modal'
 import { getDbRoles } from '../../../redux-toolkit/features/userSlice'
 import { useDispatch, useSelector } from 'react-redux'
-import { getDbUsers } from '../../../redux-toolkit/features/adminSlice'
+import {
+  getDbUsers,
+  removeUserById,
+  setSelectedUser,
+} from '../../../redux-toolkit/features/adminSlice'
 import { setSelectedRole } from '../../../redux-toolkit/features/adminSlice'
 
 import { FaTrash } from 'react-icons/fa'
@@ -12,7 +16,7 @@ import { application } from '../../../../application'
 export const ManageUsers = () => {
   let dispatch = useDispatch()
   let { dbRoles } = useSelector((store) => store.user)
-  let { dbUsers, selectedRole } = useSelector((store) => store.admin)
+  let { dbUsers, dbUser, selectedRole } = useSelector((store) => store.admin)
   let { isDeleteOpen } = useSelector((store) => store.modal)
 
   useEffect(() => {
@@ -38,6 +42,20 @@ export const ManageUsers = () => {
             <button
               type="button"
               className="manage-users-modal-confirm-delete-button"
+              onClick={() => {
+                if (
+                  user.roles.some(
+                    (ur) => ur.name === 'Psychologist / Psychotherapist'
+                  )
+                ) {
+                  dispatch(removeUserById(dbUser.userId))
+                  dispatch(openDeleteModal(false))
+                  dispatch(getDbUsers({}))
+                }
+                dispatch(removeUserById(dbUser.id))
+                dispatch(openDeleteModal(false))
+                dispatch(getDbUsers({}))
+              }}
             >
               DELETE
             </button>
@@ -212,7 +230,12 @@ export const ManageUsers = () => {
                         })}
                     </td>
                     <td>
-                      <span onClick={() => dispatch(openDeleteModal(true))}>
+                      <span
+                        onClick={() => {
+                          dispatch(setSelectedUser(user))
+                          dispatch(openDeleteModal(true))
+                        }}
+                      >
                         <FaTrash className="manage-users-remove-user-button" />
                       </span>
                     </td>

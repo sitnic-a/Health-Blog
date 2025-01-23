@@ -3,6 +3,7 @@ import { application } from '../../../application'
 
 let initialState = {
   dbUsers: [],
+  dbUser: null,
   selectedRole: 0,
   newlyRegisteredMentalHealthExperts: [],
   numberOfNewlyRegisteredMentalHealthExperts: 0,
@@ -133,6 +134,17 @@ let adminSlice = createSlice({
       .addCase(setRegisteredExpertStatus.rejected, (state, action) => {
         console.log('Approval: Rejected')
       })
+
+      //Remove user by id
+      .addCase(removeUserById.pending, (state, action) => {
+        console.log('Remove pending... ')
+      })
+      .addCase(removeUserById.fulfilled, (state, action) => {
+        console.log('Remove done...')
+      })
+      .addCase(removeUserById.rejected, (state, action) => {
+        console.log('Remove rejected...')
+      })
   },
   reducers: {
     displayProfilesContainer: () => {
@@ -178,6 +190,9 @@ let adminSlice = createSlice({
       state.selectedRole = parseInt(select.value)
       console.log('Selected role ', state.selectedRole)
     },
+    setSelectedUser: (state, action) => {
+      state.dbUser = action.payload
+    },
   },
 })
 
@@ -185,5 +200,6 @@ export const {
   displayProfilesContainer,
   displayStatusActionsContainer,
   setSelectedRole,
+  setSelectedUser,
 } = adminSlice.actions
 export default adminSlice.reducer
