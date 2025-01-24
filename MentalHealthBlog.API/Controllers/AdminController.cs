@@ -35,5 +35,11 @@ namespace MentalHealthBlog.API.Controllers
         {
             return await _adminService.SetRegisteredExpertStatus(patchDto);
         }
+
+        [HttpDelete("{userId}")]
+        public async Task<Response> RemoveUserById(int userId)
+        {
+            return await _adminService.RemoveUserById(userId);
+        }
     }
 }

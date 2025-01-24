@@ -44,17 +44,15 @@ export const ManageUsers = () => {
               className="manage-users-modal-confirm-delete-button"
               onClick={() => {
                 if (
-                  user.roles.some(
+                  dbUser.roles.some(
                     (ur) => ur.name === 'Psychologist / Psychotherapist'
                   )
                 ) {
                   dispatch(removeUserById(dbUser.userId))
                   dispatch(openDeleteModal(false))
-                  dispatch(getDbUsers({}))
                 }
                 dispatch(removeUserById(dbUser.id))
                 dispatch(openDeleteModal(false))
-                dispatch(getDbUsers({}))
               }}
             >
               DELETE
