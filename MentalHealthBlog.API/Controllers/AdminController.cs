@@ -1,6 +1,9 @@
-﻿using MentalHealthBlog.API.Models.ResourceResponse;
+﻿using iText.Layout.Element;
+using MentalHealthBlog.API.Models.ResourceRequest;
+using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata;
 
 namespace MentalHealthBlog.API.Controllers
 {
@@ -15,10 +18,22 @@ namespace MentalHealthBlog.API.Controllers
             _adminService = adminService;
         }
 
-        [HttpGet("new-request")]
-        public async Task<Response> GetNewRegisteredExperts()
+        [HttpGet]
+        public async Task<Response> Get([FromQuery] SearchUserDto? query = null)
         {
-            return await _adminService.GetNewRegisteredExperts();
+            return await _adminService.Get(query);
+        }
+
+        [HttpPost("new-request")]
+        public async Task<Response> GetNewRegisteredExperts([FromBody] SearchExpertDto? query = null)
+        {
+            return await _adminService.GetNewRegisteredExperts(query);
+        }
+
+        [HttpPatch("approval")]
+        public async Task<Response> SetRegisteredExpertStatus(RegisterExpertPatchDto patchDto)
+        {
+            return await _adminService.SetRegisteredExpertStatus(patchDto);
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using MentalHealthBlogAPI.Models;
 
+#pragma warning disable CS8618
+
 namespace MentalHealthBlog.API.Models
 {
     public class UserRole

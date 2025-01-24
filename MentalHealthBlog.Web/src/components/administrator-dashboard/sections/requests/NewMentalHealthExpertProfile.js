@@ -1,7 +1,6 @@
-import { FaCheck } from 'react-icons/fa'
-import { HiX } from 'react-icons/hi'
 import { MdEmail } from 'react-icons/md'
 import { MdLocalPhone } from 'react-icons/md'
+import { NewMentalHealthExpertProfileActions } from './NewMentalHealthExpertProfileActions'
 
 export const NewMentalHealthExpertProfile = (props) => {
   let expert = props.expert
@@ -52,27 +51,9 @@ export const NewMentalHealthExpertProfile = (props) => {
             </p>
           </div>
         </div>
-
-        <div className="new-expert-profile-bio-actions">
-          <div className="new-expert-profile-action">
-            <button
-              className="new-expert-profile-action-btn new-expert-profile-accept-btn"
-              type="button"
-              title="Accept"
-            >
-              <FaCheck className="new-expert-profile-action-icon new-expert-profile-action-accept-icon" />
-            </button>
-          </div>
-          <div className="new-expert-profile-action">
-            <button
-              className="new-expert-profile-action-btn new-expert-profile-reject-btn"
-              type="button"
-              title="Reject"
-            >
-              <HiX className="new-expert-profile-action-icon new-expert-profile-action-reject-icon" />
-            </button>
-          </div>
-        </div>
+        {expert.isApproved === false && expert.isRejected === false && (
+          <NewMentalHealthExpertProfileActions expert={expert} />
+        )}
       </div>
     )
   )
