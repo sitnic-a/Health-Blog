@@ -30,6 +30,27 @@ namespace MentalHealthBlog.API.Services
             _context = context;
             _mentalExpertLoggerService = mentalExpertLoggerService;
         }
+
+        public async Task<Response> GetSharesPerMentalHealthExpert()
+        {
+            try
+            {
+                var dbShares = await _context.Shares
+                    .Include(p => p.SharedPost)
+                    .Include(mhe => mhe.SharedWith)
+                    .ToListAsync();
+
+                var groupedSharesPerDoctor = dbShares.GroupBy(s => s.SharedWith);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
+            throw new NotImplementedException();
+        }
+
         public async Task<Response> GetSharesPerUser(ExpertSearchContentDto query)
         {
             if (query == null || query.LoggedExpertId <= 0)
@@ -76,7 +97,7 @@ namespace MentalHealthBlog.API.Services
             }
         }
 
-        private async Task<List<SharesPerUserDto>> FillListWithGroupedUsersAndTheirShares(IEnumerable<IGrouping<User, Share>> groupedUsersAndTheirShares)
+        private async Task<dynamic> FillListWithGroupedUsersAndTheirShares(IEnumerable<IGrouping<User, Share>> groupedUsersAndTheirShares)
         {
             List<SharesPerUserDto> sharesPerUser = new List<SharesPerUserDto>();
             PostHelper convertHelper = new PostHelper(_context);
@@ -84,7 +105,7 @@ namespace MentalHealthBlog.API.Services
             if (groupedUsersAndTheirShares.IsNullOrEmpty())
             {
                 _mentalExpertLoggerService.LogWarning($"SHARES-PER-USER: {MentalExpertServiceLogTypes.EMPTY.ToString()}");
-                return new List<SharesPerUserDto>();
+                return new List<object>();
             }
 
             foreach (var userFromGroup in groupedUsersAndTheirShares)
@@ -96,6 +117,7 @@ namespace MentalHealthBlog.API.Services
                 if (dbUserByKey is not null)
                 {
                     userThatSharedContent = new UserDto(dbUserByKey.Id, dbUserByKey.Username);
+                    //var userRoles = 
                     foreach (var sharedContent in userFromGroup)
                     {
                         var post = sharedContent?.SharedPost;
