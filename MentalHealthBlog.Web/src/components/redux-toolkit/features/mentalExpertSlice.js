@@ -4,6 +4,7 @@ import { application } from "../../../application";
 let initialState = {
   usersThatSharedContent: [],
   sharedContent: [],
+  sharesPerMentalHealthExpert: [],
   usersThatSharedIncludingItsContent: {},
   overlayPost: null,
 };
@@ -15,6 +16,16 @@ export const getSharesPerUser = createAsyncThunk(
     let request = await fetch(url);
     let response = await request.json();
 
+    return response;
+  }
+);
+
+export const getSharesPerMentalHealthExpert = createAsyncThunk(
+  "shares-per-mental-health-expert",
+  async () => {
+    let url = `${application.application_url}/mentalExpert/shares-per-mental-health-expert`;
+    let request = await fetch(url);
+    let response = await request.json();
     return response;
   }
 );
@@ -39,6 +50,50 @@ export const mentalExpertSlice = createSlice({
         state.usersThatSharedContent = usersThatSharedContent;
       }
     },
+    previewHoveredContentCounter: (state, action) => {
+      let mentalHealthExpertId = action.payload.mentalHealthExpertId;
+
+      let mentalHealthExpertContainers = document.querySelectorAll(
+        ".shares-per-mental-health-expert-expert-main-container"
+      );
+
+      mentalHealthExpertContainers.forEach((mentalHealthExpertContainer) => {
+        let containerKeyId = mentalHealthExpertContainer.querySelector(
+          ".input-container-key"
+        ).dataset.expertId;
+
+        if (parseInt(containerKeyId) === mentalHealthExpertId) {
+          mentalHealthExpertContainer.querySelector(
+            ".posts-counter-paragraph"
+          ).style.opacity = "1";
+          mentalHealthExpertContainer.querySelector(
+            ".posts-counter-paragraph"
+          ).style.cursor = "pointer";
+        }
+      });
+    },
+    hideHoveredContentCounter: (state, action) => {
+      let mentalHealthExpertId = action.payload.mentalHealthExpertId;
+
+      let mentalHealthExpertContainers = document.querySelectorAll(
+        ".shares-per-mental-health-expert-expert-main-container"
+      );
+
+      mentalHealthExpertContainers.forEach((mentalHealthExpertContainer) => {
+        let containerKeyId = mentalHealthExpertContainer.querySelector(
+          ".input-container-key"
+        ).dataset.expertId;
+
+        if (parseInt(containerKeyId) === mentalHealthExpertId) {
+          mentalHealthExpertContainer.querySelector(
+            ".posts-counter-paragraph"
+          ).style.opacity = "0";
+          mentalHealthExpertContainer.querySelector(
+            ".posts-counter-paragraph"
+          ).style.cursor = "pointer";
+        }
+      });
+    },
     getSharedContentOfPickedUser: (state, action) => {
       let userId = action.payload.userId;
       let response =
@@ -58,8 +113,8 @@ export const mentalExpertSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    //shares-per-user
     builder
+      //shares-per-user
       .addCase(getSharesPerUser.pending, () => {
         console.log("Pending request for shares per user");
       })
@@ -68,12 +123,26 @@ export const mentalExpertSlice = createSlice({
       })
       .addCase(getSharesPerUser.rejected, (action) => {
         console.log("Request rejected ", action.payload);
+      })
+
+      //shares-per-mental-health-expert
+      .addCase(getSharesPerMentalHealthExpert.pending, (state, action) => {
+        console.log("Shares per mental health expert pending... ");
+      })
+      .addCase(getSharesPerMentalHealthExpert.fulfilled, (state, action) => {
+        let serviceResponseObject = action.payload.serviceResponseObject;
+        state.sharesPerMentalHealthExpert = serviceResponseObject;
+      })
+      .addCase(getSharesPerMentalHealthExpert.rejected, (state, action) => {
+        console.log("Shares per mental health expert ", action.payload);
       });
   },
 });
 
 export const {
   getOnlyUsersThatSharedContent,
+  previewHoveredContentCounter,
+  hideHoveredContentCounter,
   getSharedContentOfPickedUser,
   setOverlayPost,
 } = mentalExpertSlice.actions;
