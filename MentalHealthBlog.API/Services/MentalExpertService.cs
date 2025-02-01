@@ -197,6 +197,7 @@ namespace MentalHealthBlog.API.Services
                 {
                     var postTags = convertHelper.CallReturnPostTags(post.Id);
                     var postDto = new PostDto(post.Id, post.Title, post.Content, post.UserId, post.CreatedAt, postTags);
+                    postDto.SharedAt = sharedPost?.SharedAt;
                     content.Add(postDto);
                 }
             }

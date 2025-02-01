@@ -30,7 +30,8 @@ export const SharedContentPermission = () => {
       {contentSharedWithMentalHealthExpert.length > 0 && (
         <div className="content-shared-with-mental-health-expert-posts">
           {contentSharedWithMentalHealthExpert.map((post, index) => {
-            let created = formatDateToString(post.createdAt);
+            let createdAt = formatDateToString(post.createdAt);
+            let sharedAt = formatDateToString(post.sharedAt);
             return (
               <div
                 key={post.id}
@@ -60,12 +61,12 @@ export const SharedContentPermission = () => {
                     </div>
                     <div className="content-shared-with-mental-health-expert-date-container">
                       <span className="content-shared-with-mental-health-expert-created-date">
-                        Created: {created}
+                        Created: {createdAt}
                       </span>
 
                       {/* DODATI shared u service */}
                       <span className="content-shared-with-mental-health-expert-shared-date">
-                        Shared: {created}
+                        Shared: {sharedAt}
                       </span>
                     </div>
                   </div>
