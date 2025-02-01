@@ -1,6 +1,9 @@
 import React from "react";
 import useFetchLocationState from "./custom/hooks/useFetchLocationState";
 
+import { RiDeleteBackLine } from "react-icons/ri";
+import { formatDateToString } from "./utils/helper-methods/methods";
+
 export const SharedContentPermission = () => {
   let { contentSharedWithMentalHealthExpert, mentalHealthExpert } =
     useFetchLocationState();
@@ -11,27 +14,70 @@ export const SharedContentPermission = () => {
       <div className="content-shared-with-mental-health-expert-hero">
         {mentalHealthExpert && (
           <h2>
-            Mental health expert <span>{mentalHealthExpert.username} </span>
-            permission list
+            <span className="content-shared-with-mental-health-expert-hero-username">
+              {mentalHealthExpert.username}{" "}
+            </span>
+            read permission list
           </h2>
         )}
         <p className="content-shared-with-mental-health-expert-title">
-          Posts list:
+          Everything shared with mental health expert
+        </p>
+        <p className="content-shared-with-mental-health-expert-subtitle">
+          Check the list below:
         </p>
       </div>
-      {contentSharedWithMentalHealthExpert.length > 0 &&
-        contentSharedWithMentalHealthExpert.map((post) => {
-          return (
-            <div
-              key={post.id}
-              className="content-shared-with-mental-health-expert-post-main-container"
-              style={{ display: "flex", gap: "20px", alignItems: "center" }}
-            >
-              <p>{post.title}</p>
-              <span>Revoke permission</span>
-            </div>
-          );
-        })}
+      {contentSharedWithMentalHealthExpert.length > 0 && (
+        <div className="content-shared-with-mental-health-expert-posts">
+          {contentSharedWithMentalHealthExpert.map((post, index) => {
+            let created = formatDateToString(post.createdAt);
+            return (
+              <div
+                key={post.id}
+                className="content-shared-with-mental-health-expert-post-main-container"
+              >
+                <div className="content-shared-with-mental-health-expert-container">
+                  <div className="content-shared-with-mental-health-expert-index-container">
+                    <span className="content-shared-with-mental-health-expert-index">
+                      {index + 1}
+                    </span>
+                  </div>
+                  <div className="content-shared-with-mental-health-expert-post-info-container">
+                    <span className="content-shared-with-mental-health-expert-post-title">
+                      {post.title}
+                    </span>
+                    <div className="content-shared-with-mental-health-expert-post-tags">
+                      {Object.values(post.tags).map((tag) => {
+                        return (
+                          <span
+                            className="content-shared-with-mental-health-expert-post-tag"
+                            key={tag}
+                          >
+                            {tag}
+                          </span>
+                        );
+                      })}
+                    </div>
+                    <div className="content-shared-with-mental-health-expert-date-container">
+                      <span className="content-shared-with-mental-health-expert-created-date">
+                        Created: {created}
+                      </span>
+
+                      {/* DODATI shared u service */}
+                      <span className="content-shared-with-mental-health-expert-shared-date">
+                        Shared: {created}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="content-shared-with-mental-health-expert-actions">
+                    <RiDeleteBackLine className="content-shared-with-mental-health-expert-revoke-action" />
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };
