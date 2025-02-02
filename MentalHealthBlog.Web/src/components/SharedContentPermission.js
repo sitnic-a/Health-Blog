@@ -3,10 +3,21 @@ import useFetchLocationState from "./custom/hooks/useFetchLocationState";
 
 import { RiDeleteBackLine } from "react-icons/ri";
 import { formatDateToString } from "./utils/helper-methods/methods";
+import { useDispatch } from "react-redux";
+import { revokeContentPermission } from "./redux-toolkit/features/regularUserSlice";
 
 export const SharedContentPermission = () => {
+  let dispatch = useDispatch();
+
   let { contentSharedWithMentalHealthExpert, mentalHealthExpert } =
     useFetchLocationState();
+
+  console.log(
+    "Content ",
+    contentSharedWithMentalHealthExpert,
+    "MHE ",
+    mentalHealthExpert
+  );
 
   return (
     <div className="content-shared-with-mental-health-expert-main-container">
@@ -33,6 +44,7 @@ export const SharedContentPermission = () => {
             let sharedAt = formatDateToString(post.sharedAt);
             return (
               <div
+                id={post.id}
                 key={post.id}
                 className="content-shared-with-mental-health-expert-post-main-container"
               >
@@ -69,7 +81,36 @@ export const SharedContentPermission = () => {
                     </div>
                   </div>
                   <div className="content-shared-with-mental-health-expert-actions">
-                    <RiDeleteBackLine className="content-shared-with-mental-health-expert-revoke-action" />
+                    <RiDeleteBackLine
+                      className="content-shared-with-mental-health-expert-revoke-action"
+                      onClick={() => {
+                        let revokeObject = {
+                          postId: post.id,
+                          sharedWithId: mentalHealthExpert.userId,
+                        };
+                        console.log("Revoke obj ", { revokeObject });
+
+                        dispatch(revokeContentPermission(revokeObject)).then(
+                          () => {
+                            var postContainers = document.querySelectorAll(
+                              ".content-shared-with-mental-health-expert-post-main-container"
+                            );
+                            postContainers.forEach((postContainer) => {
+                              if (
+                                parseInt(postContainer.getAttribute("id")) ===
+                                post.id
+                              ) {
+                                postContainer.classList.add("zoom");
+                                contentSharedWithMentalHealthExpert =
+                                  contentSharedWithMentalHealthExpert.filter(
+                                    (c) => c.id !== post.id
+                                  );
+                              }
+                            });
+                          }
+                        );
+                      }}
+                    />
                   </div>
                 </div>
               </div>

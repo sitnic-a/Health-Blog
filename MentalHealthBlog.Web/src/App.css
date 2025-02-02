@@ -822,6 +822,32 @@ dialog::backdrop {
   }
 }
 
+@keyframes zoom {
+  0% {
+    transform: scale(1);
+    width: 250px;
+    min-width: 250px;
+    opacity: 1;
+    transform-origin: 125px 125px;
+  }
+  50% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    width: 0;
+    min-width: 0;
+    transform: scale(0);
+    opacity: 0;
+    padding: 0;
+    margin: 0;
+  }
+}
+
+.zoom {
+  animation: zoom forwards 0.7s ease-out 1;
+}
+
 .content-shared-with-mental-health-expert-post-main-container {
   display: flex;
   padding-block: 0.2rem;
@@ -927,6 +953,11 @@ dialog::backdrop {
 
 .content-shared-with-mental-health-expert-revoke-action {
   font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.content-shared-with-mental-health-expert-revoke-action:hover {
+  color: #f00;
 }
 
 .selecting {
