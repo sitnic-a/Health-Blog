@@ -101,7 +101,7 @@ namespace MentalHealthBlog.API.Services
 
         public async Task<List<Share>> ShareContent(ShareContentDto contentToBeShared)
         {
-            var shareHelper = new ShareHelper();
+            var shareHelper = new ShareHelper(_context);
 
             if (contentToBeShared.ShareLink == false)
             {
