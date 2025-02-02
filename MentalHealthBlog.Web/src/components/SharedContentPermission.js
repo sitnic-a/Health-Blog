@@ -7,7 +7,6 @@ import { formatDateToString } from "./utils/helper-methods/methods";
 export const SharedContentPermission = () => {
   let { contentSharedWithMentalHealthExpert, mentalHealthExpert } =
     useFetchLocationState();
-  console.log("MHE ", contentSharedWithMentalHealthExpert);
 
   return (
     <div className="content-shared-with-mental-health-expert-main-container">
@@ -64,7 +63,6 @@ export const SharedContentPermission = () => {
                         Created: {createdAt}
                       </span>
 
-                      {/* DODATI shared u service */}
                       <span className="content-shared-with-mental-health-expert-shared-date">
                         Shared: {sharedAt}
                       </span>

@@ -9,6 +9,7 @@ import tagGradeReducer from "./features/tagGradeSlice";
 import shareExportReducer from "./features/shareExportSlice";
 import mentalExpertReducer from "./features/mentalExpertSlice";
 import adminReducer from "./features/adminSlice";
+import regularUser from "./features/regularUserSlice";
 
 export const store = configureStore({
   reducer: {
@@ -22,5 +23,6 @@ export const store = configureStore({
     shareExport: shareExportReducer,
     mentalExpert: mentalExpertReducer,
     admin: adminReducer,
+    regularUser: regularUser,
   },
 });

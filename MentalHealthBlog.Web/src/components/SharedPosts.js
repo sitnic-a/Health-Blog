@@ -9,13 +9,13 @@ import {
   getSharesPerMentalHealthExpert,
   hideHoveredContentCounter,
   previewHoveredContentCounter,
-} from "./redux-toolkit/features/mentalExpertSlice";
+} from "./redux-toolkit/features/regularUserSlice";
 
 export const SharedPosts = () => {
   let dispatch = useDispatch();
   let { postsToShare, isLoading } = useSelector((store) => store.shareExport);
   let { sharesPerMentalHealthExpert } = useSelector(
-    (store) => store.mentalExpert
+    (store) => store.regularUser
   );
 
   useEffect(() => {
