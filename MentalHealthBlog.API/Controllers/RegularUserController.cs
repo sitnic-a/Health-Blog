@@ -1,4 +1,5 @@
-﻿using MentalHealthBlog.API.Models.ResourceResponse;
+﻿using MentalHealthBlog.API.Models.ResourceRequest;
+using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,10 +15,17 @@ namespace MentalHealthBlog.API.Controllers
         {
             _regularUserService = regularUserService;
         }
+
         [HttpGet("shares-per-mental-health-expert")]
         public async Task<Response> GetSharesPerMentalHealthExpert()
         {
             return await _regularUserService.GetSharesPerMentalHealthExpert();
+        }
+
+        [HttpDelete("revoke")]
+        public async Task<Response> RevokeContentPermission([FromBody] RegularUserPermissionDto request)
+        {
+            return await _regularUserService.RevokeContentPermission(request);
         }
     }
 }

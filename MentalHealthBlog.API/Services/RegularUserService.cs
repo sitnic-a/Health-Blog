@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MentalHealthBlog.API.Methods;
 using MentalHealthBlog.API.Models;
+using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
 using MentalHealthBlogAPI.Models;
@@ -24,7 +25,7 @@ namespace MentalHealthBlog.API.Services
         private readonly IMapper _mapper;
         private readonly ILogger<IRegularUserService> _regularUserLoggerService;
 
-        public RegularUserService(DataContext context,IMapper mapper, ILogger<IRegularUserService> regularUserLoggerService)
+        public RegularUserService(DataContext context, IMapper mapper, ILogger<IRegularUserService> regularUserLoggerService)
         {
             _context = context;
             _mapper = mapper;
@@ -67,6 +68,38 @@ namespace MentalHealthBlog.API.Services
             catch (Exception e)
             {
                 _regularUserLoggerService.LogError($"SHARES-PER-MENTAL-HEALTH-EXPERT: {e.Message.ToString()}", e);
+                return new Response(e.Data, StatusCodes.Status500InternalServerError, RegularUserServiceLogTypes.ERROR.ToString());
+            }
+        }
+
+        public async Task<Response> RevokeContentPermission(RegularUserPermissionDto request)
+        {
+            try
+            {
+                if (request.PostId <= 0 && request.SharedWithId <= 0)
+                {
+                    _regularUserLoggerService.LogWarning($"REVOKE: {RegularUserServiceLogTypes.NOT_FOUND.ToString()}", request);
+                    return new Response(new object(), StatusCodes.Status404NotFound, RegularUserServiceLogTypes.NOT_FOUND.ToString());
+                }
+
+                var contentToBeRevoked = await _context.Shares
+                    .Where(s => s.SharedPostId == request.PostId && s.SharedWithId == request.SharedWithId)
+                    .ToListAsync();
+
+                if (contentToBeRevoked.Any())
+                {
+                    _context.RemoveRange(contentToBeRevoked);
+                    await _context.SaveChangesAsync();
+                    //var sharesPerMentalHealthExpert = await GetSharesPerMentalHealthExpert();
+                    _regularUserLoggerService.LogInformation($"REVOKE: {RegularUserServiceLogTypes.SUCCESS.ToString()}", contentToBeRevoked);
+                    return new Response(contentToBeRevoked, StatusCodes.Status200OK, RegularUserServiceLogTypes.SUCCESS.ToString());
+                }
+                _regularUserLoggerService.LogWarning($"REVOKE: {RegularUserServiceLogTypes.EMPTY.ToString()}", contentToBeRevoked);
+                return new Response(contentToBeRevoked, StatusCodes.Status204NoContent, RegularUserServiceLogTypes.NOT_FOUND.ToString());
+            }
+            catch (Exception e)
+            {
+                _regularUserLoggerService.LogError($"REVOKE: {RegularUserServiceLogTypes.ERROR.ToString()}", e);
                 return new Response(e.Data, StatusCodes.Status500InternalServerError, RegularUserServiceLogTypes.ERROR.ToString());
             }
         }
