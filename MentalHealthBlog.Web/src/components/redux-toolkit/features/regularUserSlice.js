@@ -15,6 +15,25 @@ export const getSharesPerMentalHealthExpert = createAsyncThunk(
   }
 );
 
+export const revokeContentPermission = createAsyncThunk(
+  "revoke",
+  async (revokeObject) => {
+    console.log("Revoke ", revokeObject);
+
+    let url = `${application.application_url}/regularUser/revoke`;
+    let request = await fetch(url, {
+      method: "DELETE",
+      body: JSON.stringify(revokeObject),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    let response = await request.json();
+    return response;
+  }
+);
+
 export const regularUserSlice = createSlice({
   initialState,
   name: "regularUser",
@@ -76,6 +95,17 @@ export const regularUserSlice = createSlice({
       })
       .addCase(getSharesPerMentalHealthExpert.rejected, (state, action) => {
         console.log("Shares per mental health expert ", action.payload);
+      })
+
+      //revoke
+      .addCase(revokeContentPermission.pending, (state, action) => {
+        console.log("Revoke pending...");
+      })
+      .addCase(revokeContentPermission.fulfilled, (state, action) => {
+        console.log("Permission to read deleted!");
+      })
+      .addCase(revokeContentPermission.rejected, (state, action) => {
+        console.log("Revoke error ", action.payload);
       });
   },
 });

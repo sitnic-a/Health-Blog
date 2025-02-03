@@ -3,10 +3,21 @@ import useFetchLocationState from "./custom/hooks/useFetchLocationState";
 
 import { RiDeleteBackLine } from "react-icons/ri";
 import { formatDateToString } from "./utils/helper-methods/methods";
+import { useDispatch } from "react-redux";
+import { revokeContentPermission } from "./redux-toolkit/features/regularUserSlice";
 
 export const SharedContentPermission = () => {
+  let dispatch = useDispatch();
+
   let { contentSharedWithMentalHealthExpert, mentalHealthExpert } =
     useFetchLocationState();
+
+  console.log(
+    "Content ",
+    contentSharedWithMentalHealthExpert,
+    "MHE ",
+    mentalHealthExpert
+  );
 
   return (
     <div className="content-shared-with-mental-health-expert-main-container">
@@ -69,7 +80,29 @@ export const SharedContentPermission = () => {
                     </div>
                   </div>
                   <div className="content-shared-with-mental-health-expert-actions">
-                    <RiDeleteBackLine className="content-shared-with-mental-health-expert-revoke-action" />
+                    <RiDeleteBackLine
+                      title="revoke/delete read permission"
+                      className="content-shared-with-mental-health-expert-revoke-action"
+                      onClick={(e) => {
+                        let revokeObject = {
+                          postId: post.id,
+                          sharedWithId: mentalHealthExpert.userId,
+                        };
+
+                        dispatch(revokeContentPermission(revokeObject)).then(
+                          () => {
+                            var postMainContainer =
+                              e.target.parentElement.parentElement
+                                .parentElement;
+
+                            postMainContainer.classList.add("zoom");
+                            setTimeout(() => {
+                              postMainContainer.remove();
+                            }, 250);
+                          }
+                        );
+                      }}
+                    />
                   </div>
                 </div>
               </div>
