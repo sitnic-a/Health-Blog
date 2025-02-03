@@ -10,9 +10,12 @@ import {
   hideHoveredContentCounter,
   previewHoveredContentCounter,
 } from "./redux-toolkit/features/regularUserSlice";
+import useFetchLocationState from "./custom/hooks/useFetchLocationState";
 
 export const SharedPosts = () => {
   let dispatch = useDispatch();
+  let { loggedUser } = useFetchLocationState();
+
   let { postsToShare, isLoading } = useSelector((store) => store.shareExport);
   let { sharesPerMentalHealthExpert } = useSelector(
     (store) => store.regularUser
@@ -26,7 +29,10 @@ export const SharedPosts = () => {
       dispatch(shareByLink(shareGuid));
       return;
     }
-    dispatch(getSharesPerMentalHealthExpert());
+    let query = {
+      loggedUserId: loggedUser.id,
+    };
+    dispatch(getSharesPerMentalHealthExpert(query));
   }, []);
 
   if (isLoading) {
