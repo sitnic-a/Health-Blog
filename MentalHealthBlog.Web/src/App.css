@@ -851,7 +851,6 @@ dialog::backdrop {
 .content-shared-with-mental-health-expert-post-main-container {
   display: flex;
   padding-block: 0.2rem;
-  /* margin-inline: 0.2rem; */
   margin-bottom: 0.5rem;
   max-width: 1440px;
   width: 100%;

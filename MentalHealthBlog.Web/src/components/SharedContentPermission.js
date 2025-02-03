@@ -44,7 +44,6 @@ export const SharedContentPermission = () => {
             let sharedAt = formatDateToString(post.sharedAt);
             return (
               <div
-                id={post.id}
                 key={post.id}
                 className="content-shared-with-mental-health-expert-post-main-container"
               >
@@ -82,31 +81,24 @@ export const SharedContentPermission = () => {
                   </div>
                   <div className="content-shared-with-mental-health-expert-actions">
                     <RiDeleteBackLine
+                      title="revoke/delete read permission"
                       className="content-shared-with-mental-health-expert-revoke-action"
-                      onClick={() => {
+                      onClick={(e) => {
                         let revokeObject = {
                           postId: post.id,
                           sharedWithId: mentalHealthExpert.userId,
                         };
-                        console.log("Revoke obj ", { revokeObject });
 
                         dispatch(revokeContentPermission(revokeObject)).then(
                           () => {
-                            var postContainers = document.querySelectorAll(
-                              ".content-shared-with-mental-health-expert-post-main-container"
-                            );
-                            postContainers.forEach((postContainer) => {
-                              if (
-                                parseInt(postContainer.getAttribute("id")) ===
-                                post.id
-                              ) {
-                                postContainer.classList.add("zoom");
-                                contentSharedWithMentalHealthExpert =
-                                  contentSharedWithMentalHealthExpert.filter(
-                                    (c) => c.id !== post.id
-                                  );
-                              }
-                            });
+                            var postMainContainer =
+                              e.target.parentElement.parentElement
+                                .parentElement;
+
+                            postMainContainer.classList.add("zoom");
+                            setTimeout(() => {
+                              postMainContainer.remove();
+                            }, 250);
                           }
                         );
                       }}
