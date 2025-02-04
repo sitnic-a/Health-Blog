@@ -7,8 +7,8 @@ let initialState = {
 
 export const getSharesPerMentalHealthExpert = createAsyncThunk(
   "shares-per-mental-health-expert",
-  async () => {
-    let url = `${application.application_url}/regularUser/shares-per-mental-health-expert`;
+  async (query) => {
+    let url = `${application.application_url}/regularUser/shares-per-mental-health-expert?loggedUserId=${query.loggedUserId}`;
     let request = await fetch(url);
     let response = await request.json();
     return response;

@@ -31,13 +31,14 @@ namespace MentalHealthBlog.API.Services
             _mapper = mapper;
             _regularUserLoggerService = regularUserLoggerService;
         }
-        public async Task<Response> GetSharesPerMentalHealthExpert()
+        public async Task<Response> GetSharesPerMentalHealthExpert(RegularUserSearchContentDto query)
         {
             try
             {
                 var dbShares = await _context.Shares
                     .Include(p => p.SharedPost)
                     .Include(mhe => mhe.SharedWith)
+                    .Where(s => s.SharedPost.UserId == query.LoggedUserId)
                     .ToListAsync();
 
                 if (dbShares.IsNullOrEmpty())
