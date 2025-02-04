@@ -39,6 +39,7 @@ export const mentalExpertSlice = createSlice({
         state.usersThatSharedContent = usersThatSharedContent;
       }
     },
+
     getSharedContentOfPickedUser: (state, action) => {
       let userId = action.payload.userId;
       let response =
@@ -48,6 +49,7 @@ export const mentalExpertSlice = createSlice({
       );
       state.sharedContent = [...pickedObj.sharedContent];
     },
+
     setOverlayPost: (state, action) => {
       console.log(action.payload);
 
@@ -58,8 +60,8 @@ export const mentalExpertSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    //shares-per-user
     builder
+      //shares-per-user
       .addCase(getSharesPerUser.pending, () => {
         console.log("Pending request for shares per user");
       })

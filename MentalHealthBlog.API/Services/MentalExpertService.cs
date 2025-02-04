@@ -1,4 +1,5 @@
-﻿using MentalHealthBlog.API.Methods;
+﻿using AutoMapper;
+using MentalHealthBlog.API.Methods;
 using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
@@ -23,13 +24,17 @@ namespace MentalHealthBlog.API.Services
     public class MentalExpertService : IMentalExpertService
     {
         private readonly DataContext _context;
+        private readonly IMapper _mapper;
         private readonly ILogger<IMentalExpertService> _mentalExpertLoggerService;
 
-        public MentalExpertService(DataContext context, ILogger<IMentalExpertService> mentalExpertLoggerService)
+        public MentalExpertService(DataContext context, IMapper mapper, ILogger<IMentalExpertService> mentalExpertLoggerService)
         {
             _context = context;
+            _mapper = mapper;
             _mentalExpertLoggerService = mentalExpertLoggerService;
         }
+
+
         public async Task<Response> GetSharesPerUser(ExpertSearchContentDto query)
         {
             if (query == null || query.LoggedExpertId <= 0)
@@ -56,7 +61,13 @@ namespace MentalHealthBlog.API.Services
                         .Where(ex => ex.SharedWithId == query.LoggedExpertId)
                         .GroupBy(u => u.SharedPost.User);
 
-                    List<SharesPerUserDto> sharesPerUser = await FillListWithGroupedUsersAndTheirShares(groupedUsersAndTheirShares);
+                    if (groupedUsersAndTheirShares.IsNullOrEmpty())
+                    {
+                        _mentalExpertLoggerService.LogWarning($"SHARES-PER-USER: {MentalExpertServiceLogTypes.NOT_FOUND.ToString()}");
+                        return new Response(new object(), StatusCodes.Status404NotFound, MentalExpertServiceLogTypes.NOT_FOUND.ToString());
+                    }
+
+                    List<SharesPerUserDto> sharesPerUser = await FillListGroupedUsersAndTheirShares(groupedUsersAndTheirShares);
 
                     if (!sharesPerUser.IsNullOrEmpty())
                     {
@@ -76,41 +87,34 @@ namespace MentalHealthBlog.API.Services
             }
         }
 
-        private async Task<List<SharesPerUserDto>> FillListWithGroupedUsersAndTheirShares(IEnumerable<IGrouping<User, Share>> groupedUsersAndTheirShares)
+        private async Task<List<SharesPerUserDto>> FillListGroupedUsersAndTheirShares(IEnumerable<IGrouping<User, Share>> groupedUsersAndTheirShares)
         {
-            List<SharesPerUserDto> sharesPerUser = new List<SharesPerUserDto>();
-            PostHelper convertHelper = new PostHelper(_context);
-
-            if (groupedUsersAndTheirShares.IsNullOrEmpty())
+            try
             {
-                _mentalExpertLoggerService.LogWarning($"SHARES-PER-USER: {MentalExpertServiceLogTypes.EMPTY.ToString()}");
+                List<SharesPerUserDto> sharesPerUser = new List<SharesPerUserDto>();
+                ShareHelper shareHelper = new ShareHelper(_context);
+                foreach (var userFromGroup in groupedUsersAndTheirShares)
+                {
+                    var dbUserByKey = await _context.Users.FindAsync(userFromGroup.Key.Id);
+                    UserDto userThatSharedContent;
+
+                    if (dbUserByKey is not null)
+                    {
+                        userThatSharedContent = new UserDto(dbUserByKey.Id, dbUserByKey.Username);
+                        List<PostDto> contentUserShared = shareHelper.CallFillSharedContent(userFromGroup, new List<PostDto>());
+
+                        sharesPerUser.Add(new SharesPerUserDto(userThatSharedContent, contentUserShared));
+                    }
+                }
+                return sharesPerUser;
+            }
+            catch (Exception e)
+            {
+                _mentalExpertLoggerService.LogError($"SHARES-PER-USER: {e.Message}", e);
                 return new List<SharesPerUserDto>();
             }
-
-            foreach (var userFromGroup in groupedUsersAndTheirShares)
-            {
-                var dbUserByKey = await _context.Users.FindAsync(userFromGroup.Key.Id);
-                UserDto userThatSharedContent;
-                List<PostDto> contentUserShared = new List<PostDto>();
-
-                if (dbUserByKey is not null)
-                {
-                    userThatSharedContent = new UserDto(dbUserByKey.Id, dbUserByKey.Username);
-                    foreach (var sharedContent in userFromGroup)
-                    {
-                        var post = sharedContent?.SharedPost;
-                        if (post is not null)
-                        {
-                            var postTags = convertHelper.CallReturnPostTags(post.Id);
-                            var postDto = new PostDto(post.Id, post.Title, post.Content, post.UserId, post.CreatedAt, postTags);
-                            contentUserShared.Add(postDto);
-                        }
-                    }
-                    sharesPerUser.Add(new SharesPerUserDto(userThatSharedContent, contentUserShared));
-                }
-            }
-            return sharesPerUser;
         }
+
     }
 }
 
