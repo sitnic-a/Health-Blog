@@ -1,4 +1,5 @@
-﻿using MentalHealthBlog.API.Models.ResourceRequest;
+﻿using iText.Layout.Element;
+using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Services;
 using Microsoft.AspNetCore.Http;
@@ -20,6 +21,12 @@ namespace MentalHealthBlog.API.Controllers
         public async Task<Response> GetSharesPerMentalHealthExpert([FromQuery] RegularUserSearchContentDto query)
         {
             return await _regularUserService.GetSharesPerMentalHealthExpert(query);
+        }
+
+        [HttpGet("recent")]
+        public async Task<Response> GetRecentSharesPerMentalHealthExpert([FromQuery] RegularUserSearchContentDto query)
+        {
+            return await _regularUserService.GetRecentSharesPerMentalHealthExpert(query);
         }
 
         [HttpDelete("revoke")]
