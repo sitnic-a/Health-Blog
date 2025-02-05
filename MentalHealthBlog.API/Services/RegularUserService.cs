@@ -47,7 +47,9 @@ namespace MentalHealthBlog.API.Services
                     return new Response(new object(), StatusCodes.Status404NotFound, RegularUserServiceLogTypes.NOT_FOUND.ToString());
                 }
 
-                var groupedSharesPerDoctor = dbShares.GroupBy(s => s.SharedWith);
+                var groupedSharesPerDoctor = dbShares
+                    .DistinctBy(s=> new {s.SharedPost, s.SharedWith})
+                    .GroupBy(s => s.SharedWith);
 
                 if (groupedSharesPerDoctor.IsNullOrEmpty())
                 {
