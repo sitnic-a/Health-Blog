@@ -123,21 +123,88 @@ export const SharedPosts = () => {
                     </h2>
                   </div>
                   <div className="shares-per-mental-health-expert-recent-shares-container">
-                    {recentShares.map((share) => {
+                    {recentShares.map((share, index) => {
                       let person = `${share.sharedWith.firstName} ${share.sharedWith.lastName}`
                       let sharedAt = formatDateToString(
                         share.sharedPost.sharedAt
                       )
                       return (
-                        <div className="shares-per-mental-health-expert-recent-share-container">
+                        <div
+                          className="shares-per-mental-health-expert-recent-share-container"
+                          key={index}
+                        >
                           <div className="shares-per-mental-health-expert-recent-share-title-container">
                             <h1 className="shares-per-mental-health-expert-recent-share-title">
                               {share.sharedPost.title}
-                              <span className="shares-per-menta-health-expert-recent-share-actions-container">
-                                <FaRegSquareMinus className="shares-per-menta-health-expert-recent-share-action recent-share-shrink-info-action" />
-                                <FaRegSquarePlus className="shares-per-menta-health-expert-recent-share-action recent-share-expand-info-action" />
-                              </span>
                             </h1>
+                            <span className="shares-per-mental-health-expert-recent-share-actions-container">
+                              <FaRegSquareMinus
+                                className="shares-per-mental-health-expert-recent-share-action recent-share-shrink-info-action"
+                                onClick={(e) => {
+                                  let spanContainer = e.currentTarget.parentNode
+                                  let expandAction =
+                                    spanContainer.children.item(1)
+                                  let recentShareContainer =
+                                    e.currentTarget.parentNode.parentNode
+                                      .parentNode
+
+                                  let basicInfoContainer =
+                                    recentShareContainer.children.item(1)
+
+                                  if (
+                                    basicInfoContainer.classList.contains(
+                                      'shares-per-mental-health-expert-recent-share-shrink-action-deactivated'
+                                    )
+                                  ) {
+                                    basicInfoContainer.classList.remove(
+                                      'shares-per-mental-health-expert-recent-share-shrink-action-deactivated'
+                                    )
+                                  }
+
+                                  basicInfoContainer.classList.add(
+                                    'shares-per-mental-health-expert-recent-share-shrink-action-activated'
+                                  )
+                                  e.currentTarget.style.display = 'none'
+                                  setTimeout(() => {
+                                    basicInfoContainer.style.display = 'none'
+                                    expandAction.style.display = 'inline'
+                                  }, 150)
+                                }}
+                              />
+                              <FaRegSquarePlus
+                                className="shares-per-mental-health-expert-recent-share-action recent-share-expand-info-action"
+                                onClick={(e) => {
+                                  let spanContainer = e.currentTarget.parentNode
+                                  let shrinkAction =
+                                    spanContainer.children.item(0)
+                                  let recentShareContainer =
+                                    e.currentTarget.parentNode.parentNode
+                                      .parentNode
+
+                                  let basicInfoContainer =
+                                    recentShareContainer.children.item(1)
+
+                                  if (
+                                    basicInfoContainer.classList.contains(
+                                      'shares-per-mental-health-expert-recent-share-shrink-action-activated'
+                                    )
+                                  ) {
+                                    basicInfoContainer.classList.remove(
+                                      'shares-per-mental-health-expert-recent-share-shrink-action-activated'
+                                    )
+                                  }
+
+                                  basicInfoContainer.classList.add(
+                                    'shares-per-mental-health-expert-recent-share-shrink-action-deactivated'
+                                  )
+                                  e.currentTarget.style.display = 'none'
+                                  setTimeout(() => {
+                                    basicInfoContainer.style.display = 'block'
+                                    shrinkAction.style.display = 'inline'
+                                  }, 150)
+                                }}
+                              />
+                            </span>
                           </div>
                           <div className="shares-per-mental-health-expert-recent-share-basic-info-container">
                             <p className="shares-per-mental-health-expert-recent-share-basic-info">
