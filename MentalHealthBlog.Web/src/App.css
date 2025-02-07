@@ -1,4 +1,4 @@
-input[type="text"],
+input[type='text'],
 textarea {
   border: 1px solid #a8a8a8;
   outline: none;
@@ -221,7 +221,7 @@ main {
   display: none;
 }
 
-input[name="manage-users-name-input-filter"] {
+input[name='manage-users-name-input-filter'] {
   padding: 0.3rem;
   max-width: 150px;
 }
@@ -766,7 +766,17 @@ dialog::backdrop {
 }
 
 .shares-per-mental-health-expert-content-main-container {
+  max-width: 1440px;
+  display: flex;
+  flex-grow: 1;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.shares-per-mental-health-expert-content-posts {
   display: inline-block;
+  max-width: 550px;
+  /* background-color: red; */
 }
 
 .shares-per-mental-health-expert-title {
@@ -800,6 +810,84 @@ dialog::backdrop {
   text-align: center;
   margin-top: 1rem;
   margin: 0;
+}
+
+.shares-per-mental-health-expert-recent-shares-main-container {
+  max-width: 400px;
+  width: 100%;
+  /* background: red; */
+}
+
+.shares-per-mental-health-expert-recent-shares-header-title {
+  margin: 0;
+  color: #ababab;
+  text-decoration: underline;
+}
+
+.shares-per-mental-health-expert-recent-share-title-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.shares-per-mental-health-expert-recent-share-title {
+  color: #cab587;
+}
+
+.shares-per-mental-health-expert-recent-share-action {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  transition: 200ms;
+}
+
+.shares-per-mental-health-expert-recent-share-action:hover {
+  color: #fff;
+  background: #cab587;
+}
+
+@keyframes recent-shares-shrink {
+  0% {
+    /* transform: translateY(0%); */
+    /* display: inline; */
+    height: 110px;
+  }
+  100% {
+    /* transform: translateY(-100%); */
+    /* display: none; */
+    height: 0px;
+  }
+}
+
+@keyframes recent-shares-expand {
+  0% {
+    /* transform: translateY(-100%); */
+    height: 0px;
+  }
+  100% {
+    /* transform: translateY(0%); */
+    height: auto;
+  }
+}
+
+.shares-per-mental-health-expert-recent-share-shrink-action-activated {
+  animation: recent-shares-shrink forwards 0.2s ease-out 1;
+}
+
+.shares-per-mental-health-expert-recent-share-shrink-action-deactivated {
+  animation: recent-shares-expand forwards 0.2s ease-out 1;
+}
+
+.recent-share-expand-info-action {
+  display: none;
+}
+
+.shares-per-mental-health-expert-recent-shares-container {
+  padding-top: 25px;
+}
+
+.shares-per-mental-health-expert-recent-share-basic-info {
+  margin-block: 0.8em;
 }
 
 .content-shared-with-mental-health-expert-main-container {
@@ -1002,7 +1090,7 @@ dialog::backdrop {
   }
 }
 
-button[data-action-update="update"] {
+button[data-action-update='update'] {
   position: absolute;
   background: none;
   outline: none;
@@ -1011,7 +1099,7 @@ button[data-action-update="update"] {
   left: 0.3rem;
 }
 
-button[data-action-delete="delete"] {
+button[data-action-delete='delete'] {
   position: absolute;
   background: none;
   outline: none;
@@ -1035,7 +1123,7 @@ button[data-action-delete="delete"] {
   border-radius: 0.4rem;
 }
 
-input[name="share-export"] {
+input[name='share-export'] {
   position: absolute;
   top: 0.45rem;
   width: 20px;
@@ -1047,7 +1135,7 @@ input[name="share-export"] {
   display: block;
 }
 
-button[data-action-add="add"] {
+button[data-action-add='add'] {
   background: none;
   outline: none;
   border: none;
@@ -1056,7 +1144,7 @@ button[data-action-add="add"] {
   background: #e1e1e1;
 }
 
-button[data-action-add="filter"] {
+button[data-action-add='filter'] {
   background: none;
   outline: none;
   border: none;
@@ -1066,7 +1154,7 @@ button[data-action-add="filter"] {
   width: 5.3rem;
 }
 
-button[data-action-select="select"] {
+button[data-action-select='select'] {
   background: none;
   outline: none;
   border: none;
@@ -1157,27 +1245,27 @@ div[data-tooltip-title]:after {
   padding: 0.3rem;
 }
 
-button[data-action-update="update"]:hover {
+button[data-action-update='update']:hover {
   cursor: pointer;
 }
 
-button[data-action-delete="delete"]:hover {
+button[data-action-delete='delete']:hover {
   cursor: pointer;
 }
 
-button[data-action-add="add"]:hover,
-button[data-action-add="filter"]:hover {
+button[data-action-add='add']:hover,
+button[data-action-add='filter']:hover {
   background: #f4f4f4;
   cursor: pointer;
 }
 
-button[data-action-add="add"] svg {
+button[data-action-add='add'] svg {
   margin-right: 2rem;
 }
 
-button[data-action-update="update"] svg,
-button[data-action-delete="delete"] svg,
-button[data-action-add="add"] svg {
+button[data-action-update='update'] svg,
+button[data-action-delete='delete'] svg,
+button[data-action-add='add'] svg {
   transform: scale(1.8);
   color: #000;
 }
@@ -1417,7 +1505,7 @@ button[data-action-add="add"] svg {
   height: 15px;
 }
 
-input[name="person-to-give-permission-checkbox"] {
+input[name='person-to-give-permission-checkbox'] {
   width: 19px;
   height: 19px;
   border-radius: 0px;
@@ -1574,7 +1662,7 @@ input[name="person-to-give-permission-checkbox"] {
 }
 
 .es-gmail-container > span > svg:hover {
-  fill: url("#es-gmail-container-gradient");
+  fill: url('#es-gmail-container-gradient');
 }
 
 .share-via-link-url-main-container {
@@ -1816,7 +1904,7 @@ input[name="person-to-give-permission-checkbox"] {
   font-size: 0.8rem;
 }
 
-select[name="filter-by-month"] {
+select[name='filter-by-month'] {
   margin-left: 0.5rem;
   max-width: 10rem;
   height: 1.8rem;
@@ -1826,7 +1914,7 @@ select[name="filter-by-month"] {
 }
 
 @media (width<322px) {
-  select[name="filter-by-month"] {
+  select[name='filter-by-month'] {
     margin: 0rem;
   }
 }
@@ -1882,7 +1970,7 @@ select[name="filter-by-month"] {
 .post-date p {
   font-size: 0.8em;
   color: #920d0d;
-  font-family: "serif";
+  font-family: 'serif';
   font-weight: 550;
   margin-block: 0;
   text-decoration: none;
@@ -1949,7 +2037,7 @@ pre:hover {
   overflow-y: scroll;
 }
 
-.post-by-id-container-edit input[name="title"] {
+.post-by-id-container-edit input[name='title'] {
   margin-inline: 2rem;
   border: none;
   border-bottom: 1px solid #e1e1e1;
@@ -1959,7 +2047,7 @@ pre:hover {
   border-radius: 3px;
 }
 
-.post-by-id-container-edit input[name="title"]:focus-within {
+.post-by-id-container-edit input[name='title']:focus-within {
   border: 1px solid rgb(188, 188, 253);
 }
 

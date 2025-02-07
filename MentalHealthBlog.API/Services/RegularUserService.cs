@@ -97,8 +97,10 @@ namespace MentalHealthBlog.API.Services
                         if (share != null && share.SharedPost != null && share.SharedWith != null)
                         {
                             var sharedPost = _mapper.Map<PostDto>(share.SharedPost);
+                            sharedPost.SharedAt = share.SharedAt;
                             var mentalHealthExpert = await _context.MentalHealthExperts.FirstOrDefaultAsync(mhe => mhe.UserId == share.SharedWithId);
                             var sharedWith = _mapper.Map<UserDto>(mentalHealthExpert);
+                            sharedWith.Username = share.SharedWith.Username;
                             recentShares.Add(new RecentSharesDto(sharedPost, sharedWith));
                         }
                         continue;
