@@ -8,7 +8,7 @@ using MentalHealthBlogAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
-#pragma warning disable CS8620
+#pragma warning disable CS8620, CS8602, CS8604, 
 
 namespace MentalHealthBlog.API.Services
 {
@@ -39,6 +39,7 @@ namespace MentalHealthBlog.API.Services
                     .Include(p => p.SharedPost)
                     .Include(mhe => mhe.SharedWith)
                     .Where(s => s.SharedPost.UserId == query.LoggedUserId)
+                    .OrderByDescending(s => s.SharedAt)
                     .ToListAsync();
 
                 if (dbShares.IsNullOrEmpty())
@@ -47,7 +48,9 @@ namespace MentalHealthBlog.API.Services
                     return new Response(new object(), StatusCodes.Status404NotFound, RegularUserServiceLogTypes.NOT_FOUND.ToString());
                 }
 
-                var groupedSharesPerDoctor = dbShares.GroupBy(s => s.SharedWith);
+                var groupedSharesPerDoctor = dbShares
+                    .DistinctBy(s => new { s.SharedPost, s.SharedWith })
+                    .GroupBy(s => s.SharedWith);
 
                 if (groupedSharesPerDoctor.IsNullOrEmpty())
                 {
@@ -73,6 +76,52 @@ namespace MentalHealthBlog.API.Services
             }
         }
 
+        public async Task<Response> GetRecentSharesPerMentalHealthExpert(RegularUserSearchContentDto query)
+        {
+            try
+            {
+                var userShares = await _context.Shares
+                    .Include(s => s.SharedPost)
+                    .Include(mhe => mhe.SharedWith)
+                    .Where(s => s.SharedPost.UserId == query.LoggedUserId)
+                    .OrderByDescending(s => s.SharedAt)
+                    .Take(5).ToListAsync();
+
+                userShares = userShares.DistinctBy(s => new { s.SharedPost, s.SharedWith }).ToList();
+
+                if (!userShares.IsNullOrEmpty())
+                {
+                    List<RecentSharesDto> recentShares = new List<RecentSharesDto>();
+                    foreach (var share in userShares)
+                    {
+                        if (share != null && share.SharedPost != null && share.SharedWith != null)
+                        {
+                            var sharedPost = _mapper.Map<PostDto>(share.SharedPost);
+                            var mentalHealthExpert = await _context.MentalHealthExperts.FirstOrDefaultAsync(mhe => mhe.UserId == share.SharedWithId);
+                            var sharedWith = _mapper.Map<UserDto>(mentalHealthExpert);
+                            recentShares.Add(new RecentSharesDto(sharedPost, sharedWith));
+                        }
+                        continue;
+                    }
+                    if (!recentShares.IsNullOrEmpty())
+                    {
+                        _regularUserLoggerService.LogInformation($"RECENT: {RegularUserServiceLogTypes.SUCCESS.ToString()}", recentShares);
+                        return new Response(recentShares, StatusCodes.Status200OK, RegularUserServiceLogTypes.SUCCESS.ToString());
+                    }
+                    _regularUserLoggerService.LogWarning($"RECENT: {RegularUserServiceLogTypes.EMPTY.ToString()}", recentShares);
+                    return new Response(recentShares, StatusCodes.Status204NoContent, RegularUserServiceLogTypes.EMPTY.ToString());
+                }
+                _regularUserLoggerService.LogInformation($"RECENT: {RegularUserServiceLogTypes.NOT_FOUND.ToString()}", userShares);
+                return new Response(userShares, StatusCodes.Status404NotFound, RegularUserServiceLogTypes.NOT_FOUND.ToString());
+
+            }
+            catch (Exception e)
+            {
+                _regularUserLoggerService.LogError($"RECENT: {RegularUserServiceLogTypes.ERROR.ToString()}", e.Message);
+                return new Response(e, StatusCodes.Status500InternalServerError, RegularUserServiceLogTypes.ERROR.ToString());
+            }
+
+        }
         public async Task<Response> RevokeContentPermission(RegularUserPermissionDto request)
         {
             try
@@ -104,7 +153,6 @@ namespace MentalHealthBlog.API.Services
                 return new Response(e.Data, StatusCodes.Status500InternalServerError, RegularUserServiceLogTypes.ERROR.ToString());
             }
         }
-
         private async Task<List<SharesPerMentalHealthExpertDto>> FillListGroupedMentalHealthExpertsAndContentSharedWithThem(IEnumerable<IGrouping<User, Share>> groupedMentalHealthExpertsAndContentSharedWithThem)
         {
             try
@@ -126,6 +174,9 @@ namespace MentalHealthBlog.API.Services
                         mentalHealthExpertContentIsSharedWith.Roles = mentalHealthExpertRoles;
 
                         List<PostDto> sharedContentWithMentalHealthExpert = shareHelper.CallFillSharedContent(mentalHealthExpertFromGroup, new List<PostDto>());
+                        sharedContentWithMentalHealthExpert = sharedContentWithMentalHealthExpert
+                            .OrderByDescending(s => s.SharedAt)
+                            .ToList();
                         sharesPerMentalHealthExpert.Add(new SharesPerMentalHealthExpertDto(mentalHealthExpertContentIsSharedWith, sharedContentWithMentalHealthExpert));
                     }
                 }
