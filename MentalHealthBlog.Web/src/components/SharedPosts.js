@@ -124,6 +124,7 @@ export const SharedPosts = () => {
                   </div>
                   <div className="shares-per-mental-health-expert-recent-shares-container">
                     {recentShares.map((share, index) => {
+                      let basicInfoContainerHeight
                       let person = `${share.sharedWith.firstName} ${share.sharedWith.lastName}`
                       let sharedAt = formatDateToString(
                         share.sharedPost.sharedAt
@@ -150,25 +151,15 @@ export const SharedPosts = () => {
 
                                   let basicInfoContainer =
                                     recentShareContainer.children.item(1)
+                                  basicInfoContainerHeight =
+                                    basicInfoContainer.clientHeight
+                                  basicInfoContainer.style.height = 0 + 'px'
+                                  basicInfoContainer.style.transition =
+                                    'height 150ms'
 
-                                  if (
-                                    basicInfoContainer.classList.contains(
-                                      'shares-per-mental-health-expert-recent-share-shrink-action-deactivated'
-                                    )
-                                  ) {
-                                    basicInfoContainer.classList.remove(
-                                      'shares-per-mental-health-expert-recent-share-shrink-action-deactivated'
-                                    )
-                                  }
-
-                                  basicInfoContainer.classList.add(
-                                    'shares-per-mental-health-expert-recent-share-shrink-action-activated'
-                                  )
                                   e.currentTarget.style.display = 'none'
-                                  setTimeout(() => {
-                                    basicInfoContainer.style.display = 'none'
-                                    expandAction.style.display = 'inline'
-                                  }, 150)
+                                  basicInfoContainer.style.visibility = 'hidden'
+                                  expandAction.style.display = 'inline'
                                 }}
                               />
                               <FaRegSquarePlus
@@ -183,25 +174,16 @@ export const SharedPosts = () => {
 
                                   let basicInfoContainer =
                                     recentShareContainer.children.item(1)
+                                  basicInfoContainer.style.height =
+                                    basicInfoContainerHeight + 'px'
+                                  basicInfoContainer.style.transition =
+                                    'height 150ms'
 
-                                  if (
-                                    basicInfoContainer.classList.contains(
-                                      'shares-per-mental-health-expert-recent-share-shrink-action-activated'
-                                    )
-                                  ) {
-                                    basicInfoContainer.classList.remove(
-                                      'shares-per-mental-health-expert-recent-share-shrink-action-activated'
-                                    )
-                                  }
-
-                                  basicInfoContainer.classList.add(
-                                    'shares-per-mental-health-expert-recent-share-shrink-action-deactivated'
-                                  )
                                   e.currentTarget.style.display = 'none'
-                                  setTimeout(() => {
-                                    basicInfoContainer.style.display = 'block'
-                                    shrinkAction.style.display = 'inline'
-                                  }, 150)
+                                  basicInfoContainer.style.visibility =
+                                    'visible'
+
+                                  shrinkAction.style.display = 'inline'
                                 }}
                               />
                             </span>
