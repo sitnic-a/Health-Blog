@@ -12,7 +12,7 @@ export const UserDashboard = () => {
           <ul className="navbar-list">
             <li>
               <Link
-                to={"shared-content"}
+                to={"shared-posts"}
                 state={{
                   loggedUser,
                 }}

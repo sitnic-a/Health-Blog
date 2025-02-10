@@ -6,17 +6,17 @@ export const ListOfSharedPosts = () => {
 
   return (
     <section id="list-of-shared-posts-main-container">
-      {postsToShare.map((post) => {
+      {postsToShare.map((post, index) => {
         let date = formatDateToString(post.createdAt);
         let tags = post.tags;
         return (
-          <div key={post.id}>
+          <div key={index}>
             <h1>{post.title}</h1>
             <p>{post.content}</p>
             <p>{date}</p>
             <div>
-              {tags.map((tag) => {
-                return <span>{tag} &nbsp;</span>;
+              {tags.map((tag, index) => {
+                return <span key={index}>{tag} &nbsp;</span>;
               })}
             </div>
           </div>
