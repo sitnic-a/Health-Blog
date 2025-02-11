@@ -11,40 +11,67 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace MentalHealthBlog.API.Services
 {
+    enum ShareServiceLogTypes
+    {
+        EMPTY,
+        NOT_FOUND,
+        SUCCESS,
+        ERROR
+    }
     public class ShareService : IShareService
     {
         private readonly DataContext _context;
+        private readonly ILogger<IShareService> _shareLoggerService;
         private const string _ADMIN_ROLE = "Administrator";
         private const string _USER_ROLE = "User";
 
-        public ShareService(DataContext context)
+        public ShareService(DataContext context, ILogger<IShareService> shareLoggerService)
         {
             _context = context;
+            _shareLoggerService = shareLoggerService;
         }
 
-        public async Task<List<PostDto>> ShareByLink(string shareId)
+        public async Task<Response> ShareByLink(string shareId)
         {
-            var shares = await _context
+            try
+            {
+                var dbShares = await _context
                 .Shares
                 .Include(p => p.SharedPost)
                 .Where(s => s.ShareGuid == shareId).ToListAsync();
 
-            var convertHelper = new PostHelper(_context);
-
-            var sharedContent = new List<PostDto>();
-
-            foreach (var share in shares)
-            {
-                if (!share.SharedPost.IsNullOrEmpthy())
+                if (dbShares.IsNullOrEmpty())
                 {
-                    var post = share.SharedPost;
-                    var tags = convertHelper.CallReturnPostTags(post.Id);
-                    sharedContent.Add(new PostDto(post.Id, post.Title, post.Content, post.UserId, post.CreatedAt, tags));
+                    _shareLoggerService.LogWarning($"LINK/shareId: {ShareServiceLogTypes.EMPTY.ToString()}", dbShares);
+                    return new Response(dbShares, StatusCodes.Status204NoContent, ShareServiceLogTypes.EMPTY.ToString());
                 }
-            }
 
-            if (sharedContent.Any()) return sharedContent;
-            return new List<PostDto>();
+                var convertHelper = new PostHelper(_context);
+                var sharedContent = new List<PostDto>();
+
+                foreach (var share in dbShares)
+                {
+                    if (!share.SharedPost.IsNullOrEmpthy())
+                    {
+                        var post = share.SharedPost;
+                        var tags = convertHelper.CallReturnPostTags(post.Id);
+                        sharedContent.Add(new PostDto(post.Id, post.Title, post.Content, post.UserId, post.CreatedAt, tags));
+                    }
+                }
+
+                if (sharedContent.Any())
+                {
+                    _shareLoggerService.LogInformation($"LINK/shareId: {ShareServiceLogTypes.SUCCESS.ToString()}", sharedContent);
+                    return new Response(sharedContent, StatusCodes.Status200OK, ShareServiceLogTypes.SUCCESS.ToString());
+                }
+                _shareLoggerService.LogWarning($"LINK/shareId: {ShareServiceLogTypes.NOT_FOUND.ToString()}", sharedContent);
+                return new Response(new List<PostDto>(), StatusCodes.Status404NotFound, ShareServiceLogTypes.NOT_FOUND.ToString());
+            }
+            catch (Exception e)
+            {
+                _shareLoggerService.LogError($"LINK/shareId: {ShareServiceLogTypes.ERROR.ToString()}",e);
+                return new Response(e, StatusCodes.Status500InternalServerError, e.Message);
+            }
         }
         public async Task<List<UserDto>> GetExpertsAndRelatives()
         {

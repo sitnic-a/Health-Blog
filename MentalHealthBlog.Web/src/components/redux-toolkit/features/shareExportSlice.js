@@ -164,7 +164,7 @@ let shareExportSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(shareByLink.fulfilled, (state, action) => {
-        state.postsToShare = action.payload;
+        state.postsToShare = action.payload.serviceResponseObject;
         state.isLoading = false;
       })
       .addCase(shareByLink.rejected, (state, action) => {
