@@ -182,18 +182,29 @@ let shareExportSlice = createSlice({
       })
       .addCase(shareContent.fulfilled, (state, action) => {
         if (state.isSharingLink === true) {
-          let sharedContent = action.payload;
+          let sharedContent = action.payload.serviceResponseObject;
           if (sharedContent.length > 0) {
             let shareId = sharedContent[0].shareGuid;
             let host = window.location.origin;
             state.shareLinkUrl = `${host}/share/link/${shareId}`;
           }
+          toast.success("You have succesfully shared content!", {
+            autoClose: 2000,
+            position: "bottom-right",
+          });
+          return;
         }
 
+        let statusCode = action.payload.statusCode;
         toast.success("You have succesfully shared content!", {
           autoClose: 2000,
           position: "bottom-right",
         });
+        if (statusCode === 201 || statusCode === 200) {
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        }
       })
       .addCase(shareContent.rejected, () => {
         toast.error("Something went wrong. Try again!", {

@@ -15,6 +15,7 @@ namespace MentalHealthBlog.API.Services
     {
         EMPTY,
         NOT_FOUND,
+        CREATED,
         SUCCESS,
         ERROR
     }
@@ -69,10 +70,68 @@ namespace MentalHealthBlog.API.Services
             }
             catch (Exception e)
             {
-                _shareLoggerService.LogError($"LINK/shareId: {ShareServiceLogTypes.ERROR.ToString()}",e);
+                _shareLoggerService.LogError($"LINK/shareId: {ShareServiceLogTypes.ERROR.ToString()}", e);
                 return new Response(e, StatusCodes.Status500InternalServerError, e.Message);
             }
         }
+
+        public async Task<Response> ShareContent(ShareContentDto contentToBeShared)
+        {
+            try
+            {
+                var shareHelper = new ShareHelper(_context);
+
+                if (contentToBeShared.ShareLink == false)
+                {
+                    if (contentToBeShared.PostIds.IsNullOrEmpty() ||
+                        contentToBeShared.SharedWithIds.IsNullOrEmpty() ||
+                        contentToBeShared.PostIds.Contains(0) ||
+                        contentToBeShared.SharedWithIds.Contains(0))
+                    {
+                        _shareLoggerService.LogWarning($"POST(SHARE-CONTENT): {ShareServiceLogTypes.NOT_FOUND.ToString()}", contentToBeShared);
+                        return new Response(new List<Share>(), StatusCodes.Status404NotFound, ShareServiceLogTypes.NOT_FOUND.ToString());
+                    }
+
+                    var sharedContent = await shareHelper.CallSaveNewShares(_context, contentToBeShared);
+                    if (sharedContent.Any())
+                    {
+                        _shareLoggerService.LogInformation($"POST(SHARE-CONTENT): {ShareServiceLogTypes.CREATED.ToString()}", sharedContent);
+                        return new Response(sharedContent, StatusCodes.Status201Created, ShareServiceLogTypes.CREATED.ToString());
+                    }
+
+                    _shareLoggerService.LogWarning($"POST(SHARE-CONTENT): {ShareServiceLogTypes.EMPTY.ToString()}", sharedContent);
+                    return new Response(new List<Share>(), StatusCodes.Status204NoContent,ShareServiceLogTypes.EMPTY.ToString());
+                }
+
+                if (contentToBeShared.ShareLink == true)
+                {
+                    if (contentToBeShared.PostIds.IsNullOrEmpty() ||
+                        contentToBeShared.PostIds.Contains(0))
+                    {
+                        _shareLoggerService.LogWarning($"POST(SHARE-CONTENT): {ShareServiceLogTypes.NOT_FOUND.ToString()}", contentToBeShared);
+                        return new Response(new List<Share>(), StatusCodes.Status404NotFound, ShareServiceLogTypes.NOT_FOUND.ToString());
+                    }
+
+                    var sharedContent = await shareHelper.CallSaveNewShares(_context, contentToBeShared);
+                    if (sharedContent.Any())
+                    {
+                        _shareLoggerService.LogInformation($"POST(SHARE-CONTENT): {ShareServiceLogTypes.SUCCESS.ToString()}", sharedContent);
+                        return new Response(sharedContent, StatusCodes.Status200OK, ShareServiceLogTypes.SUCCESS.ToString());
+                    }
+                    _shareLoggerService.LogWarning($"POST(SHARE-CONTENT): {ShareServiceLogTypes.EMPTY.ToString()}", sharedContent);
+                    return new Response(new List<Share>(), StatusCodes.Status204NoContent, ShareServiceLogTypes.EMPTY.ToString());
+                }
+
+                _shareLoggerService.LogWarning($"POST(SHARE-CONTENT): {ShareServiceLogTypes.NOT_FOUND.ToString()}", new object());
+                return new Response(new object(), StatusCodes.Status404NotFound, ShareServiceLogTypes.NOT_FOUND.ToString());
+            }
+            catch (Exception e)
+            {
+                _shareLoggerService.LogError($"POST(SHARE-CONTENT): {ShareServiceLogTypes.ERROR.ToString()}", e);
+                return new Response(e.Data, StatusCodes.Status500InternalServerError, ShareServiceLogTypes.ERROR.ToString());
+            }
+        }
+
         public async Task<List<UserDto>> GetExpertsAndRelatives()
         {
             try
@@ -126,32 +185,6 @@ namespace MentalHealthBlog.API.Services
 
         }
 
-        public async Task<List<Share>> ShareContent(ShareContentDto contentToBeShared)
-        {
-            var shareHelper = new ShareHelper(_context);
-
-            if (contentToBeShared.ShareLink == false)
-            {
-                if (contentToBeShared.PostIds.IsNullOrEmpty() ||
-                    contentToBeShared.SharedWithIds.IsNullOrEmpty() ||
-                    contentToBeShared.PostIds.Contains(0) ||
-                    contentToBeShared.SharedWithIds.Contains(0)) return new List<Share>();
-
-                var sharedContent = await shareHelper.CallSaveNewShares(_context, contentToBeShared);
-                if (sharedContent.Any()) return sharedContent;
-                return new List<Share>();
-            }
-            if (contentToBeShared.ShareLink == true)
-            {
-                if (contentToBeShared.PostIds.IsNullOrEmpty() ||
-                    contentToBeShared.PostIds.Contains(0)) return new List<Share>();
-
-                var sharedContent = await shareHelper.CallSaveNewShares(_context, contentToBeShared);
-                if (sharedContent.Any()) return sharedContent;
-                return new List<Share>();
-            }
-            return new List<Share>();
-        }
 
 
     }
