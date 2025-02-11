@@ -1,5 +1,7 @@
-﻿using MentalHealthBlog.API.Models.ResourceResponse;
+﻿using MentalHealthBlog.API.Models;
+using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Services;
+using MentalHealthBlog.API.Utils.Handlers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MentalHealthBlog.API.Controllers
@@ -23,6 +25,14 @@ namespace MentalHealthBlog.API.Controllers
             FileDto exportedFile = new FileDto(file.Data, file.FilePath,file.FileName, pdf,file.FileLength);
 
             return exportedFile != null ? exportedFile : new FileDto();
+        }
+
+        [HttpGet]
+        public List<Emotion> GetEmotions()
+        {
+            ExcelHandler excelHandler = new ExcelHandler();
+            List<Emotion> emotions = excelHandler.CallGetAllEmotionsFromEmotionWheelFile();
+            return emotions;
         }
     }
 }
