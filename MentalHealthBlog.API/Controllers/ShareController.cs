@@ -31,7 +31,7 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpGet("experts-relatives")]
-        public async Task<List<UserDto>> GetExpertsRelatives()
+        public async Task<Response> GetExpertsRelatives()
         {
             return await _shareService.GetExpertsAndRelatives();
         }

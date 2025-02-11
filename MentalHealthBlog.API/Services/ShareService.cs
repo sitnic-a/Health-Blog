@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using MentalHealthBlog.API.ExtensionMethods.ExtensionPostClass;
+﻿using MentalHealthBlog.API.ExtensionMethods.ExtensionPostClass;
 using MentalHealthBlog.API.Methods;
 using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
-using MentalHealthBlogAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+
+#pragma warning disable CS8601, CS8602, CS8600
 
 namespace MentalHealthBlog.API.Services
 {
@@ -132,13 +132,20 @@ namespace MentalHealthBlog.API.Services
             }
         }
 
-        public async Task<List<UserDto>> GetExpertsAndRelatives()
+        public async Task<Response> GetExpertsAndRelatives()
         {
             try
             {
                 var dbMentalHealthExperts = await _context.MentalHealthExperts
                     .Include(u => u.User)
+                    .Where(mhe => mhe.IsApproved)
                     .ToListAsync();
+
+                if (dbMentalHealthExperts.IsNullOrEmpty())
+                {
+                    _shareLoggerService.LogWarning($"EXPERTS-RELATIVES: {ShareServiceLogTypes.EMPTY.ToString()}", dbMentalHealthExperts);
+                    return new Response(dbMentalHealthExperts, StatusCodes.Status204NoContent, ShareServiceLogTypes.EMPTY.ToString());
+                }
 
                 var possibleToShareWith = new List<UserDto>();
 
@@ -148,20 +155,25 @@ namespace MentalHealthBlog.API.Services
                     .Where(ur => ur.Role.Name != _ADMIN_ROLE && ur.Role.Name != _USER_ROLE)
                     .GroupBy(ur => ur.UserId);
 
-                if (dbMentalHealthExperts.IsNullOrEmpty() || expertsAndRelatives.IsNullOrEmpty()) return new List<UserDto>();
+                if (expertsAndRelatives.IsNullOrEmpty())
+                {
+                    _shareLoggerService.LogWarning($"EXPERTS-RELATIVES: {ShareServiceLogTypes.EMPTY.ToString()}", expertsAndRelatives);
+                    return new Response(expertsAndRelatives, StatusCodes.Status204NoContent, ShareServiceLogTypes.EMPTY.ToString());
+                }
 
                 var dbUserRoles = new List<Role>();
                 MentalHealthExpert mentalHealthExpert = new MentalHealthExpert();
 
                 foreach (var item in expertsAndRelatives)
                 {
-
-                    dbUserRoles = item.Select(r => new Role(r.RoleId, r.Role.Name)).ToList();
+                    dbUserRoles = item?.Select(r => new Role(r.RoleId, r.Role.Name)).ToList();
                     mentalHealthExpert = dbMentalHealthExperts.FirstOrDefault(u => u.User.Id == item.Key);
 
                     if (mentalHealthExpert == null ||
                         mentalHealthExpert.User == null ||
-                        dbUserRoles.IsNullOrEmpty()) return new List<UserDto>();
+                        dbUserRoles.IsNullOrEmpty())
+
+                        continue;
 
                     possibleToShareWith.Add(new UserDto
                     {
@@ -175,17 +187,21 @@ namespace MentalHealthBlog.API.Services
                         PhotoAsPath = mentalHealthExpert.PhotoAsPath
                     });
                 }
-                return possibleToShareWith;
+
+                if (possibleToShareWith.Any())
+                {
+                    _shareLoggerService.LogInformation($"EXPERTS-RELATIVES: {ShareServiceLogTypes.SUCCESS.ToString()}", possibleToShareWith);
+                    return new Response(possibleToShareWith, StatusCodes.Status200OK, ShareServiceLogTypes.SUCCESS.ToString());
+                }
+
+                _shareLoggerService.LogWarning($"EXPERTS-RELATIVES: {ShareServiceLogTypes.NOT_FOUND.ToString()}", possibleToShareWith);
+                return new Response(possibleToShareWith, StatusCodes.Status404NotFound, ShareServiceLogTypes.NOT_FOUND.ToString());
             }
             catch (Exception e)
             {
-
-                throw new Exception(e.Message);
+                _shareLoggerService.LogError($"EXPERTS-RELATIVES: {ShareServiceLogTypes.ERROR.ToString()}", e);
+                return new Response(e.Data, StatusCodes.Status500InternalServerError,ShareServiceLogTypes.ERROR.ToString());
             }
-
         }
-
-
-
     }
 }

@@ -8,7 +8,7 @@ namespace MentalHealthBlog.API.Services
     {
         public Task<Response> ShareByLink(string shareId); 
         public Task<Response> ShareContent(ShareContentDto contentToBeShared);
-        public Task<List<UserDto>> GetExpertsAndRelatives();
+        public Task<Response> GetExpertsAndRelatives();
         
     }
 }

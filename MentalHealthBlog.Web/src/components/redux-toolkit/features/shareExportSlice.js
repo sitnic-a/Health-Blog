@@ -13,6 +13,7 @@ let initialState = {
   exportedDocument: null,
   isExported: false,
   possibleToShareWith: [],
+  numberOfPeoplePossibleToShareWith: 0,
   isSharingLink: false,
   shareLinkUrl: "",
   isLoading: false,
@@ -129,11 +130,14 @@ let shareExportSlice = createSlice({
       });
     },
 
-    checkVisibilityOfShareContentAction: () => {
+    checkVisibilityOfShareContentAction: (state) => {
       if (getPeopleToShareContentWith().length > 0) {
+        state.numberOfPeoplePossibleToShareWith =
+          getPeopleToShareContentWith().length;
         let shareBtn = document.querySelector(".share-btn-experts");
         shareBtn.style.display = "inline-block";
       } else {
+        state.numberOfPeoplePossibleToShareWith = 0;
         let shareBtn = document.querySelector(".share-btn-experts");
         shareBtn.style.display = "none";
       }
@@ -215,15 +219,13 @@ let shareExportSlice = createSlice({
 
       //get suggested experts or relatives
       .addCase(getExpertsAndRelatives.pending, (state, action) => {
-        console.log("Started with get experts and relatives...");
+        console.log("gEAR Pending...");
       })
       .addCase(getExpertsAndRelatives.fulfilled, (state, action) => {
-        console.log("Get experts and relatives succesfully finished");
-        console.log("Case gER payload ", action.payload);
-        state.possibleToShareWith = action.payload;
+        state.possibleToShareWith = action.payload.serviceResponseObject;
       })
       .addCase(getExpertsAndRelatives.rejected, (state, action) => {
-        console.log("Get experts and relatives rejected");
+        console.log("gEAR Error");
       });
   },
 });
