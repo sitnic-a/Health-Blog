@@ -38,7 +38,7 @@ namespace MentalHealthBlog.API.Services
                 var dbShares = await _context.Shares
                     .Include(p => p.SharedPost)
                     .Include(mhe => mhe.SharedWith)
-                    .Where(s => s.SharedPost.UserId == query.LoggedUserId)
+                    .Where(s => s.SharedPost.UserId == query.LoggedUserId && s.SharedWithId > 0)
                     .OrderByDescending(s => s.SharedAt)
                     .ToListAsync();
 
@@ -83,7 +83,7 @@ namespace MentalHealthBlog.API.Services
                 var userShares = await _context.Shares
                     .Include(s => s.SharedPost)
                     .Include(mhe => mhe.SharedWith)
-                    .Where(s => s.SharedPost.UserId == query.LoggedUserId)
+                    .Where(s => s.SharedPost.UserId == query.LoggedUserId && s.SharedWithId>0)
                     .OrderByDescending(s => s.SharedAt)
                     .Take(5).ToListAsync();
 

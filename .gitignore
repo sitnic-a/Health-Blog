@@ -397,5 +397,6 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
-#Every pdf file that is generated
+#Every pdf or excel file that is generated
 *pdfs
+*xlsx

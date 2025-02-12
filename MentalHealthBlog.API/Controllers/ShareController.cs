@@ -19,19 +19,19 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpGet("link/{shareId}")]
-        public async Task<List<PostDto>> ShareByLink(string shareId)
+        public async Task<Response> ShareByLink(string shareId)
         {
             return await _shareService.ShareByLink(shareId);
         }
 
         [HttpPost]
-        public async Task<List<Share>> ShareContent(ShareContentDto contentToBeShared)
+        public async Task<Response> ShareContent(ShareContentDto contentToBeShared)
         {
             return await _shareService.ShareContent(contentToBeShared);
         }
 
         [HttpGet("experts-relatives")]
-        public async Task<List<UserDto>> GetExpertsRelatives()
+        public async Task<Response> GetExpertsRelatives()
         {
             return await _shareService.GetExpertsAndRelatives();
         }

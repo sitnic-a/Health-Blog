@@ -6,9 +6,9 @@ namespace MentalHealthBlog.API.Services
 {
     public interface IShareService
     {
-        public Task<List<PostDto>> ShareByLink(string shareId); 
-        public Task<List<UserDto>> GetExpertsAndRelatives();
-        public Task<List<Share>> ShareContent(ShareContentDto contentToBeShared);
+        public Task<Response> ShareByLink(string shareId); 
+        public Task<Response> ShareContent(ShareContentDto contentToBeShared);
+        public Task<Response> GetExpertsAndRelatives();
         
     }
 }

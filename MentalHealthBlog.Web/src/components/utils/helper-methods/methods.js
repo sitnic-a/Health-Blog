@@ -11,6 +11,25 @@ export function formatDateToString(date) {
   return formattedDate
 }
 
+export function returnSharePerMentalHealthExpertRecentShareBasicInfoElements(
+  e
+) {
+  let spanContainer = e.currentTarget.parentNode
+  let shrinkAction = spanContainer.children.item(0)
+  let expandAction = spanContainer.children.item(1)
+  let recentShareContainer = e.currentTarget.parentNode.parentNode.parentNode
+
+  let basicInfoContainer = recentShareContainer.children.item(1)
+
+  return {
+    spanContainer,
+    shrinkAction,
+    expandAction,
+    recentShareContainer,
+    basicInfoContainer,
+  }
+}
+
 export function formatStringToDate(date) {
   return new Date(date)
 }

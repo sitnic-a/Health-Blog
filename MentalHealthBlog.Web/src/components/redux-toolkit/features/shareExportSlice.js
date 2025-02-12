@@ -13,6 +13,7 @@ let initialState = {
   exportedDocument: null,
   isExported: false,
   possibleToShareWith: [],
+  numberOfPeoplePossibleToShareWith: 0,
   isSharingLink: false,
   shareLinkUrl: "",
   isLoading: false,
@@ -129,11 +130,14 @@ let shareExportSlice = createSlice({
       });
     },
 
-    checkVisibilityOfShareContentAction: () => {
+    checkVisibilityOfShareContentAction: (state) => {
       if (getPeopleToShareContentWith().length > 0) {
+        state.numberOfPeoplePossibleToShareWith =
+          getPeopleToShareContentWith().length;
         let shareBtn = document.querySelector(".share-btn-experts");
         shareBtn.style.display = "inline-block";
       } else {
+        state.numberOfPeoplePossibleToShareWith = 0;
         let shareBtn = document.querySelector(".share-btn-experts");
         shareBtn.style.display = "none";
       }
@@ -164,7 +168,7 @@ let shareExportSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(shareByLink.fulfilled, (state, action) => {
-        state.postsToShare = action.payload;
+        state.postsToShare = action.payload.serviceResponseObject;
         state.isLoading = false;
       })
       .addCase(shareByLink.rejected, (state, action) => {
@@ -182,18 +186,29 @@ let shareExportSlice = createSlice({
       })
       .addCase(shareContent.fulfilled, (state, action) => {
         if (state.isSharingLink === true) {
-          let sharedContent = action.payload;
+          let sharedContent = action.payload.serviceResponseObject;
           if (sharedContent.length > 0) {
             let shareId = sharedContent[0].shareGuid;
             let host = window.location.origin;
             state.shareLinkUrl = `${host}/share/link/${shareId}`;
           }
+          toast.success("You have succesfully shared content!", {
+            autoClose: 2000,
+            position: "bottom-right",
+          });
+          return;
         }
 
+        let statusCode = action.payload.statusCode;
         toast.success("You have succesfully shared content!", {
           autoClose: 2000,
           position: "bottom-right",
         });
+        if (statusCode === 201 || statusCode === 200) {
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        }
       })
       .addCase(shareContent.rejected, () => {
         toast.error("Something went wrong. Try again!", {
@@ -204,15 +219,13 @@ let shareExportSlice = createSlice({
 
       //get suggested experts or relatives
       .addCase(getExpertsAndRelatives.pending, (state, action) => {
-        console.log("Started with get experts and relatives...");
+        console.log("gEAR Pending...");
       })
       .addCase(getExpertsAndRelatives.fulfilled, (state, action) => {
-        console.log("Get experts and relatives succesfully finished");
-        console.log("Case gER payload ", action.payload);
-        state.possibleToShareWith = action.payload;
+        state.possibleToShareWith = action.payload.serviceResponseObject;
       })
       .addCase(getExpertsAndRelatives.rejected, (state, action) => {
-        console.log("Get experts and relatives rejected");
+        console.log("gEAR Error");
       });
   },
 });

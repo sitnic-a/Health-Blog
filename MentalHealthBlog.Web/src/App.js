@@ -17,6 +17,7 @@ import { Requests } from "./components/administrator-dashboard/sections/requests
 import { NewExperts } from "./components/administrator-dashboard/sections/requests/NewExperts";
 import { ManageUsers } from "./components/administrator-dashboard/sections/manage-users/ManageUsers";
 import { SharedContentPermission } from "./components/SharedContentPermission";
+import { SharedContentPostsViaLink } from "./components/SharedContentPostsViaLink";
 
 function App() {
   return (
@@ -28,7 +29,7 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/post/:id" element={<PostById />}></Route>
             <Route path="/register" element={<Register />}></Route>
-            <Route path="/shared-content" element={<SharedPosts />}></Route>
+            <Route path="/shared-posts" element={<SharedPosts />}></Route>
             <Route
               path="shared-content-permission"
               element={<SharedContentPermission />}
@@ -36,7 +37,7 @@ function App() {
 
             <Route
               path="/share/link/:shareGuid"
-              element={<SharedPosts />}
+              element={<SharedContentPostsViaLink />}
             ></Route>
             <Route path="/requests" element={<Requests />}></Route>
             <Route path="/manage-users" element={<ManageUsers />}></Route>
