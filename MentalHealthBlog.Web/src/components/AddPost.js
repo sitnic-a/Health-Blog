@@ -53,7 +53,12 @@ export const AddPost = () => {
         onSubmit={submitForm}
         id="add-post-form"
         onKeyDown={(e) => {
-          e.key === "Enter" && e.preventDefault();
+          console.log("Type ", e);
+          if (e.key === "Enter" && e.target.localName === "textarea") {
+            return;
+          } else if (e.key === "Enter" && e.target.localName === "input") {
+            e.preventDefault();
+          }
         }}
       >
         <div className="add-post-modal-header">
