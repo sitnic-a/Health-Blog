@@ -27,13 +27,10 @@ namespace MentalHealthBlogAPI.Data
             base.OnModelCreating(modelBuilder);
 
             //Predefined emotions loaded on making database
-            if (Emotions.IsNullOrEmpty())
-            {
-                ExcelHandler excelHandler = new ExcelHandler();
-                List<Emotion> emotions = excelHandler.CallGetAllEmotionsFromEmotionWheelFile();
+            ExcelHandler excelHandler = new ExcelHandler();
+            List<Emotion> emotions = excelHandler.CallGetAllEmotionsFromEmotionWheelFile();
 
-                modelBuilder.Entity<Emotion>().HasData(emotions);
-            }
+            modelBuilder.Entity<Emotion>().HasData(emotions);
 
             modelBuilder.Entity<UserRole>().HasKey(ur => new { ur.UserId, ur.RoleId });
 

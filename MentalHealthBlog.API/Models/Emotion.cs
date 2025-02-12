@@ -7,7 +7,7 @@
 
         public Emotion(){}
 
-        public Emotion(int id, string name, string? color=null)
+        public Emotion(int id, string name)
         {
             Id = id;
             Name = name;

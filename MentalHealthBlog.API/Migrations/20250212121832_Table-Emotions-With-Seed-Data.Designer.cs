@@ -4,6 +4,7 @@ using MentalHealthBlogAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MentalHealthBlogAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250212121832_Table-Emotions-With-Seed-Data")]
+    partial class TableEmotionsWithSeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,7 +39,7 @@ namespace MentalHealthBlogAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Emotions", (string)null);
+                    b.ToTable("Emotions");
 
                     b.HasData(
                         new
@@ -497,7 +500,7 @@ namespace MentalHealthBlogAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("MentalHealthExperts", (string)null);
+                    b.ToTable("MentalHealthExperts");
                 });
 
             modelBuilder.Entity("MentalHealthBlog.API.Models.PostTag", b =>
@@ -512,7 +515,7 @@ namespace MentalHealthBlogAPI.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("PostsTags", (string)null);
+                    b.ToTable("PostsTags");
                 });
 
             modelBuilder.Entity("MentalHealthBlog.API.Models.Role", b =>
@@ -529,7 +532,7 @@ namespace MentalHealthBlogAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
 
                     b.HasData(
                         new
@@ -581,7 +584,7 @@ namespace MentalHealthBlogAPI.Migrations
 
                     b.HasIndex("SharedWithId");
 
-                    b.ToTable("Shares", (string)null);
+                    b.ToTable("Shares");
                 });
 
             modelBuilder.Entity("MentalHealthBlog.API.Models.Tag", b =>
@@ -598,7 +601,7 @@ namespace MentalHealthBlogAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags", (string)null);
+                    b.ToTable("Tags");
 
                     b.HasData(
                         new
@@ -650,7 +653,7 @@ namespace MentalHealthBlogAPI.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("UserRoles", (string)null);
+                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("MentalHealthBlogAPI.Models.Post", b =>
@@ -679,7 +682,7 @@ namespace MentalHealthBlogAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Posts", (string)null);
+                    b.ToTable("Posts");
 
                     b.HasData(
                         new
@@ -746,7 +749,7 @@ namespace MentalHealthBlogAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
 
                     b.HasData(
                         new

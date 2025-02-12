@@ -1,7 +1,7 @@
-﻿
-using IronXL;
-using MentalHealthBlog.API.Models;
+﻿using MentalHealthBlog.API.Models;
+using OfficeOpenXml;
 
+#pragma warning disable CS8600
 
 namespace MentalHealthBlog.API.Utils.Handlers
 {
@@ -21,44 +21,56 @@ namespace MentalHealthBlog.API.Utils.Handlers
 
             string filePath = directory.FullName;
 
-            WorkBook workBook = WorkBook.Load(filePath);
-            WorkSheet workSheet = workBook.WorkSheets[0];
-            IronXL.Range range = workSheet;
-
-            int numberOfRows = range.Rows.Length;
-            int numberOfColumns = range.Columns.Length;
-            const int __BOTTOM_LEVEL_EMOTION_COLUMN = 0;
-            const int __TOP_LEVEL_EMOTION_COLUMN = 2;
-
-            for (int i = 1; i <= numberOfRows; i++)
+            FileInfo existingFile = new FileInfo(filePath);
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            
+            using (ExcelPackage package = new ExcelPackage(existingFile))
             {
+                //Get the first worksheet in the workbook
+                ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
+                int numberOfRows = worksheet.Dimension.End.Row;
+                int numberOfColumns = worksheet.Dimension.End.Column;
+                
+                const int __FIRST_ROW_WITH_VALUE = 2;
+                const int __FIRST_COLUMN = 1;
+
+                //Column names
+                const int __BOTTOM_LEVEL_EMOTION_COLUMN = 1;
+                const int __TOP_LEVEL_EMOTION_COLUMN = 3;
+                
                 string bottomLevelEmotion = "";
                 string topLevelEmotion = "";
-                for (int j = 1; j <= numberOfColumns; j++)
+
+                for (int i = __FIRST_ROW_WITH_VALUE; i <= numberOfRows; i++)
                 {
-                    if (j == __BOTTOM_LEVEL_EMOTION_COLUMN)
+                    
+                    for (int j = __FIRST_COLUMN; j <= numberOfColumns; j++)
                     {
-                        if (!String.IsNullOrEmpty(range.Rows[i].Columns[j].ToString()))
+                        if (j == __BOTTOM_LEVEL_EMOTION_COLUMN)
                         {
-                            bottomLevelEmotion = range.Rows[i].Columns[j].ToString();
-                            continue;
+                            if (!string.IsNullOrEmpty(worksheet.Cells[i, j].Value.ToString()))
+                            {
+                                bottomLevelEmotion = worksheet.Cells[i, j].Value.ToString();
+                                continue;
+                            }
+                        }
+                        else if (j == __TOP_LEVEL_EMOTION_COLUMN)
+                        {
+                            if (!string.IsNullOrEmpty(worksheet.Cells[i, j].Value.ToString()))
+                            {
+                                topLevelEmotion = worksheet.Cells[i, j].Value.ToString();
+                            }
+                        }
+
+                        if (!string.IsNullOrEmpty(bottomLevelEmotion) && !string.IsNullOrEmpty(topLevelEmotion))
+                        {
+                            var emotion = string.Concat(bottomLevelEmotion, "(", topLevelEmotion, ")");
+                            emotionFromFile.Add(new Emotion(emotionId, emotion));
+                            ++emotionId;
+                            bottomLevelEmotion = "";
+                            topLevelEmotion = "";
                         }
                     }
-                    else if (j == __TOP_LEVEL_EMOTION_COLUMN)
-                    {
-                        if (!String.IsNullOrEmpty(range.Rows[i].Columns[j].ToString()))
-                        {
-                            topLevelEmotion = range.Rows[i].Columns[j].ToString();
-                        }
-                    }
-
-                    if (!String.IsNullOrEmpty(bottomLevelEmotion) && !String.IsNullOrEmpty(topLevelEmotion))
-                    {
-                        var emotion = String.Concat(bottomLevelEmotion, "(", topLevelEmotion, ")");
-                        emotionFromFile.Add(new Emotion(emotionId, emotion));
-                        ++emotionId;
-                    }
-
                 }
             }
             return emotionFromFile.Any() ? emotionFromFile : new List<Emotion>();
