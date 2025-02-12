@@ -83,6 +83,7 @@ export const AddPost = () => {
               name="content"
               id="content"
               rows="10"
+              spellCheck={false}
             ></textarea>
           </div>
 
