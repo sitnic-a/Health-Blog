@@ -1,63 +1,65 @@
-import React from "react";
-import Modal from "react-modal";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import useFetchLocationState from "./custom/hooks/useFetchLocationState";
-import { openAddModal } from "./redux-toolkit/features/modalSlice";
-import { createPost } from "./redux-toolkit/features/postSlice";
+import React from 'react'
+import Modal from 'react-modal'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import useFetchLocationState from './custom/hooks/useFetchLocationState'
+import { openAddModal } from './redux-toolkit/features/modalSlice'
+import { createPost } from './redux-toolkit/features/postSlice'
 import {
   setSuggestedTags,
   setDisplayedSuggestedTags,
   setChosenTags,
   setPickedTags,
   getTags,
-} from "./redux-toolkit/features/tagSlice";
+} from './redux-toolkit/features/tagSlice'
+import { getEmotions } from './redux-toolkit/features/emotionSlice'
 
-import { application } from "../application";
-import { TagsOnPostCreation } from "./TagsOnPostCreation";
+import { application } from '../application'
+import { TagsOnPostCreation } from './TagsOnPostCreation'
 
 export const AddPost = () => {
   useEffect(() => {
-    dispatch(getTags());
-  }, []);
+    dispatch(getTags())
+    dispatch(getEmotions())
+  }, [])
 
-  let dispatch = useDispatch();
-  let { loggedUser } = useFetchLocationState();
-  let { isAddOpen } = useSelector((store) => store.modal);
-  let { chosenTags } = useSelector((store) => store.tag);
+  let dispatch = useDispatch()
+  let { loggedUser } = useFetchLocationState()
+  let { isAddOpen } = useSelector((store) => store.modal)
+  let { chosenTags } = useSelector((store) => store.tag)
 
   let submitForm = (e) => {
     let addPostObj = {
       e,
       loggedUser,
       chosenTags,
-    };
-    dispatch(createPost(addPostObj));
-    dispatch(openAddModal(false));
-  };
+    }
+    dispatch(createPost(addPostObj))
+    dispatch(openAddModal(false))
+  }
 
   return (
     <Modal
       isOpen={isAddOpen}
       style={application.modal_style}
-      appElement={document.getElementById("root")}
+      appElement={document.getElementById('root')}
       onRequestClose={() => {
-        dispatch(openAddModal(false));
-        dispatch(setSuggestedTags([]));
-        dispatch(setDisplayedSuggestedTags([]));
-        dispatch(setChosenTags([]));
-        dispatch(setPickedTags([]));
+        dispatch(openAddModal(false))
+        dispatch(setSuggestedTags([]))
+        dispatch(setDisplayedSuggestedTags([]))
+        dispatch(setChosenTags([]))
+        dispatch(setPickedTags([]))
       }}
     >
       <form
         onSubmit={submitForm}
         id="add-post-form"
         onKeyDown={(e) => {
-          console.log("Type ", e);
-          if (e.key === "Enter" && e.target.localName === "textarea") {
-            return;
-          } else if (e.key === "Enter" && e.target.localName === "input") {
-            e.preventDefault();
+          console.log('Type ', e)
+          if (e.key === 'Enter' && e.target.localName === 'textarea') {
+            return
+          } else if (e.key === 'Enter' && e.target.localName === 'input') {
+            e.preventDefault()
           }
         }}
       >
@@ -92,5 +94,5 @@ export const AddPost = () => {
         <button type="submit">Save</button>
       </form>
     </Modal>
-  );
-};
+  )
+}
