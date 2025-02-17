@@ -3,6 +3,7 @@ import { application } from '../../../application'
 
 let initialState = {
   dbEmotions: [],
+  suggestedEmotions: [],
 }
 
 export const getEmotions = createAsyncThunk('/emotions', async () => {
@@ -16,7 +17,13 @@ export const getEmotions = createAsyncThunk('/emotions', async () => {
 let emotionSlice = createSlice({
   initialState,
   name: 'emotionSlice',
-  reducers: {},
+  reducers: {
+    setSuggestedEmotions: (state, action) => {
+      console.log('ACtion payload ', action.payload)
+
+      state.suggestedEmotions = action.payload
+    },
+  },
   extraReducers: (builder) => {
     builder
 
@@ -36,5 +43,5 @@ let emotionSlice = createSlice({
   },
 })
 
-export const {} = emotionSlice.actions
+export const { setSuggestedEmotions } = emotionSlice.actions
 export default emotionSlice.reducer

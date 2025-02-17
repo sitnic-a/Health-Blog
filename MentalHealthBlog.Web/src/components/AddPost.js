@@ -18,15 +18,15 @@ import { application } from '../application'
 import { TagsOnPostCreation } from './TagsOnPostCreation'
 
 export const AddPost = () => {
-  useEffect(() => {
-    dispatch(getTags())
-    dispatch(getEmotions())
-  }, [])
-
   let dispatch = useDispatch()
   let { loggedUser } = useFetchLocationState()
   let { isAddOpen } = useSelector((store) => store.modal)
   let { chosenTags } = useSelector((store) => store.tag)
+
+  useEffect(() => {
+    dispatch(getTags())
+    dispatch(getEmotions())
+  }, [])
 
   let submitForm = (e) => {
     let addPostObj = {
