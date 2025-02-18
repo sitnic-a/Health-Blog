@@ -714,6 +714,20 @@ dialog::backdrop {
   cursor: pointer;
 }
 
+.add-post-picked-emotions-container {
+  margin-block: 0.5rem;
+}
+
+.add-post-picked-emotion-container {
+  display: inline-block;
+  max-width: fit-content;
+  margin-block: 0.1rem;
+  margin-right: 0.6rem;
+  padding: 0.5rem;
+  background: transparent(0.5);
+  backdrop-filter: blur(100%);
+}
+
 .add-post-suggested-emotions-container {
   margin-block: 1rem;
   height: 100px;
@@ -721,10 +735,24 @@ dialog::backdrop {
 }
 
 .add-post-suggested-emotion-container {
-  margin-block: 0.1rem;
-  max-width: fit-content;
-  padding: 0.5rem;
+  position: relative;
   display: inline-block;
+  max-width: fit-content;
+  margin-block: 0.1rem;
+  margin-right: 0.6rem;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.add-post-suggested-emotion-marker {
+  position: absolute;
+  left: 50%;
+  top: 0%;
+  background: none;
+  color: #fff;
+  border-radius: 360px;
+  transform: translateX(-50%);
+  font-size: 2rem;
 }
 
 .list-of-posts-author {

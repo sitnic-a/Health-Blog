@@ -1,15 +1,120 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setSuggestedEmotions } from './redux-toolkit/features/emotionSlice'
+import {
+  setPickedEmotions,
+  setSuggestedEmotions,
+} from './redux-toolkit/features/emotionSlice'
+
+import { IoIosCheckmarkCircleOutline } from 'react-icons/io'
 
 export const EmotionsOnPostCreation = () => {
   let dispatch = useDispatch()
-  let { dbEmotions, suggestedEmotions } = useSelector((store) => store.emotion)
+  let pickedEmotionsFromList = []
+
+  let { dbEmotions, suggestedEmotions, pickedEmotions } = useSelector(
+    (store) => store.emotion
+  )
   return (
     <>
       <div className="add-post-emotions-container">
         <label>Emotions</label>
         <br />
+
+        {pickedEmotions.length > 0 && (
+          <div
+            className="add-post-picked-emotions-container"
+            style={{ marginBlock: '0.8rem' }}
+          >
+            {pickedEmotions.map((emotion) => {
+              if (emotion.name.includes('Bad')) {
+                return (
+                  <div
+                    className="add-post-picked-emotion-container"
+                    style={{
+                      background: 'red',
+                    }}
+                    key={emotion.id}
+                  >
+                    {emotion.name}
+                  </div>
+                )
+              } else if (emotion.name.includes('Happy')) {
+                return (
+                  <div
+                    className="add-post-picked-emotion-container"
+                    style={{
+                      background: 'green',
+                    }}
+                    key={emotion.id}
+                  >
+                    {emotion.name}
+                  </div>
+                )
+              } else if (emotion.name.includes('Surprised')) {
+                return (
+                  <div
+                    className="add-post-picked-emotion-container"
+                    style={{
+                      background: 'lightblue',
+                    }}
+                    key={emotion.id}
+                  >
+                    {emotion.name}
+                  </div>
+                )
+              } else if (emotion.name.includes('Angry')) {
+                return (
+                  <div
+                    className="add-post-picked-emotion-container"
+                    style={{
+                      background: 'orange',
+                    }}
+                    key={emotion.id}
+                  >
+                    {emotion.name}
+                  </div>
+                )
+              } else if (emotion.name.includes('Sad')) {
+                return (
+                  <div
+                    className="add-post-picked-emotion-container"
+                    style={{
+                      background: 'lightpink',
+                    }}
+                    key={emotion.id}
+                  >
+                    {emotion.name}
+                  </div>
+                )
+              } else if (emotion.name.includes('Disgusted')) {
+                return (
+                  <div
+                    className="add-post-picked-emotion-container"
+                    style={{
+                      background: 'limegreen',
+                    }}
+                    key={emotion.id}
+                  >
+                    {emotion.name}
+                  </div>
+                )
+              } else if (emotion.name.includes('Fearful')) {
+                return (
+                  <div
+                    className="add-post-picked-emotion-container"
+                    style={{
+                      background: 'yellow',
+                    }}
+                    key={emotion.id}
+                  >
+                    {emotion.name}
+                  </div>
+                )
+              }
+            })}
+          </div>
+        )}
+
         <input
           type="text"
           onFocus={() => {
@@ -44,8 +149,17 @@ export const EmotionsOnPostCreation = () => {
                 <div
                   key={emotion.id}
                   className="add-post-suggested-emotion-container"
-                  style={{ background: 'red', marginRight: '10px' }}
+                  style={{ background: 'red' }}
+                  onClick={() => {
+                    let pickedEmotion = {
+                      id: emotion.id,
+                      name: emotion.name,
+                    }
+                    pickedEmotionsFromList = [...pickedEmotions, pickedEmotion]
+                    dispatch(setPickedEmotions(pickedEmotionsFromList))
+                  }}
                 >
+                  <IoIosCheckmarkCircleOutline className="add-post-suggested-emotion-marker" />
                   {emotion.name}
                 </div>
               )
@@ -54,8 +168,17 @@ export const EmotionsOnPostCreation = () => {
                 <div
                   key={emotion.id}
                   className="add-post-suggested-emotion-container"
-                  style={{ background: 'green', marginRight: '10px' }}
+                  style={{ background: 'green' }}
+                  onClick={() => {
+                    let pickedEmotion = {
+                      id: emotion.id,
+                      name: emotion.name,
+                    }
+                    pickedEmotionsFromList = [...pickedEmotions, pickedEmotion]
+                    dispatch(setPickedEmotions(pickedEmotionsFromList))
+                  }}
                 >
+                  <IoIosCheckmarkCircleOutline className="add-post-suggested-emotion-marker" />
                   {emotion.name}
                 </div>
               )
@@ -64,8 +187,17 @@ export const EmotionsOnPostCreation = () => {
                 <div
                   key={emotion.id}
                   className="add-post-suggested-emotion-container"
-                  style={{ background: 'lightblue', marginRight: '10px' }}
+                  style={{ background: 'lightblue' }}
+                  onClick={() => {
+                    let pickedEmotion = {
+                      id: emotion.id,
+                      name: emotion.name,
+                    }
+                    pickedEmotionsFromList = [...pickedEmotions, pickedEmotion]
+                    dispatch(setPickedEmotions(pickedEmotionsFromList))
+                  }}
                 >
+                  <IoIosCheckmarkCircleOutline className="add-post-suggested-emotion-marker" />
                   {emotion.name}
                 </div>
               )
@@ -74,8 +206,17 @@ export const EmotionsOnPostCreation = () => {
                 <div
                   key={emotion.id}
                   className="add-post-suggested-emotion-container"
-                  style={{ background: 'orange', marginRight: '10px' }}
+                  style={{ background: 'orange' }}
+                  onClick={() => {
+                    let pickedEmotion = {
+                      id: emotion.id,
+                      name: emotion.name,
+                    }
+                    pickedEmotionsFromList = [...pickedEmotions, pickedEmotion]
+                    dispatch(setPickedEmotions(pickedEmotionsFromList))
+                  }}
                 >
+                  <IoIosCheckmarkCircleOutline className="add-post-suggested-emotion-marker" />
                   {emotion.name}
                 </div>
               )
@@ -84,8 +225,17 @@ export const EmotionsOnPostCreation = () => {
                 <div
                   key={emotion.id}
                   className="add-post-suggested-emotion-container"
-                  style={{ background: 'lightpink', marginRight: '10px' }}
+                  style={{ background: 'lightpink' }}
+                  onClick={() => {
+                    let pickedEmotion = {
+                      id: emotion.id,
+                      name: emotion.name,
+                    }
+                    pickedEmotionsFromList = [...pickedEmotions, pickedEmotion]
+                    dispatch(setPickedEmotions(pickedEmotionsFromList))
+                  }}
                 >
+                  <IoIosCheckmarkCircleOutline className="add-post-suggested-emotion-marker" />
                   {emotion.name}
                 </div>
               )
@@ -94,8 +244,17 @@ export const EmotionsOnPostCreation = () => {
                 <div
                   key={emotion.id}
                   className="add-post-suggested-emotion-container"
-                  style={{ background: 'limegreen', marginRight: '10px' }}
+                  style={{ background: 'limegreen' }}
+                  onClick={() => {
+                    let pickedEmotion = {
+                      id: emotion.id,
+                      name: emotion.name,
+                    }
+                    pickedEmotionsFromList = [...pickedEmotions, pickedEmotion]
+                    dispatch(setPickedEmotions(pickedEmotionsFromList))
+                  }}
                 >
+                  <IoIosCheckmarkCircleOutline className="add-post-suggested-emotion-marker" />
                   {emotion.name}
                 </div>
               )
@@ -104,8 +263,17 @@ export const EmotionsOnPostCreation = () => {
                 <div
                   key={emotion.id}
                   className="add-post-suggested-emotion-container"
-                  style={{ background: 'yellow', marginRight: '10px' }}
+                  style={{ background: 'yellow' }}
+                  onClick={() => {
+                    let pickedEmotion = {
+                      id: emotion.id,
+                      name: emotion.name,
+                    }
+                    pickedEmotionsFromList = [...pickedEmotions, pickedEmotion]
+                    dispatch(setPickedEmotions(pickedEmotionsFromList))
+                  }}
                 >
+                  <IoIosCheckmarkCircleOutline className="add-post-suggested-emotion-marker" />
                   {emotion.name}
                 </div>
               )
