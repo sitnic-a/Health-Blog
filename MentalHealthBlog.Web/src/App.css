@@ -732,11 +732,32 @@ dialog::backdrop {
 }
 
 .add-post-picked-emotion-container {
+  position: relative;
   display: inline-block;
   max-width: fit-content;
   margin-block: 0.1rem;
   margin-right: 0.6rem;
   padding: 0.5rem;
+  padding-right: 1rem;
+}
+
+.add-post-picked-emotion-remove-from-list-button {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  padding-inline: 0.2rem;
+  color: #fff;
+  border-radius: 360px;
+  font-size: 0.8rem;
+  font-weight: 400;
+  background: #e43d3d;
+  cursor: pointer;
+}
+
+.add-post-picked-emotion-remove-from-list-button:hover {
+  font-weight: 500;
+  background: #fff;
+  color: #e43d3d;
 }
 
 .add-post-suggested-emotions-container {
