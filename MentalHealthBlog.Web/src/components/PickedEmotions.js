@@ -1,14 +1,23 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { setPickedEmotions } from './redux-toolkit/features/emotionSlice'
 
 import { PickedEmotion } from './PickedEmotion'
+import { CiTrash } from 'react-icons/ci'
 
 export const PickedEmotions = () => {
+  let dispatch = useDispatch()
   let { pickedEmotions } = useSelector((store) => store.emotion)
 
   return (
     pickedEmotions.length > 0 && (
       <div className="add-post-picked-emotions-container">
+        <CiTrash
+          className="add-post-picked-emotions-unpick-all-emotions-button"
+          onClick={() => {
+            dispatch(setPickedEmotions([]))
+          }}
+        />
         {pickedEmotions.map((emotion) => {
           if (emotion.name.includes('Bad')) {
             return (
