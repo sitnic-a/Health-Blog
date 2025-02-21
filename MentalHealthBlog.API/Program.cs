@@ -80,6 +80,7 @@ builder.Services.AddScoped<IShareService, ShareService>();
 builder.Services.AddScoped<IMentalExpertService, MentalExpertService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IRegularUserService, RegularUserService>();
+builder.Services.AddScoped<IEmotionService, EmotionService>();
 
 builder.Services.AddDbContext<DataContext>(options =>
 {

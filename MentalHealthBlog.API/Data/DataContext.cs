@@ -21,6 +21,7 @@ namespace MentalHealthBlogAPI.Data
         public DbSet<Share> Shares { get; set; }
         public DbSet<MentalHealthExpert> MentalHealthExperts { get; set; }
         public DbSet<Emotion> Emotions { get; set; }
+        public DbSet<PostEmotion> PostsEmotions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -38,6 +39,12 @@ namespace MentalHealthBlogAPI.Data
             {
                 pt.PostId,
                 pt.TagId
+            });
+
+            modelBuilder.Entity<PostEmotion>().HasKey(pe => new
+            {
+                pe.PostId,
+                pe.EmotionId
             });
 
             modelBuilder.Entity<User>().HasData(

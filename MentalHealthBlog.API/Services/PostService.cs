@@ -109,6 +109,7 @@ namespace MentalHealthBlogAPI.Services
             {
                 var mappedPost = _autoMapper.Map<Post>(post);
                 var tagsNumber = post.Tags.Count;
+                var emotionsNumber = post.Emotions.Count;
 
                 if (tagsNumber > 0)
                 {
@@ -144,6 +145,19 @@ namespace MentalHealthBlogAPI.Services
                     {
                         var postTag = new PostTag(newPost.Entity.Id, tag.Id);
                         await _context.PostsTags.AddAsync(postTag);
+                    }
+                }
+
+                if (emotionsNumber > 0)
+                {
+                    foreach (var emotionId in post.Emotions)
+                    {
+                        if (emotionId <= 0)
+                        {
+                            continue;
+                        }
+                        var postEmotion = new PostEmotion(newPost.Entity.Id, emotionId);
+                        _context.PostsEmotions?.AddAsync(postEmotion);
                     }
                 }
 
