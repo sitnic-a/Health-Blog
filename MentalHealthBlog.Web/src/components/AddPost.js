@@ -22,6 +22,7 @@ export const AddPost = () => {
   let { loggedUser } = useFetchLocationState()
   let { isAddOpen } = useSelector((store) => store.modal)
   let { chosenTags } = useSelector((store) => store.tag)
+  let { pickedEmotions } = useSelector((store) => store.emotion)
 
   useEffect(() => {
     dispatch(getTags())
@@ -29,10 +30,12 @@ export const AddPost = () => {
   }, [])
 
   let submitForm = (e) => {
+    let chosenEmotions = pickedEmotions.map((emotion) => emotion.id)
     let addPostObj = {
       e,
       loggedUser,
       chosenTags,
+      chosenEmotions,
     }
     dispatch(createPost(addPostObj))
     dispatch(openAddModal(false))

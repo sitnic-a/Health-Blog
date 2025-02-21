@@ -35,6 +35,7 @@ export const createPost = createAsyncThunk('post/add/', async (addPostObj) => {
     content: data.content,
     userId: addPostObj.loggedUser.id,
     tags: addPostObj.chosenTags,
+    emotions: addPostObj.chosenEmotions,
   }
 
   let request = await fetch(url, {
