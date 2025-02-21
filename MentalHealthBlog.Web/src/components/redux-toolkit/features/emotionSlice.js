@@ -20,14 +20,11 @@ let emotionSlice = createSlice({
   name: 'emotionSlice',
   reducers: {
     setSuggestedEmotions: (state, action) => {
-      console.log('Action payload ', action.payload)
       state.suggestedEmotions = action.payload
     },
 
     setPickedEmotions: (state, action) => {
-      console.log('Picked emotions payload ', action.payload)
       state.pickedEmotions = action.payload
-      console.log('Picked emotions ', state.pickedEmotions)
     },
   },
   extraReducers: (builder) => {
@@ -41,10 +38,9 @@ let emotionSlice = createSlice({
         console.clear()
         let serviceResponseObject = action.payload.serviceResponseObject
         state.dbEmotions = serviceResponseObject
-        console.log('Db Emotions fulfilled ', state.dbEmotions)
       })
       .addCase(getEmotions.rejected, (state, action) => {
-        console.log('Db Emotions error ', action.payload)
+        //
       })
   },
 })
