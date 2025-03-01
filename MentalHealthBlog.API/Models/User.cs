@@ -1,4 +1,8 @@
-﻿namespace MentalHealthBlogAPI.Models
+﻿using MentalHealthBlog.API.Models;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
+
+namespace MentalHealthBlogAPI.Models
 {
     public class User
     {
@@ -7,6 +11,8 @@
         public byte[] PasswordSalt { get; set; }
         public string PasswordHash { get; set; } = string.Empty;
         public List<Post> Posts { get; set; }
+        [JsonIgnore]
+        public List<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
 
         public User()
         {

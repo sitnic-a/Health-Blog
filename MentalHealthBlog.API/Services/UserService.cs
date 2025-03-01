@@ -121,11 +121,24 @@ namespace MentalHealthBlog.API.Services
                 {
                     var dbUserRoles = jwtMiddleware.GetRoles(dbUser);
                     var token = jwtMiddleware.GenerateToken(dbUser);
+                    var refreshToken = jwtMiddleware.GenerateRefreshToken();
+
+                    if (refreshToken is null)
+                    {
+                        _userLoggerService.LogError($"LOGIN: {UserServiceLogTypes.USER_TOKEN_NOT_CREATED.ToString()}", token);
+                        return new Response(new object(), StatusCodes.Status401Unauthorized, UserServiceLogTypes.USER_TOKEN_NOT_CREATED.ToString());
+                    }
+
+                    dbUser.RefreshTokens.Add(refreshToken);
+                    jwtMiddleware.RemoveInactiveAndExpiredTokens(dbUser);
+                    await _context.SaveChangesAsync();
+
                     if (String.IsNullOrEmpty(token))
                     {
                         _userLoggerService.LogError($"LOGIN: {UserServiceLogTypes.USER_TOKEN_NOT_CREATED.ToString()}", token);
-                        return new Response(new object(), StatusCodes.Status403Forbidden, UserServiceLogTypes.USER_TOKEN_NOT_CREATED.ToString());
+                        return new Response(new object(), StatusCodes.Status401Unauthorized, UserServiceLogTypes.USER_TOKEN_NOT_CREATED.ToString());
                     }
+
                     var responseUser = new SignedUserDto(dbUser.Id, dbUser.Username, token, dbUserRoles);
                     _userLoggerService.LogInformation($"LOGIN: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", responseUser);
                     return new Response(responseUser, StatusCodes.Status200OK, UserServiceLogTypes.USER_SUCCESFULL.ToString());

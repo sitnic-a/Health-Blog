@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace MentalHealthBlog.API.Utils
@@ -13,6 +14,18 @@ namespace MentalHealthBlog.API.Utils
     {
         private readonly AppSettings _options;
         private readonly DataContext _context;
+
+        private string CreateUniqueRefreshToken()
+        {
+            var token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+            var tokenExists = _context.Users.Any(u => u.RefreshTokens.Any(t => t.Token == token));
+            if (tokenExists)
+            {
+                return CreateUniqueRefreshToken();
+            }
+            return token;
+        }
+
 
         public JWTService(IOptions<AppSettings> options, DataContext context)
         {
@@ -30,14 +43,38 @@ namespace MentalHealthBlog.API.Utils
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Issuer = user.Username,
+                Issuer = "http://localhost:3000",
                 IssuedAt = DateTime.Now,
-                Expires = DateTime.Now.AddMinutes(10),
+                Expires = DateTime.Now.AddMinutes(2),
+                
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
+
+        public RefreshToken GenerateRefreshToken()
+        {
+            var refreshToken = new RefreshToken
+            {
+                Token = CreateUniqueRefreshToken(),
+                CreatedAt = DateTime.UtcNow.AddHours(1),
+                ExpiresAt = DateTime.UtcNow.AddHours(1).AddMinutes(_options.RefreshTokenTTL),
+
+            };
+            return refreshToken;
+        }
+
+        public void RemoveInactiveAndExpiredTokens(User user)
+        {
+            var inactiveAndExpiredTokens = _context.RefreshTokens
+                .Where(rt => 
+                user.Id == rt.UserId && 
+                DateTime.UtcNow.AddHours(1) >= rt.ExpiresAt);
+
+            _context.RemoveRange(inactiveAndExpiredTokens);
+        }
+
 
         public List<Claim> GetClaims(User user)
         {

@@ -22,6 +22,7 @@ namespace MentalHealthBlogAPI.Data
         public DbSet<MentalHealthExpert> MentalHealthExperts { get; set; }
         public DbSet<Emotion> Emotions { get; set; }
         public DbSet<PostEmotion> PostsEmotions { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
