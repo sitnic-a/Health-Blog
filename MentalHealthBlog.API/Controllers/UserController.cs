@@ -41,11 +41,10 @@ namespace MentalHealthBlog.API.Controllers
 
             Response.Cookies.Append("refreshToken", signedUserData.RefreshToken, new CookieOptions
             {
-                HttpOnly = true,
+                HttpOnly = false,
                 Expires = DateTime.UtcNow.AddHours(1).AddMinutes(30),
-                Domain = "localhost",
-                SameSite = SameSiteMode.None,
                 Secure = true,
+                SameSite = SameSiteMode.None
             });
             return loggedUser;
         }
