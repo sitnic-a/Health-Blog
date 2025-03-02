@@ -139,7 +139,7 @@ namespace MentalHealthBlog.API.Services
                         return new Response(new object(), StatusCodes.Status401Unauthorized, UserServiceLogTypes.USER_TOKEN_NOT_CREATED.ToString());
                     }
 
-                    var responseUser = new SignedUserDto(dbUser.Id, dbUser.Username, token, dbUserRoles);
+                    var responseUser = new SignedUserDto(dbUser.Id, dbUser.Username, token,refreshToken.Token, dbUserRoles);
                     _userLoggerService.LogInformation($"LOGIN: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", responseUser);
                     return new Response(responseUser, StatusCodes.Status200OK, UserServiceLogTypes.USER_SUCCESFULL.ToString());
                 }

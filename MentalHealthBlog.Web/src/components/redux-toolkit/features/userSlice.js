@@ -30,7 +30,10 @@ export const login = createAsyncThunk('/user/login', async (user) => {
     headers: {
       'Content-Type': 'application/json',
     },
+    credentials: 'include',
   })
+  console.log('Request ', request.headers)
+
   let response = await request.json()
   console.log('Response ', response)
   return response
