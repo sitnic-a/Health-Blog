@@ -1,6 +1,9 @@
-﻿using MentalHealthBlog.API.Models;
+﻿using MentalHealthBlog.API.Methods;
+using MentalHealthBlog.API.Models;
+using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
 using MentalHealthBlogAPI.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -10,6 +13,14 @@ using System.Text;
 
 namespace MentalHealthBlog.API.Utils
 {
+    enum JWTServiceLogTypes
+    {
+        CREATED_ACCESS_TOKEN,
+        EMPTY_OR_NULL,
+        NOT_FOUND,
+        EXPIRED_REFRESH_TOKEN,
+        ERROR
+    }
     public class JWTService
     {
         private readonly AppSettings _options;
@@ -46,11 +57,61 @@ namespace MentalHealthBlog.API.Utils
                 Issuer = "http://localhost:3000",
                 IssuedAt = DateTime.Now,
                 Expires = DateTime.Now.AddMinutes(2),
-                
+
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        public async Task<Response> RefreshAccessToken(string refreshToken)
+        {
+            try
+            {
+                if (!refreshToken.IsNullOrEmpty())
+                {
+                    var dbRefreshToken = await _context.RefreshTokens
+                        .SingleOrDefaultAsync(t => t.Token == refreshToken);
+                    if (dbRefreshToken is not null)
+                    {
+                        var dbUserByRefreshToken = await _context.Users.FindAsync(dbRefreshToken.UserId);
+                        if (dbUserByRefreshToken is not null)
+                        {
+                            var dbUserByRefreshTokenAsDto = new UserDto(dbUserByRefreshToken.Id, dbUserByRefreshToken.Username);
+                            var userHelper = new UserHelper(_context);
+                            var dbUserRoles = await userHelper.GetUserRolesAsync(dbUserByRefreshTokenAsDto);
+
+                            if (!dbRefreshToken.IsExpired)
+                            {
+                                var accessToken = GenerateToken(dbUserByRefreshToken);
+                                if (!accessToken.IsNullOrEmpty())
+                                {
+                                    var responseUser = new SignedUserDto(dbUserByRefreshToken.Id, dbUserByRefreshToken.Username, accessToken, refreshToken, dbUserRoles);
+                                    return new Response(responseUser, StatusCodes.Status200OK, JWTServiceLogTypes.CREATED_ACCESS_TOKEN.ToString());
+                                }
+                                return new Response(new string(""), StatusCodes.Status204NoContent, JWTServiceLogTypes.EMPTY_OR_NULL.ToString());
+                            }
+
+                            var allRefreshTokensByUser = _context.RefreshTokens
+                            .Where(u => u.UserId == dbUserByRefreshToken.Id)
+                            .ToList();
+
+                            _context.RefreshTokens.RemoveRange(allRefreshTokensByUser);
+                            await _context.SaveChangesAsync();
+                            return new Response(new string(""), StatusCodes.Status401Unauthorized, JWTServiceLogTypes.EXPIRED_REFRESH_TOKEN.ToString());
+                        }
+                        return new Response(new string(""), StatusCodes.Status404NotFound, JWTServiceLogTypes.NOT_FOUND.ToString());
+                    }
+                    return new Response(new string(""), StatusCodes.Status404NotFound, JWTServiceLogTypes.NOT_FOUND.ToString());
+                }
+                return new Response(new string(""), StatusCodes.Status404NotFound, JWTServiceLogTypes.NOT_FOUND.ToString());
+
+            }
+            catch (Exception e)
+            {
+                return new Response(e.Data, StatusCodes.Status500InternalServerError, JWTServiceLogTypes.ERROR.ToString());
+            }
+
         }
 
         public RefreshToken GenerateRefreshToken()
@@ -68,8 +129,8 @@ namespace MentalHealthBlog.API.Utils
         public void RemoveInactiveAndExpiredTokens(User user)
         {
             var inactiveAndExpiredTokens = _context.RefreshTokens
-                .Where(rt => 
-                user.Id == rt.UserId && 
+                .Where(rt =>
+                user.Id == rt.UserId &&
                 DateTime.UtcNow.AddHours(1) >= rt.ExpiresAt);
 
             _context.RemoveRange(inactiveAndExpiredTokens);

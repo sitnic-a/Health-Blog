@@ -8,6 +8,7 @@ namespace MentalHealthBlog.API.Services
     {
         Task<Response> Register(CreateUserDto newUserRequest);
         Task<Response> Login(UserLoginDto loginCredentials);
+        Task<Response> RefreshAccessToken(string refreshToken);
         Task<Response> GetRoles();
     }
 }
