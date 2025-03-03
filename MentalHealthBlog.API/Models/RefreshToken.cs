@@ -11,7 +11,7 @@ namespace MentalHealthBlog.API.Models
         public DateTime CreatedAt { get; set; }
         public DateTime ExpiresAt { get; set; }
         public DateTime? RevokedAt { get; set; }
-        public bool IsExpired => DateTime.UtcNow.AddHours(1) >= ExpiresAt;
+        public bool IsExpired => DateTime.UtcNow.AddHours(1) >= ExpiresAt.AddMinutes(-1);
         public bool IsActive => !IsExpired && !IsRevoked;
         public bool IsRevoked => RevokedAt != null;
         public string ReplacedByToken { get; set; } = string.Empty;

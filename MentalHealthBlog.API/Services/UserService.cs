@@ -174,7 +174,7 @@ namespace MentalHealthBlog.API.Services
             {
                 var jwtMiddleware = new JWTService(_options, _context);
                 var accessToken = await jwtMiddleware.RefreshAccessToken(refreshToken);
-                if (accessToken is not null)
+                if (accessToken.StatusCode == 200 || accessToken.StatusCode == 201)
                 {
                     _userLoggerService.LogInformation($"REFRESH-TOKEN: {UserServiceLogTypes.TOKEN_SUCCESSFULLY_CREATED.ToString()}", accessToken);
                     return new Response(accessToken, StatusCodes.Status201Created, UserServiceLogTypes.TOKEN_SUCCESSFULLY_CREATED.ToString());

@@ -98,13 +98,13 @@ namespace MentalHealthBlog.API.Utils
 
                             _context.RefreshTokens.RemoveRange(allRefreshTokensByUser);
                             await _context.SaveChangesAsync();
-                            return new Response(new string(""), StatusCodes.Status401Unauthorized, JWTServiceLogTypes.EXPIRED_REFRESH_TOKEN.ToString());
+                            return new Response(new Response(), StatusCodes.Status401Unauthorized, JWTServiceLogTypes.EXPIRED_REFRESH_TOKEN.ToString());
                         }
-                        return new Response(new string(""), StatusCodes.Status404NotFound, JWTServiceLogTypes.NOT_FOUND.ToString());
+                        return new Response(new Response(), StatusCodes.Status404NotFound, JWTServiceLogTypes.NOT_FOUND.ToString());
                     }
-                    return new Response(new string(""), StatusCodes.Status404NotFound, JWTServiceLogTypes.NOT_FOUND.ToString());
+                    return new Response(new Response(), StatusCodes.Status404NotFound, JWTServiceLogTypes.NOT_FOUND.ToString());
                 }
-                return new Response(new string(""), StatusCodes.Status404NotFound, JWTServiceLogTypes.NOT_FOUND.ToString());
+                return new Response(new Response(), StatusCodes.Status404NotFound, JWTServiceLogTypes.NOT_FOUND.ToString());
 
             }
             catch (Exception e)
