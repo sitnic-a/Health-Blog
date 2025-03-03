@@ -23,11 +23,14 @@ export const Dashboard = () => {
     if (!verifyToken(loggedUser.token)) {
       dispatch(refreshAccessToken(refreshToken)).then((response) => {
         console.log('Refresh response ', response)
-
+        if (response.payload.status === 400) {
+          navigate('login')
+        }
         let authenticatedUser =
           response.payload.serviceResponseObject.serviceResponseObject
         let statusCode = parseInt(response.payload.statusCode)
         // console.log("Authenticated user ", authenticatedUser);
+
         if (statusCode === 201 || statusCode === 200) {
           console.log('New token ', authenticatedUser.jwToken)
           navigate('/', {
