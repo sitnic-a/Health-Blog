@@ -22,7 +22,7 @@ export const getQuote = createAsyncThunk("quote", async () => {
 });
 
 export const login = createAsyncThunk("/user/login", async (user) => {
-  console.log("User on submit ", user);
+  // console.log("User on submit ", user);
   let url = `${application.application_url}/user/login`;
   let request = await fetch(url, {
     method: "POST",
@@ -32,10 +32,10 @@ export const login = createAsyncThunk("/user/login", async (user) => {
     },
     credentials: "include",
   });
-  console.log("Request ", request.headers);
+  // console.log("Request ", request.headers);
 
   let response = await request.json();
-  console.log("Response ", response);
+  // console.log("Response ", response);
   return response;
 });
 
@@ -127,15 +127,15 @@ export const userSlice = createSlice({
 
       //refresh-access-token
       .addCase(refreshAccessToken.pending, (state) => {
-        console.log("Refreshing token...");
+        // console.log("Refreshing token...");
       })
       .addCase(refreshAccessToken.fulfilled, (state, action) => {
         let response = action.payload.serviceResponseObject;
-        console.log("New access token ", response);
+        // console.log("New access token ", response);
       })
       .addCase(refreshAccessToken.rejected, (state, action) => {
         let response = action.payload;
-        console.log("New access token error ", response);
+        // console.log("New access token error ", response);
       })
 
       //--- register

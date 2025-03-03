@@ -3,7 +3,7 @@ import { jwtDecode } from "jwt-decode";
 export const verifyToken = (token) => {
   const ONE_MINUTE = 60000;
   let decodedToken = jwtDecode(token);
-  console.log("Decoded token ", decodedToken);
+  // console.log("Decoded token ", decodedToken);
 
   let expireAtEpoch = new Date(decodedToken.exp * 1000).getTime();
   let expirationDate = new Date(expireAtEpoch).toLocaleString();
@@ -16,7 +16,7 @@ export const verifyToken = (token) => {
   let difference = expireAtEpoch - currentEpoch;
   console.log("Difference ", difference);
 
-  if (difference < ONE_MINUTE) {
+  if (currentEpoch >= expireAtEpoch) {
     return false;
   }
   return true;

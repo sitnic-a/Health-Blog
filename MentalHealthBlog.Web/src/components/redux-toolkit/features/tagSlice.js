@@ -36,7 +36,7 @@ let tagSlice = createSlice({
     builder
       //getAllTags
       .addCase(getTags.fulfilled, (state, action) => {
-        console.log("Payload ", action.payload);
+        // console.log("Payload ", action.payload);
         state.suggestedTags = action.payload.serviceResponseObject;
       });
   },

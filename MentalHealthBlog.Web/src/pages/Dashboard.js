@@ -14,28 +14,37 @@ export const Dashboard = () => {
   let location = useLocation();
   let dispatch = useDispatch();
   let refreshToken = Cookies.get("refreshToken");
-  console.log("Refresh token ", refreshToken);
+  // console.log("Refresh token ", refreshToken);
 
   let { loggedUser } = useFetchLocationState();
+  console.log("Logged user token ", loggedUser.token);
 
   useEffect(() => {
     if (!verifyToken(loggedUser.token)) {
       dispatch(refreshAccessToken(refreshToken)).then((response) => {
-        let authenticatedUser = response.payload.serviceResponseObject;
+        console.log("Refresh response ", response);
+
+        let authenticatedUser =
+          response.payload.serviceResponseObject.serviceResponseObject;
         let statusCode = parseInt(response.payload.statusCode);
-        console.log("Authenticated user ", authenticatedUser);
+        // console.log("Authenticated user ", authenticatedUser);
         if (statusCode === 201 || statusCode === 200) {
-          console.log("Token successfuly refreshed");
-          location.state = {
-            prevUrl: window.location.href,
-            loggedUser: {
-              id: authenticatedUser.id,
-              username: authenticatedUser.username,
-              token: authenticatedUser.jwToken,
-              roles: authenticatedUser.userRoles,
+          console.log("New token ", authenticatedUser.jwToken);
+          navigate("/", {
+            replace: true,
+            state: {
+              prevUrl: window.location.href,
+              loggedUser: {
+                id: authenticatedUser.id,
+                username: authenticatedUser.username,
+                token: authenticatedUser.jwToken,
+                roles: authenticatedUser.userRoles,
+              },
             },
-          };
-          console.log("Location ", location);
+          });
+          console.log("New state token ", location.state);
+
+          // console.log("Location ", location);
 
           return;
         }
