@@ -859,6 +859,9 @@ dialog::backdrop {
 }
 
 .navbar-list {
+  display: flex;
+  align-self: center;
+  justify-content: space-between;
   padding: 0.5rem 0.6rem;
   list-style: none;
   /* background: red; */
@@ -881,6 +884,15 @@ dialog::backdrop {
 
 .navbar-action-shared-content {
   text-decoration: none;
+}
+
+.logout-icon {
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.logout-icon:hover {
+  color: #a5a5a5;
 }
 
 .shares-per-mental-health-expert-content-main-container {

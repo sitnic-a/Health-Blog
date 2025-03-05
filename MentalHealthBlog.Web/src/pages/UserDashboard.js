@@ -1,9 +1,16 @@
-import { Link } from "react-router-dom";
-import { ListOfPosts } from "../components/ListOfPosts";
-import useFetchLocationState from "../components/custom/hooks/useFetchLocationState";
+import { Link } from 'react-router-dom'
+import { ListOfPosts } from '../components/ListOfPosts'
+import useFetchLocationState from '../components/custom/hooks/useFetchLocationState'
+import { CiLogout } from 'react-icons/ci'
+import Cookies from 'js-cookie'
+import { useDispatch } from 'react-redux'
+import { logout } from '../components/redux-toolkit/features/userSlice'
 
 export const UserDashboard = () => {
-  let { loggedUser } = useFetchLocationState();
+  let dispatch = useDispatch()
+  let { loggedUser } = useFetchLocationState()
+  let refreshToken = Cookies.get('refreshToken')
+
   return (
     <section className="user-dashboard">
       {/* Navigation bar */}
@@ -12,7 +19,7 @@ export const UserDashboard = () => {
           <ul className="navbar-list">
             <li>
               <Link
-                to={"shared-posts"}
+                to={'shared-posts'}
                 state={{
                   loggedUser,
                 }}
@@ -21,10 +28,24 @@ export const UserDashboard = () => {
                 Shared Content
               </Link>
             </li>
+            <div className="logout-container">
+              <li className="logout-icon-container">
+                <CiLogout
+                  className="logout-icon"
+                  onClick={() => {
+                    let logoutRequest = {
+                      userId: loggedUser.id,
+                      refreshToken: refreshToken,
+                    }
+                    dispatch(logout(logoutRequest))
+                  }}
+                />
+              </li>
+            </div>
           </ul>
         </div>
       </section>
       <ListOfPosts />
     </section>
-  );
-};
+  )
+}
