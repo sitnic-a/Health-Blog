@@ -20,7 +20,10 @@ namespace MentalHealthBlog.API.Services
         USER_SUCCESFULL,
         USER_TOKEN_NOT_CREATED,
         ROLES_RETRIEVED,
-        ROLES_NOT_FOUND
+        ROLES_NOT_FOUND,
+        TOKEN_SUCCESSFULLY_CREATED,
+        TOKEN_NOT_FOUND,
+        TOKEN_ERROR
     }
     public class UserService : IUserService
     {
@@ -121,12 +124,25 @@ namespace MentalHealthBlog.API.Services
                 {
                     var dbUserRoles = jwtMiddleware.GetRoles(dbUser);
                     var token = jwtMiddleware.GenerateToken(dbUser);
+                    var refreshToken = jwtMiddleware.GenerateRefreshToken();
+
+                    if (refreshToken is null)
+                    {
+                        _userLoggerService.LogError($"LOGIN: {UserServiceLogTypes.USER_TOKEN_NOT_CREATED.ToString()}", token);
+                        return new Response(new object(), StatusCodes.Status401Unauthorized, UserServiceLogTypes.USER_TOKEN_NOT_CREATED.ToString());
+                    }
+
+                    dbUser.RefreshTokens.Add(refreshToken);
+                    jwtMiddleware.RemoveInactiveAndExpiredTokens(dbUser);
+                    await _context.SaveChangesAsync();
+
                     if (String.IsNullOrEmpty(token))
                     {
                         _userLoggerService.LogError($"LOGIN: {UserServiceLogTypes.USER_TOKEN_NOT_CREATED.ToString()}", token);
-                        return new Response(new object(), StatusCodes.Status403Forbidden, UserServiceLogTypes.USER_TOKEN_NOT_CREATED.ToString());
+                        return new Response(new object(), StatusCodes.Status401Unauthorized, UserServiceLogTypes.USER_TOKEN_NOT_CREATED.ToString());
                     }
-                    var responseUser = new SignedUserDto(dbUser.Id, dbUser.Username, token, dbUserRoles);
+
+                    var responseUser = new SignedUserDto(dbUser.Id, dbUser.Username, token,refreshToken.Token, dbUserRoles);
                     _userLoggerService.LogInformation($"LOGIN: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", responseUser);
                     return new Response(responseUser, StatusCodes.Status200OK, UserServiceLogTypes.USER_SUCCESFULL.ToString());
                 }
@@ -140,7 +156,7 @@ namespace MentalHealthBlog.API.Services
             }
         }
 
-        public async Task<bool> VerifyCredentials(UserLoginDto loginCredentials)
+        private async Task<bool> VerifyCredentials(UserLoginDto loginCredentials)
         {
             var dbUsers = _context.Users;
             var existingUser = await dbUsers.SingleOrDefaultAsync(u => u.Username == loginCredentials.Username);
@@ -150,6 +166,27 @@ namespace MentalHealthBlog.API.Services
                 return CryptographicOperations.FixedTimeEquals(Convert.FromBase64String(hashToCompare), Convert.FromBase64String(existingUser.PasswordHash));
             }
             return false;
+        }
+
+        public async Task<Response> RefreshAccessToken(string refreshToken)
+        {
+            try
+            {
+                var jwtMiddleware = new JWTService(_options, _context);
+                var accessToken = await jwtMiddleware.RefreshAccessToken(refreshToken);
+                if (accessToken.StatusCode == 200 || accessToken.StatusCode == 201)
+                {
+                    _userLoggerService.LogInformation($"REFRESH-TOKEN: {UserServiceLogTypes.TOKEN_SUCCESSFULLY_CREATED.ToString()}", accessToken);
+                    return new Response(accessToken, StatusCodes.Status201Created, UserServiceLogTypes.TOKEN_SUCCESSFULLY_CREATED.ToString());
+                }
+                _userLoggerService.LogWarning($"REFRESH-TOKEN: {UserServiceLogTypes.USER_TOKEN_NOT_CREATED.ToString()}", accessToken);
+                return new Response(new Response(), StatusCodes.Status404NotFound, UserServiceLogTypes.USER_TOKEN_NOT_CREATED.ToString());
+            }
+            catch (Exception e)
+            {
+                _userLoggerService.LogError($"REFRESH-TOKEN: {UserServiceLogTypes.TOKEN_ERROR.ToString()}", e.Data);
+                return new Response(e.Data, StatusCodes.Status500InternalServerError, UserServiceLogTypes.TOKEN_ERROR.ToString());
+            }
         }
 
         public async Task<Response> GetRoles()
@@ -172,5 +209,7 @@ namespace MentalHealthBlog.API.Services
             }
 
         }
+
+        
     }
 }

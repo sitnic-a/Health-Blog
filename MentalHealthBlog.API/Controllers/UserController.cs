@@ -35,7 +35,28 @@ namespace MentalHealthBlog.API.Controllers
         [HttpPost("login")]
         public async Task<Response> Login([FromBody] UserLoginDto loginCredentials)
         {
-            return await _userService.Login(loginCredentials);
+            var loggedUser = await _userService.Login(loginCredentials);
+            var signedUserData = loggedUser.ServiceResponseObject as SignedUserDto;
+            Response.Headers.Add("Access-Control-Allow-Credentials", "true");
+
+            if (signedUserData is not null)
+            {
+                Response.Cookies.Append("refreshToken", signedUserData.RefreshToken, new CookieOptions
+                {
+                    HttpOnly = false,
+                    Expires = DateTime.UtcNow.AddHours(1).AddMinutes(10),
+                    Secure = true,
+                    SameSite = SameSiteMode.None
+                });
+            }
+
+            return loggedUser;
+        }
+
+        [HttpPost("refresh-access-token")]
+        public async Task<Response> RefreshAccessToken([FromBody] string refreshToken)
+        {
+            return await _userService.RefreshAccessToken(refreshToken);
         }
 
         [HttpGet("roles")]
