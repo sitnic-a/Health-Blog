@@ -8,6 +8,7 @@ using MentalHealthBlogAPI.Data;
 using MentalHealthBlogAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
 
 namespace MentalHealthBlog.API.Services
@@ -23,7 +24,8 @@ namespace MentalHealthBlog.API.Services
         ROLES_NOT_FOUND,
         TOKEN_SUCCESSFULLY_CREATED,
         TOKEN_NOT_FOUND,
-        TOKEN_ERROR
+        TOKEN_ERROR,
+        LOGOUT_ERROR
     }
     public class UserService : IUserService
     {
@@ -142,7 +144,7 @@ namespace MentalHealthBlog.API.Services
                         return new Response(new object(), StatusCodes.Status401Unauthorized, UserServiceLogTypes.USER_TOKEN_NOT_CREATED.ToString());
                     }
 
-                    var responseUser = new SignedUserDto(dbUser.Id, dbUser.Username, token,refreshToken.Token, dbUserRoles);
+                    var responseUser = new SignedUserDto(dbUser.Id, dbUser.Username, token, refreshToken.Token, dbUserRoles);
                     _userLoggerService.LogInformation($"LOGIN: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", responseUser);
                     return new Response(responseUser, StatusCodes.Status200OK, UserServiceLogTypes.USER_SUCCESFULL.ToString());
                 }
@@ -210,6 +212,46 @@ namespace MentalHealthBlog.API.Services
 
         }
 
-        
+        public async Task<Response> Logout(LogoutDto logoutRequest)
+        {
+            try
+            {
+                if (logoutRequest is not null)
+                {
+                    if (!logoutRequest.RefreshToken.IsNullOrEmpty())
+                    {
+                        var refreshToken = await _context.RefreshTokens
+                                            .FirstOrDefaultAsync(t => t.Token == logoutRequest.RefreshToken);
+                        if (refreshToken is not null)
+                        {
+                            refreshToken.RevokedAt = DateTime.UtcNow.AddHours(1);
+
+                            var dbRefreshTokensByLoggedUser = _context.RefreshTokens
+                                                .Where(rt => rt.UserId == logoutRequest.UserId);
+
+                            _context.RefreshTokens.RemoveRange(dbRefreshTokensByLoggedUser);
+                            await _context.SaveChangesAsync();
+                            _userLoggerService.LogInformation($"LOGOUT: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}");
+                            return new Response();
+                        }
+                        _userLoggerService.LogWarning($"LOGOUT: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", refreshToken);
+                        return new Response();
+                    }
+                    _userLoggerService.LogWarning($"LOGOUT: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", logoutRequest.RefreshToken);
+                    return new Response();
+
+                }
+                _userLoggerService.LogWarning($"LOGOUT: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", logoutRequest);
+                return new Response();
+
+            }
+            catch (Exception e)
+            {
+                _userLoggerService.LogError($"LOGOUT: {UserServiceLogTypes.LOGOUT_ERROR.ToString()}", e);
+                return new Response();
+
+            }
+        }
+
     }
 }

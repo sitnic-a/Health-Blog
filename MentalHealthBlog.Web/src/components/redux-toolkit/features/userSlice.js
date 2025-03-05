@@ -82,6 +82,7 @@ export const logout = createAsyncThunk('user/logout', async (logoutRequest) => {
   let request = await fetch(url, {
     method: 'POST',
     body: JSON.stringify(logoutRequest),
+    credentials: 'include',
   })
   let response = await request.json()
   return response
@@ -197,6 +198,10 @@ export const userSlice = createSlice({
       })
       .addCase(logout.fulfilled, (state, action) => {
         console.log('User successfully signed out...')
+        toast.success('Successfully logged out', {
+          autoClose: 1500,
+          position: 'bottom-right',
+        })
       })
       .addCase(logout.rejected, (state, action) => {
         console.log('Error')

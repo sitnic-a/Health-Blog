@@ -64,5 +64,13 @@ namespace MentalHealthBlog.API.Controllers
         {
             return await _userService.GetRoles();
         }
+
+        [HttpPost("logout")]
+        public async Task<Response> Logout([FromBody] LogoutDto logoutRequest)
+        {
+            Response.Headers.Add("Access-Control-Allow-Credentials", "true");
+
+            return await _userService.Logout(logoutRequest);
+        }
     }
 }

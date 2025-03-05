@@ -19,6 +19,7 @@ namespace MentalHealthBlog.API.Utils
         EMPTY_OR_NULL,
         NOT_FOUND,
         EXPIRED_REFRESH_TOKEN,
+        USER_SIGNED_OUT_TOKEN_REVOKED,
         ERROR
     }
     public class JWTService
@@ -81,6 +82,11 @@ namespace MentalHealthBlog.API.Utils
                             var userHelper = new UserHelper(_context);
                             var dbUserRoles = await userHelper.GetUserRolesAsync(dbUserByRefreshTokenAsDto);
 
+                            if (dbRefreshToken.RevokedAt is not null)
+                            {
+                                return new Response(new Response(), StatusCodes.Status401Unauthorized, JWTServiceLogTypes.USER_SIGNED_OUT_TOKEN_REVOKED.ToString());
+                            }
+
                             if (!dbRefreshToken.IsExpired)
                             {
                                 var accessToken = GenerateToken(dbUserByRefreshToken);
@@ -89,8 +95,9 @@ namespace MentalHealthBlog.API.Utils
                                     var responseUser = new SignedUserDto(dbUserByRefreshToken.Id, dbUserByRefreshToken.Username, accessToken, refreshToken, dbUserRoles);
                                     return new Response(responseUser, StatusCodes.Status200OK, JWTServiceLogTypes.CREATED_ACCESS_TOKEN.ToString());
                                 }
-                                return new Response(new string(""), StatusCodes.Status204NoContent, JWTServiceLogTypes.EMPTY_OR_NULL.ToString());
+                                return new Response(new Response(), StatusCodes.Status204NoContent, JWTServiceLogTypes.EMPTY_OR_NULL.ToString());
                             }
+
 
                             var allRefreshTokensByUser = _context.RefreshTokens
                             .Where(u => u.UserId == dbUserByRefreshToken.Id)
