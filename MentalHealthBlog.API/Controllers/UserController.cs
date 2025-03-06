@@ -68,8 +68,6 @@ namespace MentalHealthBlog.API.Controllers
         [HttpPost("logout")]
         public async Task<Response> Logout([FromBody] LogoutDto logoutRequest)
         {
-            Response.Headers.Add("Access-Control-Allow-Credentials", "true");
-
             return await _userService.Logout(logoutRequest);
         }
     }

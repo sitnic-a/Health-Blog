@@ -82,7 +82,9 @@ export const logout = createAsyncThunk('user/logout', async (logoutRequest) => {
   let request = await fetch(url, {
     method: 'POST',
     body: JSON.stringify(logoutRequest),
-    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
   })
   let response = await request.json()
   return response
