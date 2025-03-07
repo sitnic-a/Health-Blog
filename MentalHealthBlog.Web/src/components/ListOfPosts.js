@@ -18,19 +18,22 @@ import { ExportModal } from './share-export/export/ExportModal'
 
 export const ListOfPosts = () => {
   let dispatch = useDispatch()
-  let { loggedUser, prevUrl } = useFetchLocationState()
+  // let { loggedUser, prevUrl } = useFetchLocationState()
+  // let { prevUrl } = useFetchLocationState()
   let { isLoading, posts } = useSelector((store) => store.post)
-  let { isLogging, isAuthenticated } = useSelector((store) => store.user)
+  let { authenticatedUser, isLogging, isAuthenticated } = useSelector(
+    (store) => store.user
+  )
 
   let { statisticsLoading } = useSelector((store) => store.pie)
 
   let searchPostDto = {
-    loggedUser,
+    authenticatedUser,
     monthOfPostCreation: 0,
   }
 
   useEffect(() => {
-    if (isAuthenticated === true && prevUrl.includes('login')) {
+    if (isAuthenticated === true) {
       toast.success('Succesfully logged in', {
         autoClose: 1500,
         position: 'bottom-right',

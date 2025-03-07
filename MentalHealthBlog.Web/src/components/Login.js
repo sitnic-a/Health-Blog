@@ -37,7 +37,7 @@ export const Login = () => {
 
     dispatch(login(user)).then((response) => {
       let statusCode = response.payload.statusCode
-      let authenticatedUser = response.payload.serviceResponseObject
+      // let authenticatedUser = response.payload.serviceResponseObject
       // console.log('AUTH USER ', authenticatedUser)
 
       if (statusCode === 200 || statusCode === 201 || statusCode === 204) {
@@ -45,12 +45,12 @@ export const Login = () => {
           replace: true,
           state: {
             prevUrl: window.location.href,
-            loggedUser: {
-              id: authenticatedUser.id,
-              username: authenticatedUser.username,
-              token: authenticatedUser.jwToken,
-              roles: authenticatedUser.userRoles,
-            },
+            // loggedUser: {
+            //   id: authenticatedUser.id,
+            //   username: authenticatedUser.username,
+            //   token: authenticatedUser.jwToken,
+            //   roles: authenticatedUser.userRoles,
+            // },
           },
         })
       }

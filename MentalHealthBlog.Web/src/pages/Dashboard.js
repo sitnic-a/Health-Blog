@@ -6,7 +6,7 @@ import { MentalExpertDashboard } from './MentalExpertDashboard'
 import { UserDashboard } from './UserDashboard'
 import { useEffect } from 'react'
 import Cookies from 'js-cookie'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { refreshAccessToken } from '../components/redux-toolkit/features/userSlice'
 
 export const Dashboard = () => {
@@ -16,11 +16,12 @@ export const Dashboard = () => {
   let refreshToken = Cookies.get('refreshToken')
   // console.log("Refresh token ", refreshToken);
 
-  let { loggedUser } = useFetchLocationState()
+  // let { loggedUser } = useFetchLocationState()
+  let { authenticatedUser } = useSelector((store) => store.user)
 
   useEffect(() => {
-    console.log('Logged user token ', loggedUser.token)
-    if (!verifyToken(loggedUser.token)) {
+    console.log('Logged user token ', authenticatedUser.jwToken)
+    if (!verifyToken(authenticatedUser.jwToken)) {
       dispatch(refreshAccessToken(refreshToken)).then((response) => {
         console.log('Refresh response ', response)
         if (response.payload.status === 400) {
@@ -37,12 +38,12 @@ export const Dashboard = () => {
             replace: true,
             state: {
               prevUrl: window.location.href,
-              loggedUser: {
-                id: authenticatedUser.id,
-                username: authenticatedUser.username,
-                token: authenticatedUser.jwToken,
-                roles: authenticatedUser.userRoles,
-              },
+              // loggedUser: {
+              //   id: authenticatedUser.id,
+              //   username: authenticatedUser.username,
+              //   token: authenticatedUser.jwToken,
+              //   roles: authenticatedUser.userRoles,
+              // },
             },
           })
           console.log('New state token ', location.state)
@@ -57,20 +58,20 @@ export const Dashboard = () => {
     }
   }, [])
 
-  if (loggedUser !== null) {
-    if (loggedUser?.roles?.some((ur) => ur.name === 'User')) {
-      return <UserDashboard />
-    }
-    if (loggedUser?.roles?.some((ur) => ur.name === 'Administrator')) {
-      return <AdminDashboard />
-    }
-    if (
-      loggedUser?.roles?.some(
-        (ur) => ur.name === 'Psychologist / Psychotherapist'
-      )
-    ) {
-      return <MentalExpertDashboard />
-    }
+  // if (authenticatedUser !== null) {
+  if (authenticatedUser?.userRoles?.some((ur) => ur.name === 'User')) {
+    return <UserDashboard />
   }
+  if (authenticatedUser?.userRoles?.some((ur) => ur.name === 'Administrator')) {
+    return <AdminDashboard />
+  }
+  if (
+    authenticatedUser?.userRoles?.some(
+      (ur) => ur.name === 'Psychologist / Psychotherapist'
+    )
+  ) {
+    return <MentalExpertDashboard />
+  }
+  // }
   return <p>ERROR</p>
 }

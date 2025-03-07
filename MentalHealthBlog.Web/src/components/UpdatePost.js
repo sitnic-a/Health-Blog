@@ -1,33 +1,33 @@
-import React from "react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { updatePost } from "./redux-toolkit/features/postSlice";
-import useFetchLocationState from "./custom/hooks/useFetchLocationState";
+import React from 'react'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { updatePost } from './redux-toolkit/features/postSlice'
+import useFetchLocationState from './custom/hooks/useFetchLocationState'
 export const UpdatePost = () => {
-  let dispatch = useDispatch();
-  let { loggedUser } = useFetchLocationState();
-  let { post } = useSelector((store) => store.post);
-  let [title, setTitle] = useState(post.title);
-  let [content, setContent] = useState(post.content);
-  let navigate = useNavigate();
+  let dispatch = useDispatch()
+  let { loggedUser } = useFetchLocationState()
+  let { post } = useSelector((store) => store.post)
+  let [title, setTitle] = useState(post.title)
+  let [content, setContent] = useState(post.content)
+  let navigate = useNavigate()
 
   let update = async (e) => {
     let updatePostObj = {
       e,
       post,
       loggedUser,
-    };
-    console.log("Update post obj ", updatePostObj);
+    }
+    console.log('Update post obj ', updatePostObj)
     dispatch(updatePost(updatePostObj)).then(() => {
-      navigate("/", {
+      navigate('/', {
         state: {
           prevUrl: window.location.href,
           loggedUser: updatePostObj.loggedUser,
         },
-      });
-    });
-  };
+      })
+    })
+  }
 
   return (
     <form onSubmit={update}>
@@ -55,5 +55,5 @@ export const UpdatePost = () => {
         Update post
       </button>
     </form>
-  );
-};
+  )
+}

@@ -1,24 +1,25 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import useFetchLocationState from "./custom/hooks/useFetchLocationState";
-import { setIsSharingExporting } from "./redux-toolkit/features/postSlice";
-import { setVisibility } from "./redux-toolkit/features/filterSlice";
-import { getTags } from "./redux-toolkit/features/tagSlice";
-import { openAddModal } from "./redux-toolkit/features/modalSlice";
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import useFetchLocationState from './custom/hooks/useFetchLocationState'
+import { setIsSharingExporting } from './redux-toolkit/features/postSlice'
+import { setVisibility } from './redux-toolkit/features/filterSlice'
+import { getTags } from './redux-toolkit/features/tagSlice'
+import { openAddModal } from './redux-toolkit/features/modalSlice'
 
-import { AddPost } from "./AddPost";
-import { MdOutlineAddCircleOutline } from "react-icons/md";
-import { BiSelectMultiple } from "react-icons/bi";
+import { AddPost } from './AddPost'
+import { MdOutlineAddCircleOutline } from 'react-icons/md'
+import { BiSelectMultiple } from 'react-icons/bi'
 
 export const ListOfPostsHeader = () => {
-  let dispatch = useDispatch();
-  let { loggedUser } = useFetchLocationState();
-  let { isAddOpen } = useSelector((store) => store.modal);
-  let { isSharingExporting } = useSelector((store) => store.post);
+  let dispatch = useDispatch()
+  // let { loggedUser } = useFetchLocationState();
+  let { authenticatedUser } = useSelector((store) => store.user)
+  let { isAddOpen } = useSelector((store) => store.modal)
+  let { isSharingExporting } = useSelector((store) => store.post)
 
   useEffect(() => {
-    dispatch(getTags());
-  }, []);
+    dispatch(getTags())
+  }, [])
 
   return (
     <>
@@ -26,7 +27,7 @@ export const ListOfPostsHeader = () => {
 
       <section className="list-of-posts-header">
         <h1 className="list-of-posts-author">
-          Written by: <span>{loggedUser.username}</span>
+          Written by: <span>{authenticatedUser.username}</span>
         </h1>
         <div className="header-actions">
           <button
@@ -42,7 +43,7 @@ export const ListOfPostsHeader = () => {
             data-action-add="filter"
             type="button"
             onClick={() => {
-              dispatch(setVisibility());
+              dispatch(setVisibility())
             }}
           >
             Filter
@@ -55,7 +56,7 @@ export const ListOfPostsHeader = () => {
                 type="button"
                 data-tooltip-title="Select data"
                 onClick={(e) => {
-                  dispatch(setIsSharingExporting(!isSharingExporting));
+                  dispatch(setIsSharingExporting(!isSharingExporting))
                 }}
               >
                 <BiSelectMultiple />
@@ -66,5 +67,5 @@ export const ListOfPostsHeader = () => {
         </div>
       </section>
     </>
-  );
-};
+  )
+}

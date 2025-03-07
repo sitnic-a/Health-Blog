@@ -1,5 +1,5 @@
-import { application } from "../../../application";
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { application } from '../../../application'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 let initialState = {
   labels: [],
@@ -8,31 +8,31 @@ let initialState = {
   statisticsData: null,
   statisticsLoading: false,
   statisticsFailed: false,
-};
+}
 
 export const prepareForPieGraph = createAsyncThunk(
-  "/statistics/pie",
+  '/statistics/pie',
   async (filteringObject) => {
     // console.log('Filtering object ', filteringObject)
-    let url = `${application.application_url}/statistics/pie?MonthOfPostCreation=${filteringObject.monthOfPostCreation}`;
+    let url = `${application.application_url}/statistics/pie?MonthOfPostCreation=${filteringObject.monthOfPostCreation}`
     let request = await fetch(url, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${filteringObject.loggedUser.token}`,
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${filteringObject.authenticatedUser.jwToken}`,
       },
-    });
-    let response = await request.json();
-    return response;
+    })
+    let response = await request.json()
+    return response
   }
-);
+)
 
 export const pieSlice = createSlice({
-  name: "pieSlice",
+  name: 'pieSlice',
   initialState,
   reducers: {
     setRerendering: (state) => {
-      state.rerendering = true;
+      state.rerendering = true
     },
   },
   extraReducers: (builder) => {
@@ -40,33 +40,33 @@ export const pieSlice = createSlice({
 
       ///--- prepareForPieGraph
       .addCase(prepareForPieGraph.pending, (state) => {
-        state.statisticsLoading = true;
+        state.statisticsLoading = true
       })
       .addCase(prepareForPieGraph.rejected, (state) => {
-        state.statisticsFailed = true;
+        state.statisticsFailed = true
       })
       .addCase(prepareForPieGraph.fulfilled, (state, action) => {
-        state.statisticsLoading = false;
-        let data = action.payload.serviceResponseObject;
+        state.statisticsLoading = false
+        let data = action.payload.serviceResponseObject
         if (data.length > 0) {
-          state.statisticsData = [...data];
+          state.statisticsData = [...data]
 
-          state.labels = []; //Clearing previous data
-          state.numberOfTags = []; //Clearing previous data
+          state.labels = [] //Clearing previous data
+          state.numberOfTags = [] //Clearing previous data
           if (
             (state.labels.length <= 0 && state.numberOfTags.length <= 0) ||
             state.rerendering === true
           ) {
             for (var i = 0; i < state.statisticsData.length; i++) {
-              state.labels.push(state.statisticsData[i].tagName);
-              state.numberOfTags.push(state.statisticsData[i].numberOfTags);
+              state.labels.push(state.statisticsData[i].tagName)
+              state.numberOfTags.push(state.statisticsData[i].numberOfTags)
             }
           }
         }
-      });
+      })
   },
-});
+})
 
-export const { setRerendering } = pieSlice.actions;
+export const { setRerendering } = pieSlice.actions
 
-export default pieSlice.reducer;
+export default pieSlice.reducer

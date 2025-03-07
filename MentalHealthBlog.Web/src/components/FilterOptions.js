@@ -17,7 +17,8 @@ export const FilterOptions = (props) => {
   let { isFiltering } = useSelector((store) => store.filter)
 
   let searchPostDto = props.searchPostDto
-  let loggedUser = location.state.loggedUser
+  // let loggedUser = location.state.loggedUser
+  let { authenticatedUser } = useSelector((store) => store.user)
 
   let [months, setMonths] = useState([])
 
@@ -27,7 +28,7 @@ export const FilterOptions = (props) => {
 
   let filterPosts = (e) => {
     searchPostDto = {
-      loggedUser,
+      authenticatedUser,
       monthOfPostCreation: e.target.selectedIndex,
     }
     console.log('On change obj ', searchPostDto)
