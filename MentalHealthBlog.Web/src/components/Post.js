@@ -36,7 +36,7 @@ export const Post = (props) => {
         }}
         to={`post/${props.id}`}
         state={{
-          loggedUser: authenticatedUser,
+          // loggedUser: authenticatedUser,
           prevUrl: window.location.href,
         }}
       >

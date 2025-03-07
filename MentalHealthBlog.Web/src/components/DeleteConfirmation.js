@@ -9,15 +9,16 @@ import { toast } from 'react-toastify'
 
 export const DeleteConfirmation = () => {
   let dispatch = useDispatch()
+  let { authenticatedUser } = useSelector((store) => store.user)
   let { isDeleteOpen } = useSelector((store) => store.modal)
   let { post } = useSelector((store) => store.post)
 
   let location = useLocation()
-  let loggedUser = location.state.loggedUser
+  // let loggedUser = location.state.loggedUser
 
   let deletePostObj = {
     post: post,
-    loggedUser: loggedUser,
+    loggedUser: authenticatedUser,
   }
 
   return (

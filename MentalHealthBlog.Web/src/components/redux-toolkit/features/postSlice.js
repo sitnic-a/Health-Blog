@@ -83,7 +83,7 @@ export const updatePost = createAsyncThunk(
       body: JSON.stringify(data),
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${updatePostObj.loggedUser.token}`,
+        Authorization: `Bearer ${updatePostObj.authenticatedUser.jwToken}`,
       },
     })
     let response = await request.json()
@@ -99,7 +99,7 @@ export const deletePostById = createAsyncThunk(
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${deletePostObj.loggedUser.token}`,
+        Authorization: `Bearer ${deletePostObj.loggedUser.jwToken}`,
       },
     })
     let response = await request.json()

@@ -4,9 +4,11 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { updatePost } from './redux-toolkit/features/postSlice'
 import useFetchLocationState from './custom/hooks/useFetchLocationState'
+
 export const UpdatePost = () => {
   let dispatch = useDispatch()
-  let { loggedUser } = useFetchLocationState()
+  let { authenticatedUser } = useSelector((store) => store.user)
+  // let { loggedUser } = useFetchLocationState()
   let { post } = useSelector((store) => store.post)
   let [title, setTitle] = useState(post.title)
   let [content, setContent] = useState(post.content)
@@ -16,14 +18,14 @@ export const UpdatePost = () => {
     let updatePostObj = {
       e,
       post,
-      loggedUser,
+      authenticatedUser,
     }
     console.log('Update post obj ', updatePostObj)
     dispatch(updatePost(updatePostObj)).then(() => {
       navigate('/', {
         state: {
           prevUrl: window.location.href,
-          loggedUser: updatePostObj.loggedUser,
+          // loggedUser: updatePostObj.loggedUser,
         },
       })
     })
