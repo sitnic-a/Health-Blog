@@ -1,17 +1,17 @@
-import { Link, useNavigate } from 'react-router-dom'
-import { ListOfPosts } from '../components/ListOfPosts'
-import useFetchLocationState from '../components/custom/hooks/useFetchLocationState'
-import { CiLogout } from 'react-icons/ci'
-import Cookies from 'js-cookie'
-import { useDispatch, useSelector } from 'react-redux'
-import { logout } from '../components/redux-toolkit/features/userSlice'
+import { Link, useNavigate } from "react-router-dom";
+import { ListOfPosts } from "../components/ListOfPosts";
+import useFetchLocationState from "../components/custom/hooks/useFetchLocationState";
+import { CiLogout } from "react-icons/ci";
+import Cookies from "js-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../components/redux-toolkit/features/userSlice";
 
 export const UserDashboard = () => {
-  let dispatch = useDispatch()
-  let navigate = useNavigate()
+  let dispatch = useDispatch();
+  let navigate = useNavigate();
   // let { loggedUser } = useFetchLocationState()
-  let { authenticatedUser } = useSelector((store) => store.user)
-  let refreshToken = Cookies.get('refreshToken')
+  let { authenticatedUser } = useSelector((store) => store.user);
+  let refreshToken = Cookies.get("refreshToken");
   return (
     <section className="user-dashboard">
       {/* Navigation bar */}
@@ -20,7 +20,7 @@ export const UserDashboard = () => {
           <ul className="navbar-list">
             <li>
               <Link
-                to={'shared-posts'}
+                to={"shared-posts"}
                 // state={{
                 //   loggedUser,
                 // }}
@@ -37,10 +37,11 @@ export const UserDashboard = () => {
                     let logoutRequest = {
                       userId: authenticatedUser.id,
                       refreshToken: refreshToken,
-                    }
+                    };
                     dispatch(logout(logoutRequest)).then((data) => {
-                      navigate('login')
-                    })
+                      Cookies.remove("refreshToken");
+                      navigate("login");
+                    });
                   }}
                 />
               </li>
@@ -50,5 +51,5 @@ export const UserDashboard = () => {
       </section>
       <ListOfPosts />
     </section>
-  )
-}
+  );
+};
