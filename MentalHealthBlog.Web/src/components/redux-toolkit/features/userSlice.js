@@ -145,15 +145,13 @@ export const userSlice = createSlice({
 
       //refresh-access-token
       .addCase(refreshAccessToken.pending, (state) => {
-        // console.log("Refreshing token...");
+        state.isLoading = true
       })
       .addCase(refreshAccessToken.fulfilled, (state, action) => {
-        let response = action.payload.serviceResponseObject
-        // console.log("New access token ", response);
+        state.isLoading = false
       })
       .addCase(refreshAccessToken.rejected, (state, action) => {
-        let response = action.payload
-        // console.log("New access token error ", response);
+        state.isLoading = false
       })
 
       //--- register
