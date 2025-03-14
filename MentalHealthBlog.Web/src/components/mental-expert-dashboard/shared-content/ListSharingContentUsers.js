@@ -1,7 +1,6 @@
 import React from 'react'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import useFetchLocationState from '../../custom/hooks/useFetchLocationState'
 import {
   getOnlyUsersThatSharedContent,
   getSharedContentOfPickedUser,
@@ -18,8 +17,6 @@ export const ListSharingContentUsers = () => {
 
   let { usersThatSharedIncludingItsContent, usersThatSharedContent } =
     useSelector((store) => store.mentalExpert)
-
-  // let { loggedUser } = useFetchLocationState();
 
   let query = {
     loggedExpertId: authenticatedUser.id,

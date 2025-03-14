@@ -1,5 +1,4 @@
 import { useDispatch, useSelector } from 'react-redux'
-import useFetchLocationState from '../custom/hooks/useFetchLocationState'
 import {
   openShareModal,
   openExportModal,
@@ -18,7 +17,6 @@ import { FaFileExport } from 'react-icons/fa'
 
 export const ShareExportOverlay = () => {
   let dispatch = useDispatch()
-  // let { loggedUser } = useFetchLocationState();
   let { authenticatedUser } = useSelector((store) => store.user)
   let { isShareOpen, isExportOpen } = useSelector((store) => store.modal)
   let { postsToExport } = useSelector((store) => store.shareExport)

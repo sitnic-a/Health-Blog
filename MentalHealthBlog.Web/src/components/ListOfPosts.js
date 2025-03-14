@@ -1,7 +1,6 @@
 import React from 'react'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import useFetchLocationState from './custom/hooks/useFetchLocationState'
 import { toast } from 'react-toastify'
 import { getPosts } from './redux-toolkit/features/postSlice'
 
@@ -18,13 +17,10 @@ import { ExportModal } from './share-export/export/ExportModal'
 
 export const ListOfPosts = () => {
   let dispatch = useDispatch()
-  // let { loggedUser, prevUrl } = useFetchLocationState()
-  // let { prevUrl } = useFetchLocationState()
   let { isLoading, posts } = useSelector((store) => store.post)
   let { authenticatedUser, isLogging, isAuthenticated } = useSelector(
     (store) => store.user
   )
-
   let { statisticsLoading } = useSelector((store) => store.pie)
 
   let searchPostDto = {

@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import useFetchLocationState from './custom/hooks/useFetchLocationState'
 import { setIsSharingExporting } from './redux-toolkit/features/postSlice'
 import { setVisibility } from './redux-toolkit/features/filterSlice'
 import { getTags } from './redux-toolkit/features/tagSlice'
@@ -12,7 +11,6 @@ import { BiSelectMultiple } from 'react-icons/bi'
 
 export const ListOfPostsHeader = () => {
   let dispatch = useDispatch()
-  // let { loggedUser } = useFetchLocationState();
   let { authenticatedUser } = useSelector((store) => store.user)
   let { isAddOpen } = useSelector((store) => store.modal)
   let { isSharingExporting } = useSelector((store) => store.post)

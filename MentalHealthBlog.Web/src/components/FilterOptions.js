@@ -1,7 +1,5 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
-
 import { useDispatch, useSelector } from 'react-redux'
 import moment from 'moment'
 
@@ -12,15 +10,12 @@ import {
 } from './redux-toolkit/features/pieSlice'
 
 export const FilterOptions = (props) => {
-  let location = useLocation()
   let dispatch = useDispatch()
   let { isFiltering } = useSelector((store) => store.filter)
+  let { authenticatedUser } = useSelector((store) => store.user)
+  let [months, setMonths] = useState([])
 
   let searchPostDto = props.searchPostDto
-  // let loggedUser = location.state.loggedUser
-  let { authenticatedUser } = useSelector((store) => store.user)
-
-  let [months, setMonths] = useState([])
 
   useEffect(() => {
     setMonths(moment.months())

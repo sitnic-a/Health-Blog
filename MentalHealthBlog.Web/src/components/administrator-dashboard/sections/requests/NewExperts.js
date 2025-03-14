@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux'
-
-import { NewMentalHealthExpertProfile } from './NewMentalHealthExpertProfile'
 import {
   displayProfilesContainer,
   displayStatusActionsContainer,
   getNewRegisteredExperts,
 } from '../../../redux-toolkit/features/adminSlice'
+
+import { NewMentalHealthExpertProfile } from './NewMentalHealthExpertProfile'
 
 export const NewExperts = () => {
   let dispatch = useDispatch()
