@@ -1,15 +1,15 @@
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
-import { ListOfPosts } from '../components/ListOfPosts'
-import useFetchLocationState from '../components/custom/hooks/useFetchLocationState'
-import { CiLogout } from 'react-icons/ci'
-import Cookies from 'js-cookie'
-import { useDispatch } from 'react-redux'
 import { logout } from '../components/redux-toolkit/features/userSlice'
+import { ListOfPosts } from '../components/ListOfPosts'
+import Cookies from 'js-cookie'
+import { CiLogout } from 'react-icons/ci'
 
 export const UserDashboard = () => {
   let dispatch = useDispatch()
   let navigate = useNavigate()
-  let { loggedUser } = useFetchLocationState()
+
+  let { authenticatedUser } = useSelector((store) => store.user)
   let refreshToken = Cookies.get('refreshToken')
   return (
     <section className="user-dashboard">
@@ -20,9 +20,6 @@ export const UserDashboard = () => {
             <li>
               <Link
                 to={'shared-posts'}
-                state={{
-                  loggedUser,
-                }}
                 className="navbar-action-shared-content"
               >
                 Shared Content
@@ -34,10 +31,11 @@ export const UserDashboard = () => {
                   className="logout-icon"
                   onClick={() => {
                     let logoutRequest = {
-                      userId: loggedUser.id,
+                      userId: authenticatedUser.id,
                       refreshToken: refreshToken,
                     }
-                    dispatch(logout(logoutRequest)).then((data) => {
+                    dispatch(logout(logoutRequest)).then(() => {
+                      Cookies.remove('refreshToken')
                       navigate('login')
                     })
                   }}

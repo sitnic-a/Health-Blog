@@ -1,41 +1,42 @@
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
-import useFetchLocationState from "./custom/hooks/useFetchLocationState";
+import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
+import useFetchLocationState from './custom/hooks/useFetchLocationState'
 import {
   setIsSharingExporting,
   setPost,
-} from "./redux-toolkit/features/postSlice";
-import { openDeleteModal } from "./redux-toolkit/features/modalSlice";
-import { setOverlayForShareExport } from "./redux-toolkit/features/shareExportSlice";
+} from './redux-toolkit/features/postSlice'
+import { openDeleteModal } from './redux-toolkit/features/modalSlice'
+import { setOverlayForShareExport } from './redux-toolkit/features/shareExportSlice'
 import {
   formatDateToString,
   getSelectedPosts,
-} from "./utils/helper-methods/methods";
-import { PostTags } from "./PostTags";
+} from './utils/helper-methods/methods'
+import { PostTags } from './PostTags'
 
-import { DeleteConfirmation } from "./DeleteConfirmation";
-import { MdOutlineModeEditOutline, MdOutlineDelete } from "react-icons/md";
+import { DeleteConfirmation } from './DeleteConfirmation'
+import { MdOutlineModeEditOutline, MdOutlineDelete } from 'react-icons/md'
 
 export const Post = (props) => {
-  let dispatch = useDispatch();
-  let { isDeleteOpen } = useSelector((store) => store.modal);
-  let { isSharingExporting } = useSelector((store) => store.post);
+  let dispatch = useDispatch()
+  let { isDeleteOpen } = useSelector((store) => store.modal)
+  let { isSharingExporting } = useSelector((store) => store.post)
 
-  let { loggedUser } = useFetchLocationState();
+  // let { loggedUser } = useFetchLocationState();
+  let { authenticatedUser } = useSelector((store) => store.user)
 
   //Helpers
-  let createdAt = formatDateToString(props.createdAt);
+  let createdAt = formatDateToString(props.createdAt)
 
   return (
     <div className="main-container">
       <Link
         onClick={() => {
-          dispatch(setPost(props));
+          dispatch(setPost(props))
         }}
         to={`post/${props.id}`}
         state={{
-          loggedUser: loggedUser,
+          // loggedUser: authenticatedUser,
           prevUrl: window.location.href,
         }}
       >
@@ -70,7 +71,7 @@ export const Post = (props) => {
               postTitle: props.title,
               postContent: props.content,
               postUserId: props.userId,
-              loggedUser: loggedUser,
+              loggedUser: authenticatedUser,
             }}
           >
             <button data-action-update="update" type="button">
@@ -82,8 +83,8 @@ export const Post = (props) => {
           <button data-action-delete="delete" type="button">
             <MdOutlineDelete
               onClick={() => {
-                dispatch(openDeleteModal(true));
-                dispatch(setPost(props));
+                dispatch(openDeleteModal(true))
+                dispatch(setPost(props))
               }}
             />
             {isDeleteOpen && <DeleteConfirmation />}
@@ -98,10 +99,10 @@ export const Post = (props) => {
             name="share-export"
             id="share-export"
             onChange={() => {
-              dispatch(setOverlayForShareExport(loggedUser));
-              let selectedPosts = getSelectedPosts(loggedUser);
+              dispatch(setOverlayForShareExport(authenticatedUser))
+              let selectedPosts = getSelectedPosts(authenticatedUser)
               if (selectedPosts.length <= 0)
-                dispatch(setIsSharingExporting(!isSharingExporting));
+                dispatch(setIsSharingExporting(!isSharingExporting))
             }}
           />
         </>
@@ -109,5 +110,5 @@ export const Post = (props) => {
 
       <PostTags post={props} />
     </div>
-  );
-};
+  )
+}

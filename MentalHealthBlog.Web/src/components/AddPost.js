@@ -19,7 +19,8 @@ import { TagsOnPostCreation } from './TagsOnPostCreation'
 
 export const AddPost = () => {
   let dispatch = useDispatch()
-  let { loggedUser } = useFetchLocationState()
+  // let { loggedUser } = useFetchLocationState()
+  let { authenticatedUser } = useSelector((store) => store.user)
   let { isAddOpen } = useSelector((store) => store.modal)
   let { chosenTags } = useSelector((store) => store.tag)
   let { pickedEmotions } = useSelector((store) => store.emotion)
@@ -33,7 +34,7 @@ export const AddPost = () => {
     let chosenEmotions = pickedEmotions.map((emotion) => emotion.id)
     let addPostObj = {
       e,
-      loggedUser,
+      authenticatedUser,
       chosenTags,
       chosenEmotions,
     }

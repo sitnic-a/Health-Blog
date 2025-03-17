@@ -5,12 +5,7 @@ export const SharedContent = (props) => {
   let date = formatDateToString(content.createdAt)
 
   return (
-    <div
-      className="sharing-users-post-container"
-      onClick={() => {
-        console.log('ABORT MISSION')
-      }}
-    >
+    <div className="sharing-users-post-container">
       <div className="sharing-users-post-title">
         <h2>{content.title}</h2>
         <p>{date}</p>

@@ -1,5 +1,4 @@
-import { MdEmail } from 'react-icons/md'
-import { MdLocalPhone } from 'react-icons/md'
+import { MdEmail, MdLocalPhone } from 'react-icons/md'
 import { NewMentalHealthExpertProfileActions } from './NewMentalHealthExpertProfileActions'
 
 export const NewMentalHealthExpertProfile = (props) => {

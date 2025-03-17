@@ -12,12 +12,12 @@ let initialState = {
 }
 
 export const getPosts = createAsyncThunk('post/', async (filteringObject) => {
-  let url = `${application.application_url}/post?UserId=${filteringObject.loggedUser.id}&MonthOfPostCreation=${filteringObject.monthOfPostCreation}`
+  let url = `${application.application_url}/post?UserId=${filteringObject.authenticatedUser.id}&MonthOfPostCreation=${filteringObject.monthOfPostCreation}`
   let request = await fetch(url, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${filteringObject.loggedUser.token}`,
+      Authorization: `Bearer ${filteringObject.authenticatedUser.jwToken}`,
     },
   })
   let response = await request.json()
@@ -33,7 +33,7 @@ export const createPost = createAsyncThunk('post/add/', async (addPostObj) => {
   let newPost = {
     title: data.title,
     content: data.content,
-    userId: addPostObj.loggedUser.id,
+    userId: addPostObj.authenticatedUser.id,
     tags: addPostObj.chosenTags,
     emotions: addPostObj.chosenEmotions,
   }
@@ -83,7 +83,7 @@ export const updatePost = createAsyncThunk(
       body: JSON.stringify(data),
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${updatePostObj.loggedUser.token}`,
+        Authorization: `Bearer ${updatePostObj.authenticatedUser.jwToken}`,
       },
     })
     let response = await request.json()
@@ -99,7 +99,7 @@ export const deletePostById = createAsyncThunk(
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${deletePostObj.loggedUser.token}`,
+        Authorization: `Bearer ${deletePostObj.loggedUser.jwToken}`,
       },
     })
     let response = await request.json()

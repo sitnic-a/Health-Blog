@@ -82,7 +82,9 @@ export const logout = createAsyncThunk('user/logout', async (logoutRequest) => {
   let request = await fetch(url, {
     method: 'POST',
     body: JSON.stringify(logoutRequest),
-    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
   })
   let response = await request.json()
   return response
@@ -94,6 +96,11 @@ export const userSlice = createSlice({
   reducers: {
     setIsFailed: (state, action) => {
       state.isFailed = action.payload
+    },
+    setAuthenticatedUser: (state, action) => {
+      console.log('RA ', action.payload.serviceResponseObject)
+
+      state.authenticatedUser = action.payload.serviceResponseObject
     },
   },
   extraReducers: (builder) => {
@@ -138,15 +145,13 @@ export const userSlice = createSlice({
 
       //refresh-access-token
       .addCase(refreshAccessToken.pending, (state) => {
-        // console.log("Refreshing token...");
+        state.isLoading = true
       })
       .addCase(refreshAccessToken.fulfilled, (state, action) => {
-        let response = action.payload.serviceResponseObject
-        // console.log("New access token ", response);
+        state.isLoading = false
       })
       .addCase(refreshAccessToken.rejected, (state, action) => {
-        let response = action.payload
-        // console.log("New access token error ", response);
+        state.isLoading = false
       })
 
       //--- register
@@ -209,5 +214,5 @@ export const userSlice = createSlice({
   },
 })
 
-export const { setIsFailed } = userSlice.actions
+export const { setIsFailed, setAuthenticatedUser } = userSlice.actions
 export default userSlice.reducer
