@@ -10,5 +10,6 @@ namespace MentalHealthBlog.API.Services
         Task<Response> Login(UserLoginDto loginCredentials);
         Task<Response> RefreshAccessToken(string refreshToken);
         Task<Response> GetRoles();
+        Task<Response> Logout(LogoutDto logoutRequest);
     }
 }
