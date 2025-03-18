@@ -8,6 +8,9 @@ import { openAddModal } from './redux-toolkit/features/modalSlice'
 import { AddPost } from './AddPost'
 import { MdOutlineAddCircleOutline } from 'react-icons/md'
 import { BiSelectMultiple } from 'react-icons/bi'
+import { TbColumns3 } from 'react-icons/tb'
+import { TbColumns2 } from 'react-icons/tb'
+import { TbColumns1 } from 'react-icons/tb'
 
 export const ListOfPostsHeader = () => {
   let dispatch = useDispatch()
@@ -59,6 +62,24 @@ export const ListOfPostsHeader = () => {
               >
                 <BiSelectMultiple />
               </button>
+            </div>
+          </section>
+
+          <section id="layout-picker-main-container">
+            <div className="layout-picker-container">
+              <div className="layout-picker-types">
+                <div className="layout-type default-layout-container">
+                  <TbColumns3 className="layout-view-icon" />
+                </div>
+
+                <div className="layout-type two-columns-layout-container">
+                  <TbColumns2 className="layout-view-icon" />
+                </div>
+
+                <div className="layout-type single-column-layout-container">
+                  <TbColumns1 className="layout-view-icon" />
+                </div>
+              </div>
             </div>
           </section>
           <br />
