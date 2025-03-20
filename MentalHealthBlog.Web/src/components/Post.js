@@ -1,7 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
-import useFetchLocationState from './custom/hooks/useFetchLocationState'
 import {
   setIsSharingExporting,
   setPost,
@@ -25,7 +24,6 @@ export const Post = (props) => {
   let { isDeleteOpen } = useSelector((store) => store.modal)
   let { isSharingExporting } = useSelector((store) => store.post)
 
-  // let { loggedUser } = useFetchLocationState();
   let { authenticatedUser } = useSelector((store) => store.user)
 
   //Helpers

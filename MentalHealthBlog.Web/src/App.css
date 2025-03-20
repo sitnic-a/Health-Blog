@@ -833,6 +833,10 @@ dialog::backdrop {
   color: #00ff;
 }
 
+.list-of-posts-header {
+  margin-bottom: 2rem;
+}
+
 .list-of-posts-author {
   padding: 0.5rem;
 }
@@ -1339,7 +1343,7 @@ div[data-tooltip-title]:after {
 }
 
 #layout-picker-main-container {
-  background: #e1e1e1;
+  /* background: #e1e1e1; */
   max-width: 50px;
   width: 100%;
   height: 50px;
@@ -1350,7 +1354,7 @@ div[data-tooltip-title]:after {
   position: absolute;
   max-width: 50px;
   width: 100%;
-  max-height: 110px;
+  max-height: 150px;
   height: 100%;
   /* background: magenta; */
 }
@@ -1358,28 +1362,42 @@ div[data-tooltip-title]:after {
 .layout-picker-types {
   /* background: #e1e1e1; */
   margin-inline: auto;
-  padding-left: 0.15rem;
-  padding-bottom: 0.4rem;
-  max-height: 35px;
-  margin-top: 20%;
+  padding-bottom: 0.6rem;
+  max-height: 50px;
   overflow-y: hidden;
 }
 
 .layout-picker-types:hover {
-  max-height: 110px;
+  /* border: 1px solid red; */
+  max-height: 140px;
 }
 
 .layout-type {
+  border-radius: 0.3rem;
   position: relative;
-  padding: 0.1rem;
-  margin-left: 0.35rem;
   /* background: yellow; */
-  max-height: 35px;
+  max-height: 50px;
+  padding-inline: 0.55rem;
+  cursor: pointer;
+}
+
+.layout-type:hover {
+  transition: 200ms;
+  background: #e1e1e1;
 }
 
 .default-layout-container {
   /* background: beige; */
   margin-block: auto;
+  height: 50px;
+}
+
+.two-columns-layout-container {
+  height: 50px;
+}
+
+.single-column-layout-container {
+  height: 50px;
 }
 
 .layout-view-icon {
@@ -1387,6 +1405,7 @@ div[data-tooltip-title]:after {
   font-weight: 100;
   color: #707070;
   stroke-width: 1;
+  margin-top: 0.5rem;
 }
 
 .reminder {
