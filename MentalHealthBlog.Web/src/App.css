@@ -1193,7 +1193,7 @@ button[data-action-update='update'] {
   background: none;
   outline: none;
   border: none;
-  top: 0.75rem;
+  top: 0.4rem;
   left: 0.3rem;
 }
 
@@ -1202,7 +1202,7 @@ button[data-action-delete='delete'] {
   background: none;
   outline: none;
   border: none;
-  top: 0.75rem;
+  top: 0.4rem;
   right: 0.3rem;
 }
 
@@ -1231,6 +1231,24 @@ input[name='share-export'] {
   outline: none;
   z-index: 2;
   display: block;
+}
+
+.post-tags-reveal-action-container {
+  border-radius: 0.2rem;
+  background: #eeeeee;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+}
+
+.post-reveal-option-title {
+  margin: 0;
+  font-weight: 300;
+}
+
+.post-reveal-expand-button {
+  cursor: pointer;
 }
 
 button[data-action-add='add'] {
@@ -2082,6 +2100,7 @@ select[name='filter-by-month'] {
 }
 
 .post-container {
+  position: relative;
   margin-top: 0.3rem;
   border-radius: 0.4rem;
   padding: 0.3rem;
@@ -2102,6 +2121,7 @@ select[name='filter-by-month'] {
 }
 
 .post-header h1 {
+  color: #0000ee;
   padding: 0.2rem;
   text-align: center;
 }
@@ -2129,14 +2149,19 @@ select[name='filter-by-month'] {
   margin-left: 0.7rem;
 }
 
-.post-container-tags {
+.post-container-main-tags {
   background: #89cff0;
   color: #000;
   font-size: 0.9em;
-  margin-top: 0.3rem;
   border-radius: 0.4rem;
   max-width: 280px;
   padding-right: 0.5rem;
+}
+
+.post-container-tags {
+  height: 0px;
+  opacity: 0;
+  transition: 300ms;
 }
 
 .pie-graph-main-container {

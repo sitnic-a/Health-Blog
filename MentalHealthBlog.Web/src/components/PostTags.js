@@ -1,29 +1,31 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React from 'react'
+import { useDispatch } from 'react-redux'
 import {
   setIsHovered,
   setHoveredPost,
   setHoveredTag,
-} from "./redux-toolkit/features/tagGradeSlice";
-import Tag from "./Tag";
+} from './redux-toolkit/features/tagGradeSlice'
+import Tag from './Tag'
 
 export const PostTags = (props) => {
-  let dispatch = useDispatch();
+  let dispatch = useDispatch()
 
-  let post = props.post;
+  let post = props.post
 
   return (
     <div
-      className="post-container-tags"
+      className="post-container-main-tags"
       onMouseLeave={() => {
-        dispatch(setIsHovered(false));
-        dispatch(setHoveredPost(null));
-        dispatch(setHoveredTag(null));
+        dispatch(setIsHovered(false))
+        dispatch(setHoveredPost(null))
+        dispatch(setHoveredTag(null))
       }}
     >
-      {post.tags.map((tag) => {
-        return <Tag key={tag} post={post} tag={tag} />;
-      })}
+      <div className="post-container-tags">
+        {post.tags.map((tag) => {
+          return <Tag key={tag} post={post} tag={tag} />
+        })}
+      </div>
     </div>
-  );
-};
+  )
+}

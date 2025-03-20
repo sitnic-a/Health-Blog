@@ -117,6 +117,26 @@ let postSlice = createSlice({
     setIsSharingExporting: (state, action) => {
       state.isSharingExporting = action.payload
     },
+    showTags: (state, action) => {
+      let postTagsRevealActionMainContainer =
+        action.payload.currentTarget.parentNode.parentNode
+
+      let postTagsContainer = postTagsRevealActionMainContainer.querySelector(
+        '.post-container-tags'
+      )
+      if (postTagsContainer.style.height === '') {
+        postTagsContainer.style.height = `${postTagsContainer.scrollHeight}px`
+        postTagsContainer.style.opacity = `1`
+        action.payload.currentTarget.style.transform = 'rotate(180deg)'
+
+        return
+      }
+      postTagsContainer.style.height = ''
+      postTagsContainer.style.opacity = `0`
+      action.payload.currentTarget.style.transform = 'rotate(0deg)'
+
+      return
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -200,6 +220,6 @@ let postSlice = createSlice({
   },
 })
 
-export const { setPost, setIsSharingExporting } = postSlice.actions
+export const { setPost, setIsSharingExporting, showTags } = postSlice.actions
 
 export default postSlice.reducer
