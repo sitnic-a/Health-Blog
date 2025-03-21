@@ -137,6 +137,27 @@ let postSlice = createSlice({
 
       return
     },
+    showEmotions: (state, action) => {
+      let postEmotionsRevealActionMainContainer =
+        action.payload.currentTarget.parentNode.parentNode
+
+      let postEmotionsContainer =
+        postEmotionsRevealActionMainContainer.querySelector(
+          '.post-container-emotions'
+        )
+      if (postEmotionsContainer.style.height === '') {
+        postEmotionsContainer.style.height = `${postEmotionsContainer.scrollHeight}px`
+        postEmotionsContainer.style.opacity = `1`
+        action.payload.currentTarget.style.transform = 'rotate(180deg)'
+
+        return
+      }
+      postEmotionsContainer.style.height = ''
+      postEmotionsContainer.style.opacity = `0`
+      action.payload.currentTarget.style.transform = 'rotate(0deg)'
+
+      return
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -220,6 +241,7 @@ let postSlice = createSlice({
   },
 })
 
-export const { setPost, setIsSharingExporting, showTags } = postSlice.actions
+export const { setPost, setIsSharingExporting, showTags, showEmotions } =
+  postSlice.actions
 
 export default postSlice.reducer

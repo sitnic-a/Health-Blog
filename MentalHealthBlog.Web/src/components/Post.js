@@ -5,6 +5,7 @@ import {
   setIsSharingExporting,
   setPost,
   showTags,
+  showEmotions,
 } from './redux-toolkit/features/postSlice'
 import { openDeleteModal } from './redux-toolkit/features/modalSlice'
 import { setOverlayForShareExport } from './redux-toolkit/features/shareExportSlice'
@@ -17,6 +18,7 @@ import { PostTags } from './PostTags'
 import { DeleteConfirmation } from './DeleteConfirmation'
 import { MdOutlineModeEditOutline, MdOutlineDelete } from 'react-icons/md'
 import { TiArrowSortedDown } from 'react-icons/ti'
+import { PostEmotions } from './PostEmotions'
 
 export const Post = (props) => {
   let dispatch = useDispatch()
@@ -118,12 +120,17 @@ export const Post = (props) => {
         <PostTags post={props} />
       </div>
 
-      <div className="post-tags-reveal-action-main-container">
-        <div className="post-tags-reveal-action-container">
+      <div className="post-emotions-reveal-action-main-container">
+        <div className="post-emotions-reveal-action-container">
           <p className="post-reveal-option-title">Emotions</p>
-          <TiArrowSortedDown />
+          <TiArrowSortedDown
+            className="post-reveal-expand-button"
+            onClick={(e) => {
+              dispatch(showEmotions(e))
+            }}
+          />
         </div>
-        <PostTags post={props} />
+        <PostEmotions post={props} />
       </div>
     </div>
   )

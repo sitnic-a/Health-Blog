@@ -26,7 +26,17 @@ export const ListOfPostsHeader = () => {
     <>
       {isAddOpen && <AddPost />}
 
-      <section className="list-of-posts-header">
+      <section
+        className="list-of-posts-header"
+        onMouseOver={() => {
+          let listPostsHeader = document.querySelector('.list-of-posts-header')
+          listPostsHeader.style.marginBottom = '2rem'
+        }}
+        onMouseLeave={() => {
+          let listPostsHeader = document.querySelector('.list-of-posts-header')
+          listPostsHeader.style.marginBottom = '0'
+        }}
+      >
         <h1 className="list-of-posts-author">
           Written by: <span>{authenticatedUser.username}</span>
         </h1>
