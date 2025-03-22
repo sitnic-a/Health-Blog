@@ -77,6 +77,7 @@ export const Post = (props) => {
           {isDeleteOpen && <DeleteConfirmation />}
         </button>
       </section>
+
       {isSharingExporting === false && (
         <>
           <Link
@@ -90,6 +91,7 @@ export const Post = (props) => {
           ></Link>
         </>
       )}
+
       {isSharingExporting === true && (
         <>
           <div className="post-overlay"></div>
@@ -107,30 +109,32 @@ export const Post = (props) => {
         </>
       )}
 
-      <div className="post-tags-reveal-action-main-container">
-        <div className="post-tags-reveal-action-container">
-          <p className="post-reveal-option-title">Tags</p>
-          <TiArrowSortedDown
-            className="post-reveal-expand-button"
-            onClick={(e) => {
-              showTags(e.currentTarget)
-            }}
-          />
+      <div className="post-reveal-action-containers">
+        <div className="post-tags-reveal-action-main-container">
+          <div className="post-tags-reveal-action-container">
+            <p className="post-reveal-option-title">Tags</p>
+            <TiArrowSortedDown
+              className="post-reveal-expand-button"
+              onClick={(e) => {
+                showTags(e.currentTarget)
+              }}
+            />
+          </div>
+          <PostTags post={props} />
         </div>
-        <PostTags post={props} />
-      </div>
 
-      <div className="post-emotions-reveal-action-main-container">
-        <div className="post-emotions-reveal-action-container">
-          <p className="post-reveal-option-title">Emotions</p>
-          <TiArrowSortedDown
-            className="post-reveal-expand-button"
-            onClick={(e) => {
-              showEmotions(e.currentTarget)
-            }}
-          />
+        <div className="post-emotions-reveal-action-main-container">
+          <div className="post-emotions-reveal-action-container">
+            <p className="post-reveal-option-title">Emotions</p>
+            <TiArrowSortedDown
+              className="post-reveal-expand-button"
+              onClick={(e) => {
+                showEmotions(e.currentTarget)
+              }}
+            />
+          </div>
+          <PostEmotions post={props} />
         </div>
-        <PostEmotions post={props} />
       </div>
     </div>
   )

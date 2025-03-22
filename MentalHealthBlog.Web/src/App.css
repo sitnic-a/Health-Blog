@@ -1201,6 +1201,7 @@ button[data-action-update='update'] {
   border: none;
   top: 0.4rem;
   left: 0.3rem;
+  cursor: pointer;
 }
 
 button[data-action-delete='delete'] {
@@ -1210,6 +1211,7 @@ button[data-action-delete='delete'] {
   border: none;
   top: 0.4rem;
   right: 0.3rem;
+  cursor: pointer;
 }
 
 .post-overlay {
@@ -1239,6 +1241,14 @@ input[name='share-export'] {
   display: block;
 }
 
+.post-reveal-action-containers {
+  display: block;
+}
+
+.post-tags-reveal-action-main-container {
+  max-width: 290px;
+}
+
 .post-tags-reveal-action-container {
   border-radius: 0.2rem;
   background: #eeeeee;
@@ -1259,6 +1269,7 @@ input[name='share-export'] {
 
 .post-emotions-reveal-action-main-container {
   margin-top: 0.15rem;
+  max-width: 290px;
 }
 
 .post-emotions-reveal-action-container {
@@ -1398,6 +1409,10 @@ div[data-tooltip-title]:after {
 
 .layout-type:hover {
   transition: 200ms;
+  background: #e1e1e1;
+}
+
+.layout-active {
   background: #e1e1e1;
 }
 
