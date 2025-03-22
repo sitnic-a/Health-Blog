@@ -4,8 +4,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import {
   setIsSharingExporting,
   setPost,
-  showTags,
-  showEmotions,
 } from './redux-toolkit/features/postSlice'
 import { openDeleteModal } from './redux-toolkit/features/modalSlice'
 import { setOverlayForShareExport } from './redux-toolkit/features/shareExportSlice'
@@ -13,12 +11,14 @@ import {
   formatDateToString,
   getSelectedPosts,
 } from './utils/helper-methods/methods'
-import { PostTags } from './PostTags'
 
+import { showTags, showEmotions } from './utils/postHelper'
+import { PostTags } from './PostTags'
+import { PostEmotions } from './PostEmotions'
 import { DeleteConfirmation } from './DeleteConfirmation'
+
 import { MdOutlineModeEditOutline, MdOutlineDelete } from 'react-icons/md'
 import { TiArrowSortedDown } from 'react-icons/ti'
-import { PostEmotions } from './PostEmotions'
 
 export const Post = (props) => {
   let dispatch = useDispatch()
@@ -113,7 +113,7 @@ export const Post = (props) => {
           <TiArrowSortedDown
             className="post-reveal-expand-button"
             onClick={(e) => {
-              dispatch(showTags(e))
+              showTags(e.currentTarget)
             }}
           />
         </div>
@@ -126,7 +126,7 @@ export const Post = (props) => {
           <TiArrowSortedDown
             className="post-reveal-expand-button"
             onClick={(e) => {
-              dispatch(showEmotions(e))
+              showEmotions(e.currentTarget)
             }}
           />
         </div>
