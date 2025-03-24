@@ -37,6 +37,7 @@ export function formatStringToDate(date) {
 export function getSelectedPosts(loggedUser) {
   let postsToShareExport = []
   let postTags = []
+  let postEmotions = []
 
   let author = document.querySelector(
     '.list-of-posts-header .list-of-posts-author span'
@@ -71,8 +72,25 @@ export function getSelectedPosts(loggedUser) {
       '.post-container-tags .add-post-content-picked-tags-span-tag'
     )
 
+    let postContainerEmotions = checked.querySelectorAll(
+      '.post-container-emotions .post-container-emotion'
+    )
+
     postContainerTags.forEach((tag) => {
       postTags.push(tag.innerHTML)
+    })
+
+    postContainerEmotions.forEach((emotion) => {
+      let emotionName = emotion.childNodes[0].textContent
+
+      let emotionId = parseInt(
+        emotion.querySelector('.post-container-emotion-id').innerHTML
+      )
+      let emotionToAdd = {
+        name: emotionName,
+        id: emotionId,
+      }
+      postEmotions.push(emotionToAdd)
     })
 
     let post = {
@@ -83,6 +101,7 @@ export function getSelectedPosts(loggedUser) {
       content: postContent,
       createdAt: postDate,
       tags: postTags,
+      emotions: postEmotions,
     }
 
     postsToShareExport.push(post)

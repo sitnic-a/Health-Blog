@@ -9,6 +9,7 @@ export const PostEmotion = (props) => {
       key={emotion.id}
     >
       {emotion.name}
+      <span className="post-container-emotion-id">{emotion.id}</span>
     </div>
   )
 }

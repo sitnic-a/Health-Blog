@@ -2231,6 +2231,10 @@ select[name='filter-by-month'] {
   margin: 0.1rem 0.1rem;
 }
 
+.post-container-emotion-id {
+  display: none;
+}
+
 .pie-graph-main-container {
   text-align: center;
   max-width: 450px;
