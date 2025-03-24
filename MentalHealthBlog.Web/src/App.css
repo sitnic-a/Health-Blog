@@ -1377,7 +1377,6 @@ div[data-tooltip-title]:after {
 }
 
 .layout-picker-container {
-  position: absolute;
   max-width: 50px;
   width: 100%;
   max-height: 150px;
@@ -1400,7 +1399,6 @@ div[data-tooltip-title]:after {
 
 .layout-type {
   border-radius: 0.3rem;
-  position: relative;
   /* background: yellow; */
   max-height: 50px;
   padding-inline: 0.55rem;

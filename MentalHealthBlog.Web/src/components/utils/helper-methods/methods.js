@@ -48,7 +48,7 @@ export function getSelectedPosts(loggedUser) {
 
   checkedPosts.forEach((checked) => {
     let postContainerContent = checked.querySelector(
-      'a > .post-container > .post-container-content'
+      '.post-container > .post-container-content'
     )
 
     let id = postContainerContent.querySelector('input[data-post-id]').dataset
