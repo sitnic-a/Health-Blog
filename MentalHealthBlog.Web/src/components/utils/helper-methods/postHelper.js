@@ -51,27 +51,14 @@ export const showEmotions = (expandIcon) => {
   return
 }
 
-export const rotateElements = (element) => {
-  console.log('Element ', element)
+export const swap = (clickedElement, layoutPickerTypes) => {
+  let firstElement = layoutPickerTypes.children[0]
+  if (clickedElement !== firstElement) {
+    layoutPickerTypes.insertBefore(clickedElement, firstElement)
+  }
+}
 
-  console.log('After rotation ', typeof element)
-
-  console.log('In obj')
-
-  let layoutPickerTypes = element.target.parentNode
-  let clickedElement = element.target
-  let index = Array.from(layoutPickerTypes.children).indexOf(clickedElement)
-
-  let temp = layoutPickerTypes.children[0].outerHTML
-  layoutPickerTypes.children[0].outerHTML =
-    layoutPickerTypes.children[index].outerHTML
-
-  layoutPickerTypes.children[index].outerHTML = temp
-  Array.from(layoutPickerTypes.children).forEach((type) => {
-    type.addEventListener('click', (e) => {
-      let clickedElement = e.target.parentNode
-      rotateElements(clickedElement)
-      return
-    })
-  })
+export const setActiveLayoutType = (clickedElement, layouts) => {
+  layouts.forEach((layoutType) => layoutType.classList.remove('layout-active'))
+  clickedElement.classList.add('layout-active')
 }

@@ -12,7 +12,7 @@ import {
   getSelectedPosts,
 } from './utils/helper-methods/methods'
 
-import { showTags, showEmotions } from './utils/postHelper'
+import { showTags, showEmotions } from './utils/helper-methods/postHelper'
 import { PostTags } from './PostTags'
 import { PostEmotions } from './PostEmotions'
 import { DeleteConfirmation } from './DeleteConfirmation'

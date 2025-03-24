@@ -1,37 +1,37 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setIsSharingExporting } from "./redux-toolkit/features/postSlice";
-import { setVisibility } from "./redux-toolkit/features/filterSlice";
-import { getTags } from "./redux-toolkit/features/tagSlice";
-import { openAddModal } from "./redux-toolkit/features/modalSlice";
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { setIsSharingExporting } from './redux-toolkit/features/postSlice'
+import { setVisibility } from './redux-toolkit/features/filterSlice'
+import { getTags } from './redux-toolkit/features/tagSlice'
+import { openAddModal } from './redux-toolkit/features/modalSlice'
+import { setActiveLayoutType, swap } from './utils/helper-methods/postHelper'
 
-import { AddPost } from "./AddPost";
-import { MdOutlineAddCircleOutline } from "react-icons/md";
-import { BiSelectMultiple } from "react-icons/bi";
-import { TbColumns3 } from "react-icons/tb";
-import { TbColumns2 } from "react-icons/tb";
-import { TbColumns1 } from "react-icons/tb";
+import { AddPost } from './AddPost'
+import { MdOutlineAddCircleOutline } from 'react-icons/md'
+import { BiSelectMultiple } from 'react-icons/bi'
+import { TbColumns3 } from 'react-icons/tb'
+import { TbColumns2 } from 'react-icons/tb'
+import { TbColumns1 } from 'react-icons/tb'
 
 export const ListOfPostsHeader = () => {
-  let dispatch = useDispatch();
-  let { authenticatedUser } = useSelector((store) => store.user);
-  let { isAddOpen } = useSelector((store) => store.modal);
-  let { isSharingExporting } = useSelector((store) => store.post);
-  let layouts = document.querySelectorAll(".layout-type");
-  console.log("Layouts ", layouts);
+  let dispatch = useDispatch()
+  let { authenticatedUser } = useSelector((store) => store.user)
+  let { isAddOpen } = useSelector((store) => store.modal)
+  let { isSharingExporting } = useSelector((store) => store.post)
+
+  let layoutPickerTypes = document.querySelector('.layout-picker-types')
+  let layouts = document.querySelectorAll('.layout-type')
 
   useEffect(() => {
-    dispatch(getTags());
-  }, []);
+    dispatch(getTags())
+  }, [])
 
-  layouts.forEach((layout) => {
-    layout.addEventListener("click", (e) => {
-      console.log("Ee ", e.currentTarget);
-      let layoutPickerTypes = document.querySelector(".layout-picker-types");
-
-      let index = [...layouts].indexOf(e.currentTarget);
-    });
-  });
+  layouts.forEach((layoutType) => {
+    layoutType.addEventListener('click', function () {
+      swap(this, layoutPickerTypes)
+      setActiveLayoutType(this, layouts)
+    })
+  })
 
   return (
     <>
@@ -40,12 +40,12 @@ export const ListOfPostsHeader = () => {
       <section
         className="list-of-posts-header"
         onMouseOver={() => {
-          let listPostsHeader = document.querySelector(".list-of-posts-header");
-          listPostsHeader.style.marginBottom = "2rem";
+          let listPostsHeader = document.querySelector('.list-of-posts-header')
+          listPostsHeader.style.marginBottom = '2rem'
         }}
         onMouseLeave={() => {
-          let listPostsHeader = document.querySelector(".list-of-posts-header");
-          listPostsHeader.style.marginBottom = "0";
+          let listPostsHeader = document.querySelector('.list-of-posts-header')
+          listPostsHeader.style.marginBottom = '0'
         }}
       >
         <h1 className="list-of-posts-author">
@@ -65,7 +65,7 @@ export const ListOfPostsHeader = () => {
             data-action-add="filter"
             type="button"
             onClick={() => {
-              dispatch(setVisibility());
+              dispatch(setVisibility())
             }}
           >
             Filter
@@ -78,7 +78,7 @@ export const ListOfPostsHeader = () => {
                 type="button"
                 data-tooltip-title="Select data"
                 onClick={(e) => {
-                  dispatch(setIsSharingExporting(!isSharingExporting));
+                  dispatch(setIsSharingExporting(!isSharingExporting))
                 }}
               >
                 <BiSelectMultiple />
@@ -107,5 +107,5 @@ export const ListOfPostsHeader = () => {
         </div>
       </section>
     </>
-  );
-};
+  )
+}
