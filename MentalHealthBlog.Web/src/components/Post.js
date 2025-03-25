@@ -78,36 +78,20 @@ export const Post = (props) => {
         </button>
       </section>
 
-      {isSharingExporting === false && (
-        <>
-          <Link
-            to={`/post/${props.id}`}
-            state={{
-              postTitle: props.title,
-              postContent: props.content,
-              postUserId: props.userId,
-              loggedUser: authenticatedUser,
-            }}
-          ></Link>
-        </>
-      )}
-
-      {isSharingExporting === true && (
-        <>
-          <div className="post-overlay"></div>
-          <input
-            type="checkbox"
-            name="share-export"
-            id="share-export"
-            onChange={() => {
-              dispatch(setOverlayForShareExport(authenticatedUser))
-              let selectedPosts = getSelectedPosts(authenticatedUser)
-              if (selectedPosts.length <= 0)
-                dispatch(setIsSharingExporting(!isSharingExporting))
-            }}
-          />
-        </>
-      )}
+      <>
+        <div className="post-overlay"></div>
+        <input
+          type="checkbox"
+          name="share-export"
+          id="share-export"
+          onChange={() => {
+            dispatch(setOverlayForShareExport(authenticatedUser))
+            let selectedPosts = getSelectedPosts(authenticatedUser)
+            if (selectedPosts.length <= 0)
+              dispatch(setIsSharingExporting(!isSharingExporting))
+          }}
+        />
+      </>
 
       <div className="post-reveal-action-containers">
         <div className="post-tags-reveal-action-main-container">

@@ -92,7 +92,6 @@ export const ListOfPostsHeader = () => {
                 <div
                   className="layout-type default-layout-container"
                   onClick={(e) => {
-                    alert('Default')
                     let mainContainers =
                       document.querySelectorAll('.main-container')
 
@@ -103,12 +102,14 @@ export const ListOfPostsHeader = () => {
                       //dodaj klasu .main-single-col na svaki container
                       let postContainer =
                         container.querySelector('.post-container')
+                      let postOverlay = container.querySelector('.post-overlay')
                       let postRevealActionContainers = container.querySelector(
                         '.post-reveal-action-containers'
                       )
                       postContainer.classList.remove(
                         'post-container-single-col'
                       )
+                      postOverlay.classList.remove('post-overlay-single-col')
                       //dodaj klasu .post-container-single-col na svaki post-container
                     })
                   }}
@@ -128,7 +129,6 @@ export const ListOfPostsHeader = () => {
                 <div
                   className="layout-type single-column-layout-container"
                   onClick={(e) => {
-                    // alert('Single col')
                     let mainContainers =
                       document.querySelectorAll('.main-container')
                     mainContainers.forEach((container) => {
@@ -136,11 +136,13 @@ export const ListOfPostsHeader = () => {
                       container.classList.add('main-single-col')
                       let postContainer =
                         container.querySelector('.post-container')
+                      let postOverlay = container.querySelector('.post-overlay')
                       let postRevealActionContainers = container.querySelector(
                         '.post-reveal-action-containers'
                       )
                       postContainer.classList.add('post-container-single-col')
                       postRevealActionContainers.style.marginInline = 'auto'
+                      postOverlay.classList.add('post-overlay-single-col')
                       //dodaj klasu .post-container-single-col na svaki post-container
                     })
                   }}

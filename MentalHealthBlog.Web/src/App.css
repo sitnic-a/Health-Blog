@@ -2,7 +2,7 @@ input[type='text'],
 textarea {
   border: 1px solid #a8a8a8;
   outline: none;
-  padding-inline: 0.2rem;
+  /* padding-inline: 0.2rem; */
   border-width: 1px;
 }
 
@@ -1220,17 +1220,18 @@ button[data-action-delete='delete'] {
   left: 0;
   max-width: 400px;
   width: 100%;
-  min-height: 99.4%;
+  min-height: 99%;
   border-radius: 0.4rem;
   background: #000;
   opacity: 0.7;
   z-index: 1;
-  display: block;
+  visibility: hidden;
   border-radius: 0.4rem;
 }
 
 .post-overlay-single-col {
   max-width: 600px;
+  min-height: 100%;
   top: 0;
 }
 
@@ -1243,7 +1244,7 @@ input[name='share-export'] {
   border: none;
   outline: none;
   z-index: 2;
-  display: block;
+  visibility: hidden;
 }
 
 .post-reveal-action-containers {
@@ -2171,6 +2172,7 @@ select[name='filter-by-month'] {
 .post-container-single-col {
   margin-top: 0px;
   max-width: 260px;
+  max-height: 300px;
   width: 100%;
 }
 
