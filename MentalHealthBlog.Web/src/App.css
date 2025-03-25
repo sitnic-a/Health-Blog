@@ -1229,6 +1229,11 @@ button[data-action-delete='delete'] {
   border-radius: 0.4rem;
 }
 
+.post-overlay-single-col {
+  max-width: 600px;
+  top: 0;
+}
+
 input[name='share-export'] {
   position: absolute;
   top: 0.45rem;
@@ -1243,6 +1248,8 @@ input[name='share-export'] {
 
 .post-reveal-action-containers {
   display: block;
+  max-width: 290px;
+  width: 100%;
 }
 
 .post-tags-reveal-action-main-container {
@@ -2142,6 +2149,12 @@ select[name='filter-by-month'] {
   border-radius: 0.4rem;
 }
 
+.main-single-col {
+  /* background: red; */
+  display: flex;
+  max-width: 600px;
+}
+
 .main-container > a {
   text-decoration: none;
 }
@@ -2153,6 +2166,12 @@ select[name='filter-by-month'] {
   padding: 0.3rem;
   max-width: 280px;
   background: #ffeebb;
+}
+
+.post-container-single-col {
+  margin-top: 0px;
+  max-width: 260px;
+  width: 100%;
 }
 
 .post-container:hover {
@@ -2181,6 +2200,8 @@ select[name='filter-by-month'] {
 
 .post-date {
   margin-top: 0.4rem;
+  /* position: absolute;
+  bottom: 5px; */
 }
 
 .post-date p {
