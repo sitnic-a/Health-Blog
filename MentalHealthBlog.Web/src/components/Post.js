@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import {
   setIsSharingExporting,
   setPost,
@@ -83,7 +83,6 @@ export const Post = (props) => {
         <input
           type="checkbox"
           name="share-export"
-          id="share-export"
           onChange={() => {
             dispatch(setOverlayForShareExport(authenticatedUser))
             let selectedPosts = getSelectedPosts(authenticatedUser)

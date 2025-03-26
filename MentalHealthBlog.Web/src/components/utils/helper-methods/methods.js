@@ -202,3 +202,29 @@ export function expandShrinkSidebar() {
     )
   }
 }
+
+export const windowResize = (screenWidth = null, screenHeight = null) => {
+  window.addEventListener('resize', (e) => {
+    let width = e.currentTarget.innerWidth
+    if (screenWidth !== null) {
+      if (width < screenWidth) {
+        let mainContainers = document.querySelectorAll('.main-container')
+        mainContainers.forEach((container) => {
+          let postContainer = container.querySelector('.post-container')
+          let postOverlay = container.querySelector('.post-overlay')
+
+          if (container.classList.contains('main-single-col')) {
+            container.classList.remove('main-single-col')
+            postContainer.classList.remove('post-container-single-col')
+            postOverlay.classList.remove('post-overlay-single-col')
+          }
+        })
+      }
+      return
+    }
+    if (screenHeight !== null) {
+      //Do something
+      return
+    }
+  })
+}

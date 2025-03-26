@@ -19,8 +19,11 @@ import { ManageUsers } from './components/administrator-dashboard/sections/manag
 import { SharedContentPermission } from './components/SharedContentPermission'
 import { SharedContentPostsViaLink } from './components/SharedContentPostsViaLink'
 import { RequireAuth } from './components/RequireAuth'
+import { windowResize } from './components/utils/helper-methods/methods'
 
 function App() {
+  windowResize(680)
+
   return (
     <Provider store={store}>
       <Router>
