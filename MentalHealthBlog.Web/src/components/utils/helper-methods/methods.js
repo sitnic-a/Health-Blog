@@ -204,21 +204,37 @@ export function expandShrinkSidebar() {
 }
 
 export const windowResize = (screenWidth = null, screenHeight = null) => {
+  let isInSingleColLayout = false
+
   window.addEventListener('resize', (e) => {
     let width = e.currentTarget.innerWidth
     if (screenWidth !== null) {
+      let mainContainers = document.querySelectorAll('.main-container')
       if (width < screenWidth) {
-        let mainContainers = document.querySelectorAll('.main-container')
         mainContainers.forEach((container) => {
           let postContainer = container.querySelector('.post-container')
           let postOverlay = container.querySelector('.post-overlay')
 
           if (container.classList.contains('main-single-col')) {
+            isInSingleColLayout = true
             container.classList.remove('main-single-col')
             postContainer.classList.remove('post-container-single-col')
             postOverlay.classList.remove('post-overlay-single-col')
           }
         })
+        return
+      }
+      if (width >= screenWidth && isInSingleColLayout === true) {
+        mainContainers.forEach((container) => {
+          let postContainer = container.querySelector('.post-container')
+          let postOverlay = container.querySelector('.post-overlay')
+
+          container.classList.add('main-single-col')
+          postContainer.classList.add('post-container-single-col')
+          postOverlay.classList.add('post-overlay-single-col')
+          isInSingleColLayout = false
+        })
+        return
       }
       return
     }

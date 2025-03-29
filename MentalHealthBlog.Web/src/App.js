@@ -20,9 +20,10 @@ import { SharedContentPermission } from './components/SharedContentPermission'
 import { SharedContentPostsViaLink } from './components/SharedContentPostsViaLink'
 import { RequireAuth } from './components/RequireAuth'
 import { windowResize } from './components/utils/helper-methods/methods'
+import { application } from './application'
 
 function App() {
-  windowResize(680)
+  windowResize(application.layouts.min_screen_single_col_width)
 
   return (
     <Provider store={store}>

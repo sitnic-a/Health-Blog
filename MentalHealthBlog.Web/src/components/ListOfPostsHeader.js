@@ -4,14 +4,11 @@ import { setIsSharingExporting } from './redux-toolkit/features/postSlice'
 import { setVisibility } from './redux-toolkit/features/filterSlice'
 import { getTags } from './redux-toolkit/features/tagSlice'
 import { openAddModal } from './redux-toolkit/features/modalSlice'
-import { setActiveLayoutType, swap } from './utils/helper-methods/postHelper'
 
 import { AddPost } from './AddPost'
 import { MdOutlineAddCircleOutline } from 'react-icons/md'
 import { BiSelectMultiple } from 'react-icons/bi'
-import { TbColumns3 } from 'react-icons/tb'
-import { TbColumns2 } from 'react-icons/tb'
-import { TbColumns1 } from 'react-icons/tb'
+import { LayoutPicker } from './LayoutPicker'
 
 export const ListOfPostsHeader = () => {
   let dispatch = useDispatch()
@@ -19,19 +16,9 @@ export const ListOfPostsHeader = () => {
   let { isAddOpen } = useSelector((store) => store.modal)
   let { isSharingExporting } = useSelector((store) => store.post)
 
-  let layoutPickerTypes = document.querySelector('.layout-picker-types')
-  let layouts = document.querySelectorAll('.layout-type')
-
   useEffect(() => {
     dispatch(getTags())
   }, [])
-
-  layouts.forEach((layoutType) => {
-    layoutType.addEventListener('click', function () {
-      swap(this, layoutPickerTypes)
-      setActiveLayoutType(this, layouts)
-    })
-  })
 
   return (
     <>
@@ -86,65 +73,8 @@ export const ListOfPostsHeader = () => {
             </div>
           </section>
 
-          <section id="layout-picker-main-container">
-            <div className="layout-picker-container">
-              <div className="layout-picker-types">
-                <div
-                  className="layout-type two-columns-layout-container"
-                  onClick={(e) => {
-                    let mainContainers =
-                      document.querySelectorAll('.main-container')
+          <LayoutPicker />
 
-                    mainContainers.forEach((container) => {
-                      if (container.classList.contains('main-single-col')) {
-                        container.classList.remove('main-single-col')
-                      }
-                      let postContainer =
-                        container.querySelector('.post-container')
-                      let postOverlay = container.querySelector('.post-overlay')
-                      postContainer.classList.remove(
-                        'post-container-single-col'
-                      )
-                      postOverlay.classList.remove('post-overlay-single-col')
-                    })
-                  }}
-                >
-                  <TbColumns2 className="layout-view-icon" />
-                </div>
-
-                {/* <div
-                  className="layout-type default-layout-container"
-                  onClick={(e) => {
-                    alert('Default')
-                  }}
-                >
-                  <TbColumns3 className="layout-view-icon" />
-                </div> */}
-
-                <div
-                  className="layout-type single-column-layout-container"
-                  onClick={(e) => {
-                    let mainContainers =
-                      document.querySelectorAll('.main-container')
-                    mainContainers.forEach((container) => {
-                      container.classList.add('main-single-col')
-                      let postContainer =
-                        container.querySelector('.post-container')
-                      let postOverlay = container.querySelector('.post-overlay')
-                      let postRevealActionContainers = container.querySelector(
-                        '.post-reveal-action-containers'
-                      )
-                      postContainer.classList.add('post-container-single-col')
-                      postRevealActionContainers.style.marginInline = 'auto'
-                      postOverlay.classList.add('post-overlay-single-col')
-                    })
-                  }}
-                >
-                  <TbColumns1 className="layout-view-icon" />
-                </div>
-              </div>
-            </div>
-          </section>
           <br />
         </div>
       </section>

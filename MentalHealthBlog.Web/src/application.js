@@ -15,4 +15,7 @@ export const application = {
       overflowY: 'scroll',
     },
   },
+  layouts: {
+    min_screen_single_col_width: 680,
+  },
 }
