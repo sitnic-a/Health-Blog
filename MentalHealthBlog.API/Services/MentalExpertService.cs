@@ -101,7 +101,7 @@ namespace MentalHealthBlog.API.Services
                     if (dbUserByKey is not null)
                     {
                         userThatSharedContent = new UserDto(dbUserByKey.Id, dbUserByKey.Username);
-                        List<PostDto> contentUserShared = shareHelper.CallFillSharedContent(userFromGroup, new List<PostDto>());
+                        List<PostDto> contentUserShared = await shareHelper.CallFillSharedContentAsync(userFromGroup, new List<PostDto>());
 
                         sharesPerUser.Add(new SharesPerUserDto(userThatSharedContent, contentUserShared));
                     }

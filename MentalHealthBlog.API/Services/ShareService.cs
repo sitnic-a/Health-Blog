@@ -55,7 +55,7 @@ namespace MentalHealthBlog.API.Services
                     if (!share.SharedPost.IsNullOrEmpthy())
                     {
                         var post = share.SharedPost;
-                        var tags = convertHelper.CallReturnPostTags(post.Id);
+                        var tags = await convertHelper.CallReturnPostTagsAsync(post.Id);
                         sharedContent.Add(new PostDto(post.Id, post.Title, post.Content, post.UserId, post.CreatedAt, tags));
                     }
                 }
