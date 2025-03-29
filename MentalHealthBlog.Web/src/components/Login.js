@@ -36,7 +36,15 @@ export const Login = () => {
     }
 
     dispatch(login(user)).then((response) => {
-      let statusCode = response.payload.statusCode
+      let statusCode = response?.payload?.statusCode
+
+      if (statusCode === undefined) {
+        toast.error('Something went wrong', {
+          autoClose: 1500,
+          position: 'bottom-right',
+        })
+      }
+
       if (statusCode === 200 || statusCode === 201 || statusCode === 204) {
         navigate('/', {
           replace: true,

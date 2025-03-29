@@ -113,7 +113,9 @@ export const userSlice = createSlice({
       })
       .addCase(login.rejected, (state) => {
         state.isFailed = true
-        state.isAuthenticated = true
+        state.isLoading = false
+        state.isLogging = false
+        state.isAuthenticated = false
       })
       .addCase(login.fulfilled, (state, action) => {
         state.statusCode = action.payload.statusCode

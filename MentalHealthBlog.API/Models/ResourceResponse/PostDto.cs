@@ -11,6 +11,7 @@ namespace MentalHealthBlog.API.Models.ResourceResponse
         public DateTime CreatedAt { get; set; }
         public DateTime? SharedAt { get; set; }
         public List<string> Tags { get; set; }
+        public List<EmotionDto> Emotions { get; set; }
 
         public PostDto() { }
 

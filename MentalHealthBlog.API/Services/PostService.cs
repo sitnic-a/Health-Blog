@@ -52,19 +52,29 @@ namespace MentalHealthBlogAPI.Services
                     .Select(t => new { Tag = t.Tag.Name })
                     .ToListAsync();
 
-                var tagsOnPost = dbPostTags.Count;
+                var dbPostEmotions = await _context.PostsEmotions
+                    .Include(e => e.Emotion)
+                    .Where(p => p.PostId == item.Id)
+                    .Select(p => new EmotionDto(p.EmotionId, p.Emotion.Name))
+                    .ToListAsync();
 
-                if (tagsOnPost > 0)
+                var tagsOnPost = dbPostTags.Count;
+                var emotionsOnPost = dbPostEmotions.Count;
+
+                if (tagsOnPost > 0 && emotionsOnPost > 0)
                 {
                     postDto = _autoMapper.Map<PostDto>(item);
                     postDto.Tags = dbPostTags.Select(t => t.Tag).ToList();
+                    postDto.Emotions = dbPostEmotions;
                     posts.Add(postDto);
                     continue;
                 }
-                    postDto = _autoMapper.Map<PostDto>(item);
-                    postDto.Tags = new List<string>();
-                    posts.Add(postDto);
-                    continue;
+
+                postDto = _autoMapper.Map<PostDto>(item);
+                postDto.Tags = new List<string>();
+                postDto.Emotions = new List<EmotionDto>();
+                posts.Add(postDto);
+                continue;
             }
             try
             {

@@ -37,6 +37,7 @@ export function formatStringToDate(date) {
 export function getSelectedPosts(loggedUser) {
   let postsToShareExport = []
   let postTags = []
+  let postEmotions = []
 
   let author = document.querySelector(
     '.list-of-posts-header .list-of-posts-author span'
@@ -48,7 +49,7 @@ export function getSelectedPosts(loggedUser) {
 
   checkedPosts.forEach((checked) => {
     let postContainerContent = checked.querySelector(
-      'a > .post-container > .post-container-content'
+      '.post-container > .post-container-content'
     )
 
     let id = postContainerContent.querySelector('input[data-post-id]').dataset
@@ -71,8 +72,25 @@ export function getSelectedPosts(loggedUser) {
       '.post-container-tags .add-post-content-picked-tags-span-tag'
     )
 
+    let postContainerEmotions = checked.querySelectorAll(
+      '.post-container-emotions .post-container-emotion'
+    )
+
     postContainerTags.forEach((tag) => {
       postTags.push(tag.innerHTML)
+    })
+
+    postContainerEmotions.forEach((emotion) => {
+      let emotionName = emotion.childNodes[0].textContent
+
+      let emotionId = parseInt(
+        emotion.querySelector('.post-container-emotion-id').innerHTML
+      )
+      let emotionToAdd = {
+        name: emotionName,
+        id: emotionId,
+      }
+      postEmotions.push(emotionToAdd)
     })
 
     let post = {
@@ -83,6 +101,7 @@ export function getSelectedPosts(loggedUser) {
       content: postContent,
       createdAt: postDate,
       tags: postTags,
+      emotions: postEmotions,
     }
 
     postsToShareExport.push(post)
@@ -182,4 +201,46 @@ export function expandShrinkSidebar() {
       'sharing-users-content-container-shrinked'
     )
   }
+}
+
+export const windowResize = (screenWidth = null, screenHeight = null) => {
+  let isInSingleColLayout = false
+
+  window.addEventListener('resize', (e) => {
+    let width = e.currentTarget.innerWidth
+    if (screenWidth !== null) {
+      let mainContainers = document.querySelectorAll('.main-container')
+      if (width < screenWidth) {
+        mainContainers.forEach((container) => {
+          let postContainer = container.querySelector('.post-container')
+          let postOverlay = container.querySelector('.post-overlay')
+
+          if (container.classList.contains('main-single-col')) {
+            isInSingleColLayout = true
+            container.classList.remove('main-single-col')
+            postContainer.classList.remove('post-container-single-col')
+            postOverlay.classList.remove('post-overlay-single-col')
+          }
+        })
+        return
+      }
+      if (width >= screenWidth && isInSingleColLayout === true) {
+        mainContainers.forEach((container) => {
+          let postContainer = container.querySelector('.post-container')
+          let postOverlay = container.querySelector('.post-overlay')
+
+          container.classList.add('main-single-col')
+          postContainer.classList.add('post-container-single-col')
+          postOverlay.classList.add('post-overlay-single-col')
+          isInSingleColLayout = false
+        })
+        return
+      }
+      return
+    }
+    if (screenHeight !== null) {
+      //Do something
+      return
+    }
+  })
 }

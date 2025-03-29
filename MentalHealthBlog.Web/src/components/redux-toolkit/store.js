@@ -5,7 +5,6 @@ import modalReducer from './features/modalSlice'
 import userReducer from './features/userSlice'
 import pieReducer from './features/pieSlice'
 import filterReducer from './features/filterSlice'
-import tagGradeReducer from './features/tagGradeSlice'
 import shareExportReducer from './features/shareExportSlice'
 import mentalExpertReducer from './features/mentalExpertSlice'
 import adminReducer from './features/adminSlice'
@@ -20,7 +19,6 @@ export const store = configureStore({
     modal: modalReducer,
     pie: pieReducer,
     filter: filterReducer,
-    tagGrade: tagGradeReducer,
     shareExport: shareExportReducer,
     mentalExpert: mentalExpertReducer,
     admin: adminReducer,

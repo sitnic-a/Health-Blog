@@ -116,6 +116,25 @@ let postSlice = createSlice({
     },
     setIsSharingExporting: (state, action) => {
       state.isSharingExporting = action.payload
+      let postOverlays = document.querySelectorAll('.post-overlay')
+      let shareExportCheckboxes = document.querySelectorAll(
+        'input[name="share-export"]'
+      )
+      if (state.isSharingExporting === true) {
+        postOverlays.forEach((overlay) => {
+          overlay.style.visibility = 'visible'
+        })
+        shareExportCheckboxes.forEach((shareExportCheckbox) => {
+          shareExportCheckbox.style.visibility = 'visible'
+        })
+        return
+      }
+      postOverlays.forEach((overlay) => {
+        overlay.style.visibility = 'hidden'
+      })
+      shareExportCheckboxes.forEach((shareExportCheckbox) => {
+        shareExportCheckbox.style.visibility = 'hidden'
+      })
     },
   },
   extraReducers: (builder) => {

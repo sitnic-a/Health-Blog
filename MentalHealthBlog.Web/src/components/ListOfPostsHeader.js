@@ -8,6 +8,7 @@ import { openAddModal } from './redux-toolkit/features/modalSlice'
 import { AddPost } from './AddPost'
 import { MdOutlineAddCircleOutline } from 'react-icons/md'
 import { BiSelectMultiple } from 'react-icons/bi'
+import { LayoutPicker } from './LayoutPicker'
 
 export const ListOfPostsHeader = () => {
   let dispatch = useDispatch()
@@ -23,7 +24,17 @@ export const ListOfPostsHeader = () => {
     <>
       {isAddOpen && <AddPost />}
 
-      <section className="list-of-posts-header">
+      <section
+        className="list-of-posts-header"
+        onMouseOver={() => {
+          let listPostsHeader = document.querySelector('.list-of-posts-header')
+          listPostsHeader.style.marginBottom = '2rem'
+        }}
+        onMouseLeave={() => {
+          let listPostsHeader = document.querySelector('.list-of-posts-header')
+          listPostsHeader.style.marginBottom = '0'
+        }}
+      >
         <h1 className="list-of-posts-author">
           Written by: <span>{authenticatedUser.username}</span>
         </h1>
@@ -61,6 +72,9 @@ export const ListOfPostsHeader = () => {
               </button>
             </div>
           </section>
+
+          <LayoutPicker />
+
           <br />
         </div>
       </section>
