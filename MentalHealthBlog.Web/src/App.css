@@ -2672,11 +2672,11 @@ pre:hover {
 
 .sharing-users-main-post-container {
   padding-inline: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding-bottom: 1.5rem;
   background: #eee;
   max-width: 220px;
   width: 100%;
-  height: 300px;
+  max-height: 350px;
   overflow-y: scroll;
   border-radius: 0.5rem;
   cursor: pointer;
@@ -2717,11 +2717,27 @@ pre:hover {
   cursor: pointer;
 }
 
+.sharing-users-main-post-tags {
+  max-height: 130px;
+  margin-bottom: 1rem;
+  overflow-y: scroll;
+}
+
 .sharing-users-post-tags {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   cursor: pointer;
+}
+
+.sharing-users-main-post-emotions {
+  max-height: 200px;
+  overflow-y: scroll;
+}
+
+.sharing-users-post-emotions .post-container-emotions {
+  height: fit-content;
+  opacity: 1;
 }
 
 .sharing-users-post-tag {
@@ -2733,5 +2749,5 @@ pre:hover {
   margin-right: 5px;
   margin-top: 5px;
   color: #fff;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
 }
