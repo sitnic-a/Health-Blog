@@ -1,3 +1,7 @@
+/* * {
+  margin: 0;
+} */
+
 input[type="text"],
 textarea {
   border: 1px solid #a8a8a8;
@@ -859,7 +863,7 @@ dialog::backdrop {
 
 .navigation-container {
   max-width: 100vw;
-  background: rgb(234, 234, 234);
+  background: #eaeaea;
   border-radius: 0.2rem;
   margin-left: 0.5rem;
 }
@@ -2383,6 +2387,25 @@ pre:hover {
 
 /* Mental Expert CSS */
 .mental-expert-dashboard {
+  max-width: 100wv;
+  width: 100%;
+  margin: auto;
+}
+
+.mental-expert-navigation-bar {
+  display: flex;
+  gap: 5px;
+  padding-block: 0.5rem;
+  background: #eaeaea;
+  border-radius: 0.2rem;
+  padding: 0.5rem 0.6rem;
+  margin-block: 1rem;
+  justify-content: end;
+}
+
+.mental-expert-navigation-bar li {
+  text-decoration: none;
+  list-style: none;
 }
 
 #sharing-users-main-container {
@@ -2503,10 +2526,28 @@ pre:hover {
   max-width: 0;
 }
 
-.sharing-users-content-container > h1 {
+.sharing-users-content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.sharing-users-content-header > h1 {
   font-size: 1.5rem;
   text-transform: capitalize;
+  margin: 0;
   margin-left: 0.5rem;
+  padding: 1rem;
+}
+
+.sharing-users-give-assaintment-container {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  background: #41668e;
+  color: #fff;
+  padding: 0.5rem 0.4rem;
 }
 
 .overlay-post-main-container {
@@ -2517,6 +2558,11 @@ pre:hover {
   left: 0;
   background: rgba(0, 0, 0, 0.8);
   cursor: pointer;
+}
+
+.sharing-users-give-assainment-icon {
+  font-size: 1.2rem;
+  padding-top: 0.1rem;
 }
 
 .overlay-post-container {

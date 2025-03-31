@@ -6,6 +6,8 @@ import { initialDisplayScrollsOnMentalHealthExpertSharingUsersMainPostContainers
 import { SharedContent } from "./SharedContent";
 import { OverlayPostPreview } from "./OverlayPostPreview";
 
+import { FaTasks } from "react-icons/fa";
+
 export const ListSharedContent = (props) => {
   let dispatch = useDispatch();
   let { overlayPost } = useSelector((store) => store.mentalExpert);
@@ -17,7 +19,19 @@ export const ListSharedContent = (props) => {
 
   return (
     <section className="sharing-users-content-container">
-      <h1>Shared content</h1>
+      <div className="sharing-users-content-header">
+        <h1>Shared content</h1>
+        <div className="sharing-users-content-actions">
+          {/* Should be changed to icon for assainment and should make hover over
+           item to show tooltip about feature when it's clicked and explanation how to use it */}
+          <div className="sharing-users-give-assaintment-container">
+            <span className="sharing-users-give-assainment-btn">
+              Give Assainment
+            </span>
+            <FaTasks className="sharing-users-give-assainment-icon" />
+          </div>
+        </div>
+      </div>
 
       {overlayPost !== null && <OverlayPostPreview content={overlayPost} />}
 
