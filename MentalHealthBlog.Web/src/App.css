@@ -2521,7 +2521,7 @@ pre:hover {
 
 .overlay-post-container {
   position: relative;
-  max-width: 450px;
+  max-width: 550px;
   height: 90vh;
   margin-inline: auto;
   margin-block: 2rem;
@@ -2534,7 +2534,7 @@ pre:hover {
   display: none;
 }
 
-@media (width<=760px) {
+@media (width<=860px) {
   .overlay-post-container {
     max-width: 400px;
   }
@@ -2596,11 +2596,11 @@ pre:hover {
 }
 
 .overlay-post-content > pre {
-  max-width: 430px;
+  max-width: 530px;
   font-family: Arial, Helvetica, sans-serif;
   text-align: justify;
   font-size: 0.9rem;
-  height: 550px;
+  min-height: 150px;
   overflow-y: scroll;
   text-wrap: wrap;
   cursor: default;
@@ -2636,6 +2636,15 @@ pre:hover {
   border-radius: 0.2rem;
   margin-right: 5px;
   cursor: default;
+}
+
+.overlay-post-emotions-container .post-container-main-emotions {
+  height: max-content;
+}
+
+.overlay-post-emotions-container .post-container-emotions {
+  opacity: 1;
+  height: fit-content;
 }
 
 .overlay-post-date {

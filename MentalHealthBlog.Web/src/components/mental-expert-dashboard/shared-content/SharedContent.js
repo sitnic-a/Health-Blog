@@ -1,10 +1,10 @@
-import { formatDateToString } from '../../utils/helper-methods/methods'
+import { formatDateToString } from "../../utils/helper-methods/methods";
 
-import { PostEmotions } from '../../PostEmotions'
+import { PostEmotions } from "../../PostEmotions";
 
 export const SharedContent = (props) => {
-  let content = props.content
-  let date = formatDateToString(content.createdAt)
+  let content = props.content;
+  let date = formatDateToString(content.createdAt);
 
   return (
     <div className="sharing-users-post-container">
@@ -19,13 +19,13 @@ export const SharedContent = (props) => {
 
       <div className="sharing-users-main-post-tags">
         <div className="sharing-users-post-tags">
-          <span>Tagovi: </span>
+          <span>Tags: </span>
           {content.tags.map((tag) => {
             return (
               <span className="sharing-users-post-tag" key={tag}>
                 {tag}
               </span>
-            )
+            );
           })}
         </div>
       </div>
@@ -37,5 +37,5 @@ export const SharedContent = (props) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
