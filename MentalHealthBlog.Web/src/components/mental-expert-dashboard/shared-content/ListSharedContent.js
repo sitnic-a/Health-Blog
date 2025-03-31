@@ -1,13 +1,19 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { setOverlayPost } from '../../redux-toolkit/features/mentalExpertSlice'
-import { SharedContent } from './SharedContent'
-import { OverlayPostPreview } from './OverlayPostPreview'
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setOverlayPost } from "../../redux-toolkit/features/mentalExpertSlice";
+import { initialDisplayScrollsOnMentalHealthExpertSharingUsersMainPostContainers } from "../../utils/helper-methods/postHelper";
+
+import { SharedContent } from "./SharedContent";
+import { OverlayPostPreview } from "./OverlayPostPreview";
 
 export const ListSharedContent = (props) => {
-  let dispatch = useDispatch()
-  let { overlayPost } = useSelector((store) => store.mentalExpert)
-  let sharedContent = [...props.sharedContent]
+  let dispatch = useDispatch();
+  let { overlayPost } = useSelector((store) => store.mentalExpert);
+  let sharedContent = [...props.sharedContent];
+
+  useEffect(() => {
+    initialDisplayScrollsOnMentalHealthExpertSharingUsersMainPostContainers();
+  }, []);
 
   return (
     <section className="sharing-users-content-container">
@@ -26,9 +32,9 @@ export const ListSharedContent = (props) => {
               >
                 <SharedContent content={content} />
               </div>
-            )
+            );
           })}
       </div>
     </section>
-  )
-}
+  );
+};

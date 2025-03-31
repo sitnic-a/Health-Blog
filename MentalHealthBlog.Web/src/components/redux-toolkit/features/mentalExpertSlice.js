@@ -51,8 +51,6 @@ export const mentalExpertSlice = createSlice({
     },
 
     setOverlayPost: (state, action) => {
-      console.log(action.payload);
-
       let contentPost = action.payload;
       if (contentPost !== null || contentPost !== undefined) {
         state.overlayPost = contentPost;
