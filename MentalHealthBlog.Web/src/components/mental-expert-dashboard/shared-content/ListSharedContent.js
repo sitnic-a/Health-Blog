@@ -25,7 +25,7 @@ export const ListSharedContent = (props) => {
           {/* Should be changed to icon for assainment and should make hover over
            item to show tooltip about feature when it's clicked and explanation how to use it */}
           <div className="sharing-users-give-assaintment-container">
-            <span className="sharing-users-give-assainment-btn">
+            <span className="sharing-users-give-assainment-span">
               Give Assainment
             </span>
             <FaTasks className="sharing-users-give-assainment-icon" />
