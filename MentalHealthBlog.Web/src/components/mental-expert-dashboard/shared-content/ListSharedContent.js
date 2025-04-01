@@ -6,7 +6,7 @@ import { initialDisplayScrollsOnMentalHealthExpertSharingUsersMainPostContainers
 import { SharedContent } from "./SharedContent";
 import { OverlayPostPreview } from "./OverlayPostPreview";
 
-import { FaTasks } from "react-icons/fa";
+import { AssignmentButton } from "../../shared/AssignmentButton";
 
 export const ListSharedContent = (props) => {
   let dispatch = useDispatch();
@@ -22,14 +22,9 @@ export const ListSharedContent = (props) => {
       <div className="sharing-users-content-header">
         <h1>Shared content</h1>
         <div className="sharing-users-content-actions">
-          {/* Should be changed to icon for assainment and should make hover over
+          {/* Should be changed to icon for assignment and should make hover over
            item to show tooltip about feature when it's clicked and explanation how to use it */}
-          <div className="sharing-users-give-assaintment-container">
-            <span className="sharing-users-give-assainment-span">
-              Give Assainment
-            </span>
-            <FaTasks className="sharing-users-give-assainment-icon" />
-          </div>
+          <AssignmentButton />
         </div>
       </div>
 

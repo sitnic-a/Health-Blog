@@ -2394,6 +2394,7 @@ pre:hover {
 
 .mental-expert-navigation-bar {
   display: flex;
+  align-items: center;
   gap: 5px;
   padding-block: 0.5rem;
   background: #eaeaea;
@@ -2541,7 +2542,7 @@ pre:hover {
   padding: 1rem;
 }
 
-.sharing-users-give-assaintment-container {
+.sharing-users-give-assignment-container {
   display: flex;
   gap: 5px;
   align-items: center;
@@ -2552,17 +2553,17 @@ pre:hover {
   cursor: pointer;
 }
 
-.sharing-users-give-assaintment-container:hover {
+.sharing-users-give-assignment-container:hover {
   background: none;
   border: 1px solid #41668e;
   color: #41668e;
 }
 
-.sharing-users-give-assainment-span {
+.sharing-users-give-assignment-span {
   font-size: 1rem;
 }
 
-.sharing-users-give-assainment-icon {
+.sharing-users-give-assignment-icon {
   font-size: 1.2rem;
   padding-top: 0.2rem;
 }
