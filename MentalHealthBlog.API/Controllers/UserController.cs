@@ -23,7 +23,7 @@ namespace MentalHealthBlog.API.Controllers
             _adminService = adminService;
         }
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public async Task<Response> GetById(int id)
         {
             return await _userService.GetByIdAsync(id);

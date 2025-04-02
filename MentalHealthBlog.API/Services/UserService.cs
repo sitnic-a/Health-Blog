@@ -78,6 +78,7 @@ namespace MentalHealthBlog.API.Services
                         {
                             if (dbUserRoles.Any(r => r.Id == __USER_ROLE__))
                             {
+                                dbUserDto.Roles= dbUserRoles;
                                 _userLoggerService.LogInformation($"GET/id: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", dbUserDto);
                                 return new Response(dbUserDto, StatusCodes.Status200OK, UserServiceLogTypes.USER_SUCCESFULL.ToString());
                             }
