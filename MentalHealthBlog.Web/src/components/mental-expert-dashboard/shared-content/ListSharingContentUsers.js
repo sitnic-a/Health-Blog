@@ -10,6 +10,7 @@ import {
 import { expandShrinkSidebar } from '../../utils/helper-methods/methods'
 
 import { BiExpandAlt } from 'react-icons/bi'
+import { getUserById } from '../../redux-toolkit/features/userSlice'
 
 export const ListSharingContentUsers = () => {
   let dispatch = useDispatch()
@@ -56,6 +57,7 @@ export const ListSharingContentUsers = () => {
                     }
                     dispatch(getSharedContentOfPickedUser(contentAndQuery))
                     dispatch(setOverlayPost(null))
+                    dispatch(getUserById(user.id))
                   }
                   let contentAndQuery = {
                     userId: user.id,
@@ -63,6 +65,7 @@ export const ListSharingContentUsers = () => {
                   }
                   dispatch(getSharedContentOfPickedUser(contentAndQuery))
                   dispatch(setOverlayPost(null))
+                  dispatch(getUserById(user.id))
                 }}
               >
                 <span className="sharing-user-title">{user.username}</span>

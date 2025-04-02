@@ -11,6 +11,7 @@ let initialState = {
   isAuthenticated: false,
   isRegistered: false,
   statusCode: null,
+  dbUser: null,
   dbRoles: [],
 }
 
@@ -18,6 +19,13 @@ export const getQuote = createAsyncThunk('quote', async () => {
   let url = 'https://type.fit/api/quotes'
   let request = await fetch(url)
   let response = request.json()
+  return response
+})
+
+export const getUserById = createAsyncThunk('user/id', async (id) => {
+  let url = `${application.application_url}/user/${id}`
+  let request = await fetch(url)
+  let response = await request.json()
   return response
 })
 
@@ -105,6 +113,20 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+
+      //--- getUserById
+      .addCase(getUserById.pending, (state, action) => {
+        console.log('Fetching user...')
+      })
+      .addCase(getUserById.fulfilled, (state, action) => {
+        console.log('Fulfilled user fetch ', action.payload)
+        let userById = action.payload.serviceResponseObject
+        state.dbUser = userById
+        console.log('Db user ', state.dbUser)
+      })
+      .addCase(getUserById.rejected, (state, action) => {
+        console.log('Rejected user fetch...')
+      })
 
       //--- login
       .addCase(login.pending, (state) => {
