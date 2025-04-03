@@ -38,7 +38,7 @@ export const CreateAssignment = () => {
               Assignment for user:
             </label>
             <p className="create-assignment-user-to-accomplish-task">
-              {dbUser?.username}
+              {dbUser !== null ? dbUser.username : 'Unknown'}
             </p>
           </div>
         </div>
