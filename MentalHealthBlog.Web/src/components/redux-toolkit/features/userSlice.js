@@ -107,7 +107,6 @@ export const userSlice = createSlice({
     },
     setAuthenticatedUser: (state, action) => {
       console.log('RA ', action.payload.serviceResponseObject)
-
       state.authenticatedUser = action.payload.serviceResponseObject
     },
   },
@@ -119,10 +118,8 @@ export const userSlice = createSlice({
         console.log('Fetching user...')
       })
       .addCase(getUserById.fulfilled, (state, action) => {
-        console.log('Fulfilled user fetch ', action.payload)
         let userById = action.payload.serviceResponseObject
         state.dbUser = userById
-        console.log('Db user ', state.dbUser)
       })
       .addCase(getUserById.rejected, (state, action) => {
         console.log('Rejected user fetch...')
