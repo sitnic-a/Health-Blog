@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MentalHealthBlog.API.ExtensionMethods.ExtensionAssignmentClass;
 using MentalHealthBlog.API.Methods;
 using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
@@ -16,6 +17,7 @@ namespace MentalHealthBlog.API.Services
     enum MentalExpertServiceLogTypes
     {
         EMPTY,
+        ASSIGNMENT_INVALID_DATA,
         NOT_FOUND,
         SUCCESS,
         ERROR
@@ -115,6 +117,40 @@ namespace MentalHealthBlog.API.Services
             }
         }
 
+        public async Task<Response> CreateAssignment(CreateAssignmentDto request)
+        {
+            try
+            {
+                if (!request.IsValid())
+                {
+                    _mentalExpertLoggerService.LogWarning($"GIVE-ASSIGNMENT: {MentalExpertServiceLogTypes.ASSIGNMENT_INVALID_DATA.ToString()}", request);
+                    return new Response(new object(), StatusCodes.Status400BadRequest, MentalExpertServiceLogTypes.ASSIGNMENT_INVALID_DATA.ToString());
+                }
+
+                var newAssignment = _mapper.Map<Assignment>(request);
+                if (newAssignment == null)
+                {
+                    _mentalExpertLoggerService.LogWarning($"GIVE-ASSIGNMENT: {MentalExpertServiceLogTypes.ASSIGNMENT_INVALID_DATA.ToString()}", newAssignment);
+                    return new Response(new object(), StatusCodes.Status400BadRequest, MentalExpertServiceLogTypes.ASSIGNMENT_INVALID_DATA.ToString());
+                }
+
+                await _context.Assignments.AddAsync(newAssignment);
+                await _context.SaveChangesAsync();
+
+                var dbAssignments = await _context.Assignments
+                    .OrderByDescending(a => a.CreatedAt)
+                    .ToListAsync();
+
+                _mentalExpertLoggerService.LogInformation($"GIVE-ASSIGNMENT: {MentalExpertServiceLogTypes.SUCCESS.ToString()}", newAssignment);
+                return new Response(dbAssignments, StatusCodes.Status201Created, MentalExpertServiceLogTypes.SUCCESS.ToString());
+            }
+            catch (Exception e)
+            {
+                _mentalExpertLoggerService.LogError($"GIVE-ASSIGNMENT: {MentalExpertServiceLogTypes.ERROR}", e);
+                return new Response(e.Data,StatusCodes.Status500InternalServerError,e.Message);
+            }
+            
+        }
     }
 }
 

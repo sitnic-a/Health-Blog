@@ -7,13 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="ExtensionMethods\NewFolder\**" />
-    <Content Remove="ExtensionMethods\NewFolder\**" />
-    <EmbeddedResource Remove="ExtensionMethods\NewFolder\**" />
-    <None Remove="ExtensionMethods\NewFolder\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
     <PackageReference Include="EPPlus" Version="7.5.3" />

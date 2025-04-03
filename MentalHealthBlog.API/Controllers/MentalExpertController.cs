@@ -23,5 +23,11 @@ namespace MentalHealthBlog.API.Controllers
             return await _mentalExpertService.GetSharesPerUser(query);
         }
 
+        [HttpPost("give-assignment")]
+        public async Task<Response> CreateAssignment([FromForm] CreateAssignmentDto request)
+        {
+            return await _mentalExpertService.CreateAssignment(request);
+        }
+
     }
 }
