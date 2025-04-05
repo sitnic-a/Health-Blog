@@ -1,7 +1,24 @@
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { createAssignment } from '../../redux-toolkit/features/mentalExpertSlice'
 
 export const CreateAssignment = () => {
-  let { dbUser } = useSelector((store) => store.user)
+  let dispatch = useDispatch()
+  let { authenticatedUser, dbUser } = useSelector((store) => store.user)
+
+  let giveAssignment = (e) => {
+    console.log('Auth user ', authenticatedUser)
+
+    e.preventDefault()
+    let form = new FormData(e.target)
+    let data = Object.fromEntries([...form.entries()])
+    let addAssignmentObj = {
+      assignmentGivenToId: dbUser.id,
+      assignmentGivenById: authenticatedUser.id,
+      content: data['create-assignment-content'],
+      createdAt: new Date(),
+    }
+    dispatch(createAssignment(addAssignmentObj))
+  }
 
   return (
     <div id="create-assignment-main-container">
@@ -12,20 +29,20 @@ export const CreateAssignment = () => {
           provided as additional way to help user during the therapy.
         </p>
       </div>
-      <form id="create-assignment-form">
+      <form id="create-assignment-form" onSubmit={giveAssignment}>
         <div className="create-assignment-assignment-container">
           <div className="create-assignment-assignment-task">
             <label
               className="create-assignment-label"
-              htmlFor="create-assignment-task"
+              htmlFor="create-assignment-content"
             >
               Assignment:
             </label>
             <br />
             <textarea
-              className="create-assignment-task-textarea"
+              className="create-assignment-content-textarea"
               rows={15}
-              name="create-assignment-task"
+              name="create-assignment-content"
               placeholder="Assignment text..."
             ></textarea>
           </div>

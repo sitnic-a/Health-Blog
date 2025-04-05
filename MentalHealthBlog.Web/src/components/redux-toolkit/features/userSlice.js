@@ -120,6 +120,7 @@ export const userSlice = createSlice({
       .addCase(getUserById.fulfilled, (state, action) => {
         let userById = action.payload.serviceResponseObject
         state.dbUser = userById
+        console.log('Dbuser ', state.dbUser)
       })
       .addCase(getUserById.rejected, (state, action) => {
         console.log('Rejected user fetch...')
