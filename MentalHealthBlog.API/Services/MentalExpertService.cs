@@ -127,7 +127,17 @@ namespace MentalHealthBlog.API.Services
                     return new Response(new object(), StatusCodes.Status400BadRequest, MentalExpertServiceLogTypes.ASSIGNMENT_INVALID_DATA.ToString());
                 }
 
-                var newAssignment = _mapper.Map<Assignment>(request);
+                var dbMentalHealthExpert = await _context.MentalHealthExperts
+                        .FirstOrDefaultAsync(mhe => mhe.UserId == request.AssignmentGivenById);
+
+                if (dbMentalHealthExpert == null)
+                {
+                    _mentalExpertLoggerService.LogWarning($"GIVE-ASSIGNMENT: {MentalExpertServiceLogTypes.NOT_FOUND.ToString()}", dbMentalHealthExpert);
+                    return new Response(new object(), StatusCodes.Status404NotFound, MentalExpertServiceLogTypes.NOT_FOUND.ToString());
+                }
+
+                var newAssignment = new Assignment(request.AssignmentGivenToId,dbMentalHealthExpert.Id,request.Content,DateTime.Now);
+
                 if (newAssignment == null)
                 {
                     _mentalExpertLoggerService.LogWarning($"GIVE-ASSIGNMENT: {MentalExpertServiceLogTypes.ASSIGNMENT_INVALID_DATA.ToString()}", newAssignment);

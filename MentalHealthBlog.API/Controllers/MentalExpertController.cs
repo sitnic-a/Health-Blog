@@ -24,7 +24,7 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpPost("give-assignment")]
-        public async Task<Response> CreateAssignment([FromForm] CreateAssignmentDto request)
+        public async Task<Response> CreateAssignment([FromBody] CreateAssignmentDto request)
         {
             return await _mentalExpertService.CreateAssignment(request);
         }

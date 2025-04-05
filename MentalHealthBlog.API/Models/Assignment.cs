@@ -11,5 +11,13 @@ namespace MentalHealthBlog.API.Models
         public int AssignmentGivenById { get; set; }
         public string Content { get; set; }
         public DateTime CreatedAt { get; set; }
+
+        public Assignment(int assignmentGivenToId, int assignmentGivenById, string content, DateTime createdAt)
+        {
+            AssignmentGivenToId = assignmentGivenToId;
+            AssignmentGivenById = assignmentGivenById;
+            Content = content;
+            CreatedAt = createdAt;
+        }
     }
 }
