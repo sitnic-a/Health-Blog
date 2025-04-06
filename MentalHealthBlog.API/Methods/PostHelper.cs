@@ -1,4 +1,6 @@
-﻿using MentalHealthBlogAPI.Data;
+﻿using MentalHealthBlog.API.Models;
+using MentalHealthBlog.API.Models.ResourceResponse;
+using MentalHealthBlogAPI.Data;
 using Microsoft.EntityFrameworkCore;
 
 #pragma warning disable CS8602
@@ -13,31 +15,44 @@ namespace MentalHealthBlog.API.Methods
             _context = context;
         }
 
-        private List<string> ReturnPostTags(int postId)
+        private async Task<List<string>> ReturnPostTagsAsync(int postId)
         {
             if (_context is not null)
             {
-                var postTags = _context.PostsTags
+                var postTags = await _context.PostsTags
                     .Include(t => t.Tag)
                     .Where(p => p.PostId == postId)
-                    .ToList();
+                    .Select(p => p.Tag.Name)
+                    .ToListAsync();
 
-                var tags = new List<string>();
-                foreach (var postTag in postTags)
-                {
-                    if (postTag is not null)
-                    {
-                        tags.Add(postTag.Tag.Name);
-                    }
-                }
-                return tags;
+                return postTags;
             }
             return new List<string>();
         }
 
-        public List<string> CallReturnPostTags(int postId)
+        public async Task<List<string>> CallReturnPostTagsAsync(int postId)
         {
-            return ReturnPostTags(postId);
+            return await ReturnPostTagsAsync(postId);
+        }
+
+        private async Task<List<EmotionDto>> ReturnPostEmotionsAsync(int postId)
+        {
+            if (_context is not null)
+            {
+                var dbPostEmotions = await _context.PostsEmotions
+                    .Include(e => e.Emotion)
+                    .Where(p => p.PostId == postId)
+                    .Select(p => new EmotionDto(p.EmotionId, p.Emotion.Name))
+                    .ToListAsync();
+
+                return dbPostEmotions;
+            }
+            return new List<EmotionDto>();
+        }
+
+        public async Task<List<EmotionDto>> CallReturnPostEmotionsAsync(int postId)
+        {
+            return await ReturnPostEmotionsAsync(postId);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MentalHealthBlog.API.ExtensionMethods.ExtensionUserClass;
+using MentalHealthBlog.API.Methods;
 using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
@@ -16,9 +17,11 @@ namespace MentalHealthBlog.API.Services
 
     enum UserServiceLogTypes
     {
+        USER_NOT_FOUND_OR_NULL,
         USER_EXISTS,
         USER_INVALID_DATA_OR_SOMETHING_ELSE,
         USER_SUCCESFULL,
+        USER_FAILED,
         USER_TOKEN_NOT_CREATED,
         ROLES_RETRIEVED,
         ROLES_NOT_FOUND,
@@ -36,6 +39,9 @@ namespace MentalHealthBlog.API.Services
         private readonly DataContext _context;
         private const int __KEYSIZE__ = 128;
         private const int __ITERATIONS = 350000;
+        private const int __ADMIN_ROLE__ = 1;
+        private const int __USER_ROLE__ = 2;
+        private const int __PSYCHOLOGIST_ROLE__ = 4;
         private HashAlgorithmName __HASHALGORITHM__ = HashAlgorithmName.SHA512;
         private User user = new();
 
@@ -47,6 +53,70 @@ namespace MentalHealthBlog.API.Services
             _options = options;
             _mapper = mapper;
             _userLoggerService = userLoggerService;
+        }
+
+        public async Task<Response> GetByIdAsync(int id)
+        {
+            try
+            {
+                if (id <= 0)
+                {
+                    _userLoggerService.LogWarning($"GET/id: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", id);
+                    return new Response(new object(), StatusCodes.Status400BadRequest, UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString());
+                }
+
+                var dbUser = await _context.Users.FindAsync(id);
+                if (dbUser != null)
+                {
+                    var userHelper = new UserHelper(_context);
+
+                    var dbUserDto = new UserDto(dbUser.Id, dbUser.Username);
+                    if (dbUserDto != null)
+                    {
+                        var dbUserRoles = await userHelper.GetUserRolesAsync(dbUserDto);
+                        if (dbUserRoles.Any())
+                        {
+                            if (dbUserRoles.Any(r => r.Id == __USER_ROLE__))
+                            {
+                                dbUserDto.Roles= dbUserRoles;
+                                _userLoggerService.LogInformation($"GET/id: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", dbUserDto);
+                                return new Response(dbUserDto, StatusCodes.Status200OK, UserServiceLogTypes.USER_SUCCESFULL.ToString());
+                            }
+                            if (dbUserRoles.Any(r => r.Id == __PSYCHOLOGIST_ROLE__))
+                            {
+                                var mentalHealthExpert = await _context.MentalHealthExperts.SingleOrDefaultAsync(mhe => mhe.UserId == dbUser.Id);
+                                if (mentalHealthExpert != null)
+                                {
+                                    dbUserDto = new UserDto(dbUser.Username, dbUserRoles,
+                                        mentalHealthExpert.PhoneNumber,
+                                        mentalHealthExpert.Organization,
+                                        mentalHealthExpert.Email,
+                                        mentalHealthExpert.PhotoAsFile,
+                                        mentalHealthExpert.PhotoAsPath);
+                                    dbUserDto.Id = mentalHealthExpert.Id;
+                                    dbUserDto.UserId = mentalHealthExpert.UserId;
+                                    dbUserDto.FirstName = mentalHealthExpert.FirstName;
+                                    dbUserDto.LastName = mentalHealthExpert.LastName;
+                                    dbUserDto.Username = dbUser.Username;
+                                    _userLoggerService.LogInformation($"GET/id: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", dbUser);
+                                    return new Response(dbUserDto, StatusCodes.Status200OK, UserServiceLogTypes.USER_SUCCESFULL.ToString());
+                                }
+                            }
+                        }
+                        _userLoggerService.LogWarning($"GET/id: {UserServiceLogTypes.USER_NOT_FOUND_OR_NULL.ToString()}", dbUser);
+                        return new Response(new object(), StatusCodes.Status404NotFound, UserServiceLogTypes.USER_NOT_FOUND_OR_NULL.ToString());
+                    }
+                    _userLoggerService.LogWarning($"GET/id: {UserServiceLogTypes.USER_NOT_FOUND_OR_NULL.ToString()}", dbUser);
+                    return new Response(new object(), StatusCodes.Status404NotFound, UserServiceLogTypes.USER_NOT_FOUND_OR_NULL.ToString());
+                }
+                _userLoggerService.LogWarning($"GET/id: {UserServiceLogTypes.USER_NOT_FOUND_OR_NULL.ToString()}", dbUser);
+                return new Response(new object(), StatusCodes.Status404NotFound, UserServiceLogTypes.USER_NOT_FOUND_OR_NULL.ToString());
+            }
+            catch (Exception e)
+            {
+                _userLoggerService.LogError($"GET/id: {UserServiceLogTypes.USER_FAILED.ToString()}", e);
+                return new Response(e.Data, StatusCodes.Status500InternalServerError, UserServiceLogTypes.USER_FAILED.ToString());
+            }
         }
         public async Task<Response> Register(CreateUserDto newUserRequest)
         {
@@ -252,6 +322,7 @@ namespace MentalHealthBlog.API.Services
 
             }
         }
+
 
     }
 }

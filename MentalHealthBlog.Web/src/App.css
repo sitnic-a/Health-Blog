@@ -1,3 +1,7 @@
+/* * {
+  margin: 0;
+} */
+
 input[type='text'],
 textarea {
   border: 1px solid #a8a8a8;
@@ -859,7 +863,7 @@ dialog::backdrop {
 
 .navigation-container {
   max-width: 100vw;
-  background: rgb(234, 234, 234);
+  background: #eaeaea;
   border-radius: 0.2rem;
   margin-left: 0.5rem;
 }
@@ -2383,6 +2387,26 @@ pre:hover {
 
 /* Mental Expert CSS */
 .mental-expert-dashboard {
+  max-width: 100wv;
+  width: 100%;
+  margin: auto;
+}
+
+.mental-expert-navigation-bar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding-block: 0.5rem;
+  background: #eaeaea;
+  border-radius: 0.2rem;
+  padding: 0.5rem 0.6rem;
+  margin-block: 1rem;
+  justify-content: flex-end;
+}
+
+.mental-expert-navigation-bar li {
+  text-decoration: none;
+  list-style: none;
 }
 
 #sharing-users-main-container {
@@ -2503,10 +2527,45 @@ pre:hover {
   max-width: 0;
 }
 
-.sharing-users-content-container > h1 {
+.sharing-users-content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.sharing-users-content-header > h1 {
   font-size: 1.5rem;
   text-transform: capitalize;
+  margin: 0;
   margin-left: 0.5rem;
+  padding: 1rem;
+}
+
+.sharing-users-give-assignment-container {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  background: #41668e;
+  color: #fff;
+  padding: 0.5rem 0.4rem;
+  border-radius: 0.3rem;
+  cursor: pointer;
+}
+
+.sharing-users-give-assignment-container:hover {
+  background: none;
+  border: 1px solid #41668e;
+  color: #41668e;
+}
+
+.sharing-users-give-assignment-span {
+  font-size: 1rem;
+}
+
+.sharing-users-give-assignment-icon {
+  font-size: 1.2rem;
+  padding-top: 0.2rem;
 }
 
 .overlay-post-main-container {
@@ -2521,7 +2580,7 @@ pre:hover {
 
 .overlay-post-container {
   position: relative;
-  max-width: 450px;
+  max-width: 550px;
   height: 90vh;
   margin-inline: auto;
   margin-block: 2rem;
@@ -2534,7 +2593,7 @@ pre:hover {
   display: none;
 }
 
-@media (width<=760px) {
+@media (width<=860px) {
   .overlay-post-container {
     max-width: 400px;
   }
@@ -2596,11 +2655,11 @@ pre:hover {
 }
 
 .overlay-post-content > pre {
-  max-width: 430px;
+  max-width: 530px;
   font-family: Arial, Helvetica, sans-serif;
   text-align: justify;
   font-size: 0.9rem;
-  height: 550px;
+  min-height: 150px;
   overflow-y: scroll;
   text-wrap: wrap;
   cursor: default;
@@ -2638,6 +2697,15 @@ pre:hover {
   cursor: default;
 }
 
+.overlay-post-emotions-container .post-container-main-emotions {
+  height: max-content;
+}
+
+.overlay-post-emotions-container .post-container-emotions {
+  opacity: 1;
+  height: fit-content;
+}
+
 .overlay-post-date {
   font-size: 0.8rem;
   cursor: default;
@@ -2672,11 +2740,11 @@ pre:hover {
 
 .sharing-users-main-post-container {
   padding-inline: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding-bottom: 1.5rem;
   background: #eee;
-  max-width: 220px;
+  max-width: 280px;
   width: 100%;
-  height: 300px;
+  max-height: 350px;
   overflow-y: scroll;
   border-radius: 0.5rem;
   cursor: pointer;
@@ -2717,11 +2785,27 @@ pre:hover {
   cursor: pointer;
 }
 
+.sharing-users-main-post-tags {
+  max-height: 130px;
+  margin-bottom: 1rem;
+  overflow-y: hidden;
+}
+
 .sharing-users-post-tags {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   cursor: pointer;
+}
+
+.sharing-users-main-post-emotions {
+  max-height: 200px;
+  overflow-y: hidden;
+}
+
+.sharing-users-post-emotions .post-container-emotions {
+  height: fit-content;
+  opacity: 1;
 }
 
 .sharing-users-post-tag {
@@ -2730,8 +2814,99 @@ pre:hover {
   padding: 0.15rem;
   padding-inline: 0.3rem;
   background: #89cff0;
-  margin-right: 5px;
+  margin-left: 0.3rem;
   margin-top: 5px;
   color: #fff;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
+}
+
+.sharing-users-post-feedback-main-container {
+}
+
+.sharing-users-post-feedback-button-container {
+  background: red;
+}
+
+.sharing-users-post-feedback-button-container > p {
+  margin: 0;
+  padding: 0;
+}
+
+#create-assignment-main-container {
+  max-width: 720px;
+  margin: 0.5rem auto;
+  /* border: 1px dashed red; */
+  padding: 0.5rem;
+  border-radius: 0.3rem;
+}
+
+.create-assignment-main-title {
+  text-align: center;
+}
+
+.create-assignment-description {
+  max-width: 430px;
+  margin-inline: auto;
+  text-align: center;
+  margin-block: 0.8rem;
+}
+
+#create-assignment-form {
+  padding: 0.5rem;
+}
+
+.create-assignment-assignment-container {
+  max-width: 720px;
+  /* background: red; */
+}
+
+.create-assignment-assignment-task {
+  /* background: yellow; */
+  margin-bottom: 0.5rem;
+}
+
+.create-assignment-label {
+  display: inline-block;
+  font-size: 1.1em;
+  padding-block: 0.8rem;
+  font-weight: 400;
+}
+
+.create-assignment-content-textarea {
+  border-radius: 0.2rem;
+  padding-left: 0.3rem;
+  margin-left: -0.3rem;
+  width: 100%;
+  font-size: 0.95rem;
+}
+
+.create-assignment-user-to-accomplish {
+  /* background: blue; */
+}
+
+.create-assignment-user-to-accomplish-task {
+  background: #eeeeee;
+  padding-block: 0.5rem;
+  text-align: center;
+  border: 1px solid #b9b9b9;
+  cursor: not-allowed !important;
+  margin-block: 1rem;
+  border-radius: 0.2rem;
+}
+
+.create-assignment-give-assignment-button {
+  background: #41668e;
+  color: #fff;
+  padding: 0.5rem 0.4rem;
+  outline: none;
+  border: none;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.create-assignment-give-assignment-button:hover {
+  background: none;
+  border: 1px solid #41668e;
+  color: #41668e;
 }

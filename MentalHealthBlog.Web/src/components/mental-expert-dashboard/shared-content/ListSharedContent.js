@@ -1,17 +1,32 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { setOverlayPost } from '../../redux-toolkit/features/mentalExpertSlice'
-import { SharedContent } from './SharedContent'
-import { OverlayPostPreview } from './OverlayPostPreview'
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setOverlayPost } from "../../redux-toolkit/features/mentalExpertSlice";
+import { initialDisplayScrollsOnMentalHealthExpertSharingUsersMainPostContainers } from "../../utils/helper-methods/postHelper";
+
+import { SharedContent } from "./SharedContent";
+import { OverlayPostPreview } from "./OverlayPostPreview";
+
+import { AssignmentButton } from "../../shared/AssignmentButton";
 
 export const ListSharedContent = (props) => {
-  let dispatch = useDispatch()
-  let { overlayPost } = useSelector((store) => store.mentalExpert)
-  let sharedContent = [...props.sharedContent]
+  let dispatch = useDispatch();
+  let { overlayPost } = useSelector((store) => store.mentalExpert);
+  let sharedContent = [...props.sharedContent];
+
+  useEffect(() => {
+    initialDisplayScrollsOnMentalHealthExpertSharingUsersMainPostContainers();
+  }, []);
 
   return (
     <section className="sharing-users-content-container">
-      <h1>Shared content</h1>
+      <div className="sharing-users-content-header">
+        <h1>Shared content</h1>
+        <div className="sharing-users-content-actions">
+          {/* Should be changed to icon for assignment and should make hover over
+           item to show tooltip about feature when it's clicked and explanation how to use it */}
+          <AssignmentButton />
+        </div>
+      </div>
 
       {overlayPost !== null && <OverlayPostPreview content={overlayPost} />}
 
@@ -26,9 +41,9 @@ export const ListSharedContent = (props) => {
               >
                 <SharedContent content={content} />
               </div>
-            )
+            );
           })}
       </div>
     </section>
-  )
-}
+  );
+};

@@ -175,7 +175,7 @@ namespace MentalHealthBlog.API.Services
                         var mentalHealthExpertRoles = await userHelper.GetUserRolesAsync(mentalHealthExpertContentIsSharedWith);
                         mentalHealthExpertContentIsSharedWith.Roles = mentalHealthExpertRoles;
 
-                        List<PostDto> sharedContentWithMentalHealthExpert = shareHelper.CallFillSharedContent(mentalHealthExpertFromGroup, new List<PostDto>());
+                        List<PostDto> sharedContentWithMentalHealthExpert = await shareHelper.CallFillSharedContentAsync(mentalHealthExpertFromGroup, new List<PostDto>());
                         sharedContentWithMentalHealthExpert = sharedContentWithMentalHealthExpert
                             .OrderByDescending(s => s.SharedAt)
                             .ToList();

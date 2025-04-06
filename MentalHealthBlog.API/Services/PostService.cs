@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MentalHealthBlog.API.ExtensionMethods.ExtensionPostClass;
+using MentalHealthBlog.API.Methods;
 using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
@@ -31,8 +32,7 @@ namespace MentalHealthBlogAPI.Services
         }
         public async Task<Response> GetPosts(SearchPostDto query)
         {
-            var dbPosts = _context.Posts
-                                    .Where(p => p.UserId == query.UserId);
+            var dbPosts = _context.Posts.Where(p => p.UserId == query.UserId);
 
             if (query.MonthOfPostCreation.HasValue && query.MonthOfPostCreation > 0)
             {
@@ -43,20 +43,12 @@ namespace MentalHealthBlogAPI.Services
 
             var posts = new List<PostDto>();
             var postDto = new PostDto();
+            var postHelper = new PostHelper(_context);
 
             foreach (var item in filteredPosts)
             {
-                var dbPostTags = await _context.PostsTags
-                    .Include(t => t.Tag)
-                    .Where(p => p.PostId == item.Id)
-                    .Select(t => new { Tag = t.Tag.Name })
-                    .ToListAsync();
-
-                var dbPostEmotions = await _context.PostsEmotions
-                    .Include(e => e.Emotion)
-                    .Where(p => p.PostId == item.Id)
-                    .Select(p => new EmotionDto(p.EmotionId, p.Emotion.Name))
-                    .ToListAsync();
+                var dbPostTags = await postHelper.CallReturnPostTagsAsync(item.Id);
+                var dbPostEmotions = await postHelper.CallReturnPostEmotionsAsync(item.Id);
 
                 var tagsOnPost = dbPostTags.Count;
                 var emotionsOnPost = dbPostEmotions.Count;
@@ -64,7 +56,7 @@ namespace MentalHealthBlogAPI.Services
                 if (tagsOnPost > 0 && emotionsOnPost > 0)
                 {
                     postDto = _autoMapper.Map<PostDto>(item);
-                    postDto.Tags = dbPostTags.Select(t => t.Tag).ToList();
+                    postDto.Tags = dbPostTags;
                     postDto.Emotions = dbPostEmotions;
                     posts.Add(postDto);
                     continue;

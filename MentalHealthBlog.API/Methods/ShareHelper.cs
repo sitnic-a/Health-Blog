@@ -67,7 +67,7 @@ namespace MentalHealthBlog.API.Methods
             return await SaveNewShares(context, contentToBeShared);
         }
 
-        private List<PostDto> FillSharedContent(IGrouping<User, Share> userAndContent, List<PostDto> content)
+        private async Task<List<PostDto>> FillSharedContentAsync(IGrouping<User, Share> userAndContent, List<PostDto> content)
         {
             PostHelper convertHelper = new PostHelper(_context);
 
@@ -76,8 +76,10 @@ namespace MentalHealthBlog.API.Methods
                 var post = sharedPost?.SharedPost;
                 if (post is not null)
                 {
-                    var postTags = convertHelper.CallReturnPostTags(post.Id);
+                    var postTags = await convertHelper.CallReturnPostTagsAsync(post.Id);
+                    var postEmotions = await convertHelper.CallReturnPostEmotionsAsync(post.Id);
                     var postDto = new PostDto(post.Id, post.Title, post.Content, post.UserId, post.CreatedAt, postTags);
+                    postDto.Emotions = postEmotions;
                     postDto.SharedAt = sharedPost?.SharedAt;
                     content.Add(postDto);
                 }
@@ -85,9 +87,9 @@ namespace MentalHealthBlog.API.Methods
             return content;
         }
 
-        public List<PostDto> CallFillSharedContent(IGrouping<User, Share> userAndContent, List<PostDto> content)
+        public async Task<List<PostDto>> CallFillSharedContentAsync(IGrouping<User, Share> userAndContent, List<PostDto> content)
         {
-            return FillSharedContent(userAndContent, content);
+            return await FillSharedContentAsync(userAndContent, content);
         }
     }
 }
