@@ -877,7 +877,12 @@ dialog::backdrop {
   /* background: red; */
 }
 
-.navbar-list > li > a {
+.left {
+  display: flex;
+  gap: 5px;
+}
+
+.left li > a {
   padding: 0.3rem;
   background: #fff;
   max-width: fit-content;
@@ -886,7 +891,7 @@ dialog::backdrop {
   color: #000;
 }
 
-.navbar-list > li > a:hover {
+.left > li > a:hover {
   background: #a5a5a5;
   color: #fff;
   box-shadow: -1px 2px 10px #fff;
@@ -2401,7 +2406,7 @@ pre:hover {
   border-radius: 0.2rem;
   padding: 0.5rem 0.6rem;
   margin-block: 1rem;
-  justify-content: flex-end;
+  justify-content: space-between;
 }
 
 .mental-expert-navigation-bar li {
@@ -2542,6 +2547,12 @@ pre:hover {
   padding: 1rem;
 }
 
+@media (width<=350px) {
+  .sharing-users-content-header > h1 {
+    font-size: 1.29rem;
+  }
+}
+
 .sharing-users-give-assignment-container {
   display: flex;
   gap: 5px;
@@ -2561,6 +2572,18 @@ pre:hover {
 
 .sharing-users-give-assignment-span {
   font-size: 1rem;
+}
+
+@media (width <= 650px) {
+  .sharing-users-give-assignment-span {
+    display: none;
+  }
+}
+
+@media ((width>=470px) AND (width<=550px)) {
+  .sharing-users-give-assignment-span {
+    display: flex;
+  }
 }
 
 .sharing-users-give-assignment-icon {

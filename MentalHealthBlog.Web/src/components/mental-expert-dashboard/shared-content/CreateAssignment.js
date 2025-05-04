@@ -1,8 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { createAssignment } from '../../redux-toolkit/features/mentalExpertSlice'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 export const CreateAssignment = () => {
   let dispatch = useDispatch()
+  let navigate = useNavigate()
   let { authenticatedUser, dbUser } = useSelector((store) => store.user)
 
   let giveAssignment = (e) => {
@@ -17,7 +20,9 @@ export const CreateAssignment = () => {
       content: data['create-assignment-content'],
       createdAt: new Date(),
     }
-    dispatch(createAssignment(addAssignmentObj))
+    dispatch(createAssignment(addAssignmentObj)).then(() => {
+      navigate('/')
+    })
   }
 
   return (

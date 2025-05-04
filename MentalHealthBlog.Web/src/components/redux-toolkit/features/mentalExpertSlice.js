@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { application } from '../../../application'
+import { toast } from 'react-toastify'
 
 let initialState = {
   usersThatSharedContent: [],
@@ -93,6 +94,10 @@ export const mentalExpertSlice = createSlice({
       })
       .addCase(createAssignment.fulfilled, (state, action) => {
         console.log('New assignment creation fulfilled ', action.payload)
+        toast.success('Assignment successfully created!', {
+          autoClose: 2000,
+          position: 'bottom-right',
+        })
       })
       .addCase(createAssignment.rejected, (state, action) => {
         console.log('New assignment creation rejected!')
