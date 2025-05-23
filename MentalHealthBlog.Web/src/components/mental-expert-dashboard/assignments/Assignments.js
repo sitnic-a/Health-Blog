@@ -1,5 +1,12 @@
-import React from 'react'
+import React from "react";
+import { useParams } from "react-router-dom";
 
 export const Assignments = () => {
-  return <div>Mental Health Expert Assignments</div>
-}
+  let { id } = useParams();
+
+  return (
+    <div>
+      Mental Health Expert Assignments for mental health expert with id {id}
+    </div>
+  );
+};
