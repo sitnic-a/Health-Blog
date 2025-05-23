@@ -23,7 +23,7 @@ import { CreateAssignment } from './components/mental-expert-dashboard/shared-co
 import { windowResize } from './components/utils/helper-methods/methods'
 import { application } from './application'
 import { ReviewAssignmentsButton } from './components/shared/ReviewAssignmentsButton'
-import { Assignments } from './components/Assignments'
+import { Assignments } from './components/shared/Assignments'
 
 function App() {
   windowResize(application.layouts.min_screen_single_col_width)

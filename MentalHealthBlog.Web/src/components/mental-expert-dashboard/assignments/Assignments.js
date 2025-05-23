@@ -1,5 +1,5 @@
 import React from 'react'
 
 export const Assignments = () => {
-  return <div>User Assignment</div>
+  return <div>Mental Health Expert Assignments</div>
 }

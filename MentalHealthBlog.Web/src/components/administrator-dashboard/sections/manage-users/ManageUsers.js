@@ -43,6 +43,8 @@ export const ManageUsers = () => {
               type="button"
               className="manage-users-modal-confirm-delete-button"
               onClick={() => {
+                console.log('User remove ', dbUser)
+
                 if (
                   dbUser.roles.some(
                     (ur) => ur.name === 'Psychologist / Psychotherapist'
