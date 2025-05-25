@@ -82,7 +82,7 @@ namespace MentalHealthBlog.API.Services
             try
             {
                 var dbMentalHealthExperts = await _context.MentalHealthExperts
-                    .Include(u => u.User)
+                    //.Include(u => u.User)
                     .Where(mhe => mhe.IsApproved == false && mhe.IsRejected == false)
                     .ToListAsync();
 
@@ -91,14 +91,14 @@ namespace MentalHealthBlog.API.Services
                     if (query.Status == true)
                     {
                         dbMentalHealthExperts = await _context.MentalHealthExperts
-                            .Include(u => u.User)
+                            //.Include(u => u.User)
                             .Where(mhe => mhe.IsApproved == true)
                             .ToListAsync();
                     }
                     else if (query.Status == false)
                     {
                         dbMentalHealthExperts = await _context.MentalHealthExperts
-                            .Include(u => u.User)
+                            //.Include(u => u.User)
                             .Where(mhe => mhe.IsRejected == true)
                             .ToListAsync();
                     }
@@ -114,12 +114,14 @@ namespace MentalHealthBlog.API.Services
                 foreach (var dbMentalHealthExpert in dbMentalHealthExperts)
                 {
                     var mentalHealthExpert = _mapper.Map<MentalHealthExpertDto>(dbMentalHealthExpert);
+                    var mentalHealthExpertAsUser = await _context.Users
+                        .FirstOrDefaultAsync(u => u.Id == mentalHealthExpert.UserId);  
                     if (mentalHealthExpert is null)
                     {
                         _adminLoggerService.LogWarning($"NEW-REQUEST: {AdminServiceLogTypes.NOT_FOUND.ToString()}", mentalHealthExpert);
                         return new Response(new object(), StatusCodes.Status404NotFound, AdminServiceLogTypes.NOT_FOUND.ToString());
                     }
-                    mentalHealthExpert.Username = dbMentalHealthExpert.User.Username;
+                    mentalHealthExpert.Username = mentalHealthExpertAsUser.Username;
                     mentalHealthExperts.Add(mentalHealthExpert);
                 }
 
@@ -174,10 +176,19 @@ namespace MentalHealthBlog.API.Services
                 var dbUser = await _context.Users.FindAsync(userId);
                 if (dbUser != null)
                 {
+                    var mentalHealthExpert = await _context.MentalHealthExperts.FirstOrDefaultAsync(mhe => mhe.UserId == dbUser.Id);
+                    if (mentalHealthExpert != null)
+                    {
+                        var removedMentalHealthExpert = _context.MentalHealthExperts.Remove(mentalHealthExpert);
+                        var removedMentalHealthExpertAsUser = _context.Users.Remove(dbUser);
+                        await _context.SaveChangesAsync();
+                        _adminLoggerService.LogInformation($"DELETE/id: {AdminServiceLogTypes.SUCCESS.ToString()}", mentalHealthExpert);
+                        return new Response(mentalHealthExpert, StatusCodes.Status200OK, AdminServiceLogTypes.SUCCESS.ToString());
+                    }
                     var removedUser = _context.Users.Remove(dbUser);
                     await _context.SaveChangesAsync();
                     _adminLoggerService.LogInformation($"DELETE/id: {AdminServiceLogTypes.SUCCESS.ToString()}", dbUser);
-                    return new Response(dbUser,StatusCodes.Status200OK,AdminServiceLogTypes.SUCCESS.ToString());
+                    return new Response(dbUser, StatusCodes.Status200OK, AdminServiceLogTypes.SUCCESS.ToString());
                 }
                 _adminLoggerService.LogWarning($"DELETE/id: {AdminServiceLogTypes.NOT_FOUND.ToString()}", dbUser);
                 return new Response(new User(), StatusCodes.Status404NotFound, AdminServiceLogTypes.NOT_FOUND.ToString());

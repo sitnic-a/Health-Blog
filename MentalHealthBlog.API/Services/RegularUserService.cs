@@ -81,11 +81,13 @@ namespace MentalHealthBlog.API.Services
             try
             {
                 var userShares = await _context.Shares
+                    .Where(s => s.SharedPost.UserId == query.LoggedUserId && s.SharedWithId > 0)
+                    .Take(5)
                     .Include(s => s.SharedPost)
                     .Include(mhe => mhe.SharedWith)
-                    .Where(s => s.SharedPost.UserId == query.LoggedUserId && s.SharedWithId>0)
+                    //.ThenInclude(u => u.User)
                     .OrderByDescending(s => s.SharedAt)
-                    .Take(5).ToListAsync();
+                    .ToListAsync();
 
                 userShares = userShares.DistinctBy(s => new { s.SharedPost, s.SharedWith }).ToList();
 
@@ -98,9 +100,13 @@ namespace MentalHealthBlog.API.Services
                         {
                             var sharedPost = _mapper.Map<PostDto>(share.SharedPost);
                             sharedPost.SharedAt = share.SharedAt;
-                            var mentalHealthExpert = await _context.MentalHealthExperts.FirstOrDefaultAsync(mhe => mhe.UserId == share.SharedWithId);
+                            var mentalHealthExpert = await _context.MentalHealthExperts
+                                .FirstOrDefaultAsync(mhe => mhe.Id == share.SharedWithId);
+                            var mentalHealthExpertAsUser = await _context.Users
+                                .FirstOrDefaultAsync(u => u.Id == mentalHealthExpert.UserId);
+
                             var sharedWith = _mapper.Map<UserDto>(mentalHealthExpert);
-                            sharedWith.Username = share.SharedWith.Username;
+                            sharedWith.Username = mentalHealthExpertAsUser.Username;
                             recentShares.Add(new RecentSharesDto(sharedPost, sharedWith));
                         }
                         continue;
@@ -155,7 +161,7 @@ namespace MentalHealthBlog.API.Services
                 return new Response(e.Data, StatusCodes.Status500InternalServerError, RegularUserServiceLogTypes.ERROR.ToString());
             }
         }
-        private async Task<List<SharesPerMentalHealthExpertDto>> FillListGroupedMentalHealthExpertsAndContentSharedWithThem(IEnumerable<IGrouping<User, Share>> groupedMentalHealthExpertsAndContentSharedWithThem)
+        private async Task<List<SharesPerMentalHealthExpertDto>> FillListGroupedMentalHealthExpertsAndContentSharedWithThem(IEnumerable<IGrouping<MentalHealthExpert, Share>> groupedMentalHealthExpertsAndContentSharedWithThem)
         {
             try
             {
@@ -165,13 +171,17 @@ namespace MentalHealthBlog.API.Services
 
                 foreach (var mentalHealthExpertFromGroup in groupedMentalHealthExpertsAndContentSharedWithThem)
                 {
-                    var dbMentalHealthExpertByKey = await _context.MentalHealthExperts.FirstOrDefaultAsync(mhe => mhe.UserId == mentalHealthExpertFromGroup.Key.Id);
+                    var dbMentalHealthExpertByKey = await _context.MentalHealthExperts
+                        //.Include(u => u.User)
+                        .SingleOrDefaultAsync(mhe => mhe.Id == mentalHealthExpertFromGroup.Key.Id);
                     UserDto mentalHealthExpertContentIsSharedWith = new UserDto();
 
                     if (dbMentalHealthExpertByKey is not null)
                     {
                         mentalHealthExpertContentIsSharedWith = _mapper.Map<UserDto>(dbMentalHealthExpertByKey);
-                        mentalHealthExpertContentIsSharedWith.Username = mentalHealthExpertFromGroup.Key.Username;
+                        var mentalHealthExpertAsUser = await _context.Users
+                            .FirstOrDefaultAsync(u => u.Id == mentalHealthExpertContentIsSharedWith.UserId);
+                        mentalHealthExpertContentIsSharedWith.Username = mentalHealthExpertAsUser.Username;
                         var mentalHealthExpertRoles = await userHelper.GetUserRolesAsync(mentalHealthExpertContentIsSharedWith);
                         mentalHealthExpertContentIsSharedWith.Roles = mentalHealthExpertRoles;
 

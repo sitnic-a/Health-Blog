@@ -3,6 +3,7 @@ using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
 using MentalHealthBlogAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace MentalHealthBlog.API.Methods
 {
@@ -26,11 +27,13 @@ namespace MentalHealthBlog.API.Methods
                     {
                         foreach (var shareWith in contentToBeShared.SharedWithIds)
                         {
+                            var mentalHealthExpert = await _context.MentalHealthExperts
+                                .SingleOrDefaultAsync(mhe => mhe.UserId == shareWith);
                             var newShare = new Share
                             {
                                 ShareGuid = shareGuid.ToString(),
                                 SharedPostId = post,
-                                SharedWithId = shareWith,
+                                SharedWithId = mentalHealthExpert.Id,
                                 SharedAt = contentToBeShared.SharedAt.Value.AddHours(1)
                             };
 
@@ -49,7 +52,7 @@ namespace MentalHealthBlog.API.Methods
                         {
                             ShareGuid = shareGuid.ToString(),
                             SharedPostId = post,
-                            SharedWithId = null,
+                            SharedWith = null,
                             SharedAt = contentToBeShared.SharedAt.Value.AddHours(1)
                         };
 
@@ -67,7 +70,7 @@ namespace MentalHealthBlog.API.Methods
             return await SaveNewShares(context, contentToBeShared);
         }
 
-        private async Task<List<PostDto>> FillSharedContentAsync(IGrouping<User, Share> userAndContent, List<PostDto> content)
+        private async Task<List<PostDto>> FillSharedContentAsync(IGrouping<MentalHealthExpert, Share> userAndContent, List<PostDto> content)
         {
             PostHelper convertHelper = new PostHelper(_context);
 
@@ -87,9 +90,34 @@ namespace MentalHealthBlog.API.Methods
             return content;
         }
 
-        public async Task<List<PostDto>> CallFillSharedContentAsync(IGrouping<User, Share> userAndContent, List<PostDto> content)
+        private async Task<List<PostDto>> FillByUsersSharedContentForMentalHealthExpertPreviewAsync(IGrouping<User, Share> userAndContent, List<PostDto> content)
+        {
+            PostHelper convertHelper = new PostHelper(_context);
+
+            foreach (var sharedPost in userAndContent)
+            {
+                var post = sharedPost?.SharedPost;
+                if (post is not null)
+                {
+                    var postTags = await convertHelper.CallReturnPostTagsAsync(post.Id);
+                    var postEmotions = await convertHelper.CallReturnPostEmotionsAsync(post.Id);
+                    var postDto = new PostDto(post.Id, post.Title, post.Content, post.UserId, post.CreatedAt, postTags);
+                    postDto.Emotions = postEmotions;
+                    postDto.SharedAt = sharedPost?.SharedAt;
+                    content.Add(postDto);
+                }
+            }
+            return content;
+        }
+
+        public async Task<List<PostDto>> CallFillSharedContentAsync(IGrouping<MentalHealthExpert, Share> userAndContent, List<PostDto> content)
         {
             return await FillSharedContentAsync(userAndContent, content);
+        }
+
+        public async Task<List<PostDto>> CallFillByUsersSharedContentForMentalHealthExpertPreviewAsync(IGrouping<User, Share> userAndContent, List<PostDto> content)
+        {
+            return await FillByUsersSharedContentForMentalHealthExpertPreviewAsync(userAndContent, content);
         }
     }
 }

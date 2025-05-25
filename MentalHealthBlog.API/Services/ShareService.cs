@@ -137,7 +137,7 @@ namespace MentalHealthBlog.API.Services
             try
             {
                 var dbMentalHealthExperts = await _context.MentalHealthExperts
-                    .Include(u => u.User)
+                    //.Include(u => u.User)
                     .Where(mhe => mhe.IsApproved)
                     .ToListAsync();
 
@@ -167,10 +167,13 @@ namespace MentalHealthBlog.API.Services
                 foreach (var item in expertsAndRelatives)
                 {
                     dbUserRoles = item?.Select(r => new Role(r.RoleId, r.Role.Name)).ToList();
-                    mentalHealthExpert = dbMentalHealthExperts.FirstOrDefault(u => u.User.Id == item.Key);
+                    mentalHealthExpert = dbMentalHealthExperts.FirstOrDefault(mhe => mhe.UserId == item.Key);
+
+                    var mentalHealthExpertAsUser = await _context.Users
+                        .FindAsync(mentalHealthExpert.UserId);
 
                     if (mentalHealthExpert == null ||
-                        mentalHealthExpert.User == null ||
+                        //mentalHealthExpert.User == null ||
                         dbUserRoles.IsNullOrEmpty())
 
                         continue;
@@ -178,13 +181,16 @@ namespace MentalHealthBlog.API.Services
                     possibleToShareWith.Add(new UserDto
                     {
                         Id = mentalHealthExpert.UserId,
-                        Username = mentalHealthExpert.User.Username,
+                        FirstName = mentalHealthExpert.FirstName,
+                        LastName = mentalHealthExpert.LastName,
+                        Username = mentalHealthExpertAsUser.Username,
                         Roles = dbUserRoles,
                         PhoneNumber = mentalHealthExpert.PhoneNumber,
                         Organization = mentalHealthExpert.Organization,
                         Email = mentalHealthExpert.Email,
                         PhotoAsFile = mentalHealthExpert.PhotoAsFile,
-                        PhotoAsPath = mentalHealthExpert.PhotoAsPath
+                        PhotoAsPath = mentalHealthExpert.PhotoAsPath,
+                        UserId = mentalHealthExpert.UserId
                     });
                 }
 

@@ -47,6 +47,9 @@ namespace MentalHealthBlog.API.Services
 
             try
             {
+                var mentalHealthExpert = await _context.MentalHealthExperts
+                    .SingleOrDefaultAsync(mhe => mhe.UserId == query.LoggedExpertId);
+                
                 var dbShares = await _context.Shares
                 .Include(p => p.SharedPost)
                 .Include(u => u.SharedPost.User)
@@ -60,7 +63,7 @@ namespace MentalHealthBlog.API.Services
                             p.SharedPostId,
                             p.SharedWithId
                         })
-                        .Where(ex => ex.SharedWithId == query.LoggedExpertId)
+                        .Where(ex => ex.SharedWithId == mentalHealthExpert.Id)
                         .GroupBy(u => u.SharedPost.User);
 
                     if (groupedUsersAndTheirShares.IsNullOrEmpty())
@@ -103,7 +106,7 @@ namespace MentalHealthBlog.API.Services
                     if (dbUserByKey is not null)
                     {
                         userThatSharedContent = new UserDto(dbUserByKey.Id, dbUserByKey.Username);
-                        List<PostDto> contentUserShared = await shareHelper.CallFillSharedContentAsync(userFromGroup, new List<PostDto>());
+                        List<PostDto> contentUserShared = await shareHelper.CallFillByUsersSharedContentForMentalHealthExpertPreviewAsync(userFromGroup, new List<PostDto>());
 
                         sharesPerUser.Add(new SharesPerUserDto(userThatSharedContent, contentUserShared));
                     }
