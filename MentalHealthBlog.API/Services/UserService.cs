@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MentalHealthBlog.API.Exceptions;
 using MentalHealthBlog.API.ExtensionMethods.ExtensionUserClass;
 using MentalHealthBlog.API.Methods;
 using MentalHealthBlog.API.Models;
@@ -62,7 +63,7 @@ namespace MentalHealthBlog.API.Services
                 if (id <= 0)
                 {
                     _userLoggerService.LogWarning($"GET/id: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", id);
-                    return new Response(new object(), StatusCodes.Status400BadRequest, UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString());
+                    throw new ArgumentException("User bad request!");
                 }
 
                 var dbUser = await _context.Users.FindAsync(id);
@@ -78,7 +79,7 @@ namespace MentalHealthBlog.API.Services
                         {
                             if (dbUserRoles.Any(r => r.Id == __USER_ROLE__))
                             {
-                                dbUserDto.Roles= dbUserRoles;
+                                dbUserDto.Roles = dbUserRoles;
                                 _userLoggerService.LogInformation($"GET/id: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", dbUserDto);
                                 return new Response(dbUserDto, StatusCodes.Status200OK, UserServiceLogTypes.USER_SUCCESFULL.ToString());
                             }
@@ -104,18 +105,20 @@ namespace MentalHealthBlog.API.Services
                             }
                         }
                         _userLoggerService.LogWarning($"GET/id: {UserServiceLogTypes.USER_NOT_FOUND_OR_NULL.ToString()}", dbUser);
-                        return new Response(new object(), StatusCodes.Status404NotFound, UserServiceLogTypes.USER_NOT_FOUND_OR_NULL.ToString());
+                        throw new RecordNotFoundException("User should have at least one role!");
+
                     }
                     _userLoggerService.LogWarning($"GET/id: {UserServiceLogTypes.USER_NOT_FOUND_OR_NULL.ToString()}", dbUser);
-                    return new Response(new object(), StatusCodes.Status404NotFound, UserServiceLogTypes.USER_NOT_FOUND_OR_NULL.ToString());
+                    throw new RecordNotFoundException("Record doesn't exist!");
+
                 }
                 _userLoggerService.LogWarning($"GET/id: {UserServiceLogTypes.USER_NOT_FOUND_OR_NULL.ToString()}", dbUser);
-                return new Response(new object(), StatusCodes.Status404NotFound, UserServiceLogTypes.USER_NOT_FOUND_OR_NULL.ToString());
+                throw new RecordNotFoundException("Record doesn't exist!");
             }
             catch (Exception e)
             {
                 _userLoggerService.LogError($"GET/id: {UserServiceLogTypes.USER_FAILED.ToString()}", e);
-                return new Response(e.Data, StatusCodes.Status500InternalServerError, UserServiceLogTypes.USER_FAILED.ToString());
+                throw;
             }
         }
         public async Task<Response> Register(CreateUserDto newUserRequest)
@@ -125,14 +128,14 @@ namespace MentalHealthBlog.API.Services
                 if (user.IsNotValid(newUserRequest.Username, newUserRequest.Password))
                 {
                     _userLoggerService.LogError($"REGISTER: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", new { Username = newUserRequest.Username, Password = newUserRequest.Password });
-                    return new Response(new object(), StatusCodes.Status400BadRequest, UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString());
+                    throw new ArgumentException("Bad request while register!");
                 }
                 var dbUsers = _context.Users;
                 var existingUser = await dbUsers.SingleOrDefaultAsync(u => u.Username == newUserRequest.Username) is not null;
                 if (existingUser)
                 {
                     _userLoggerService.LogWarning($"REGISTER: {UserServiceLogTypes.USER_EXISTS.ToString()}", existingUser);
-                    return new Response(new object(), StatusCodes.Status400BadRequest, UserServiceLogTypes.USER_EXISTS.ToString());
+                    throw new AlreadyRegisteredException("User already registered!");
                 }
                 var salt = user.GenerateSalt(__KEYSIZE__);
                 var hash = user.HashPassword(newUserRequest.Password, salt, __ITERATIONS, __HASHALGORITHM__, __KEYSIZE__);
@@ -154,7 +157,7 @@ namespace MentalHealthBlog.API.Services
                     if (newMentalHealthExpert is null)
                     {
                         _userLoggerService.LogWarning($"REGISTER: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", newMentalHealthExpert);
-                        return new Response(new object(), StatusCodes.Status400BadRequest, UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString());
+                        throw new NullReferenceException("Psychologist creation bad request!");
                     }
                     if (newUserRequest.Photo != null)
                     {
@@ -176,7 +179,7 @@ namespace MentalHealthBlog.API.Services
             catch (Exception e)
             {
                 _userLoggerService.LogError($"REGISTER: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", e);
-                return new Response(e.Data, StatusCodes.Status400BadRequest, UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString());
+                throw;
             }
         }
 
@@ -187,7 +190,7 @@ namespace MentalHealthBlog.API.Services
                 if (user.IsNotValid(loginCredentials.Username, loginCredentials.Password))
                 {
                     _userLoggerService.LogError($"REGISTER: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", loginCredentials);
-                    return new Response(new object(), StatusCodes.Status400BadRequest, UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString());
+                    throw new CreateUserException("Credentials not valid!");
                 }
                 var jwtMiddleware = new JWTService(_options, _context);
                 var authenticated = await VerifyCredentials(loginCredentials);
@@ -201,7 +204,7 @@ namespace MentalHealthBlog.API.Services
                     if (refreshToken is null)
                     {
                         _userLoggerService.LogError($"LOGIN: {UserServiceLogTypes.USER_TOKEN_NOT_CREATED.ToString()}", token);
-                        return new Response(new object(), StatusCodes.Status401Unauthorized, UserServiceLogTypes.USER_TOKEN_NOT_CREATED.ToString());
+                        throw new InvalidTokenException("Refresh token not created!");
                     }
 
                     dbUser.RefreshTokens.Add(refreshToken);
@@ -211,7 +214,7 @@ namespace MentalHealthBlog.API.Services
                     if (String.IsNullOrEmpty(token))
                     {
                         _userLoggerService.LogError($"LOGIN: {UserServiceLogTypes.USER_TOKEN_NOT_CREATED.ToString()}", token);
-                        return new Response(new object(), StatusCodes.Status401Unauthorized, UserServiceLogTypes.USER_TOKEN_NOT_CREATED.ToString());
+                        throw new InvalidTokenException("Token not created");
                     }
 
                     var responseUser = new SignedUserDto(dbUser.Id, dbUser.Username, token, refreshToken.Token, dbUserRoles);
@@ -219,12 +222,12 @@ namespace MentalHealthBlog.API.Services
                     return new Response(responseUser, StatusCodes.Status200OK, UserServiceLogTypes.USER_SUCCESFULL.ToString());
                 }
                 _userLoggerService.LogWarning($"LOGIN: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", $"DB USER: {dbUser}");
-                return new Response(new object(), StatusCodes.Status400BadRequest, UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString());
+                throw new NullReferenceException("User not authenticated!");
             }
             catch (Exception e)
             {
                 _userLoggerService.LogError($"LOGIN: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", e);
-                return new Response(e.Data, StatusCodes.Status400BadRequest, UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString());
+                throw;
             }
         }
 
@@ -252,12 +255,12 @@ namespace MentalHealthBlog.API.Services
                     return new Response(accessToken, StatusCodes.Status201Created, UserServiceLogTypes.TOKEN_SUCCESSFULLY_CREATED.ToString());
                 }
                 _userLoggerService.LogWarning($"REFRESH-TOKEN: {UserServiceLogTypes.USER_TOKEN_NOT_CREATED.ToString()}", accessToken);
-                return new Response(new Response(), StatusCodes.Status404NotFound, UserServiceLogTypes.USER_TOKEN_NOT_CREATED.ToString());
+                throw new InvalidTokenException("Refresh token not created!");
             }
             catch (Exception e)
             {
                 _userLoggerService.LogError($"REFRESH-TOKEN: {UserServiceLogTypes.TOKEN_ERROR.ToString()}", e.Data);
-                return new Response(e.Data, StatusCodes.Status500InternalServerError, UserServiceLogTypes.TOKEN_ERROR.ToString());
+                throw;
             }
         }
 
@@ -272,12 +275,12 @@ namespace MentalHealthBlog.API.Services
                     return new Response(dbRoles, StatusCodes.Status200OK, UserServiceLogTypes.ROLES_RETRIEVED.ToString());
                 }
                 _userLoggerService.LogWarning($"DB_ROLES: {UserServiceLogTypes.ROLES_NOT_FOUND.ToString()}");
-                return new Response();
+                throw new RecordNotFoundException("User should have at least one role!");
             }
             catch (Exception e)
             {
                 _userLoggerService.LogWarning($"DB_ROLES: {UserServiceLogTypes.ROLES_NOT_FOUND.ToString()}", e);
-                return new Response();
+                throw;
             }
 
         }
@@ -302,27 +305,26 @@ namespace MentalHealthBlog.API.Services
                             _context.RefreshTokens.RemoveRange(dbRefreshTokensByLoggedUser);
                             await _context.SaveChangesAsync();
                             _userLoggerService.LogInformation($"LOGOUT: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}");
-                            return new Response();
+                            return new Response(new object(), StatusCodes.Status200OK, UserServiceLogTypes.USER_SUCCESFULL.ToString());
                         }
                         _userLoggerService.LogWarning($"LOGOUT: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", refreshToken);
-                        return new Response();
+                        throw new RecordNotFoundException("Refresh token not found!");
+
                     }
                     _userLoggerService.LogWarning($"LOGOUT: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", logoutRequest.RefreshToken);
-                    return new Response();
+                    throw new RecordNotFoundException("Refresh token not found!");
 
                 }
                 _userLoggerService.LogWarning($"LOGOUT: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", logoutRequest);
-                return new Response();
+                throw new ArgumentException("Bad request!");
 
             }
             catch (Exception e)
             {
                 _userLoggerService.LogError($"LOGOUT: {UserServiceLogTypes.LOGOUT_ERROR.ToString()}", e);
-                return new Response();
-
+                throw;
             }
         }
-
 
     }
 }

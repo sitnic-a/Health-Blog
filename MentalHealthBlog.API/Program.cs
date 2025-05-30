@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using MentalHealthBlog.API.Utils.SignalR;
+using MentalHealthBlog.API.Middlewares;
 
 #pragma warning disable 8604
 
@@ -120,6 +121,8 @@ builder.Services.AddAuthorization();
 
 
 var app = builder.Build();
+app.UseMiddleware<ExceptionMiddleware>();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -127,6 +130,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 
 app.UseCors("localPolicy");
 app.MapHub<AdminHub>("api/rt-new-request");

@@ -14,6 +14,12 @@
             StatusCode = statusCode;
             Message = message;
         }
+
+        public Response(int statusCode, string message)
+        {
+            StatusCode = statusCode;
+            Message = message;
+        }
         
     }
 }
