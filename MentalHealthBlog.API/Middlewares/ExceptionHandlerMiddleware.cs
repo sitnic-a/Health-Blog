@@ -17,6 +17,9 @@ namespace MentalHealthBlog.API.Middlewares
                     or FileNotFoundException:
                     code = HttpStatusCode.NotFound;
                     break;
+                case EmptyListException:
+                    code = HttpStatusCode.NoContent; 
+                    break;
                 case AlreadyRegisteredException:
                     code = HttpStatusCode.Conflict;
                     break;

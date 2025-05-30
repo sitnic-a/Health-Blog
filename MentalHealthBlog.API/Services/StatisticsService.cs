@@ -1,4 +1,5 @@
-﻿using MentalHealthBlog.API.Models;
+﻿using MentalHealthBlog.API.Exceptions;
+using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
@@ -45,7 +46,6 @@ namespace MentalHealthBlog.API.Services
         {
             try
             {
-
                 if (await _context.PostsTags.AnyAsync())
                 {
                     IEnumerable<IGrouping<int, PostTag>> groupedTagsByTagId = _dbPostTags
@@ -81,12 +81,12 @@ namespace MentalHealthBlog.API.Services
                     return new Response(pieGraphData, StatusCodes.Status200OK, StatisticsServiceLogTypes.SUCCESS.ToString());
                 }
                 _statisticsServiceLogger.LogWarning($"GET: {StatisticsServiceLogTypes.NULL}");
-                return new Response(new object(), StatusCodes.Status204NoContent, StatisticsServiceLogTypes.NULL.ToString());
+                throw new EmptyListException("No tags for posts found!");
             }
             catch (Exception e)
             {
                 _statisticsServiceLogger.LogError($"GET: {StatisticsServiceLogTypes.FAILED.ToString()}", e);
-                return new Response(e.Data, StatusCodes.Status400BadRequest, e.Message);
+                throw;
             }
         }
     }
