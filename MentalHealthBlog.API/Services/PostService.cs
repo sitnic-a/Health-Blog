@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MentalHealthBlog.API.Exceptions;
 using MentalHealthBlog.API.ExtensionMethods.ExtensionPostClass;
 using MentalHealthBlog.API.Methods;
 using MentalHealthBlog.API.Models;
@@ -13,6 +14,7 @@ namespace MentalHealthBlogAPI.Services
     enum PostServiceLogTypes
     {
         POST_NULL,
+        POST_EMPTY,
         POST_INVALID_DATA,
         POSTS_SUCCESS,
         POSTS_FAILED
@@ -32,56 +34,62 @@ namespace MentalHealthBlogAPI.Services
         }
         public async Task<Response> GetPosts(SearchPostDto query)
         {
-            var dbPosts = _context.Posts.Where(p => p.UserId == query.UserId);
-
-            if (query.MonthOfPostCreation.HasValue && query.MonthOfPostCreation > 0)
+            try
             {
-                dbPosts = dbPosts.Where(p => p.CreatedAt.Month == query.MonthOfPostCreation);
-            }
+                var dbPosts = _context.Posts.Where(p => p.UserId == query.UserId);
 
-            var filteredPosts = await dbPosts.OrderByDescending(p => p.Id).ToListAsync();
-
-            var posts = new List<PostDto>();
-            var postDto = new PostDto();
-            var postHelper = new PostHelper(_context);
-
-            foreach (var item in filteredPosts)
-            {
-                var dbPostTags = await postHelper.CallReturnPostTagsAsync(item.Id);
-                var dbPostEmotions = await postHelper.CallReturnPostEmotionsAsync(item.Id);
-
-                var tagsOnPost = dbPostTags.Count;
-                var emotionsOnPost = dbPostEmotions.Count;
-
-                if (tagsOnPost > 0 && emotionsOnPost > 0)
+                if (!await dbPosts.AnyAsync())
                 {
+                    _postServiceLogger.LogInformation($"GET: {PostServiceLogTypes.POST_EMPTY.ToString()}");
+                    return new Response(new List<PostDto>(), StatusCodes.Status200OK, $"GET: {PostServiceLogTypes.POST_EMPTY.ToString()}");
+                }
+
+                if (query.MonthOfPostCreation.HasValue && query.MonthOfPostCreation > 0)
+                {
+                    dbPosts = dbPosts.Where(p => p.CreatedAt.Month == query.MonthOfPostCreation);
+                }
+
+                var filteredPosts = await dbPosts
+                    .OrderByDescending(p => p.Id)
+                    .ToListAsync();
+
+                var posts = new List<PostDto>();
+                var postDto = new PostDto();
+                var postHelper = new PostHelper(_context);
+
+                foreach (var item in filteredPosts)
+                {
+                    var dbPostTags = await postHelper.CallReturnPostTagsAsync(item.Id);
+                    var dbPostEmotions = await postHelper.CallReturnPostEmotionsAsync(item.Id);
+
                     postDto = _autoMapper.Map<PostDto>(item);
                     postDto.Tags = dbPostTags;
                     postDto.Emotions = dbPostEmotions;
                     posts.Add(postDto);
+                   
                     continue;
                 }
 
-                postDto = _autoMapper.Map<PostDto>(item);
-                postDto.Tags = new List<string>();
-                postDto.Emotions = new List<EmotionDto>();
-                posts.Add(postDto);
-                continue;
-            }
-            try
-            {
-                if (posts is null)
+                if (filteredPosts.Any() && !posts.Any())
                 {
                     _postServiceLogger.LogWarning($"GET: {PostServiceLogTypes.POST_NULL.ToString()}");
-                    return new Response(new object(), StatusCodes.Status204NoContent, PostServiceLogTypes.POST_NULL.ToString());
+                    throw new RecordNotFoundException("Posts not retrieved properly!");
                 }
+
+                if (!posts.Any())
+                {
+                    _postServiceLogger.LogInformation($"GET: {PostServiceLogTypes.POST_EMPTY.ToString()}");
+                    return new Response(new List<PostDto>(), StatusCodes.Status200OK, PostServiceLogTypes.POST_EMPTY.ToString());
+                }
+
                 _postServiceLogger.LogInformation($"GET: {PostServiceLogTypes.POSTS_SUCCESS.ToString()}");
                 return new Response(posts, StatusCodes.Status200OK, PostServiceLogTypes.POSTS_SUCCESS.ToString());
+
             }
             catch (Exception e)
             {
                 _postServiceLogger.LogError($"GET: {PostServiceLogTypes.POSTS_FAILED.ToString()}", e);
-                return new Response(e.Data, StatusCodes.Status400BadRequest, PostServiceLogTypes.POSTS_FAILED.ToString());
+                throw;
             }
         }
 

@@ -3,14 +3,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { prepareForPieGraph } from './redux-toolkit/features/pieSlice'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 import { Pie } from 'react-chartjs-2'
-
+import { toast } from 'react-toastify'
 ChartJS.register(ArcElement, Tooltip, Legend)
 
 export const PieGraph = ({ searchPostDto }) => {
   let dispatch = useDispatch()
-  let { labels, numberOfTags, statisticsData } = useSelector(
-    (store) => store.pie
-  )
+  let { labels, numberOfTags } = useSelector((store) => store.pie)
 
   const data = {
     labels: [...labels],
@@ -40,12 +38,19 @@ export const PieGraph = ({ searchPostDto }) => {
   }
 
   useEffect(() => {
-    dispatch(prepareForPieGraph(searchPostDto))
+    dispatch(prepareForPieGraph(searchPostDto)).then((data) => {
+      let statusCode = data.payload.statusCode
+      if (statusCode !== 200) {
+        toast.error('Tags are not fetched properly, statistics unavailable', {
+          position: 'bottom-right',
+        })
+      }
+    })
   }, [])
 
   return (
     <section className="pie-graph-section">
-      {statisticsData != null && (
+      {labels.length > 0 && numberOfTags.length > 0 && (
         <>
           <p>Pie Graph Chart</p>
           <Pie data={data} />

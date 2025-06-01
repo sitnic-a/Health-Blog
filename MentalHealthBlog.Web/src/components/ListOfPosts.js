@@ -35,7 +35,21 @@ export const ListOfPosts = () => {
         position: 'bottom-right',
       })
     }
-    dispatch(getPosts(searchPostDto))
+    dispatch(getPosts(searchPostDto)).then((data) => {
+      let statusCode = data.payload.statusCode
+
+      if (statusCode !== 200) {
+        toast.error("Posts aren't fetched properly!", {
+          autoClose: 1500,
+          position: 'bottom-right',
+        })
+        return
+      }
+      toast.success('Posts fetched properly!', {
+        autoClose: 1500,
+        position: 'bottom-right',
+      })
+    })
   }, [])
 
   if (isLoading && isLogging && statisticsLoading) {
