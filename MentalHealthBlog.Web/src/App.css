@@ -653,6 +653,10 @@ dialog::backdrop {
   background-color: darkgoldenrod;
 }
 
+.required-field {
+  color: #f00;
+}
+
 .add-post-picked-tags-container {
   overflow: hidden;
 }

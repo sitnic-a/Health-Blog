@@ -1,8 +1,5 @@
-import React from 'react'
-import Modal from 'react-modal'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import useFetchLocationState from './custom/hooks/useFetchLocationState'
 import { openAddModal } from './redux-toolkit/features/modalSlice'
 import { createPost } from './redux-toolkit/features/postSlice'
 import {
@@ -14,12 +11,12 @@ import {
 } from './redux-toolkit/features/tagSlice'
 import { getEmotions } from './redux-toolkit/features/emotionSlice'
 
+import Modal from 'react-modal'
 import { application } from '../application'
 import { TagsOnPostCreation } from './TagsOnPostCreation'
 
 export const AddPost = () => {
   let dispatch = useDispatch()
-  // let { loggedUser } = useFetchLocationState()
   let { authenticatedUser } = useSelector((store) => store.user)
   let { isAddOpen } = useSelector((store) => store.modal)
   let { chosenTags } = useSelector((store) => store.tag)
@@ -59,7 +56,6 @@ export const AddPost = () => {
         onSubmit={submitForm}
         id="add-post-form"
         onKeyDown={(e) => {
-          console.log('Type ', e)
           if (e.key === 'Enter' && e.target.localName === 'textarea') {
             return
           } else if (e.key === 'Enter' && e.target.localName === 'input') {
@@ -72,7 +68,10 @@ export const AddPost = () => {
         </div>
         <div className="add-post-modal-content">
           <div className="add-post-title-container">
-            <label htmlFor="title">Title</label>
+            <label htmlFor="title">
+              Title
+              <span className="required-field"> *</span>
+            </label>
             <br />
             <input
               className="add-post-title-input"
@@ -82,7 +81,10 @@ export const AddPost = () => {
             />
           </div>
           <div className="add-post-content-container">
-            <label htmlFor="content">Content</label>
+            <label htmlFor="content">
+              Content
+              <span className="required-field"> *</span>
+            </label>
             <br />
             <textarea
               className="add-post-content-textarea"

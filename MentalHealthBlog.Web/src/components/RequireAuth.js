@@ -17,7 +17,7 @@ export const RequireAuth = () => {
   useEffect(() => {
     if (authenticatedUser === null && refreshToken !== undefined) {
       dispatch(refreshAccessToken(refreshToken)).then((response) => {
-        dispatch(setAuthenticatedUser(response.payload.serviceResponseObject))
+        dispatch(setAuthenticatedUser(response.payload?.serviceResponseObject))
       })
     }
   }, [])

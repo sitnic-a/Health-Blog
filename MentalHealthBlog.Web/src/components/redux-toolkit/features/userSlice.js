@@ -106,8 +106,8 @@ export const userSlice = createSlice({
       state.isFailed = action.payload
     },
     setAuthenticatedUser: (state, action) => {
-      console.log('RA ', action.payload.serviceResponseObject)
-      state.authenticatedUser = action.payload.serviceResponseObject
+      console.log('RA ', action.payload?.serviceResponseObject)
+      state.authenticatedUser = action.payload?.serviceResponseObject
     },
   },
   extraReducers: (builder) => {
