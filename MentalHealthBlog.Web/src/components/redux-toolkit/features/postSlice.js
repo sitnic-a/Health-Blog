@@ -25,6 +25,20 @@ export const getPosts = createAsyncThunk('post/', async (filteringObject) => {
   return response
 })
 
+export const getById = createAsyncThunk('post/id', async (requestObject) => {
+  let url = `${application.application_url}/post/${requestObject.postId}`
+
+  let request = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${requestObject.authenticatedUser.jwToken}`,
+    },
+  })
+  let response = await request.json()
+  return response
+})
+
 export const createPost = createAsyncThunk('post/add/', async (addPostObj) => {
   let url = `${application.application_url}/post`
   addPostObj.e.preventDefault()
@@ -161,6 +175,18 @@ let postSlice = createSlice({
       })
       .addCase(getPosts.fulfilled, (state, action) => {
         state.posts = action.payload.serviceResponseObject
+      })
+
+      //--- getById
+      .addCase(getById.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(getById.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.post = action.payload.serviceResponseObject
+      })
+      .addCase(getById.rejected, (state, action) => {
+        state.isLoading = false
       })
 
       //--- addPost

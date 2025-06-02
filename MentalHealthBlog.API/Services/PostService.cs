@@ -101,7 +101,7 @@ namespace MentalHealthBlogAPI.Services
                 if (searched is null)
                 {
                     _postServiceLogger.LogWarning($"GET/id: {PostServiceLogTypes.POST_NULL.ToString()}");
-                    return new Response(new object(), StatusCodes.Status204NoContent, PostServiceLogTypes.POST_NULL.ToString());
+                    throw new RecordNotFoundException("Post not found!");
                 }
                 _postServiceLogger.LogInformation($"GET/id: {PostServiceLogTypes.POSTS_SUCCESS.ToString()}");
                 return new Response(searched, StatusCodes.Status200OK, PostServiceLogTypes.POSTS_SUCCESS.ToString());
@@ -109,7 +109,7 @@ namespace MentalHealthBlogAPI.Services
             catch (Exception e)
             {
                 _postServiceLogger.LogError($"GET/id: {PostServiceLogTypes.POSTS_FAILED.ToString()}", e);
-                return new Response(e.Data, StatusCodes.Status400BadRequest, PostServiceLogTypes.POSTS_FAILED.ToString());
+                throw;
             }
         }
 

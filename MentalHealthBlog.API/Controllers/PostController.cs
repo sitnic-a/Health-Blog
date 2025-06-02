@@ -26,6 +26,7 @@ namespace MentalHealthBlogAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<Response> GetById(int id)
         {
             return await _postService.GetById(id);
