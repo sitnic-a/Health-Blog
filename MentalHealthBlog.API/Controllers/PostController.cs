@@ -32,7 +32,8 @@ namespace MentalHealthBlogAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<Response> AddPost([FromBody] CreatePostDto? post)
+        [Authorize]
+        public async Task<Response> AddPost([FromBody] CreatePostDto post)
         {
             return await _postService.Add(post);
         }

@@ -117,15 +117,24 @@ namespace MentalHealthBlogAPI.Services
         {
             try
             {
-                var mappedPost = _autoMapper.Map<Post>(post);
-                var tagsNumber = post.Tags.Count;
-                var emotionsNumber = post.Emotions.Count;
+                var postHelper = new PostHelper(_context);
 
-                if (tagsNumber > 0)
+                if (!await postHelper.NewPostRequestIsValid(post))
+                {
+                    _postServiceLogger.LogWarning($"POST: {PostServiceLogTypes.POST_INVALID_DATA.ToString()}", post);
+                    throw new ArgumentException("Bad request!");
+                }
+
+                var mappedPost = _autoMapper.Map<Post>(post);
+                var hasAtLeastOneTagPicked = post.Tags.Any();
+                var hasAtLeastOnEmotionPicked = post.Emotions.Any();
+
+                if (hasAtLeastOneTagPicked)
                 {
                     foreach (var item in post.Tags)
                     {
                         var existingTag = await _context.Tags.FirstOrDefaultAsync(t => t.Name == item) != null;
+                        
                         if (!existingTag)
                         {
                             var newTag = new Tag { Name = item };
@@ -134,18 +143,19 @@ namespace MentalHealthBlogAPI.Services
                     }
                 }
 
-                if (mappedPost.IsNullOrEmpthy() || tagsNumber <= 0)
+                if (mappedPost.IsNullOrEmpthy() || !hasAtLeastOneTagPicked)
                 {
                     _postServiceLogger.LogWarning($"POST: {PostServiceLogTypes.POST_INVALID_DATA.ToString()}");
-                    return new Response(new object(), StatusCodes.Status400BadRequest, PostServiceLogTypes.POST_INVALID_DATA.ToString());
+                    throw new CreateRecordException("Couldn't create new post. Invalid data!");
                 }
 
                 var newPost = await _context.Posts.AddAsync(mappedPost);
                 await _context.SaveChangesAsync();
+
                 if (newPost is null)
                 {
                     _postServiceLogger.LogWarning($"POST: {PostServiceLogTypes.POST_NULL.ToString()}");
-                    return new Response(new object(), StatusCodes.Status204NoContent, PostServiceLogTypes.POST_NULL.ToString());
+                    throw new RecordNotFoundException("New post is not created!");
                 }
 
                 foreach (var item in post.Tags)
@@ -158,7 +168,7 @@ namespace MentalHealthBlogAPI.Services
                     }
                 }
 
-                if (emotionsNumber > 0)
+                if (hasAtLeastOnEmotionPicked)
                 {
                     foreach (var emotionId in post.Emotions)
                     {
@@ -167,7 +177,7 @@ namespace MentalHealthBlogAPI.Services
                             continue;
                         }
                         var postEmotion = new PostEmotion(newPost.Entity.Id, emotionId);
-                        _context.PostsEmotions?.AddAsync(postEmotion);
+                        await _context.PostsEmotions.AddAsync(postEmotion);
                     }
                 }
 
@@ -178,7 +188,7 @@ namespace MentalHealthBlogAPI.Services
             catch (Exception e)
             {
                 _postServiceLogger.LogError($"POST: {PostServiceLogTypes.POSTS_FAILED.ToString()}", e);
-                return new Response(e.Data, StatusCodes.Status400BadRequest, PostServiceLogTypes.POSTS_FAILED.ToString());
+                throw;
             }
         }
         public async Task<Response> Update(int id, Post post)

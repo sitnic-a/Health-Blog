@@ -657,6 +657,10 @@ dialog::backdrop {
   color: #f00;
 }
 
+.add-post-modal-content {
+  margin-block: 10px;
+}
+
 .add-post-picked-tags-container {
   overflow: hidden;
 }

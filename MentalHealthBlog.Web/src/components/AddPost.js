@@ -14,6 +14,7 @@ import { getEmotions } from './redux-toolkit/features/emotionSlice'
 import Modal from 'react-modal'
 import { application } from '../application'
 import { TagsOnPostCreation } from './TagsOnPostCreation'
+import { toast } from 'react-toastify'
 
 export const AddPost = () => {
   let dispatch = useDispatch()
@@ -35,8 +36,29 @@ export const AddPost = () => {
       chosenTags,
       chosenEmotions,
     }
-    dispatch(createPost(addPostObj))
-    dispatch(openAddModal(false))
+
+    dispatch(createPost(addPostObj)).then((data) => {
+      let statusCode = data?.payload?.StatusCode
+
+      if (statusCode !== null || statusCode !== undefined) {
+        if (statusCode !== 201) {
+          if (statusCode === 400) {
+            toast.error('Data either invalid or not entered', {
+              position: 'bottom-right',
+            })
+            return
+          }
+          if (statusCode === 404) {
+            toast.error("New post can't be created!", {
+              position: 'bottom-right',
+            })
+            return
+          }
+        } else {
+          dispatch(openAddModal(false))
+        }
+      }
+    })
   }
 
   return (
@@ -66,6 +88,9 @@ export const AddPost = () => {
         <div className="add-post-modal-header">
           <h2>Post</h2>
         </div>
+
+        <span className="required-field">Required fields *</span>
+
         <div className="add-post-modal-content">
           <div className="add-post-title-container">
             <label htmlFor="title">

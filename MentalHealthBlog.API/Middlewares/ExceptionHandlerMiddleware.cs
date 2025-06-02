@@ -29,7 +29,7 @@ namespace MentalHealthBlog.API.Middlewares
                     or InvalidTokenException:
                     code = HttpStatusCode.Unauthorized;
                     break;
-                case CreateUserException
+                case CreateRecordException
                     or NullReferenceException
                     or ArgumentException
                     or InvalidOperationException:

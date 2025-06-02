@@ -1,3 +1,7 @@
+export function stringIsNullOrEmpty(variable) {
+  return variable === null || variable === undefined || variable === ''
+}
+
 export function formatDateToString(date) {
   const validDate = new Date(date)
   const formatter = new Intl.DateTimeFormat('en-US', {

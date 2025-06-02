@@ -190,7 +190,7 @@ namespace MentalHealthBlog.API.Services
                 if (user.IsNotValid(loginCredentials.Username, loginCredentials.Password))
                 {
                     _userLoggerService.LogError($"REGISTER: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", loginCredentials);
-                    throw new CreateUserException("Credentials not valid!");
+                    throw new CreateRecordException("Credentials not valid!");
                 }
                 var jwtMiddleware = new JWTService(_options, _context);
                 var authenticated = await VerifyCredentials(loginCredentials);

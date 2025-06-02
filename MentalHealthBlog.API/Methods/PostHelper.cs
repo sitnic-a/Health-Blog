@@ -1,7 +1,9 @@
 ﻿using MentalHealthBlog.API.Models;
+using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 #pragma warning disable CS8602
 
@@ -13,6 +15,15 @@ namespace MentalHealthBlog.API.Methods
         public PostHelper(DataContext context)
         {
             _context = context;
+        }
+
+        public async Task<bool> NewPostRequestIsValid(CreatePostDto request)
+        {
+            await Task.Delay(0);
+            return !request.Title.IsNullOrEmpty() &&
+                !request.Content.IsNullOrEmpty() &&
+                request.UserId > 0 &&
+                request.Tags.Any();
         }
 
         private async Task<List<string>> ReturnPostTagsAsync(int postId)
