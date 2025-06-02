@@ -35,7 +35,7 @@ export const ListOfPosts = () => {
       })
     }
     dispatch(getPosts(searchPostDto)).then((data) => {
-      let statusCode = data.payload.statusCode
+      let statusCode = data?.payload?.statusCode
 
       if (statusCode !== 200) {
         toast.error("Posts aren't fetched properly!", {

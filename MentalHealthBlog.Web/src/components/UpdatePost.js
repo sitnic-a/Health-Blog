@@ -39,12 +39,15 @@ export const UpdatePost = () => {
       authenticatedUser,
     }
     console.log('Update post obj ', updatePostObj)
-    dispatch(updatePost(updatePostObj)).then(() => {
-      navigate('/', {
-        state: {
-          prevUrl: window.location.href,
-        },
-      })
+    dispatch(updatePost(updatePostObj)).then((data) => {
+      let statusCode = data?.payload?.statusCode
+      if (statusCode === 200) {
+        navigate('/', {
+          state: {
+            prevUrl: window.location.href,
+          },
+        })
+      }
     })
   }
 

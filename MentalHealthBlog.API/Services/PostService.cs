@@ -24,12 +24,12 @@ namespace MentalHealthBlogAPI.Services
     {
         private readonly DataContext _context;
         private readonly ILogger<PostService> _postServiceLogger;
-        private readonly IMapper _autoMapper;
+        private readonly IMapper _mapper;
 
         public PostService(DataContext context, IMapper mapper, ILogger<PostService> postServiceLogger)
         {
             _context = context;
-            _autoMapper = mapper;
+            _mapper = mapper;
             _postServiceLogger = postServiceLogger;
         }
         public async Task<Response> GetPosts(SearchPostDto query)
@@ -62,7 +62,7 @@ namespace MentalHealthBlogAPI.Services
                     var dbPostTags = await postHelper.CallReturnPostTagsAsync(item.Id);
                     var dbPostEmotions = await postHelper.CallReturnPostEmotionsAsync(item.Id);
 
-                    postDto = _autoMapper.Map<PostDto>(item);
+                    postDto = _mapper.Map<PostDto>(item);
                     postDto.Tags = dbPostTags;
                     postDto.Emotions = dbPostEmotions;
                     posts.Add(postDto);
@@ -119,13 +119,13 @@ namespace MentalHealthBlogAPI.Services
             {
                 var postHelper = new PostHelper(_context);
 
-                if (!await postHelper.NewPostRequestIsValid(post))
+                if (!await postHelper.PostRequestIsValid(post))
                 {
                     _postServiceLogger.LogWarning($"POST: {PostServiceLogTypes.POST_INVALID_DATA.ToString()}", post);
                     throw new ArgumentException("Bad request!");
                 }
 
-                var mappedPost = _autoMapper.Map<Post>(post);
+                var mappedPost = _mapper.Map<Post>(post);
                 var hasAtLeastOneTagPicked = post.Tags.Any();
                 var hasAtLeastOnEmotionPicked = post.Emotions.Any();
 
@@ -195,17 +195,22 @@ namespace MentalHealthBlogAPI.Services
         {
             try
             {
-                if (post.IsNullOrEmpthy())
+                var postHelper = new PostHelper(_context);
+
+                if (!await postHelper.PostRequestIsValid(post))
                 {
                     _postServiceLogger.LogWarning($"PUT/id: {PostServiceLogTypes.POST_INVALID_DATA.ToString()}");
-                    return new Response(new object(), StatusCodes.Status400BadRequest, PostServiceLogTypes.POST_INVALID_DATA.ToString());
+                    throw new ArgumentException("Bad request!");
                 }
+
                 var searched = await _context.Posts.FindAsync(id);
+
                 if (searched is null)
                 {
                     _postServiceLogger.LogWarning($"PUT/id: {PostServiceLogTypes.POST_NULL.ToString()}");
-                    return new Response(new object(), StatusCodes.Status204NoContent, PostServiceLogTypes.POST_NULL.ToString());
+                    throw new RecordNotFoundException("Post can't be updated! Post doesn't exist!");
                 }
+
                 searched.Id = id;
                 searched.Title = post.Title;
                 searched.Content = post.Content;
@@ -217,9 +222,8 @@ namespace MentalHealthBlogAPI.Services
             catch (Exception e)
             {
                 _postServiceLogger.LogError($"PUT/id: {PostServiceLogTypes.POSTS_FAILED.ToString()}", e);
-                return new Response(e.Data, StatusCodes.Status400BadRequest, PostServiceLogTypes.POSTS_FAILED.ToString());
+                throw;
             }
-
         }
 
         public async Task<Response> Delete(int id)

@@ -40,6 +40,7 @@ namespace MentalHealthBlogAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<Response> UpdatePost(int id, [FromBody] Post post)
         {
             return await _postService.Update(id, post);

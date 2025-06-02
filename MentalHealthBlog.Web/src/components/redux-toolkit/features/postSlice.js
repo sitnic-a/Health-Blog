@@ -79,26 +79,20 @@ export const createPost = createAsyncThunk('post/add/', async (addPostObj) => {
 export const updatePost = createAsyncThunk(
   'post/update/{id}',
   async (updatePostObj) => {
-    console.log('Update post obj ', updatePostObj)
     updatePostObj.e.preventDefault()
+
     let form = new FormData(updatePostObj.e.target)
     let formEntries = [...form.entries()]
     let formObject = Object.fromEntries(formEntries)
+
     let data = {
       title: formObject.title,
       content: formObject.content,
       userId: updatePostObj.post.userId,
     }
 
-    console.log(data)
-    if (
-      data.title === '' ||
-      data.title === null ||
-      data.content === '' ||
-      data.content === null
-    ) {
-      toast.error('Fields should be populated!', {
-        autoClose: 1500,
+    if (stringIsNullOrEmpty(data.title) || stringIsNullOrEmpty(data.content)) {
+      toast.error('Populate all fields!', {
         position: 'bottom-right',
       })
       return
@@ -113,6 +107,7 @@ export const updatePost = createAsyncThunk(
         Authorization: `Bearer ${updatePostObj.authenticatedUser.jwToken}`,
       },
     })
+
     let response = await request.json()
     return response
   }
@@ -198,7 +193,7 @@ let postSlice = createSlice({
       })
       .addCase(createPost.fulfilled, (state, action) => {
         state.isLoading = false
-        let statusCode = action.payload.statusCode
+        let statusCode = action?.payload?.statusCode
 
         if (statusCode === 201) {
           toast.success('Succesfully added post', {
@@ -224,12 +219,15 @@ let postSlice = createSlice({
         })
       })
       .addCase(updatePost.fulfilled, (state, action) => {
-        toast.success('Succesfully updated post', {
-          autoClose: 1500,
-          position: 'bottom-right',
-        })
-        toast.done = () => {
-          window.location.reload()
+        let statusCode = action?.payload?.statusCode
+        if (statusCode === 200) {
+          toast.success('Succesfully updated post', {
+            autoClose: 1500,
+            position: 'bottom-right',
+          })
+          toast.done = () => {
+            window.location.reload()
+          }
         }
       })
 

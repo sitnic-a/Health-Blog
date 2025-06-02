@@ -39,7 +39,7 @@ export const PieGraph = ({ searchPostDto }) => {
 
   useEffect(() => {
     dispatch(prepareForPieGraph(searchPostDto)).then((data) => {
-      let statusCode = data.payload.statusCode
+      let statusCode = data?.payload?.statusCode
       if (statusCode !== 200) {
         toast.error('Tags are not fetched properly, statistics unavailable', {
           position: 'bottom-right',
