@@ -230,12 +230,19 @@ namespace MentalHealthBlogAPI.Services
         {
             try
             {
+                if (id <= 0)
+                {
+                    _postServiceLogger.LogWarning($"DELETE/id: {PostServiceLogTypes.POST_INVALID_DATA.ToString()}");
+                    throw new ArgumentException("Bad request!");
+                }
+
                 var searched = await _context.Posts.FindAsync(id);
                 if (searched is null)
                 {
                     _postServiceLogger.LogWarning($"DELETE/id: {PostServiceLogTypes.POST_NULL.ToString()}");
-                    return new Response(new object(), StatusCodes.Status204NoContent, PostServiceLogTypes.POST_NULL.ToString());
+                    throw new RecordNotFoundException("Post couldn't be deleted!");
                 }
+
                 _context.Posts.Remove(searched);
                 await _context.SaveChangesAsync();
                 _postServiceLogger.LogInformation($"DELETE/id: {PostServiceLogTypes.POSTS_SUCCESS.ToString()}");
@@ -244,7 +251,7 @@ namespace MentalHealthBlogAPI.Services
             catch (Exception e)
             {
                 _postServiceLogger.LogError($"DELETE/id: {PostServiceLogTypes.POSTS_FAILED.ToString()}", e);
-                return new Response(e.Data, StatusCodes.Status400BadRequest, PostServiceLogTypes.POSTS_FAILED.ToString());
+                throw;
             }
         }
     }

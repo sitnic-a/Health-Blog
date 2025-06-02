@@ -121,7 +121,7 @@ export const deletePostById = createAsyncThunk(
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${deletePostObj.loggedUser.jwToken}`,
+        Authorization: `Bearer ${deletePostObj.authenticatedUser.jwToken}`,
       },
     })
     let response = await request.json()
@@ -244,6 +244,16 @@ let postSlice = createSlice({
       })
       .addCase(deletePostById.fulfilled, (state, action) => {
         toast.isActive = false
+        let statusCode = action?.payload?.statusCode
+        if (statusCode === 200) {
+          toast.success('Succesfully deleted post', {
+            autoClose: 1500,
+            position: 'bottom-right',
+          })
+          setTimeout(() => {
+            window.location.reload()
+          }, 1500)
+        }
       })
   },
 })

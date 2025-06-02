@@ -47,6 +47,7 @@ namespace MentalHealthBlogAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<Response> DeletePost(int id)
         {
             return await _postService.Delete(id);

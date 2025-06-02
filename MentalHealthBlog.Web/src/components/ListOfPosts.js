@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { toast } from 'react-toastify'
 import { getPosts } from './redux-toolkit/features/postSlice'
+import { toast } from 'react-toastify'
 
 import { Post } from './Post'
 import { ListOfPostsHeader } from './ListOfPostsHeader'
@@ -17,9 +17,7 @@ import { ExportModal } from './share-export/export/ExportModal'
 export const ListOfPosts = () => {
   let dispatch = useDispatch()
   let { isLoading, posts } = useSelector((store) => store.post)
-  let { authenticatedUser, isLogging, isAuthenticated } = useSelector(
-    (store) => store.user
-  )
+  let { authenticatedUser, isLogging } = useSelector((store) => store.user)
   let { statisticsLoading } = useSelector((store) => store.pie)
 
   let searchPostDto = {
@@ -28,12 +26,6 @@ export const ListOfPosts = () => {
   }
 
   useEffect(() => {
-    if (isAuthenticated === true) {
-      toast.success('Succesfully logged in', {
-        autoClose: 1500,
-        position: 'bottom-right',
-      })
-    }
     dispatch(getPosts(searchPostDto)).then((data) => {
       let statusCode = data?.payload?.statusCode
 

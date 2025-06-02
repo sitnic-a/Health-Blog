@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { login, setIsFailed } from './redux-toolkit/features/userSlice'
 import { toast } from 'react-toastify'
 import { Loader } from './Loader'
+import { stringIsNullOrEmpty } from './utils/helper-methods/methods'
 
 export const Login = () => {
   let dispatch = useDispatch()
@@ -22,10 +23,8 @@ export const Login = () => {
     }
 
     if (
-      user.username === '' ||
-      user.username === null ||
-      user.password === '' ||
-      user.password === null
+      stringIsNullOrEmpty(user.username) ||
+      stringIsNullOrEmpty(user.password)
     ) {
       toast.error('Fields are required', {
         autoClose: 1500,
@@ -51,6 +50,10 @@ export const Login = () => {
           state: {
             prevUrl: window.location.href,
           },
+        })
+        toast.success('Succesfully logged in', {
+          autoClose: 1500,
+          position: 'bottom-right',
         })
       }
     })
