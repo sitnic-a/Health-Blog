@@ -2,6 +2,7 @@
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,6 +32,7 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpGet("experts-relatives")]
+        [Authorize]
         public async Task<Response> GetExpertsRelatives()
         {
             return await _shareService.GetExpertsAndRelatives();

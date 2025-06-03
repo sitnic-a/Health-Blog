@@ -14,6 +14,7 @@ import {
 
 import { FaShare } from 'react-icons/fa'
 import { FaFileExport } from 'react-icons/fa'
+import { toast } from 'react-toastify'
 
 export const ShareExportOverlay = () => {
   let dispatch = useDispatch()
@@ -32,11 +33,21 @@ export const ShareExportOverlay = () => {
               '.share-export-container'
             )
             shareExportContainer.style.display = 'none'
-            dispatch(getExpertsAndRelatives())
+            let objectWithData = {
+              authenticatedUser,
+            }
+            dispatch(getExpertsAndRelatives(objectWithData)).then((data) => {
+              let statusCode = data?.payload?.StatusCode
+              if (statusCode !== 200) {
+                if (statusCode === 404) {
+                  toast.error("Experts couldn't be fetched!", {
+                    position: 'bottom-right',
+                  })
+                }
+              }
+            })
             let selectedPosts = getSelectedPosts(authenticatedUser)
             console.log('In LIST on Share ', selectedPosts)
-
-            // alert("Share activated");
           }}
         >
           <FaShare className="share-export-icon" />
