@@ -84,13 +84,13 @@ namespace MentalHealthBlog.API.Services
 
                 if (contentToBeShared.ShareLink == false)
                 {
-                    if (contentToBeShared.PostIds.IsNullOrEmpty() ||
-                        contentToBeShared.SharedWithIds.IsNullOrEmpty() ||
+                    if (!contentToBeShared.PostIds.Any() ||
+                        !contentToBeShared.SharedWithIds.Any() ||
                         contentToBeShared.PostIds.Contains(0) ||
                         contentToBeShared.SharedWithIds.Contains(0))
                     {
                         _shareLoggerService.LogWarning($"POST(SHARE-CONTENT): {ShareServiceLogTypes.NOT_FOUND.ToString()}", contentToBeShared);
-                        return new Response(new List<Share>(), StatusCodes.Status404NotFound, ShareServiceLogTypes.NOT_FOUND.ToString());
+                        throw new ArgumentException("Bad request!");
                     }
 
                     var sharedContent = await shareHelper.CallSaveNewShares(_context, contentToBeShared);
@@ -101,35 +101,35 @@ namespace MentalHealthBlog.API.Services
                     }
 
                     _shareLoggerService.LogWarning($"POST(SHARE-CONTENT): {ShareServiceLogTypes.EMPTY.ToString()}", sharedContent);
-                    return new Response(new List<Share>(), StatusCodes.Status204NoContent, ShareServiceLogTypes.EMPTY.ToString());
+                    throw new CreateRecordException("Content haven't been shared!");
                 }
 
                 if (contentToBeShared.ShareLink == true)
                 {
-                    if (contentToBeShared.PostIds.IsNullOrEmpty() ||
+                    if (!contentToBeShared.PostIds.Any() ||
                         contentToBeShared.PostIds.Contains(0))
                     {
                         _shareLoggerService.LogWarning($"POST(SHARE-CONTENT): {ShareServiceLogTypes.NOT_FOUND.ToString()}", contentToBeShared);
-                        return new Response(new List<Share>(), StatusCodes.Status404NotFound, ShareServiceLogTypes.NOT_FOUND.ToString());
+                        throw new ArgumentException("Bad request!");
                     }
 
                     var sharedContent = await shareHelper.CallSaveNewShares(_context, contentToBeShared);
                     if (sharedContent.Any())
                     {
                         _shareLoggerService.LogInformation($"POST(SHARE-CONTENT): {ShareServiceLogTypes.SUCCESS.ToString()}", sharedContent);
-                        return new Response(sharedContent, StatusCodes.Status200OK, ShareServiceLogTypes.SUCCESS.ToString());
+                        return new Response(sharedContent, StatusCodes.Status201Created, ShareServiceLogTypes.SUCCESS.ToString());
                     }
                     _shareLoggerService.LogWarning($"POST(SHARE-CONTENT): {ShareServiceLogTypes.EMPTY.ToString()}", sharedContent);
-                    return new Response(new List<Share>(), StatusCodes.Status204NoContent, ShareServiceLogTypes.EMPTY.ToString());
+                    throw new CreateRecordException("Content haven't been shared!");
                 }
 
                 _shareLoggerService.LogWarning($"POST(SHARE-CONTENT): {ShareServiceLogTypes.NOT_FOUND.ToString()}", new object());
-                return new Response(new object(), StatusCodes.Status404NotFound, ShareServiceLogTypes.NOT_FOUND.ToString());
+                throw new ArgumentException("Bad request! Content can't be shared!");
             }
             catch (Exception e)
             {
                 _shareLoggerService.LogError($"POST(SHARE-CONTENT): {ShareServiceLogTypes.ERROR.ToString()}", e);
-                return new Response(e.Data, StatusCodes.Status500InternalServerError, ShareServiceLogTypes.ERROR.ToString());
+                throw;
             }
         }
 

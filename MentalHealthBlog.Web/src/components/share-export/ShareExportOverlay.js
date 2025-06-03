@@ -43,8 +43,21 @@ export const ShareExportOverlay = () => {
                   toast.error("Experts couldn't be fetched!", {
                     position: 'bottom-right',
                   })
+                  return
                 }
               }
+              if (
+                data?.payload?.statusCode === 200 &&
+                data?.payload?.serviceResponseObject.length === 0
+              ) {
+                toast.warning('Reach some mental health expert first!', {
+                  position: 'bottom-right',
+                })
+              }
+
+              toast.success('Successfuly retrieved experts!', {
+                position: 'bottom-right',
+              })
             })
             let selectedPosts = getSelectedPosts(authenticatedUser)
             console.log('In LIST on Share ', selectedPosts)

@@ -1870,11 +1870,9 @@ input[name='person-to-give-permission-checkbox'] {
 
 .people-to-give-permission-count {
   color: #000;
-  position: absolute;
-  bottom: 0;
-  right: 30px;
-  margin: 0;
-  text-align: center;
+  margin-top: 1rem;
+  text-align: left;
+  margin-inline: auto;
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
   height: min-content;
@@ -1882,9 +1880,8 @@ input[name='person-to-give-permission-checkbox'] {
 
 @media (width <=400px) {
   .people-to-give-permission-count {
-    left: 4px;
-    right: 0px;
-    top: 0;
+    text-align: start;
+    margin-inline: auto;
   }
 }
 

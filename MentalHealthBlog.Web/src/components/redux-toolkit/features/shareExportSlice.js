@@ -49,12 +49,13 @@ export const shareByLink = createAsyncThunk(
 
 export const shareContent = createAsyncThunk(
   '/share',
-  async (contentToBeShared) => {
+  async (objectWithData) => {
     let request = await fetch(`${application.application_url}/share`, {
       method: 'POST',
-      body: JSON.stringify(contentToBeShared),
+      body: JSON.stringify(objectWithData.contentToBeShared),
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
       },
     })
 
@@ -181,39 +182,44 @@ let shareExportSlice = createSlice({
 
       //Share
       .addCase(shareContent.pending, (state, action) => {
-        console.log('Pending...')
-        let contentToBeShared = action.meta.arg
+        console.log('Pending...', action.meta)
+        let contentToBeShared = action.meta.arg.contentToBeShared
 
         if (contentToBeShared.shareLink === true) {
           state.isSharingLink = true
         }
       })
       .addCase(shareContent.fulfilled, (state, action) => {
+        let statusCode = action?.payload?.statusCode
+
         if (state.isSharingLink === true) {
-          let sharedContent = action.payload.serviceResponseObject
-          if (sharedContent.length > 0) {
-            let shareId = sharedContent[0].shareGuid
-            let host = window.location.origin
-            state.shareLinkUrl = `${host}/share/link/${shareId}`
+          let sharedContent = action?.payload?.serviceResponseObject
+          if (statusCode === 201) {
+            if (sharedContent?.length > 0) {
+              let shareId = sharedContent[0].shareGuid
+              let host = window.location.origin
+              state.shareLinkUrl = `${host}/share/link/${shareId}`
+            }
+            toast.success('You have succesfully shared content!', {
+              autoClose: 2000,
+              position: 'bottom-right',
+            })
+            return
           }
+        }
+
+        if (statusCode === 201) {
           toast.success('You have succesfully shared content!', {
             autoClose: 2000,
             position: 'bottom-right',
           })
-          return
-        }
 
-        let statusCode = action.payload.statusCode
-        toast.success('You have succesfully shared content!', {
-          autoClose: 2000,
-          position: 'bottom-right',
-        })
-        if (statusCode === 201 || statusCode === 200) {
           setTimeout(() => {
             window.location.reload()
           }, 1000)
         }
       })
+
       .addCase(shareContent.rejected, () => {
         toast.error('Something went wrong. Try again!', {
           autoClose: 2000,
@@ -232,6 +238,7 @@ let shareExportSlice = createSlice({
         let statusCode = action?.payload?.statusCode
         if (statusCode !== 200) {
           state.possibleToShareWithError = action?.payload
+          return
         }
       })
 
