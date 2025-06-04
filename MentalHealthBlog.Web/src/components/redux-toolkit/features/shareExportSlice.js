@@ -184,6 +184,10 @@ let shareExportSlice = createSlice({
       })
       .addCase(shareByLink.rejected, (state, action) => {
         state.isLoading = false
+        toast.error('Something went wrong. Try again!', {
+          autoClose: 2000,
+          position: 'bottom-right',
+        })
       })
 
       //Share
@@ -250,6 +254,10 @@ let shareExportSlice = createSlice({
 
       .addCase(getExpertsAndRelatives.rejected, (state, action) => {
         state.possibleToShareWithError = action?.payload
+        toast.error('Something went wrong. Try again!', {
+          autoClose: 2000,
+          position: 'bottom-right',
+        })
       })
   },
 })
