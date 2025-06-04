@@ -69,13 +69,28 @@ export const ShareExportOverlay = () => {
         <section
           className="export-icon-container"
           onClick={() => {
-            // let postsToExport = getSelectedPosts();/
             dispatch(openExportModal(!isExportOpen))
             let shareExportContainer = document.querySelector(
               '.share-export-container'
             )
             shareExportContainer.style.display = 'none'
-            dispatch(exportToPDF(postsToExport)).then((response) => {
+
+            let objectWithData = {
+              postsToExport,
+              authenticatedUser,
+            }
+
+            dispatch(exportToPDF(objectWithData)).then((response) => {
+              let statusCode = response?.payload?.StatusCode
+              let fileLength = response?.payload?.fileLength
+
+              if (statusCode !== 200 && fileLength <= 0) {
+                toast.error('Document is not exported! Try again!', {
+                  position: 'bottom-right',
+                })
+                return
+              }
+
               var arrBuffer = base64ToArrayBuffer(response.payload.data)
 
               // It is necessary to create a new blob object with mime-type explicitly set

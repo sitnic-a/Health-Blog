@@ -1,11 +1,13 @@
-import { useDispatch, useSelector } from "react-redux";
-import { openExportModal } from "../../redux-toolkit/features/modalSlice";
+import { useDispatch, useSelector } from 'react-redux'
+import { openExportModal } from '../../redux-toolkit/features/modalSlice'
+import { BiError } from 'react-icons/bi'
+import { MdOutlineDownloadDone } from 'react-icons/md'
 
 export const ExportModal = () => {
-  let dispatch = useDispatch();
+  let dispatch = useDispatch()
 
-  let { isExportOpen } = useSelector((store) => store.modal);
-  let { postsToExport, isExported } = useSelector((store) => store.shareExport);
+  let { isExportOpen } = useSelector((store) => store.modal)
+  let { postsToExport, isExported } = useSelector((store) => store.shareExport)
 
   return (
     isExportOpen && (
@@ -15,11 +17,11 @@ export const ExportModal = () => {
             <span
               className="share-export-close-modal-btn"
               onClick={() => {
-                dispatch(openExportModal(!isExportOpen));
+                dispatch(openExportModal(!isExportOpen))
                 let shareExportContainer = document.querySelector(
-                  ".share-export-container"
-                );
-                shareExportContainer.style.display = "flex";
+                  '.share-export-container'
+                )
+                shareExportContainer.style.display = 'flex'
               }}
             >
               X
@@ -33,13 +35,29 @@ export const ExportModal = () => {
                       <div className="export-modal-file-wrapper">
                         <p>{post.title}</p>
                       </div>
-                    );
+                    )
                   })}
                 </div>
 
                 {isExported && (
-                  <div className="export-modal-progress-bar">
-                    <p>Successfully exported!</p>
+                  <div className="export-modal-progress-container">
+                    <div className="export-modal-successfully-exported-container">
+                      <MdOutlineDownloadDone className="export-modal-exported-success-icon" />
+                      <p className="export-modal-exported-description">
+                        Successfully exported!
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {!isExported && (
+                  <div className="export-modal-progress-container">
+                    <div className="export-modal-not-exported-container">
+                      <BiError className="export-modal-not-exported-error-icon" />
+                      <p className="export-modal-not-exported-description">
+                        Document couldn't be exported!
+                      </p>
+                    </div>
                   </div>
                 )}
               </div>
@@ -48,5 +66,5 @@ export const ExportModal = () => {
         </section>
       </>
     )
-  );
-};
+  )
+}

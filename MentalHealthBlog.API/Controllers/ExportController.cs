@@ -1,5 +1,6 @@
 ﻿using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MentalHealthBlog.API.Controllers
@@ -15,6 +16,7 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "User")]
        public async Task<FileDto> ExportToPDF([FromBody] List<PostDto> posts)
         {
             FileDto file = await _exportService.ExportToPDF(posts);

@@ -2107,25 +2107,20 @@ input[name='person-to-give-permission-checkbox'] {
 .export-modal-files-container {
   padding-inline: 1rem;
   margin-inline: -1rem;
-  margin-top: -1.5rem;
+  margin-top: -0.3rem;
+  margin-bottom: 0.5rem;
+  max-height: 100px;
+  overflow-y: scroll;
 }
 
 .export-modal-file-wrapper {
-  display: flex;
-  gap: 10px;
-  align-items: center;
   padding-inline: 1rem;
-  margin-top: 0;
+  margin-top: 0px;
   padding: 0.1rem;
 }
 
-/* 
-.export-modal-document-icon {
-  -webkit-filter: invert();
-} */
-
 .export-modal-file-wrapper > p {
-  margin-block: -0.3rem;
+  margin-block: -0.1rem;
   padding-block: 0.2rem;
   display: flex;
   flex-direction: row;
@@ -2133,11 +2128,37 @@ input[name='person-to-give-permission-checkbox'] {
   font-size: 0.82rem;
 }
 
-.export-modal-progress-bar {
-  position: absolute;
+.export-modal-progress-container {
+  position: relative;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.export-modal-successfully-exported-container {
+  color: #54f434;
+}
+
+.export-modal-exported-success-icon {
+  font-size: 4rem;
+  font-weight: 200;
+}
+
+.export-modal-exported-description {
+  font-size: 1rem;
+  margin-top: 0;
+}
+
+.export-modal-not-exported-container {
+  color: #f00;
+}
+
+.export-modal-not-exported-error-icon {
+  font-size: 6rem;
+}
+
+.export-modal-not-exported-description {
+  margin-top: 0rem;
 }
 
 .share-export-main-container {

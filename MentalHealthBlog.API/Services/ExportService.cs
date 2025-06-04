@@ -21,7 +21,8 @@ namespace MentalHealthBlog.API.Services
             {
                 PDFGenerators generator = new PDFGenerators();
                 FileDto file = await generator.CreatePdfFile(posts);
-                if (file is not null)
+                //FileDto file = null;
+                if (file != null)
                 {
                     _exportLoggerService.LogInformation($"EXPORT-PDF: {ExportServiceLogTypes.EXPORTED_TO_PDF.ToString()}");
                     return file;

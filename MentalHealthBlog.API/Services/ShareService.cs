@@ -96,7 +96,6 @@ namespace MentalHealthBlog.API.Services
                 throw;
             }
         }
-
         public async Task<Response> ShareContent(ShareContentDto contentToBeShared)
         {
             try

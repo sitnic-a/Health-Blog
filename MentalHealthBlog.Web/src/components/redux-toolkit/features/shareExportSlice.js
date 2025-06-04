@@ -11,7 +11,7 @@ let initialState = {
   postsToShare: [],
   postsToExport: [],
   exportedDocument: null,
-  isExported: false,
+  isExported: null,
   possibleToShareWith: [],
   possibleToShareWithError: null,
   numberOfPeoplePossibleToShareWith: 0,
@@ -22,17 +22,20 @@ let initialState = {
 
 export const exportToPDF = createAsyncThunk(
   '/export',
-  async (postsToExport) => {
-    console.log('Posts to export ', postsToExport)
+  async (objectWithData) => {
+    console.log('Posts to export ', objectWithData.postsToExport)
     let request = await fetch(`${application.application_url}/export`, {
       method: 'POST',
-      body: JSON.stringify(postsToExport),
+      body: JSON.stringify(objectWithData.postsToExport),
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
       },
     })
 
     let response = request.json()
+    console.log('RR ', await response)
+
     return response
   }
 )
@@ -165,14 +168,18 @@ let shareExportSlice = createSlice({
         console.log('Pending')
       })
       .addCase(exportToPDF.fulfilled, (state, action) => {
-        console.log('Successfully implemented')
-        state.isExported = true
-        console.log('Payload ---- ', action.payload)
-
-        state.exportedDocument = action.payload
+        let fileLength = action?.payload?.fileLength
+        if (fileLength > 0) {
+          state.isExported = true
+          state.exportedDocument = action.payload
+        }
       })
       .addCase(exportToPDF.rejected, (state, action) => {
         console.log('FAILED')
+        toast.error('Something went wrong', {
+          autoClose: 1500,
+          position: 'bottom-right',
+        })
       })
 
       .addCase(shareByLink.pending, (state, action) => {
