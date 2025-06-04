@@ -172,7 +172,9 @@ let shareExportSlice = createSlice({
         if (fileLength > 0) {
           state.isExported = true
           state.exportedDocument = action.payload
+          return
         }
+        state.isExported = false
       })
       .addCase(exportToPDF.rejected, (state, action) => {
         console.log('FAILED')

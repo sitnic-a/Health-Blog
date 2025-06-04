@@ -83,8 +83,9 @@ export const ShareExportOverlay = () => {
             dispatch(exportToPDF(objectWithData)).then((response) => {
               let statusCode = response?.payload?.StatusCode
               let fileLength = response?.payload?.fileLength
+              console.log('File ', fileLength)
 
-              if (statusCode !== 200 && fileLength <= 0) {
+              if (statusCode !== 200 && fileLength === undefined) {
                 toast.error('Document is not exported! Try again!', {
                   position: 'bottom-right',
                 })
