@@ -18,6 +18,7 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpGet("shares-per-mental-health-expert")]
+        //[Authorize]
         public async Task<Response> GetSharesPerMentalHealthExpert([FromQuery] RegularUserSearchContentDto query)
         {
             return await _regularUserService.GetSharesPerMentalHealthExpert(query);

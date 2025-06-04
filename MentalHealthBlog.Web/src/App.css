@@ -941,6 +941,20 @@ dialog::backdrop {
   justify-content: space-between;
 }
 
+.shares-per-mental-health-expert-error-container {
+  color: #f00;
+  display: flex;
+  align-items: center;
+}
+
+.shares-per-mental-health-expert-error-icon {
+  font-size: 6rem;
+}
+
+.shares-per-mental-health-expert-error-description {
+  margin: 0;
+}
+
 .shares-per-mental-health-expert-content-posts {
   display: inline-block;
   max-width: 550px;

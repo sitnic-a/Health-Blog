@@ -89,7 +89,7 @@ namespace MentalHealthBlog.API.Methods
             {
                 throw;
             }
-            
+
         }
         public async Task<List<Share>> CallSaveNewShares(DataContext context, ShareContentDto contentToBeShared)
         {
@@ -98,22 +98,37 @@ namespace MentalHealthBlog.API.Methods
 
         private async Task<List<PostDto>> FillSharedContentAsync(IGrouping<MentalHealthExpert, Share> userAndContent, List<PostDto> content)
         {
-            PostHelper convertHelper = new PostHelper(_context);
-
-            foreach (var sharedPost in userAndContent)
+            try
             {
-                var post = sharedPost?.SharedPost;
-                if (post is not null)
+                PostHelper convertHelper = new PostHelper(_context);
+
+                foreach (var sharedPost in userAndContent)
                 {
+                    var post = sharedPost?.SharedPost;
+
+                    if (post == null)
+                    {
+                        throw new RecordNotFoundException("Posts you shared can not be fetched!");
+                    }
+
                     var postTags = await convertHelper.CallReturnPostTagsAsync(post.Id);
                     var postEmotions = await convertHelper.CallReturnPostEmotionsAsync(post.Id);
-                    var postDto = new PostDto(post.Id, post.Title, post.Content, post.UserId, post.CreatedAt, postTags,postEmotions);
-                    postDto.Emotions = postEmotions;
+                    var postDto = new PostDto(post.Id, post.Title, post.Content, post.UserId, post.CreatedAt, postTags, postEmotions);
                     postDto.SharedAt = sharedPost?.SharedAt;
+
+                    if (postDto == null)
+                    {
+                        throw new RecordNotFoundException("Posts you shared can not be fetched!");
+                    }
+
                     content.Add(postDto);
                 }
+                return content;
             }
-            return content;
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         private async Task<List<PostDto>> FillByUsersSharedContentForMentalHealthExpertPreviewAsync(IGrouping<User, Share> userAndContent, List<PostDto> content)
@@ -127,7 +142,7 @@ namespace MentalHealthBlog.API.Methods
                 {
                     var postTags = await convertHelper.CallReturnPostTagsAsync(post.Id);
                     var postEmotions = await convertHelper.CallReturnPostEmotionsAsync(post.Id);
-                    var postDto = new PostDto(post.Id, post.Title, post.Content, post.UserId, post.CreatedAt, postTags,postEmotions);
+                    var postDto = new PostDto(post.Id, post.Title, post.Content, post.UserId, post.CreatedAt, postTags, postEmotions);
                     postDto.SharedAt = sharedPost?.SharedAt;
                     content.Add(postDto);
                 }

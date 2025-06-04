@@ -8,17 +8,40 @@ import {
 import { RecentShares } from './RecentShares'
 import { SharedContent } from './SharedContent'
 import { Loader } from './Loader'
+import { toast } from 'react-toastify'
+import { BiError } from 'react-icons/bi'
 
 export const SharesPerMentalHealthExpert = () => {
   let dispatch = useDispatch()
   let { authenticatedUser } = useSelector((store) => store.user)
-  let { isLoading } = useSelector((store) => store.regularUser)
+  let {
+    sharesPerMentalHealthExpert,
+    isLoading,
+    successfullyFetchedSharesPerMentalHealthExpert,
+  } = useSelector((store) => store.regularUser)
 
   useEffect(() => {
     let query = {
       loggedUserId: authenticatedUser.id,
     }
-    dispatch(getSharesPerMentalHealthExpert(query))
+    dispatch(getSharesPerMentalHealthExpert(query)).then((data) => {
+      let statusCode = data?.payload?.StatusCode
+      if (statusCode !== 200) {
+        if (statusCode === 400) {
+          toast.error("Content doesn't exist!", {
+            position: 'bottom-right',
+          })
+          return
+        }
+
+        if (statusCode === 404) {
+          toast.error('Posts are not fetched properly!', {
+            position: 'bottom-right',
+          })
+          return
+        }
+      }
+    })
     dispatch(getRecentShares(query))
   }, [])
 
@@ -31,10 +54,37 @@ export const SharesPerMentalHealthExpert = () => {
       <h1 className="shares-per-mental-health-expert-title">
         Content shared with mental health experts
       </h1>
-      <section className="shares-per-mental-health-expert-content-main-container">
-        <SharedContent />
-        <RecentShares />
-      </section>
+
+      {sharesPerMentalHealthExpert?.length > 0 && (
+        <section className="shares-per-mental-health-expert-content-main-container">
+          <SharedContent />
+          <RecentShares />
+        </section>
+      )}
+
+      {sharesPerMentalHealthExpert?.length === 0 &&
+        successfullyFetchedSharesPerMentalHealthExpert && (
+          <section className="shares-per-mental-health-expert-content-main-container">
+            <p>You haven't shared your content with anyone!</p>
+          </section>
+        )}
+
+      {successfullyFetchedSharesPerMentalHealthExpert === false && (
+        <section className="shares-per-mental-health-expert-content-main-container">
+          <div className="shares-per-mental-health-expert-error-container">
+            <BiError className="shares-per-mental-health-expert-error-icon" />
+            <div className="shares-per-mental-health-expert-error-messages">
+              <span className="shares-per-mental-health-expert-error-description">
+                Posts couldn't be loaded!
+              </span>
+              <br />
+              <span className="shares-per-mental-health-expert-error-description">
+                If problem continues to happen, please contact support!
+              </span>
+            </div>
+          </div>
+        </section>
+      )}
     </section>
   )
 }

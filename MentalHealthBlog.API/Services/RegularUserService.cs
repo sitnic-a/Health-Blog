@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
+using MentalHealthBlog.API.Exceptions;
 using MentalHealthBlog.API.Methods;
 using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
-using MentalHealthBlogAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -15,6 +15,7 @@ namespace MentalHealthBlog.API.Services
     enum RegularUserServiceLogTypes
     {
         EMPTY,
+        NULL,
         NOT_FOUND,
         SUCCESS,
         ERROR
@@ -35,44 +36,53 @@ namespace MentalHealthBlog.API.Services
         {
             try
             {
+
+                if (query == null || query.LoggedUserId <= 0)
+                {
+                    _regularUserLoggerService.LogWarning($"SHARES-PER-MENTAL-HEALTH-EXPERT: {RegularUserServiceLogTypes.NULL.ToString()}");
+                    throw new ArgumentException("Bad request!");
+                }
+
                 var dbShares = await _context.Shares
+                    .Where(s => s.SharedPost.UserId == query.LoggedUserId && s.SharedWithId > 0)
                     .Include(p => p.SharedPost)
                     .Include(mhe => mhe.SharedWith)
-                    .Where(s => s.SharedPost.UserId == query.LoggedUserId && s.SharedWithId > 0)
                     .OrderByDescending(s => s.SharedAt)
                     .ToListAsync();
 
-                if (dbShares.IsNullOrEmpty())
+                var hasSharedWithMentalHealthExperts = dbShares.Any();
+
+                if (!hasSharedWithMentalHealthExperts)
                 {
                     _regularUserLoggerService.LogWarning($"SHARES-PER-MENTAL-HEALTH-EXPERT: {RegularUserServiceLogTypes.EMPTY.ToString()}", dbShares);
-                    return new Response(new object(), StatusCodes.Status404NotFound, RegularUserServiceLogTypes.NOT_FOUND.ToString());
+                    return new Response(new List<SharesPerMentalHealthExpertDto>(), StatusCodes.Status200OK, RegularUserServiceLogTypes.EMPTY.ToString());
                 }
 
                 var groupedSharesPerDoctor = dbShares
                     .DistinctBy(s => new { s.SharedPost, s.SharedWith })
                     .GroupBy(s => s.SharedWith);
 
-                if (groupedSharesPerDoctor.IsNullOrEmpty())
+                if (hasSharedWithMentalHealthExperts && !groupedSharesPerDoctor.Any())
                 {
                     _regularUserLoggerService.LogWarning($"SHARES-PER-MENTAL-HEALTH-EXPERT: {RegularUserServiceLogTypes.NOT_FOUND.ToString()}");
-                    return new Response(new object(), StatusCodes.Status404NotFound, RegularUserServiceLogTypes.NOT_FOUND.ToString());
+                    throw new RecordNotFoundException("Posts you shared was not retrieved properly!");
                 }
 
                 List<SharesPerMentalHealthExpertDto> sharesPerMentalHealthExpert = await FillListGroupedMentalHealthExpertsAndContentSharedWithThem(groupedSharesPerDoctor);
 
-                if (!sharesPerMentalHealthExpert.IsNullOrEmpty())
+                if (sharesPerMentalHealthExpert.Any())
                 {
                     _regularUserLoggerService.LogInformation($"SHARES-PER-MENTAL-HEALTH-EXPERT: {RegularUserServiceLogTypes.SUCCESS.ToString()}", sharesPerMentalHealthExpert);
                     return new Response(sharesPerMentalHealthExpert, StatusCodes.Status200OK, RegularUserServiceLogTypes.SUCCESS.ToString());
                 }
-                _regularUserLoggerService.LogWarning($"SHARES-PER-MENTAL-HEALTH-EXPERT: {RegularUserServiceLogTypes.EMPTY.ToString()}", sharesPerMentalHealthExpert);
-                return new Response(sharesPerMentalHealthExpert, StatusCodes.Status204NoContent, RegularUserServiceLogTypes.EMPTY.ToString());
 
+                _regularUserLoggerService.LogWarning($"SHARES-PER-MENTAL-HEALTH-EXPERT: {RegularUserServiceLogTypes.NOT_FOUND.ToString()}", sharesPerMentalHealthExpert);
+                throw new RecordNotFoundException("Posts you shared was not retrieved properly!");
             }
             catch (Exception e)
             {
-                _regularUserLoggerService.LogError($"SHARES-PER-MENTAL-HEALTH-EXPERT: {e.Message.ToString()}", e);
-                return new Response(e.Data, StatusCodes.Status500InternalServerError, RegularUserServiceLogTypes.ERROR.ToString());
+                _regularUserLoggerService.LogError($"SHARES-PER-MENTAL-HEALTH-EXPERT: {RegularUserServiceLogTypes.ERROR.ToString()}", e);
+                throw;
             }
         }
 
@@ -171,33 +181,50 @@ namespace MentalHealthBlog.API.Services
 
                 foreach (var mentalHealthExpertFromGroup in groupedMentalHealthExpertsAndContentSharedWithThem)
                 {
-                    var dbMentalHealthExpertByKey = await _context.MentalHealthExperts
-                        //.Include(u => u.User)
-                        .SingleOrDefaultAsync(mhe => mhe.Id == mentalHealthExpertFromGroup.Key.Id);
-                    UserDto mentalHealthExpertContentIsSharedWith = new UserDto();
-
-                    if (dbMentalHealthExpertByKey is not null)
+                    if (mentalHealthExpertFromGroup == null)
                     {
-                        mentalHealthExpertContentIsSharedWith = _mapper.Map<UserDto>(dbMentalHealthExpertByKey);
-                        var mentalHealthExpertAsUser = await _context.Users
-                            .FirstOrDefaultAsync(u => u.Id == mentalHealthExpertContentIsSharedWith.UserId);
-                        mentalHealthExpertContentIsSharedWith.Username = mentalHealthExpertAsUser.Username;
-                        var mentalHealthExpertRoles = await userHelper.GetUserRolesAsync(mentalHealthExpertContentIsSharedWith);
-                        mentalHealthExpertContentIsSharedWith.Roles = mentalHealthExpertRoles;
+                        _regularUserLoggerService.LogWarning($"SHARES-PER-MENTAL-HEALTH-EXPERT: {RegularUserServiceLogTypes.NOT_FOUND.ToString()}");
+                        throw new RecordNotFoundException("Couldn't get posts you shared!");
+                    }
 
-                        List<PostDto> sharedContentWithMentalHealthExpert = await shareHelper.CallFillSharedContentAsync(mentalHealthExpertFromGroup, new List<PostDto>());
+                    var dbMentalHealthExpertByKey = await _context.MentalHealthExperts
+                        .SingleOrDefaultAsync(mhe => mhe.Id == mentalHealthExpertFromGroup.Key.Id);
+
+                    if (dbMentalHealthExpertByKey == null)
+                    {
+                        _regularUserLoggerService.LogWarning($"SHARES-PER-MENTAL-HEALTH-EXPERT: {RegularUserServiceLogTypes.NOT_FOUND.ToString()}");
+                        throw new RecordNotFoundException("Couldn't get posts you shared!");
+                    }
+
+                    UserDto mentalHealthExpertContentIsSharedWith = _mapper.Map<UserDto>(dbMentalHealthExpertByKey);
+                    var mentalHealthExpertAsUser = await _context.Users
+                        .FirstOrDefaultAsync(u => u.Id == mentalHealthExpertContentIsSharedWith.UserId);
+                    var mentalHealthExpertRoles = await userHelper.GetUserRolesAsync(mentalHealthExpertContentIsSharedWith);
+
+                    mentalHealthExpertContentIsSharedWith.Username = mentalHealthExpertAsUser.Username;
+                    mentalHealthExpertContentIsSharedWith.Roles = mentalHealthExpertRoles;
+
+                    List<PostDto> sharedContentWithMentalHealthExpert = await shareHelper.CallFillSharedContentAsync(mentalHealthExpertFromGroup, new List<PostDto>());
+
+                    if (sharedContentWithMentalHealthExpert.Any() && mentalHealthExpertContentIsSharedWith != null)
+                    {
                         sharedContentWithMentalHealthExpert = sharedContentWithMentalHealthExpert
                             .OrderByDescending(s => s.SharedAt)
                             .ToList();
                         sharesPerMentalHealthExpert.Add(new SharesPerMentalHealthExpertDto(mentalHealthExpertContentIsSharedWith, sharedContentWithMentalHealthExpert));
+                        continue;
                     }
+
+                    _regularUserLoggerService.LogWarning($"SHARES-PER-MENTAL-HEALTH-EXPERT: {RegularUserServiceLogTypes.NOT_FOUND.ToString()}");
+                    throw new RecordNotFoundException("Couldn't get posts you shared!");
                 }
+
                 return sharesPerMentalHealthExpert;
             }
             catch (Exception e)
             {
                 _regularUserLoggerService.LogError($"SHARES-PER-MENTAL-HEALTH-EXPERT: {e.Message}", e);
-                return new List<SharesPerMentalHealthExpertDto>();
+                throw;
             }
         }
 
