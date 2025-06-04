@@ -107,7 +107,7 @@ namespace MentalHealthBlog.API.Methods
                 {
                     var postTags = await convertHelper.CallReturnPostTagsAsync(post.Id);
                     var postEmotions = await convertHelper.CallReturnPostEmotionsAsync(post.Id);
-                    var postDto = new PostDto(post.Id, post.Title, post.Content, post.UserId, post.CreatedAt, postTags);
+                    var postDto = new PostDto(post.Id, post.Title, post.Content, post.UserId, post.CreatedAt, postTags,postEmotions);
                     postDto.Emotions = postEmotions;
                     postDto.SharedAt = sharedPost?.SharedAt;
                     content.Add(postDto);
@@ -127,8 +127,7 @@ namespace MentalHealthBlog.API.Methods
                 {
                     var postTags = await convertHelper.CallReturnPostTagsAsync(post.Id);
                     var postEmotions = await convertHelper.CallReturnPostEmotionsAsync(post.Id);
-                    var postDto = new PostDto(post.Id, post.Title, post.Content, post.UserId, post.CreatedAt, postTags);
-                    postDto.Emotions = postEmotions;
+                    var postDto = new PostDto(post.Id, post.Title, post.Content, post.UserId, post.CreatedAt, postTags,postEmotions);
                     postDto.SharedAt = sharedPost?.SharedAt;
                     content.Add(postDto);
                 }

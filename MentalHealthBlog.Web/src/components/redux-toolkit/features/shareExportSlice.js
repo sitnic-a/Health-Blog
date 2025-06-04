@@ -39,9 +39,15 @@ export const exportToPDF = createAsyncThunk(
 
 export const shareByLink = createAsyncThunk(
   'share/link/{shareId}',
-  async (shareGuid) => {
-    let url = `${application.application_url}/share/link/${shareGuid}`
-    let request = await fetch(url)
+  async (objectWithData) => {
+    let url = `${application.application_url}/share/link/${objectWithData.shareGuid}`
+    let request = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
+      },
+    })
     let response = await request.json()
     return response
   }

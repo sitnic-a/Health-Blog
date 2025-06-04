@@ -20,7 +20,7 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpGet("link/{shareId}")]
-        //[Authorize(Roles = "User")]
+        [Authorize(Roles = "User")]
         public async Task<Response> ShareByLink(string shareId)
         {
             return await _shareService.ShareByLink(shareId);

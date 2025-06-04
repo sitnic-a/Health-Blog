@@ -37,15 +37,21 @@ namespace MentalHealthBlog.API.Services
         {
             try
             {
-                var dbShares = await _context
-                .Shares
-                .Include(p => p.SharedPost)
-                .Where(s => s.ShareGuid == shareId).ToListAsync();
+                if (shareId.IsNullOrEmpty())
+                {
+                    _shareLoggerService.LogWarning($"LINK/shareId: {ShareServiceLogTypes.EMPTY.ToString()}");
+                    throw new ArgumentException("Bad request!");
+                }
 
-                if (dbShares.IsNullOrEmpty())
+                var dbShares = await _context.Shares
+                .Where(s => s.ShareGuid == shareId)
+                .Include(p => p.SharedPost)
+                .ToListAsync();
+
+                if (!dbShares.Any())
                 {
                     _shareLoggerService.LogWarning($"LINK/shareId: {ShareServiceLogTypes.EMPTY.ToString()}", dbShares);
-                    return new Response(dbShares, StatusCodes.Status204NoContent, ShareServiceLogTypes.EMPTY.ToString());
+                    throw new Exception("No content found!");
                 }
 
                 var convertHelper = new PostHelper(_context);
@@ -57,22 +63,37 @@ namespace MentalHealthBlog.API.Services
                     {
                         var post = share.SharedPost;
                         var tags = await convertHelper.CallReturnPostTagsAsync(post.Id);
-                        sharedContent.Add(new PostDto(post.Id, post.Title, post.Content, post.UserId, post.CreatedAt, tags));
+                        var emotions = await convertHelper.CallReturnPostEmotionsAsync(post.Id);
+                        var postDto = new PostDto(post.Id, post.Title, post.Content, post.UserId, post.CreatedAt, tags, emotions);
+                        postDto.SharedAt = DateTime.Now;
+
+                        if (postDto == null)
+                        {
+                            _shareLoggerService.LogWarning($"LINK/shareId: {ShareServiceLogTypes.NOT_FOUND.ToString()}");
+                            throw new RecordNotFoundException("Content not shared properly!");
+                        }
+                        
+                        sharedContent.Add(postDto);
+                        continue;
                     }
+
+                    _shareLoggerService.LogWarning($"LINK/shareId: {ShareServiceLogTypes.NOT_FOUND.ToString()}");
+                    throw new RecordNotFoundException("Content not retrieved properly!");
                 }
 
-                if (sharedContent.Any())
+                if (dbShares.Any() && !sharedContent.Any())
                 {
-                    _shareLoggerService.LogInformation($"LINK/shareId: {ShareServiceLogTypes.SUCCESS.ToString()}", sharedContent);
-                    return new Response(sharedContent, StatusCodes.Status200OK, ShareServiceLogTypes.SUCCESS.ToString());
+                    _shareLoggerService.LogWarning($"LINK/shareId: {ShareServiceLogTypes.NOT_FOUND.ToString()}");
+                    throw new RecordNotFoundException("Content not retrieved properly!");
                 }
-                _shareLoggerService.LogWarning($"LINK/shareId: {ShareServiceLogTypes.NOT_FOUND.ToString()}", sharedContent);
-                return new Response(new List<PostDto>(), StatusCodes.Status404NotFound, ShareServiceLogTypes.NOT_FOUND.ToString());
+                
+                _shareLoggerService.LogInformation($"LINK/shareId: {ShareServiceLogTypes.SUCCESS.ToString()}", sharedContent);
+                return new Response(sharedContent, StatusCodes.Status200OK, ShareServiceLogTypes.SUCCESS.ToString());
             }
             catch (Exception e)
             {
                 _shareLoggerService.LogError($"LINK/shareId: {ShareServiceLogTypes.ERROR.ToString()}", e);
-                return new Response(e, StatusCodes.Status500InternalServerError, e.Message);
+                throw;
             }
         }
 
@@ -132,7 +153,6 @@ namespace MentalHealthBlog.API.Services
                 throw;
             }
         }
-
         public async Task<Response> GetExpertsAndRelatives()
         {
             try

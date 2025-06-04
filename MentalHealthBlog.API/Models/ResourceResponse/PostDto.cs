@@ -15,7 +15,7 @@ namespace MentalHealthBlog.API.Models.ResourceResponse
 
         public PostDto() { }
 
-        public PostDto(int id, string title, string content, int userId, DateTime createdAt, List<string> tags)
+        public PostDto(int id, string title, string content, int userId, DateTime createdAt, List<string> tags, List<EmotionDto> emotions)
         {
             Id = id;
             Title = title;
@@ -23,6 +23,7 @@ namespace MentalHealthBlog.API.Models.ResourceResponse
             UserId = userId;
             CreatedAt = createdAt;
             Tags = new List<string>(tags);
+            Emotions = emotions;
         }
     }
 }
