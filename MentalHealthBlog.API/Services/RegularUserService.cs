@@ -90,56 +90,96 @@ namespace MentalHealthBlog.API.Services
         {
             try
             {
+                if (query == null || query.LoggedUserId <= 0)
+                {
+                    _regularUserLoggerService.LogWarning($"RECENT: {RegularUserServiceLogTypes.NULL.ToString()}");
+                    throw new ArgumentException("Bad request!");
+                }
+
                 var userShares = await _context.Shares
                     .Where(s => s.SharedPost.UserId == query.LoggedUserId && s.SharedWithId > 0)
                     .Take(5)
                     .Include(s => s.SharedPost)
                     .Include(mhe => mhe.SharedWith)
-                    //.ThenInclude(u => u.User)
                     .OrderByDescending(s => s.SharedAt)
                     .ToListAsync();
 
-                userShares = userShares.DistinctBy(s => new { s.SharedPost, s.SharedWith }).ToList();
+                var userSharedContentWithAnyone = userShares.Any();
 
-                if (!userShares.IsNullOrEmpty())
+                if (userSharedContentWithAnyone)
                 {
+                    userShares = userShares.DistinctBy(s => new { s.SharedPost, s.SharedWith }).ToList();
                     List<RecentSharesDto> recentShares = new List<RecentSharesDto>();
+                    var userHelper = new UserHelper(_context);
                     foreach (var share in userShares)
                     {
                         if (share != null && share.SharedPost != null && share.SharedWith != null)
                         {
                             var sharedPost = _mapper.Map<PostDto>(share.SharedPost);
-                            sharedPost.SharedAt = share.SharedAt;
+                            if (sharedPost == null)
+                            {
+                                _regularUserLoggerService.LogWarning($"RECENT: {RegularUserServiceLogTypes.NOT_FOUND.ToString()}");
+                                throw new RecordNotFoundException("Shared content couldn't get detected!");
+                            }
+                            sharedPost.SharedAt = share?.SharedAt;
+
                             var mentalHealthExpert = await _context.MentalHealthExperts
                                 .FirstOrDefaultAsync(mhe => mhe.Id == share.SharedWithId);
+                            if (mentalHealthExpert == null)
+                            {
+                                _regularUserLoggerService.LogWarning($"RECENT: {RegularUserServiceLogTypes.NOT_FOUND.ToString()}");
+                                throw new RecordNotFoundException("Expert couldn't get detected!");
+                            }
                             var mentalHealthExpertAsUser = await _context.Users
                                 .FirstOrDefaultAsync(u => u.Id == mentalHealthExpert.UserId);
-
+                            if (mentalHealthExpertAsUser == null)
+                            {
+                                _regularUserLoggerService.LogWarning($"RECENT: {RegularUserServiceLogTypes.NOT_FOUND.ToString()}");
+                                throw new RecordNotFoundException("Expert couldn't get detected!");
+                            }
+                            var mentalHealthExpertDto = new UserDto(mentalHealthExpertAsUser.Id, mentalHealthExpertAsUser.Username);
                             var sharedWith = _mapper.Map<UserDto>(mentalHealthExpert);
+                            if (sharedWith == null)
+                            {
+                                _regularUserLoggerService.LogWarning($"RECENT: {RegularUserServiceLogTypes.NOT_FOUND.ToString()}");
+                                throw new RecordNotFoundException("Expert couldn't get detected!");
+                            }
                             sharedWith.Username = mentalHealthExpertAsUser.Username;
-                            recentShares.Add(new RecentSharesDto(sharedPost, sharedWith));
-                        }
-                        continue;
-                    }
-                    if (!recentShares.IsNullOrEmpty())
-                    {
-                        _regularUserLoggerService.LogInformation($"RECENT: {RegularUserServiceLogTypes.SUCCESS.ToString()}", recentShares);
-                        return new Response(recentShares, StatusCodes.Status200OK, RegularUserServiceLogTypes.SUCCESS.ToString());
-                    }
-                    _regularUserLoggerService.LogWarning($"RECENT: {RegularUserServiceLogTypes.EMPTY.ToString()}", recentShares);
-                    return new Response(recentShares, StatusCodes.Status204NoContent, RegularUserServiceLogTypes.EMPTY.ToString());
-                }
-                _regularUserLoggerService.LogInformation($"RECENT: {RegularUserServiceLogTypes.NOT_FOUND.ToString()}", userShares);
-                return new Response(userShares, StatusCodes.Status404NotFound, RegularUserServiceLogTypes.NOT_FOUND.ToString());
+                            sharedWith.Roles = await userHelper.GetUserRolesAsync(mentalHealthExpertDto);
 
+                            if (sharedPost != null && sharedWith != null)
+                            {
+                                recentShares.Add(new RecentSharesDto(sharedPost, sharedWith));
+                                continue;
+                            }
+
+                            _regularUserLoggerService.LogWarning($"RECENT: {RegularUserServiceLogTypes.NOT_FOUND.ToString()}");
+                            throw new RecordNotFoundException("Recent shares couldn't be fetched properly!");
+                        }
+
+                        _regularUserLoggerService.LogWarning($"RECENT: {RegularUserServiceLogTypes.NOT_FOUND.ToString()}");
+                        throw new RecordNotFoundException("Recent shares couldn't be fetched properly!");
+                    }
+
+                    if (userSharedContentWithAnyone && !recentShares.Any())
+                    {
+                        _regularUserLoggerService.LogWarning($"RECENT: {RegularUserServiceLogTypes.NOT_FOUND.ToString()}");
+                        throw new RecordNotFoundException("Recent shares not available!");
+                    }
+
+                    _regularUserLoggerService.LogInformation($"RECENT: {RegularUserServiceLogTypes.SUCCESS.ToString()}");
+                    return new Response(recentShares, StatusCodes.Status200OK, RegularUserServiceLogTypes.SUCCESS.ToString());
+                }
+                _regularUserLoggerService.LogInformation($"RECENT: {RegularUserServiceLogTypes.EMPTY.ToString()}");
+                return new Response(new List<RecentSharesDto>(), StatusCodes.Status200OK, RegularUserServiceLogTypes.EMPTY.ToString());
             }
             catch (Exception e)
             {
                 _regularUserLoggerService.LogError($"RECENT: {RegularUserServiceLogTypes.ERROR.ToString()}", e.Message);
-                return new Response(e, StatusCodes.Status500InternalServerError, RegularUserServiceLogTypes.ERROR.ToString());
+                throw;
             }
-
         }
+
         public async Task<Response> RevokeContentPermission(RegularUserPermissionDto request)
         {
             try
