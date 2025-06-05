@@ -4,6 +4,7 @@
     {
         public int PostId { get; set; }
         public int SharedWithId { get; set; }
+        public int LoggedUserId { get; set; }
 
         public RegularUserPermissionDto(){}
     }

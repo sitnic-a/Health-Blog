@@ -8,6 +8,7 @@ let initialState = {
   successfullyFetchedRecentShares: null,
   isLoading: false,
   successfullyFetchedSharesPerMentalHealthExpert: null,
+  hasSharedPosts: true,
 };
 
 export const getSharesPerMentalHealthExpert = createAsyncThunk(
@@ -44,15 +45,14 @@ export const getRecentShares = createAsyncThunk(
 
 export const revokeContentPermission = createAsyncThunk(
   "revoke",
-  async (revokeObject) => {
-    console.log("Revoke ", revokeObject);
-
+  async (objectWithData) => {
     let url = `${application.application_url}/regularUser/revoke`;
     let request = await fetch(url, {
       method: "DELETE",
-      body: JSON.stringify(revokeObject),
+      body: JSON.stringify(objectWithData.revokeObject),
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
       },
     });
 
@@ -171,6 +171,11 @@ export const regularUserSlice = createSlice({
       })
       .addCase(revokeContentPermission.fulfilled, (state, action) => {
         console.log("Permission to read deleted!");
+        if (
+          action?.payload?.serviceResponseObject?.serviceResponseObject <= 0
+        ) {
+          state.hasSharedPosts = false;
+        }
       })
       .addCase(revokeContentPermission.rejected, (state, action) => {
         console.log("Revoke error ", action.payload);

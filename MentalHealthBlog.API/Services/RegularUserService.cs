@@ -6,7 +6,6 @@ using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 #pragma warning disable CS8620, CS8602, CS8604, 
 
@@ -85,7 +84,6 @@ namespace MentalHealthBlog.API.Services
                 throw;
             }
         }
-
         public async Task<Response> GetRecentSharesPerMentalHealthExpert(RegularUserSearchContentDto query)
         {
             try
@@ -179,15 +177,14 @@ namespace MentalHealthBlog.API.Services
                 throw;
             }
         }
-
         public async Task<Response> RevokeContentPermission(RegularUserPermissionDto request)
         {
             try
             {
-                if (request.PostId <= 0 && request.SharedWithId <= 0)
+                if (request.PostId <= 0 || request.SharedWithId <= 0 || request.LoggedUserId <= 0)
                 {
                     _regularUserLoggerService.LogWarning($"REVOKE: {RegularUserServiceLogTypes.NOT_FOUND.ToString()}", request);
-                    return new Response(new object(), StatusCodes.Status404NotFound, RegularUserServiceLogTypes.NOT_FOUND.ToString());
+                    throw new ArgumentException("Bad request!");
                 }
 
                 var contentToBeRevoked = await _context.Shares
@@ -198,17 +195,23 @@ namespace MentalHealthBlog.API.Services
                 {
                     _context.RemoveRange(contentToBeRevoked);
                     await _context.SaveChangesAsync();
-                    //var sharesPerMentalHealthExpert = await GetSharesPerMentalHealthExpert();
+                    var query = new RegularUserSearchContentDto
+                    {
+                        LoggedUserId = request.LoggedUserId
+                    };
+
+                    var sharesPerMentalHealthExpert = await GetSharesPerMentalHealthExpert(query);
                     _regularUserLoggerService.LogInformation($"REVOKE: {RegularUserServiceLogTypes.SUCCESS.ToString()}", contentToBeRevoked);
-                    return new Response(contentToBeRevoked, StatusCodes.Status200OK, RegularUserServiceLogTypes.SUCCESS.ToString());
+                    return new Response(sharesPerMentalHealthExpert, StatusCodes.Status200OK, RegularUserServiceLogTypes.SUCCESS.ToString());
                 }
-                _regularUserLoggerService.LogWarning($"REVOKE: {RegularUserServiceLogTypes.EMPTY.ToString()}", contentToBeRevoked);
-                return new Response(contentToBeRevoked, StatusCodes.Status204NoContent, RegularUserServiceLogTypes.NOT_FOUND.ToString());
+
+                _regularUserLoggerService.LogWarning($"REVOKE: {RegularUserServiceLogTypes.NOT_FOUND.ToString()}", contentToBeRevoked);
+                throw new RecordNotFoundException("Permissions not located!");
             }
             catch (Exception e)
             {
                 _regularUserLoggerService.LogError($"REVOKE: {RegularUserServiceLogTypes.ERROR.ToString()}", e);
-                return new Response(e.Data, StatusCodes.Status500InternalServerError, RegularUserServiceLogTypes.ERROR.ToString());
+                throw;
             }
         }
         private async Task<List<SharesPerMentalHealthExpertDto>> FillListGroupedMentalHealthExpertsAndContentSharedWithThem(IEnumerable<IGrouping<MentalHealthExpert, Share>> groupedMentalHealthExpertsAndContentSharedWithThem)

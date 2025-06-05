@@ -52,6 +52,13 @@ export const SharesPerMentalHealthExpert = () => {
       let statusCode = data?.payload?.StatusCode;
       let recentShares = data?.payload?.serviceResponseObject;
       if (statusCode !== 200) {
+        if (statusCode === 400) {
+          toast.error("Content doesn't exist!", {
+            position: "bottom-right",
+          });
+          return;
+        }
+
         if (statusCode === 404) {
           toast.error("Recent shares not loaded properly!", {
             position: "bottom-right",

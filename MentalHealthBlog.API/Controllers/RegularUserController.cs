@@ -33,6 +33,7 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpDelete("revoke")]
+        [Authorize]
         public async Task<Response> RevokeContentPermission([FromBody] RegularUserPermissionDto request)
         {
             return await _regularUserService.RevokeContentPermission(request);
