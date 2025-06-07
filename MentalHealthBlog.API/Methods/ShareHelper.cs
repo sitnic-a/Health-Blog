@@ -133,21 +133,32 @@ namespace MentalHealthBlog.API.Methods
 
         private async Task<List<PostDto>> FillByUsersSharedContentForMentalHealthExpertPreviewAsync(IGrouping<User, Share> userAndContent, List<PostDto> content)
         {
-            PostHelper convertHelper = new PostHelper(_context);
-
-            foreach (var sharedPost in userAndContent)
+            try
             {
-                var post = sharedPost?.SharedPost;
-                if (post is not null)
+                PostHelper convertHelper = new PostHelper(_context);
+
+                foreach (var sharedPost in userAndContent)
                 {
+                    var post = sharedPost?.SharedPost;
+
+                    if (post == null)
+                    {
+                        throw new RecordNotFoundException("Shares can be populated properly!");
+                    }
+
                     var postTags = await convertHelper.CallReturnPostTagsAsync(post.Id);
                     var postEmotions = await convertHelper.CallReturnPostEmotionsAsync(post.Id);
                     var postDto = new PostDto(post.Id, post.Title, post.Content, post.UserId, post.CreatedAt, postTags, postEmotions);
                     postDto.SharedAt = sharedPost?.SharedAt;
                     content.Add(postDto);
                 }
+                return content;
             }
-            return content;
+            catch (Exception)
+            {
+                throw;
+            }
+
         }
 
         public async Task<List<PostDto>> CallFillSharedContentAsync(IGrouping<MentalHealthExpert, Share> userAndContent, List<PostDto> content)
