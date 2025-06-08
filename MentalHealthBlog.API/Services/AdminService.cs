@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using MentalHealthBlog.API.Exceptions;
+using MentalHealthBlog.API.Methods;
 using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
@@ -12,7 +14,7 @@ namespace MentalHealthBlog.API.Services
 {
     enum AdminServiceLogTypes
     {
-        EMPTY_OR_NULL_TABLE,
+        EMPTY,
         NOT_FOUND,
         SUCCESS,
         ERROR
@@ -49,7 +51,7 @@ namespace MentalHealthBlog.API.Services
                         {
                             return new Response(users, StatusCodes.Status200OK, AdminServiceLogTypes.SUCCESS.ToString());
                         }
-                        return new Response(new List<UserDto>(), StatusCodes.Status204NoContent, AdminServiceLogTypes.EMPTY_OR_NULL_TABLE.ToString());
+                        return new Response(new List<UserDto>(), StatusCodes.Status204NoContent, AdminServiceLogTypes.EMPTY.ToString());
                     }
 
                     if (query.Role == __MENTAL_HEALTH_EXPERT_ROLE__)
@@ -59,7 +61,7 @@ namespace MentalHealthBlog.API.Services
                         {
                             return new Response(users, StatusCodes.Status200OK, AdminServiceLogTypes.SUCCESS.ToString());
                         }
-                        return new Response(new List<UserDto>(), StatusCodes.Status204NoContent, AdminServiceLogTypes.EMPTY_OR_NULL_TABLE.ToString());
+                        return new Response(new List<UserDto>(), StatusCodes.Status204NoContent, AdminServiceLogTypes.EMPTY.ToString());
                     }
                 }
                 var _dbUsers = await _context.Users.ToListAsync();
@@ -68,7 +70,7 @@ namespace MentalHealthBlog.API.Services
                 {
                     return new Response(users, StatusCodes.Status200OK, AdminServiceLogTypes.SUCCESS.ToString());
                 }
-                return new Response(new List<UserDto>(), StatusCodes.Status204NoContent, AdminServiceLogTypes.EMPTY_OR_NULL_TABLE.ToString());
+                return new Response(new List<UserDto>(), StatusCodes.Status204NoContent, AdminServiceLogTypes.EMPTY.ToString());
             }
             catch (Exception e)
             {
@@ -82,47 +84,50 @@ namespace MentalHealthBlog.API.Services
             try
             {
                 var dbMentalHealthExperts = await _context.MentalHealthExperts
-                    //.Include(u => u.User)
                     .Where(mhe => mhe.IsApproved == false && mhe.IsRejected == false)
                     .ToListAsync();
+                var registeredNewMentalHealthExperts = dbMentalHealthExperts.Any();
 
                 if (query is not null)
                 {
                     if (query.Status == true)
                     {
                         dbMentalHealthExperts = await _context.MentalHealthExperts
-                            //.Include(u => u.User)
                             .Where(mhe => mhe.IsApproved == true)
                             .ToListAsync();
                     }
                     else if (query.Status == false)
                     {
                         dbMentalHealthExperts = await _context.MentalHealthExperts
-                            //.Include(u => u.User)
                             .Where(mhe => mhe.IsRejected == true)
                             .ToListAsync();
                     }
                 }
 
-                if (dbMentalHealthExperts.IsNullOrEmpty())
+                if (!registeredNewMentalHealthExperts)
                 {
-                    _adminLoggerService.LogWarning($"NEW-REQUEST: {AdminServiceLogTypes.EMPTY_OR_NULL_TABLE.ToString()}", dbMentalHealthExperts);
-                    return new Response(new object(), StatusCodes.Status404NotFound, AdminServiceLogTypes.EMPTY_OR_NULL_TABLE.ToString());
+                    _adminLoggerService.LogWarning($"NEW-REQUEST: {AdminServiceLogTypes.EMPTY.ToString()}", dbMentalHealthExperts);
+                    return new Response(new List<MentalHealthExpertDto>(), StatusCodes.Status200OK, AdminServiceLogTypes.EMPTY.ToString());
                 }
+
                 List<MentalHealthExpertDto> mentalHealthExperts = new List<MentalHealthExpertDto>();
+                var userHelper = new UserHelper(_context);
 
                 foreach (var dbMentalHealthExpert in dbMentalHealthExperts)
                 {
                     var mentalHealthExpert = _mapper.Map<MentalHealthExpertDto>(dbMentalHealthExpert);
                     var mentalHealthExpertAsUser = await _context.Users
-                        .FirstOrDefaultAsync(u => u.Id == mentalHealthExpert.UserId);  
-                    if (mentalHealthExpert is null)
+                        .FirstOrDefaultAsync(u => u.Id == mentalHealthExpert.UserId);
+                    
+                    if (mentalHealthExpert != null && mentalHealthExpertAsUser != null)
                     {
-                        _adminLoggerService.LogWarning($"NEW-REQUEST: {AdminServiceLogTypes.NOT_FOUND.ToString()}", mentalHealthExpert);
-                        return new Response(new object(), StatusCodes.Status404NotFound, AdminServiceLogTypes.NOT_FOUND.ToString());
+                        mentalHealthExpert.Username = mentalHealthExpertAsUser.Username;
+                        mentalHealthExperts.Add(mentalHealthExpert);
+                        continue;
                     }
-                    mentalHealthExpert.Username = mentalHealthExpertAsUser.Username;
-                    mentalHealthExperts.Add(mentalHealthExpert);
+
+                    _adminLoggerService.LogWarning($"NEW-REQUEST: {AdminServiceLogTypes.NOT_FOUND.ToString()}", mentalHealthExpert);
+                    throw new RecordNotFoundException("User not found!");
                 }
 
                 _adminLoggerService.LogInformation($"NEW-REQUEST: {AdminServiceLogTypes.SUCCESS.ToString()}", mentalHealthExperts);
@@ -131,7 +136,7 @@ namespace MentalHealthBlog.API.Services
             catch (Exception e)
             {
                 _adminLoggerService.LogError($"NEW-REQUEST: {AdminServiceLogTypes.ERROR}", e.Message);
-                return new Response(e.Data, StatusCodes.Status400BadRequest, AdminServiceLogTypes.ERROR.ToString());
+                throw;
             }
         }
 
