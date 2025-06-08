@@ -1,4 +1,3 @@
-import React from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -17,18 +16,18 @@ export const ListSharingContentUsers = () => {
   let dispatch = useDispatch();
   let { authenticatedUser } = useSelector((store) => store.user);
 
-  let {
-    usersThatSharedIncludingItsContent,
-    usersThatSharedContent,
-    isSharedWithThisMentalHealthExpert,
-  } = useSelector((store) => store.mentalExpert);
+  let { usersThatSharedIncludingItsContent, usersThatSharedContent } =
+    useSelector((store) => store.mentalExpert);
 
-  let query = {
-    loggedExpertId: authenticatedUser.id,
+  let objectWithData = {
+    query: {
+      loggedExpertId: authenticatedUser.id,
+    },
+    authenticatedUser,
   };
 
   useEffect(() => {
-    dispatch(getSharesPerUser(query)).then((data) => {
+    dispatch(getSharesPerUser(objectWithData)).then((data) => {
       let statusCode = data?.payload?.StatusCode;
 
       if (statusCode !== 200) {

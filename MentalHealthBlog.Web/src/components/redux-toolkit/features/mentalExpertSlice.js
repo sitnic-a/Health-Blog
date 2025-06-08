@@ -11,9 +11,15 @@ let initialState = {
 
 export const getSharesPerUser = createAsyncThunk(
   "shares-per-user",
-  async (query) => {
-    let url = `${application.application_url}/mentalExpert/shares-per-user?LoggedExpertId=${query.loggedExpertId}`;
-    let request = await fetch(url);
+  async (objectWithData) => {
+    let url = `${application.application_url}/mentalExpert/shares-per-user?LoggedExpertId=${objectWithData.query.loggedExpertId}`;
+    let request = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
+      },
+    });
     let response = await request.json();
 
     return response;
@@ -22,15 +28,14 @@ export const getSharesPerUser = createAsyncThunk(
 
 export const createAssignment = createAsyncThunk(
   "give-assignment",
-  async (addAssignmentObj) => {
-    console.log("New assignment object ", addAssignmentObj);
-
+  async (objectWithData) => {
     let url = `${application.application_url}/mentalExpert/give-assignment`;
     let request = await fetch(url, {
       method: "POST",
-      body: JSON.stringify(addAssignmentObj),
+      body: JSON.stringify(objectWithData.addAssignmentObj),
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
       },
     });
     let response = await request.json();
@@ -98,10 +103,6 @@ export const mentalExpertSlice = createSlice({
       })
       .addCase(createAssignment.fulfilled, (state, action) => {
         console.log("New assignment creation fulfilled ", action.payload);
-        toast.success("Assignment successfully created!", {
-          autoClose: 2000,
-          position: "bottom-right",
-        });
       })
       .addCase(createAssignment.rejected, (state, action) => {
         console.log("New assignment creation rejected!");
