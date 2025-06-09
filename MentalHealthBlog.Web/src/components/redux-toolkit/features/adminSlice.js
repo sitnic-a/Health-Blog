@@ -1,6 +1,6 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { application } from "../../../application";
-import { toast } from "react-toastify";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { application } from '../../../application'
+import { toast } from 'react-toastify'
 
 let initialState = {
   dbUsers: [],
@@ -11,218 +11,219 @@ let initialState = {
   isLoading: false,
   isSuccessful: false,
   isFailed: null,
-};
+}
 
-export const getDbUsers = createAsyncThunk("", async (query) => {
-  console.log("Query value ", query);
-  let url = `${application.application_url}/admin`;
+export const getDbUsers = createAsyncThunk('', async (query) => {
+  console.log('Query value ', query)
+  let url = `${application.application_url}/admin`
 
   if (query.role > 0) {
-    url += `?role=${query.role}`;
-    if (query.searchCondition !== "") {
-      url += `&searchCondition=${query.searchCondition}`;
+    url += `?role=${query.role}`
+    if (query.searchCondition !== '') {
+      url += `&searchCondition=${query.searchCondition}`
     }
   } else if (
-    query.searchCondition !== "" &&
+    query.searchCondition !== '' &&
     query.searchCondition !== undefined &&
     query.searchCondition !== null
   ) {
-    url += `?searchCondition=${query.searchCondition}`;
+    url += `?searchCondition=${query.searchCondition}`
   }
 
-  console.log("URL ", url);
+  console.log('URL ', url)
 
-  let request = await fetch(url);
-  let response = await request.json();
+  let request = await fetch(url)
+  let response = await request.json()
 
-  return response;
-});
+  return response
+})
 
 export const getNewRegisteredExperts = createAsyncThunk(
-  "new-request",
+  'new-request',
   async (objectWithData) => {
-    let url = `${application.application_url}/admin/new-request`;
+    let url = `${application.application_url}/admin/new-request`
     let request = await fetch(url, {
-      method: "POST",
-      body: JSON.stringify(objectWithData.query),
+      method: 'POST',
+      body: JSON.stringify(objectWithData?.query),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
       },
-    });
-    let response = await request.json();
-    return response;
+    })
+    let response = await request.json()
+    return response
   }
-);
+)
 
 export const setRegisteredExpertStatus = createAsyncThunk(
-  "approval",
+  'approval',
   async (statusDto) => {
-    let url = `${application.application_url}/admin/approval`;
+    let url = `${application.application_url}/admin/approval`
     let request = await fetch(url, {
-      method: "PATCH",
+      method: 'PATCH',
       body: JSON.stringify(statusDto),
       headers: {
-        "Content-Type": "application/json-patch+json",
+        'Content-Type': 'application/json-patch+json',
       },
-    });
-    let response = await request.json();
-    console.log("Response ", response);
-    return response;
+    })
+    let response = await request.json()
+    console.log('Response ', response)
+    return response
   }
-);
+)
 
-export const removeUserById = createAsyncThunk("id", async (id) => {
-  let url = `${application.application_url}/admin/${id}`;
+export const removeUserById = createAsyncThunk('id', async (id) => {
+  let url = `${application.application_url}/admin/${id}`
   let request = await fetch(url, {
-    method: "DELETE",
+    method: 'DELETE',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
-  });
-  let response = await request.json();
-  return response;
-});
+  })
+  let response = await request.json()
+  return response
+})
 
 let adminSlice = createSlice({
   initialState,
-  name: "adminSlice",
-  extraReducers: (builder) => {
-    builder
-      //Get Users
-      .addCase(getDbUsers.pending, (state, action) => {
-        state.isLoading = true;
-      })
-      .addCase(getDbUsers.fulfilled, (state, action) => {
-        let serviceResponseObject = action.payload;
-        state.isLoading = false;
-        console.log("SSS ", serviceResponseObject);
-
-        state.dbUsers = serviceResponseObject.serviceResponseObject;
-      })
-      .addCase(getDbUsers.rejected, (state, action) => {
-        state.isLoading = false;
-      })
-
-      //New registered experts
-      .addCase(getNewRegisteredExperts.pending, (state, action) => {
-        console.log("New-Request: Pending...");
-      })
-      .addCase(getNewRegisteredExperts.fulfilled, (state, action) => {
-        console.log("New-Request: Fullfilled");
-        let statusCode = action?.payload?.statusCode;
-        let serviceResponseObject = action?.payload?.serviceResponseObject;
-
-        if (statusCode === 200) {
-          state.newlyRegisteredMentalHealthExperts = serviceResponseObject;
-          state.numberOfNewlyRegisteredMentalHealthExperts =
-            state.newlyRegisteredMentalHealthExperts.length;
-          state.isFailed = false;
-          return;
-        }
-
-        state.isFailed = true;
-      })
-      .addCase(getNewRegisteredExperts.rejected, (state, action) => {
-        console.log("New-Request: Rejected");
-        console.log(action.payload);
-      })
-
-      //Set registered expert status
-      .addCase(setRegisteredExpertStatus.pending, (state, action) => {
-        console.log("Approval: Pending... ");
-      })
-      .addCase(setRegisteredExpertStatus.fulfilled, (state, action) => {
-        console.log("Approval: Fullfilled");
-        console.log(action);
-
-        let serviceResponseObject =
-          action.payload.serviceResponseObject.serviceResponseObject;
-
-        state.newlyRegisteredMentalHealthExperts = serviceResponseObject;
-      })
-      .addCase(setRegisteredExpertStatus.rejected, (state, action) => {
-        console.log("Approval: Rejected");
-      })
-
-      //Remove user by id
-      .addCase(removeUserById.pending, (state, action) => {
-        console.log("Remove pending... ");
-      })
-      .addCase(removeUserById.fulfilled, (state, action) => {
-        console.log("Remove done...", action.payload);
-
-        let statusCode = action.payload.statusCode;
-
-        if (statusCode === 200) {
-          toast.success("Succesfully deleted user", {
-            autoClose: 1500,
-            position: "bottom-right",
-          });
-          setTimeout(() => {
-            window.location.reload();
-          }, 1000);
-          return;
-        }
-      })
-      .addCase(removeUserById.rejected, (state, action) => {
-        console.log("Remove rejected...");
-      });
-  },
+  name: 'adminSlice',
   reducers: {
     displayProfilesContainer: () => {
       let statusActionsContainer = document.querySelector(
-        ".new-experts-status-actions-container"
-      );
+        '.new-experts-status-actions-container'
+      )
       let profilesContainer = document.querySelector(
-        ".new-experts-main-profiles-container"
-      );
+        '.new-experts-main-profiles-container'
+      )
       let profileContainer = document.querySelectorAll(
-        ".new-expert-profile-container"
-      );
+        '.new-expert-profile-container'
+      )
       let statusHamburger = document.querySelector(
-        ".new-experts-status-hamburger"
-      );
+        '.new-experts-status-hamburger'
+      )
       if (window.screen.width <= 500) {
-        profilesContainer.style.display = "flex";
-        profilesContainer.style.maxWidth = "1440px";
+        profilesContainer.style.display = 'flex'
+        profilesContainer.style.maxWidth = '1440px'
         profileContainer.forEach((profile) => {
-          profile.style.margin = "auto";
-        });
-        statusActionsContainer.style.display = "none";
-        statusHamburger.style.display = "block";
+          profile.style.margin = 'auto'
+        })
+        statusActionsContainer.style.display = 'none'
+        statusHamburger.style.display = 'block'
       }
     },
     displayStatusActionsContainer: () => {
       let statusActionsContainer = document.querySelector(
-        ".new-experts-status-actions-container"
-      );
+        '.new-experts-status-actions-container'
+      )
       let profilesContainer = document.querySelector(
-        ".new-experts-main-profiles-container"
-      );
+        '.new-experts-main-profiles-container'
+      )
       let statusHamburger = document.querySelector(
-        ".new-experts-status-hamburger"
-      );
+        '.new-experts-status-hamburger'
+      )
 
-      profilesContainer.style.display = "none";
-      statusActionsContainer.style.display = "block";
-      statusHamburger.style.display = "none";
+      profilesContainer.style.display = 'none'
+      statusActionsContainer.style.display = 'block'
+      statusHamburger.style.display = 'none'
     },
     setSelectedRole: (state) => {
-      let select = document.getElementById("manage-users-select-role-filter");
-      state.selectedRole = parseInt(select.value);
-      console.log("Selected role ", state.selectedRole);
+      let select = document.getElementById('manage-users-select-role-filter')
+      state.selectedRole = parseInt(select.value)
+      console.log('Selected role ', state.selectedRole)
     },
     setSelectedUser: (state, action) => {
-      state.dbUser = action.payload;
+      state.dbUser = action.payload
     },
   },
-});
+  extraReducers: (builder) => {
+    builder
+      //Get Users
+      .addCase(getDbUsers.pending, (state, action) => {
+        state.isLoading = true
+      })
+      .addCase(getDbUsers.fulfilled, (state, action) => {
+        let serviceResponseObject = action.payload
+        state.isLoading = false
+        console.log('SSS ', serviceResponseObject)
+
+        state.dbUsers = serviceResponseObject.serviceResponseObject
+      })
+      .addCase(getDbUsers.rejected, (state, action) => {
+        state.isLoading = false
+      })
+
+      //New registered experts
+      .addCase(getNewRegisteredExperts.pending, (state, action) => {
+        console.log('New-Request: Pending...')
+      })
+      .addCase(getNewRegisteredExperts.fulfilled, (state, action) => {
+        console.log('New-Request: Fullfilled')
+        let statusCode = action?.payload?.statusCode
+        let serviceResponseObject = action?.payload?.serviceResponseObject
+
+        if (statusCode === 200) {
+          state.newlyRegisteredMentalHealthExperts = serviceResponseObject
+          state.numberOfNewlyRegisteredMentalHealthExperts =
+            state.newlyRegisteredMentalHealthExperts.length
+          state.isFailed = false
+          return
+        }
+
+        state.isFailed = true
+      })
+      .addCase(getNewRegisteredExperts.rejected, (state, action) => {
+        toast.error('Something went wrong!', {
+          position: 'bottom-right',
+        })
+      })
+
+      //Set registered expert status
+      .addCase(setRegisteredExpertStatus.pending, (state, action) => {
+        console.log('Approval: Pending... ')
+      })
+      .addCase(setRegisteredExpertStatus.fulfilled, (state, action) => {
+        console.log('Approval: Fullfilled')
+        console.log(action)
+
+        let serviceResponseObject =
+          action.payload.serviceResponseObject.serviceResponseObject
+
+        state.newlyRegisteredMentalHealthExperts = serviceResponseObject
+      })
+      .addCase(setRegisteredExpertStatus.rejected, (state, action) => {
+        console.log('Approval: Rejected')
+      })
+
+      //Remove user by id
+      .addCase(removeUserById.pending, (state, action) => {
+        console.log('Remove pending... ')
+      })
+      .addCase(removeUserById.fulfilled, (state, action) => {
+        console.log('Remove done...', action.payload)
+
+        let statusCode = action.payload.statusCode
+
+        if (statusCode === 200) {
+          toast.success('Succesfully deleted user', {
+            autoClose: 1500,
+            position: 'bottom-right',
+          })
+          setTimeout(() => {
+            window.location.reload()
+          }, 1000)
+          return
+        }
+      })
+      .addCase(removeUserById.rejected, (state, action) => {
+        console.log('Remove rejected...')
+      })
+  },
+})
 
 export const {
   displayProfilesContainer,
   displayStatusActionsContainer,
   setSelectedRole,
   setSelectedUser,
-} = adminSlice.actions;
-export default adminSlice.reducer;
+} = adminSlice.actions
+export default adminSlice.reducer

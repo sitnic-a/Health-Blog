@@ -1,46 +1,57 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
-import { getNewRegisteredExperts } from "../../../redux-toolkit/features/adminSlice";
-import { toast } from "react-toastify";
+import { getNewRegisteredExperts } from '../../../redux-toolkit/features/adminSlice'
+import { toast } from 'react-toastify'
 
 export const RequestNewExperts = () => {
-  let dispatch = useDispatch();
-  let { authenticatedUser } = useSelector((store) => store.user);
+  let dispatch = useDispatch()
+  let { authenticatedUser } = useSelector((store) => store.user)
   let { isFailed, numberOfNewlyRegisteredMentalHealthExperts } = useSelector(
     (store) => store.admin
-  );
+  )
 
   useEffect(() => {
     let objectWithData = {
       authenticatedUser,
-    };
+    }
     dispatch(getNewRegisteredExperts(objectWithData)).then((data) => {
-      let statusCode = data?.payload?.StatusCode;
+      let statusCode = data?.payload?.StatusCode
       if (statusCode !== 200) {
         if (statusCode === 404) {
           toast.error("Users couldn't be fetced properly!", {
-            position: "bottom-right",
-          });
-          return;
+            position: 'bottom-right',
+          })
+          return
+        }
+
+        if (
+          data?.payload?.serviceResponseObject.length === 0 &&
+          data?.payload?.statusCode === 200
+        ) {
+          toast.warning('There is no new requests!', {
+            autoClose: 1500,
+            position: 'bottom-right',
+          })
+          return
         }
 
         if (data?.payload?.statusCode === 200) {
-          toast.success("Succesfully fetched requests!", {
+          toast.success('Succesfully fetched requests!', {
             autoClose: 1500,
-            position: "bottom-right",
-          });
+            position: 'bottom-right',
+          })
         }
       }
-    });
-  }, []);
+    })
+  }, [])
 
   return (
     <>
       {numberOfNewlyRegisteredMentalHealthExperts > 0 && (
         <Link
-          to={"/requests/new-experts"}
+          to={'/requests/new-experts'}
           className="request-link new-mental-health-expert-request-link"
         >
           {numberOfNewlyRegisteredMentalHealthExperts && (
@@ -78,5 +89,5 @@ export const RequestNewExperts = () => {
           </div>
         )}
     </>
-  );
-};
+  )
+}
