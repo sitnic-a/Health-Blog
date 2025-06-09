@@ -57,17 +57,18 @@ export const getNewRegisteredExperts = createAsyncThunk(
 
 export const setRegisteredExpertStatus = createAsyncThunk(
   'approval',
-  async (statusDto) => {
+  async (objectWithData) => {
     let url = `${application.application_url}/admin/approval`
     let request = await fetch(url, {
       method: 'PATCH',
-      body: JSON.stringify(statusDto),
+      body: JSON.stringify(objectWithData?.patchDto),
       headers: {
         'Content-Type': 'application/json-patch+json',
+        Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
       },
     })
+
     let response = await request.json()
-    console.log('Response ', response)
     return response
   }
 )
@@ -183,15 +184,21 @@ let adminSlice = createSlice({
       })
       .addCase(setRegisteredExpertStatus.fulfilled, (state, action) => {
         console.log('Approval: Fullfilled')
-        console.log(action)
+        let statusCode = action?.payload?.statusCode
 
-        let serviceResponseObject =
-          action.payload.serviceResponseObject.serviceResponseObject
+        if (statusCode === 200) {
+          let serviceResponseObject =
+            action?.payload?.serviceResponseObject?.serviceResponseObject
 
-        state.newlyRegisteredMentalHealthExperts = serviceResponseObject
+          state.newlyRegisteredMentalHealthExperts = serviceResponseObject
+          return
+        }
       })
       .addCase(setRegisteredExpertStatus.rejected, (state, action) => {
         console.log('Approval: Rejected')
+        toast.error('Something was wrong', {
+          position: 'bottom-right',
+        })
       })
 
       //Remove user by id

@@ -14,6 +14,7 @@ namespace MentalHealthBlog.API.Services
 {
     enum AdminServiceLogTypes
     {
+        INVALID_DATA,
         EMPTY,
         NOT_FOUND,
         SUCCESS,
@@ -104,7 +105,7 @@ namespace MentalHealthBlog.API.Services
                     }
                 }
 
-                if (!registeredNewMentalHealthExperts)
+                if (!registeredNewMentalHealthExperts && query == null)
                 {
                     _adminLoggerService.LogWarning($"NEW-REQUEST: {AdminServiceLogTypes.EMPTY.ToString()}", dbMentalHealthExperts);
                     return new Response(new List<MentalHealthExpertDto>(), StatusCodes.Status200OK, AdminServiceLogTypes.EMPTY.ToString());
@@ -146,13 +147,14 @@ namespace MentalHealthBlog.API.Services
             {
                 if (patchDto == null)
                 {
-                    return new Response(new object(), StatusCodes.Status404NotFound, AdminServiceLogTypes.NOT_FOUND.ToString());
+                    _adminLoggerService.LogWarning($"APPROVAL: {AdminServiceLogTypes.INVALID_DATA.ToString()}");
+                    throw new ArgumentException("Bad request!");
                 }
 
                 var dbMentalHealthExpert = await _context.MentalHealthExperts
                     .FirstOrDefaultAsync(u => u.UserId == patchDto.MentalHealthExpertId);
 
-                if (dbMentalHealthExpert is not null)
+                if (dbMentalHealthExpert != null)
                 {
                     dbMentalHealthExpert.IsApproved = patchDto.IsApproved;
                     dbMentalHealthExpert.IsRejected = patchDto.IsRejected;
@@ -160,12 +162,14 @@ namespace MentalHealthBlog.API.Services
                     var dbMentalHealthExperts = await GetNewRegisteredExperts();
                     return new Response(dbMentalHealthExperts, StatusCodes.Status200OK, AdminServiceLogTypes.SUCCESS.ToString());
                 }
-                return new Response(new object(), StatusCodes.Status404NotFound, AdminServiceLogTypes.NOT_FOUND.ToString());
 
+                _adminLoggerService.LogWarning($"APPROVAL: {AdminServiceLogTypes.NOT_FOUND.ToString()}");
+                throw new RecordNotFoundException("Couldn't set new status!");
             }
             catch (Exception e)
             {
-                return new Response(e.Data, StatusCodes.Status500InternalServerError, e.Message);
+                _adminLoggerService.LogError($"APPROVAL: {AdminServiceLogTypes.ERROR.ToString()}",e.Message);
+                throw;
             }
         }
 

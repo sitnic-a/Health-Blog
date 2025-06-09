@@ -49,12 +49,12 @@ export const RequestNewExperts = () => {
 
   return (
     <>
-      {numberOfNewlyRegisteredMentalHealthExperts > 0 && (
+      {!isFailed && (
         <Link
           to={'/requests/new-experts'}
           className="request-link new-mental-health-expert-request-link"
         >
-          {numberOfNewlyRegisteredMentalHealthExperts && (
+          {numberOfNewlyRegisteredMentalHealthExperts > 0 && (
             <span className="new-mental-health-expert-request-container-notification">
               {numberOfNewlyRegisteredMentalHealthExperts}
             </span>
@@ -64,14 +64,14 @@ export const RequestNewExperts = () => {
             <p className="new-mental-health-expert-request-container-label">
               Mental Health Experts
             </p>
-            <p className="new-mental-health-expert-request-container-info">
-              Newly registered:
-              {numberOfNewlyRegisteredMentalHealthExperts && (
+            {numberOfNewlyRegisteredMentalHealthExperts > 0 && (
+              <p className="new-mental-health-expert-request-container-info">
+                Newly registered:
                 <span className="new-mental-health-expert-request-container-number-of-registered">
                   {numberOfNewlyRegisteredMentalHealthExperts}
                 </span>
-              )}
-            </p>
+              </p>
+            )}
           </div>
         </Link>
       )}
@@ -81,13 +81,6 @@ export const RequestNewExperts = () => {
           <p>Wasn't able to fetch request. Something went wrong!</p>
         </div>
       )}
-
-      {numberOfNewlyRegisteredMentalHealthExperts <= 0 &&
-        isFailed === false && (
-          <div>
-            <p>There are no new requests!</p>
-          </div>
-        )}
     </>
   )
 }

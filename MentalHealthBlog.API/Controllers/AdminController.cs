@@ -33,6 +33,7 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpPatch("approval")]
+        [Authorize(Roles ="Administrator")]
         public async Task<Response> SetRegisteredExpertStatus(RegisterExpertPatchDto patchDto)
         {
             return await _adminService.SetRegisteredExpertStatus(patchDto);

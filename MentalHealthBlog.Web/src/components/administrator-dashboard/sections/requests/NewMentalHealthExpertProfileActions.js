@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   getNewRegisteredExperts,
   setRegisteredExpertStatus,
@@ -9,26 +9,49 @@ import { HiX } from 'react-icons/hi'
 
 export const NewMentalHealthExpertProfileActions = (props) => {
   let dispatch = useDispatch()
+  let { authenticatedUser } = useSelector((store) => store.user)
   let expert = props.expert
   return (
     <div className="new-expert-profile-bio-actions">
       <div className="new-expert-profile-action">
         <button
           onClick={() => {
-            let patchDto = {
-              mentalHealthExpertId: expert.userId,
-              isApproved: true,
-              isRejected: false,
+            let objectWithData = {
+              patchDto: {
+                mentalHealthExpertId: expert.userId,
+                isApproved: true,
+                isRejected: false,
+              },
+              authenticatedUser,
             }
-            dispatch(setRegisteredExpertStatus(patchDto)).then((data) => {
-              console.log('LOGGG ', data)
+            dispatch(setRegisteredExpertStatus(objectWithData)).then((data) => {
+              let statusCode = data?.payload?.StatusCode
+
+              if (statusCode !== 200) {
+                if (statusCode === 400) {
+                  toast.error("Couldn't change the status!", {
+                    position: 'bottom-right',
+                  })
+                  return
+                }
+
+                if (statusCode === 404) {
+                  toast.error("Expert couldn't be located!", {
+                    position: 'bottom-right',
+                  })
+                  return
+                }
+              }
 
               if (data.payload.statusCode === 200) {
                 toast.success('Successfully approved mental health expert', {
                   autoClose: 2000,
                   position: 'bottom-right',
                 })
-                dispatch(getNewRegisteredExperts())
+                let objectWithData = {
+                  authenticatedUser,
+                }
+                dispatch(getNewRegisteredExperts(objectWithData))
               }
             })
           }}
@@ -42,18 +65,42 @@ export const NewMentalHealthExpertProfileActions = (props) => {
       <div className="new-expert-profile-action">
         <button
           onClick={() => {
-            let patchDto = {
-              mentalHealthExpertId: expert.userId,
-              isApproved: false,
-              isRejected: true,
+            let objectWithData = {
+              patchDto: {
+                mentalHealthExpertId: expert.userId,
+                isApproved: false,
+                isRejected: true,
+              },
+              authenticatedUser,
             }
-            dispatch(setRegisteredExpertStatus(patchDto)).then((data) => {
-              if (data.payload.statusCode === 200) {
+            dispatch(setRegisteredExpertStatus(objectWithData)).then((data) => {
+              let statusCode = data?.payload?.StatusCode
+
+              if (statusCode !== 200) {
+                if (statusCode === 400) {
+                  toast.error("Couldn't change the status!", {
+                    position: 'bottom-right',
+                  })
+                  return
+                }
+
+                if (statusCode === 404) {
+                  toast.error("Expert couldn't be located!", {
+                    position: 'bottom-right',
+                  })
+                  return
+                }
+              }
+
+              if (data?.payload?.statusCode === 200) {
                 toast.success('Successfully rejected mental health expert', {
                   autoClose: 2000,
                   position: 'bottom-right',
                 })
-                dispatch(getNewRegisteredExperts())
+                let objectWithData = {
+                  authenticatedUser,
+                }
+                dispatch(getNewRegisteredExperts(objectWithData))
               }
             })
           }}

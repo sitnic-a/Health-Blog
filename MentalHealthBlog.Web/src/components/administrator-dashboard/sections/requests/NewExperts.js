@@ -1,19 +1,19 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux'
 import {
   displayProfilesContainer,
   displayStatusActionsContainer,
   getNewRegisteredExperts,
-} from "../../../redux-toolkit/features/adminSlice";
+} from '../../../redux-toolkit/features/adminSlice'
 
-import { NewMentalHealthExpertProfile } from "./NewMentalHealthExpertProfile";
+import { NewMentalHealthExpertProfile } from './NewMentalHealthExpertProfile'
 
 export const NewExperts = () => {
-  let dispatch = useDispatch();
-  let { authenticatedUser } = useSelector((store) => store.user);
+  let dispatch = useDispatch()
+  let { authenticatedUser } = useSelector((store) => store.user)
 
   let { newlyRegisteredMentalHealthExperts } = useSelector(
     (store) => store.admin
-  );
+  )
 
   return (
     <>
@@ -39,11 +39,11 @@ export const NewExperts = () => {
                     status: false,
                   },
                   authenticatedUser,
-                };
-                dispatch(displayProfilesContainer());
-                dispatch(getNewRegisteredExperts(objectWithData));
-                document.querySelector(".new-experts-subtitle").innerHTML =
-                  "Rejected";
+                }
+                dispatch(displayProfilesContainer())
+                dispatch(getNewRegisteredExperts(objectWithData))
+                document.querySelector('.new-experts-subtitle').innerHTML =
+                  'Rejected'
               }}
             >
               Rejected
@@ -57,11 +57,11 @@ export const NewExperts = () => {
                     status: true,
                   },
                   authenticatedUser,
-                };
-                dispatch(displayProfilesContainer());
-                dispatch(getNewRegisteredExperts(objectWithData));
-                document.querySelector(".new-experts-subtitle").innerHTML =
-                  "Approved";
+                }
+                dispatch(displayProfilesContainer())
+                dispatch(getNewRegisteredExperts(objectWithData))
+                document.querySelector('.new-experts-subtitle').innerHTML =
+                  'Approved'
               }}
             >
               Approved
@@ -70,22 +70,25 @@ export const NewExperts = () => {
               className="new-experts-status-button pending"
               type="button"
               onClick={() => {
-                dispatch(displayProfilesContainer());
-                dispatch(getNewRegisteredExperts());
-                document.querySelector(".new-experts-subtitle").innerHTML =
-                  "Pending";
+                let objectWithData = {
+                  authenticatedUser,
+                }
+                dispatch(displayProfilesContainer())
+                dispatch(getNewRegisteredExperts(objectWithData))
+                document.querySelector('.new-experts-subtitle').innerHTML =
+                  'Pending'
               }}
             >
               Pending
             </button>
           </div>
         </div>
-        {newlyRegisteredMentalHealthExperts.length > 0 ? (
+        {newlyRegisteredMentalHealthExperts?.length > 0 ? (
           <div className="new-experts-main-profiles-container">
             {newlyRegisteredMentalHealthExperts.map((expert) => {
               return (
                 <NewMentalHealthExpertProfile key={expert.id} expert={expert} />
-              );
+              )
             })}
           </div>
         ) : (
@@ -95,5 +98,5 @@ export const NewExperts = () => {
         )}
       </div>
     </>
-  );
-};
+  )
+}
