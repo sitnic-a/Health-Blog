@@ -160,7 +160,7 @@ export const ManageUsers = () => {
                         data?.payload?.statusCode === 200 &&
                         data?.payload?.serviceResponseObject.length === 0
                       ) {
-                        toast.warning('No regular users registered!', {
+                        toast.warning('No users registered!', {
                           position: 'bottom-right',
                         })
                         return
@@ -217,11 +217,47 @@ export const ManageUsers = () => {
                 let searchCondition = document.querySelector(
                   "input[name='manage-users-name-input-filter'"
                 ).value
-                var query = {
-                  role: parseInt(selectedRoleId),
-                  searchCondition,
+                let objectWithData = {
+                  query: {
+                    role: parseInt(selectedRoleId),
+                    searchCondition,
+                  },
+                  authenticatedUser,
                 }
-                dispatch(getDbUsers(query))
+                dispatch(getDbUsers(objectWithData)).then((data) => {
+                  let statusCode = data?.payload?.StatusCode
+                  if (statusCode !== 200) {
+                    if (statusCode === 400) {
+                      toast.error("Couldn't fetch experts!", {
+                        position: 'bottom-right',
+                      })
+                      return
+                    }
+                    if (statusCode === 404) {
+                      toast.error('Experts not fetched properly!', {
+                        position: 'bottom-right',
+                      })
+                      return
+                    }
+
+                    if (
+                      data?.payload?.statusCode === 200 &&
+                      data?.payload?.serviceResponseObject.length === 0
+                    ) {
+                      toast.warning('No such expert registered!', {
+                        position: 'bottom-right',
+                      })
+                      return
+                    }
+
+                    if (data?.payload?.statusCode === 200) {
+                      toast.success('Successfully filtered experts!', {
+                        autoClose: 1500,
+                        position: 'bottom-right',
+                      })
+                    }
+                  }
+                })
               }
             }}
           />
@@ -238,11 +274,47 @@ export const ManageUsers = () => {
                 "input[name='manage-users-name-input-filter'"
               ).value
 
-              var query = {
-                role: parseInt(selectedRoleId),
-                searchCondition,
+              let objectWithData = {
+                query: {
+                  role: parseInt(selectedRoleId),
+                  searchCondition,
+                },
+                authenticatedUser,
               }
-              dispatch(getDbUsers(query))
+              dispatch(getDbUsers(objectWithData)).then((data) => {
+                let statusCode = data?.payload?.StatusCode
+                if (statusCode !== 200) {
+                  if (statusCode === 400) {
+                    toast.error("Couldn't fetch experts!", {
+                      position: 'bottom-right',
+                    })
+                    return
+                  }
+                  if (statusCode === 404) {
+                    toast.error('Experts not fetched properly!', {
+                      position: 'bottom-right',
+                    })
+                    return
+                  }
+
+                  if (
+                    data?.payload?.statusCode === 200 &&
+                    data?.payload?.serviceResponseObject.length === 0
+                  ) {
+                    toast.warning('No such expert registered!', {
+                      position: 'bottom-right',
+                    })
+                    return
+                  }
+
+                  if (data?.payload?.statusCode === 200) {
+                    toast.success('Successfully filtered experts!', {
+                      autoClose: 1500,
+                      position: 'bottom-right',
+                    })
+                  }
+                }
+              })
             }}
           >
             Search

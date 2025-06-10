@@ -73,11 +73,16 @@ namespace MentalHealthBlog.API.Services
                     if (query.Role == __MENTAL_HEALTH_EXPERT_ROLE__)
                     {
                         users = await filter.CallGetMentalHealthExpert(query);
-                        if (!users.IsNullOrEmpty())
+                        if (users.Any())
                         {
-                            return new Response(users, StatusCodes.Status200OK, AdminServiceLogTypes.SUCCESS.ToString());
+                            _adminLoggerService.LogInformation($"GET: {AdminServiceLogTypes.SUCCESS.ToString()}");
+                            return new Response(users,StatusCodes.Status200OK, AdminServiceLogTypes.SUCCESS.ToString());
                         }
-                        return new Response(new List<UserDto>(), StatusCodes.Status204NoContent, AdminServiceLogTypes.EMPTY.ToString());
+                        else
+                        {
+                            _adminLoggerService.LogInformation($"GET: {AdminServiceLogTypes.EMPTY.ToString()}");
+                            return new Response(users, StatusCodes.Status200OK, AdminServiceLogTypes.EMPTY.ToString());
+                        }
                     }
                 }
 

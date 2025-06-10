@@ -20,7 +20,7 @@ namespace MentalHealthBlog.API.Utils.Filtering.Dashboards.Admin
         private readonly DataContext _context;
         private readonly ILogger<IAdminService> _adminLoggerService;
         private readonly IMapper _mapper;
-        public AdminDashboardFilter(DataContext context,ILogger<IAdminService> adminLoggerService, IMapper mapper)
+        public AdminDashboardFilter(DataContext context, ILogger<IAdminService> adminLoggerService, IMapper mapper)
         {
             _context = context;
             _adminLoggerService = adminLoggerService;
@@ -110,7 +110,7 @@ namespace MentalHealthBlog.API.Utils.Filtering.Dashboards.Admin
 
                 if (registeredRegularUsers)
                 {
-                    
+
                     var userHelper = new UserHelper(_context);
 
                     foreach (var dbRegularUser in dbRegularUsers)
@@ -127,7 +127,8 @@ namespace MentalHealthBlog.API.Utils.Filtering.Dashboards.Admin
                         user.Roles = roles;
                         users.Add(user);
                     }
-                } else
+                }
+                else
                 {
                     _adminLoggerService.LogWarning($"GET: {AdminServiceLogTypes.EMPTY.ToString()}");
                     return new List<UserDto>();
@@ -149,49 +150,84 @@ namespace MentalHealthBlog.API.Utils.Filtering.Dashboards.Admin
 
 
         }
-        private async Task<List<UserDto>> FillMentalHealthExpertUsers(List<MentalHealthExpert>? dbMentalHealthExperts)
+        private async Task<List<UserDto>> FillMentalHealthExpertUsers(List<MentalHealthExpert> dbMentalHealthExperts)
         {
             var users = new List<UserDto>();
+            var userHelper = new UserHelper(_context);
 
-            if (!dbMentalHealthExperts.IsNullOrEmpty())
+            foreach (var dbMentalHealthExpert in dbMentalHealthExperts)
             {
-                var userHelper = new UserHelper(_context);
-
-                foreach (var dbMentalHealthExpert in dbMentalHealthExperts)
+                if (dbMentalHealthExpert == null)
                 {
-                    var dbUser = await _context.Users.FindAsync(dbMentalHealthExpert.UserId);
-                    if (dbUser != null)
-                    {
-                        var user = _mapper.Map<UserDto>(dbMentalHealthExpert);
-                        var roles = await userHelper.GetUserRolesAsync(user);
-                        user.Username = dbUser.Username;
-                        user.Roles = roles;
-                        users.Add(user);
-                    }
+                    _adminLoggerService.LogWarning($"GET: {AdminServiceLogTypes.NOT_FOUND.ToString()}");
+                    throw new RecordNotFoundException("User not found!");
                 }
+                var dbUser = await _context.Users.FindAsync(dbMentalHealthExpert.UserId);
+                if (dbUser != null)
+                {
+                    var user = _mapper.Map<UserDto>(dbMentalHealthExpert);
+                    var roles = await userHelper.GetUserRolesAsync(user);
+
+                    if (user == null || roles.IsNullOrEmpty())
+                    {
+                        _adminLoggerService.LogWarning($"GET: {AdminServiceLogTypes.NOT_FOUND.ToString()}");
+                        throw new RecordNotFoundException("User not found!");
+                    }
+
+                    user.Username = dbUser.Username;
+                    user.Roles = roles;
+                    users.Add(user);
+                    continue;
+                }
+                _adminLoggerService.LogWarning($"GET: {AdminServiceLogTypes.NOT_FOUND.ToString()}");
+                throw new RecordNotFoundException("User not found!");
             }
+
             return users;
         }
         private async Task<List<UserDto>> GetMentalHealthExpert(SearchUserDto? query = null)
         {
-            var _dbMentalHealthExperts = new List<MentalHealthExpert>();
+            var dbMentalHealthExperts = new List<MentalHealthExpert>();
             var users = new List<UserDto>();
             if (!query.SearchCondition.IsNullOrEmpty())
             {
-                _dbMentalHealthExperts = await _context.MentalHealthExperts
+                dbMentalHealthExperts = await _context.MentalHealthExperts
                                                      .Where(mhe => mhe.FirstName.Contains(query.SearchCondition) ||
                                                                    mhe.LastName.Contains(query.SearchCondition) ||
                                                                    mhe.Organization.Contains(query.SearchCondition))
                                                      .ToListAsync();
 
-                users = await FillMentalHealthExpertUsers(_dbMentalHealthExperts);
-                return !users.IsNullOrEmpty() ? users : new List<UserDto>();
+                if (dbMentalHealthExperts.Any())
+                {
+                    users = await FillMentalHealthExpertUsers(dbMentalHealthExperts);
+                    if (!users.Any())
+                    {
+                        _adminLoggerService.LogWarning($"GET: {AdminServiceLogTypes.NOT_FOUND.ToString()}");
+                        throw new RecordNotFoundException("Users not fetched properly!");
+                    }
+                    _adminLoggerService.LogInformation($"GET: {AdminServiceLogTypes.SUCCESS.ToString()}");
+                    return users;
+                }
+
+                _adminLoggerService.LogWarning($"GET: {AdminServiceLogTypes.EMPTY.ToString()}");
+                return users;
             }
 
-            _dbMentalHealthExperts = await _context.MentalHealthExperts.ToListAsync();
-            users = await FillMentalHealthExpertUsers(_dbMentalHealthExperts);
-            return !users.IsNullOrEmpty() ? users : new List<UserDto>();
+            dbMentalHealthExperts = await _context.MentalHealthExperts.ToListAsync();
+            if (dbMentalHealthExperts.Any())
+            {
+                users = await FillMentalHealthExpertUsers(dbMentalHealthExperts);
+                if (!users.Any())
+                {
+                    _adminLoggerService.LogWarning($"GET: {AdminServiceLogTypes.NOT_FOUND.ToString()}");
+                    throw new RecordNotFoundException("Users not fetched properly!");
+                }
+                _adminLoggerService.LogInformation($"GET: {AdminServiceLogTypes.SUCCESS.ToString()}");
+                return users;
+            }
 
+            _adminLoggerService.LogWarning($"GET: {AdminServiceLogTypes.EMPTY.ToString()}");
+            return users;
         }
         public async Task<List<UserDto>> CallGetMentalHealthExpert(SearchUserDto? query = null)
         {
