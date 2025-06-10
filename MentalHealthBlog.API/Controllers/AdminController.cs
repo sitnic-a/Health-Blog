@@ -20,6 +20,7 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles ="Administrator")]
         public async Task<Response> Get([FromQuery] SearchUserDto? query = null)
         {
             return await _adminService.Get(query);

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using MentalHealthBlog.API.Exceptions;
 using MentalHealthBlog.API.Methods;
-using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Utils.Filtering.Dashboards.Admin;
@@ -37,22 +36,38 @@ namespace MentalHealthBlog.API.Services
         {
             try
             {
-                AdminDashboardFilter filter = new AdminDashboardFilter(_context, _mapper);
+                AdminDashboardFilter filter = new AdminDashboardFilter(_context,_adminLoggerService, _mapper);
 
                 var users = new List<UserDto>();
                 const int __USER_ROLE__ = 2;
                 const int __MENTAL_HEALTH_EXPERT_ROLE__ = 4;
+
+                var dbUsers = await _context.Users.ToListAsync();
+                var usersTableHasRecords = dbUsers.Any();
+
+                if (!usersTableHasRecords)
+                {
+                    _adminLoggerService.LogWarning($"GET: {AdminServiceLogTypes.EMPTY.ToString()}");
+                    return new Response(new List<UserDto>(), StatusCodes.Status200OK, AdminServiceLogTypes.EMPTY.ToString());
+                }
+                //Exception handling za dio kada smo unijeli query pretragu je ostao neuraden
 
                 if (query?.Role > 0)
                 {
                     if (query.Role == __USER_ROLE__)
                     {
                         users = await filter.CallGetRegularUsers(query);
-                        if (!users.IsNullOrEmpty())
+
+                        if (!users.Any())
                         {
+                            _adminLoggerService.LogInformation($"GET: {AdminServiceLogTypes.EMPTY.ToString()}", users);
+                            return new Response(users, StatusCodes.Status200OK, AdminServiceLogTypes.EMPTY.ToString());
+                        }
+                        else if (users.Any())
+                        {
+                            _adminLoggerService.LogWarning($"GET: {AdminServiceLogTypes.SUCCESS.ToString()}");
                             return new Response(users, StatusCodes.Status200OK, AdminServiceLogTypes.SUCCESS.ToString());
                         }
-                        return new Response(new List<UserDto>(), StatusCodes.Status204NoContent, AdminServiceLogTypes.EMPTY.ToString());
                     }
 
                     if (query.Role == __MENTAL_HEALTH_EXPERT_ROLE__)
@@ -65,17 +80,21 @@ namespace MentalHealthBlog.API.Services
                         return new Response(new List<UserDto>(), StatusCodes.Status204NoContent, AdminServiceLogTypes.EMPTY.ToString());
                     }
                 }
-                var _dbUsers = await _context.Users.ToListAsync();
-                users = await filter.CallGetUnfilteredUsers(_dbUsers);
-                if (!users.IsNullOrEmpty())
+
+                users = await filter.CallGetUnfilteredUsers(dbUsers);
+                if (usersTableHasRecords && !users.Any())
                 {
-                    return new Response(users, StatusCodes.Status200OK, AdminServiceLogTypes.SUCCESS.ToString());
+                    _adminLoggerService.LogWarning($"GET: {AdminServiceLogTypes.NOT_FOUND.ToString()}");
+                    throw new RecordNotFoundException("Users not fetched properly!");
                 }
-                return new Response(new List<UserDto>(), StatusCodes.Status204NoContent, AdminServiceLogTypes.EMPTY.ToString());
+
+                _adminLoggerService.LogInformation($"GET: {AdminServiceLogTypes.SUCCESS.ToString()}", users);
+                return new Response(users, StatusCodes.Status200OK, AdminServiceLogTypes.SUCCESS.ToString());
             }
             catch (Exception e)
             {
-                return new Response(e.Data, StatusCodes.Status500InternalServerError, AdminServiceLogTypes.ERROR.ToString());
+                _adminLoggerService.LogError($"GET: {AdminServiceLogTypes.ERROR.ToString()}", e);
+                throw;
             }
 
         }
@@ -119,7 +138,7 @@ namespace MentalHealthBlog.API.Services
                     var mentalHealthExpert = _mapper.Map<MentalHealthExpertDto>(dbMentalHealthExpert);
                     var mentalHealthExpertAsUser = await _context.Users
                         .FirstOrDefaultAsync(u => u.Id == mentalHealthExpert.UserId);
-                    
+
                     if (mentalHealthExpert != null && mentalHealthExpertAsUser != null)
                     {
                         mentalHealthExpert.Username = mentalHealthExpertAsUser.Username;
@@ -168,7 +187,7 @@ namespace MentalHealthBlog.API.Services
             }
             catch (Exception e)
             {
-                _adminLoggerService.LogError($"APPROVAL: {AdminServiceLogTypes.ERROR.ToString()}",e.Message);
+                _adminLoggerService.LogError($"APPROVAL: {AdminServiceLogTypes.ERROR.ToString()}", e.Message);
                 throw;
             }
         }

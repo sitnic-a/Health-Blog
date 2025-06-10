@@ -13,26 +13,32 @@ let initialState = {
   isFailed: null,
 }
 
-export const getDbUsers = createAsyncThunk('', async (query) => {
-  console.log('Query value ', query)
+export const getDbUsers = createAsyncThunk('', async (objectWithData) => {
+  console.log('Query value ', objectWithData?.query)
   let url = `${application.application_url}/admin`
 
-  if (query.role > 0) {
-    url += `?role=${query.role}`
-    if (query.searchCondition !== '') {
-      url += `&searchCondition=${query.searchCondition}`
+  if (objectWithData?.query?.role > 0) {
+    url += `?role=${objectWithData?.query?.role}`
+    if (objectWithData?.query?.searchCondition !== '') {
+      url += `&searchCondition=${objectWithData?.query?.searchCondition}`
     }
   } else if (
-    query.searchCondition !== '' &&
-    query.searchCondition !== undefined &&
-    query.searchCondition !== null
+    objectWithData?.query?.searchCondition !== '' &&
+    objectWithData?.query?.searchCondition !== undefined &&
+    objectWithData?.query?.searchCondition !== null
   ) {
-    url += `?searchCondition=${query.searchCondition}`
+    url += `?searchCondition=${objectWithData?.query?.searchCondition}`
   }
 
   console.log('URL ', url)
 
-  let request = await fetch(url)
+  let request = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
+    },
+  })
   let response = await request.json()
 
   return response
@@ -143,11 +149,16 @@ let adminSlice = createSlice({
         state.isLoading = true
       })
       .addCase(getDbUsers.fulfilled, (state, action) => {
-        let serviceResponseObject = action.payload
-        state.isLoading = false
-        console.log('SSS ', serviceResponseObject)
-
-        state.dbUsers = serviceResponseObject.serviceResponseObject
+        let statusCode = action?.payload?.statusCode
+        if (statusCode === 200) {
+          let serviceResponseObject = action.payload
+          state.isLoading = false
+          console.log('SSS ', serviceResponseObject)
+          state.dbUsers = serviceResponseObject.serviceResponseObject
+          state.isFailed = false
+          return
+        }
+        state.isFailed = true
       })
       .addCase(getDbUsers.rejected, (state, action) => {
         state.isLoading = false

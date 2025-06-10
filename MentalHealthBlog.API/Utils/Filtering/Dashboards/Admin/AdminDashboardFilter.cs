@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using MentalHealthBlog.API.Exceptions;
 using MentalHealthBlog.API.Methods;
 using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
+using MentalHealthBlog.API.Services;
 using MentalHealthBlogAPI.Data;
 using MentalHealthBlogAPI.Models;
 using Microsoft.EntityFrameworkCore;
@@ -16,38 +18,62 @@ namespace MentalHealthBlog.API.Utils.Filtering.Dashboards.Admin
     public class AdminDashboardFilter
     {
         private readonly DataContext _context;
+        private readonly ILogger<IAdminService> _adminLoggerService;
         private readonly IMapper _mapper;
-        public AdminDashboardFilter(DataContext context, IMapper mapper)
+        public AdminDashboardFilter(DataContext context,ILogger<IAdminService> adminLoggerService, IMapper mapper)
         {
             _context = context;
+            _adminLoggerService = adminLoggerService;
             _mapper = mapper;
         }
 
         private async Task<List<UserDto>> GetUnfilteredUsers(List<User> dbUsers)
         {
-            var users = new List<UserDto>();
-            const int __ADMIN_ROLE = 1;
-            if (!dbUsers.IsNullOrEmpty())
+            try
             {
-                var userHelper = new UserHelper(_context);
+                var users = new List<UserDto>();
+                const int __ADMIN_ROLE = 1;
+                const int __PSYCHOLOGIST_ROLE = 4;
 
-                foreach (var dbUser in dbUsers)
+                var usersTableHasRecords = dbUsers.Any();
+
+                if (usersTableHasRecords)
                 {
-                    var user = _mapper.Map<UserDto>(dbUser);
-
-                    var roles = await userHelper.GetUserRolesAsync(user);
-                    user.Roles = roles;
-
-                    if (roles.Any(r => r.Id == __ADMIN_ROLE))
+                    var userHelper = new UserHelper(_context);
+                    foreach (var dbUser in dbUsers)
                     {
-                        continue;
-                    }
+                        var user = _mapper.Map<UserDto>(dbUser);
 
-                    var dbMentalHealthExpert = await _context.MentalHealthExperts
-                                                .SingleOrDefaultAsync(u => u.UserId == dbUser.Id);
+                        if (user == null)
+                        {
+                            _adminLoggerService.LogWarning($"GET: {AdminServiceLogTypes.NOT_FOUND.ToString()}");
+                            throw new RecordNotFoundException("Couldn't fetch users properly!");
+                        }
+                        var roles = await userHelper.GetUserRolesAsync(user);
+                        user.Roles = roles;
+                        var isAdmin = roles.Any(r => r.Id == __ADMIN_ROLE);
+                        var isMentalHealthExpert = roles.Any(r => r.Id == __PSYCHOLOGIST_ROLE);
 
-                    if (dbMentalHealthExpert != null)
-                    {
+                        if (isAdmin)
+                        {
+                            continue;
+                        }
+
+
+                        var dbMentalHealthExpert = await _context.MentalHealthExperts
+                                                    .SingleOrDefaultAsync(u => u.UserId == dbUser.Id);
+
+                        if (dbMentalHealthExpert == null && isMentalHealthExpert)
+                        {
+                            _adminLoggerService.LogWarning($"GET: {AdminServiceLogTypes.NOT_FOUND.ToString()}");
+                            throw new RecordNotFoundException("Couldn't fetch users properly!");
+                        }
+                        else if (!isMentalHealthExpert)
+                        {
+                            users.Add(user);
+                            continue;
+                        }
+
                         user.UserId = dbMentalHealthExpert.UserId;
                         user.FirstName = dbMentalHealthExpert.FirstName;
                         user.LastName = dbMentalHealthExpert.LastName;
@@ -57,37 +83,70 @@ namespace MentalHealthBlog.API.Utils.Filtering.Dashboards.Admin
                         user.PhotoAsFile = dbMentalHealthExpert.PhotoAsFile;
                         user.PhotoAsPath = dbMentalHealthExpert.PhotoAsPath;
                         user.Roles = roles;
+                        users.Add(user);
                     }
-                    users.Add(user);
                 }
+                return users.Any() ? users : new List<UserDto>();
             }
-            return !users.IsNullOrEmpty() ? users : new List<UserDto>();
-
+            catch (Exception e)
+            {
+                _adminLoggerService.LogError($"GET: {AdminServiceLogTypes.ERROR.ToString()}", e);
+                throw;
+            }
         }
-        private async Task<List<UserDto>> GetRegularUsers(SearchUserDto?query = null)
+
+        private async Task<List<UserDto>> GetRegularUsers(SearchUserDto? query = null)
         {
-            const int __REGULAR_USER_ROLE = 2;
-            var users = new List<UserDto>();
-            var _dbRegularUsers = await _context.UserRoles
+            try
+            {
+                var users = new List<UserDto>();
+                const int __REGULAR_USER_ROLE = 2;
+                var dbRegularUsers = await _context.UserRoles
                                     .Include(u => u.User)
                                     .Where(ur => ur.RoleId == __REGULAR_USER_ROLE)
                                     .ToListAsync();
 
-            if (!_dbRegularUsers.IsNullOrEmpty())
-            {
-                var userHelper = new UserHelper(_context);
+                var registeredRegularUsers = dbRegularUsers.Any();
 
-                foreach (var dbRegularUser in _dbRegularUsers)
+                if (registeredRegularUsers)
                 {
-                    var user = new UserDto();
-                    user.Id = dbRegularUser.UserId;
-                    user.Username = dbRegularUser.User.Username;
-                    var roles = await userHelper.GetUserRolesAsync(user);
-                    user.Roles = roles;
-                    users.Add(user);
+                    
+                    var userHelper = new UserHelper(_context);
+
+                    foreach (var dbRegularUser in dbRegularUsers)
+                    {
+                        var user = new UserDto();
+                        var roles = await userHelper.GetUserRolesAsync(user);
+
+                        if (dbRegularUser == null || roles == null)
+                        {
+                            throw new RecordNotFoundException("Couldn't fetch users properly!");
+                        }
+                        user.Id = dbRegularUser.UserId;
+                        user.Username = dbRegularUser.User.Username;
+                        user.Roles = roles;
+                        users.Add(user);
+                    }
+                } else
+                {
+                    _adminLoggerService.LogWarning($"GET: {AdminServiceLogTypes.EMPTY.ToString()}");
+                    return new List<UserDto>();
                 }
+
+                if (registeredRegularUsers && !users.Any())
+                {
+                    _adminLoggerService.LogWarning($"GET: {AdminServiceLogTypes.NOT_FOUND.ToString()}");
+                    throw new RecordNotFoundException("Users not fetched properly!");
+                }
+
+                _adminLoggerService.LogInformation($"GET: {AdminServiceLogTypes.SUCCESS.ToString()}");
+                return users;
             }
-            return !users.IsNullOrEmpty() ? users : new List<UserDto>();
+            catch (Exception)
+            {
+                throw;
+            }
+
 
         }
         private async Task<List<UserDto>> FillMentalHealthExpertUsers(List<MentalHealthExpert>? dbMentalHealthExperts)
@@ -134,7 +193,7 @@ namespace MentalHealthBlog.API.Utils.Filtering.Dashboards.Admin
             return !users.IsNullOrEmpty() ? users : new List<UserDto>();
 
         }
-        public async Task<List<UserDto>> CallGetMentalHealthExpert(SearchUserDto?query = null)
+        public async Task<List<UserDto>> CallGetMentalHealthExpert(SearchUserDto? query = null)
         {
             return await GetMentalHealthExpert(query);
         }
