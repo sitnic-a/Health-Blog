@@ -40,7 +40,7 @@ namespace MentalHealthBlog.API.Services
             }
             catch (Exception e)
             {
-                _tagServiceLogger.LogError($"GET: {TagServiceLogTypes.TAGS_FAILED.ToString()}", e);
+                _tagServiceLogger.LogError($"GET: {e.Message}");
                 throw;
             }
         }

@@ -36,6 +36,17 @@ export const ListOfPosts = () => {
         })
         return
       }
+
+      if (
+        data?.payload?.statusCode === 200 &&
+        data?.payload?.serviceResponseObject?.length === 0
+      ) {
+        toast.warning('Currently, no posts to retrieve', {
+          position: 'bottom-right',
+        })
+        return
+      }
+
       toast.success('Posts fetched properly!', {
         autoClose: 1500,
         position: 'bottom-right',

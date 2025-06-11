@@ -92,7 +92,7 @@ namespace MentalHealthBlog.API.Services
             }
             catch (Exception e)
             {
-                _shareLoggerService.LogError($"LINK/shareId: {ShareServiceLogTypes.ERROR.ToString()}", e);
+                _shareLoggerService.LogError($"LINK/shareId: {e.Message}");
                 throw;
             }
         }
@@ -148,7 +148,7 @@ namespace MentalHealthBlog.API.Services
             }
             catch (Exception e)
             {
-                _shareLoggerService.LogError($"POST(SHARE-CONTENT): {ShareServiceLogTypes.ERROR.ToString()}", e);
+                _shareLoggerService.LogError($"POST(SHARE-CONTENT): {e.Message}");
                 throw;
             }
         }
@@ -230,7 +230,7 @@ namespace MentalHealthBlog.API.Services
             }
             catch (Exception e)
             {
-                _shareLoggerService.LogError($"EXPERTS-RELATIVES: {ShareServiceLogTypes.ERROR.ToString()}", e);
+                _shareLoggerService.LogError($"EXPERTS-RELATIVES: {e.Message}");
                 throw;
             }
         }

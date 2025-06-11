@@ -30,8 +30,9 @@ namespace MentalHealthBlog.API.Services
                 _exportLoggerService.LogInformation($"EXPORT-PDF: {ExportServiceLogTypes.FAILED.ToString()}");
                 throw new IOException("PDF File is not created!");
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                _exportLoggerService.LogError($"EXPORT-PDF: {e.Message}");
                 throw;
             }
             

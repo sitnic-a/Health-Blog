@@ -117,7 +117,7 @@ namespace MentalHealthBlog.API.Services
             }
             catch (Exception e)
             {
-                _userLoggerService.LogError($"GET/id: {UserServiceLogTypes.USER_FAILED.ToString()}", e);
+                _userLoggerService.LogError($"GET/id: {e.Message}");
                 throw;
             }
         }
@@ -178,11 +178,10 @@ namespace MentalHealthBlog.API.Services
             }
             catch (Exception e)
             {
-                _userLoggerService.LogError($"REGISTER: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", e);
+                _userLoggerService.LogError($"REGISTER: {e.Message}");
                 throw;
             }
         }
-
         public async Task<Response> Login(UserLoginDto loginCredentials)
         {
             try
@@ -226,11 +225,10 @@ namespace MentalHealthBlog.API.Services
             }
             catch (Exception e)
             {
-                _userLoggerService.LogError($"LOGIN: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", e);
+                _userLoggerService.LogError($"LOGIN: {e.Message}");
                 throw;
             }
         }
-
         private async Task<bool> VerifyCredentials(UserLoginDto loginCredentials)
         {
             var dbUsers = _context.Users;
@@ -242,7 +240,26 @@ namespace MentalHealthBlog.API.Services
             }
             return false;
         }
+        public async Task<Response> GetRoles()
+        {
+            try
+            {
+                var dbRoles = await _context.Roles.Where(r => r.Name != "Administrator" || r.Name != "Moderator").ToListAsync();
+                if (dbRoles.Any() && dbRoles != null)
+                {
+                    _userLoggerService.LogInformation($"DB_ROLES: {UserServiceLogTypes.ROLES_RETRIEVED.ToString()}", dbRoles);
+                    return new Response(dbRoles, StatusCodes.Status200OK, UserServiceLogTypes.ROLES_RETRIEVED.ToString());
+                }
+                _userLoggerService.LogWarning($"DB_ROLES: {UserServiceLogTypes.ROLES_NOT_FOUND.ToString()}");
+                throw new RecordNotFoundException("User should have at least one role!");
+            }
+            catch (Exception e)
+            {
+                _userLoggerService.LogWarning($"DB_ROLES: {e.Message}");
+                throw;
+            }
 
+        }
         public async Task<Response> RefreshAccessToken(string refreshToken)
         {
             try
@@ -259,32 +276,10 @@ namespace MentalHealthBlog.API.Services
             }
             catch (Exception e)
             {
-                _userLoggerService.LogError($"REFRESH-TOKEN: {UserServiceLogTypes.TOKEN_ERROR.ToString()}", e.Data);
+                _userLoggerService.LogError($"REFRESH-TOKEN: {e.Message}");
                 throw;
             }
         }
-
-        public async Task<Response> GetRoles()
-        {
-            try
-            {
-                var dbRoles = await _context.Roles.Where(r => r.Name != "Administrator" || r.Name != "Moderator").ToListAsync();
-                if (dbRoles.Any() && dbRoles != null)
-                {
-                    _userLoggerService.LogInformation($"DB_ROLES: {UserServiceLogTypes.ROLES_RETRIEVED.ToString()}", dbRoles);
-                    return new Response(dbRoles, StatusCodes.Status200OK, UserServiceLogTypes.ROLES_RETRIEVED.ToString());
-                }
-                _userLoggerService.LogWarning($"DB_ROLES: {UserServiceLogTypes.ROLES_NOT_FOUND.ToString()}");
-                throw new RecordNotFoundException("User should have at least one role!");
-            }
-            catch (Exception e)
-            {
-                _userLoggerService.LogWarning($"DB_ROLES: {UserServiceLogTypes.ROLES_NOT_FOUND.ToString()}", e);
-                throw;
-            }
-
-        }
-
         public async Task<Response> Logout(LogoutDto logoutRequest)
         {
             try
@@ -321,10 +316,9 @@ namespace MentalHealthBlog.API.Services
             }
             catch (Exception e)
             {
-                _userLoggerService.LogError($"LOGOUT: {UserServiceLogTypes.LOGOUT_ERROR.ToString()}", e);
+                _userLoggerService.LogError($"LOGOUT: {e.Message}");
                 throw;
             }
         }
-
     }
 }

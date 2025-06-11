@@ -37,7 +37,7 @@ namespace MentalHealthBlog.API.Services
             }
             catch (Exception e)
             {
-                _emotionLoggerService.LogError($"GET: {EmotionServiceLogTypes.ERROR.ToString()}", e);
+                _emotionLoggerService.LogError($"GET: {e.Message}");
                 throw;
             }
         }

@@ -88,11 +88,10 @@ namespace MentalHealthBlogAPI.Services
             }
             catch (Exception e)
             {
-                _postServiceLogger.LogError($"GET: {PostServiceLogTypes.POSTS_FAILED.ToString()}", e);
+                _postServiceLogger.LogError($"GET: {e.Message}");
                 throw;
             }
         }
-
         public async Task<Response> GetById(int id)
         {
             try
@@ -108,11 +107,10 @@ namespace MentalHealthBlogAPI.Services
             }
             catch (Exception e)
             {
-                _postServiceLogger.LogError($"GET/id: {PostServiceLogTypes.POSTS_FAILED.ToString()}", e);
+                _postServiceLogger.LogError($"GET/id: {e.Message}");
                 throw;
             }
         }
-
         public async Task<Response> Add(CreatePostDto post)
         {
             try
@@ -187,7 +185,7 @@ namespace MentalHealthBlogAPI.Services
             }
             catch (Exception e)
             {
-                _postServiceLogger.LogError($"POST: {PostServiceLogTypes.POSTS_FAILED.ToString()}", e);
+                _postServiceLogger.LogError($"POST: {e.Message}");
                 throw;
             }
         }
@@ -221,11 +219,10 @@ namespace MentalHealthBlogAPI.Services
             }
             catch (Exception e)
             {
-                _postServiceLogger.LogError($"PUT/id: {PostServiceLogTypes.POSTS_FAILED.ToString()}", e);
+                _postServiceLogger.LogError($"PUT/id: {e.Message}");
                 throw;
             }
         }
-
         public async Task<Response> Delete(int id)
         {
             try
@@ -250,7 +247,7 @@ namespace MentalHealthBlogAPI.Services
             }
             catch (Exception e)
             {
-                _postServiceLogger.LogError($"DELETE/id: {PostServiceLogTypes.POSTS_FAILED.ToString()}", e);
+                _postServiceLogger.LogError($"DELETE/id: {e.Message}");
                 throw;
             }
         }

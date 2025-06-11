@@ -91,11 +91,50 @@ namespace MentalHealthBlog.API.Services
             }
             catch (Exception e)
             {
-                _mentalExpertLoggerService.LogError($"SHARES-PER-USER: {MentalExpertServiceLogTypes.ERROR.ToString()}", e);
+                _mentalExpertLoggerService.LogError($"SHARES-PER-USER: {e.Message}");
                 throw;
             }
         }
+        public async Task<Response> CreateAssignment(CreateAssignmentDto request)
+        {
+            try
+            {
+                if (!request.IsValid())
+                {
+                    _mentalExpertLoggerService.LogWarning($"GIVE-ASSIGNMENT: {MentalExpertServiceLogTypes.ASSIGNMENT_INVALID_DATA.ToString()}", request);
+                    throw new ArgumentException("Bad request!");
+                }
 
+                var dbMentalHealthExpert = await _context.MentalHealthExperts
+                        .FirstOrDefaultAsync(mhe => mhe.UserId == request.AssignmentGivenById);
+
+                if (dbMentalHealthExpert == null)
+                {
+                    _mentalExpertLoggerService.LogWarning($"GIVE-ASSIGNMENT: {MentalExpertServiceLogTypes.NOT_FOUND.ToString()}", dbMentalHealthExpert);
+                    throw new RecordNotFoundException("Couldn't create an assignment!");
+                }
+
+                var newAssignment = new Assignment(request.AssignmentGivenToId, dbMentalHealthExpert.Id, request.Content, DateTime.Now);
+
+                if (newAssignment == null)
+                {
+                    _mentalExpertLoggerService.LogWarning($"GIVE-ASSIGNMENT: {MentalExpertServiceLogTypes.ASSIGNMENT_INVALID_DATA.ToString()}", newAssignment);
+                    throw new CreateRecordException("Assignment can't be created!");
+                }
+
+                await _context.Assignments.AddAsync(newAssignment);
+                await _context.SaveChangesAsync();
+
+                _mentalExpertLoggerService.LogInformation($"GIVE-ASSIGNMENT: {MentalExpertServiceLogTypes.SUCCESS.ToString()}", newAssignment);
+                return new Response(newAssignment, StatusCodes.Status201Created, MentalExpertServiceLogTypes.SUCCESS.ToString());
+            }
+            catch (Exception e)
+            {
+                _mentalExpertLoggerService.LogError($"GIVE-ASSIGNMENT: {e.Message}");
+                throw;
+            }
+
+        }
         private async Task<List<SharesPerUserDto>> FillListGroupedUsersAndTheirShares(IEnumerable<IGrouping<User, Share>> groupedUsersAndTheirShares)
         {
             try
@@ -137,50 +176,9 @@ namespace MentalHealthBlog.API.Services
             }
             catch (Exception e)
             {
-                _mentalExpertLoggerService.LogError($"SHARES-PER-USER: {e.Message}", e);
+                _mentalExpertLoggerService.LogError($"SHARES-PER-USER: {e.Message}");
                 throw;
             }
-        }
-
-        public async Task<Response> CreateAssignment(CreateAssignmentDto request)
-        {
-            try
-            {
-                if (!request.IsValid())
-                {
-                    _mentalExpertLoggerService.LogWarning($"GIVE-ASSIGNMENT: {MentalExpertServiceLogTypes.ASSIGNMENT_INVALID_DATA.ToString()}", request);
-                    throw new ArgumentException("Bad request!");
-                }
-
-                var dbMentalHealthExpert = await _context.MentalHealthExperts
-                        .FirstOrDefaultAsync(mhe => mhe.UserId == request.AssignmentGivenById);
-
-                if (dbMentalHealthExpert == null)
-                {
-                    _mentalExpertLoggerService.LogWarning($"GIVE-ASSIGNMENT: {MentalExpertServiceLogTypes.NOT_FOUND.ToString()}", dbMentalHealthExpert);
-                    throw new RecordNotFoundException("Couldn't create an assignment!");
-                }
-
-                var newAssignment = new Assignment(request.AssignmentGivenToId, dbMentalHealthExpert.Id, request.Content, DateTime.Now);
-
-                if (newAssignment == null)
-                {
-                    _mentalExpertLoggerService.LogWarning($"GIVE-ASSIGNMENT: {MentalExpertServiceLogTypes.ASSIGNMENT_INVALID_DATA.ToString()}", newAssignment);
-                    throw new CreateRecordException("Assignment can't be created!");
-                }
-
-                await _context.Assignments.AddAsync(newAssignment);
-                await _context.SaveChangesAsync();
-
-                _mentalExpertLoggerService.LogInformation($"GIVE-ASSIGNMENT: {MentalExpertServiceLogTypes.SUCCESS.ToString()}", newAssignment);
-                return new Response(newAssignment, StatusCodes.Status201Created, MentalExpertServiceLogTypes.SUCCESS.ToString());
-            }
-            catch (Exception e)
-            {
-                _mentalExpertLoggerService.LogError($"GIVE-ASSIGNMENT: {MentalExpertServiceLogTypes.ERROR}", e);
-                throw;
-            }
-
         }
     }
 }

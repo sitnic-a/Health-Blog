@@ -217,9 +217,9 @@ let adminSlice = createSlice({
         console.log('Remove pending... ')
       })
       .addCase(removeUserById.fulfilled, (state, action) => {
-        console.log('Remove done...', action.payload)
+        console.log('Remove done...', action?.payload)
 
-        let statusCode = action.payload.statusCode
+        let statusCode = action?.payload?.statusCode
 
         if (statusCode === 200) {
           toast.success('Succesfully deleted user', {
@@ -228,12 +228,15 @@ let adminSlice = createSlice({
           })
           setTimeout(() => {
             window.location.reload()
-          }, 1000)
+          }, 1500)
           return
         }
       })
       .addCase(removeUserById.rejected, (state, action) => {
         console.log('Remove rejected...')
+        toast.error('Something went wrong!', {
+          position: 'bottom-right',
+        })
       })
   },
 })

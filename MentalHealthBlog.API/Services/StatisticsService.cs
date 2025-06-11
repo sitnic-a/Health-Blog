@@ -92,7 +92,7 @@ namespace MentalHealthBlog.API.Services
             }
             catch (Exception e)
             {
-                _statisticsServiceLogger.LogError($"GET: {StatisticsServiceLogTypes.FAILED.ToString()}", e);
+                _statisticsServiceLogger.LogError($"GET: {e.Message}");
                 throw;
             }
         }

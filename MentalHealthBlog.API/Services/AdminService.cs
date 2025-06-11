@@ -5,7 +5,6 @@ using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Utils.Filtering.Dashboards.Admin;
 using MentalHealthBlogAPI.Data;
-using MentalHealthBlogAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -36,7 +35,7 @@ namespace MentalHealthBlog.API.Services
         {
             try
             {
-                AdminDashboardFilter filter = new AdminDashboardFilter(_context,_adminLoggerService, _mapper);
+                AdminDashboardFilter filter = new AdminDashboardFilter(_context, _adminLoggerService, _mapper);
 
                 var users = new List<UserDto>();
                 const int __USER_ROLE__ = 2;
@@ -76,7 +75,7 @@ namespace MentalHealthBlog.API.Services
                         if (users.Any())
                         {
                             _adminLoggerService.LogInformation($"GET: {AdminServiceLogTypes.SUCCESS.ToString()}");
-                            return new Response(users,StatusCodes.Status200OK, AdminServiceLogTypes.SUCCESS.ToString());
+                            return new Response(users, StatusCodes.Status200OK, AdminServiceLogTypes.SUCCESS.ToString());
                         }
                         else
                         {
@@ -98,12 +97,11 @@ namespace MentalHealthBlog.API.Services
             }
             catch (Exception e)
             {
-                _adminLoggerService.LogError($"GET: {AdminServiceLogTypes.ERROR.ToString()}", e);
+                _adminLoggerService.LogError($"GET: {e.Message}");
                 throw;
             }
 
         }
-
         public async Task<Response> GetNewRegisteredExperts(SearchExpertDto? query = null)
         {
             try
@@ -160,11 +158,10 @@ namespace MentalHealthBlog.API.Services
             }
             catch (Exception e)
             {
-                _adminLoggerService.LogError($"NEW-REQUEST: {AdminServiceLogTypes.ERROR}", e.Message);
+                _adminLoggerService.LogError($"NEW-REQUEST: {e.Message}");
                 throw;
             }
         }
-
         public async Task<Response> SetRegisteredExpertStatus(RegisterExpertPatchDto patchDto)
         {
             try
@@ -192,25 +189,41 @@ namespace MentalHealthBlog.API.Services
             }
             catch (Exception e)
             {
-                _adminLoggerService.LogError($"APPROVAL: {AdminServiceLogTypes.ERROR.ToString()}", e.Message);
+                _adminLoggerService.LogError($"APPROVAL: {e.Message}");
                 throw;
             }
         }
-
         public async Task<Response> RemoveUserById(int userId)
         {
             try
             {
                 if (userId <= 0)
                 {
-                    _adminLoggerService.LogWarning($"DELETE/id: {AdminServiceLogTypes.NOT_FOUND.ToString()}", new object());
-                    return new Response(new object(), StatusCodes.Status404NotFound, AdminServiceLogTypes.NOT_FOUND.ToString());
+                    _adminLoggerService.LogWarning($"DELETE/id: {AdminServiceLogTypes.INVALID_DATA.ToString()}");
+                    throw new ArgumentException("Bad request!");
                 }
+
                 var dbUser = await _context.Users.FindAsync(userId);
                 if (dbUser != null)
                 {
+                    const int __PSYCHOLOGIST_ROLE__ = 4;
+                    var userHelper = new UserHelper(_context);
+                    var dbUserDto = _mapper.Map<UserDto>(dbUser);
+                    var roles = await userHelper.GetUserRolesAsync(dbUserDto);
+
+                    if (roles.IsNullOrEmpty())
+                    {
+                        _adminLoggerService.LogWarning($"DELETE/id: {AdminServiceLogTypes.NOT_FOUND.ToString()}");
+                        throw new RecordNotFoundException("User not deleted. Roles are missing!");
+                    }
+
                     var mentalHealthExpert = await _context.MentalHealthExperts.FirstOrDefaultAsync(mhe => mhe.UserId == dbUser.Id);
-                    if (mentalHealthExpert != null)
+                    if (mentalHealthExpert == null && roles.Any(r => r.Id == __PSYCHOLOGIST_ROLE__))
+                    {
+                        _adminLoggerService.LogWarning($"DELETE/id: {AdminServiceLogTypes.NOT_FOUND.ToString()}");
+                        throw new RecordNotFoundException("User not deleted. Mental health expert not found!");
+                    }
+                    else if (mentalHealthExpert != null && roles.Any(r => r.Id == __PSYCHOLOGIST_ROLE__))
                     {
                         var removedMentalHealthExpert = _context.MentalHealthExperts.Remove(mentalHealthExpert);
                         var removedMentalHealthExpertAsUser = _context.Users.Remove(dbUser);
@@ -218,19 +231,20 @@ namespace MentalHealthBlog.API.Services
                         _adminLoggerService.LogInformation($"DELETE/id: {AdminServiceLogTypes.SUCCESS.ToString()}", mentalHealthExpert);
                         return new Response(mentalHealthExpert, StatusCodes.Status200OK, AdminServiceLogTypes.SUCCESS.ToString());
                     }
+
                     var removedUser = _context.Users.Remove(dbUser);
                     await _context.SaveChangesAsync();
                     _adminLoggerService.LogInformation($"DELETE/id: {AdminServiceLogTypes.SUCCESS.ToString()}", dbUser);
                     return new Response(dbUser, StatusCodes.Status200OK, AdminServiceLogTypes.SUCCESS.ToString());
                 }
-                _adminLoggerService.LogWarning($"DELETE/id: {AdminServiceLogTypes.NOT_FOUND.ToString()}", dbUser);
-                return new Response(new User(), StatusCodes.Status404NotFound, AdminServiceLogTypes.NOT_FOUND.ToString());
 
+                _adminLoggerService.LogWarning($"DELETE/id: {AdminServiceLogTypes.NOT_FOUND.ToString()}", dbUser);
+                throw new RecordNotFoundException("User can't be deleted. User not found!");
             }
             catch (Exception e)
             {
-                _adminLoggerService.LogError($"DELETE/id: {e.Message}", e);
-                return new Response(e.Data, StatusCodes.Status500InternalServerError, e.Message);
+                _adminLoggerService.LogError($"DELETE/id: {e.Message}");
+                throw;
             }
         }
     }

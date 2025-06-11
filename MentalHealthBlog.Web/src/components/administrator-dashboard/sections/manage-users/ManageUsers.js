@@ -93,10 +93,43 @@ export const ManageUsers = () => {
                     (ur) => ur?.name === 'Psychologist / Psychotherapist'
                   )
                 ) {
-                  dispatch(removeUserById(dbUser.userId))
+                  dispatch(removeUserById(dbUser.userId)).then((data) => {
+                    let statusCode = data?.payload?.StatusCode
+                    if (statusCode !== 200) {
+                      if (statusCode === 400) {
+                        toast.error("User don't exist! Check parameters!", {
+                          position: 'bottom-right',
+                        })
+                        return
+                      }
+                      if (statusCode === 404) {
+                        toast.error('User not deleted! Not found!', {
+                          position: 'bottom-right',
+                        })
+                        return
+                      }
+                    }
+                  })
                   dispatch(openDeleteModal(false))
+                  return
                 }
-                dispatch(removeUserById(dbUser.id))
+                dispatch(removeUserById(dbUser.id)).then((data) => {
+                  let statusCode = data?.payload?.StatusCode
+                  if (statusCode !== 200) {
+                    if (statusCode === 400) {
+                      toast.error("User don't exist! Check parameters!", {
+                        position: 'bottom-right',
+                      })
+                      return
+                    }
+                    if (statusCode === 404) {
+                      toast.error('User not deleted! Not found!', {
+                        position: 'bottom-right',
+                      })
+                      return
+                    }
+                  }
+                })
                 dispatch(openDeleteModal(false))
               }}
             >

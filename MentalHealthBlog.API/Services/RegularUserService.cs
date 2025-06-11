@@ -80,7 +80,7 @@ namespace MentalHealthBlog.API.Services
             }
             catch (Exception e)
             {
-                _regularUserLoggerService.LogError($"SHARES-PER-MENTAL-HEALTH-EXPERT: {RegularUserServiceLogTypes.ERROR.ToString()}", e);
+                _regularUserLoggerService.LogError($"SHARES-PER-MENTAL-HEALTH-EXPERT: {e.Message}");
                 throw;
             }
         }
@@ -173,7 +173,7 @@ namespace MentalHealthBlog.API.Services
             }
             catch (Exception e)
             {
-                _regularUserLoggerService.LogError($"RECENT: {RegularUserServiceLogTypes.ERROR.ToString()}", e.Message);
+                _regularUserLoggerService.LogError($"RECENT: {e.Message}");
                 throw;
             }
         }
@@ -210,7 +210,7 @@ namespace MentalHealthBlog.API.Services
             }
             catch (Exception e)
             {
-                _regularUserLoggerService.LogError($"REVOKE: {RegularUserServiceLogTypes.ERROR.ToString()}", e);
+                _regularUserLoggerService.LogError($"REVOKE: {e.Message}");
                 throw;
             }
         }
@@ -266,7 +266,7 @@ namespace MentalHealthBlog.API.Services
             }
             catch (Exception e)
             {
-                _regularUserLoggerService.LogError($"SHARES-PER-MENTAL-HEALTH-EXPERT: {e.Message}", e);
+                _regularUserLoggerService.LogError($"SHARES-PER-MENTAL-HEALTH-EXPERT: {e.Message}");
                 throw;
             }
         }
