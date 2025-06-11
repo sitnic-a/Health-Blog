@@ -1,8 +1,6 @@
-import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setIsSharingExporting } from './redux-toolkit/features/postSlice'
 import { setVisibility } from './redux-toolkit/features/filterSlice'
-import { getTags } from './redux-toolkit/features/tagSlice'
 import { openAddModal } from './redux-toolkit/features/modalSlice'
 
 import { AddPost } from './AddPost'
@@ -15,10 +13,6 @@ export const ListOfPostsHeader = () => {
   let { authenticatedUser } = useSelector((store) => store.user)
   let { isAddOpen } = useSelector((store) => store.modal)
   let { isSharingExporting } = useSelector((store) => store.post)
-
-  useEffect(() => {
-    dispatch(getTags())
-  }, [])
 
   return (
     <>

@@ -1,13 +1,16 @@
-import { useDispatch, useSelector } from "react-redux";
-import { checkVisibilityOfShareContentAction } from "../../redux-toolkit/features/shareExportSlice";
-import defaultAvatar from "../../../images/default-avatar.png";
-import { LiaSearchSolid } from "react-icons/lia";
+import { useDispatch, useSelector } from 'react-redux'
+import { checkVisibilityOfShareContentAction } from '../../redux-toolkit/features/shareExportSlice'
+import defaultAvatar from '../../../images/default-avatar.png'
+import { LiaSearchSolid } from 'react-icons/lia'
+import { BiError } from 'react-icons/bi'
 
 export const ExpertsToShareContentWith = () => {
-  let dispatch = useDispatch();
-  let { possibleToShareWith, numberOfPeoplePossibleToShareWith } = useSelector(
-    (store) => store.shareExport
-  );
+  let dispatch = useDispatch()
+  let {
+    possibleToShareWith,
+    possibleToShareWithError,
+    numberOfPeoplePossibleToShareWith,
+  } = useSelector((store) => store.shareExport)
   return (
     <>
       <div className="search-people">
@@ -24,8 +27,8 @@ export const ExpertsToShareContentWith = () => {
 
       <div className="people-to-give-permission-container">
         <div className="people-to-give-permission">
-          {possibleToShareWith.map((personToShareWith) => {
-            let base64Photo = `data:image/png;base64,${personToShareWith.photoAsFile}`;
+          {possibleToShareWith?.map((personToShareWith) => {
+            let base64Photo = `data:image/png;base64,${personToShareWith.photoAsFile}`
 
             return (
               <div
@@ -38,7 +41,7 @@ export const ExpertsToShareContentWith = () => {
                     name="person-to-give-permission-checkbox"
                     id="person-to-give-permission-checkbox"
                     onClick={() => {
-                      dispatch(checkVisibilityOfShareContentAction());
+                      dispatch(checkVisibilityOfShareContentAction())
                     }}
                   />
                 </div>
@@ -90,16 +93,41 @@ export const ExpertsToShareContentWith = () => {
                   </div>
                 </div>
               </div>
-            );
+            )
           })}
         </div>
+
+        {possibleToShareWith?.length === 0 && (
+          <div className="person-to-give-permission-no-data-container">
+            <p className="person-to-give-permission-no-data-title">
+              Experts list is currently empty!
+            </p>
+          </div>
+        )}
+
+        {possibleToShareWithError && (
+          <div className="person-to-give-permission-no-data-container">
+            <div className="person-to-give-permission-no-data-information">
+              <BiError className="person-to-give-permission-no-data-error-icon" />
+              <div className="person-to-give-permission-no-data-messages">
+                <p className="person-to-give-permission-no-data-title-error">
+                  Something went wrong! Experts list couldn't get populated!
+                </p>
+                <p className="person-to-give-permission-no-data-title-error">
+                  Please contact site administrator
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {numberOfPeoplePossibleToShareWith > 0 && (
           <p className="people-to-give-permission-count">
-            Number of persons content is shared with{" "}
+            Number of persons content is shared with{' '}
             {numberOfPeoplePossibleToShareWith}
           </p>
         )}
       </div>
     </>
-  );
-};
+  )
+}

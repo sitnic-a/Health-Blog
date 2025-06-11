@@ -1,28 +1,30 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux'
 import {
   getPeopleToShareContentWith,
   prepareContentToShare,
-} from "../../utils/helper-methods/methods";
+} from '../../utils/helper-methods/methods'
 
 import {
   shareContent,
   revokeShareContent,
   resetShareLinkUrl,
-} from "../../redux-toolkit/features/shareExportSlice";
+} from '../../redux-toolkit/features/shareExportSlice'
 
 import {
   openShareModal,
   openShareViaLink,
-} from "../../redux-toolkit/features/modalSlice";
-import { ExpertsToShareContentWith } from "./ExpertsToShareContentWith";
+} from '../../redux-toolkit/features/modalSlice'
+import { ExpertsToShareContentWith } from './ExpertsToShareContentWith'
 
-import { IoRemoveCircleOutline } from "react-icons/io5";
-import { ShareViaLink } from "./ShareViaLink";
+import { IoRemoveCircleOutline } from 'react-icons/io5'
+import { ShareViaLink } from './ShareViaLink'
+import { toast } from 'react-toastify'
 
 export const ShareModal = () => {
-  let dispatch = useDispatch();
-  let { isShareOpen, isShareViaLinkOpen } = useSelector((store) => store.modal);
-  let { postsToExport } = useSelector((store) => store.shareExport);
+  let dispatch = useDispatch()
+  let { authenticatedUser } = useSelector((store) => store.user)
+  let { isShareOpen, isShareViaLinkOpen } = useSelector((store) => store.modal)
+  let { postsToExport } = useSelector((store) => store.shareExport)
 
   return (
     postsToExport.length > 0 &&
@@ -32,13 +34,13 @@ export const ShareModal = () => {
           <span
             className="share-export-close-modal-btn"
             onClick={() => {
-              dispatch(openShareModal(!isShareOpen));
-              dispatch(openShareViaLink(!isShareViaLinkOpen));
-              dispatch(resetShareLinkUrl());
+              dispatch(openShareModal(!isShareOpen))
+              dispatch(openShareViaLink(!isShareViaLinkOpen))
+              dispatch(resetShareLinkUrl())
               let shareExportContainer = document.querySelector(
-                ".share-export-container"
-              );
-              shareExportContainer.style.display = "flex";
+                '.share-export-container'
+              )
+              shareExportContainer.style.display = 'flex'
             }}
           >
             X
@@ -53,13 +55,13 @@ export const ShareModal = () => {
                   <span
                     className="revoke-btn"
                     onClick={() => {
-                      dispatch(revokeShareContent(post.id));
+                      dispatch(revokeShareContent(post.id))
                     }}
                   >
                     <IoRemoveCircleOutline />
                   </span>
                 </div>
-              );
+              )
             })}
           </div>
 
@@ -72,13 +74,32 @@ export const ShareModal = () => {
                 let paramsForPreparation = {
                   postsToExport,
                   shareLink: false,
-                };
+                }
 
                 let contentToBeShared =
-                  prepareContentToShare(paramsForPreparation);
-                console.log("CTBS ", contentToBeShared);
+                  prepareContentToShare(paramsForPreparation)
 
-                dispatch(shareContent(contentToBeShared));
+                let objectWithData = {
+                  contentToBeShared,
+                  authenticatedUser,
+                }
+
+                console.log('CTBS ', contentToBeShared)
+
+                dispatch(shareContent(objectWithData)).then((data) => {
+                  let statusCode = data?.payload?.StatusCode
+                  if (statusCode === 400) {
+                    toast.error("Content couldn't be shared!", {
+                      position: 'bottom-right',
+                    })
+                    return
+                  }
+                  if (statusCode === 404) {
+                    toast.error("Couldn't find the data!", {
+                      position: 'bottom-right',
+                    })
+                  }
+                })
               }}
             >
               Share content
@@ -91,13 +112,31 @@ export const ShareModal = () => {
                 let paramsForPreparation = {
                   postsToExport,
                   shareLink: true,
-                };
+                }
 
                 let contentToBeShared =
-                  prepareContentToShare(paramsForPreparation);
+                  prepareContentToShare(paramsForPreparation)
 
-                dispatch(shareContent(contentToBeShared));
-                dispatch(openShareViaLink(!isShareViaLinkOpen));
+                let objectWithData = {
+                  contentToBeShared,
+                  authenticatedUser,
+                }
+
+                dispatch(shareContent(objectWithData)).then((data) => {
+                  let statusCode = data?.payload?.StatusCode
+                  if (statusCode === 400) {
+                    toast.error("Content couldn't be shared!", {
+                      position: 'bottom-right',
+                    })
+                    return
+                  }
+                  if (statusCode === 404) {
+                    toast.error("Couldn't find the data!", {
+                      position: 'bottom-right',
+                    })
+                  }
+                })
+                dispatch(openShareViaLink(!isShareViaLinkOpen))
               }}
             >
               Share via link
@@ -107,5 +146,5 @@ export const ShareModal = () => {
         </section>
       </section>
     )
-  );
-};
+  )
+}

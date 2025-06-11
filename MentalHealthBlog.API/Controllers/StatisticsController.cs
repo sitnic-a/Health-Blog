@@ -1,6 +1,7 @@
 ﻿using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MentalHealthBlog.API.Controllers
@@ -17,6 +18,7 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpGet("pie")]
+        [Authorize]
         public async Task<Response> PrepareForPieGraph([FromQuery] SearchPostDto query)
         {
             return await _statisticsService.PrepareForMontlyPieGraph(query);

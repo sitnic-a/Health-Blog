@@ -525,8 +525,6 @@ namespace MentalHealthBlogAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("MentalHealthExperts");
                 });
 
@@ -766,7 +764,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 1,
                             Content = "Content_T01",
-                            CreatedAt = new DateTime(2025, 4, 3, 16, 43, 30, 682, DateTimeKind.Local).AddTicks(6136),
+                            CreatedAt = new DateTime(2025, 5, 25, 11, 34, 1, 778, DateTimeKind.Local).AddTicks(7018),
                             Title = "Title_01",
                             UserId = 1
                         },
@@ -774,7 +772,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 2,
                             Content = "Content_T02",
-                            CreatedAt = new DateTime(2025, 4, 3, 16, 43, 30, 682, DateTimeKind.Local).AddTicks(6198),
+                            CreatedAt = new DateTime(2025, 5, 25, 11, 34, 1, 778, DateTimeKind.Local).AddTicks(7070),
                             Title = "Title_02",
                             UserId = 1
                         },
@@ -782,7 +780,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 3,
                             Content = "Content_T03",
-                            CreatedAt = new DateTime(2025, 4, 3, 16, 43, 30, 682, DateTimeKind.Local).AddTicks(6200),
+                            CreatedAt = new DateTime(2025, 5, 25, 11, 34, 1, 778, DateTimeKind.Local).AddTicks(7073),
                             Title = "Title_03",
                             UserId = 2
                         },
@@ -790,7 +788,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 4,
                             Content = "Content_T04",
-                            CreatedAt = new DateTime(2025, 4, 3, 16, 43, 30, 682, DateTimeKind.Local).AddTicks(6202),
+                            CreatedAt = new DateTime(2025, 5, 25, 11, 34, 1, 778, DateTimeKind.Local).AddTicks(7076),
                             Title = "Title_04",
                             UserId = 2
                         },
@@ -798,7 +796,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 5,
                             Content = "Content_T05",
-                            CreatedAt = new DateTime(2025, 4, 3, 16, 43, 30, 682, DateTimeKind.Local).AddTicks(6204),
+                            CreatedAt = new DateTime(2025, 5, 25, 11, 34, 1, 778, DateTimeKind.Local).AddTicks(7078),
                             Title = "Title_05",
                             UserId = 1
                         });
@@ -878,17 +876,6 @@ namespace MentalHealthBlogAPI.Migrations
                     b.Navigation("AssignmentGivenTo");
                 });
 
-            modelBuilder.Entity("MentalHealthBlog.API.Models.MentalHealthExpert", b =>
-                {
-                    b.HasOne("MentalHealthBlogAPI.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("MentalHealthBlog.API.Models.PostEmotion", b =>
                 {
                     b.HasOne("MentalHealthBlog.API.Models.Emotion", "Emotion")
@@ -946,7 +933,7 @@ namespace MentalHealthBlogAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MentalHealthBlogAPI.Models.User", "SharedWith")
+                    b.HasOne("MentalHealthBlog.API.Models.MentalHealthExpert", "SharedWith")
                         .WithMany()
                         .HasForeignKey("SharedWithId");
 

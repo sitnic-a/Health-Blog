@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MentalHealthBlog.API.Exceptions;
 using MentalHealthBlog.API.ExtensionMethods.ExtensionAssignmentClass;
 using MentalHealthBlog.API.Methods;
 using MentalHealthBlog.API.Models;
@@ -7,7 +8,6 @@ using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
 using MentalHealthBlogAPI.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 #pragma warning disable CS8620
 #pragma warning disable CS8602
@@ -39,84 +39,62 @@ namespace MentalHealthBlog.API.Services
 
         public async Task<Response> GetSharesPerUser(ExpertSearchContentDto query)
         {
-            if (query == null || query.LoggedExpertId <= 0)
-            {
-                _mentalExpertLoggerService.LogError($"SHARES-PER-USER: {MentalExpertServiceLogTypes.ERROR.ToString()} - QUERY NULL OR WRONG", query);
-                return new Response(new object(), StatusCodes.Status400BadRequest, MentalExpertServiceLogTypes.ERROR.ToString());
-            }
-
             try
             {
+                if (query == null || query.LoggedExpertId <= 0)
+                {
+                    _mentalExpertLoggerService.LogError($"SHARES-PER-USER: {MentalExpertServiceLogTypes.ERROR.ToString()} - QUERY NULL OR WRONG", query);
+                    throw new ArgumentException("Bad request!");
+                }
+
+                var mentalHealthExpert = await _context.MentalHealthExperts
+                    .SingleOrDefaultAsync(mhe => mhe.UserId == query.LoggedExpertId);
+
                 var dbShares = await _context.Shares
-                .Include(p => p.SharedPost)
-                .Include(u => u.SharedPost.User)
-                .ToListAsync();
+                    .Where(mhe => mhe.SharedWithId == mentalHealthExpert.Id)
+                    .Include(p => p.SharedPost)
+                    .Include(u => u.SharedPost.User)
+                    .ToListAsync();
+                var isSharedWithThisMentalHealthExpert = dbShares.Any();
 
-                if (!dbShares.IsNullOrEmpty())
+                if (!isSharedWithThisMentalHealthExpert)
                 {
-                    var groupedUsersAndTheirShares = dbShares
-                        .DistinctBy(p => new
-                        {
-                            p.SharedPostId,
-                            p.SharedWithId
-                        })
-                        .Where(ex => ex.SharedWithId == query.LoggedExpertId)
-                        .GroupBy(u => u.SharedPost.User);
-
-                    if (groupedUsersAndTheirShares.IsNullOrEmpty())
-                    {
-                        _mentalExpertLoggerService.LogWarning($"SHARES-PER-USER: {MentalExpertServiceLogTypes.NOT_FOUND.ToString()}");
-                        return new Response(new object(), StatusCodes.Status404NotFound, MentalExpertServiceLogTypes.NOT_FOUND.ToString());
-                    }
-
-                    List<SharesPerUserDto> sharesPerUser = await FillListGroupedUsersAndTheirShares(groupedUsersAndTheirShares);
-
-                    if (!sharesPerUser.IsNullOrEmpty())
-                    {
-                        _mentalExpertLoggerService.LogInformation($"SHARES-PER-USER: {MentalExpertServiceLogTypes.SUCCESS.ToString()}", sharesPerUser);
-                        return new Response(sharesPerUser, StatusCodes.Status200OK, MentalExpertServiceLogTypes.SUCCESS.ToString());
-                    }
                     _mentalExpertLoggerService.LogWarning($"SHARES-PER-USER: {MentalExpertServiceLogTypes.EMPTY.ToString()}");
-                    return new Response(new object(), StatusCodes.Status204NoContent, MentalExpertServiceLogTypes.EMPTY.ToString());
+                    return new Response(new List<SharesPerUserDto>(), StatusCodes.Status200OK, $"SHARES-PER-USER: {MentalExpertServiceLogTypes.EMPTY.ToString()}");
                 }
-                _mentalExpertLoggerService.LogWarning($"SHARES-PER-USER: {MentalExpertServiceLogTypes.EMPTY.ToString()}");
-                return new Response(new object(), StatusCodes.Status204NoContent, MentalExpertServiceLogTypes.EMPTY.ToString());
-            }
-            catch (Exception e)
-            {
-                _mentalExpertLoggerService.LogError($"SHARES-PER-USER: {MentalExpertServiceLogTypes.ERROR.ToString()}", e);
-                return new Response(e.Data, StatusCodes.Status400BadRequest, MentalExpertServiceLogTypes.ERROR.ToString());
-            }
-        }
 
-        private async Task<List<SharesPerUserDto>> FillListGroupedUsersAndTheirShares(IEnumerable<IGrouping<User, Share>> groupedUsersAndTheirShares)
-        {
-            try
-            {
-                List<SharesPerUserDto> sharesPerUser = new List<SharesPerUserDto>();
-                ShareHelper shareHelper = new ShareHelper(_context);
-                foreach (var userFromGroup in groupedUsersAndTheirShares)
-                {
-                    var dbUserByKey = await _context.Users.FindAsync(userFromGroup.Key.Id);
-                    UserDto userThatSharedContent;
-
-                    if (dbUserByKey is not null)
+                var groupedUsersAndTheirShares = dbShares
+                    .DistinctBy(p => new
                     {
-                        userThatSharedContent = new UserDto(dbUserByKey.Id, dbUserByKey.Username);
-                        List<PostDto> contentUserShared = await shareHelper.CallFillSharedContentAsync(userFromGroup, new List<PostDto>());
+                        p.SharedPostId,
+                        p.SharedWithId
+                    })
+                    .GroupBy(u => u.SharedPost.User);
 
-                        sharesPerUser.Add(new SharesPerUserDto(userThatSharedContent, contentUserShared));
-                    }
+                if (!groupedUsersAndTheirShares.Any())
+                {
+                    _mentalExpertLoggerService.LogWarning($"SHARES-PER-USER: {MentalExpertServiceLogTypes.NOT_FOUND.ToString()}");
+                    throw new RecordNotFoundException("Content shared with this mental health expert not available!");
                 }
-                return sharesPerUser;
+
+                List<SharesPerUserDto> sharesPerUser = await FillListGroupedUsersAndTheirShares(groupedUsersAndTheirShares);
+
+                if (isSharedWithThisMentalHealthExpert && !sharesPerUser.Any())
+                {
+                    _mentalExpertLoggerService.LogWarning($"SHARES-PER-USER: {MentalExpertServiceLogTypes.NOT_FOUND.ToString()}");
+                    throw new RecordNotFoundException("Shares not fetched properly!");
+                }
+
+                _mentalExpertLoggerService.LogInformation($"SHARES-PER-USER: {MentalExpertServiceLogTypes.SUCCESS.ToString()}", sharesPerUser);
+                return new Response(sharesPerUser, StatusCodes.Status200OK, MentalExpertServiceLogTypes.SUCCESS.ToString());
+                
             }
             catch (Exception e)
             {
-                _mentalExpertLoggerService.LogError($"SHARES-PER-USER: {e.Message}", e);
-                return new List<SharesPerUserDto>();
+                _mentalExpertLoggerService.LogError($"SHARES-PER-USER: {e.Message}");
+                throw;
             }
         }
-
         public async Task<Response> CreateAssignment(CreateAssignmentDto request)
         {
             try
@@ -124,7 +102,7 @@ namespace MentalHealthBlog.API.Services
                 if (!request.IsValid())
                 {
                     _mentalExpertLoggerService.LogWarning($"GIVE-ASSIGNMENT: {MentalExpertServiceLogTypes.ASSIGNMENT_INVALID_DATA.ToString()}", request);
-                    return new Response(new object(), StatusCodes.Status400BadRequest, MentalExpertServiceLogTypes.ASSIGNMENT_INVALID_DATA.ToString());
+                    throw new ArgumentException("Bad request!");
                 }
 
                 var dbMentalHealthExpert = await _context.MentalHealthExperts
@@ -133,33 +111,74 @@ namespace MentalHealthBlog.API.Services
                 if (dbMentalHealthExpert == null)
                 {
                     _mentalExpertLoggerService.LogWarning($"GIVE-ASSIGNMENT: {MentalExpertServiceLogTypes.NOT_FOUND.ToString()}", dbMentalHealthExpert);
-                    return new Response(new object(), StatusCodes.Status404NotFound, MentalExpertServiceLogTypes.NOT_FOUND.ToString());
+                    throw new RecordNotFoundException("Couldn't create an assignment!");
                 }
 
-                var newAssignment = new Assignment(request.AssignmentGivenToId,dbMentalHealthExpert.Id,request.Content,DateTime.Now);
+                var newAssignment = new Assignment(request.AssignmentGivenToId, dbMentalHealthExpert.Id, request.Content, DateTime.Now);
 
                 if (newAssignment == null)
                 {
                     _mentalExpertLoggerService.LogWarning($"GIVE-ASSIGNMENT: {MentalExpertServiceLogTypes.ASSIGNMENT_INVALID_DATA.ToString()}", newAssignment);
-                    return new Response(new object(), StatusCodes.Status400BadRequest, MentalExpertServiceLogTypes.ASSIGNMENT_INVALID_DATA.ToString());
+                    throw new CreateRecordException("Assignment can't be created!");
                 }
 
                 await _context.Assignments.AddAsync(newAssignment);
                 await _context.SaveChangesAsync();
 
-                var dbAssignments = await _context.Assignments
-                    .OrderByDescending(a => a.CreatedAt)
-                    .ToListAsync();
-
                 _mentalExpertLoggerService.LogInformation($"GIVE-ASSIGNMENT: {MentalExpertServiceLogTypes.SUCCESS.ToString()}", newAssignment);
-                return new Response(dbAssignments, StatusCodes.Status201Created, MentalExpertServiceLogTypes.SUCCESS.ToString());
+                return new Response(newAssignment, StatusCodes.Status201Created, MentalExpertServiceLogTypes.SUCCESS.ToString());
             }
             catch (Exception e)
             {
-                _mentalExpertLoggerService.LogError($"GIVE-ASSIGNMENT: {MentalExpertServiceLogTypes.ERROR}", e);
-                return new Response(e.Data,StatusCodes.Status500InternalServerError,e.Message);
+                _mentalExpertLoggerService.LogError($"GIVE-ASSIGNMENT: {e.Message}");
+                throw;
             }
-            
+
+        }
+        private async Task<List<SharesPerUserDto>> FillListGroupedUsersAndTheirShares(IEnumerable<IGrouping<User, Share>> groupedUsersAndTheirShares)
+        {
+            try
+            {
+                List<SharesPerUserDto> sharesPerUser = new List<SharesPerUserDto>();
+                ShareHelper shareHelper = new ShareHelper(_context);
+
+                foreach (var userFromGroup in groupedUsersAndTheirShares)
+                {
+                    var dbUserByKey = await _context.Users.FindAsync(userFromGroup.Key.Id);
+                    UserDto userThatSharedContent;
+
+                    if (dbUserByKey is not null)
+                    {
+                        userThatSharedContent = new UserDto(dbUserByKey.Id, dbUserByKey.Username);
+                        if (userThatSharedContent == null)
+                        {
+                            _mentalExpertLoggerService.LogError($"SHARES-PER-USER: {MentalExpertServiceLogTypes.NOT_FOUND}");
+                            throw new RecordNotFoundException("User not found!");
+                        }
+
+                        List<PostDto> contentUserShared = await shareHelper.CallFillByUsersSharedContentForMentalHealthExpertPreviewAsync(userFromGroup, new List<PostDto>());
+
+                        if (!contentUserShared.Any())
+                        {
+                            _mentalExpertLoggerService.LogWarning($"SHARES-PER-USER: {MentalExpertServiceLogTypes.NOT_FOUND.ToString()}");
+                            throw new RecordNotFoundException("Shares aren't populated properly!");
+                        }
+                        
+                        sharesPerUser.Add(new SharesPerUserDto(userThatSharedContent, contentUserShared));
+                        continue;
+                    }
+
+                    _mentalExpertLoggerService.LogError($"SHARES-PER-USER: {MentalExpertServiceLogTypes.NOT_FOUND}");
+                    throw new RecordNotFoundException("Couldn't populate the shares per user list! User not found.");
+                }
+
+                return sharesPerUser;
+            }
+            catch (Exception e)
+            {
+                _mentalExpertLoggerService.LogError($"SHARES-PER-USER: {e.Message}");
+                throw;
+            }
         }
     }
 }

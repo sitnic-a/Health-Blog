@@ -11,8 +11,9 @@ let initialState = {
   postsToShare: [],
   postsToExport: [],
   exportedDocument: null,
-  isExported: false,
+  isExported: null,
   possibleToShareWith: [],
+  possibleToShareWithError: null,
   numberOfPeoplePossibleToShareWith: 0,
   isSharingLink: false,
   shareLinkUrl: "",
@@ -21,26 +22,34 @@ let initialState = {
 
 export const exportToPDF = createAsyncThunk(
   "/export",
-  async (postsToExport) => {
-    console.log("Posts to export ", postsToExport);
+  async (objectWithData) => {
+    console.log("Posts to export ", objectWithData.postsToExport);
     let request = await fetch(`${application.application_url}/export`, {
       method: "POST",
-      body: JSON.stringify(postsToExport),
+      body: JSON.stringify(objectWithData.postsToExport),
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
       },
     });
 
     let response = request.json();
+
     return response;
   }
 );
 
 export const shareByLink = createAsyncThunk(
   "share/link/{shareId}",
-  async (shareGuid) => {
-    let url = `${application.application_url}/share/link/${shareGuid}`;
-    let request = await fetch(url);
+  async (objectWithData) => {
+    let url = `${application.application_url}/share/link/${objectWithData.shareGuid}`;
+    let request = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
+      },
+    });
     let response = await request.json();
     return response;
   }
@@ -48,12 +57,13 @@ export const shareByLink = createAsyncThunk(
 
 export const shareContent = createAsyncThunk(
   "/share",
-  async (contentToBeShared) => {
+  async (objectWithData) => {
     let request = await fetch(`${application.application_url}/share`, {
       method: "POST",
-      body: JSON.stringify(contentToBeShared),
+      body: JSON.stringify(objectWithData.contentToBeShared),
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
       },
     });
 
@@ -64,13 +74,16 @@ export const shareContent = createAsyncThunk(
 
 export const getExpertsAndRelatives = createAsyncThunk(
   "/share/experts-relatives",
-  async () => {
-    console.log("Get expert and relatives users invoked...");
+  async (objectWithData) => {
     let url = `${application.application_url}/share/experts-relatives`;
-    let request = await fetch(url);
+    let request = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
+      },
+    });
     let response = request.json();
-    console.log("Response in slice ", response);
-
     return response;
   }
 );
@@ -152,16 +165,26 @@ let shareExportSlice = createSlice({
       //Export
       .addCase(exportToPDF.pending, (state) => {
         console.log("Pending");
+        state.isLoading = true;
       })
       .addCase(exportToPDF.fulfilled, (state, action) => {
-        console.log("Successfully implemented");
-        state.isExported = true;
-        console.log("Payload ---- ", action.payload);
+        let fileLength = action?.payload?.fileLength;
+        if (fileLength > 0) {
+          state.isExported = true;
+          state.exportedDocument = action.payload;
+          state.isLoading = false;
 
-        state.exportedDocument = action.payload;
+          return;
+        }
+        // state.isExported = false;
       })
       .addCase(exportToPDF.rejected, (state, action) => {
+        state.isLoading = false;
         console.log("FAILED");
+        toast.error("Something went wrong", {
+          autoClose: 1500,
+          position: "bottom-right",
+        });
       })
 
       .addCase(shareByLink.pending, (state, action) => {
@@ -173,43 +196,52 @@ let shareExportSlice = createSlice({
       })
       .addCase(shareByLink.rejected, (state, action) => {
         state.isLoading = false;
+        toast.error("Something went wrong. Try again!", {
+          autoClose: 2000,
+          position: "bottom-right",
+        });
       })
 
       //Share
       .addCase(shareContent.pending, (state, action) => {
-        console.log("Pending...");
-        let contentToBeShared = action.meta.arg;
+        console.log("Pending...", action.meta);
+        let contentToBeShared = action.meta.arg.contentToBeShared;
 
         if (contentToBeShared.shareLink === true) {
           state.isSharingLink = true;
         }
       })
       .addCase(shareContent.fulfilled, (state, action) => {
+        let statusCode = action?.payload?.statusCode;
+
         if (state.isSharingLink === true) {
-          let sharedContent = action.payload.serviceResponseObject;
-          if (sharedContent.length > 0) {
-            let shareId = sharedContent[0].shareGuid;
-            let host = window.location.origin;
-            state.shareLinkUrl = `${host}/share/link/${shareId}`;
+          let sharedContent = action?.payload?.serviceResponseObject;
+          if (statusCode === 201) {
+            if (sharedContent?.length > 0) {
+              let shareId = sharedContent[0].shareGuid;
+              let host = window.location.origin;
+              state.shareLinkUrl = `${host}/share/link/${shareId}`;
+            }
+            toast.success("You have succesfully shared content!", {
+              autoClose: 2000,
+              position: "bottom-right",
+            });
+            return;
           }
+        }
+
+        if (statusCode === 201) {
           toast.success("You have succesfully shared content!", {
             autoClose: 2000,
             position: "bottom-right",
           });
-          return;
-        }
 
-        let statusCode = action.payload.statusCode;
-        toast.success("You have succesfully shared content!", {
-          autoClose: 2000,
-          position: "bottom-right",
-        });
-        if (statusCode === 201 || statusCode === 200) {
           setTimeout(() => {
             window.location.reload();
           }, 1000);
         }
       })
+
       .addCase(shareContent.rejected, () => {
         toast.error("Something went wrong. Try again!", {
           autoClose: 2000,
@@ -221,11 +253,22 @@ let shareExportSlice = createSlice({
       .addCase(getExpertsAndRelatives.pending, (state, action) => {
         console.log("gEAR Pending...");
       })
+
       .addCase(getExpertsAndRelatives.fulfilled, (state, action) => {
+        let statusCode = action?.payload?.statusCode;
         state.possibleToShareWith = action.payload.serviceResponseObject;
+        if (statusCode !== 200) {
+          state.possibleToShareWithError = action?.payload;
+          return;
+        }
       })
+
       .addCase(getExpertsAndRelatives.rejected, (state, action) => {
-        console.log("gEAR Error");
+        state.possibleToShareWithError = action?.payload;
+        toast.error("Something went wrong. Try again!", {
+          autoClose: 2000,
+          position: "bottom-right",
+        });
       });
   },
 });

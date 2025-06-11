@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { application } from '../../../application'
 import { toast } from 'react-toastify'
+import { stringIsNullOrEmpty } from '../../utils/helper-methods/methods'
 
 let initialState = {
   posts: [],
@@ -24,6 +25,20 @@ export const getPosts = createAsyncThunk('post/', async (filteringObject) => {
   return response
 })
 
+export const getById = createAsyncThunk('post/id', async (requestObject) => {
+  let url = `${application.application_url}/post/${requestObject.postId}`
+
+  let request = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${requestObject.authenticatedUser.jwToken}`,
+    },
+  })
+  let response = await request.json()
+  return response
+})
+
 export const createPost = createAsyncThunk('post/add/', async (addPostObj) => {
   let url = `${application.application_url}/post`
   addPostObj.e.preventDefault()
@@ -38,11 +53,23 @@ export const createPost = createAsyncThunk('post/add/', async (addPostObj) => {
     emotions: addPostObj.chosenEmotions,
   }
 
+  if (
+    stringIsNullOrEmpty(newPost.title) ||
+    stringIsNullOrEmpty(newPost.content) ||
+    newPost.tags.length <= 0
+  ) {
+    toast.error('Enter required fields!', {
+      position: 'bottom-right',
+    })
+    return
+  }
+
   let request = await fetch(url, {
     method: 'POST',
     body: JSON.stringify(newPost),
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${addPostObj.authenticatedUser.jwToken}`,
     },
   })
   let response = await request.json()
@@ -52,26 +79,20 @@ export const createPost = createAsyncThunk('post/add/', async (addPostObj) => {
 export const updatePost = createAsyncThunk(
   'post/update/{id}',
   async (updatePostObj) => {
-    console.log('Update post obj ', updatePostObj)
     updatePostObj.e.preventDefault()
+
     let form = new FormData(updatePostObj.e.target)
     let formEntries = [...form.entries()]
     let formObject = Object.fromEntries(formEntries)
+
     let data = {
       title: formObject.title,
       content: formObject.content,
       userId: updatePostObj.post.userId,
     }
 
-    console.log(data)
-    if (
-      data.title === '' ||
-      data.title === null ||
-      data.content === '' ||
-      data.content === null
-    ) {
-      toast.error('Fields should be populated!', {
-        autoClose: 1500,
+    if (stringIsNullOrEmpty(data.title) || stringIsNullOrEmpty(data.content)) {
+      toast.error('Populate all fields!', {
         position: 'bottom-right',
       })
       return
@@ -86,6 +107,7 @@ export const updatePost = createAsyncThunk(
         Authorization: `Bearer ${updatePostObj.authenticatedUser.jwToken}`,
       },
     })
+
     let response = await request.json()
     return response
   }
@@ -99,7 +121,7 @@ export const deletePostById = createAsyncThunk(
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${deletePostObj.loggedUser.jwToken}`,
+        Authorization: `Bearer ${deletePostObj.authenticatedUser.jwToken}`,
       },
     })
     let response = await request.json()
@@ -150,6 +172,18 @@ let postSlice = createSlice({
         state.posts = action.payload.serviceResponseObject
       })
 
+      //--- getById
+      .addCase(getById.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(getById.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.post = action.payload.serviceResponseObject
+      })
+      .addCase(getById.rejected, (state, action) => {
+        state.isLoading = false
+      })
+
       //--- addPost
       .addCase(createPost.pending, (state) => {
         state.isLoading = true
@@ -159,7 +193,7 @@ let postSlice = createSlice({
       })
       .addCase(createPost.fulfilled, (state, action) => {
         state.isLoading = false
-        let statusCode = action.payload.statusCode
+        let statusCode = action?.payload?.statusCode
 
         if (statusCode === 201) {
           toast.success('Succesfully added post', {
@@ -169,14 +203,6 @@ let postSlice = createSlice({
           setTimeout(() => {
             window.location.reload()
           }, 1000)
-          return
-        }
-
-        if (statusCode !== 200 || statusCode !== 201) {
-          toast.error('Fields should be populated!', {
-            autoClose: 1500,
-            position: 'bottom-right',
-          })
           return
         }
       })
@@ -193,12 +219,15 @@ let postSlice = createSlice({
         })
       })
       .addCase(updatePost.fulfilled, (state, action) => {
-        toast.success('Succesfully updated post', {
-          autoClose: 1500,
-          position: 'bottom-right',
-        })
-        toast.done = () => {
-          window.location.reload()
+        let statusCode = action?.payload?.statusCode
+        if (statusCode === 200) {
+          toast.success('Succesfully updated post', {
+            autoClose: 1500,
+            position: 'bottom-right',
+          })
+          toast.done = () => {
+            window.location.reload()
+          }
         }
       })
 
@@ -215,6 +244,16 @@ let postSlice = createSlice({
       })
       .addCase(deletePostById.fulfilled, (state, action) => {
         toast.isActive = false
+        let statusCode = action?.payload?.statusCode
+        if (statusCode === 200) {
+          toast.success('Succesfully deleted post', {
+            autoClose: 1500,
+            position: 'bottom-right',
+          })
+          setTimeout(() => {
+            window.location.reload()
+          }, 1500)
+        }
       })
   },
 })

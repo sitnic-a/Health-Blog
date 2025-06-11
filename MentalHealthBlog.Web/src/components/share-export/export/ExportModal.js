@@ -1,11 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
 import { openExportModal } from "../../redux-toolkit/features/modalSlice";
+import { BiError } from "react-icons/bi";
+import { MdOutlineDownloadDone } from "react-icons/md";
 
 export const ExportModal = () => {
   let dispatch = useDispatch();
 
   let { isExportOpen } = useSelector((store) => store.modal);
-  let { postsToExport, isExported } = useSelector((store) => store.shareExport);
+  let { postsToExport, isExported, isLoading } = useSelector(
+    (store) => store.shareExport
+  );
 
   return (
     isExportOpen && (
@@ -37,10 +41,32 @@ export const ExportModal = () => {
                   })}
                 </div>
 
-                {isExported && (
-                  <div className="export-modal-progress-bar">
-                    <p>Successfully exported!</p>
-                  </div>
+                {isLoading === true ? (
+                  <p>Please wait, document is exporting...</p>
+                ) : (
+                  <>
+                    {isExported && (
+                      <div className="export-modal-progress-container">
+                        <div className="export-modal-successfully-exported-container">
+                          <MdOutlineDownloadDone className="export-modal-exported-success-icon" />
+                          <p className="export-modal-exported-description">
+                            Successfully exported!
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {!isExported && (
+                      <div className="export-modal-progress-container">
+                        <div className="export-modal-not-exported-container">
+                          <BiError className="export-modal-not-exported-error-icon" />
+                          <p className="export-modal-not-exported-description">
+                            Document couldn't be exported!
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             </div>

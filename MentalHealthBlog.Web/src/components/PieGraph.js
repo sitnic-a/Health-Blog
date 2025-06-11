@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { prepareForPieGraph } from './redux-toolkit/features/pieSlice'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 import { Pie } from 'react-chartjs-2'
-import { prepareForPieGraph } from './redux-toolkit/features/pieSlice'
-
+import { toast } from 'react-toastify'
 ChartJS.register(ArcElement, Tooltip, Legend)
 
 export const PieGraph = ({ searchPostDto }) => {
@@ -17,12 +17,12 @@ export const PieGraph = ({ searchPostDto }) => {
         label: 'Times posted',
         data: [...numberOfTags],
         backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
+          'rgb(255, 99, 132)',
+          'rgb(54, 162, 235)',
+          'rgb(255, 206, 86)',
+          'rgb(75, 192, 192)',
+          'rgb(153, 102, 255)',
+          'rgb(255, 159, 64)',
         ],
         borderColor: [
           'rgba(255, 99, 132, 1)',
@@ -38,13 +38,24 @@ export const PieGraph = ({ searchPostDto }) => {
   }
 
   useEffect(() => {
-    dispatch(prepareForPieGraph(searchPostDto))
+    dispatch(prepareForPieGraph(searchPostDto)).then((data) => {
+      let statusCode = data?.payload?.statusCode
+      if (statusCode !== 200) {
+        toast.error('Tags are not fetched properly, statistics unavailable', {
+          position: 'bottom-right',
+        })
+      }
+    })
   }, [])
 
   return (
     <section className="pie-graph-section">
-      <p>Pie Graph Chart</p>
-      <Pie data={data} />
+      {labels.length > 0 && numberOfTags.length > 0 && (
+        <>
+          <p>Pie Graph Chart</p>
+          <Pie data={data} />
+        </>
+      )}
     </section>
   )
 }

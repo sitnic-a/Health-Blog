@@ -1,8 +1,7 @@
-import React from 'react'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { toast } from 'react-toastify'
 import { getPosts } from './redux-toolkit/features/postSlice'
+import { toast } from 'react-toastify'
 
 import { Post } from './Post'
 import { ListOfPostsHeader } from './ListOfPostsHeader'
@@ -18,9 +17,7 @@ import { ExportModal } from './share-export/export/ExportModal'
 export const ListOfPosts = () => {
   let dispatch = useDispatch()
   let { isLoading, posts } = useSelector((store) => store.post)
-  let { authenticatedUser, isLogging, isAuthenticated } = useSelector(
-    (store) => store.user
-  )
+  let { authenticatedUser, isLogging } = useSelector((store) => store.user)
   let { statisticsLoading } = useSelector((store) => store.pie)
 
   let searchPostDto = {
@@ -29,13 +26,32 @@ export const ListOfPosts = () => {
   }
 
   useEffect(() => {
-    if (isAuthenticated === true) {
-      toast.success('Succesfully logged in', {
+    dispatch(getPosts(searchPostDto)).then((data) => {
+      let statusCode = data?.payload?.statusCode
+
+      if (statusCode !== 200) {
+        toast.error("Posts aren't fetched properly!", {
+          autoClose: 1500,
+          position: 'bottom-right',
+        })
+        return
+      }
+
+      if (
+        data?.payload?.statusCode === 200 &&
+        data?.payload?.serviceResponseObject?.length === 0
+      ) {
+        toast.warning('Currently, no posts to retrieve', {
+          position: 'bottom-right',
+        })
+        return
+      }
+
+      toast.success('Posts fetched properly!', {
         autoClose: 1500,
         position: 'bottom-right',
       })
-    }
-    dispatch(getPosts(searchPostDto))
+    })
   }, [])
 
   if (isLoading && isLogging && statisticsLoading) {

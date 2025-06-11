@@ -1,33 +1,66 @@
-import React from 'react'
-import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getOnlyUsersThatSharedContent,
   getSharedContentOfPickedUser,
   getSharesPerUser,
   setOverlayPost,
-} from '../../redux-toolkit/features/mentalExpertSlice'
-import { expandShrinkSidebar } from '../../utils/helper-methods/methods'
+} from "../../redux-toolkit/features/mentalExpertSlice";
+import { expandShrinkSidebar } from "../../utils/helper-methods/methods";
 
-import { BiExpandAlt } from 'react-icons/bi'
-import { getUserById } from '../../redux-toolkit/features/userSlice'
+import { BiExpandAlt } from "react-icons/bi";
+import { getUserById } from "../../redux-toolkit/features/userSlice";
+import { toast } from "react-toastify";
 
 export const ListSharingContentUsers = () => {
-  let dispatch = useDispatch()
-  let { authenticatedUser } = useSelector((store) => store.user)
+  let dispatch = useDispatch();
+  let { authenticatedUser } = useSelector((store) => store.user);
 
   let { usersThatSharedIncludingItsContent, usersThatSharedContent } =
-    useSelector((store) => store.mentalExpert)
+    useSelector((store) => store.mentalExpert);
 
-  let query = {
-    loggedExpertId: authenticatedUser.id,
-  }
+  let objectWithData = {
+    query: {
+      loggedExpertId: authenticatedUser.id,
+    },
+    authenticatedUser,
+  };
 
   useEffect(() => {
-    dispatch(getSharesPerUser(query)).then((data) => {
-      dispatch(getOnlyUsersThatSharedContent(data))
-    })
-  }, [])
+    dispatch(getSharesPerUser(objectWithData)).then((data) => {
+      let statusCode = data?.payload?.StatusCode;
+
+      if (statusCode !== 200) {
+        if (statusCode === 400) {
+          toast.error("Fetching shares wasn't possible!", {
+            position: "bottom-right",
+          });
+          return;
+        }
+        if (statusCode === 404) {
+          toast.error("Couldn't fetch shares properly!", {
+            position: "bottom-right",
+          });
+          return;
+        }
+      }
+      console.log("Data ", data.payload);
+
+      if (data?.payload.serviceResponseObject?.length === 0) {
+        toast.warning("Nothing shared so far!", {
+          position: "bottom-right",
+        });
+      }
+
+      if (data?.payload.serviceResponseObject?.length > 0) {
+        toast.success("Succesfully retrieved content!", {
+          position: "bottom-right",
+        });
+      }
+
+      dispatch(getOnlyUsersThatSharedContent(data));
+    });
+  }, []);
 
   return (
     <section className="sharing-users-main-users-container">
@@ -35,7 +68,7 @@ export const ListSharingContentUsers = () => {
         <span
           className="sharing-users-expander-icon"
           onClick={() => {
-            expandShrinkSidebar()
+            expandShrinkSidebar();
           }}
         >
           <BiExpandAlt />
@@ -50,29 +83,29 @@ export const ListSharingContentUsers = () => {
                 key={user.id}
                 onClick={() => {
                   if (window.screen.width <= 550) {
-                    expandShrinkSidebar()
+                    expandShrinkSidebar();
                     let contentAndQuery = {
                       userId: user.id,
                       usersThatSharedIncludingItsContent,
-                    }
-                    dispatch(getSharedContentOfPickedUser(contentAndQuery))
-                    dispatch(setOverlayPost(null))
-                    dispatch(getUserById(user.id))
+                    };
+                    dispatch(getSharedContentOfPickedUser(contentAndQuery));
+                    dispatch(setOverlayPost(null));
+                    dispatch(getUserById(user.id));
                   }
                   let contentAndQuery = {
                     userId: user.id,
                     usersThatSharedIncludingItsContent,
-                  }
-                  dispatch(getSharedContentOfPickedUser(contentAndQuery))
-                  dispatch(setOverlayPost(null))
-                  dispatch(getUserById(user.id))
+                  };
+                  dispatch(getSharedContentOfPickedUser(contentAndQuery));
+                  dispatch(setOverlayPost(null));
+                  dispatch(getUserById(user.id));
                 }}
               >
                 <span className="sharing-user-title">{user.username}</span>
               </div>
-            )
+            );
           })}
       </div>
     </section>
-  )
-}
+  );
+};

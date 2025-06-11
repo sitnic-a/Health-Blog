@@ -2,6 +2,7 @@
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MentalHealthBlog.API.Controllers
@@ -18,12 +19,14 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpGet("shares-per-user")]
+        [Authorize(Roles= "Psychologist / Psychotherapist")]
         public async Task<Response> GetSharesPerUser([FromQuery] ExpertSearchContentDto query)
         {
             return await _mentalExpertService.GetSharesPerUser(query);
         }
 
         [HttpPost("give-assignment")]
+        [Authorize(Roles= "Psychologist / Psychotherapist")]
         public async Task<Response> CreateAssignment([FromBody] CreateAssignmentDto request)
         {
             return await _mentalExpertService.CreateAssignment(request);

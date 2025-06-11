@@ -1,41 +1,58 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { application } from "../../../application";
+import { toast } from "react-toastify";
 
 let initialState = {
   sharesPerMentalHealthExpert: [],
   recentShares: [],
+  successfullyFetchedRecentShares: null,
   isLoading: false,
+  successfullyFetchedSharesPerMentalHealthExpert: null,
+  hasSharedPosts: true,
 };
 
 export const getSharesPerMentalHealthExpert = createAsyncThunk(
   "shares-per-mental-health-expert",
-  async (query) => {
-    let url = `${application.application_url}/regularUser/shares-per-mental-health-expert?loggedUserId=${query.loggedUserId}`;
-    let request = await fetch(url);
+  async (objectWithData) => {
+    let url = `${application.application_url}/regularUser/shares-per-mental-health-expert?loggedUserId=${objectWithData.query.loggedUserId}`;
+    let request = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
+      },
+    });
     let response = await request.json();
     return response;
   }
 );
 
-export const getRecentShares = createAsyncThunk("recent", async (query) => {
-  console.log("Query sent ", query);
-  let url = `${application.application_url}/regularUser/recent?loggedUserId=${query.loggedUserId}`;
-  let request = await fetch(url);
-  let response = await request.json();
-  return response;
-});
+export const getRecentShares = createAsyncThunk(
+  "recent",
+  async (objectWithData) => {
+    let url = `${application.application_url}/regularUser/recent?loggedUserId=${objectWithData.query.loggedUserId}`;
+    let request = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
+      },
+    });
+    let response = await request.json();
+    return response;
+  }
+);
 
 export const revokeContentPermission = createAsyncThunk(
   "revoke",
-  async (revokeObject) => {
-    console.log("Revoke ", revokeObject);
-
+  async (objectWithData) => {
     let url = `${application.application_url}/regularUser/revoke`;
     let request = await fetch(url, {
       method: "DELETE",
-      body: JSON.stringify(revokeObject),
+      body: JSON.stringify(objectWithData.revokeObject),
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
       },
     });
 
@@ -102,12 +119,22 @@ export const regularUserSlice = createSlice({
       })
       .addCase(getSharesPerMentalHealthExpert.fulfilled, (state, action) => {
         let serviceResponseObject = action.payload.serviceResponseObject;
-        state.sharesPerMentalHealthExpert = serviceResponseObject;
+        let statusCode = action?.payload?.statusCode;
         state.isLoading = false;
+
+        if (statusCode === 200) {
+          state.successfullyFetchedSharesPerMentalHealthExpert = true;
+          state.sharesPerMentalHealthExpert = serviceResponseObject;
+          return;
+        }
+        state.successfullyFetchedSharesPerMentalHealthExpert = false;
       })
       .addCase(getSharesPerMentalHealthExpert.rejected, (state, action) => {
-        console.log("Shares per mental health expert ", action.payload);
         state.isLoading = false;
+        state.successfullyFetchedSharesPerMentalHealthExpert = false;
+        toast.error("Something went wrong!", {
+          position: "bottom-right",
+        });
       })
 
       //recent
@@ -116,14 +143,25 @@ export const regularUserSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getRecentShares.fulfilled, (state, action) => {
-        console.log("Recent shares fulfilled");
-        let recentShares = action.payload.serviceResponseObject;
-        state.recentShares = recentShares;
-        console.log("Recent ", recentShares);
+        let statusCode = action?.payload?.statusCode;
+        let recentShares = action?.payload?.serviceResponseObject;
         state.isLoading = false;
+
+        if (statusCode === 200) {
+          state.recentShares = recentShares;
+          state.successfullyFetchedRecentShares = true;
+          return;
+        }
+
+        if (statusCode !== 200) {
+          state.successfullyFetchedRecentShares = false;
+          return;
+        }
       })
       .addCase(getRecentShares.rejected, (state, action) => {
-        console.log("Recent shares rejected ", action.payload);
+        toast.error("Something went wrong", {
+          position: "bottom-right",
+        });
         state.isLoading = false;
       })
 
@@ -133,6 +171,11 @@ export const regularUserSlice = createSlice({
       })
       .addCase(revokeContentPermission.fulfilled, (state, action) => {
         console.log("Permission to read deleted!");
+        if (
+          action?.payload?.serviceResponseObject?.serviceResponseObject <= 0
+        ) {
+          state.hasSharedPosts = false;
+        }
       })
       .addCase(revokeContentPermission.rejected, (state, action) => {
         console.log("Revoke error ", action.payload);

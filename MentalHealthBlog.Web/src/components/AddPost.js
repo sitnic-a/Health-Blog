@@ -1,8 +1,5 @@
-import React from 'react'
-import Modal from 'react-modal'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import useFetchLocationState from './custom/hooks/useFetchLocationState'
 import { openAddModal } from './redux-toolkit/features/modalSlice'
 import { createPost } from './redux-toolkit/features/postSlice'
 import {
@@ -14,12 +11,13 @@ import {
 } from './redux-toolkit/features/tagSlice'
 import { getEmotions } from './redux-toolkit/features/emotionSlice'
 
+import Modal from 'react-modal'
 import { application } from '../application'
 import { TagsOnPostCreation } from './TagsOnPostCreation'
+import { toast } from 'react-toastify'
 
 export const AddPost = () => {
   let dispatch = useDispatch()
-  // let { loggedUser } = useFetchLocationState()
   let { authenticatedUser } = useSelector((store) => store.user)
   let { isAddOpen } = useSelector((store) => store.modal)
   let { chosenTags } = useSelector((store) => store.tag)
@@ -38,8 +36,29 @@ export const AddPost = () => {
       chosenTags,
       chosenEmotions,
     }
-    dispatch(createPost(addPostObj))
-    dispatch(openAddModal(false))
+
+    dispatch(createPost(addPostObj)).then((data) => {
+      let statusCode = data?.payload?.StatusCode
+
+      if (statusCode !== null || statusCode !== undefined) {
+        if (statusCode !== 201) {
+          if (statusCode === 400) {
+            toast.error('Data either invalid or not entered', {
+              position: 'bottom-right',
+            })
+            return
+          }
+          if (statusCode === 404) {
+            toast.error("New post can't be created!", {
+              position: 'bottom-right',
+            })
+            return
+          }
+        } else {
+          dispatch(openAddModal(false))
+        }
+      }
+    })
   }
 
   return (
@@ -59,7 +78,6 @@ export const AddPost = () => {
         onSubmit={submitForm}
         id="add-post-form"
         onKeyDown={(e) => {
-          console.log('Type ', e)
           if (e.key === 'Enter' && e.target.localName === 'textarea') {
             return
           } else if (e.key === 'Enter' && e.target.localName === 'input') {
@@ -70,9 +88,15 @@ export const AddPost = () => {
         <div className="add-post-modal-header">
           <h2>Post</h2>
         </div>
+
+        <span className="required-field">Required fields *</span>
+
         <div className="add-post-modal-content">
           <div className="add-post-title-container">
-            <label htmlFor="title">Title</label>
+            <label htmlFor="title">
+              Title
+              <span className="required-field"> *</span>
+            </label>
             <br />
             <input
               className="add-post-title-input"
@@ -82,7 +106,10 @@ export const AddPost = () => {
             />
           </div>
           <div className="add-post-content-container">
-            <label htmlFor="content">Content</label>
+            <label htmlFor="content">
+              Content
+              <span className="required-field"> *</span>
+            </label>
             <br />
             <textarea
               className="add-post-content-textarea"

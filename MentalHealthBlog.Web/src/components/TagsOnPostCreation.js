@@ -1,5 +1,3 @@
-import React from 'react'
-import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   setSuggestedTags,
@@ -11,10 +9,6 @@ import {
 import { EmotionsOnPostCreation } from './EmotionsOnPostCreation'
 
 export const TagsOnPostCreation = () => {
-  useEffect(() => {
-    dispatch(getTags())
-  }, [])
-
   let dispatch = useDispatch()
   let { suggestedTags, displayedSuggestedTags, chosenTags, pickedTags } =
     useSelector((store) => store.tag)
@@ -132,7 +126,10 @@ export const TagsOnPostCreation = () => {
   return (
     <>
       <div className="add-post-tags-container">
-        <label htmlFor="tag">Tags</label>
+        <label htmlFor="tag">
+          Tags
+          <span className="required-field"> *</span>
+        </label>
         <br />
         <div className="add-post-picked-tags-container">
           {chosenTags.map((tag) => {

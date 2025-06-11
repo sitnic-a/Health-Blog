@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import Modal from 'react-modal'
 import { getDbRoles } from '../../../redux-toolkit/features/userSlice'
 import { useDispatch, useSelector } from 'react-redux'
@@ -10,18 +10,61 @@ import {
 import { setSelectedRole } from '../../../redux-toolkit/features/adminSlice'
 
 import { FaTrash } from 'react-icons/fa'
+import { BiError } from 'react-icons/bi'
 import { openDeleteModal } from '../../../redux-toolkit/features/modalSlice'
 import { application } from '../../../../application'
+import { toast } from 'react-toastify'
 
 export const ManageUsers = () => {
   let dispatch = useDispatch()
-  let { dbRoles } = useSelector((store) => store.user)
-  let { dbUsers, dbUser, selectedRole } = useSelector((store) => store.admin)
+  let { dbRoles, authenticatedUser } = useSelector((store) => store.user)
+  let { dbUsers, dbUser, selectedRole, isFailed } = useSelector(
+    (store) => store.admin
+  )
   let { isDeleteOpen } = useSelector((store) => store.modal)
 
   useEffect(() => {
+    let objectWithData = {
+      query: {},
+      authenticatedUser,
+    }
     dispatch(getDbRoles())
-    dispatch(getDbUsers({}))
+    dispatch(getDbUsers(objectWithData)).then((data) => {
+      let statusCode = data?.payload?.StatusCode
+      if (statusCode !== 200) {
+        if (statusCode === 400) {
+          toast.error('Check your search parameters!', {
+            position: 'bottom-right',
+          })
+          return
+        }
+
+        if (statusCode === 404) {
+          toast.error('Users are not fetched properly!', {
+            position: 'bottom-right',
+          })
+          return
+        }
+
+        if (
+          data?.payload?.statusCode === 200 &&
+          data?.payload?.serviceResponseObject.length <= 0
+        ) {
+          toast.warning('There are currenly no users that uses this system!', {
+            position: 'bottom-right',
+          })
+          return
+        }
+
+        if (data?.payload?.statusCode === 200) {
+          toast.success('Successfully retrieved users!', {
+            autoClose: 1500,
+            position: 'bottom-right',
+          })
+          return
+        }
+      }
+    })
   }, [])
 
   return (
@@ -43,15 +86,50 @@ export const ManageUsers = () => {
               type="button"
               className="manage-users-modal-confirm-delete-button"
               onClick={() => {
+                console.log('User remove ', dbUser)
+
                 if (
-                  dbUser.roles.some(
-                    (ur) => ur.name === 'Psychologist / Psychotherapist'
+                  dbUser?.roles?.some(
+                    (ur) => ur?.name === 'Psychologist / Psychotherapist'
                   )
                 ) {
-                  dispatch(removeUserById(dbUser.userId))
+                  dispatch(removeUserById(dbUser.userId)).then((data) => {
+                    let statusCode = data?.payload?.StatusCode
+                    if (statusCode !== 200) {
+                      if (statusCode === 400) {
+                        toast.error("User don't exist! Check parameters!", {
+                          position: 'bottom-right',
+                        })
+                        return
+                      }
+                      if (statusCode === 404) {
+                        toast.error('User not deleted! Not found!', {
+                          position: 'bottom-right',
+                        })
+                        return
+                      }
+                    }
+                  })
                   dispatch(openDeleteModal(false))
+                  return
                 }
-                dispatch(removeUserById(dbUser.id))
+                dispatch(removeUserById(dbUser.id)).then((data) => {
+                  let statusCode = data?.payload?.StatusCode
+                  if (statusCode !== 200) {
+                    if (statusCode === 400) {
+                      toast.error("User don't exist! Check parameters!", {
+                        position: 'bottom-right',
+                      })
+                      return
+                    }
+                    if (statusCode === 404) {
+                      toast.error('User not deleted! Not found!', {
+                        position: 'bottom-right',
+                      })
+                      return
+                    }
+                  }
+                })
                 dispatch(openDeleteModal(false))
               }}
             >
@@ -73,7 +151,7 @@ export const ManageUsers = () => {
       </div>
       <div className="manage-users-filter-container">
         <div className="manage-users-filter select-role-filter-main-container">
-          {dbRoles.length > 0 && (
+          {dbRoles?.length > 0 && (
             <div className="manage-users-select-filter">
               <span>Role:</span>
               <select
@@ -88,11 +166,47 @@ export const ManageUsers = () => {
                     "input[name='manage-users-name-input-filter'"
                   ).value
 
-                  var query = {
-                    role: parseInt(selectedRoleId),
-                    searchCondition,
+                  let objectWithData = {
+                    query: {
+                      role: parseInt(selectedRoleId),
+                      searchCondition,
+                    },
+                    authenticatedUser,
                   }
-                  dispatch(getDbUsers(query))
+                  dispatch(getDbUsers(objectWithData)).then((data) => {
+                    let statusCode = data?.payload?.StatusCode
+                    if (statusCode !== 200) {
+                      if (statusCode === 400) {
+                        toast.error("Couldn't fetch users!", {
+                          position: 'bottom-right',
+                        })
+                        return
+                      }
+                      if (statusCode === 404) {
+                        toast.error('Users not fetched properly!', {
+                          position: 'bottom-right',
+                        })
+                        return
+                      }
+
+                      if (
+                        data?.payload?.statusCode === 200 &&
+                        data?.payload?.serviceResponseObject.length === 0
+                      ) {
+                        toast.warning('No users registered!', {
+                          position: 'bottom-right',
+                        })
+                        return
+                      }
+
+                      if (data?.payload?.statusCode === 200) {
+                        toast.success('Successfully filtered users!', {
+                          autoClose: 1500,
+                          position: 'bottom-right',
+                        })
+                      }
+                    }
+                  })
                   let __MENTAL_HEALTH_EXPERT_ROLE__ = 4
                   let inputFilterMainContainer = document.querySelector(
                     '.input-filter-main-container'
@@ -110,7 +224,7 @@ export const ManageUsers = () => {
                 }}
               >
                 <option value={0}>Choose option</option>
-                {dbRoles.map((role) => {
+                {dbRoles?.map((role) => {
                   return (
                     <option key={role.id} value={role.id}>
                       {role.name}
@@ -136,11 +250,47 @@ export const ManageUsers = () => {
                 let searchCondition = document.querySelector(
                   "input[name='manage-users-name-input-filter'"
                 ).value
-                var query = {
-                  role: parseInt(selectedRoleId),
-                  searchCondition,
+                let objectWithData = {
+                  query: {
+                    role: parseInt(selectedRoleId),
+                    searchCondition,
+                  },
+                  authenticatedUser,
                 }
-                dispatch(getDbUsers(query))
+                dispatch(getDbUsers(objectWithData)).then((data) => {
+                  let statusCode = data?.payload?.StatusCode
+                  if (statusCode !== 200) {
+                    if (statusCode === 400) {
+                      toast.error("Couldn't fetch experts!", {
+                        position: 'bottom-right',
+                      })
+                      return
+                    }
+                    if (statusCode === 404) {
+                      toast.error('Experts not fetched properly!', {
+                        position: 'bottom-right',
+                      })
+                      return
+                    }
+
+                    if (
+                      data?.payload?.statusCode === 200 &&
+                      data?.payload?.serviceResponseObject.length === 0
+                    ) {
+                      toast.warning('No such expert registered!', {
+                        position: 'bottom-right',
+                      })
+                      return
+                    }
+
+                    if (data?.payload?.statusCode === 200) {
+                      toast.success('Successfully filtered experts!', {
+                        autoClose: 1500,
+                        position: 'bottom-right',
+                      })
+                    }
+                  }
+                })
               }
             }}
           />
@@ -157,11 +307,47 @@ export const ManageUsers = () => {
                 "input[name='manage-users-name-input-filter'"
               ).value
 
-              var query = {
-                role: parseInt(selectedRoleId),
-                searchCondition,
+              let objectWithData = {
+                query: {
+                  role: parseInt(selectedRoleId),
+                  searchCondition,
+                },
+                authenticatedUser,
               }
-              dispatch(getDbUsers(query))
+              dispatch(getDbUsers(objectWithData)).then((data) => {
+                let statusCode = data?.payload?.StatusCode
+                if (statusCode !== 200) {
+                  if (statusCode === 400) {
+                    toast.error("Couldn't fetch experts!", {
+                      position: 'bottom-right',
+                    })
+                    return
+                  }
+                  if (statusCode === 404) {
+                    toast.error('Experts not fetched properly!', {
+                      position: 'bottom-right',
+                    })
+                    return
+                  }
+
+                  if (
+                    data?.payload?.statusCode === 200 &&
+                    data?.payload?.serviceResponseObject.length === 0
+                  ) {
+                    toast.warning('No such expert registered!', {
+                      position: 'bottom-right',
+                    })
+                    return
+                  }
+
+                  if (data?.payload?.statusCode === 200) {
+                    toast.success('Successfully filtered experts!', {
+                      autoClose: 1500,
+                      position: 'bottom-right',
+                    })
+                  }
+                }
+              })
             }}
           >
             Search
@@ -169,11 +355,29 @@ export const ManageUsers = () => {
         </div>
       </div>
 
-      <div className="manage-users-users-list-main-container">
-        <div className="manage-users-users-list-main-container-header">
-          <h4>Users of application:</h4>
+      {isFailed && (
+        <div className="manage-users-error-container">
+          <BiError className="manage-users-error-no-data-icon" />
+          <div className="manage-users-error-information">
+            <p>
+              Users not fetched properly! If this continues contact support!
+            </p>
+          </div>
         </div>
-        {dbUsers.length > 0 && (
+      )}
+
+      {!isFailed && dbUsers?.length === 0 && (
+        <div className="manage-users-users-list-main-container">
+          <p>When someone register you'll see it first! ;)</p>
+        </div>
+      )}
+
+      {!isFailed && dbUsers?.length > 0 && (
+        <div className="manage-users-users-list-main-container">
+          <div className="manage-users-users-list-main-container-header">
+            <h4>Users of application:</h4>
+          </div>
+
           <table className="manage-users-table">
             <thead>
               <tr className="manage-users-table-row">
@@ -242,8 +446,8 @@ export const ManageUsers = () => {
               })}
             </tbody>
           </table>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   )
 }

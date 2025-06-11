@@ -9,11 +9,11 @@ import { NewMentalHealthExpertProfile } from './NewMentalHealthExpertProfile'
 
 export const NewExperts = () => {
   let dispatch = useDispatch()
+  let { authenticatedUser } = useSelector((store) => store.user)
 
   let { newlyRegisteredMentalHealthExperts } = useSelector(
     (store) => store.admin
   )
-  console.log(newlyRegisteredMentalHealthExperts)
 
   return (
     <>
@@ -34,11 +34,14 @@ export const NewExperts = () => {
               className="new-experts-status-button rejected"
               type="button"
               onClick={() => {
-                let query = {
-                  status: false,
+                let objectWithData = {
+                  query: {
+                    status: false,
+                  },
+                  authenticatedUser,
                 }
                 dispatch(displayProfilesContainer())
-                dispatch(getNewRegisteredExperts(query))
+                dispatch(getNewRegisteredExperts(objectWithData))
                 document.querySelector('.new-experts-subtitle').innerHTML =
                   'Rejected'
               }}
@@ -49,11 +52,14 @@ export const NewExperts = () => {
               className="new-experts-status-button approved"
               type="button"
               onClick={() => {
-                let query = {
-                  status: true,
+                let objectWithData = {
+                  query: {
+                    status: true,
+                  },
+                  authenticatedUser,
                 }
                 dispatch(displayProfilesContainer())
-                dispatch(getNewRegisteredExperts(query))
+                dispatch(getNewRegisteredExperts(objectWithData))
                 document.querySelector('.new-experts-subtitle').innerHTML =
                   'Approved'
               }}
@@ -64,8 +70,11 @@ export const NewExperts = () => {
               className="new-experts-status-button pending"
               type="button"
               onClick={() => {
+                let objectWithData = {
+                  authenticatedUser,
+                }
                 dispatch(displayProfilesContainer())
-                dispatch(getNewRegisteredExperts())
+                dispatch(getNewRegisteredExperts(objectWithData))
                 document.querySelector('.new-experts-subtitle').innerHTML =
                   'Pending'
               }}
@@ -74,7 +83,7 @@ export const NewExperts = () => {
             </button>
           </div>
         </div>
-        {newlyRegisteredMentalHealthExperts.length > 0 ? (
+        {newlyRegisteredMentalHealthExperts?.length > 0 ? (
           <div className="new-experts-main-profiles-container">
             {newlyRegisteredMentalHealthExperts.map((expert) => {
               return (

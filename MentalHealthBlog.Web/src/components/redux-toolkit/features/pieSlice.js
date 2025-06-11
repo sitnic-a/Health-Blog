@@ -42,17 +42,24 @@ export const pieSlice = createSlice({
       .addCase(prepareForPieGraph.pending, (state) => {
         state.statisticsLoading = true
       })
-      .addCase(prepareForPieGraph.rejected, (state) => {
+      .addCase(prepareForPieGraph.rejected, (state, action) => {
         state.statisticsFailed = true
       })
       .addCase(prepareForPieGraph.fulfilled, (state, action) => {
+        state.labels = [] //Clearing previous data
+        state.numberOfTags = [] //Clearing previous data
+        state.statisticsData = null
+
         state.statisticsLoading = false
+        state.statisticsData = action.payload.serviceResponseObject
+
         let data = action.payload.serviceResponseObject
-        if (data.length > 0) {
+        if (data?.length > 0) {
           state.statisticsData = [...data]
 
           state.labels = [] //Clearing previous data
           state.numberOfTags = [] //Clearing previous data
+
           if (
             (state.labels.length <= 0 && state.numberOfTags.length <= 0) ||
             state.rerendering === true

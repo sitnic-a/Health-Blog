@@ -1,34 +1,41 @@
-﻿using iText.IO.Font.Constants;
-using iText.Kernel.Colors;
-using iText.Kernel.Font;
-using iText.Kernel.Geom;
-using iText.Kernel.Pdf;
-using iText.Kernel.Pdf.Colorspace;
-using iText.Layout;
-using iText.Layout.Element;
-using iText.Layout.Properties;
-using iText.Layout.Renderer;
-using MentalHealthBlog.API.Models.ResourceResponse;
+﻿using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Utils;
-using Org.BouncyCastle.Asn1.Cms;
-using Org.BouncyCastle.Utilities;
-using System.Drawing;
 
 namespace MentalHealthBlog.API.Services
 {
+    enum ExportServiceLogTypes
+    {
+        EXPORTED_TO_PDF,
+        FAILED
+    }
     public class ExportService : IExportService
     {
+        private readonly ILogger<IExportService> _exportLoggerService;
+        public ExportService(ILogger<IExportService> exportLoggerService)
+        {
+            _exportLoggerService = exportLoggerService;
+        }
         public async Task<FileDto> ExportToPDF(List<PostDto> posts)
         {
-            PDFGenerators generator = new PDFGenerators();
-            FileDto file = await generator.CreatePdfFile(posts);
-            return file;
+            try
+            {
+                PDFGenerators generator = new PDFGenerators();
+                FileDto file = await generator.CreatePdfFile(posts);
 
-            //Return PDF file
-
-            //Make controller 
-
-            //Call method on frontend
+                if (file != null)
+                {
+                    _exportLoggerService.LogInformation($"EXPORT-PDF: {ExportServiceLogTypes.EXPORTED_TO_PDF.ToString()}");
+                    return file;
+                }
+                _exportLoggerService.LogInformation($"EXPORT-PDF: {ExportServiceLogTypes.FAILED.ToString()}");
+                throw new IOException("PDF File is not created!");
+            }
+            catch (Exception e)
+            {
+                _exportLoggerService.LogError($"EXPORT-PDF: {e.Message}");
+                throw;
+            }
+            
         }
     }
 }

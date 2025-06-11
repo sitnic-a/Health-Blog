@@ -1,24 +1,62 @@
-import { useDispatch, useSelector } from 'react-redux'
-import { createAssignment } from '../../redux-toolkit/features/mentalExpertSlice'
+import { useDispatch, useSelector } from "react-redux";
+import { createAssignment } from "../../redux-toolkit/features/mentalExpertSlice";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { checkNewAssignmentValidity } from "../../utils/helper-methods/methods";
 
 export const CreateAssignment = () => {
-  let dispatch = useDispatch()
-  let { authenticatedUser, dbUser } = useSelector((store) => store.user)
+  let dispatch = useDispatch();
+  let navigate = useNavigate();
+  let { authenticatedUser, dbUser } = useSelector((store) => store.user);
 
   let giveAssignment = (e) => {
-    console.log('Auth user ', authenticatedUser)
+    e.preventDefault();
+    let form = new FormData(e.target);
+    let data = Object.fromEntries([...form.entries()]);
+    let objectWithData = {
+      addAssignmentObj: {
+        assignmentGivenToId: dbUser?.id,
+        assignmentGivenById: authenticatedUser?.id,
+        content: data["create-assignment-content"],
+        createdAt: new Date(),
+      },
+      authenticatedUser,
+    };
 
-    e.preventDefault()
-    let form = new FormData(e.target)
-    let data = Object.fromEntries([...form.entries()])
-    let addAssignmentObj = {
-      assignmentGivenToId: dbUser.id,
-      assignmentGivenById: authenticatedUser.id,
-      content: data['create-assignment-content'],
-      createdAt: new Date(),
+    if (!checkNewAssignmentValidity(objectWithData?.addAssignmentObj)) {
+      toast.error("All form data are required!", {
+        position: "bottom-right",
+      });
+      return;
     }
-    dispatch(createAssignment(addAssignmentObj))
-  }
+
+    dispatch(createAssignment(objectWithData)).then((data) => {
+      let statusCode = data?.payload?.StatusCode;
+      if (statusCode !== 201) {
+        if (statusCode === 400) {
+          toast.error("Check out data from form!", {
+            position: "bottom-right",
+          });
+          return;
+        }
+
+        if (statusCode === 404) {
+          toast.error("Assignment couldn't be created!", {
+            position: "bottom-right",
+          });
+          return;
+        }
+      }
+
+      if (data?.payload?.statusCode === 201) {
+        toast.success(`Assignment succesfully given to ${dbUser.username}`, {
+          autoClose: 1500,
+          position: "bottom-right",
+        });
+        navigate("/");
+      }
+    });
+  };
 
   return (
     <div id="create-assignment-main-container">
@@ -28,6 +66,7 @@ export const CreateAssignment = () => {
           This is the place for doctor to give an assignment to user. It's
           provided as additional way to help user during the therapy.
         </p>
+        <p className="required-field">Required fields *</p>
       </div>
       <form id="create-assignment-form" onSubmit={giveAssignment}>
         <div className="create-assignment-assignment-container">
@@ -38,6 +77,7 @@ export const CreateAssignment = () => {
             >
               Assignment:
             </label>
+            <span className="required-field"> *</span>
             <br />
             <textarea
               className="create-assignment-content-textarea"
@@ -53,9 +93,10 @@ export const CreateAssignment = () => {
               htmlFor="user-to-accomplish-task"
             >
               Assignment for user:
-            </label>
+            </label>{" "}
+            <span className="required-field"> *</span>
             <p className="create-assignment-user-to-accomplish-task">
-              {dbUser !== null ? dbUser.username : 'Unknown'}
+              {dbUser?.username}
             </p>
           </div>
         </div>
@@ -67,5 +108,5 @@ export const CreateAssignment = () => {
         </button>
       </form>
     </div>
-  )
-}
+  );
+};

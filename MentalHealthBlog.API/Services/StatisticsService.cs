@@ -1,8 +1,11 @@
-﻿using MentalHealthBlog.API.Models;
+﻿using MentalHealthBlog.API.Exceptions;
+using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
 using Microsoft.EntityFrameworkCore;
+
+#pragma warning disable CS8602
 
 namespace MentalHealthBlog.API.Services
 {
@@ -45,48 +48,52 @@ namespace MentalHealthBlog.API.Services
         {
             try
             {
+                var userHasAtLeastOnePost = await _context.Posts
+                    .Where(p => p.UserId == _loggedUserId)
+                    .AnyAsync();
 
-                if (await _context.PostsTags.AnyAsync())
+                if (userHasAtLeastOnePost && !_dbPostTags.Any())
                 {
-                    IEnumerable<IGrouping<int, PostTag>> groupedTagsByTagId = _dbPostTags
-                            .GroupBy(t => t.TagId);
-
-                    if (query.MonthOfPostCreation.HasValue && query.MonthOfPostCreation > 0)
-                    {
-                        groupedTagsByTagId = _dbPostTags
-                             .Where(pt => pt.Post?.CreatedAt.Month == query.MonthOfPostCreation)
-                             .GroupBy(t => t.TagId);
-                    }
-
-                    var tagsById = new List<StatisticsPostTagDto>();
-
-                    foreach (var item in groupedTagsByTagId)
-                    {
-                        var dbPostTag = _dbPostTags.FirstOrDefault(t => t.TagId == item.Key);
-                        if (dbPostTag != null && dbPostTag.Tag != null)
-                        {
-                            var tagById = new StatisticsPostTagDto
-                            {
-                                TagId = dbPostTag.TagId,
-                                NumberOfTags = item.Count(),
-                                Tag = dbPostTag.Tag,
-                                TagName = dbPostTag.Tag.Name,
-                            };
-                            tagsById.Add(tagById);
-                        }
-                    };
-
-                    var pieGraphData = tagsById.OrderByDescending(t => t.NumberOfTags).Take(5);
-                    _statisticsServiceLogger.LogInformation($"GET: {StatisticsServiceLogTypes.SUCCESS}");
-                    return new Response(pieGraphData, StatusCodes.Status200OK, StatisticsServiceLogTypes.SUCCESS.ToString());
+                    _statisticsServiceLogger.LogWarning($"PIE: {StatisticsServiceLogTypes.NULL}");
+                    throw new RecordNotFoundException("Couldn't retrieve posts tags");
                 }
-                _statisticsServiceLogger.LogWarning($"GET: {StatisticsServiceLogTypes.NULL}");
-                return new Response(new object(), StatusCodes.Status204NoContent, StatisticsServiceLogTypes.NULL.ToString());
+
+                IEnumerable<IGrouping<int, PostTag>> groupedTagsByTagId = _dbPostTags
+                        .GroupBy(t => t.TagId);
+
+                if (query.MonthOfPostCreation.HasValue && query.MonthOfPostCreation > 0)
+                {
+                    groupedTagsByTagId = _dbPostTags
+                         .Where(pt => pt.Post?.CreatedAt.Month == query.MonthOfPostCreation)
+                         .GroupBy(t => t.TagId);
+                }
+
+                var tagsById = new List<StatisticsPostTagDto>();
+
+                foreach (var item in groupedTagsByTagId)
+                {
+                    var dbPostTag = _dbPostTags.FirstOrDefault(t => t.TagId == item.Key);
+                    if (dbPostTag != null && dbPostTag.Tag != null)
+                    {
+                        var tagById = new StatisticsPostTagDto
+                        {
+                            TagId = dbPostTag.TagId,
+                            NumberOfTags = item.Count(),
+                            Tag = dbPostTag.Tag,
+                            TagName = dbPostTag.Tag.Name,
+                        };
+                        tagsById.Add(tagById);
+                    }
+                }
+
+                var pieGraphData = tagsById.OrderByDescending(t => t.NumberOfTags).Take(5);
+                _statisticsServiceLogger.LogInformation($"GET: {StatisticsServiceLogTypes.SUCCESS}");
+                return new Response(pieGraphData, StatusCodes.Status200OK, StatisticsServiceLogTypes.SUCCESS.ToString());
             }
             catch (Exception e)
             {
-                _statisticsServiceLogger.LogError($"GET: {StatisticsServiceLogTypes.FAILED.ToString()}", e);
-                return new Response(e.Data, StatusCodes.Status400BadRequest, e.Message);
+                _statisticsServiceLogger.LogError($"GET: {e.Message}");
+                throw;
             }
         }
     }

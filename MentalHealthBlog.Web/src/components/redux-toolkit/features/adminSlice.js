@@ -10,29 +10,35 @@ let initialState = {
   numberOfNewlyRegisteredMentalHealthExperts: 0,
   isLoading: false,
   isSuccessful: false,
-  isFailed: false,
+  isFailed: null,
 }
 
-export const getDbUsers = createAsyncThunk('', async (query) => {
-  console.log('Query value ', query)
+export const getDbUsers = createAsyncThunk('', async (objectWithData) => {
+  console.log('Query value ', objectWithData?.query)
   let url = `${application.application_url}/admin`
 
-  if (query.role > 0) {
-    url += `?role=${query.role}`
-    if (query.searchCondition !== '') {
-      url += `&searchCondition=${query.searchCondition}`
+  if (objectWithData?.query?.role > 0) {
+    url += `?role=${objectWithData?.query?.role}`
+    if (objectWithData?.query?.searchCondition !== '') {
+      url += `&searchCondition=${objectWithData?.query?.searchCondition}`
     }
   } else if (
-    query.searchCondition !== '' &&
-    query.searchCondition !== undefined &&
-    query.searchCondition !== null
+    objectWithData?.query?.searchCondition !== '' &&
+    objectWithData?.query?.searchCondition !== undefined &&
+    objectWithData?.query?.searchCondition !== null
   ) {
-    url += `?searchCondition=${query.searchCondition}`
+    url += `?searchCondition=${objectWithData?.query?.searchCondition}`
   }
 
   console.log('URL ', url)
 
-  let request = await fetch(url)
+  let request = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
+    },
+  })
   let response = await request.json()
 
   return response
@@ -40,13 +46,14 @@ export const getDbUsers = createAsyncThunk('', async (query) => {
 
 export const getNewRegisteredExperts = createAsyncThunk(
   'new-request',
-  async (query) => {
+  async (objectWithData) => {
     let url = `${application.application_url}/admin/new-request`
     let request = await fetch(url, {
       method: 'POST',
-      body: JSON.stringify(query),
+      body: JSON.stringify(objectWithData?.query),
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
       },
     })
     let response = await request.json()
@@ -56,17 +63,18 @@ export const getNewRegisteredExperts = createAsyncThunk(
 
 export const setRegisteredExpertStatus = createAsyncThunk(
   'approval',
-  async (statusDto) => {
+  async (objectWithData) => {
     let url = `${application.application_url}/admin/approval`
     let request = await fetch(url, {
       method: 'PATCH',
-      body: JSON.stringify(statusDto),
+      body: JSON.stringify(objectWithData?.patchDto),
       headers: {
         'Content-Type': 'application/json-patch+json',
+        Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
       },
     })
+
     let response = await request.json()
-    console.log('Response ', response)
     return response
   }
 )
@@ -86,80 +94,6 @@ export const removeUserById = createAsyncThunk('id', async (id) => {
 let adminSlice = createSlice({
   initialState,
   name: 'adminSlice',
-  extraReducers: (builder) => {
-    builder
-      //Get Users
-      .addCase(getDbUsers.pending, (state, action) => {
-        state.isLoading = true
-      })
-      .addCase(getDbUsers.fulfilled, (state, action) => {
-        let serviceResponseObject = action.payload
-        state.isLoading = false
-        console.log('SSS ', serviceResponseObject)
-
-        state.dbUsers = serviceResponseObject.serviceResponseObject
-      })
-      .addCase(getDbUsers.rejected, (state, action) => {
-        state.isLoading = false
-      })
-
-      //New registered experts
-      .addCase(getNewRegisteredExperts.pending, (state, action) => {
-        console.log('New-Request: Pending...')
-      })
-      .addCase(getNewRegisteredExperts.fulfilled, (state, action) => {
-        console.log('New-Request: Fullfilled')
-        let serviceResponseObject = action.payload.serviceResponseObject
-        state.newlyRegisteredMentalHealthExperts = serviceResponseObject
-        state.numberOfNewlyRegisteredMentalHealthExperts =
-          state.newlyRegisteredMentalHealthExperts.length
-      })
-      .addCase(getNewRegisteredExperts.rejected, (state, action) => {
-        console.log('New-Request: Rejected')
-        console.log(action.payload)
-      })
-
-      //Set registered expert status
-      .addCase(setRegisteredExpertStatus.pending, (state, action) => {
-        console.log('Approval: Pending... ')
-      })
-      .addCase(setRegisteredExpertStatus.fulfilled, (state, action) => {
-        console.log('Approval: Fullfilled')
-        console.log(action)
-
-        let serviceResponseObject =
-          action.payload.serviceResponseObject.serviceResponseObject
-
-        state.newlyRegisteredMentalHealthExperts = serviceResponseObject
-      })
-      .addCase(setRegisteredExpertStatus.rejected, (state, action) => {
-        console.log('Approval: Rejected')
-      })
-
-      //Remove user by id
-      .addCase(removeUserById.pending, (state, action) => {
-        console.log('Remove pending... ')
-      })
-      .addCase(removeUserById.fulfilled, (state, action) => {
-        console.log('Remove done...', action.payload)
-
-        let statusCode = action.payload.statusCode
-
-        if (statusCode === 200) {
-          toast.success('Succesfully deleted user', {
-            autoClose: 1500,
-            position: 'bottom-right',
-          })
-          setTimeout(() => {
-            window.location.reload()
-          }, 1000)
-          return
-        }
-      })
-      .addCase(removeUserById.rejected, (state, action) => {
-        console.log('Remove rejected...')
-      })
-  },
   reducers: {
     displayProfilesContainer: () => {
       let statusActionsContainer = document.querySelector(
@@ -207,6 +141,103 @@ let adminSlice = createSlice({
     setSelectedUser: (state, action) => {
       state.dbUser = action.payload
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      //Get Users
+      .addCase(getDbUsers.pending, (state, action) => {
+        state.isLoading = true
+      })
+      .addCase(getDbUsers.fulfilled, (state, action) => {
+        let statusCode = action?.payload?.statusCode
+        if (statusCode === 200) {
+          let serviceResponseObject = action.payload
+          state.isLoading = false
+          console.log('SSS ', serviceResponseObject)
+          state.dbUsers = serviceResponseObject.serviceResponseObject
+          state.isFailed = false
+          return
+        }
+        state.isFailed = true
+      })
+      .addCase(getDbUsers.rejected, (state, action) => {
+        state.isLoading = false
+      })
+
+      //New registered experts
+      .addCase(getNewRegisteredExperts.pending, (state, action) => {
+        console.log('New-Request: Pending...')
+      })
+      .addCase(getNewRegisteredExperts.fulfilled, (state, action) => {
+        console.log('New-Request: Fullfilled')
+        let statusCode = action?.payload?.statusCode
+        let serviceResponseObject = action?.payload?.serviceResponseObject
+
+        if (statusCode === 200) {
+          state.newlyRegisteredMentalHealthExperts = serviceResponseObject
+          state.numberOfNewlyRegisteredMentalHealthExperts =
+            state.newlyRegisteredMentalHealthExperts.length
+          state.isFailed = false
+          return
+        }
+
+        state.isFailed = true
+      })
+      .addCase(getNewRegisteredExperts.rejected, (state, action) => {
+        toast.error('Something went wrong!', {
+          position: 'bottom-right',
+        })
+      })
+
+      //Set registered expert status
+      .addCase(setRegisteredExpertStatus.pending, (state, action) => {
+        console.log('Approval: Pending... ')
+      })
+      .addCase(setRegisteredExpertStatus.fulfilled, (state, action) => {
+        console.log('Approval: Fullfilled')
+        let statusCode = action?.payload?.statusCode
+
+        if (statusCode === 200) {
+          let serviceResponseObject =
+            action?.payload?.serviceResponseObject?.serviceResponseObject
+
+          state.newlyRegisteredMentalHealthExperts = serviceResponseObject
+          return
+        }
+      })
+      .addCase(setRegisteredExpertStatus.rejected, (state, action) => {
+        console.log('Approval: Rejected')
+        toast.error('Something was wrong', {
+          position: 'bottom-right',
+        })
+      })
+
+      //Remove user by id
+      .addCase(removeUserById.pending, (state, action) => {
+        console.log('Remove pending... ')
+      })
+      .addCase(removeUserById.fulfilled, (state, action) => {
+        console.log('Remove done...', action?.payload)
+
+        let statusCode = action?.payload?.statusCode
+
+        if (statusCode === 200) {
+          toast.success('Succesfully deleted user', {
+            autoClose: 1500,
+            position: 'bottom-right',
+          })
+          setTimeout(() => {
+            window.location.reload()
+          }, 1500)
+          return
+        }
+      })
+      .addCase(removeUserById.rejected, (state, action) => {
+        console.log('Remove rejected...')
+        toast.error('Something went wrong!', {
+          position: 'bottom-right',
+        })
+      })
   },
 })
 

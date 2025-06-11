@@ -1,4 +1,3 @@
-import React from "react";
 import useFetchLocationState from "./custom/hooks/useFetchLocationState";
 
 import { SharedContentPermissionPosts } from "./SharedContentPermissionPosts";

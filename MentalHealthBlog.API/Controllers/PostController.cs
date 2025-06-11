@@ -26,24 +26,28 @@ namespace MentalHealthBlogAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<Response> GetById(int id)
         {
             return await _postService.GetById(id);
         }
 
         [HttpPost]
-        public async Task<Response> AddPost([FromBody] CreatePostDto? post)
+        [Authorize]
+        public async Task<Response> AddPost([FromBody] CreatePostDto post)
         {
             return await _postService.Add(post);
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<Response> UpdatePost(int id, [FromBody] Post post)
         {
             return await _postService.Update(id, post);
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<Response> DeletePost(int id)
         {
             return await _postService.Delete(id);

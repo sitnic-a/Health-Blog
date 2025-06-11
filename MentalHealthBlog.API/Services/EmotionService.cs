@@ -1,4 +1,5 @@
-﻿using MentalHealthBlog.API.Models.ResourceResponse;
+﻿using MentalHealthBlog.API.Exceptions;
+using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,12 +33,12 @@ namespace MentalHealthBlog.API.Services
                     return new Response(dbEmotions, StatusCodes.Status200OK, EmotionServiceLogTypes.SUCCESS.ToString());
                 }
                 _emotionLoggerService.LogWarning($"GET: {EmotionServiceLogTypes.EMPTY_OR_NULL_TABLE.ToString()}", dbEmotions);
-                return new Response(dbEmotions, StatusCodes.Status204NoContent, EmotionServiceLogTypes.EMPTY_OR_NULL_TABLE.ToString());
+                throw new EmptyListException("Emotions not found");
             }
             catch (Exception e)
             {
-                _emotionLoggerService.LogError($"GET: {EmotionServiceLogTypes.ERROR.ToString()}", e);
-                return new Response(e.Data, StatusCodes.Status500InternalServerError, EmotionServiceLogTypes.ERROR.ToString());
+                _emotionLoggerService.LogError($"GET: {e.Message}");
+                throw;
             }
         }
     }
