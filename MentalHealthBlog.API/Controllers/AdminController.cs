@@ -1,10 +1,8 @@
-﻿using iText.Layout.Element;
-using MentalHealthBlog.API.Models.ResourceRequest;
+﻿using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection.Metadata;
 
 namespace MentalHealthBlog.API.Controllers
 {
@@ -41,6 +39,7 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpDelete("{userId}")]
+        [Authorize(Roles ="Administrator")]
         public async Task<Response> RemoveUserById(int userId)
         {
             return await _adminService.RemoveUserById(userId);

@@ -79,12 +79,13 @@ export const setRegisteredExpertStatus = createAsyncThunk(
   }
 )
 
-export const removeUserById = createAsyncThunk('id', async (id) => {
-  let url = `${application.application_url}/admin/${id}`
+export const removeUserById = createAsyncThunk('id', async (objectWithData) => {
+  let url = `${application.application_url}/admin/${objectWithData?.dbUser?.id}`
   let request = await fetch(url, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
     },
   })
   let response = await request.json()
