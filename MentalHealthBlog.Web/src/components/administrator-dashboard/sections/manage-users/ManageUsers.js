@@ -86,14 +86,16 @@ export const ManageUsers = () => {
               type="button"
               className="manage-users-modal-confirm-delete-button"
               onClick={() => {
-                console.log('User remove ', dbUser)
-
+                let objectWithData = {
+                  dbUser,
+                  authenticatedUser,
+                }
                 if (
                   dbUser?.roles?.some(
                     (ur) => ur?.name === 'Psychologist / Psychotherapist'
                   )
                 ) {
-                  dispatch(removeUserById(dbUser.userId)).then((data) => {
+                  dispatch(removeUserById(objectWithData)).then((data) => {
                     let statusCode = data?.payload?.StatusCode
                     if (statusCode !== 200) {
                       if (statusCode === 400) {
@@ -113,7 +115,7 @@ export const ManageUsers = () => {
                   dispatch(openDeleteModal(false))
                   return
                 }
-                dispatch(removeUserById(dbUser.id)).then((data) => {
+                dispatch(removeUserById(objectWithData)).then((data) => {
                   let statusCode = data?.payload?.StatusCode
                   if (statusCode !== 200) {
                     if (statusCode === 400) {
