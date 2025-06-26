@@ -12,12 +12,15 @@ export const EmotionsOnPostCreation = () => {
   return (
     <>
       <div className="add-post-emotions-container">
-        <label>Emotions</label>
+        <label htmlFor="emotion">Emotions</label>
         <br />
 
         <PickedEmotions />
 
         <input
+          className="form-field"
+          id="emotion"
+          name="emotion"
           type="text"
           onFocus={() => {
             if (suggestedEmotions.length <= 0) {

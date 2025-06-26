@@ -39,7 +39,7 @@ export const ListOfPostsHeader = () => {
             type="button"
             onClick={() => dispatch(openAddModal(true))}
           >
-            <MdOutlineAddCircleOutline />
+            <MdOutlineAddCircleOutline className="add-post-icon" />
             Add new post
           </button>
 
@@ -64,7 +64,7 @@ export const ListOfPostsHeader = () => {
                   dispatch(setIsSharingExporting(!isSharingExporting))
                 }}
               >
-                <BiSelectMultiple />
+                <BiSelectMultiple className="select-data-icon" />
               </button>
             </div>
           </section>

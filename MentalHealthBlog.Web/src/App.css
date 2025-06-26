@@ -33,6 +33,7 @@ textarea {
   outline: none;
   /* padding-inline: 0.2rem; */
   border-width: 1px;
+  margin-top: 5px;
 }
 
 main {
@@ -169,7 +170,6 @@ main {
   border: none;
   border-bottom: 1px solid #e1e1e1;
   outline: none;
-  font-size: 1.05rem;
   border-radius: 0.3rem;
 }
 
@@ -869,8 +869,20 @@ dialog::backdrop {
   color: #f00;
 }
 
+.add-post-modal-header {
+  font-family: 'Overlock';
+  font-size: 1.2rem;
+}
+
 .add-post-modal-content {
   margin-block: 10px;
+}
+
+.add-post-title-container > label,
+.add-post-content-container > label,
+.add-post-tags-container > label,
+.add-post-emotions-container > label {
+  font-family: 'Overlock';
 }
 
 .add-post-picked-tags-container {
@@ -1057,6 +1069,19 @@ dialog::backdrop {
 .emotion-marker-checked {
   opacity: 1;
   color: #00ff;
+}
+
+.add-post-modal-save-button {
+  margin-top: 5px;
+  padding: 0.4rem 2.5rem;
+  background: #edb572;
+  color: #f3f1e3;
+  outline: none;
+  border: none;
+  font-size: 0.9rem;
+  font-family: 'Klee One';
+  font-weight: 500;
+  border-radius: 0.5rem;
 }
 
 .list-of-posts-header {
@@ -1605,6 +1630,14 @@ button[data-action-select='select'] {
   cursor: pointer;
 }
 
+.share-export:hover {
+  background: #f3f1e3;
+  color: #8bb8da;
+  .select-data-icon {
+    color: #edb572;
+  }
+}
+
 .share-export-select {
   display: flex;
   align-items: center;
@@ -1708,11 +1741,15 @@ div[data-tooltip-title]:after {
 
 .layout-type:hover {
   transition: 200ms;
-  background: #e1e1e1;
+  background: #f3f1e3;
+
+  .layout-view-icon {
+    color: #edb572;
+  }
 }
 
 .layout-active {
-  background: #e1e1e1;
+  background: #f3f1e3;
 }
 
 .default-layout-container {
@@ -1732,7 +1769,7 @@ div[data-tooltip-title]:after {
 .layout-view-icon {
   font-size: 2rem;
   font-weight: 100;
-  color: #707070;
+  color: #82a3bc;
   stroke-width: 1;
   margin-top: 0.5rem;
 }
@@ -1768,16 +1805,21 @@ button[data-action-delete='delete']:hover {
   cursor: pointer;
 }
 
-button[data-action-add='add']:hover,
-button[data-action-add='filter']:hover {
-  background: #f4f4f4;
-  cursor: pointer;
-}
-
-button[data-action-add='add'] svg {
+.add-post-icon {
   margin-right: 0.8rem;
   transform: scale(1.8);
   color: #f3f1e3;
+}
+
+button[data-action-add='add']:hover,
+button[data-action-add='filter']:hover {
+  background: #f3f1e3;
+  color: #edb572;
+  cursor: pointer;
+
+  .add-post-icon {
+    color: #edb572;
+  }
 }
 
 button[data-action-update='update'] svg,
@@ -1793,7 +1835,7 @@ button[data-action-delete='delete'] svg {
   min-height: 100vh;
   top: 0;
   left: 0;
-  /* background: rgba(255, 0, 0, 0.5); */
+  background: #82a3bc60;
   z-index: 3;
 }
 

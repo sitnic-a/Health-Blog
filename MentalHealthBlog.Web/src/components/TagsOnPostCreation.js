@@ -150,7 +150,7 @@ export const TagsOnPostCreation = () => {
           name="tags"
           id="tag"
           type="text"
-          className="add-post-content-tags-input"
+          className="add-post-content-tags-input form-field"
           onKeyUp={(e) => handleTagAdding(e)}
           onChange={(e) => handleSuggestedTagsChange(e)}
         />

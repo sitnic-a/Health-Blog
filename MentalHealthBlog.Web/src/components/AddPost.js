@@ -64,7 +64,7 @@ export const AddPost = () => {
   return (
     <Modal
       isOpen={isAddOpen}
-      style={application.modal_style}
+      style={application.add_post_modal_style}
       appElement={document.getElementById('root')}
       onRequestClose={() => {
         dispatch(openAddModal(false))
@@ -99,7 +99,7 @@ export const AddPost = () => {
             </label>
             <br />
             <input
-              className="add-post-title-input"
+              className="add-post-title-input form-field"
               type="text"
               id="title"
               name="title"
@@ -112,7 +112,7 @@ export const AddPost = () => {
             </label>
             <br />
             <textarea
-              className="add-post-content-textarea"
+              className="add-post-content-textarea form-field"
               name="content"
               id="content"
               rows="10"
@@ -122,7 +122,9 @@ export const AddPost = () => {
 
           <TagsOnPostCreation />
         </div>
-        <button type="submit">Save</button>
+        <button type="submit" className="add-post-modal-save-button">
+          Save
+        </button>
       </form>
     </Modal>
   )
