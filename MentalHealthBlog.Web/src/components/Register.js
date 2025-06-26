@@ -6,7 +6,10 @@ import { toast } from 'react-toastify'
 import { register, getDbRoles } from './redux-toolkit/features/userSlice'
 import useFetchLocationState from './custom/hooks/useFetchLocationState'
 import { db_roles } from './enums/roles'
-import { previewImage } from './utils/helper-methods/methods'
+import {
+  previewImage,
+  stringIsNullOrEmpty,
+} from './utils/helper-methods/methods'
 
 export const Register = () => {
   let { dbRoles } = useSelector((store) => store.user)
@@ -50,6 +53,8 @@ export const Register = () => {
       roles: roles,
     }
 
+    console.log('SEND DATA ', sendData)
+
     if (isMentalHealthExpert === true) {
       mentalHealthExpertFirstName = document.getElementById(
         'register-mental-health-expert-first-name'
@@ -84,6 +89,8 @@ export const Register = () => {
         },
         photo: mentalHealthExpertPhoto,
       }
+
+      console.log('SEND DATA 2 ', sendData)
     }
 
     let form = new FormData()
@@ -100,12 +107,16 @@ export const Register = () => {
       }
     }
 
+    console.log('Form ', form)
+
     if (
-      form.get('username') === '' ||
-      form.get('username') === null ||
-      form.get('password') === '' ||
-      form.get('password') === null ||
-      form.get('roles').length <= 0
+      stringIsNullOrEmpty(form.get('username')) ||
+      stringIsNullOrEmpty(form.get('password')) ||
+      form.get('roles').length <= 0 ||
+      stringIsNullOrEmpty(sendData.mentalHealthExpert.firstName) ||
+      stringIsNullOrEmpty(sendData.mentalHealthExpert.lastName) ||
+      stringIsNullOrEmpty(sendData.mentalHealthExpert.organization) ||
+      stringIsNullOrEmpty(sendData.mentalHealthExpert.phoneNumber)
     ) {
       toast.error(
         'Something went wrong! Please check are all fields populated',
@@ -126,22 +137,34 @@ export const Register = () => {
   }
 
   return (
-    <section className="register-container">
+    <section id="register-container">
+      <h1>Populate required fields to continue...</h1>
       <form onSubmit={registerUser} encType="multipart/form-data">
-        <div>
-          <label htmlFor="register-username">Username:</label>
-          <input
-            type="text"
-            name="username"
-            id="register-username"
-            placeholder="Enter your username"
-            autoComplete="true"
-          />
-        </div>
+        <div className="register-credentials-container">
+          <div>
+            <label htmlFor="register-username">Username:</label>
+            <span className="required-field"> *</span>
+            <input
+              name="username"
+              id="register-username"
+              className="form-field"
+              type="text"
+              placeholder="Enter your username"
+              autoComplete="true"
+            />
+          </div>
 
-        <div>
-          <label htmlFor="register-password">Password:</label>
-          <input type="password" name="password" id="register-password" />
+          <div>
+            <label htmlFor="register-password">Password:</label>
+            <span className="required-field"> *</span>
+
+            <input
+              name="password"
+              id="register-password"
+              className="form-field"
+              type="password"
+            />
+          </div>
         </div>
         {isMentalHealthExpert !== true && (
           <div>
@@ -169,65 +192,85 @@ export const Register = () => {
           <div className="mental-health-expert-register-info-main-container">
             <div className="mental-health-expert-register-info-container">
               <div className="mental-health-expert-register-info name">
-                <label htmlFor="mental-health-expert-first-name">
+                <label htmlFor="register-mental-health-expert-first-name">
                   First name:
                 </label>
+                <span className="required-field"> *</span>
+
                 <input
                   id="register-mental-health-expert-first-name"
-                  name="mental-health-expert-first-name"
+                  name="register-mental-health-expert-first-name"
+                  className="form-field"
                   type="text"
                   placeholder="Enter your first name: "
                 ></input>
               </div>
 
               <div className="mental-health-expert-register-info last-name">
-                <label htmlFor="mental-health-expert-last-name">
+                <label htmlFor="register-mental-health-expert-last-name">
                   Last name:
                 </label>
+                <span className="required-field"> *</span>
+
                 <input
+                  className="form-field"
                   id="register-mental-health-expert-last-name"
-                  name="mental-health-expert-last-name"
+                  name="register-mental-health-expert-last-name"
                   type="text"
                   placeholder="Enter your last name: "
                 ></input>
               </div>
 
               <div className="mental-health-expert-register-info organization">
-                <label htmlFor="mental-health-expert-organization">
+                <label htmlFor="register-mental-health-expert-organization">
                   Organization:
                 </label>
+                <span className="required-field"> *</span>
+
                 <input
+                  className="form-field"
                   id="register-mental-health-expert-organization"
-                  name="mental-health-expert-organization"
+                  name="register-mental-health-expert-organization"
                   type="text"
                   placeholder="Enter your organization: "
                 ></input>
               </div>
 
               <div className="mental-health-expert-register-info phone-number">
-                <label htmlFor="mental-health-expert-phone-number">
+                <label htmlFor="register-mental-health-expert-phone-number">
                   Phone number:
                 </label>
+                <span className="required-field"> *</span>
+
                 <input
+                  className="form-field"
                   id="register-mental-health-expert-phone-number"
-                  name="mental-health-expert-phone-number"
+                  name="register-mental-health-expert-phone-number"
                   type="text"
                   placeholder="Enter your phone number: "
                 ></input>
               </div>
 
               <div className="mental-health-expert-register-info email">
-                <label htmlFor="mental-health-expert-email">Email:</label>
+                <label htmlFor="register-mental-health-expert-email">
+                  Email:
+                </label>
+
                 <input
+                  className="form-field"
                   id="register-mental-health-expert-email"
-                  name="mental-health-expert-email"
+                  name="register-mental-health-expert-email"
                   type="email"
                   placeholder="Enter your email: "
                 ></input>
               </div>
+            </div>
 
+            <div className="mental-health-expert-photo-container">
               <div className="mental-health-expert-register-info photo">
-                <label htmlFor="mental-health-expert-photo">Photo:</label>
+                <label htmlFor="register-mental-health-expert-photo">
+                  Photo:{' '}
+                </label>
                 <input
                   onChange={(e) => {
                     previewImage(e.target.files[0])
@@ -235,19 +278,19 @@ export const Register = () => {
                   accept="image/*"
                   multiple
                   id="register-mental-health-expert-photo"
-                  name="mental-health-expert-photo"
                   type="file"
                 ></input>
               </div>
+              <div
+                id="mental-health-expert-register-photo-main-container"
+                className="mental-health-expert-register-photo-main-container"
+              ></div>
             </div>
-            <div
-              id="mental-health-expert-register-photo-main-container"
-              className="mental-health-expert-register-photo-main-container"
-            ></div>
           </div>
         )}
-
-        <button type="submit">Register</button>
+        <button type="submit" id="register-container-button">
+          Register
+        </button>
       </form>
     </section>
   )

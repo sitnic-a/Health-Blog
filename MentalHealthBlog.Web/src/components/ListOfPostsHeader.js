@@ -34,6 +34,7 @@ export const ListOfPostsHeader = () => {
         </h1>
         <div className="header-actions">
           <button
+            className="header-actions-button"
             data-action-add="add"
             type="button"
             onClick={() => dispatch(openAddModal(true))}
@@ -43,6 +44,7 @@ export const ListOfPostsHeader = () => {
           </button>
 
           <button
+            className="header-actions-button"
             data-action-add="filter"
             type="button"
             onClick={() => {

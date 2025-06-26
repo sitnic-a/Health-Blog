@@ -29,6 +29,7 @@ export const DeleteConfirmation = () => {
         </div>
         <div className="confirmation-actions">
           <button
+            className="confirmation-action-delete"
             type="button"
             onClick={() => {
               dispatch(deletePostById(deletePostObj)).then((data) => {
@@ -50,6 +51,7 @@ export const DeleteConfirmation = () => {
             Yes
           </button>
           <button
+            className="confirmation-action-cancel"
             type="button"
             onClick={() => dispatch(openDeleteModal(false))}
           >

@@ -74,45 +74,57 @@ export const Login = () => {
                 Welcome to Mental Health Blog. Feel free to write express your
                 emotions!
               </h1>
-              <div>
-                <label htmlFor="username">Username:</label>
-                <br />
-                <input
-                  id="username"
-                  type="text"
-                  name="username"
-                  autoComplete="username"
-                />
-              </div>
-              <br />
-              <div>
-                <label htmlFor="password">Password:</label>
-                <br />
-                <input id="password" type="password" name="password" />
-              </div>
-              <section id="register-main-container">
-                <div className="register-regular-user-main-container">
-                  <Link
-                    className="register-link regular-user-link"
-                    to={'/register'}
-                    state={{ regularUser: true }}
-                  >
-                    Create an account
-                  </Link>
+              <div className="form-fields">
+                <div>
+                  <label htmlFor="username">Username:</label>
+                  <span className="required-field"> *</span>
+                  <br />
+                  <input
+                    className="form-field"
+                    id="username"
+                    type="text"
+                    name="username"
+                    autoComplete="username"
+                    autoFocus
+                  />
                 </div>
-                <div className="register-mental-health-expert-main-container">
-                  <Link
-                    className="register-link mental-health-expert-link"
-                    to={'/register'}
-                    state={{ isMentalHealthExpert: true }}
-                  >
-                    Register as mental health expert
-                  </Link>
+                <br />
+                <div>
+                  <label htmlFor="password">Password:</label>
+                  <span className="required-field"> *</span>
+
+                  <br />
+                  <input
+                    className="form-field"
+                    id="password"
+                    type="password"
+                    name="password"
+                  />
                 </div>
-              </section>
-              <button type="submit" id="login-container-button">
-                Login
-              </button>
+                <section id="register-main-container">
+                  <div className="register-regular-user-main-container">
+                    <Link
+                      className="register-link regular-user-link"
+                      to={'/register'}
+                      state={{ regularUser: true }}
+                    >
+                      Create an account
+                    </Link>
+                  </div>
+                  <div className="register-mental-health-expert-main-container">
+                    <Link
+                      className="register-link mental-health-expert-link"
+                      to={'/register'}
+                      state={{ isMentalHealthExpert: true }}
+                    >
+                      Register as mental health expert
+                    </Link>
+                  </div>
+                </section>
+                <button type="submit" id="login-container-button">
+                  Login
+                </button>
+              </div>
             </div>
           </form>
         </section>
