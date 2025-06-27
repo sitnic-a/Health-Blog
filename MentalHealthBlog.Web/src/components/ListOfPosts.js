@@ -12,6 +12,7 @@ import { FilterOptions } from './FilterOptions'
 
 import { ShareExportOverlay } from './share-export/ShareExportOverlay'
 import { ShareModal } from './share-export/share/ShareModal'
+import { ShareModal2 } from './ShareModal2'
 import { ExportModal } from './share-export/export/ExportModal'
 
 export const ListOfPosts = () => {
@@ -61,7 +62,7 @@ export const ListOfPosts = () => {
   return (
     <>
       <ListOfPostsHeader />
-      <ShareModal />
+      <ShareModal2 />
       <ExportModal />
 
       <ShareExportOverlay />

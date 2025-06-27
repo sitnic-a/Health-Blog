@@ -3373,3 +3373,85 @@ select[name='filter-by-month'] {
   background: #fff;
   color: #82a3bc;
 }
+
+/* SHARE MODAL 2 STYLE testing */
+
+.share-modal-container-2-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  max-height: 100vh;
+  height: 100%;
+  background: red;
+  z-index: 4;
+  overflow: hidden;
+}
+
+#share-modal-container-2 {
+  max-width: 966px;
+  max-height: 814px;
+  background: #f3e1e3;
+  margin: auto;
+}
+
+@media (width<=950px) {
+  #share-modal-container-2 {
+    margin-inline: 1rem;
+  }
+}
+
+.share-modal-header {
+  margin: 0;
+  margin-inline: 3rem;
+}
+
+.share-modal-header > p {
+  text-align: center;
+  font-size: 1.2rem;
+  font-family: 'Klee One';
+  font-weight: 700;
+  margin: 0;
+}
+
+.share-modal-posts-to-share-container {
+  margin-top: 2rem;
+  margin-inline: 3rem;
+  /* max-width: 800px; */
+  border: 1px solid red;
+}
+
+.share-modal-posts-to-share {
+  margin: 9px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.share-modal-post-to-share-container {
+  height: 2rem;
+  background: blue;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.share-modal-post-to-share-title {
+  font-size: 14px;
+  max-width: 120px;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.share-modal-action-container {
+  margin-top: 2rem;
+  margin-inline: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.share-modal-filter-container {
+}

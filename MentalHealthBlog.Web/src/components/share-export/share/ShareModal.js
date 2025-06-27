@@ -20,6 +20,8 @@ import { IoRemoveCircleOutline } from 'react-icons/io5'
 import { ShareViaLink } from './ShareViaLink'
 import { toast } from 'react-toastify'
 
+import { ShareModal2 } from '../../ShareModal2'
+
 export const ShareModal = () => {
   let dispatch = useDispatch()
   let { authenticatedUser } = useSelector((store) => store.user)
@@ -30,7 +32,9 @@ export const ShareModal = () => {
     postsToExport.length > 0 &&
     isShareOpen && (
       <section className="share-modal-overlay">
-        <section className="share-modal-container">
+        <ShareModal2 />
+
+        {/* <section className="share-modal-container">
           <span
             className="share-export-close-modal-btn"
             onClick={() => {
@@ -143,7 +147,7 @@ export const ShareModal = () => {
             </button>
             <ShareViaLink />
           </div>
-        </section>
+        </section> */}
       </section>
     )
   )
