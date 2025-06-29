@@ -3383,16 +3383,27 @@ select[name='filter-by-month'] {
   width: 100vw;
   max-height: 100vh;
   height: 100%;
-  background: red;
+  background: #82a3bc60;
   z-index: 4;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 #share-modal-container-2 {
-  max-width: 966px;
-  max-height: 814px;
-  background: #f3e1e3;
+  position: relative;
+  top: 50%;
+  max-width: 760px;
+  min-height: 480px;
+  background: #f3f1e3;
   margin: auto;
+  transform: translateY(-50%);
+  padding-bottom: 1rem;
+  border-radius: 0.7rem;
+}
+
+@media (width<=420px) {
+  #share-modal-container-2 {
+    transform: translateY(-40%);
+  }
 }
 
 @media (width<=950px) {
@@ -3401,7 +3412,22 @@ select[name='filter-by-month'] {
   }
 }
 
+.share-modal-close-modal-btn {
+  float: right;
+  margin-top: 0.2rem;
+  margin-right: 0.5rem;
+  font-size: 1.2rem;
+  font-family: 'Klee One';
+  cursor: pointer;
+}
+
+.share-modal-close-modal-btn:hover {
+  color: #f00;
+  font-weight: 600;
+}
+
 .share-modal-header {
+  clear: both;
   margin: 0;
   margin-inline: 3rem;
 }
@@ -3415,14 +3441,15 @@ select[name='filter-by-month'] {
 }
 
 .share-modal-posts-to-share-container {
-  margin-top: 2rem;
+  margin-top: 1rem;
   margin-inline: 3rem;
   /* max-width: 800px; */
-  border: 1px solid red;
+  border: 1px solid #82a3bc;
+  border-radius: 0.5rem;
 }
 
 .share-modal-posts-to-share {
-  margin: 9px;
+  margin: 5px;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -3431,21 +3458,29 @@ select[name='filter-by-month'] {
 
 .share-modal-post-to-share-container {
   height: 2rem;
-  background: blue;
+  background: #edb572;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 8px;
+  padding-inline: 0.3rem;
 }
 
 .share-modal-post-to-share-title {
-  font-size: 14px;
   max-width: 120px;
   width: 100%;
   overflow-x: hidden;
+  font-size: 11.5px;
+  font-family: 'Klee One';
+  font-weight: 500;
+}
+
+.share-modal-post-to-share-remove-from-list {
+  font-size: 0.7rem;
 }
 
 .share-modal-action-container {
-  margin-top: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 0.8rem;
   margin-inline: 3rem;
   display: flex;
   align-items: center;
@@ -3454,4 +3489,312 @@ select[name='filter-by-month'] {
 }
 
 .share-modal-filter-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  flex-grow: 1;
+}
+
+@media (width<=635px) {
+  .share-modal-filter-container {
+    max-width: 800px;
+    width: 100%;
+  }
+}
+
+.search-by-name-surname-organization {
+  width: 54%;
+  padding: 0.5rem 4px;
+  font-size: 14px;
+  font-family: 'Klee One';
+  border: 1px solid #82a3bc;
+  border-radius: 0.4rem;
+  background: transparent;
+  margin-right: 8px;
+}
+
+@media (width>=720px) {
+  .search-by-name-surname-organization {
+    max-width: 700px;
+    width: 65%;
+  }
+}
+
+@media (width<=635px) {
+  .search-by-name-surname-organization {
+    max-width: 700px;
+    width: 50%;
+    text-align: center;
+    margin-right: 0;
+  }
+}
+
+@media (width<=420px) {
+  .search-by-name-surname-organization {
+    width: 100%;
+  }
+}
+
+.search-by-name-surname-organization-filter-button {
+  display: flex;
+  align-items: center;
+  max-width: 150px;
+  height: 0px;
+  padding-inline: 0.7rem;
+  padding-block: 1.1rem;
+  margin-top: 0.3rem;
+  background: #82a3bc;
+  border: none;
+  color: #f3f1e3;
+  border-radius: 0.4rem;
+  font-family: 'Klee One';
+}
+
+@media (width<=635px) {
+  .search-by-name-surname-organization-filter-button {
+    display: flex;
+    justify-content: center;
+    max-width: 700px;
+    width: 44%;
+    font-size: 0.93rem;
+    margin-left: 8px;
+  }
+}
+
+@media (width<=420px) {
+  .search-by-name-surname-organization-filter-button {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+@media (width<=530px) {
+  .search-by-name-surname-organization-filter-button {
+    padding-inline: 7px;
+  }
+}
+
+.search-by-name-surname-organization-filter-icon {
+  margin-left: 20px;
+  font-size: 24px;
+}
+
+@media (width<=530px) {
+  .search-by-name-surname-organization-filter-icon {
+    margin-left: 10px;
+    font-size: 24px;
+  }
+}
+
+.share-modal-share-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+  margin-top: 0.4rem;
+}
+
+@media (width<=635px) {
+  .share-modal-share-actions {
+    max-width: 700px;
+    width: 100%;
+  }
+}
+
+.share-content-to-experts {
+  padding-block: 0.5rem;
+  padding-inline: 0.7rem;
+  border: none;
+  border-radius: 0.5rem;
+  outline: none;
+  background: #edb572;
+  color: #f3f1e3;
+  cursor: pointer;
+  font-family: 'Klee One';
+}
+
+.share-content-to-experts:hover {
+  background: #f3f1e3;
+  color: #edb572;
+  border: 1px solid #82a3bc;
+}
+
+.share-content-to-experts:disabled {
+  background: #bbc5cd;
+  color: #f3f1e3;
+}
+
+.share-content-to-experts:disabled:hover {
+  background: #bbc5cd;
+  color: #f3f1e3;
+  cursor: not-allowed;
+  border: none;
+}
+
+@media (width<=635px) {
+  .share-content-to-experts {
+    width: 100%;
+  }
+}
+
+.share-modal-people-to-share-with {
+  margin-inline: 3rem;
+  border: 1px solid #82a3bc;
+}
+
+.person-to-share-with-main-container {
+  max-width: fit-content;
+  background: #bcd0e0;
+  margin: 0.3rem;
+  padding-inline: 0.7rem;
+  padding-bottom: 3rem;
+}
+
+@media (width<=420px) {
+  .person-to-share-with-main-container {
+    padding-inline: 0.3rem;
+  }
+}
+
+.person-to-share-content-with-checkbox {
+  width: 20px;
+  height: 20px;
+  margin-right: -0.3rem;
+  float: right;
+  clear: both;
+}
+
+@media (width<=420px) {
+  .person-to-share-content-with-checkbox {
+    margin-right: -0rem;
+  }
+}
+
+.person-to-share-with-container {
+  clear: both;
+}
+
+.person-to-share-with-img-container {
+  max-width: 60px;
+  max-height: 60px;
+  margin: auto;
+}
+
+@media (width<=420px) {
+  .person-to-share-with-img-container {
+    max-width: 40px;
+    max-height: 40px;
+    margin: auto;
+  }
+}
+
+.person-to-share-with-img {
+  max-width: 60px;
+  max-height: 60px;
+}
+
+@media (width<=420px) {
+  .person-to-share-with-img {
+    max-width: 40px;
+    max-height: 40px;
+    margin: auto;
+  }
+}
+
+.person-to-share-with-header-info-container {
+  text-align: center;
+}
+
+.person-to-share-with-name {
+  max-width: 200px;
+  margin: 0;
+  font-size: 1rem;
+  font-family: 'Klee One';
+}
+
+.person-to-share-with-role {
+  max-width: 200px;
+  margin: 0;
+  font-size: 1rem;
+  font-family: 'Klee One';
+}
+
+.person-to-share-with-additional-info-field {
+  display: flex;
+  align-items: center;
+}
+
+.person-to-share-with-phone-field {
+  margin-top: 0.7rem;
+  margin-bottom: 0.3rem;
+  gap: 3px;
+}
+
+@media (width<=420px) {
+  .person-to-share-with-phone-field {
+    margin-top: 25px;
+    flex-direction: column;
+  }
+}
+
+.person-to-share-with-phone-icon {
+  width: 15px;
+  height: 15px;
+  margin-top: 0.1rem;
+  font-size: 0.9rem;
+}
+
+@media (width<=420px) {
+  .person-to-share-with-phone-icon {
+    width: 23px;
+    height: 23px;
+  }
+}
+
+.person-to-share-with-phone-value {
+  max-width: 180px;
+  margin: 0;
+  font-size: 0.9rem;
+  font-family: 'Klee One';
+}
+
+.person-to-share-with-email-field {
+  gap: 3px;
+  margin-bottom: 0.3rem;
+}
+
+@media (width<=420px) {
+  .person-to-share-with-email-field {
+    flex-direction: column;
+  }
+}
+
+.person-to-share-with-email-icon {
+  width: 15px;
+  height: 15px;
+  margin-top: 0.2rem;
+}
+
+@media (width<=420px) {
+  .person-to-share-with-email-icon {
+    width: 23px;
+    height: 23px;
+  }
+}
+
+.person-to-share-with-email-value {
+  margin: 0;
+  max-width: 190px;
+  word-wrap: break-word;
+  font-size: 0.9rem;
+  font-family: 'Klee One';
+}
+
+.person-to-share-with-organization-field {
+  justify-content: center;
+}
+
+.person-to-share-with-organization-value {
+  margin: 0;
+  font-family: 'Klee One';
+  text-align: center;
 }
