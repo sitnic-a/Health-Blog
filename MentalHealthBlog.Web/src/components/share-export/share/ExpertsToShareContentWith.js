@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { checkVisibilityOfShareContentAction } from '../../redux-toolkit/features/shareExportSlice'
+import { checkIfShareContentActionIsDisabled } from '../../redux-toolkit/features/shareExportSlice'
 import defaultAvatar from '../../../images/default-avatar.png'
 import { LiaSearchSolid } from 'react-icons/lia'
 import { BiError } from 'react-icons/bi'
@@ -41,7 +41,7 @@ export const ExpertsToShareContentWith = () => {
                     name="person-to-give-permission-checkbox"
                     id="person-to-give-permission-checkbox"
                     onClick={() => {
-                      dispatch(checkVisibilityOfShareContentAction())
+                      dispatch(checkIfShareContentActionIsDisabled())
                     }}
                   />
                 </div>

@@ -1,8 +1,11 @@
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { checkIfShareContentActionIsDisabled } from '../../redux-toolkit/features/shareExportSlice'
+
 import defaultAvatar from '../../../images/default-avatar.png'
 import { MdPhone, MdEmail } from 'react-icons/md'
 
 export const ExpertsToShareContentWith2 = () => {
+  let dispatch = useDispatch()
   let { possibleToShareWith } = useSelector((store) => store.shareExport)
   return (
     <div className="share-modal-people-to-share-with">
@@ -24,6 +27,9 @@ export const ExpertsToShareContentWith2 = () => {
               className="person-to-share-content-with-checkbox"
               type="checkbox"
               name="person-to-share-content-with-checkbox"
+              onClick={() => {
+                dispatch(checkIfShareContentActionIsDisabled())
+              }}
             />
             <div className="person-to-share-with-container">
               <div className="person-to-share-with-img-container">

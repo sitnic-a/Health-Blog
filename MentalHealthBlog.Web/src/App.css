@@ -3476,6 +3476,13 @@ select[name='filter-by-month'] {
 
 .share-modal-post-to-share-remove-from-list {
   font-size: 0.7rem;
+  cursor: pointer;
+}
+
+.share-modal-post-to-share-remove-from-list:hover {
+  color: #f00;
+  font-weight: 600;
+  transform: scale(1.05);
 }
 
 .share-modal-action-container {

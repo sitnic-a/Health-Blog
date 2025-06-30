@@ -18,6 +18,7 @@ let initialState = {
   isSharingLink: false,
   shareLinkUrl: '',
   isLoading: false,
+  disabledShareContentAction: true,
 }
 
 export const exportToPDF = createAsyncThunk(
@@ -143,17 +144,17 @@ let shareExportSlice = createSlice({
       })
     },
 
-    checkVisibilityOfShareContentAction: (state) => {
-      if (getPeopleToShareContentWith().length > 0) {
-        state.numberOfPeoplePossibleToShareWith =
-          getPeopleToShareContentWith().length
-        let shareBtn = document.querySelector('.share-btn-experts')
-        shareBtn.style.display = 'inline-block'
-      } else {
-        state.numberOfPeoplePossibleToShareWith = 0
-        let shareBtn = document.querySelector('.share-btn-experts')
-        shareBtn.style.display = 'none'
+    checkIfShareContentActionIsDisabled: (state) => {
+      let sharingWith = getPeopleToShareContentWith().length
+
+      if (sharingWith > 0) {
+        state.numberOfPeoplePossibleToShareWith = sharingWith
+        state.disabledShareContentAction = false
+        return
       }
+
+      state.numberOfPeoplePossibleToShareWith = 0
+      state.disabledShareContentAction = true
     },
 
     resetShareLinkUrl: (state) => {
@@ -276,7 +277,7 @@ let shareExportSlice = createSlice({
 export const {
   setOverlayForShareExport,
   revokeShareContent,
-  checkVisibilityOfShareContentAction,
+  checkIfShareContentActionIsDisabled,
   resetShareLinkUrl,
 } = shareExportSlice.actions
 
