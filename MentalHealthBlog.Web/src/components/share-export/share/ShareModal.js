@@ -32,7 +32,7 @@ export const ShareModal = () => {
     postsToExport.length > 0 &&
     isShareOpen && (
       <section className="share-modal-overlay">
-        <ShareModal2 />
+        {/* <ShareModal2 /> */}
 
         {/* <section className="share-modal-container">
           <span

@@ -1,22 +1,40 @@
 import { useDispatch, useSelector } from 'react-redux'
+import {
+  openShareModal,
+  openShareViaLink,
+} from './redux-toolkit/features/modalSlice'
+
+import { resetShareLinkUrl } from './redux-toolkit/features/shareExportSlice'
+import { ExpertsToShareContentWith2 } from './share-export/share/ExpertsToShareContentWith2'
 
 import { LiaSearchSolid } from 'react-icons/lia'
-import defaultAvatar from '../images/default-avatar.png'
-
-import { MdPhone, MdEmail } from 'react-icons/md'
-
 export const ShareModal2 = () => {
   let dispatch = useDispatch()
   let { authenticatedUser } = useSelector((store) => store.user)
   let { isShareOpen, isShareViaLinkOpen } = useSelector((store) => store.modal)
-  let { postsToExport } = useSelector((store) => store.shareExport)
+  let { postsToExport, possibleToShareWith } = useSelector(
+    (store) => store.shareExport
+  )
 
   return (
     postsToExport.length > 0 &&
     isShareOpen && (
       <section className="share-modal-container-2-overlay">
         <section id="share-modal-container-2">
-          <span className="share-modal-close-modal-btn">X</span>
+          <span
+            className="share-modal-close-modal-btn"
+            onClick={() => {
+              dispatch(openShareModal(!isShareOpen))
+              dispatch(openShareViaLink(!isShareViaLinkOpen))
+              dispatch(resetShareLinkUrl())
+              let shareExportContainer = document.querySelector(
+                '.share-export-container'
+              )
+              shareExportContainer.style.display = 'flex'
+            }}
+          >
+            X
+          </span>
 
           <div className="share-modal-header">
             <p>Share posts...</p>
@@ -72,59 +90,7 @@ export const ShareModal2 = () => {
             </div>
           </div>
 
-          <div className="share-modal-people-to-share-with">
-            <div className="person-to-share-with-main-container">
-              <input
-                className="person-to-share-content-with-checkbox"
-                type="checkbox"
-                name="person-to-share-content-with-checkbox"
-              />
-              <div className="person-to-share-with-container">
-                <div className="person-to-share-with-img-container">
-                  <img
-                    className="person-to-share-with-img"
-                    src={defaultAvatar}
-                    alt="Person"
-                  />
-                </div>
-
-                <div className="person-to-share-with-header-info-container">
-                  <h3 className="person-to-share-with-name">Ime i Prezime</h3>
-                  <p className="person-to-share-with-role">Role</p>
-                </div>
-
-                <div className="person-to-share-with-additional-info-container">
-                  <div className="person-to-share-with-additional-info-field person-to-share-with-phone-field">
-                    <MdPhone className="person-to-share-with-phone-icon" />
-                    <p
-                      className="person-to-share-with-phone-value"
-                      title="+38762/000-111"
-                    >
-                      +38762/000-111
-                    </p>
-                  </div>
-
-                  <div className="person-to-share-with-additional-info-field person-to-share-with-email-field">
-                    <MdEmail className="person-to-share-with-email-icon" />
-                    <p
-                      className="person-to-share-with-email-value"
-                      title="emaiemail123@email.com"
-                    >
-                      emailemail123@email.com
-                    </p>
-                  </div>
-
-                  <hr />
-
-                  <div className="person-to-share-with-additional-info-field person-to-share-with-organization-field">
-                    <p className="person-to-share-with-organization-value">
-                      organization
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ExpertsToShareContentWith2 />
         </section>
       </section>
     )

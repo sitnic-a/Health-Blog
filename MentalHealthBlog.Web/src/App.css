@@ -3637,8 +3637,10 @@ select[name='filter-by-month'] {
 }
 
 .share-modal-people-to-share-with {
+  display: flex;
   margin-inline: 3rem;
   border: 1px solid #82a3bc;
+  overflow-x: scroll;
 }
 
 .person-to-share-with-main-container {
@@ -3674,28 +3676,28 @@ select[name='filter-by-month'] {
 }
 
 .person-to-share-with-img-container {
-  max-width: 60px;
-  max-height: 60px;
+  max-width: 100px;
+  max-height: 100px;
   margin: auto;
 }
 
 @media (width<=420px) {
   .person-to-share-with-img-container {
-    max-width: 40px;
-    max-height: 40px;
+    max-width: 80px;
+    max-height: 80px;
     margin: auto;
   }
 }
 
 .person-to-share-with-img {
-  max-width: 60px;
-  max-height: 60px;
+  max-width: 100px;
+  max-height: 100px;
 }
 
 @media (width<=420px) {
   .person-to-share-with-img {
-    max-width: 40px;
-    max-height: 40px;
+    max-width: 80px;
+    max-height: 80px;
     margin: auto;
   }
 }
