@@ -20,6 +20,7 @@ export const application = {
   },
   add_post_modal_style: {
     overlay: {
+      overflowY: 'scroll',
       background: '#82a3bc60',
     },
     content: {
@@ -31,7 +32,7 @@ export const application = {
       bottom: 'auto',
       transform: 'translate(-50%, -50%)',
       maxWidth: '700px',
-      minHeight: '150px',
+      maxHeight: '500px',
       width: '80%',
       padding: '0rem 2rem 1rem 2rem',
     },

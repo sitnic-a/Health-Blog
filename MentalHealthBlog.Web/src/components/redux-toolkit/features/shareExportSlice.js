@@ -158,6 +158,7 @@ let shareExportSlice = createSlice({
     },
 
     resetShareLinkUrl: (state) => {
+      state.isSharingLink = false
       state.shareLinkUrl = ''
     },
   },

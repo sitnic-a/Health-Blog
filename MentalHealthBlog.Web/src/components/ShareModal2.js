@@ -16,14 +16,14 @@ import { ExpertsToShareContentWith2 } from './share-export/share/ExpertsToShareC
 
 import { LiaSearchSolid } from 'react-icons/lia'
 import { PostsToBeShared } from './share-export/share/PostsToBeShared'
+import { ShareViaLink } from './share-export/share/ShareViaLink'
 
 export const ShareModal2 = () => {
   let dispatch = useDispatch()
   let { authenticatedUser } = useSelector((store) => store.user)
   let { isShareOpen, isShareViaLinkOpen } = useSelector((store) => store.modal)
-  let { postsToExport, disabledShareContentAction } = useSelector(
-    (store) => store.shareExport
-  )
+  let { postsToExport, disabledShareContentAction, isSharingLink } =
+    useSelector((store) => store.shareExport)
 
   return (
     postsToExport.length > 0 &&
@@ -70,6 +70,10 @@ export const ShareModal2 = () => {
               <button
                 className="share-content-to-experts share-content-btn"
                 onClick={async () => {
+                  if (isSharingLink === true) {
+                    dispatch(resetShareLinkUrl())
+                  }
+
                   let paramsForPreparation = {
                     postsToExport,
                     shareLink: false,
@@ -104,11 +108,45 @@ export const ShareModal2 = () => {
               >
                 Share Content
               </button>
-              <button className="share-content-to-experts">
+              <button
+                className="share-content-to-experts"
+                onClick={() => {
+                  let paramsForPreparation = {
+                    postsToExport,
+                    shareLink: true,
+                  }
+
+                  let contentToBeShared =
+                    prepareContentToShare(paramsForPreparation)
+
+                  let objectWithData = {
+                    contentToBeShared,
+                    authenticatedUser,
+                  }
+
+                  dispatch(shareContent(objectWithData)).then((data) => {
+                    let statusCode = data?.payload?.StatusCode
+                    if (statusCode === 400) {
+                      toast.error("Content couldn't be shared!", {
+                        position: 'bottom-right',
+                      })
+                      return
+                    }
+                    if (statusCode === 404) {
+                      toast.error("Couldn't find the data!", {
+                        position: 'bottom-right',
+                      })
+                    }
+                  })
+                  dispatch(openShareViaLink(!isShareViaLinkOpen))
+                }}
+              >
                 Share via link
               </button>
             </div>
           </div>
+
+          <ShareViaLink />
 
           <ExpertsToShareContentWith2 />
         </section>
