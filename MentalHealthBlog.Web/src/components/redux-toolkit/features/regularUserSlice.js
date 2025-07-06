@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { application } from "../../../application";
-import { toast } from "react-toastify";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { application } from '../../../application'
+import { toast } from 'react-toastify'
 
 let initialState = {
   sharesPerMentalHealthExpert: [],
@@ -9,181 +9,189 @@ let initialState = {
   isLoading: false,
   successfullyFetchedSharesPerMentalHealthExpert: null,
   hasSharedPosts: true,
-};
+  isReviewingSharedPosts: false,
+}
 
 export const getSharesPerMentalHealthExpert = createAsyncThunk(
-  "shares-per-mental-health-expert",
+  'shares-per-mental-health-expert',
   async (objectWithData) => {
-    let url = `${application.application_url}/regularUser/shares-per-mental-health-expert?loggedUserId=${objectWithData.query.loggedUserId}`;
+    let url = `${application.application_url}/regularUser/shares-per-mental-health-expert?loggedUserId=${objectWithData.query.loggedUserId}`
     let request = await fetch(url, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
       },
-    });
-    let response = await request.json();
-    return response;
+    })
+    let response = await request.json()
+    return response
   }
-);
+)
 
 export const getRecentShares = createAsyncThunk(
-  "recent",
+  'recent',
   async (objectWithData) => {
-    let url = `${application.application_url}/regularUser/recent?loggedUserId=${objectWithData.query.loggedUserId}`;
+    let url = `${application.application_url}/regularUser/recent?loggedUserId=${objectWithData.query.loggedUserId}`
     let request = await fetch(url, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
       },
-    });
-    let response = await request.json();
-    return response;
+    })
+    let response = await request.json()
+    return response
   }
-);
+)
 
 export const revokeContentPermission = createAsyncThunk(
-  "revoke",
+  'revoke',
   async (objectWithData) => {
-    let url = `${application.application_url}/regularUser/revoke`;
+    let url = `${application.application_url}/regularUser/revoke`
     let request = await fetch(url, {
-      method: "DELETE",
+      method: 'DELETE',
       body: JSON.stringify(objectWithData.revokeObject),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
       },
-    });
+    })
 
-    let response = await request.json();
-    return response;
+    let response = await request.json()
+    return response
   }
-);
+)
 
 export const regularUserSlice = createSlice({
   initialState,
-  name: "regularUser",
+  name: 'regularUser',
   reducers: {
     previewHoveredContentCounter: (state, action) => {
-      let mentalHealthExpertId = action.payload.mentalHealthExpertId;
+      let mentalHealthExpertId = action.payload.mentalHealthExpertId
 
       let mentalHealthExpertContainers = document.querySelectorAll(
-        ".shares-per-mental-health-expert-expert-main-container"
-      );
+        '.shares-per-mental-health-expert-expert-main-container'
+      )
 
       mentalHealthExpertContainers.forEach((mentalHealthExpertContainer) => {
         let containerKeyId = mentalHealthExpertContainer.querySelector(
-          ".input-container-key"
-        ).dataset.expertId;
+          '.input-container-key'
+        ).dataset.expertId
 
         if (parseInt(containerKeyId) === mentalHealthExpertId) {
           mentalHealthExpertContainer.querySelector(
-            ".posts-counter-paragraph"
-          ).style.opacity = "1";
+            '.posts-counter-paragraph'
+          ).style.opacity = '1'
           mentalHealthExpertContainer.querySelector(
-            ".posts-counter-paragraph"
-          ).style.cursor = "pointer";
+            '.posts-counter-paragraph'
+          ).style.cursor = 'pointer'
         }
-      });
+      })
     },
     hideHoveredContentCounter: (state, action) => {
-      let mentalHealthExpertId = action.payload.mentalHealthExpertId;
+      let mentalHealthExpertId = action.payload.mentalHealthExpertId
 
       let mentalHealthExpertContainers = document.querySelectorAll(
-        ".shares-per-mental-health-expert-expert-main-container"
-      );
+        '.shares-per-mental-health-expert-expert-main-container'
+      )
 
       mentalHealthExpertContainers.forEach((mentalHealthExpertContainer) => {
         let containerKeyId = mentalHealthExpertContainer.querySelector(
-          ".input-container-key"
-        ).dataset.expertId;
+          '.input-container-key'
+        ).dataset.expertId
 
         if (parseInt(containerKeyId) === mentalHealthExpertId) {
           mentalHealthExpertContainer.querySelector(
-            ".posts-counter-paragraph"
-          ).style.opacity = "0";
+            '.posts-counter-paragraph'
+          ).style.opacity = '0'
           mentalHealthExpertContainer.querySelector(
-            ".posts-counter-paragraph"
-          ).style.cursor = "pointer";
+            '.posts-counter-paragraph'
+          ).style.cursor = 'pointer'
         }
-      });
+      })
+    },
+    setIsReviewingState: (state, action) => {
+      state.isReviewingSharedPosts = action.payload
     },
   },
   extraReducers: (builder) => {
     builder
       //shares-per-mental-health-expert
       .addCase(getSharesPerMentalHealthExpert.pending, (state, action) => {
-        console.log("Shares per mental health expert pending... ");
-        state.isLoading = true;
+        console.log('Shares per mental health expert pending... ')
+        state.isLoading = true
       })
       .addCase(getSharesPerMentalHealthExpert.fulfilled, (state, action) => {
-        let serviceResponseObject = action.payload.serviceResponseObject;
-        let statusCode = action?.payload?.statusCode;
-        state.isLoading = false;
+        let serviceResponseObject = action.payload.serviceResponseObject
+        let statusCode = action?.payload?.statusCode
+
+        state.isLoading = false
 
         if (statusCode === 200) {
-          state.successfullyFetchedSharesPerMentalHealthExpert = true;
-          state.sharesPerMentalHealthExpert = serviceResponseObject;
-          return;
+          state.successfullyFetchedSharesPerMentalHealthExpert = true
+          state.sharesPerMentalHealthExpert = serviceResponseObject
+          return
         }
-        state.successfullyFetchedSharesPerMentalHealthExpert = false;
+        state.successfullyFetchedSharesPerMentalHealthExpert = false
       })
       .addCase(getSharesPerMentalHealthExpert.rejected, (state, action) => {
-        state.isLoading = false;
-        state.successfullyFetchedSharesPerMentalHealthExpert = false;
-        toast.error("Something went wrong!", {
-          position: "bottom-right",
-        });
+        state.isLoading = false
+        state.successfullyFetchedSharesPerMentalHealthExpert = false
+        toast.error('Something went wrong!', {
+          position: 'bottom-right',
+        })
       })
 
       //recent
       .addCase(getRecentShares.pending, (state, action) => {
-        console.log("Recent shares pending...");
-        state.isLoading = true;
+        console.log('Recent shares pending...')
+        state.isLoading = true
       })
       .addCase(getRecentShares.fulfilled, (state, action) => {
-        let statusCode = action?.payload?.statusCode;
-        let recentShares = action?.payload?.serviceResponseObject;
-        state.isLoading = false;
+        let statusCode = action?.payload?.statusCode
+        let recentShares = action?.payload?.serviceResponseObject
+        state.isLoading = false
 
         if (statusCode === 200) {
-          state.recentShares = recentShares;
-          state.successfullyFetchedRecentShares = true;
-          return;
+          state.recentShares = recentShares
+          state.successfullyFetchedRecentShares = true
+          return
         }
 
         if (statusCode !== 200) {
-          state.successfullyFetchedRecentShares = false;
-          return;
+          state.successfullyFetchedRecentShares = false
+          return
         }
       })
       .addCase(getRecentShares.rejected, (state, action) => {
-        toast.error("Something went wrong", {
-          position: "bottom-right",
-        });
-        state.isLoading = false;
+        toast.error('Something went wrong', {
+          position: 'bottom-right',
+        })
+        state.isLoading = false
       })
 
       //revoke
       .addCase(revokeContentPermission.pending, (state, action) => {
-        console.log("Revoke pending...");
+        console.log('Revoke pending...')
       })
       .addCase(revokeContentPermission.fulfilled, (state, action) => {
-        console.log("Permission to read deleted!");
+        console.log('Permission to read deleted!')
         if (
           action?.payload?.serviceResponseObject?.serviceResponseObject <= 0
         ) {
-          state.hasSharedPosts = false;
+          state.hasSharedPosts = false
         }
       })
       .addCase(revokeContentPermission.rejected, (state, action) => {
-        console.log("Revoke error ", action.payload);
-      });
+        console.log('Revoke error ', action.payload)
+      })
   },
-});
+})
 
-export const { previewHoveredContentCounter, hideHoveredContentCounter } =
-  regularUserSlice.actions;
+export const {
+  previewHoveredContentCounter,
+  hideHoveredContentCounter,
+  setIsReviewingState,
+} = regularUserSlice.actions
 
-export default regularUserSlice.reducer;
+export default regularUserSlice.reducer

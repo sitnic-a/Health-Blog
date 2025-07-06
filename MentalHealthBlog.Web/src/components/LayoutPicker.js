@@ -1,7 +1,5 @@
-import React from 'react'
 import { setActiveLayoutType, swap } from './utils/helper-methods/postHelper'
 
-import { TbColumns3 } from 'react-icons/tb'
 import { TbColumns2 } from 'react-icons/tb'
 import { TbColumns1 } from 'react-icons/tb'
 
@@ -30,8 +28,21 @@ export const LayoutPicker = () => {
                   container.classList.remove('main-single-col')
                 }
                 let postContainer = container.querySelector('.post-container')
+                let postRevealActionContainers = container.querySelector(
+                  '.post-reveal-action-containers'
+                )
+                let postTagsRevealActionContainer =
+                  postRevealActionContainers.querySelector(
+                    '.post-tags-reveal-action-container'
+                  )
                 let postOverlay = container.querySelector('.post-overlay')
                 postContainer.classList.remove('post-container-single-col')
+                postRevealActionContainers.classList.remove(
+                  'post-reveal-action-containers-single-col'
+                )
+                postTagsRevealActionContainer.classList.remove(
+                  'post-tags-reveal-action-container-single-col'
+                )
                 postOverlay.classList.remove('post-overlay-single-col')
               })
             }}
@@ -59,8 +70,17 @@ export const LayoutPicker = () => {
                 let postRevealActionContainers = container.querySelector(
                   '.post-reveal-action-containers'
                 )
+                let postTagsRevealActionContainer =
+                  postRevealActionContainers.querySelector(
+                    '.post-tags-reveal-action-container'
+                  )
                 postContainer.classList.add('post-container-single-col')
-                postRevealActionContainers.style.marginInline = 'auto'
+                postRevealActionContainers.classList.add(
+                  'post-reveal-action-containers-single-col'
+                )
+                postTagsRevealActionContainer.classList.add(
+                  'post-tags-reveal-action-container-single-col'
+                )
                 postOverlay.classList.add('post-overlay-single-col')
               })
             }}

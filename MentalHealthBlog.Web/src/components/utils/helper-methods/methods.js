@@ -209,12 +209,25 @@ export const windowResize = (screenWidth = null, screenHeight = null) => {
       if (width < screenWidth) {
         mainContainers.forEach((container) => {
           let postContainer = container.querySelector('.post-container')
+          let postRevealActionContainers = container.querySelector(
+            '.post-reveal-action-containers'
+          )
+          let postTagsRevealActionContainer =
+            postRevealActionContainers.querySelector(
+              '.post-tags-reveal-action-container'
+            )
           let postOverlay = container.querySelector('.post-overlay')
 
           if (container.classList.contains('main-single-col')) {
             isInSingleColLayout = true
             container.classList.remove('main-single-col')
             postContainer.classList.remove('post-container-single-col')
+            postRevealActionContainers.classList.remove(
+              'post-reveal-action-containers-single-col'
+            )
+            postTagsRevealActionContainer.classList.remove(
+              'post-tags-reveal-action-container-single-col'
+            )
             postOverlay.classList.remove('post-overlay-single-col')
           }
         })
@@ -223,10 +236,24 @@ export const windowResize = (screenWidth = null, screenHeight = null) => {
       if (width >= screenWidth && isInSingleColLayout === true) {
         mainContainers.forEach((container) => {
           let postContainer = container.querySelector('.post-container')
+          let postRevealActionContainers = container.querySelector(
+            '.post-reveal-action-containers'
+          )
+          let postTagsRevealActionContainer =
+            postRevealActionContainers.querySelector(
+              '.post-tags-reveal-action-container'
+            )
+
           let postOverlay = container.querySelector('.post-overlay')
 
           container.classList.add('main-single-col')
           postContainer.classList.add('post-container-single-col')
+          postRevealActionContainers.classList.add(
+            'post-reveal-action-containers-single-col'
+          )
+          postTagsRevealActionContainer.classList.add(
+            'post-tags-reveal-action-container-single-col'
+          )
           postOverlay.classList.add('post-overlay-single-col')
           isInSingleColLayout = false
         })

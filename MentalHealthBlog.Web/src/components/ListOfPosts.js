@@ -14,6 +14,7 @@ import { ShareExportOverlay } from './share-export/ShareExportOverlay'
 import { ShareModal } from './share-export/share/ShareModal'
 import { ShareModal2 } from './ShareModal2'
 import { ExportModal } from './share-export/export/ExportModal'
+import { setIsReviewingState } from './redux-toolkit/features/regularUserSlice'
 
 export const ListOfPosts = () => {
   let dispatch = useDispatch()
@@ -28,6 +29,7 @@ export const ListOfPosts = () => {
 
   useEffect(() => {
     dispatch(getPosts(searchPostDto)).then((data) => {
+      dispatch(setIsReviewingState(false))
       let statusCode = data?.payload?.statusCode
 
       if (statusCode !== 200) {
@@ -78,7 +80,7 @@ export const ListOfPosts = () => {
       <div className="dashboard-cols">
         <section className="list-of-posts-main-container">
           {posts.map((post) => {
-            return <Post key={post.id} {...post} />
+            return <Post key={post.id} post={post} />
           })}
         </section>
 
