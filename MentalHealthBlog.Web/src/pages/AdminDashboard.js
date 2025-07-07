@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom'
 import { FaUserCheck, FaUser } from 'react-icons/fa'
+import { Navbar } from '../components/shared/Navbar'
 
 export const AdminDashboard = () => {
   return (
     <section id="admin-dashboard-main-container">
+      <Navbar />
+
       <div className="admin-dashboard-container">
         <div className="admin-dashboard-actions-container">
           <Link

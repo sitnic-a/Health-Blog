@@ -320,14 +320,15 @@ main {
 
 #admin-dashboard-main-container {
   /* border: 1px solid red; */
-  max-width: 1440px;
+  max-width: 100vw;
   min-height: 95vh;
-  margin: 0.5rem;
+  margin-inline: -2rem;
+  padding-inline: 2rem;
   /* margin-top: 2rem; -- space for navbar (settings, logout, etc...)  */
 }
 
 .admin-dashboard-container {
-  margin: 0.5rem;
+  /* margin: 0.5rem; */
   /* border: 1px solid red; */
 }
 
@@ -1109,64 +1110,69 @@ dialog::backdrop {
 }
 
 .user-dashboard {
-  margin: 0;
-  margin-top: -1rem;
-  margin-inline: -2rem;
-  padding-inline: 2rem;
   max-width: 100vw;
   min-height: 100vh;
+  margin-inline: -2rem;
+  padding-inline: 2rem;
   height: auto;
   align-items: normal;
   background: #cce5f1;
 }
 
-.navigation-container {
-  max-width: 100vw;
-  background: #eaeaea;
-  border-radius: 0.2rem;
-  margin-left: 0.5rem;
+#navigation-bar-main-container {
+  margin-inline: -2rem;
+  padding-block: 1rem;
+  background: #f3f1e3;
 }
 
-.navbar-list {
+.navigation-bar-container {
+  padding-inline: 2.5rem;
   display: flex;
-  align-self: center;
   justify-content: space-between;
-  padding: 0.5rem 0.6rem;
-  list-style: none;
-  /* background: red; */
+  align-items: center;
 }
 
-.left {
+.navigation-bar-features {
   display: flex;
-  gap: 5px;
+  align-items: center;
+  gap: 8px;
 }
 
-.left li > a {
-  padding: 0.3rem;
-  background: #fff;
-  max-width: fit-content;
-  border-radius: 0.2rem;
-  font-size: 0.88rem;
+.navigation-bar-action {
+  font-size: 0.9rem;
+  font-family: 'Klee One';
   color: #000;
-}
-
-.left > li > a:hover {
-  background: #a5a5a5;
-  color: #fff;
-  box-shadow: -1px 2px 10px #fff;
-}
-
-.navbar-action-shared-content {
   text-decoration: none;
 }
 
-.logout-icon {
-  font-size: 1.4rem;
+.navigation-bar-action:hover {
+  color: #a5a5a5;
+  font-weight: 500;
+  transform: scale(1.1);
+  transition: 80ms;
+}
+
+.logout-container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   cursor: pointer;
 }
 
-.logout-icon:hover {
+.logout-container:hover {
   color: #a5a5a5;
+  transform: scale(1.1);
+  transition: 80ms;
+}
+
+.logout-icon {
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.logout-title {
+  font-size: 0.9rem;
+  font-family: 'Klee One';
 }
 
 .shares-per-mental-health-expert-content-main-container {
@@ -2628,6 +2634,7 @@ select[name='filter-by-month'] {
   display: inline-block;
   border-radius: 0.2rem;
   font-size: 0.9rem;
+  font-family: 'Klee One';
   padding: 0.3rem;
   margin: 0.1rem 0.1rem;
 }
@@ -2726,9 +2733,11 @@ select[name='filter-by-month'] {
 
 /* Mental Expert CSS */
 .mental-expert-dashboard {
-  max-width: 100wv;
-  width: 100%;
-  margin: auto;
+  max-width: 100vw;
+  min-height: 100vh;
+  margin-inline: -2rem;
+  padding-inline: 2rem;
+  background: #cce5f1;
 }
 
 .mental-expert-navigation-bar {
@@ -2751,7 +2760,8 @@ select[name='filter-by-month'] {
 #sharing-users-main-container {
   max-width: 100%;
   height: 100vh;
-  border: 1px solid beige;
+  margin-inline: -2rem;
+  /* border: 1px solid beige; */
   display: flex;
   /* background: red; */
 }
@@ -2760,7 +2770,7 @@ select[name='filter-by-month'] {
   max-width: 200px;
   width: 100%;
   position: relative;
-  border: 1px solid #eee;
+  border-right: 1px solid #f3f1e3;
   height: 100%;
   padding: 0.3rem;
 }
@@ -2816,7 +2826,7 @@ select[name='filter-by-month'] {
   text-align: center;
   margin-top: 0.2rem;
   margin-bottom: 0.2rem;
-  border-radius: 0.15rem;
+  border-radius: 0.7rem;
   cursor: pointer;
 }
 
@@ -2836,6 +2846,7 @@ select[name='filter-by-month'] {
 }
 
 .sharing-user-title {
+  font-family: 'Klee One';
   color: #0000ee;
   font-weight: 500;
 }
@@ -2888,7 +2899,8 @@ select[name='filter-by-month'] {
 }
 
 .sharing-users-content-header > h1 {
-  font-size: 1.5rem;
+  font-size: 1.35rem;
+  font-family: 'Klee One';
   text-transform: capitalize;
   margin: 0;
   margin-left: 0.5rem;
@@ -2897,7 +2909,7 @@ select[name='filter-by-month'] {
 
 @media (width<=350px) {
   .sharing-users-content-header > h1 {
-    font-size: 1.29rem;
+    font-size: 1.2rem;
   }
 }
 
@@ -2919,6 +2931,7 @@ select[name='filter-by-month'] {
 }
 
 .sharing-users-give-assignment-span {
+  font-family: 'Klee One';
   font-size: 1rem;
 }
 
@@ -2945,7 +2958,7 @@ select[name='filter-by-month'] {
   position: absolute;
   top: 0;
   left: 0;
-  background: rgba(0, 0, 0, 0.8);
+  background: #82a3bc60;
   cursor: pointer;
 }
 
@@ -3003,6 +3016,10 @@ select[name='filter-by-month'] {
   background: #920d0d;
 }
 
+.overlay-post-actions-close-modal {
+  font-family: 'Klee One';
+}
+
 .overlay-post-content-container {
   position: relative;
   padding: 1rem;
@@ -3010,8 +3027,9 @@ select[name='filter-by-month'] {
   max-width: 100%;
   min-height: 90%;
   position: relative;
-  background: #fff;
+  background: #f3f1e3;
   cursor: default;
+  border-radius: 0.4rem;
 }
 
 @media (width<440px) {
@@ -3021,15 +3039,17 @@ select[name='filter-by-month'] {
 }
 
 .overlay-post-title {
+  font-family: 'Overlock';
+  font-size: 1.3rem;
   text-align: center;
   cursor: default;
 }
 
 .overlay-post-content > pre {
   max-width: 530px;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Klee One';
+  font-size: 1rem;
   text-align: justify;
-  font-size: 0.9rem;
   min-height: 150px;
   overflow-y: scroll;
   text-wrap: wrap;
@@ -3048,6 +3068,11 @@ select[name='filter-by-month'] {
   }
 }
 
+.overlay-post-tags-subtitle {
+  font-family: 'Klee One';
+  font-size: 1.1rem;
+}
+
 .overlay-post-tags-container {
   display: flex;
   flex-wrap: wrap;
@@ -3058,7 +3083,8 @@ select[name='filter-by-month'] {
 }
 
 .overlay-post-tag {
-  font-size: 0.85rem;
+  font-family: 'Klee One';
+  font-size: 0.9rem;
   background: #89cff0;
   color: #fff;
   padding-inline: 0.25rem;
@@ -3066,6 +3092,11 @@ select[name='filter-by-month'] {
   border-radius: 0.2rem;
   margin-right: 5px;
   cursor: default;
+}
+
+.overlay-post-emotions-subtitle {
+  font-family: 'Klee One';
+  font-size: 1.1rem;
 }
 
 .overlay-post-emotions-container .post-container-main-emotions {
@@ -3078,6 +3109,7 @@ select[name='filter-by-month'] {
 }
 
 .overlay-post-date {
+  font-family: 'Klee One';
   font-size: 0.8rem;
   cursor: default;
 }
@@ -3112,7 +3144,7 @@ select[name='filter-by-month'] {
 .sharing-users-main-post-container {
   padding-inline: 0.5rem;
   padding-bottom: 1.5rem;
-  background: #eee;
+  background: #f3f1e3;
   max-width: 280px;
   width: 100%;
   max-height: 350px;
@@ -3122,8 +3154,8 @@ select[name='filter-by-month'] {
 }
 
 .sharing-users-main-post-container:hover {
-  background: #eaeaea;
-  box-shadow: -3px 1px 20px #8a8a8a;
+  background: #f1edd0;
+  box-shadow: -3px 1px 20px #82a3bc;
 }
 
 .sharing-users-main-post-container::-webkit-scrollbar {
@@ -3136,14 +3168,22 @@ select[name='filter-by-month'] {
   }
 }
 
-.sharing-users-post-title {
+.sharing-users-post-header {
   cursor: pointer;
   /* font-size: 0.88rem; */
 }
 
-.sharing-users-post-title > p {
+.sharing-users-post-header-title {
+  font-family: 'Overlock';
+  font-size: 1.8rem;
+  text-align: center;
+  margin-block: 0.5rem;
+}
+
+.sharing-users-post-header-datetime {
   font-size: 0.75rem;
-  margin-top: -12px;
+  font-family: 'Klee One';
+  margin-block: 0.4rem;
   cursor: pointer;
 }
 
@@ -3151,9 +3191,10 @@ select[name='filter-by-month'] {
   cursor: pointer;
 }
 
-.sharing-users-post-content > p {
+.sharing-users-post-content-text {
   text-align: justify;
   cursor: pointer;
+  font-family: 'Klee One';
 }
 
 .sharing-users-main-post-tags {
@@ -3169,9 +3210,17 @@ select[name='filter-by-month'] {
   cursor: pointer;
 }
 
+.sharing-users-post-tags-subtitle {
+  font-family: 'Klee One';
+}
+
 .sharing-users-main-post-emotions {
   max-height: 200px;
   overflow-y: hidden;
+}
+
+.sharing-users-post-emotions-subtitle {
+  font-family: 'Klee One';
 }
 
 .sharing-users-post-emotions .post-container-emotions {
@@ -3189,6 +3238,7 @@ select[name='filter-by-month'] {
   margin-top: 5px;
   color: #fff;
   font-size: 0.9rem;
+  font-family: 'Klee One';
 }
 
 .sharing-users-post-feedback-main-container {

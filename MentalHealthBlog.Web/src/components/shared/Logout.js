@@ -14,26 +14,25 @@ export const Logout = () => {
   let refreshToken = Cookies.get('refreshToken')
 
   return (
-    <div className="logout-container">
-      <li className="logout-icon-container">
-        <CiLogout
-          className="logout-icon"
-          onClick={() => {
-            if (authenticatedUser?.userRoles.some((role) => role.id === 4)) {
-              dispatch(resetSharedContent([]))
-            }
+    <div
+      className="logout-container"
+      onClick={() => {
+        if (authenticatedUser?.userRoles.some((role) => role.id === 4)) {
+          dispatch(resetSharedContent([]))
+        }
 
-            let logoutRequest = {
-              userId: authenticatedUser.id,
-              refreshToken: refreshToken,
-            }
-            dispatch(logout(logoutRequest)).then(() => {
-              Cookies.remove('refreshToken')
-              navigate('login')
-            })
-          }}
-        />
-      </li>
+        let logoutRequest = {
+          userId: authenticatedUser.id,
+          refreshToken: refreshToken,
+        }
+        dispatch(logout(logoutRequest)).then(() => {
+          Cookies.remove('refreshToken')
+          navigate('login')
+        })
+      }}
+    >
+      <CiLogout className="logout-icon" />
+      <span className="logout-title">Sign Out</span>
     </div>
   )
 }

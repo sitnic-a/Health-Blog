@@ -9,6 +9,7 @@ import { ListSharingContentUsers } from '../components/mental-expert-dashboard/s
 import { ListSharedContent } from '../components/mental-expert-dashboard/shared-content/ListSharedContent'
 import { Logout } from '../components/shared/Logout'
 import { ReviewAssignmentsButton } from '../components/shared/ReviewAssignmentsButton'
+import { Navbar } from '../components/shared/Navbar'
 
 export const MentalExpertDashboard = () => {
   let dispatch = useDispatch()
@@ -62,12 +63,8 @@ export const MentalExpertDashboard = () => {
 
   return (
     <section className="mental-expert-dashboard">
-      <div className="mental-expert-navigation-bar">
-        <div className="left">
-          <ReviewAssignmentsButton />
-        </div>
-        <Logout />
-      </div>
+      <Navbar />
+
       <section id="sharing-users-main-container">
         <ListSharingContentUsers />
 
