@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import useFetchLocationState from './custom/hooks/useFetchLocationState'
 import {
   getSharesPerMentalHealthExpert,
-  revokeContentPermission,
   setIsReviewingState,
 } from './redux-toolkit/features/regularUserSlice'
 
@@ -12,7 +11,7 @@ import { Post } from './Post'
 export const SharedContentPermissionPosts = () => {
   let dispatch = useDispatch()
   let { authenticatedUser } = useSelector((store) => store.user)
-  let { sharesPerMentalHealthExpert, hasSharedPosts } = useSelector(
+  let { sharesPerMentalHealthExpert } = useSelector(
     (store) => store.regularUser
   )
 
@@ -51,7 +50,7 @@ export const SharedContentPermissionPosts = () => {
           )}
         </div>
       )}
-      {!hasSharedPosts && (
+      {contentSharedWithMentalHealthExpert?.length <= 0 && (
         <div className="content-shared-with-mental-health-expert-posts">
           <p>There are no posts or content to revoke permission for!</p>
         </div>

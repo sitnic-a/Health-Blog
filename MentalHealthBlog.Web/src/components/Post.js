@@ -6,7 +6,11 @@ import {
 } from './redux-toolkit/features/postSlice'
 import { openDeleteModal } from './redux-toolkit/features/modalSlice'
 import { setOverlayForShareExport } from './redux-toolkit/features/shareExportSlice'
-import { revokeContentPermission } from './redux-toolkit/features/regularUserSlice'
+import {
+  resetSharesPerMentalHealthExpert,
+  getSharesPerMentalHealthExpert,
+  revokeContentPermission,
+} from './redux-toolkit/features/regularUserSlice'
 import {
   formatDateToString,
   getSelectedPosts,
@@ -91,6 +95,8 @@ export const Post = (props) => {
                   authenticatedUser,
                 }
 
+                let postMainContainer
+
                 dispatch(revokeContentPermission(objectWithData)).then(
                   (data) => {
                     let statusCode = data?.payload?.StatusCode
@@ -113,13 +119,15 @@ export const Post = (props) => {
                     }
 
                     if (data?.payload?.statusCode === 200) {
-                      var postMainContainer =
+                      postMainContainer =
                         e.target.parentElement.parentElement.parentElement
-
                       postMainContainer.classList.add('zoom')
+
                       setTimeout(() => {
                         postMainContainer.remove()
                       }, 250)
+
+                      dispatch(resetSharesPerMentalHealthExpert(data?.payload))
 
                       toast.success(
                         `This content is no longer visible to ${mentalHealthExpert.firstName} ${mentalHealthExpert.lastName}`,

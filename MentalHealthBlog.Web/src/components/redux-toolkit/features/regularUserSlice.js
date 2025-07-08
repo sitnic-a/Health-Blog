@@ -113,6 +113,12 @@ export const regularUserSlice = createSlice({
     setIsReviewingState: (state, action) => {
       state.isReviewingSharedPosts = action.payload
     },
+    resetSharesPerMentalHealthExpert: (state, action) => {
+      console.log('Data 2 ', action)
+
+      state.sharesPerMentalHealthExpert =
+        action?.payload?.serviceResponseObject?.serviceResponseObject
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -176,6 +182,7 @@ export const regularUserSlice = createSlice({
       })
       .addCase(revokeContentPermission.fulfilled, (state, action) => {
         console.log('Permission to read deleted!')
+
         if (
           action?.payload?.serviceResponseObject?.serviceResponseObject <= 0
         ) {
@@ -192,6 +199,7 @@ export const {
   previewHoveredContentCounter,
   hideHoveredContentCounter,
   setIsReviewingState,
+  resetSharesPerMentalHealthExpert,
 } = regularUserSlice.actions
 
 export default regularUserSlice.reducer

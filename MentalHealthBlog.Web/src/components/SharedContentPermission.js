@@ -1,9 +1,10 @@
-import useFetchLocationState from "./custom/hooks/useFetchLocationState";
+import useFetchLocationState from './custom/hooks/useFetchLocationState'
+import { SharedContentPermissionExpertInfo } from './SharedContentPermissionExpertInfo'
 
-import { SharedContentPermissionPosts } from "./SharedContentPermissionPosts";
+import { SharedContentPermissionPosts } from './SharedContentPermissionPosts'
 
 export const SharedContentPermission = () => {
-  let { mentalHealthExpert } = useFetchLocationState();
+  let { mentalHealthExpert } = useFetchLocationState()
 
   return (
     <div className="content-shared-with-mental-health-expert-main-container">
@@ -11,7 +12,7 @@ export const SharedContentPermission = () => {
         {mentalHealthExpert && (
           <h2>
             <span className="content-shared-with-mental-health-expert-hero-username">
-              {mentalHealthExpert.username}{" "}
+              {mentalHealthExpert?.firstName} {mentalHealthExpert?.lastName}{' '}
             </span>
             read permission list
           </h2>
@@ -22,8 +23,12 @@ export const SharedContentPermission = () => {
         <p className="content-shared-with-mental-health-expert-subtitle">
           Check the list below:
         </p>
+      </div>
+
+      <div className="content-shared-with-mental-health-expert-container">
         <SharedContentPermissionPosts />
+        <SharedContentPermissionExpertInfo />
       </div>
     </div>
-  );
-};
+  )
+}
