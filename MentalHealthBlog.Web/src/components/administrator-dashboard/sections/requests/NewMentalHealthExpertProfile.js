@@ -1,9 +1,11 @@
 import { MdEmail, MdLocalPhone } from 'react-icons/md'
 import { NewMentalHealthExpertProfileActions } from './NewMentalHealthExpertProfileActions'
+import defaultPhoto from '../../../../images/default-avatar.png'
+import { stringIsNullOrEmpty } from '../../../utils/helper-methods/methods'
 
 export const NewMentalHealthExpertProfile = (props) => {
   let expert = props.expert
-  let base64Photo = `data:image/png;base64,${expert.photoAsFile}`
+  let base64Photo = `data:image/png;base64,${expert?.photoAsFile}`
 
   return (
     expert && (
@@ -12,8 +14,10 @@ export const NewMentalHealthExpertProfile = (props) => {
           <div className="new-expert-profile-img-wrapper">
             <img
               className="new-expert-profile-img"
-              src={base64Photo}
-              alt={expert.username}
+              src={
+                !stringIsNullOrEmpty(expert?.photo) ? base64Photo : defaultPhoto
+              }
+              alt={expert?.username}
             />
           </div>
           <div className="new-expert-profile-wrapper">
@@ -46,7 +50,9 @@ export const NewMentalHealthExpertProfile = (props) => {
           <div className="new-expert-profile-wrapper new-expert-profile-email-wrapper">
             <p className="new-expert-profile-bio-info new-expert-profile-email">
               <MdEmail />
-              <span>{expert.email}</span>
+              <span>
+                {!stringIsNullOrEmpty(expert?.email) ? expert?.email : '-'}
+              </span>
             </p>
           </div>
         </div>

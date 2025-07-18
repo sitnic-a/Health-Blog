@@ -109,23 +109,42 @@ export const Register = () => {
 
     console.log('Form ', form)
 
-    if (
-      stringIsNullOrEmpty(form.get('username')) ||
-      stringIsNullOrEmpty(form.get('password')) ||
-      form.get('roles').length <= 0 ||
-      stringIsNullOrEmpty(sendData.mentalHealthExpert.firstName) ||
-      stringIsNullOrEmpty(sendData.mentalHealthExpert.lastName) ||
-      stringIsNullOrEmpty(sendData.mentalHealthExpert.organization) ||
-      stringIsNullOrEmpty(sendData.mentalHealthExpert.phoneNumber)
-    ) {
-      toast.error(
-        'Something went wrong! Please check are all fields populated',
-        {
-          autoClose: 1500,
-          position: 'bottom-right',
-        }
-      )
-      return
+    if (isMentalHealthExpert === true) {
+      if (
+        stringIsNullOrEmpty(form.get('username')) ||
+        stringIsNullOrEmpty(form.get('password')) ||
+        form.get('roles').length <= 0 ||
+        stringIsNullOrEmpty(sendData.mentalHealthExpert.firstName) ||
+        stringIsNullOrEmpty(sendData.mentalHealthExpert.lastName) ||
+        stringIsNullOrEmpty(sendData.mentalHealthExpert.organization) ||
+        stringIsNullOrEmpty(sendData.mentalHealthExpert.phoneNumber)
+      ) {
+        toast.error(
+          'Something went wrong! Please check are all fields populated',
+          {
+            autoClose: 1500,
+            position: 'bottom-right',
+          }
+        )
+        return
+      }
+    }
+
+    if (isMentalHealthExpert !== true) {
+      if (
+        stringIsNullOrEmpty(form.get('username')) ||
+        stringIsNullOrEmpty(form.get('password')) ||
+        form.get('roles').length <= 0
+      ) {
+        toast.error(
+          'Something went wrong! Please check are all fields populated',
+          {
+            autoClose: 1500,
+            position: 'bottom-right',
+          }
+        )
+        return
+      }
     }
 
     dispatch(register(form)).then((response) => {
@@ -170,8 +189,8 @@ export const Register = () => {
           <div>
             <label htmlFor="register-roles">User type:</label>
             <br />
-            {dbRoles.length > 0 &&
-              dbRoles.map((role) => {
+            {dbRoles?.length > 0 &&
+              dbRoles?.map((role) => {
                 return (
                   <div key={role.id}>
                     <input

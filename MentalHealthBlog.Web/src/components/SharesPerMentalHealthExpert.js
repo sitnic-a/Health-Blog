@@ -1,25 +1,26 @@
-import React from "react";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from 'react'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   getRecentShares,
   getSharesPerMentalHealthExpert,
-} from "./redux-toolkit/features/regularUserSlice";
-import { RecentShares } from "./RecentShares";
-import { SharedContent } from "./SharedContent";
-import { Loader } from "./Loader";
-import { toast } from "react-toastify";
-import { BiError } from "react-icons/bi";
+} from './redux-toolkit/features/regularUserSlice'
+import { RecentShares } from './RecentShares'
+import { SharedContent } from './SharedContent'
+import { Loader } from './Loader'
+import { toast } from 'react-toastify'
+import { BiError } from 'react-icons/bi'
+import { Navbar } from './shared/Navbar'
 
 export const SharesPerMentalHealthExpert = () => {
-  let dispatch = useDispatch();
-  let { authenticatedUser } = useSelector((store) => store.user);
+  let dispatch = useDispatch()
+  let { authenticatedUser } = useSelector((store) => store.user)
   let {
     sharesPerMentalHealthExpert,
     isLoading,
     successfullyFetchedSharesPerMentalHealthExpert,
     successfullyFetchedRecentShares,
-  } = useSelector((store) => store.regularUser);
+  } = useSelector((store) => store.regularUser)
 
   useEffect(() => {
     let objectWithData = {
@@ -27,66 +28,66 @@ export const SharesPerMentalHealthExpert = () => {
         loggedUserId: authenticatedUser.id,
       },
       authenticatedUser,
-    };
+    }
 
     dispatch(getSharesPerMentalHealthExpert(objectWithData)).then((data) => {
-      let statusCode = data?.payload?.StatusCode;
+      let statusCode = data?.payload?.StatusCode
       if (statusCode !== 200) {
         if (statusCode === 400) {
           toast.error("Content doesn't exist!", {
-            position: "bottom-right",
-          });
-          return;
+            position: 'bottom-right',
+          })
+          return
         }
 
         if (statusCode === 404) {
-          toast.error("Posts are not fetched properly!", {
-            position: "bottom-right",
-          });
-          return;
+          toast.error('Posts are not fetched properly!', {
+            position: 'bottom-right',
+          })
+          return
         }
       }
-    });
+    })
 
     dispatch(getRecentShares(objectWithData)).then((data) => {
-      let statusCode = data?.payload?.StatusCode;
-      let recentShares = data?.payload?.serviceResponseObject;
+      let statusCode = data?.payload?.StatusCode
+      let recentShares = data?.payload?.serviceResponseObject
       if (statusCode !== 200) {
         if (statusCode === 400) {
           toast.error("Content doesn't exist!", {
-            position: "bottom-right",
-          });
-          return;
+            position: 'bottom-right',
+          })
+          return
         }
 
         if (statusCode === 404) {
-          toast.error("Recent shares not loaded properly!", {
-            position: "bottom-right",
-          });
-          return;
+          toast.error('Recent shares not loaded properly!', {
+            position: 'bottom-right',
+          })
+          return
         }
       }
 
       if (recentShares?.length > 0 && successfullyFetchedRecentShares) {
-        toast.success("Succesfully retrieved recent posts!", {
+        toast.success('Succesfully retrieved recent posts!', {
           autoClose: 1500,
-          position: "bottom-right",
-        });
-        return;
+          position: 'bottom-right',
+        })
+        return
       }
 
       if (recentShares?.length === 0) {
         toast.warning("You didn't share recently!", {
           autoClose: 1500,
-          position: "bottom-right",
-        });
-        return;
+          position: 'bottom-right',
+        })
+        return
       }
-    });
-  }, []);
+    })
+  }, [])
 
   if (isLoading) {
-    return <Loader />;
+    return <Loader />
   }
 
   return (
@@ -126,5 +127,5 @@ export const SharesPerMentalHealthExpert = () => {
         </section>
       )}
     </section>
-  );
-};
+  )
+}

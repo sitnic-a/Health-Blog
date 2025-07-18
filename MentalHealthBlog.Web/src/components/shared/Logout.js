@@ -27,7 +27,7 @@ export const Logout = () => {
         }
         dispatch(logout(logoutRequest)).then(() => {
           Cookies.remove('refreshToken')
-          navigate('login')
+          navigate('/login')
         })
       }}
     >

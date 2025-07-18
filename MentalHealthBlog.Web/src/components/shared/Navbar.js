@@ -31,7 +31,7 @@ export const Navbar = () => {
       ) && (
         <div className="navigation-bar-container">
           <div className="navigation-bar-features">
-            <Link to={'shared-posts'} className="navigation-bar-action">
+            <Link to={'/shared-posts'} className="navigation-bar-action">
               Shared Content
             </Link>
             <Link

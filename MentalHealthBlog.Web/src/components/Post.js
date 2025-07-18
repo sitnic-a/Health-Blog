@@ -25,11 +25,13 @@ import { MdOutlineModeEditOutline, MdOutlineDelete } from 'react-icons/md'
 import { TiArrowSortedDown } from 'react-icons/ti'
 import { GoCircleSlash } from 'react-icons/go'
 import { toast } from 'react-toastify'
+import { useState } from 'react'
 
 export const Post = (props) => {
   let dispatch = useDispatch()
   let navigate = useNavigate()
 
+  let [isZoomingOut, setIsZoomingOut] = useState(false)
   let post = props?.post
   let mentalHealthExpert = props?.sharedWith
 
@@ -51,7 +53,7 @@ export const Post = (props) => {
       <section
         className={`post-container ${
           isReviewingSharedPosts === true ? 'post-container-single-col' : ''
-        }`}
+        } ${isZoomingOut ? 'zoom' : ''}`}
       >
         <section className="post-container-content">
           <div className="post-header">
@@ -95,8 +97,6 @@ export const Post = (props) => {
                   authenticatedUser,
                 }
 
-                let postMainContainer
-
                 dispatch(revokeContentPermission(objectWithData)).then(
                   (data) => {
                     let statusCode = data?.payload?.StatusCode
@@ -119,15 +119,13 @@ export const Post = (props) => {
                     }
 
                     if (data?.payload?.statusCode === 200) {
-                      postMainContainer =
-                        e.target.parentElement.parentElement.parentElement
-                      postMainContainer.classList.add('zoom')
+                      setIsZoomingOut(true)
 
                       setTimeout(() => {
-                        postMainContainer.remove()
+                        dispatch(
+                          resetSharesPerMentalHealthExpert(data?.payload)
+                        )
                       }, 250)
-
-                      dispatch(resetSharesPerMentalHealthExpert(data?.payload))
 
                       toast.success(
                         `This content is no longer visible to ${mentalHealthExpert.firstName} ${mentalHealthExpert.lastName}`,

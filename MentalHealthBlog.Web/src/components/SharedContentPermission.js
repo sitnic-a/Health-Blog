@@ -1,4 +1,5 @@
 import useFetchLocationState from './custom/hooks/useFetchLocationState'
+import { Navbar } from './shared/Navbar'
 import { SharedContentPermissionExpertInfo } from './SharedContentPermissionExpertInfo'
 
 import { SharedContentPermissionPosts } from './SharedContentPermissionPosts'
@@ -8,9 +9,10 @@ export const SharedContentPermission = () => {
 
   return (
     <div className="content-shared-with-mental-health-expert-main-container">
+      <Navbar />
       <div className="content-shared-with-mental-health-expert-hero">
         {mentalHealthExpert && (
-          <h2>
+          <h2 className="content-shared-with-mental-health-expert-hero-title">
             <span className="content-shared-with-mental-health-expert-hero-username">
               {mentalHealthExpert?.firstName} {mentalHealthExpert?.lastName}{' '}
             </span>
@@ -24,7 +26,6 @@ export const SharedContentPermission = () => {
           Check the list below:
         </p>
       </div>
-
       <div className="content-shared-with-mental-health-expert-container">
         <SharedContentPermissionPosts />
         <SharedContentPermissionExpertInfo />

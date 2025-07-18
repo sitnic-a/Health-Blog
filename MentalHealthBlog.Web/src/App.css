@@ -1285,10 +1285,39 @@ dialog::backdrop {
 .content-shared-with-mental-health-expert-main-container {
   max-width: 100vw;
   min-height: 100vh;
-  margin-top: -1rem;
+  margin-top: -2rem;
   margin-inline: -2rem;
   padding: 2rem;
-  background: #82a3bc60;
+  background: #cce5f1;
+}
+
+.content-shared-with-mental-health-expert-hero {
+  max-width: 700px;
+  margin-inline: 0.5rem;
+}
+
+.content-shared-with-mental-health-expert-hero-title {
+  font-family: 'Klee One';
+}
+
+.content-shared-with-mental-health-expert-hero-username {
+  font-family: 'Klee One';
+  font-weight: 700;
+  color: #edb572;
+  margin-right: 10px;
+}
+
+.content-shared-with-mental-health-expert-title {
+  font-family: 'Klee One';
+  max-width: 300px;
+  /* background: yellow; */
+  margin: 0.3rem 0rem;
+}
+
+.content-shared-with-mental-health-expert-subtitle {
+  font-family: 'Klee One';
+  font-weight: 600;
+  margin-bottom: 2rem;
 }
 
 .content-shared-with-mental-health-expert-posts {
@@ -1352,26 +1381,6 @@ dialog::backdrop {
   animation: zoom forwards 0.7s ease-out 1;
 }
 
-.content-shared-with-mental-health-expert-hero {
-  max-width: 700px;
-  margin-inline: 0.5rem;
-}
-
-.content-shared-with-mental-health-expert-hero-username {
-  color: rgb(51, 120, 14);
-}
-
-.content-shared-with-mental-health-expert-title {
-  max-width: 300px;
-  /* background: yellow; */
-  margin: 0.3rem 0rem;
-}
-
-.content-shared-with-mental-health-expert-subtitle {
-  font-weight: 600;
-  margin-bottom: 2rem;
-}
-
 .content-shared-with-mental-health-expert-container {
   max-width: 100vw;
   display: flex;
@@ -1389,18 +1398,9 @@ dialog::backdrop {
   border-radius: 0.6rem;
 }
 
-@media ((width >=700px) AND (height >=720px)) {
-  .content-shared-with-mental-health-expert-expert-info-container {
-    max-width: 400px;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-    margin-left: 20rem;
-  }
-}
-
 @media ((width<=1176px) OR (width<=1500px) OR (height <=610px)) {
   .content-shared-with-mental-health-expert-expert-info-container {
-    margin-left: 0rem;
+    display: none;
   }
 }
 
@@ -1438,12 +1438,6 @@ dialog::backdrop {
   margin-inline: 0.5rem;
 }
 
-@media ((width >=700px) AND (height >=720px)) {
-  .content-shared-with-mental-health-expert-expert-contact-info {
-    margin-inline: 2rem;
-  }
-}
-
 .content-shared-with-mental-health-expert-phone-container {
   display: flex;
   align-items: center;
@@ -1459,13 +1453,6 @@ dialog::backdrop {
   word-wrap: break-word;
   font-size: 1.1rem;
   font-family: 'Klee One';
-}
-
-@media ((width >=700px) AND (height >=720px)) {
-  .content-shared-with-mental-health-expert-phone-value {
-    max-width: 380px;
-    font-size: 1.2rem;
-  }
 }
 
 .content-shared-with-mental-health-expert-email-container {
@@ -1484,13 +1471,6 @@ dialog::backdrop {
   font-family: 'Klee One';
 }
 
-@media ((width >=700px) AND (height >=720px)) {
-  .content-shared-with-mental-health-expert-email-value {
-    max-width: 380px;
-    font-size: 1.2rem;
-  }
-}
-
 .content-shared-with-mental-health-expert-organization-container {
   display: flex;
   justify-content: center;
@@ -1501,13 +1481,6 @@ dialog::backdrop {
   font-size: 1.1rem;
   font-family: 'Klee One';
   word-wrap: break-word;
-}
-
-@media ((width >=700px) AND (height >=720px)) {
-  .content-shared-with-mental-health-expert-organization-value {
-    max-width: 380px;
-    font-size: 1.2rem;
-  }
 }
 
 .content-shared-with-mental-health-expert-revoke-action {
@@ -1650,7 +1623,7 @@ input[name='share-export'] {
 }
 
 .post-reveal-action-containers-single-col {
-  padding: 1rem;
+  padding: 0.2rem;
   border-top-left-radius: 0rem;
   border-top-right-radius: 0.4rem;
   border-bottom-right-radius: 0.4rem;
