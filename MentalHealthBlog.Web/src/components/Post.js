@@ -8,7 +8,6 @@ import { openDeleteModal } from './redux-toolkit/features/modalSlice'
 import { setOverlayForShareExport } from './redux-toolkit/features/shareExportSlice'
 import {
   resetSharesPerMentalHealthExpert,
-  getSharesPerMentalHealthExpert,
   revokeContentPermission,
 } from './redux-toolkit/features/regularUserSlice'
 import {

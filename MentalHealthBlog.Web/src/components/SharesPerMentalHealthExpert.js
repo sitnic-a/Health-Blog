@@ -1,4 +1,3 @@
-import React from 'react'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -10,7 +9,6 @@ import { SharedContent } from './SharedContent'
 import { Loader } from './Loader'
 import { toast } from 'react-toastify'
 import { BiError } from 'react-icons/bi'
-import { Navbar } from './shared/Navbar'
 
 export const SharesPerMentalHealthExpert = () => {
   let dispatch = useDispatch()

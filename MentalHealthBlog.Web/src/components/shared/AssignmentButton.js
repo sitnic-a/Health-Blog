@@ -1,15 +1,14 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { FaTasks } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom'
+import { FaTasks } from 'react-icons/fa'
 
 export const AssignmentButton = () => {
-  let navigate = useNavigate();
+  let navigate = useNavigate()
 
   return (
     <div
       className="sharing-users-give-assignment-container"
       onClick={() => {
-        navigate("/create-assignment");
+        navigate('/create-assignment')
       }}
     >
       <span className="sharing-users-give-assignment-span">
@@ -17,5 +16,5 @@ export const AssignmentButton = () => {
       </span>
       <FaTasks className="sharing-users-give-assignment-icon" />
     </div>
-  );
-};
+  )
+}

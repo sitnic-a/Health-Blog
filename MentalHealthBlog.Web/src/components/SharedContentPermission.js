@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux'
 import useFetchLocationState from './custom/hooks/useFetchLocationState'
 import { Navbar } from './shared/Navbar'
 import { SharedContentPermissionExpertInfo } from './SharedContentPermissionExpertInfo'
@@ -6,6 +7,14 @@ import { SharedContentPermissionPosts } from './SharedContentPermissionPosts'
 
 export const SharedContentPermission = () => {
   let { mentalHealthExpert } = useFetchLocationState()
+  let { sharesPerMentalHealthExpert } = useSelector(
+    (store) => store.regularUser
+  )
+
+  let content = sharesPerMentalHealthExpert.filter(
+    (mhe) =>
+      mhe?.mentalHealthExpertContentSharedWith?.id === mentalHealthExpert?.id
+  )[0]?.sharedContent
 
   return (
     <div className="content-shared-with-mental-health-expert-main-container">
@@ -28,7 +37,11 @@ export const SharedContentPermission = () => {
       </div>
       <div className="content-shared-with-mental-health-expert-container">
         <SharedContentPermissionPosts />
-        <SharedContentPermissionExpertInfo />
+        {content?.length > 0 && (
+          <SharedContentPermissionExpertInfo
+            mentalHealthExpert={mentalHealthExpert}
+          />
+        )}
       </div>
     </div>
   )

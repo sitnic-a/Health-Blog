@@ -7,8 +7,6 @@ import {
 import { toast } from 'react-toastify'
 import { ListSharingContentUsers } from '../components/mental-expert-dashboard/shared-content/ListSharingContentUsers'
 import { ListSharedContent } from '../components/mental-expert-dashboard/shared-content/ListSharedContent'
-import { Logout } from '../components/shared/Logout'
-import { ReviewAssignmentsButton } from '../components/shared/ReviewAssignmentsButton'
 import { Navbar } from '../components/shared/Navbar'
 
 export const MentalExpertDashboard = () => {

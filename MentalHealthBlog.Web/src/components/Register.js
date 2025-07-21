@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { toast } from 'react-toastify'
 import { register, getDbRoles } from './redux-toolkit/features/userSlice'
 import useFetchLocationState from './custom/hooks/useFetchLocationState'
-import { db_roles } from './enums/roles'
 import {
   previewImage,
   stringIsNullOrEmpty,
 } from './utils/helper-methods/methods'
+import { db_roles } from './enums/roles'
+import { toast } from 'react-toastify'
 
 export const Register = () => {
   let { dbRoles } = useSelector((store) => store.user)

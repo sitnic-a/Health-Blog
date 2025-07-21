@@ -2,7 +2,6 @@ import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import { Logout } from './Logout'
-import { ReviewAssignmentsButton } from './ReviewAssignmentsButton'
 
 export const Navbar = () => {
   let { authenticatedUser } = useSelector((store) => store.user)
