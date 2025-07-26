@@ -392,14 +392,28 @@ main {
 }
 
 .main-manage-users-container {
-  max-width: 1440px;
-  padding-bottom: 1rem;
-  /* background: yellow; */
+  max-width: 100vw;
+  min-height: 100vh;
+  padding: 2rem;
+  margin-top: -2rem;
+  margin-inline: -2rem;
+  background: #cce5f1;
 }
 
 .manage-users-header,
 .manage-users-filter-container {
   margin-left: 0.5rem;
+}
+
+.manage-users-header-title {
+  font-family: 'Klee One';
+  font-size: 1.5rem;
+}
+
+.manage-users-header-subtitle {
+  font-family: 'Klee One';
+  font-size: 1.2rem;
+  font-weight: 400;
 }
 
 .manage-users-filter-container {
@@ -412,74 +426,151 @@ main {
   font-size: 0.9rem;
 }
 
+.manage-users-select-filter-title {
+  font-family: 'Klee One';
+  font-size: 1rem;
+}
+
 .manage-users-select-role-filter {
+  max-width: 200px;
   margin-left: 0.4rem;
-  padding: 0.3rem;
-  max-width: 150px;
+  padding: 0.6rem 0.5rem;
+  background: #82a3bc;
+  color: #f3f1e3;
+  outline: none;
+  border: none;
+  border-radius: 0.5rem;
+  font-family: 'Klee One';
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: 200ms;
+}
+
+.manage-users-select-role-filter:hover {
+  background: none;
+  color: #34688f;
+  border: 1px solid #34688f;
 }
 
 .input-filter-main-container {
   display: none;
 }
 
+.manage-users-filter-condition-title {
+  font-family: 'Klee One';
+  font-size: 1rem;
+}
+
 input[name='manage-users-name-input-filter'] {
-  padding: 0.3rem;
-  max-width: 150px;
+  max-width: 300px;
+  padding: 0.6rem;
+  padding-right: 3rem;
+  background: #f0eae1;
+  font-family: 'Klee One';
+  border-radius: 0.4rem;
+  outline: none;
+  border: 1px solid #82a3bc;
 }
 
 .manage-users-search-filter-button {
-  padding: 0.4rem 1.2rem;
-  background: #8f8f8f;
+  margin-top: 0.2rem;
+  padding: 0.7rem 2rem;
+  font-family: 'Klee One';
+  background: #34688f;
   outline: none;
   border: none;
   color: #fff;
-}
-
-.manage-users-modal-content {
-  padding: 1rem;
-  /* background: #0000ee; */
-}
-
-.manage-users-modal-actions {
-  max-width: 700px;
-  display: flex;
-  gap: 10px;
-}
-
-.manage-users-modal-actions > button {
-  width: 50%;
-  padding: 0.5rem;
-  border: none;
-  outline: none;
+  border-radius: 0.5rem;
   cursor: pointer;
-}
-
-.manage-users-modal-confirm-delete-button {
-  background: #ff0000;
-  color: #fff;
-}
-
-.manage-users-modal-confirm-delete-button:hover {
-  background: #fff;
-  border: 1px solid #f00;
-  color: #f00;
-}
-
-.manage-users-modal-abort-delete-button:hover {
-  background: #fff;
-  border: 1px solid #9e9e9e;
-  color: #9e9e9e;
+  transition: 200ms;
 }
 
 .manage-users-search-filter-button:hover {
-  background: #464646;
+  background: none;
+  color: #34688f;
+  border: 1px solid #34688f;
+}
+
+.manage-users-delete-modal-content {
+  max-width: 500px;
+  margin: auto;
+  /* background: #0000ee; */
+}
+
+.manage-users-modal-title {
+  margin: 0;
+  margin-bottom: 0.7rem;
+  font-family: 'Klee One';
+  font-size: 1.7rem;
+  text-align: center;
+}
+
+@media (width<430px) {
+  .manage-users-modal-title {
+    font-size: 1.4rem;
+  }
+}
+
+.manage-users-modal-actions {
+  display: flex;
+  justify-content: space-around;
+}
+
+.manage-users-modal-actions > button {
+  border: none;
+  outline: none;
   cursor: pointer;
+  border-radius: 0.5rem;
+}
+
+.manage-users-modal-confirm-delete-button {
+  max-width: 150px;
+  width: 100%;
+  padding-block: 1rem;
+  background: #c93232;
+  color: #fff;
+}
+
+@media (width<430px) {
+  .manage-users-modal-confirm-delete-button {
+    max-width: 120px;
+  }
+}
+
+.manage-users-modal-abort-delete-button {
+  max-width: 150px;
+  width: 100%;
+  padding-block: 1rem;
+  background: #82a3bc;
+  color: #fff;
+}
+
+@media (width<430px) {
+  .manage-users-modal-abort-delete-button {
+    max-width: 120px;
+  }
+}
+
+.manage-users-modal-confirm-delete-button:hover {
+  background: none;
+  border: 1px solid #c93232;
+  color: #c93232;
+}
+
+.manage-users-modal-abort-delete-button:hover {
+  background: none;
+  border: 1px solid #82a3bc;
+  color: #82a3bc;
 }
 
 .manage-users-users-list-main-container {
   /* background: green; */
+  position: relative;
+  top: 1rem;
   max-width: 1440px;
-  padding-block: 1rem;
+  max-height: 400px;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .manage-users-users-list-main-container-header {
@@ -510,12 +601,27 @@ input[name='manage-users-name-input-filter'] {
   max-width: 1440px;
   width: 100%;
   border-spacing: 0px;
-  -webkit-border-vertical-spacing: 10px;
+  -webkit-border-vertical-spacing: 2px;
+  background: #f1e0c4;
+  border-radius: 0.5rem;
+  /* padding-block: 1rem; */
 }
 
 .manage-users-table-row,
 .manage-users-table-body-row {
   text-align: center;
+}
+
+.manage-users-table-body-row:last-child
+  > .manage-users-table-data-cell:first-child {
+  position: relative;
+  border-bottom-left-radius: 0.5rem;
+}
+
+.manage-users-table-body-row:last-child
+  > .manage-users-table-data-cell:last-child {
+  position: relative;
+  border-bottom-right-radius: 0.5rem;
 }
 
 .manage-users-table-body-row:hover {
@@ -524,12 +630,74 @@ input[name='manage-users-name-input-filter'] {
   border-radius: 0.4rem;
 }
 
+@media (width<700px) {
+  .manage-users-more-cell-organization {
+    display: none;
+  }
+}
+
+@media (width<700px) {
+  .manage-users-more-cell-phone-number {
+    display: none;
+  }
+}
+
+@media (width<700px) {
+  .manage-users-more-cell-email {
+    display: none;
+  }
+}
+
+.manage-users-table-row-head-cell {
+  position: relative;
+  padding-block: 1rem;
+  font-family: 'Klee One';
+}
+
+.manage-users-table-body {
+  background: #f0eae1;
+}
+
 .manage-users-table-data-cell {
-  padding-block: 4px;
+  padding-block: 0.7rem;
+  font-family: 'Klee One';
+}
+
+@media (width<500px) {
+  .manage-users-table-data-cell {
+    max-width: 40px;
+    padding-inline: 0.3rem;
+    overflow-x: scroll;
+  }
+}
+
+@media (width<700px) {
+  .manage-users-data-organization {
+    display: none;
+  }
+}
+
+@media (width<700px) {
+  .manage-users-data-phone-number {
+    display: none;
+  }
+}
+
+@media (width<700px) {
+  .manage-users-data-email {
+    display: none;
+  }
+}
+
+@media (width<=500px) {
+  .manage-users-data-role {
+    max-width: 40px;
+    overflow-x: scroll;
+  }
 }
 
 .manage-users-remove-user-button {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
 }
 
 .manage-users-remove-user-button:hover {
@@ -3448,9 +3616,10 @@ select[name='filter-by-month'] {
 .confirmation-title > h2 {
   font-family: 'Klee One';
   font-size: 1.5rem;
+  text-align: center;
 }
 
-@media (width <=380px) {
+@media (width <=430px) {
   .confirmation-title > h2 {
     font-size: 1.2rem;
   }
@@ -3458,13 +3627,13 @@ select[name='filter-by-month'] {
 
 .confirmation-actions {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 .confirmation-action-delete {
-  max-width: 180px;
+  max-width: 150px;
   width: 100%;
-  background: #edb572;
+  background: #c93232;
   color: #f3f1e3;
   outline: none;
   border: none;
@@ -3472,21 +3641,23 @@ select[name='filter-by-month'] {
   border-radius: 0.5rem;
   cursor: pointer;
   font-size: 1.1rem;
+  transition: 200ms;
 }
 
-@media (width<=460px) {
+@media (width<=430px) {
   .confirmation-action-delete {
     max-width: 120px;
   }
 }
 
 .confirmation-action-delete:hover {
-  background: #fff;
-  color: #edb572;
+  background: none;
+  border: 1px solid #c93232;
+  color: #c93232;
 }
 
 .confirmation-action-cancel {
-  max-width: 180px;
+  max-width: 150px;
   width: 100%;
   background: #82a3bc;
   color: #f3f1e3;
@@ -3498,14 +3669,15 @@ select[name='filter-by-month'] {
   font-size: 1.1rem;
 }
 
-@media (width<=460px) {
+@media (width<=430px) {
   .confirmation-action-cancel {
     max-width: 120px;
   }
 }
 
 .confirmation-action-cancel:hover {
-  background: #fff;
+  background: none;
+  border: 1px solid #828282;
   color: #82a3bc;
 }
 
