@@ -154,7 +154,6 @@ let adminSlice = createSlice({
         if (statusCode === 200) {
           let serviceResponseObject = action.payload
           state.isLoading = false
-          console.log('SSS ', serviceResponseObject)
           state.dbUsers = serviceResponseObject.serviceResponseObject
           state.isFailed = false
           return

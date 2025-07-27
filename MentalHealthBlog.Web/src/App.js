@@ -13,7 +13,6 @@ import { store } from './components/redux-toolkit/store'
 import { Provider } from 'react-redux'
 import { Dashboard } from './pages/Dashboard'
 import { SharedPosts } from './components/SharedPosts'
-import { Requests } from './components/administrator-dashboard/sections/requests/Requests'
 import { NewExperts } from './components/administrator-dashboard/sections/requests/NewExperts'
 import { ManageUsers } from './components/administrator-dashboard/sections/manage-users/ManageUsers'
 import { SharedContentPermission } from './components/SharedContentPermission'
@@ -49,7 +48,6 @@ function App() {
                 path="/share/link/:shareGuid"
                 element={<SharedContentPostsViaLink />}
               ></Route>
-              <Route path="/requests" element={<Requests />}></Route>
               <Route path="/manage-users" element={<ManageUsers />}></Route>
               <Route
                 path="/requests/new-experts"
