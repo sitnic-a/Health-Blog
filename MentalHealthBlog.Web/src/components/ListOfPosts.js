@@ -12,7 +12,6 @@ import { FilterOptions } from './FilterOptions'
 
 import { ShareExportOverlay } from './share-export/ShareExportOverlay'
 import { ShareModal } from './share-export/share/ShareModal'
-import { ShareModal2 } from './ShareModal2'
 import { ExportModal } from './share-export/export/ExportModal'
 import { setIsReviewingState } from './redux-toolkit/features/regularUserSlice'
 
@@ -64,7 +63,7 @@ export const ListOfPosts = () => {
   return (
     <>
       <ListOfPostsHeader />
-      <ShareModal2 />
+      <ShareModal />
       <ExportModal />
 
       <ShareExportOverlay />

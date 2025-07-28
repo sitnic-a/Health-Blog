@@ -1,42 +1,37 @@
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  getPeopleToShareContentWith,
-  prepareContentToShare,
-} from '../../utils/helper-methods/methods'
-
-import {
-  shareContent,
-  revokeShareContent,
-  resetShareLinkUrl,
-} from '../../redux-toolkit/features/shareExportSlice'
-
-import {
   openShareModal,
   openShareViaLink,
 } from '../../redux-toolkit/features/modalSlice'
-import { ExpertsToShareContentWith } from './ExpertsToShareContentWith'
 
-import { IoRemoveCircleOutline } from 'react-icons/io5'
-import { ShareViaLink } from './ShareViaLink'
+import {
+  resetShareLinkUrl,
+  shareContent,
+} from '../../redux-toolkit/features/shareExportSlice'
+import { prepareContentToShare } from '../../utils/helper-methods/methods'
+
 import { toast } from 'react-toastify'
 
-import { ShareModal2 } from '../../ShareModal2'
+import { ExpertsToShareContentWith2 } from './ExpertsToShareContentWith2'
+
+import { LiaSearchSolid } from 'react-icons/lia'
+import { PostsToBeShared } from './PostsToBeShared'
+import { ShareViaLink } from './ShareViaLink'
 
 export const ShareModal = () => {
   let dispatch = useDispatch()
   let { authenticatedUser } = useSelector((store) => store.user)
   let { isShareOpen, isShareViaLinkOpen } = useSelector((store) => store.modal)
-  let { postsToExport } = useSelector((store) => store.shareExport)
+  let { postsToExport, disabledShareContentAction, isSharingLink } =
+    useSelector((store) => store.shareExport)
 
   return (
     postsToExport.length > 0 &&
     isShareOpen && (
-      <section className="share-modal-overlay">
-        {/* <ShareModal2 /> */}
-
-        {/* <section className="share-modal-container">
+      <section className="share-modal-container-overlay">
+        <section id="share-modal-container">
           <span
-            className="share-export-close-modal-btn"
+            className="share-modal-close-modal-btn"
             onClick={() => {
               dispatch(openShareModal(!isShareOpen))
               dispatch(openShareViaLink(!isShareViaLinkOpen))
@@ -50,104 +45,111 @@ export const ShareModal = () => {
             X
           </span>
 
-          <h4>Share posts...</h4>
-          <div className="share-posts-container">
-            {postsToExport.map((post) => {
-              return (
-                <div className="share-post-container" key={post.id}>
-                  <p className="share-post-title">{post.title}</p>
-                  <span
-                    className="revoke-btn"
-                    onClick={() => {
-                      dispatch(revokeShareContent(post.id))
-                    }}
-                  >
-                    <IoRemoveCircleOutline />
-                  </span>
-                </div>
-              )
-            })}
+          <div className="share-modal-header">
+            <p>Share posts...</p>
           </div>
 
-          <div className="share-people-container">
-            <ExpertsToShareContentWith />
-            <button
-              className="share-btn share-btn-experts"
-              type="button"
-              onClick={async () => {
-                let paramsForPreparation = {
-                  postsToExport,
-                  shareLink: false,
-                }
+          <PostsToBeShared />
 
-                let contentToBeShared =
-                  prepareContentToShare(paramsForPreparation)
+          <div className="share-modal-action-container">
+            <div className="share-modal-filter-container">
+              <input
+                type="text"
+                className="search-by-name-surname-organization"
+              />
+              <button
+                className="search-by-name-surname-organization-filter-button"
+                type="button"
+              >
+                Search
+                <LiaSearchSolid className="search-by-name-surname-organization-filter-icon" />
+              </button>
+            </div>
 
-                let objectWithData = {
-                  contentToBeShared,
-                  authenticatedUser,
-                }
-
-                console.log('CTBS ', contentToBeShared)
-
-                dispatch(shareContent(objectWithData)).then((data) => {
-                  let statusCode = data?.payload?.StatusCode
-                  if (statusCode === 400) {
-                    toast.error("Content couldn't be shared!", {
-                      position: 'bottom-right',
-                    })
-                    return
+            <div className="share-modal-share-actions">
+              <button
+                className="share-content-to-experts share-content-btn"
+                onClick={async () => {
+                  if (isSharingLink === true) {
+                    dispatch(resetShareLinkUrl())
                   }
-                  if (statusCode === 404) {
-                    toast.error("Couldn't find the data!", {
-                      position: 'bottom-right',
-                    })
+
+                  let paramsForPreparation = {
+                    postsToExport,
+                    shareLink: false,
                   }
-                })
-              }}
-            >
-              Share content
-            </button>
 
-            <button
-              className="share-btn"
-              type="button"
-              onClick={() => {
-                let paramsForPreparation = {
-                  postsToExport,
-                  shareLink: true,
-                }
+                  let contentToBeShared =
+                    prepareContentToShare(paramsForPreparation)
 
-                let contentToBeShared =
-                  prepareContentToShare(paramsForPreparation)
-
-                let objectWithData = {
-                  contentToBeShared,
-                  authenticatedUser,
-                }
-
-                dispatch(shareContent(objectWithData)).then((data) => {
-                  let statusCode = data?.payload?.StatusCode
-                  if (statusCode === 400) {
-                    toast.error("Content couldn't be shared!", {
-                      position: 'bottom-right',
-                    })
-                    return
+                  let objectWithData = {
+                    contentToBeShared,
+                    authenticatedUser,
                   }
-                  if (statusCode === 404) {
-                    toast.error("Couldn't find the data!", {
-                      position: 'bottom-right',
-                    })
+
+                  console.log('CTBS ', contentToBeShared)
+
+                  dispatch(shareContent(objectWithData)).then((data) => {
+                    let statusCode = data?.payload?.StatusCode
+                    if (statusCode === 400) {
+                      toast.error("Content couldn't be shared!", {
+                        position: 'bottom-right',
+                      })
+                      return
+                    }
+                    if (statusCode === 404) {
+                      toast.error("Couldn't find the data!", {
+                        position: 'bottom-right',
+                      })
+                    }
+                  })
+                }}
+                disabled={disabledShareContentAction}
+              >
+                Share Content
+              </button>
+              <button
+                className="share-content-to-experts"
+                onClick={() => {
+                  let paramsForPreparation = {
+                    postsToExport,
+                    shareLink: true,
                   }
-                })
-                dispatch(openShareViaLink(!isShareViaLinkOpen))
-              }}
-            >
-              Share via link
-            </button>
-            <ShareViaLink />
+
+                  let contentToBeShared =
+                    prepareContentToShare(paramsForPreparation)
+
+                  let objectWithData = {
+                    contentToBeShared,
+                    authenticatedUser,
+                  }
+
+                  dispatch(shareContent(objectWithData)).then((data) => {
+                    let statusCode = data?.payload?.StatusCode
+                    if (statusCode === 400) {
+                      toast.error("Content couldn't be shared!", {
+                        position: 'bottom-right',
+                      })
+                      return
+                    }
+                    if (statusCode === 404) {
+                      toast.error("Couldn't find the data!", {
+                        position: 'bottom-right',
+                      })
+                    }
+                  })
+                  dispatch(openShareViaLink(!isShareViaLinkOpen))
+                }}
+              >
+                Share via link
+              </button>
+            </div>
           </div>
-        </section> */}
+
+          <ShareViaLink />
+
+          <ExpertsToShareContentWith2 />
+        </section>
       </section>
     )
   )
