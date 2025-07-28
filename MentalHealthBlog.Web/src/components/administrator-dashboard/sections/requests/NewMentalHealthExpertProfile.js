@@ -15,7 +15,9 @@ export const NewMentalHealthExpertProfile = (props) => {
             <img
               className="new-expert-profile-img"
               src={
-                !stringIsNullOrEmpty(expert?.photo) ? base64Photo : defaultPhoto
+                !stringIsNullOrEmpty(expert?.photoAsFile)
+                  ? base64Photo
+                  : defaultPhoto
               }
               alt={expert?.username}
             />

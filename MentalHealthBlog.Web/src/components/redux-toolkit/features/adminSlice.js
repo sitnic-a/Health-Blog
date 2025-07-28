@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { application } from '../../../application'
 import { toast } from 'react-toastify'
+import { manipulateSidebarAndAdminStatusActions } from '../../utils/helper-methods/methods'
 
 let initialState = {
   dbUsers: [],
@@ -97,27 +98,7 @@ let adminSlice = createSlice({
   name: 'adminSlice',
   reducers: {
     displayProfilesContainer: () => {
-      let statusActionsContainer = document.querySelector(
-        '.new-experts-status-actions-container'
-      )
-      let profilesContainer = document.querySelector(
-        '.new-experts-main-profiles-container'
-      )
-      let profileContainer = document.querySelectorAll(
-        '.new-expert-profile-container'
-      )
-      let statusHamburger = document.querySelector(
-        '.new-experts-status-hamburger'
-      )
-      if (window.screen.width <= 500) {
-        profilesContainer.style.display = 'flex'
-        profilesContainer.style.maxWidth = '1440px'
-        profileContainer.forEach((profile) => {
-          profile.style.margin = 'auto'
-        })
-        statusActionsContainer.style.display = 'none'
-        statusHamburger.style.display = 'block'
-      }
+      manipulateSidebarAndAdminStatusActions()
     },
     displayStatusActionsContainer: () => {
       let statusActionsContainer = document.querySelector(

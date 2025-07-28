@@ -199,11 +199,35 @@ export function expandShrinkSidebar() {
   }
 }
 
+export const manipulateSidebarAndAdminStatusActions = () => {
+  let statusActionsContainer = document.querySelector(
+    '.new-experts-status-actions-container'
+  )
+  let profilesContainer = document.querySelector(
+    '.new-experts-main-profiles-container'
+  )
+  let statusHamburger = document.querySelector('.new-experts-status-hamburger')
+  if (window.screen.width <= 500) {
+    profilesContainer.style.display = 'flex'
+    profilesContainer.style.marginLeft = '0.5rem'
+    statusActionsContainer.style.display = 'none'
+    statusHamburger.style.display = 'block'
+  }
+
+  if (window.screen.width > 500) {
+    statusActionsContainer.style.display = 'block'
+    statusHamburger.style.display = 'none'
+  }
+}
+
 export const windowResize = (screenWidth = null, screenHeight = null) => {
   let isInSingleColLayout = false
 
   window.addEventListener('resize', (e) => {
     let width = e.currentTarget.innerWidth
+
+    manipulateSidebarAndAdminStatusActions()
+
     if (screenWidth !== null) {
       let mainContainers = document.querySelectorAll('.main-container')
       if (width < screenWidth) {
