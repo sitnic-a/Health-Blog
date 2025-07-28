@@ -977,16 +977,16 @@ input[name='manage-users-name-input-filter'] {
 }
 
 .new-expert-profile-accept-btn {
-  border: 1px solid #34688f;
+  border: 1px solid #5eba69;
 }
 
 .new-expert-profile-accept-btn:hover {
-  background: #34688f;
-  border: 1px solid #34688f;
+  background: #5eba69;
+  border: 1px solid #5eba69;
   .new-expert-profile-action-accept-icon {
     background: none;
     fill: none;
-    stroke: #fff;
+    stroke: #f3f1e3;
     stroke-width: 30px;
   }
 }
@@ -994,7 +994,7 @@ input[name='manage-users-name-input-filter'] {
 .new-expert-profile-action-accept-icon {
   background: none;
   fill: none;
-  stroke: #34688f;
+  stroke: #5eba69;
   stroke-width: 12px;
 }
 

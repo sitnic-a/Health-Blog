@@ -207,16 +207,28 @@ export const manipulateSidebarAndAdminStatusActions = () => {
     '.new-experts-main-profiles-container'
   )
   let statusHamburger = document.querySelector('.new-experts-status-hamburger')
+
   if (window.screen.width <= 500) {
-    profilesContainer.style.display = 'flex'
-    profilesContainer.style.marginLeft = '0.5rem'
-    statusActionsContainer.style.display = 'none'
-    statusHamburger.style.display = 'block'
+    if (
+      !stringIsNullOrEmpty(profilesContainer) &&
+      !stringIsNullOrEmpty(statusActionsContainer) &&
+      !stringIsNullOrEmpty(statusHamburger)
+    ) {
+      profilesContainer.style.display = 'flex'
+      profilesContainer.style.marginLeft = '0.5rem'
+      statusActionsContainer.style.display = 'none'
+      statusHamburger.style.display = 'block'
+    }
   }
 
   if (window.screen.width > 500) {
-    statusActionsContainer.style.display = 'block'
-    statusHamburger.style.display = 'none'
+    if (
+      !stringIsNullOrEmpty(statusActionsContainer) &&
+      !stringIsNullOrEmpty(statusHamburger)
+    ) {
+      statusActionsContainer.style.display = 'block'
+      statusHamburger.style.display = 'none'
+    }
   }
 }
 
