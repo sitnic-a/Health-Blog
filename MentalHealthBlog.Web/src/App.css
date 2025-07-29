@@ -1360,9 +1360,14 @@ dialog::backdrop {
 .shares-per-mental-health-expert-content-main-container {
   max-width: 1440px;
   display: flex;
-  flex-grow: 1;
-  flex-wrap: wrap;
   justify-content: space-between;
+  padding-bottom: 2rem;
+}
+
+@media (width<=1160px) {
+  .shares-per-mental-health-expert-content-main-container {
+    justify-content: center;
+  }
 }
 
 .shares-per-mental-health-expert-error-container {
@@ -1380,28 +1385,103 @@ dialog::backdrop {
 }
 
 .shares-per-mental-health-expert-content-posts {
-  display: inline-block;
+  display: flex;
+  flex-wrap: wrap;
   max-width: 550px;
+  max-height: 330px;
   /* background-color: red; */
 }
 
+@media (width<=1160px) {
+  .shares-per-mental-health-expert-content-posts {
+    max-width: 290px;
+    justify-content: center;
+    transform: translateY(30%);
+    overflow-y: scroll;
+  }
+}
+
+@media (width<680px) {
+  .shares-per-mental-health-expert-content-posts {
+    max-width: 550px;
+    transform: translateY(0%);
+    overflow: hidden;
+  }
+}
+
+@media (width<=592px) {
+  .shares-per-mental-health-expert-content-posts {
+    max-width: 290px;
+    overflow-y: scroll;
+  }
+}
+
+.shares-per-mental-health-expert-content-posts::-webkit-scrollbar {
+  background-color: #b4d2e9;
+  width: 10px;
+  margin-right: 1rem;
+}
+
+.shares-per-mental-health-expert-content-posts::-webkit-scrollbar-thumb {
+  background: #82a3bc;
+  border-radius: 0.5rem;
+}
+
+.shares-per-mental-health-expert-main-container {
+  min-height: 100vh;
+  background: #cce5f1;
+  padding-inline: 2rem;
+  margin-inline: -2rem;
+}
+
 .shares-per-mental-health-expert-title {
+  margin-top: 3rem;
   margin-left: 0.5rem;
+  font-family: 'Klee One';
+  font-size: 1.5rem;
+  font-weight: 600;
 }
 
 .shares-per-mental-health-expert-expert-main-container {
-  border: 1px solid gray;
+  background: #f0eae1;
+  /* border: 1px solid gray; */
+  border-radius: 0.4rem;
   display: inline-block;
   padding: 1.5rem;
+  padding-block: 3rem;
   /* margin-inline: 0.5rem; */
   margin: 0.5rem;
 }
 
+.shares-per-mental-health-expert-expert-image-wrapper {
+  margin: auto;
+  margin-top: -2rem;
+  margin-bottom: 1.5rem;
+  max-width: 150px;
+  max-height: 150px;
+  overflow: hidden;
+  border-radius: 360px;
+}
+
+.shares-per-mental-health-expert-expert-image {
+  max-width: 150px;
+  width: 100%;
+  border-radius: 360px;
+}
+
 .shares-per-mental-health-expert-expert-info-paragraph {
-  margin-bottom: 1rem;
+  margin: 0;
+  margin-block: 0.2rem;
   text-align: center;
-  font-weight: 700;
+  font-family: 'Klee One';
   font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.shares-per-mental-health-expert-expert-info-paragraph:nth-of-type(2) {
+  font-size: 0.87rem;
+  font-weight: 500;
+  margin-bottom: 0.7rem;
 }
 
 .posts-counter-link {
@@ -1410,58 +1490,116 @@ dialog::backdrop {
   text-decoration: none;
 }
 
+.shares-per-mental-health-expert-separator-line {
+  border-color: #edb572;
+  border-width: 1.21px;
+}
+
 .posts-counter-paragraph {
   opacity: 0;
   transition: 600ms;
   text-align: center;
+  font-family: 'Klee One';
   margin-top: 1rem;
   margin: 0;
 }
 
 .shares-per-mental-health-expert-recent-shares-main-container {
-  max-width: 400px;
+  max-width: 550px;
   width: 100%;
-  /* background: red; */
+  margin-top: -4rem;
+  box-sizing: border-box;
+}
+
+@media (width<=1160px) {
+  .shares-per-mental-health-expert-recent-shares-main-container {
+    margin-top: 0;
+    margin-left: 0.8rem;
+  }
+}
+
+@media (width<680px) {
+  .shares-per-mental-health-expert-recent-shares-main-container {
+    display: none;
+  }
 }
 
 .shares-per-mental-health-expert-recent-shares-header-title {
-  margin: 0;
-  color: #ababab;
-  text-decoration: underline;
+  font-family: 'Klee One';
+  font-size: 1.3rem;
+  color: #000;
+}
+
+.shares-per-mental-health-expert-recent-shares-container {
+  padding: 1rem;
+  background: #a0bbcf;
+  max-width: 550px;
+  max-height: 450px;
+  overflow-y: scroll;
+  border-radius: 0.4rem;
+}
+
+.shares-per-mental-health-expert-recent-shares-container::-webkit-scrollbar {
+  background-color: #b4d2e9;
+  width: 10px;
+  margin-right: 1rem;
+}
+
+.shares-per-mental-health-expert-recent-shares-container::-webkit-scrollbar-thumb {
+  background: #82a3bc;
+  border-radius: 0.5rem;
 }
 
 .shares-per-mental-health-expert-recent-share-title-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 1.5rem;
+  /* border: 1px solid red; */
 }
 
 .shares-per-mental-health-expert-recent-share-title {
-  color: #cab587;
+  margin: 0;
+  font-family: 'Overlock';
+  font-size: 1.4rem;
+}
+
+.shares-per-mental-health-expert-recent-share-actions-container {
+  margin-top: 0.3rem;
 }
 
 .shares-per-mental-health-expert-recent-share-action {
-  width: 20px;
-  height: 20px;
+  width: 25px;
+  height: 25px;
   cursor: pointer;
   transition: 200ms;
+  background: #edb572;
+  color: #f3f1e3;
 }
 
 .shares-per-mental-health-expert-recent-share-action:hover {
-  color: #fff;
-  background: #cab587;
+  color: #edb572;
+  background: none;
 }
 
 .recent-share-expand-info-action {
   display: none;
 }
 
-.shares-per-mental-health-expert-recent-shares-container {
-  padding-top: 25px;
+.shares-per-mental-health-expert-recent-share-container {
+  background: #f0eae1;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0.4rem;
 }
 
 .shares-per-mental-health-expert-recent-share-basic-info {
-  margin-block: 0.8em;
+  margin-block: 0.3em;
+  font-family: 'Klee One';
+}
+
+.shares-per-mental-health-expert-recent-share-basic-info:nth-of-type(3) {
+  margin-top: 0.9em;
 }
 
 .content-shared-with-mental-health-expert-main-container {

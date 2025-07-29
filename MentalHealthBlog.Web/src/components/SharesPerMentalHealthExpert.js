@@ -4,6 +4,8 @@ import {
   getRecentShares,
   getSharesPerMentalHealthExpert,
 } from './redux-toolkit/features/regularUserSlice'
+
+import { Navbar } from './shared/Navbar'
 import { RecentShares } from './RecentShares'
 import { SharedContent } from './SharedContent'
 import { Loader } from './Loader'
@@ -90,6 +92,7 @@ export const SharesPerMentalHealthExpert = () => {
 
   return (
     <section className="shares-per-mental-health-expert-main-container">
+      <Navbar />
       <h1 className="shares-per-mental-health-expert-title">
         Content shared with mental health experts
       </h1>

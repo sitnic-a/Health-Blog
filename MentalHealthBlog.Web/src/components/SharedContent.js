@@ -1,10 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import {
   hideHoveredContentCounter,
   previewHoveredContentCounter,
   setIsReviewingState,
 } from './redux-toolkit/features/regularUserSlice'
+import { stringIsNullOrEmpty } from './utils/helper-methods/methods'
+
+import defaultPhoto from '../images/default-avatar.png'
 
 export const SharedContent = () => {
   let dispatch = useDispatch()
@@ -14,10 +17,13 @@ export const SharedContent = () => {
     (store) => store.regularUser
   )
   return (
-    sharesPerMentalHealthExpert.length > 0 && (
+    sharesPerMentalHealthExpert?.length > 0 && (
       <div className="shares-per-mental-health-expert-content-posts">
         {sharesPerMentalHealthExpert.map((expert) => {
-          let mentalHealthExpert = expert.mentalHealthExpertContentSharedWith
+          console.log('Expert ', expert)
+
+          let mentalHealthExpert = expert?.mentalHealthExpertContentSharedWith
+          let base64photo = `data:image/png;base64, ${mentalHealthExpert?.photoAsFile}`
           let contentSharedWithMentalHealthExpert = expert.sharedContent
           return (
             <div
@@ -41,9 +47,25 @@ export const SharedContent = () => {
                 type="hidden"
                 data-expert-id={mentalHealthExpert.id}
               />
+              <div className="shares-per-mental-health-expert-expert-image-wrapper">
+                <img
+                  className="shares-per-mental-health-expert-expert-image"
+                  src={
+                    !stringIsNullOrEmpty(mentalHealthExpert?.photoAsFile)
+                      ? base64photo
+                      : defaultPhoto
+                  }
+                  alt="Expert"
+                />
+              </div>
               <p className="shares-per-mental-health-expert-expert-info-paragraph">
-                {mentalHealthExpert.username}
+                {mentalHealthExpert?.firstName} {mentalHealthExpert?.lastName}
               </p>
+              <p className="shares-per-mental-health-expert-expert-info-paragraph">
+                {mentalHealthExpert?.roles[0].name}
+              </p>
+
+              <hr className="shares-per-mental-health-expert-separator-line" />
 
               <p
                 className="posts-counter-paragraph"
