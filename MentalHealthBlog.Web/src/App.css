@@ -1431,6 +1431,7 @@ dialog::backdrop {
   min-height: 100vh;
   background: #cce5f1;
   padding-inline: 2rem;
+  padding-top: 0.01rem;
   margin-inline: -2rem;
 }
 
@@ -3839,38 +3840,41 @@ select[name='filter-by-month'] {
   top: 0;
   left: 0;
   width: 100vw;
-  /* max-height: 100vh; */
-  /* height: 100%; */
-
+  /* min-height: 100vh; */
   height: 100vh;
-
   background: #82a3bc60;
   z-index: 4;
-  /* overflow: hidden; */
+  /* overflow-y: scroll; */
 }
 
 #share-modal-container {
   position: relative;
   top: 50%;
   max-width: 760px;
-  min-height: 480px;
-  background: #f3f1e3;
+  max-height: 550px;
   margin: auto;
+  background: #f3f1e3;
   transform: translateY(-50%);
   padding-bottom: 1rem;
   border-radius: 0.7rem;
-}
-
-@media (width<=420px) {
-  #share-modal-container {
-    transform: translateY(-40%);
-  }
+  overflow-y: scroll;
 }
 
 @media (width<=800px) {
   #share-modal-container {
     margin-inline: 1rem;
   }
+}
+
+#share-modal-container::-webkit-scrollbar {
+  background-color: #f3f1e3;
+  width: 10px;
+  margin-right: 1rem;
+}
+
+#share-modal-container::-webkit-scrollbar-thumb {
+  background: #edb572;
+  border-radius: 0.5rem;
 }
 
 .share-modal-close-modal-btn {

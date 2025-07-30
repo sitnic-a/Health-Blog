@@ -92,7 +92,6 @@ export const SharesPerMentalHealthExpert = () => {
 
   return (
     <section className="shares-per-mental-health-expert-main-container">
-      <Navbar />
       <h1 className="shares-per-mental-health-expert-title">
         Content shared with mental health experts
       </h1>
