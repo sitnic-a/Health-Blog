@@ -48,7 +48,6 @@ export const shareByLink = createAsyncThunk(
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
       },
     })
     let response = await request.json()

@@ -4,12 +4,10 @@ import { useSelector, useDispatch } from 'react-redux'
 import { shareByLink } from './redux-toolkit/features/shareExportSlice'
 import { ListOfSharedPosts } from './share-export/share/ListOfSharedPosts'
 import { useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
 
 export const SharedContentPostsViaLink = () => {
   let dispatch = useDispatch()
   let navigate = useNavigate()
-  let { authenticatedUser } = useSelector((store) => store.user)
   let { postsToShare } = useSelector((store) => store.shareExport)
 
   useEffect(() => {
@@ -20,7 +18,6 @@ export const SharedContentPostsViaLink = () => {
 
       let objectWithData = {
         shareGuid,
-        authenticatedUser,
       }
 
       dispatch(shareByLink(objectWithData)).then((data) => {
@@ -38,8 +35,8 @@ export const SharedContentPostsViaLink = () => {
   return (
     postsToShare !== null &&
     postsToShare?.length > 0 && (
-      <section className="user-shared-content">
-        <h1>Content:</h1>
+      <section id="user-shared-posts-via-link">
+        <h1 className="user-shared-posts-via-link-title">Content:</h1>
         <ListOfSharedPosts />
       </section>
     )

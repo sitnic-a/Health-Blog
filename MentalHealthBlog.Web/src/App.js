@@ -34,6 +34,11 @@ function App() {
           <Routes>
             <Route exact path="/login" element={<Login />} />
             <Route path="/register" element={<Register />}></Route>
+            <Route
+              path="/share/link/:shareGuid"
+              element={<SharedContentPostsViaLink />}
+            ></Route>
+
             <Route element={<RequireAuth />}>
               <Route path="/" element={<Dashboard />} />
               <Route path="/post/:id" element={<PostById />}></Route>
@@ -44,10 +49,6 @@ function App() {
                 element={<SharedContentPermission />}
               ></Route>
 
-              <Route
-                path="/share/link/:shareGuid"
-                element={<SharedContentPostsViaLink />}
-              ></Route>
               <Route path="/manage-users" element={<ManageUsers />}></Route>
               <Route
                 path="/requests/new-experts"
