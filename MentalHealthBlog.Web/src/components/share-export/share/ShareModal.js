@@ -5,6 +5,7 @@ import {
 } from '../../redux-toolkit/features/modalSlice'
 
 import {
+  filterSuggestedPossibleToShareWith,
   resetShareLinkUrl,
   shareContent,
 } from '../../redux-toolkit/features/shareExportSlice'
@@ -57,6 +58,10 @@ export const ShareModal = () => {
               <input
                 type="text"
                 className="search-by-name-surname-organization"
+                onKeyUp={(e) => {
+                  let searchCondition = e.target.value
+                  dispatch(filterSuggestedPossibleToShareWith(searchCondition))
+                }}
               />
               <button
                 className="search-by-name-surname-organization-filter-button"

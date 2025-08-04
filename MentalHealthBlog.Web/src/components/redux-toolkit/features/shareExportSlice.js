@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import {
   getSelectedPosts,
   getPeopleToShareContentWith,
+  stringIsNullOrEmpty,
 } from '../../utils/helper-methods/methods'
 import { setIsSharingExporting } from './postSlice'
 import { application } from '../../../application'
@@ -13,6 +14,7 @@ let initialState = {
   exportedDocument: null,
   isExported: null,
   possibleToShareWith: [],
+  suggestedPossibleToShareWith: [],
   possibleToShareWithError: null,
   numberOfPeoplePossibleToShareWith: 0,
   isSharingLink: false,
@@ -160,6 +162,21 @@ let shareExportSlice = createSlice({
       state.isSharingLink = false
       state.shareLinkUrl = ''
     },
+
+    filterSuggestedPossibleToShareWith: (state, action) => {
+      if (stringIsNullOrEmpty(action?.payload)) {
+        state.suggestedPossibleToShareWith = state.possibleToShareWith
+        return
+      }
+      //Filter data
+      let possibleToShareWithCopy = [...state.possibleToShareWith]
+      let filteredPossibleToShareWith = possibleToShareWithCopy.filter(
+        (person) =>
+          person?.firstName?.includes(action?.payload) ||
+          person?.lastName?.includes(action?.payload)
+      )
+      state.suggestedPossibleToShareWith = filteredPossibleToShareWith
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -257,7 +274,9 @@ let shareExportSlice = createSlice({
 
       .addCase(getExpertsAndRelatives.fulfilled, (state, action) => {
         let statusCode = action?.payload?.statusCode
-        state.possibleToShareWith = action.payload.serviceResponseObject
+        state.possibleToShareWith = action?.payload?.serviceResponseObject
+        state.suggestedPossibleToShareWith =
+          action?.payload?.serviceResponseObject
         if (statusCode !== 200) {
           state.possibleToShareWithError = action?.payload
           return
@@ -279,6 +298,7 @@ export const {
   revokeShareContent,
   checkIfShareContentActionIsDisabled,
   resetShareLinkUrl,
+  filterSuggestedPossibleToShareWith,
 } = shareExportSlice.actions
 
 export default shareExportSlice.reducer

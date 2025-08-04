@@ -3,13 +3,16 @@ import { checkIfShareContentActionIsDisabled } from '../../redux-toolkit/feature
 
 import defaultAvatar from '../../../images/default-avatar.png'
 import { MdPhone, MdEmail } from 'react-icons/md'
+import { stringIsNullOrEmpty } from '../../utils/helper-methods/methods'
 
 export const ExpertsToShareContentWith = () => {
   let dispatch = useDispatch()
-  let { possibleToShareWith } = useSelector((store) => store.shareExport)
+  let { suggestedPossibleToShareWith } = useSelector(
+    (store) => store.shareExport
+  )
   return (
     <div className="share-modal-people-to-share-with">
-      {possibleToShareWith?.map((personToShareWith) => {
+      {suggestedPossibleToShareWith?.map((personToShareWith) => {
         let fullName = `${personToShareWith?.firstName} ${personToShareWith?.lastName}`
         let base64Photo = `data:image/png;base64,${personToShareWith?.photoAsFile}`
         return (
@@ -21,7 +24,7 @@ export const ExpertsToShareContentWith = () => {
               type="hidden"
               name="person-permission-info"
               className="person-permission-info info-id"
-              value={personToShareWith.id}
+              value={personToShareWith?.id}
             />
             <input
               className="person-to-share-content-with-checkbox"
@@ -35,7 +38,11 @@ export const ExpertsToShareContentWith = () => {
               <div className="person-to-share-with-img-container">
                 <img
                   className="person-to-share-with-img"
-                  src={base64Photo ? base64Photo : defaultAvatar}
+                  src={
+                    !stringIsNullOrEmpty(personToShareWith?.photoAsFile)
+                      ? base64Photo
+                      : defaultAvatar
+                  }
                   alt="Person"
                 />
               </div>
@@ -43,7 +50,7 @@ export const ExpertsToShareContentWith = () => {
               <div className="person-to-share-with-header-info-container">
                 <h3 className="person-to-share-with-name">{fullName}</h3>
                 <p className="person-to-share-with-role">
-                  {personToShareWith?.roles[0].name}
+                  {personToShareWith?.roles[0]?.name}
                 </p>
               </div>
 

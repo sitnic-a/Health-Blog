@@ -4214,6 +4214,7 @@ select[name='filter-by-month'] {
   color: #f3f1e3;
   border-radius: 0.4rem;
   font-family: 'Klee One';
+  cursor: pointer;
 }
 
 @media (width<=635px) {
