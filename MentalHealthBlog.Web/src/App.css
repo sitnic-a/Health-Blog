@@ -165,6 +165,7 @@ main {
   border-bottom: 1px solid #e1e1e1;
   outline: none;
   border-radius: 0.3rem;
+  font-family: 'Klee One';
 }
 
 @keyframes blink {
@@ -193,6 +194,14 @@ main {
 
 .form-fields * {
   margin-top: 4px;
+}
+
+.form-field-label {
+  font-family: 'Klee One';
+}
+
+.register-link {
+  font-family: 'Klee One';
 }
 
 #login-container-button {
@@ -2172,7 +2181,7 @@ div[data-tooltip-title]:after {
   width: 100%;
   min-height: 40px;
   position: relative;
-  padding: 0.5rem;
+  padding-inline: 0.5rem;
   opacity: 0;
   visibility: hidden;
   transition: 300ms;
@@ -2289,7 +2298,7 @@ button[data-action-delete='delete'] svg {
   font-weight: 600;
   font-size: 1.2rem;
   transition: 150ms;
-  background: #b10000;
+  background: #c93232;
   padding: 5px;
   border-top-right-radius: 0.4rem;
   cursor: pointer;
@@ -2902,7 +2911,7 @@ input[name='person-to-give-permission-checkbox'] {
   max-width: 430px;
   width: 100%;
   min-height: 230px;
-  background: #fff;
+  background: #f3f1e3;
   margin: auto;
   top: 35%;
   position: absolute;
@@ -2912,7 +2921,7 @@ input[name='person-to-give-permission-checkbox'] {
 }
 
 .export-modal-container > span:hover {
-  color: #b10000;
+  color: #c93232;
   background: #fff;
 }
 
@@ -2944,8 +2953,9 @@ input[name='person-to-give-permission-checkbox'] {
   margin-block: -1rem;
 }
 
-.export-modal-content > h4 {
+.export-modal-content-title {
   padding-block: 0.2rem;
+  font-family: 'Overlock';
 }
 
 .export-modal-files-container {
@@ -2963,13 +2973,14 @@ input[name='person-to-give-permission-checkbox'] {
   padding: 0.1rem;
 }
 
-.export-modal-file-wrapper > p {
+.export-modal-file-file-name {
   margin-block: -0.1rem;
   padding-block: 0.2rem;
   display: flex;
   flex-direction: row;
   gap: 1px;
-  font-size: 0.82rem;
+  font-family: 'Klee One';
+  font-size: 0.9rem;
 }
 
 .export-modal-progress-container {
@@ -2980,7 +2991,7 @@ input[name='person-to-give-permission-checkbox'] {
 }
 
 .export-modal-successfully-exported-container {
-  color: #54f434;
+  color: #5eba69;
 }
 
 .export-modal-exported-success-icon {
@@ -2989,6 +3000,7 @@ input[name='person-to-give-permission-checkbox'] {
 }
 
 .export-modal-exported-description {
+  font-family: 'Klee One';
   font-size: 1rem;
   margin-top: 0;
 }
@@ -3048,18 +3060,19 @@ input[name='person-to-give-permission-checkbox'] {
   margin-top: 0.5rem;
   margin-left: 0.5rem;
   margin-right: 0.5rem;
-  background: #eeeeee;
-  max-width: 680px;
+  background: #f3f1e3;
+  max-width: 700px;
   padding: 0.3rem;
+  border-radius: 0.4rem;
   min-height: 60px;
 }
 
 .dashboard-filter-container h3 {
   color: #000;
-  font-weight: 600;
-  text-decoration: underline;
+  font-family: 'Klee One';
+  font-size: 1.3rem;
+  font-weight: 400;
   margin: 0.2rem 0.5rem;
-  font-size: 1rem;
 }
 
 .filter-by-month {
@@ -3072,19 +3085,23 @@ input[name='person-to-give-permission-checkbox'] {
 }
 
 .filter-by-month > p {
-  font-size: 0.8rem;
+  font-family: 'Klee One';
+  font-size: 1rem;
 }
 
 select[name='filter-by-month'] {
-  margin-left: 0.5rem;
-  max-width: 10rem;
-  height: 1.8rem;
-  text-align: center;
-  border: 0.8px solid #89cff0;
+  max-width: 160px;
   width: 100%;
+  margin-left: 0.5rem;
+  padding-block: 0.5rem;
+  font-family: 'Klee One';
+  text-align: center;
+  border: none;
+  background: #edb572;
+  color: #f3f1e3;
 }
 
-@media (width<322px) {
+@media (width<327px) {
   select[name='filter-by-month'] {
     margin: 0rem;
   }
@@ -3263,6 +3280,10 @@ select[name='filter-by-month'] {
     right: 0%;
     transform: translateY(0%);
   }
+}
+
+.pie-graph-title {
+  font-family: 'Klee One';
 }
 
 .post-by-id {

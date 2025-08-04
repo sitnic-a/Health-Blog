@@ -161,7 +161,9 @@ export const Register = () => {
       <form onSubmit={registerUser} encType="multipart/form-data">
         <div className="register-credentials-container">
           <div>
-            <label htmlFor="register-username">Username:</label>
+            <label className="form-field-label" htmlFor="register-username">
+              Username:
+            </label>
             <span className="required-field"> *</span>
             <input
               name="username"
@@ -174,7 +176,9 @@ export const Register = () => {
           </div>
 
           <div>
-            <label htmlFor="register-password">Password:</label>
+            <label className="form-field-label" htmlFor="register-password">
+              Password:
+            </label>
             <span className="required-field"> *</span>
 
             <input
@@ -187,7 +191,9 @@ export const Register = () => {
         </div>
         {isMentalHealthExpert !== true && (
           <div>
-            <label htmlFor="register-roles">User type:</label>
+            <label className="form-field-label" htmlFor="register-roles">
+              User type:
+            </label>
             <br />
             {dbRoles?.length > 0 &&
               dbRoles?.map((role) => {
@@ -199,7 +205,9 @@ export const Register = () => {
                       id="db-role"
                       value={role.id}
                     />
-                    <label htmlFor="db-role-name">{role.name}</label>
+                    <label className="form-field-label" htmlFor="db-role-name">
+                      {role.name}
+                    </label>
                     <br />
                   </div>
                 )

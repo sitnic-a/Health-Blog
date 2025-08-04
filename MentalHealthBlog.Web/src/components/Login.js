@@ -76,7 +76,9 @@ export const Login = () => {
               </h1>
               <div className="form-fields">
                 <div>
-                  <label htmlFor="username">Username:</label>
+                  <label className="form-field-label" htmlFor="username">
+                    Username:
+                  </label>
                   <span className="required-field"> *</span>
                   <br />
                   <input
@@ -90,7 +92,9 @@ export const Login = () => {
                 </div>
                 <br />
                 <div>
-                  <label htmlFor="password">Password:</label>
+                  <label className="form-field-label" htmlFor="password">
+                    Password:
+                  </label>
                   <span className="required-field"> *</span>
 
                   <br />

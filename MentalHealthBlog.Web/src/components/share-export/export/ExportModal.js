@@ -1,15 +1,15 @@
-import { useDispatch, useSelector } from "react-redux";
-import { openExportModal } from "../../redux-toolkit/features/modalSlice";
-import { BiError } from "react-icons/bi";
-import { MdOutlineDownloadDone } from "react-icons/md";
+import { useDispatch, useSelector } from 'react-redux'
+import { openExportModal } from '../../redux-toolkit/features/modalSlice'
+import { BiError } from 'react-icons/bi'
+import { MdOutlineDownloadDone } from 'react-icons/md'
 
 export const ExportModal = () => {
-  let dispatch = useDispatch();
+  let dispatch = useDispatch()
 
-  let { isExportOpen } = useSelector((store) => store.modal);
+  let { isExportOpen } = useSelector((store) => store.modal)
   let { postsToExport, isExported, isLoading } = useSelector(
     (store) => store.shareExport
-  );
+  )
 
   return (
     isExportOpen && (
@@ -19,30 +19,36 @@ export const ExportModal = () => {
             <span
               className="share-export-close-modal-btn"
               onClick={() => {
-                dispatch(openExportModal(!isExportOpen));
+                dispatch(openExportModal(!isExportOpen))
                 let shareExportContainer = document.querySelector(
-                  ".share-export-container"
-                );
-                shareExportContainer.style.display = "flex";
+                  '.share-export-container'
+                )
+                shareExportContainer.style.display = 'flex'
               }}
             >
               X
             </span>
             <div className="export-modal">
               <div className="export-modal-content">
-                <h4>Exporting posts...</h4>
+                <h4 className="export-modal-content-title">
+                  Exporting posts...
+                </h4>
                 <div className="export-modal-files-container">
-                  {postsToExport.map((post) => {
+                  {postsToExport?.map((post) => {
                     return (
                       <div className="export-modal-file-wrapper">
-                        <p>{post.title}</p>
+                        <p className="export-modal-file-file-name">
+                          {post?.title}
+                        </p>
                       </div>
-                    );
+                    )
                   })}
                 </div>
 
                 {isLoading === true ? (
-                  <p>Please wait, document is exporting...</p>
+                  <p className="export-modal-content-title">
+                    Please wait, document is exporting...
+                  </p>
                 ) : (
                   <>
                     {isExported && (
@@ -74,5 +80,5 @@ export const ExportModal = () => {
         </section>
       </>
     )
-  );
-};
+  )
+}
