@@ -12,7 +12,7 @@ import { prepareContentToShare } from '../../utils/helper-methods/methods'
 
 import { toast } from 'react-toastify'
 
-import { ExpertsToShareContentWith2 } from './ExpertsToShareContentWith2'
+import { ExpertsToShareContentWith } from './ExpertsToShareContentWith'
 
 import { LiaSearchSolid } from 'react-icons/lia'
 import { PostsToBeShared } from './PostsToBeShared'
@@ -20,6 +20,7 @@ import { ShareViaLink } from './ShareViaLink'
 
 export const ShareModal = () => {
   let dispatch = useDispatch()
+
   let { authenticatedUser } = useSelector((store) => store.user)
   let { isShareOpen, isShareViaLinkOpen } = useSelector((store) => store.modal)
   let { postsToExport, disabledShareContentAction, isSharingLink } =
@@ -148,7 +149,7 @@ export const ShareModal = () => {
 
           <ShareViaLink />
 
-          <ExpertsToShareContentWith2 />
+          <ExpertsToShareContentWith />
         </section>
       </section>
     )

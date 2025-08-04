@@ -219,7 +219,10 @@ export const Register = () => {
           <div className="mental-health-expert-register-info-main-container">
             <div className="mental-health-expert-register-info-container">
               <div className="mental-health-expert-register-info name">
-                <label htmlFor="register-mental-health-expert-first-name">
+                <label
+                  className="form-field-label"
+                  htmlFor="register-mental-health-expert-first-name"
+                >
                   First name:
                 </label>
                 <span className="required-field"> *</span>
@@ -234,7 +237,10 @@ export const Register = () => {
               </div>
 
               <div className="mental-health-expert-register-info last-name">
-                <label htmlFor="register-mental-health-expert-last-name">
+                <label
+                  className="form-field-label"
+                  htmlFor="register-mental-health-expert-last-name"
+                >
                   Last name:
                 </label>
                 <span className="required-field"> *</span>
@@ -249,7 +255,10 @@ export const Register = () => {
               </div>
 
               <div className="mental-health-expert-register-info organization">
-                <label htmlFor="register-mental-health-expert-organization">
+                <label
+                  className="form-field-label"
+                  htmlFor="register-mental-health-expert-organization"
+                >
                   Organization:
                 </label>
                 <span className="required-field"> *</span>
@@ -264,7 +273,10 @@ export const Register = () => {
               </div>
 
               <div className="mental-health-expert-register-info phone-number">
-                <label htmlFor="register-mental-health-expert-phone-number">
+                <label
+                  className="form-field-label"
+                  htmlFor="register-mental-health-expert-phone-number"
+                >
                   Phone number:
                 </label>
                 <span className="required-field"> *</span>
@@ -279,7 +291,10 @@ export const Register = () => {
               </div>
 
               <div className="mental-health-expert-register-info email">
-                <label htmlFor="register-mental-health-expert-email">
+                <label
+                  className="form-field-label"
+                  htmlFor="register-mental-health-expert-email"
+                >
                   Email:
                 </label>
 
@@ -295,7 +310,10 @@ export const Register = () => {
 
             <div className="mental-health-expert-photo-container">
               <div className="mental-health-expert-register-info photo">
-                <label htmlFor="register-mental-health-expert-photo">
+                <label
+                  className="form-field-label"
+                  htmlFor="register-mental-health-expert-photo"
+                >
                   Photo:{' '}
                 </label>
                 <input

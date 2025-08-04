@@ -4,7 +4,7 @@ import defaultPhoto from '../../../../images/default-avatar.png'
 import { stringIsNullOrEmpty } from '../../../utils/helper-methods/methods'
 
 export const NewMentalHealthExpertProfile = (props) => {
-  let expert = props.expert
+  let expert = props?.expert
   let base64Photo = `data:image/png;base64,${expert?.photoAsFile}`
 
   return (
@@ -30,23 +30,23 @@ export const NewMentalHealthExpertProfile = (props) => {
         <div className="new-expert-profile-bio">
           <div className="new-expert-profile-wrapper new-expert-profile-first-name-wrapper">
             <p className="new-expert-profile-bio-info new-expert-profile-first-name">
-              First name: <span>{expert.firstName}</span>
+              First name: <span>{expert?.firstName}</span>
             </p>
           </div>
           <div className="new-expert-profile-wrapper new-expert-profile-last-name-wrapper">
             <p className="new-expert-profile-bio-info new-expert-profile-last-name">
-              Last name: <span>{expert.lastName}</span>
+              Last name: <span>{expert?.lastName}</span>
             </p>
           </div>
           <div className="new-expert-profile-wrapper new-expert-profile-organization-wrapper">
             <p className="new-expert-profile-bio-info new-expert-profile-organization">
-              Organization: <span>{expert.organization}</span>
+              Organization: <span>{expert?.organization}</span>
             </p>
           </div>
           <div className="new-expert-profile-wrapper new-expert-profile-phone-number-wrapper">
             <p className="new-expert-profile-bio-info new-expert-profile-phone-number">
               <MdLocalPhone />
-              <span>{expert.phoneNumber}</span>
+              <span>{expert?.phoneNumber}</span>
             </p>
           </div>
           <div className="new-expert-profile-wrapper new-expert-profile-email-wrapper">
@@ -58,7 +58,7 @@ export const NewMentalHealthExpertProfile = (props) => {
             </p>
           </div>
         </div>
-        {expert.isApproved === false && expert.isRejected === false && (
+        {expert?.isApproved === false && expert?.isRejected === false && (
           <NewMentalHealthExpertProfileActions expert={expert} />
         )}
       </div>

@@ -1,133 +1,85 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { checkIfShareContentActionIsDisabled } from '../../redux-toolkit/features/shareExportSlice'
+
 import defaultAvatar from '../../../images/default-avatar.png'
-import { LiaSearchSolid } from 'react-icons/lia'
-import { BiError } from 'react-icons/bi'
+import { MdPhone, MdEmail } from 'react-icons/md'
 
 export const ExpertsToShareContentWith = () => {
   let dispatch = useDispatch()
-  let {
-    possibleToShareWith,
-    possibleToShareWithError,
-    numberOfPeoplePossibleToShareWith,
-  } = useSelector((store) => store.shareExport)
+  let { possibleToShareWith } = useSelector((store) => store.shareExport)
   return (
-    <>
-      <div className="search-people">
-        <span>
-          <LiaSearchSolid />
-        </span>
-        <input
-          type="text"
-          name="search-by-first-last-name"
-          id="search-by-first-last-name"
-          placeholder="Search by first/last name..."
-        />
-      </div>
-
-      <div className="people-to-give-permission-container">
-        <div className="people-to-give-permission">
-          {possibleToShareWith?.map((personToShareWith) => {
-            let base64Photo = `data:image/png;base64,${personToShareWith.photoAsFile}`
-
-            return (
-              <div
-                key={personToShareWith.id}
-                className="person-to-give-permission-container"
-              >
-                <div className="permission-action">
-                  <input
-                    type="checkbox"
-                    name="person-to-give-permission-checkbox"
-                    id="person-to-give-permission-checkbox"
-                    onClick={() => {
-                      dispatch(checkIfShareContentActionIsDisabled())
-                    }}
-                  />
-                </div>
-
-                <div className="person-to-give-permission-information">
-                  <div className="person-to-give-permission-img-container">
-                    <img
-                      className="person-to-give-permission-img"
-                      src={
-                        personToShareWith.photoAsFile
-                          ? base64Photo
-                          : defaultAvatar
-                      }
-                      alt="Person"
-                    />
-                  </div>
-                  <div className="person-to-give-permission-basic-information">
-                    <input
-                      type="hidden"
-                      name="person-permission-info"
-                      className="person-permission-info info-id"
-                      value={personToShareWith.id}
-                    />
-                    <p
-                      className="person-permission-info info-username"
-                      title={personToShareWith.username}
-                    >
-                      {personToShareWith.username}
-                    </p>
-                    <p
-                      className="person-permission-info info-role"
-                      title={personToShareWith.roles[0].name}
-                    >
-                      {personToShareWith.roles[0].name}
-                    </p>
-                    <p
-                      className="person-permission-info info-phoneNumber"
-                      title={personToShareWith.phoneNumber}
-                    >
-                      {personToShareWith.phoneNumber}
-                    </p>
-                    <hr />
-                    <p
-                      className="person-permission-info info-organization"
-                      title={personToShareWith.organization}
-                    >
-                      {personToShareWith.organization}
-                    </p>
-                  </div>
-                </div>
+    <div className="share-modal-people-to-share-with">
+      {possibleToShareWith?.map((personToShareWith) => {
+        let fullName = `${personToShareWith?.firstName} ${personToShareWith?.lastName}`
+        let base64Photo = `data:image/png;base64,${personToShareWith?.photoAsFile}`
+        return (
+          <div
+            className="person-to-share-with-main-container"
+            key={personToShareWith?.userId}
+          >
+            <input
+              type="hidden"
+              name="person-permission-info"
+              className="person-permission-info info-id"
+              value={personToShareWith.id}
+            />
+            <input
+              className="person-to-share-content-with-checkbox"
+              type="checkbox"
+              name="person-to-share-content-with-checkbox"
+              onClick={() => {
+                dispatch(checkIfShareContentActionIsDisabled())
+              }}
+            />
+            <div className="person-to-share-with-container">
+              <div className="person-to-share-with-img-container">
+                <img
+                  className="person-to-share-with-img"
+                  src={base64Photo ? base64Photo : defaultAvatar}
+                  alt="Person"
+                />
               </div>
-            )
-          })}
-        </div>
 
-        {possibleToShareWith?.length === 0 && (
-          <div className="person-to-give-permission-no-data-container">
-            <p className="person-to-give-permission-no-data-title">
-              Experts list is currently empty!
-            </p>
-          </div>
-        )}
+              <div className="person-to-share-with-header-info-container">
+                <h3 className="person-to-share-with-name">{fullName}</h3>
+                <p className="person-to-share-with-role">
+                  {personToShareWith?.roles[0].name}
+                </p>
+              </div>
 
-        {possibleToShareWithError && (
-          <div className="person-to-give-permission-no-data-container">
-            <div className="person-to-give-permission-no-data-information">
-              <BiError className="person-to-give-permission-no-data-error-icon" />
-              <div className="person-to-give-permission-no-data-messages">
-                <p className="person-to-give-permission-no-data-title-error">
-                  Something went wrong! Experts list couldn't get populated!
-                </p>
-                <p className="person-to-give-permission-no-data-title-error">
-                  Please contact site administrator
-                </p>
+              <div className="person-to-share-with-additional-info-container">
+                <div className="person-to-share-with-additional-info-field person-to-share-with-phone-field">
+                  <MdPhone className="person-to-share-with-phone-icon" />
+                  <p
+                    className="person-to-share-with-phone-value"
+                    title={personToShareWith?.phoneNumber}
+                  >
+                    {personToShareWith?.phoneNumber}
+                  </p>
+                </div>
+
+                <div className="person-to-share-with-additional-info-field person-to-share-with-email-field">
+                  <MdEmail className="person-to-share-with-email-icon" />
+                  <p
+                    className="person-to-share-with-email-value"
+                    title={personToShareWith?.email}
+                  >
+                    {personToShareWith?.email}
+                  </p>
+                </div>
+
+                <hr />
+
+                <div className="person-to-share-with-additional-info-field person-to-share-with-organization-field">
+                  <p className="person-to-share-with-organization-value">
+                    {personToShareWith?.organization}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
-        )}
-
-        {numberOfPeoplePossibleToShareWith > 0 && (
-          <p className="people-to-give-permission-count">
-            Number of persons content is shared with{' '}
-            {numberOfPeoplePossibleToShareWith}
-          </p>
-        )}
-      </div>
-    </>
+        )
+      })}
+    </div>
   )
 }

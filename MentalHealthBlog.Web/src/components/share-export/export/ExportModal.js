@@ -36,7 +36,7 @@ export const ExportModal = () => {
                 <div className="export-modal-files-container">
                   {postsToExport?.map((post) => {
                     return (
-                      <div className="export-modal-file-wrapper">
+                      <div key={post?.id} className="export-modal-file-wrapper">
                         <p className="export-modal-file-file-name">
                           {post?.title}
                         </p>
