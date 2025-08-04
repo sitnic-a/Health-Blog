@@ -20,8 +20,6 @@ export const SharedContent = () => {
     sharesPerMentalHealthExpert?.length > 0 && (
       <div className="shares-per-mental-health-expert-content-posts">
         {sharesPerMentalHealthExpert.map((expert) => {
-          console.log('Expert ', expert)
-
           let mentalHealthExpert = expert?.mentalHealthExpertContentSharedWith
           let base64photo = `data:image/png;base64, ${mentalHealthExpert?.photoAsFile}`
           let contentSharedWithMentalHealthExpert = expert.sharedContent

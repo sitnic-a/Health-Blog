@@ -136,7 +136,9 @@ export const NewExperts = () => {
           </div>
         ) : (
           <div className="new-experts-main-profiles-container">
-            <span>All requests are properly processed!</span>
+            <span className="new-experts-main-profiles-container-requests-information">
+              All requests are properly processed!
+            </span>
           </div>
         )}
       </div>

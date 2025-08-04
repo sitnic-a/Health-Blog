@@ -18,13 +18,19 @@
 }
 
 .not-found-container > h1:first-child {
+  font-family: 'Klee One';
   font-size: 3rem;
 }
 
 .not-found-container > h1 {
+  font-family: 'Klee One';
   font-size: 2rem;
   margin-block: 0;
-  color: #f00;
+  color: #c93232;
+}
+
+.not-found-container > p {
+  font-family: 'Klee One';
 }
 
 input[type='text'],
@@ -101,7 +107,7 @@ main {
 .loader-box {
   width: 1.5rem;
   height: 1.5rem;
-  background: green;
+  background: #5eba69;
   animation-name: loading;
   animation-duration: 5s;
   animation-timing-function: linear;
@@ -115,6 +121,7 @@ main {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  font-family: 'Klee One';
   font-size: 1.2rem;
   color: #920d0d;
   font-weight: 600;
@@ -386,14 +393,14 @@ main {
 
 .admin-dashboard-request-container-title {
   margin: 0;
-  font-size: 1.5rem;
   font-family: 'Klee One';
+  font-size: 1.5rem;
 }
 
 .admin-dashboard-request-container-subtitle {
   margin-block: 0.3rem;
-  font-size: 1.1rem;
   font-family: 'Klee One';
+  font-size: 1.1rem;
 }
 
 .admin-dashboard-request-container-info {
@@ -405,7 +412,8 @@ main {
 }
 
 .admin-dashboard-error-container {
-  color: #f00;
+  font-family: 'Klee One';
+  color: #c93232;
 }
 
 .admin-link-manage-users {
@@ -575,6 +583,7 @@ input[name='manage-users-name-input-filter'] {
 .manage-users-modal-confirm-delete-button {
   max-width: 150px;
   width: 100%;
+  font-family: 'Klee One';
   padding-block: 1rem;
   background: #c93232;
   color: #fff;
@@ -589,6 +598,7 @@ input[name='manage-users-name-input-filter'] {
 .manage-users-modal-abort-delete-button {
   max-width: 150px;
   width: 100%;
+  font-family: 'Klee One';
   padding-block: 1rem;
   background: #82a3bc;
   color: #fff;
@@ -622,28 +632,19 @@ input[name='manage-users-name-input-filter'] {
   overflow-x: hidden;
 }
 
-.manage-users-users-list-main-container-header {
-  margin-left: 0.5rem;
-  margin-block: 0;
-}
-
-.manage-users-users-list-main-container-header > h4 {
-  margin-top: 0;
-  margin-bottom: 1.5rem;
-}
-
 .manage-users-error-container {
   display: flex;
   align-items: center;
 }
 
 .manage-users-error-no-data-icon {
-  color: #f00;
+  color: #c93232;
   font-size: 6rem;
 }
 
 .manage-users-error-information {
-  color: #f00;
+  font-family: 'Klee One';
+  color: #c93232;
 }
 
 .manage-users-table {
@@ -750,7 +751,7 @@ input[name='manage-users-name-input-filter'] {
 }
 
 .manage-users-remove-user-button:hover {
-  color: #ff0000;
+  color: #c93232;
 }
 
 #new-experts-main-container {
@@ -769,8 +770,8 @@ input[name='manage-users-name-input-filter'] {
 .new-experts-title {
   margin-top: 1rem;
   margin-bottom: 0.5rem;
-  font-size: 1.8rem;
   font-family: 'Klee One';
+  font-size: 1.8rem;
 }
 
 .new-experts-subtitle {
@@ -860,21 +861,22 @@ input[name='manage-users-name-input-filter'] {
   top: 7px;
   right: 35px;
   padding: 0rem 0.4rem;
+  font-family: 'Klee One';
   font-size: 1rem;
 }
 
 .new-experts-main-profiles-container {
   /* margin-top: 1rem; */
-  margin-left: 0.3rem;
   max-width: 1440px;
+  width: 100%;
   min-height: 430px;
   height: 100%;
-  width: 100%;
   display: flex;
-  flex-wrap: wrap;
   gap: 10px;
-  /* border: 1px solid red; */
+  flex-wrap: wrap;
+  margin-left: 0.3rem;
   padding-bottom: 2rem;
+  /* border: 1px solid red; */
 }
 
 @media (width<=500px) {
@@ -882,6 +884,10 @@ input[name='manage-users-name-input-filter'] {
     display: none;
     /* margin-inline: 1rem; */
   }
+}
+
+.new-experts-main-profiles-container-requests-information {
+  font-family: 'Klee One';
 }
 
 .new-expert-profile-container {
@@ -1030,13 +1036,7 @@ input[name='manage-users-name-input-filter'] {
   font-size: 1.5rem;
 }
 
-.quote-container {
-  /* border: 1px solid red; */
-  text-align: center;
-  margin-top: 4rem;
-}
-
-#modal {
+/* #modal {
   position: absolute;
   inset: 2rem;
   border: 1px solid rgb(204, 204, 204);
@@ -1060,10 +1060,10 @@ dialog::backdrop {
   width: 100vw;
   height: 100vh;
   background-color: darkgoldenrod;
-}
+} */
 
 .required-field {
-  color: #f00;
+  color: #c93232;
 }
 
 .add-post-modal-header {
@@ -1087,31 +1087,34 @@ dialog::backdrop {
 }
 
 .add-post-content-picked-tags-span-tag {
-  display: inline-block;
-  padding: 0.5rem 0.6rem;
-  font-size: 0.9em;
-  background: #eeeeee;
-  margin: 0.3rem 0.3rem;
-  border-radius: 0.7rem;
-  position: relative;
   min-height: 20px;
+  position: relative;
+  display: inline-block;
+  margin: 0.3rem 0.3rem;
+  padding: 0.5rem 0.85rem;
+  font-family: 'Klee One';
+  font-size: 0.9em;
+  background: #34688f;
+  color: #f3f1e3;
+  border-radius: 0.7rem;
 }
 
 .add-post-content-picked-tags-span-tag-remove {
   position: absolute;
   top: 0;
   right: 0;
-  font-size: 0.5rem;
+  font-size: 0.6rem;
   padding: 0.2rem;
-  color: #d02121;
+  color: #f3f1e3;
   font-weight: 700;
+  cursor: pointer;
 }
 
 .add-post-content-picked-tags-span-tag-remove:hover {
   color: #fff;
-  font-size: 0.54em;
+  font-size: 0.64em;
   border-radius: 100%;
-  background: #d02121;
+  background: #c93232;
 }
 
 .add-post-title-input,
@@ -1121,6 +1124,7 @@ dialog::backdrop {
 }
 
 .add-post-content-tags-input {
+  font-family: 'Klee One';
   font-size: 0.8em;
   margin-bottom: 1rem;
 }
@@ -1139,12 +1143,15 @@ dialog::backdrop {
   margin: 0.3rem;
   border: 1px solid #a8a8a8;
   border-radius: 0.4rem;
+  font-family: 'Klee One';
   font-size: 0.8em;
 }
 
 .add-post-suggested-tag:hover {
-  background: #eaeaea;
+  background: #34688f;
+  color: #f3f1e3;
   cursor: pointer;
+  border: none;
 }
 
 .add-post-picked-emotions-container {
@@ -1159,7 +1166,7 @@ dialog::backdrop {
 }
 
 .add-post-picked-emotions-unpick-all-emotions-button:hover {
-  color: #f00;
+  color: #c93232;
   font-size: 1.6rem;
   font-weight: 500;
 }
@@ -1172,6 +1179,7 @@ dialog::backdrop {
   margin-right: 0.6rem;
   padding: 0.5rem;
   padding-right: 1rem;
+  font-family: 'Klee One';
 }
 
 .add-post-picked-emotion-remove-from-list-button {
@@ -1183,14 +1191,14 @@ dialog::backdrop {
   border-radius: 360px;
   font-size: 0.8rem;
   font-weight: 400;
-  background: #e43d3d;
+  background: #c93232;
   cursor: pointer;
 }
 
 .add-post-picked-emotion-remove-from-list-button:hover {
   font-weight: 500;
   background: #fff;
-  color: #e43d3d;
+  color: #c93232;
 }
 
 .add-post-suggested-emotions-container {
@@ -1208,6 +1216,7 @@ dialog::backdrop {
   padding: 0.5rem;
   cursor: pointer;
   border-radius: 0.3rem;
+  font-family: 'Klee One';
 }
 
 .emotion-bad {
@@ -1275,8 +1284,8 @@ dialog::backdrop {
   color: #f3f1e3;
   outline: none;
   border: none;
-  font-size: 0.9rem;
   font-family: 'Klee One';
+  font-size: 0.9rem;
   font-weight: 500;
   border-radius: 0.5rem;
   cursor: pointer;
@@ -1367,8 +1376,8 @@ dialog::backdrop {
 }
 
 .logout-title {
-  font-size: 0.9rem;
   font-family: 'Klee One';
+  font-size: 0.9rem;
 }
 
 .shares-per-mental-health-expert-content-main-container {
@@ -1386,9 +1395,9 @@ dialog::backdrop {
 }
 
 .shares-per-mental-health-expert-error-container {
-  color: #f00;
   display: flex;
   align-items: center;
+  color: #c93232;
 }
 
 .shares-per-mental-health-expert-error-icon {
@@ -1396,14 +1405,15 @@ dialog::backdrop {
 }
 
 .shares-per-mental-health-expert-error-description {
+  font-family: 'Klee One';
   margin: 0;
 }
 
 .shares-per-mental-health-expert-content-posts {
-  display: flex;
-  flex-wrap: wrap;
   max-width: 550px;
   max-height: 330px;
+  display: flex;
+  flex-wrap: wrap;
   /* background-color: red; */
 }
 
@@ -1432,22 +1442,22 @@ dialog::backdrop {
 }
 
 .shares-per-mental-health-expert-content-posts::-webkit-scrollbar {
-  background-color: #b4d2e9;
   width: 10px;
   margin-right: 1rem;
+  background: #b4d2e9;
 }
 
 .shares-per-mental-health-expert-content-posts::-webkit-scrollbar-thumb {
-  background: #82a3bc;
   border-radius: 0.5rem;
+  background: #82a3bc;
 }
 
 .shares-per-mental-health-expert-main-container {
   min-height: 100vh;
-  background: #cce5f1;
+  margin-inline: -2rem;
   padding-inline: 2rem;
   padding-top: 0.01rem;
-  margin-inline: -2rem;
+  background: #cce5f1;
 }
 
 .shares-per-mental-health-expert-title {
@@ -1459,22 +1469,22 @@ dialog::backdrop {
 }
 
 .shares-per-mental-health-expert-expert-main-container {
-  background: #f0eae1;
-  /* border: 1px solid gray; */
-  border-radius: 0.4rem;
   display: inline-block;
+  margin: 0.5rem;
+  /* margin-inline: 0.5rem; */
   padding: 1.5rem;
   padding-block: 3rem;
-  /* margin-inline: 0.5rem; */
-  margin: 0.5rem;
+  border-radius: 0.4rem;
+  /* border: 1px solid gray; */
+  background: #f0eae1;
 }
 
 .shares-per-mental-health-expert-expert-image-wrapper {
+  max-width: 150px;
+  max-height: 150px;
   margin: auto;
   margin-top: -2rem;
   margin-bottom: 1.5rem;
-  max-width: 150px;
-  max-height: 150px;
   overflow: hidden;
   border-radius: 360px;
 }
@@ -1547,23 +1557,23 @@ dialog::backdrop {
 }
 
 .shares-per-mental-health-expert-recent-shares-container {
-  padding: 1rem;
-  background: #a0bbcf;
   max-width: 550px;
   max-height: 450px;
+  padding: 1rem;
   overflow-y: scroll;
   border-radius: 0.4rem;
+  background: #a0bbcf;
 }
 
 .shares-per-mental-health-expert-recent-shares-container::-webkit-scrollbar {
-  background-color: #b4d2e9;
   width: 10px;
   margin-right: 1rem;
+  background: #b4d2e9;
 }
 
 .shares-per-mental-health-expert-recent-shares-container::-webkit-scrollbar-thumb {
-  background: #82a3bc;
   border-radius: 0.5rem;
+  background: #82a3bc;
 }
 
 .shares-per-mental-health-expert-recent-share-title-container {
@@ -1594,8 +1604,8 @@ dialog::backdrop {
 }
 
 .shares-per-mental-health-expert-recent-share-action:hover {
-  color: #edb572;
   background: none;
+  color: #edb572;
 }
 
 .recent-share-expand-info-action {
@@ -1603,10 +1613,10 @@ dialog::backdrop {
 }
 
 .shares-per-mental-health-expert-recent-share-container {
-  background: #f0eae1;
-  padding: 1rem;
   margin-bottom: 0.5rem;
+  padding: 1rem;
   border-radius: 0.4rem;
+  background: #f0eae1;
 }
 
 .shares-per-mental-health-expert-recent-share-basic-info {
@@ -1637,34 +1647,34 @@ dialog::backdrop {
 }
 
 .content-shared-with-mental-health-expert-hero-username {
+  margin-right: 10px;
   font-family: 'Klee One';
   font-weight: 700;
   color: #edb572;
-  margin-right: 10px;
 }
 
 .content-shared-with-mental-health-expert-title {
-  font-family: 'Klee One';
   max-width: 300px;
-  /* background: yellow; */
   margin: 0.3rem 0rem;
+  font-family: 'Klee One';
+  /* background: yellow; */
 }
 
 .content-shared-with-mental-health-expert-subtitle {
+  margin-bottom: 2rem;
   font-family: 'Klee One';
   font-weight: 600;
-  margin-bottom: 2rem;
 }
 
 .content-shared-with-mental-health-expert-posts {
   max-width: 800px;
   width: 100%;
   max-height: 410px;
-  overflow-y: scroll;
-  overflow-x: hidden;
   margin-left: -0.5rem;
   margin-bottom: 2rem;
   padding: 0rem 2rem 2rem 0rem;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 @media (height>=720px) {
@@ -1724,13 +1734,13 @@ dialog::backdrop {
 
 .content-shared-with-mental-health-expert-expert-info-container {
   max-width: 300px;
+  width: 100%;
   max-height: 340px;
   margin-top: 0.5rem;
   margin-left: 12rem;
-  width: 100%;
-  background: #f3f1e3;
   padding-block: 2.5rem;
   border-radius: 0.8rem;
+  background: #f3f1e3;
 }
 
 @media (width<=1176px) {
@@ -1740,9 +1750,9 @@ dialog::backdrop {
 }
 
 .content-shared-with-mental-health-expert-expert-photo-container {
-  margin: auto;
   max-width: 200px;
   max-height: 200px;
+  margin: auto;
   overflow: hidden;
   border-radius: 360px;
 }
@@ -1772,8 +1782,8 @@ dialog::backdrop {
   max-width: 240px;
   margin: 0;
   word-wrap: break-word;
-  font-size: 1rem;
   font-family: 'Klee One';
+  font-size: 1rem;
 }
 
 .content-shared-with-mental-health-expert-email-container {
@@ -2196,7 +2206,8 @@ div[data-tooltip-title]:after {
   margin-right: 1rem;
   font-size: 0.78rem;
   color: #e43d3d;
-  font-weight: 700;
+  font-family: 'Klee One';
+  font-weight: 600;
   letter-spacing: 0.06px;
   border: 1px solid red;
   padding: 0.3rem;
