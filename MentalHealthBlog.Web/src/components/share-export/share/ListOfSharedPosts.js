@@ -12,6 +12,27 @@ export const ListOfSharedPosts = () => {
     toast.success('Content retrieved succesfully!', {
       position: 'bottom-right',
     })
+
+    let postContainersTags = document.querySelectorAll(
+      '.shared-posts-via-link-tags-container .post-container-main-tags .post-container-tags'
+    )
+    let postContainersEmotions = document.querySelectorAll(
+      '.shared-posts-via-link-emotions-main-container .shared-posts-via-link-emotions-container .post-container-main-emotions .post-container-emotions'
+    )
+
+    postContainersTags.forEach((postContainerTags) => {
+      if (postContainerTags.clientHeight < 100) {
+        postContainerTags.style.overflowY = 'hidden'
+      }
+    })
+
+    postContainersEmotions.forEach((postContainerEmotions) => {
+      if (postContainerEmotions.clientHeight < 100) {
+        postContainerEmotions.style.overflowY = 'hidden'
+      }
+    })
+    console.log('PTags ', postContainersTags)
+    console.log('PEmotions ', postContainersEmotions)
   }, [])
 
   return (

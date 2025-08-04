@@ -1266,6 +1266,7 @@ dialog::backdrop {
   font-family: 'Klee One';
   font-weight: 500;
   border-radius: 0.5rem;
+  cursor: pointer;
 }
 
 .list-of-posts-header {
@@ -1359,6 +1360,7 @@ dialog::backdrop {
 
 .shares-per-mental-health-expert-content-main-container {
   max-width: 1440px;
+  min-height: 100vh;
   display: flex;
   justify-content: space-between;
   padding-bottom: 2rem;
@@ -2719,6 +2721,7 @@ input[name='person-to-give-permission-checkbox'] {
   background: #cce5f1;
   margin-top: -1.5rem;
   padding-inline: 1rem;
+  padding-bottom: 2rem;
   margin-inline: -2rem;
 }
 
@@ -2765,6 +2768,17 @@ input[name='person-to-give-permission-checkbox'] {
     flex-wrap: wrap-reverse;
     margin-top: -1.5rem;
   }
+}
+
+.shared-posts-via-link-post-container::-webkit-scrollbar {
+  background-color: #b4d2e9;
+  width: 10px;
+  margin-right: 1rem;
+}
+
+.shared-posts-via-link-post-container::-webkit-scrollbar-thumb {
+  background: #edb572;
+  border-radius: 0.5rem;
 }
 
 .shared-posts-via-link-post-details {
@@ -2814,19 +2828,60 @@ input[name='person-to-give-permission-checkbox'] {
   }
 }
 
+.shared-posts-via-link-tags-container .post-container-main-tags {
+  padding: 0;
+}
+
 .shared-posts-via-link-tags-container
   .post-container-main-tags
   .post-container-tags {
-  height: fit-content;
+  max-height: 200px;
+  height: 100%;
   opacity: 1;
+  overflow-y: scroll;
+  padding: 0;
+}
+
+.shared-posts-via-link-tags-container
+  .post-container-main-tags
+  .post-container-tags::-webkit-scrollbar {
+  background-color: #b4d2e9;
+  width: 10px;
+  margin-right: 1rem;
+}
+
+.shared-posts-via-link-tags-container
+  .post-container-main-tags
+  .post-container-tags::-webkit-scrollbar-thumb {
+  background: #edb572;
+  border-radius: 0.5rem;
 }
 
 .shared-posts-via-link-emotions-main-container
   .shared-posts-via-link-emotions-container
   .post-container-main-emotions
   .post-container-emotions {
-  height: fit-content;
+  max-height: 200px;
+  height: 100%;
   opacity: 1;
+  overflow-y: scroll;
+}
+
+.shared-posts-via-link-emotions-main-container
+  .shared-posts-via-link-emotions-container
+  .post-container-main-emotions
+  .post-container-emotions::-webkit-scrollbar {
+  background-color: #b4d2e9;
+  width: 10px;
+  margin-right: 1rem;
+}
+
+.shared-posts-via-link-emotions-main-container
+  .shared-posts-via-link-emotions-container
+  .post-container-main-emotions
+  .post-container-emotions::-webkit-scrollbar-thumb {
+  background: #edb572;
+  border-radius: 0.5rem;
 }
 
 .export-modal-overlay {
