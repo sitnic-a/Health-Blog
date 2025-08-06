@@ -27,17 +27,17 @@ export const ListSharingContentUsers = () => {
         </span>
       </div>
       <div className="sharing-users-users-container">
-        {usersThatSharedContent.length > 0 &&
-          usersThatSharedContent.map((user) => {
+        {usersThatSharedContent?.length > 0 &&
+          usersThatSharedContent?.map((user) => {
             return (
               <div
                 className="sharing-user-user-container"
-                key={user.id}
+                key={user?.id}
                 onClick={() => {
                   if (window.screen.width <= 550) {
                     expandShrinkSidebar()
                     let contentAndQuery = {
-                      userId: user.id,
+                      userId: user?.id,
                       usersThatSharedIncludingItsContent,
                     }
                     dispatch(getSharedContentOfPickedUser(contentAndQuery))
@@ -45,7 +45,7 @@ export const ListSharingContentUsers = () => {
                     dispatch(getUserById(user.id))
                   }
                   let contentAndQuery = {
-                    userId: user.id,
+                    userId: user?.id,
                     usersThatSharedIncludingItsContent,
                   }
                   dispatch(getSharedContentOfPickedUser(contentAndQuery))
@@ -53,7 +53,7 @@ export const ListSharingContentUsers = () => {
                   dispatch(getUserById(user.id))
                 }}
               >
-                <span className="sharing-user-title">{user.username}</span>
+                <span className="sharing-user-title">{user?.username}</span>
               </div>
             )
           })}

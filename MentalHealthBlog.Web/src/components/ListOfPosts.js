@@ -14,13 +14,14 @@ import { ShareExportOverlay } from './share-export/ShareExportOverlay'
 import { ShareModal } from './share-export/share/ShareModal'
 import { ExportModal } from './share-export/export/ExportModal'
 import { setIsReviewingState } from './redux-toolkit/features/regularUserSlice'
+import { DeleteConfirmation } from './DeleteConfirmation'
 
 export const ListOfPosts = () => {
   let dispatch = useDispatch()
   let { isLoading, posts } = useSelector((store) => store.post)
   let { authenticatedUser, isLogging } = useSelector((store) => store.user)
   let { statisticsLoading } = useSelector((store) => store.pie)
-
+  let { isDeleteOpen } = useSelector((store) => store.modal)
   let searchPostDto = {
     authenticatedUser,
     monthOfPostCreation: 0,
@@ -78,6 +79,7 @@ export const ListOfPosts = () => {
 
       <div className="dashboard-cols">
         <section className="list-of-posts-main-container">
+          {isDeleteOpen && <DeleteConfirmation />}
           {posts.map((post) => {
             return <Post key={post.id} post={post} />
           })}

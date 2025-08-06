@@ -18,7 +18,6 @@ import {
 import { showTags, showEmotions } from './utils/helper-methods/postHelper'
 import { PostTags } from './PostTags'
 import { PostEmotions } from './PostEmotions'
-import { DeleteConfirmation } from './DeleteConfirmation'
 
 import { MdOutlineModeEditOutline, MdOutlineDelete } from 'react-icons/md'
 import { TiArrowSortedDown } from 'react-icons/ti'
@@ -34,7 +33,6 @@ export const Post = (props) => {
   let post = props?.post
   let mentalHealthExpert = props?.sharedWith
 
-  let { isDeleteOpen } = useSelector((store) => store.modal)
   let { isSharingExporting } = useSelector((store) => store.post)
   let { isReviewingSharedPosts } = useSelector((store) => store.regularUser)
   let { authenticatedUser } = useSelector((store) => store.user)
@@ -127,7 +125,7 @@ export const Post = (props) => {
                       }, 250)
 
                       toast.success(
-                        `This content is no longer visible to ${mentalHealthExpert.firstName} ${mentalHealthExpert.lastName}`,
+                        `This content is no longer visible to ${mentalHealthExpert?.firstName} ${mentalHealthExpert?.lastName}`,
                         {
                           position: 'bottom-right',
                         }
@@ -144,6 +142,7 @@ export const Post = (props) => {
           <>
             <button data-action-update="update" type="button">
               <MdOutlineModeEditOutline
+                className="post-container-action-icon"
                 onClick={() => {
                   dispatch(setPost(post))
                   navigate(`/post/${post?.id}`, {
@@ -157,12 +156,12 @@ export const Post = (props) => {
 
             <button data-action-delete="delete" type="button">
               <MdOutlineDelete
+                className="post-container-action-icon"
                 onClick={() => {
                   dispatch(openDeleteModal(true))
                   dispatch(setPost(post))
                 }}
               />
-              {isDeleteOpen && <DeleteConfirmation />}
             </button>
           </>
         )}
@@ -180,7 +179,7 @@ export const Post = (props) => {
           onChange={() => {
             dispatch(setOverlayForShareExport(authenticatedUser))
             let selectedPosts = getSelectedPosts(authenticatedUser)
-            if (selectedPosts.length <= 0)
+            if (selectedPosts?.length <= 0)
               dispatch(setIsSharingExporting(!isSharingExporting))
           }}
         />

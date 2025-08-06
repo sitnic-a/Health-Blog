@@ -53,34 +53,36 @@ export const UpdatePost = () => {
 
   return (
     <form onSubmit={update}>
-      <article className="post-by-id-container-edit">
-        <h1> Update post:</h1>
-        <div>
-          <p>
+      <section className="update-post-main-container">
+        <h1 className="update-post-main-container-title"> Update post:</h1>
+        <div className="update-post-main-container-header">
+          <p className="update-post-main-container-header-title">
             New Title
             <span className="required-field"> *</span>
+            <br />
             <input
               name="title"
-              className="post-by-id-container-edit-title"
+              className="form-field update-post-main-container-header-post-title"
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              spellCheck={false}
             />
           </p>
         </div>
 
-        <div>
+        <div className="update-post-main-container-content-container">
           <textarea
-            className="post-by-id-container-edit-textarea"
+            className="update-post-main-container-content-value"
             name="content"
-            cols={70}
-            rows={30}
+            rows={20}
             value={content}
             onChange={(e) => setContent(e.target.value)}
+            spellCheck={false}
           ></textarea>
         </div>
-      </article>
-      <button className="post-by-id-container-edit-submit-button" type="submit">
+      </section>
+      <button className="update-post-main-container-submit-btn" type="submit">
         Update post
       </button>
     </form>

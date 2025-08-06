@@ -2,15 +2,16 @@ import { useDispatch } from 'react-redux'
 import { setOverlayPost } from '../../redux-toolkit/features/mentalExpertSlice'
 import { formatDateToString } from '../../utils/helper-methods/methods'
 
+import { PostTags } from '../../PostTags'
 import { PostEmotions } from '../../PostEmotions'
 
 export const OverlayPostPreview = (props) => {
   let dispatch = useDispatch()
-  let contentPost = props.content
+  let contentPost = props?.content
 
   let createdAt
   if (contentPost !== null || contentPost !== undefined) {
-    createdAt = formatDateToString(contentPost.createdAt)
+    createdAt = formatDateToString(contentPost?.createdAt)
   }
 
   return (
@@ -37,20 +38,14 @@ export const OverlayPostPreview = (props) => {
           </div>
           <div className="overlay-post-content-container">
             <div className="overlay-post-title">
-              <h1>{contentPost.title}</h1>
+              <h1>{contentPost?.title}</h1>
             </div>
             <div className="overlay-post-content">
-              <pre>{contentPost.content}</pre>
+              <pre>{contentPost?.content}</pre>
             </div>
             <p className="overlay-post-tags-subtitle">Tags: </p>
             <div className="overlay-post-tags-container">
-              {contentPost.tags.map((tag) => {
-                return (
-                  <span key={tag} className="overlay-post-tag">
-                    {tag}
-                  </span>
-                )
-              })}
+              <PostTags post={contentPost} />
             </div>
 
             <div className="overlay-post-emotions-container">

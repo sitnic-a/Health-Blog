@@ -2,7 +2,7 @@ import { UpdatePost } from './UpdatePost'
 
 export const PostById = () => {
   return (
-    <section className="post-by-id">
+    <section id="post-by-id-main-container">
       <UpdatePost />
     </section>
   )
