@@ -1,11 +1,13 @@
 import { useSelector } from 'react-redux'
-import { ManageUsersFilter } from '../../ManageUsersFilter'
-import { ManageUsersTable } from '../../ManageUsersTable'
-import { ManageUsersDeleteUserModal } from '../../ManageUsersDeleteUserModal'
+import { ManageUsersFilter } from '../ManageUsersFilter/ManageUsersFilter'
+import { ManageUsersTable } from '../../../sections/manage-users/ManageUsersTable/ManageUsersTable'
+import { ManageUsersDeleteUserModal } from '../ManageUsersDeleteUserModal/ManageUsersDeleteUserModal'
 
-import { Navbar } from '../../../shared/Navbar/Navbar'
+import { Navbar } from '../../../../shared/Navbar/Navbar'
 
 import { BiError } from 'react-icons/bi'
+
+import ManageUsersCSS from './ManageUsers.css'
 
 export const ManageUsers = () => {
   let { dbUsers, dbUser, isFailed } = useSelector((store) => store.admin)
@@ -36,7 +38,9 @@ export const ManageUsers = () => {
 
       {!isFailed && dbUsers?.length === 0 && (
         <div className="manage-users-users-list-main-container">
-          <p>When someone register you'll see it first! ;)</p>
+          <p className="manage-users-users-list-info">
+            When someone register you'll see it first! ;)
+          </p>
         </div>
       )}
     </div>

@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-import { AdminDashboard } from './AdminDashboard'
+import { AdminDashboard } from './AdminDashboard/AdminDashboard'
 import { MentalExpertDashboard } from './MentalExpertDashboard'
 import { UserDashboard } from './UserDashboard'
 

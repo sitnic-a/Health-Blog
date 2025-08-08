@@ -1,0 +1,73 @@
+.manage-users-delete-modal-content {
+  max-width: 500px;
+  margin: auto;
+  /* background: #0000ee; */
+}
+
+.manage-users-modal-title {
+  margin: 0;
+  margin-bottom: 0.7rem;
+  font-family: 'Klee One';
+  font-size: 1.7rem;
+  text-align: center;
+}
+
+@media (width<430px) {
+  .manage-users-modal-title {
+    font-size: 1.4rem;
+  }
+}
+
+.manage-users-modal-actions {
+  display: flex;
+  justify-content: space-around;
+}
+
+.manage-users-modal-actions > button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  border-radius: 0.5rem;
+}
+
+.manage-users-modal-confirm-delete-button {
+  max-width: 150px;
+  width: 100%;
+  font-family: 'Klee One';
+  padding-block: 1rem;
+  background: #c93232;
+  color: #fff;
+}
+
+@media (width<430px) {
+  .manage-users-modal-confirm-delete-button {
+    max-width: 120px;
+  }
+}
+
+.manage-users-modal-confirm-delete-button:hover {
+  background: none;
+  border: 1px solid #c93232;
+  color: #c93232;
+}
+
+.manage-users-modal-abort-delete-button {
+  max-width: 150px;
+  width: 100%;
+  font-family: 'Klee One';
+  padding-block: 1rem;
+  background: #82a3bc;
+  color: #fff;
+}
+
+@media (width<430px) {
+  .manage-users-modal-abort-delete-button {
+    max-width: 120px;
+  }
+}
+
+.manage-users-modal-abort-delete-button:hover {
+  background: none;
+  border: 1px solid #82a3bc;
+  color: #82a3bc;
+}

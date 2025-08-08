@@ -1,20 +1,21 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 //Main imports
 import './App.css'
+import './components/shared/shared.css'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 //Import components
 import { PostById } from './components/PostById'
-import { Login } from './components/Login'
-import { Register } from './components/Register'
+import { Login } from './components/Login/Login'
+import { Register } from './components/Register/Register'
 
 import { store } from './components/redux-toolkit/store'
 import { Provider } from 'react-redux'
 import { Dashboard } from './pages/Dashboard'
 import { SharedPosts } from './components/SharedPosts'
 import { NewExperts } from './components/administrator-dashboard/sections/requests/NewExperts'
-import { ManageUsers } from './components/administrator-dashboard/sections/manage-users/ManageUsers'
+import { ManageUsers } from './components/administrator-dashboard/sections/manage-users/ManageUsers/ManageUsers'
 import { SharedContentPermission } from './components/SharedContentPermission'
 import { SharedContentPostsViaLink } from './components/SharedContentPostsViaLink'
 import { RequireAuth } from './components/RequireAuth'

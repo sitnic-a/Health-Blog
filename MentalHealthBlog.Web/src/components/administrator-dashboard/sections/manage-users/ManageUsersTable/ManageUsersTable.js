@@ -2,12 +2,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   getDbUsers,
   setSelectedUser,
-} from '../redux-toolkit/features/adminSlice'
-import { openDeleteModal } from '../redux-toolkit/features/modalSlice'
+} from '../../../../redux-toolkit/features/adminSlice'
+import { openDeleteModal } from '../../../../redux-toolkit/features/modalSlice'
 import { CiTrash } from 'react-icons/ci'
-import { getDbRoles } from '../redux-toolkit/features/userSlice'
+import { getDbRoles } from '../../../../redux-toolkit/features/userSlice'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
+
+import ManageUsersTableCSS from './ManageUsersTable.css'
 
 export const ManageUsersTable = () => {
   let dispatch = useDispatch()

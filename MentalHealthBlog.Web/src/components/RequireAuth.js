@@ -5,7 +5,7 @@ import {
   refreshAccessToken,
   setAuthenticatedUser,
 } from './redux-toolkit/features/userSlice'
-import { Login } from './Login'
+import { Login } from './Login/Login'
 import Cookies from 'js-cookie'
 import { Loader } from './shared/Loader/Loader'
 
