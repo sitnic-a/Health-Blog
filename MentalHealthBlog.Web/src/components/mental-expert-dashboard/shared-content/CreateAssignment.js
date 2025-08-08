@@ -84,7 +84,7 @@ export const CreateAssignment = () => {
                 <span className="required-field"> *</span>
                 <br />
                 <textarea
-                  className="create-assignment-content-textarea"
+                  className="form-field create-assignment-content-textarea"
                   rows={15}
                   name="create-assignment-content"
                   placeholder="Assignment text..."

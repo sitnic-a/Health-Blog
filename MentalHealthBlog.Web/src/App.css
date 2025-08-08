@@ -3067,7 +3067,7 @@ select[name='filter-by-month'] {
 }
 
 .update-post-main-container-content-value:hover {
-  background: rgb(250, 255, 255);
+  background: #faffff;
   outline: none;
   cursor: text;
 }
@@ -3103,23 +3103,6 @@ select[name='filter-by-month'] {
   padding-inline: 2rem;
   background: #cce5f1;
 }
-
-/* .mental-expert-navigation-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 5px;
-  margin-block: 1rem;
-  padding: 0.5rem 0.6rem;
-  padding-block: 0.5rem;
-  border-radius: 0.2rem;
-  background: #eaeaea;
-}
-
-.mental-expert-navigation-bar li {
-  text-decoration: none;
-  list-style: none;
-} */
 
 #sharing-users-main-container {
   max-width: 100vw;
@@ -3280,6 +3263,10 @@ select[name='filter-by-month'] {
   .sharing-users-content-header > h1 {
     font-size: 1.2rem;
   }
+}
+
+.sharing-users-content-actions {
+  margin-right: 0.5rem;
 }
 
 .sharing-users-give-assignment-container {
@@ -3529,6 +3516,7 @@ select[name='filter-by-month'] {
 @media (width<=550px) {
   .sharing-users-main-post-container {
     margin: auto;
+    margin-bottom: 0.5rem;
   }
 }
 
@@ -3658,6 +3646,7 @@ select[name='filter-by-month'] {
 }
 
 #create-assignment-form {
+  margin-bottom: 2rem;
   padding: 0.5rem;
 }
 
@@ -3667,23 +3656,31 @@ select[name='filter-by-month'] {
 }
 
 .create-assignment-assignment-task {
-  margin-bottom: 0.5rem;
+  /* margin-bottom: 0.5rem; */
   /* background: yellow; */
 }
 
 .create-assignment-label {
   display: inline-block;
-  padding-block: 0.8rem;
+  padding-block: 0.4rem;
+  font-family: 'Klee One';
   font-size: 1.1em;
-  font-weight: 400;
+  /* font-weight: 400; */
 }
 
 .create-assignment-content-textarea {
-  border-radius: 0.2rem;
-  padding-left: 0.3rem;
-  margin-left: -0.3rem;
   width: 100%;
+  margin-left: -0.3rem;
+  padding-left: 0.3rem;
+  font-family: 'Klee One';
   font-size: 0.95rem;
+  border-radius: 0.4rem;
+  transition: 200ms;
+  background: #f3f1e3;
+}
+
+.create-assignment-content-textarea:hover {
+  background: #faffff;
 }
 
 .create-assignment-user-to-accomplish {
@@ -3691,30 +3688,36 @@ select[name='filter-by-month'] {
 }
 
 .create-assignment-user-to-accomplish-task {
-  background: #eeeeee;
-  padding-block: 0.5rem;
-  text-align: center;
-  border: 1px solid #b9b9b9;
-  cursor: not-allowed !important;
   margin-block: 1rem;
+  padding-block: 0.5rem;
+  font-family: 'Klee One';
+  text-align: center;
+  /* border: 1px solid #b9b9b9; */
   border-radius: 0.2rem;
+  cursor: not-allowed !important;
+  background: #f2e0c4;
 }
 
 .create-assignment-give-assignment-button {
-  background: #41668e;
-  color: #fff;
-  padding: 0.5rem 0.4rem;
+  max-width: 240px;
+  width: 100%;
+  margin-left: 50%;
+  padding: 0.6rem 1rem;
+  font-family: 'Klee One';
+  font-size: 0.9rem;
   outline: none;
   border: none;
   border-radius: 0.3rem;
+  transform: translateX(-50%);
   cursor: pointer;
-  font-size: 0.9rem;
+  color: #f3f1e3;
+  background: #34688f;
 }
 
 .create-assignment-give-assignment-button:hover {
+  border: 1px solid #34688f;
+  color: #34688f;
   background: none;
-  border: 1px solid #41668e;
-  color: #41668e;
 }
 
 .confirmation-container {
@@ -3743,15 +3746,15 @@ select[name='filter-by-month'] {
 .confirmation-action-delete {
   max-width: 150px;
   width: 100%;
-  background: #c93232;
-  color: #f3f1e3;
+  padding-block: 0.8rem;
   outline: none;
   border: none;
-  padding-block: 0.8rem;
   border-radius: 0.5rem;
-  cursor: pointer;
   font-size: 1.1rem;
   transition: 200ms;
+  cursor: pointer;
+  color: #f3f1e3;
+  background: #c93232;
 }
 
 @media (width<=430px) {
@@ -3761,22 +3764,23 @@ select[name='filter-by-month'] {
 }
 
 .confirmation-action-delete:hover {
-  background: none;
   border: 1px solid #c93232;
   color: #c93232;
+  background: none;
 }
 
 .confirmation-action-cancel {
   max-width: 150px;
   width: 100%;
-  background: #82a3bc;
-  color: #f3f1e3;
+  padding-block: 0.8rem;
+  font-size: 1.1rem;
   outline: none;
   border: none;
-  padding-block: 0.8rem;
   border-radius: 0.5rem;
+  transition: 200ms;
   cursor: pointer;
-  font-size: 1.1rem;
+  color: #f3f1e3;
+  background: #82a3bc;
 }
 
 @media (width<=430px) {
@@ -3786,36 +3790,36 @@ select[name='filter-by-month'] {
 }
 
 .confirmation-action-cancel:hover {
-  background: none;
-  border: 1px solid #828282;
+  border: 1px solid #82a3bc;
   color: #82a3bc;
+  background: none;
 }
 
 /* SHARE MODAL 2 STYLE testing */
 
 .share-modal-container-overlay {
+  width: 100vw;
+  height: 100vh;
+  /* min-height: 100vh; */
   position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
-  /* min-height: 100vh; */
-  height: 100vh;
-  background: #82a3bc60;
   z-index: 4;
+  background: #82a3bc60;
   /* overflow-y: scroll; */
 }
 
 #share-modal-container {
-  position: relative;
-  top: 50%;
   max-width: 760px;
   max-height: 550px;
+  position: relative;
+  top: 50%;
   margin: auto;
-  background: #f3f1e3;
-  transform: translateY(-50%);
   padding-bottom: 1rem;
+  transform: translateY(-50%);
   border-radius: 0.7rem;
   overflow-y: scroll;
+  background: #f3f1e3;
 }
 
 @media (width<=800px) {
@@ -3825,76 +3829,76 @@ select[name='filter-by-month'] {
 }
 
 #share-modal-container::-webkit-scrollbar {
-  background-color: #f3f1e3;
   width: 10px;
   margin-right: 1rem;
+  background-color: #f3f1e3;
 }
 
 #share-modal-container::-webkit-scrollbar-thumb {
-  background: #edb572;
   border-radius: 0.5rem;
+  background: #edb572;
 }
 
 .share-modal-close-modal-btn {
-  float: right;
   margin-top: 0.2rem;
   margin-right: 0.5rem;
-  font-size: 1.2rem;
+  float: right;
   font-family: 'Klee One';
+  font-size: 1.2rem;
   cursor: pointer;
 }
 
 .share-modal-close-modal-btn:hover {
-  color: #f00;
+  color: #c93232;
   font-weight: 600;
 }
 
 .share-modal-header {
-  clear: both;
   margin: 0;
   margin-inline: 3rem;
+  clear: both;
 }
 
 .share-modal-header > p {
-  text-align: center;
-  font-size: 1.2rem;
-  font-family: 'Klee One';
-  font-weight: 700;
   margin: 0;
+  text-align: center;
+  font-family: 'Klee One';
+  font-size: 1.2rem;
+  font-weight: 700;
 }
 
 .share-modal-posts-to-share-container {
+  /* max-width: 800px; */
   margin-top: 1rem;
   margin-inline: 3rem;
-  /* max-width: 800px; */
   border: 1px solid #82a3bc;
   border-radius: 0.5rem;
 }
 
 .share-modal-posts-to-share {
-  margin: 5px;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 5px;
+  margin: 5px;
 }
 
 .share-modal-post-to-share-container {
   height: 2rem;
-  background: #edb572;
   display: flex;
   align-items: center;
   gap: 8px;
   padding-inline: 0.3rem;
+  background: #edb572;
 }
 
 .share-modal-post-to-share-title {
   max-width: 120px;
   width: 100%;
-  overflow-x: hidden;
-  font-size: 11.5px;
   font-family: 'Klee One';
+  font-size: 11.5px;
   font-weight: 500;
+  overflow-x: hidden;
 }
 
 .share-modal-post-to-share-remove-from-list {
@@ -3903,19 +3907,19 @@ select[name='filter-by-month'] {
 }
 
 .share-modal-post-to-share-remove-from-list:hover {
-  color: #f00;
   font-weight: 600;
   transform: scale(1.05);
+  color: #c93232;
 }
 
 .share-modal-action-container {
-  margin-top: 1rem;
-  margin-bottom: 0.8rem;
-  margin-inline: 3rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
+  margin-top: 1rem;
+  margin-bottom: 0.8rem;
+  margin-inline: 3rem;
 }
 
 .share-modal-filter-container {
@@ -3934,13 +3938,13 @@ select[name='filter-by-month'] {
 
 .search-by-name-surname-organization {
   width: 54%;
+  margin-right: 8px;
   padding: 0.5rem 4px;
-  font-size: 14px;
   font-family: 'Klee One';
+  font-size: 14px;
   border: 1px solid #82a3bc;
   border-radius: 0.4rem;
   background: transparent;
-  margin-right: 8px;
 }
 
 @media (width>=720px) {
@@ -3954,8 +3958,8 @@ select[name='filter-by-month'] {
   .search-by-name-surname-organization {
     max-width: 700px;
     width: 50%;
-    text-align: center;
     margin-right: 0;
+    text-align: center;
   }
 }
 
@@ -3966,29 +3970,29 @@ select[name='filter-by-month'] {
 }
 
 .search-by-name-surname-organization-filter-button {
-  display: flex;
-  align-items: center;
   max-width: 150px;
   height: 0px;
+  display: flex;
+  align-items: center;
+  margin-top: 0.3rem;
   padding-inline: 0.7rem;
   padding-block: 1.1rem;
-  margin-top: 0.3rem;
-  background: #82a3bc;
   border: none;
-  color: #f3f1e3;
   border-radius: 0.4rem;
   font-family: 'Klee One';
   cursor: pointer;
+  color: #f3f1e3;
+  background: #82a3bc;
 }
 
 @media (width<=635px) {
   .search-by-name-surname-organization-filter-button {
-    display: flex;
-    justify-content: center;
     max-width: 700px;
     width: 44%;
+    display: flex;
+    justify-content: center;
+    margin-left: 0.5rem;
     font-size: 0.93rem;
-    margin-left: 8px;
   }
 }
 
@@ -4034,31 +4038,32 @@ select[name='filter-by-month'] {
 .share-content-to-experts {
   padding-block: 0.5rem;
   padding-inline: 0.7rem;
+  font-family: 'Klee One';
+  outline: none;
   border: none;
   border-radius: 0.5rem;
-  outline: none;
-  background: #edb572;
-  color: #f3f1e3;
+  transition: 200ms;
   cursor: pointer;
-  font-family: 'Klee One';
+  color: #f3f1e3;
+  background: #edb572;
 }
 
 .share-content-to-experts:hover {
-  background: #f3f1e3;
+  border: 1px solid #edb572;
   color: #edb572;
-  border: 1px solid #82a3bc;
+  background: #f3f1e3;
 }
 
 .share-content-to-experts:disabled {
-  background: #bbc5cd;
   color: #f3f1e3;
+  background: #bbc5cd;
 }
 
 .share-content-to-experts:disabled:hover {
-  background: #bbc5cd;
-  color: #f3f1e3;
-  cursor: not-allowed;
   border: none;
+  cursor: not-allowed;
+  color: #f3f1e3;
+  background: #bbc5cd;
 }
 
 @media (width<=635px) {
@@ -4076,10 +4081,10 @@ select[name='filter-by-month'] {
 
 .person-to-share-with-main-container {
   max-width: fit-content;
-  background: #bcd0e0;
   margin: 0.3rem;
   padding-inline: 0.7rem;
   padding-bottom: 3rem;
+  background: #bcd0e0;
 }
 
 @media (width<=420px) {
@@ -4140,15 +4145,15 @@ select[name='filter-by-month'] {
 .person-to-share-with-name {
   max-width: 200px;
   margin: 0;
-  font-size: 1rem;
   font-family: 'Klee One';
+  font-size: 1rem;
 }
 
 .person-to-share-with-role {
   max-width: 200px;
   margin: 0;
-  font-size: 1rem;
   font-family: 'Klee One';
+  font-size: 1rem;
 }
 
 .person-to-share-with-additional-info-field {
@@ -4186,8 +4191,8 @@ select[name='filter-by-month'] {
 .person-to-share-with-phone-value {
   max-width: 180px;
   margin: 0;
-  font-size: 0.9rem;
   font-family: 'Klee One';
+  font-size: 0.9rem;
 }
 
 .person-to-share-with-email-field {
@@ -4215,11 +4220,11 @@ select[name='filter-by-month'] {
 }
 
 .person-to-share-with-email-value {
-  margin: 0;
   max-width: 190px;
-  word-wrap: break-word;
+  margin: 0;
   font-size: 0.9rem;
   font-family: 'Klee One';
+  word-wrap: break-word;
 }
 
 .person-to-share-with-organization-field {
