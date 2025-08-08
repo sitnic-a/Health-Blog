@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   getRecentShares,
   getSharesPerMentalHealthExpert,
-} from './redux-toolkit/features/regularUserSlice'
+} from '../redux-toolkit/features/regularUserSlice'
 
 import { RecentShares } from './RecentShares'
 import { SharedContent } from './SharedContent'

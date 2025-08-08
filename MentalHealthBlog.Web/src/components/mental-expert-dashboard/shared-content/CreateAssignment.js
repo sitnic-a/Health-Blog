@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { createAssignment } from '../../redux-toolkit/features/mentalExpertSlice'
+import { createAssignment } from '../../../redux-toolkit/features/mentalExpertSlice'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { checkNewAssignmentValidity } from '../../utils/helper-methods/methods'
+import { checkNewAssignmentValidity } from '../../../utils/helper-methods/methods'
 
 export const CreateAssignment = () => {
   let dispatch = useDispatch()

@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import moment from 'moment'
 
-import { getPosts } from './redux-toolkit/features/postSlice'
+import { getPosts } from '../redux-toolkit/features/postSlice'
 import {
   prepareForPieGraph,
   setRerendering,
-} from './redux-toolkit/features/pieSlice'
+} from '../redux-toolkit/features/pieSlice'
 
 export const FilterOptions = (props) => {
   let dispatch = useDispatch()

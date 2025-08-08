@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   getOnlyUsersThatSharedContent,
   getSharesPerUser,
-} from '../components/redux-toolkit/features/mentalExpertSlice'
+} from '../redux-toolkit/features/mentalExpertSlice'
 import { toast } from 'react-toastify'
 import { ListSharingContentUsers } from '../components/mental-expert-dashboard/shared-content/ListSharingContentUsers'
 import { ListSharedContent } from '../components/mental-expert-dashboard/shared-content/ListSharedContent'

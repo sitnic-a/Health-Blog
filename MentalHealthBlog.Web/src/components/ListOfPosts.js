@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getPosts } from './redux-toolkit/features/postSlice'
+import { getPosts } from '../redux-toolkit/features/postSlice'
 import { toast } from 'react-toastify'
 
 import { Post } from './Post'
@@ -13,7 +13,7 @@ import { FilterOptions } from './FilterOptions'
 import { ShareExportOverlay } from './share-export/ShareExportOverlay'
 import { ShareModal } from './share-export/share/ShareModal'
 import { ExportModal } from './share-export/export/ExportModal'
-import { setIsReviewingState } from './redux-toolkit/features/regularUserSlice'
+import { setIsReviewingState } from '../redux-toolkit/features/regularUserSlice'
 import { DeleteConfirmation } from './DeleteConfirmation'
 
 export const ListOfPosts = () => {

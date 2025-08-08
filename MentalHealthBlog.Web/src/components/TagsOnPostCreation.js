@@ -5,7 +5,7 @@ import {
   setChosenTags,
   setPickedTags,
   getTags,
-} from './redux-toolkit/features/tagSlice'
+} from '../redux-toolkit/features/tagSlice'
 import { EmotionsOnPostCreation } from './EmotionsOnPostCreation'
 
 export const TagsOnPostCreation = () => {

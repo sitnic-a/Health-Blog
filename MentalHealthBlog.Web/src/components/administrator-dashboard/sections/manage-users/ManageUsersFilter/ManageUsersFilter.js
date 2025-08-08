@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   getDbUsers,
   setSelectedRole,
-} from '../../../../redux-toolkit/features/adminSlice'
+} from '../../../../../redux-toolkit/features/adminSlice'
 
 import { toast } from 'react-toastify'
 

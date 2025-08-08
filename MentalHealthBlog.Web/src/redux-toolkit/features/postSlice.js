@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { application } from '../../../application'
+import { application } from '../../application'
 import { toast } from 'react-toastify'
 import { stringIsNullOrEmpty } from '../../utils/helper-methods/methods'
 

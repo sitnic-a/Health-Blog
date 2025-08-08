@@ -2,13 +2,13 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { register, getDbRoles } from '../redux-toolkit/features/userSlice'
-import useFetchLocationState from '../custom/hooks/useFetchLocationState'
+import { register, getDbRoles } from '../../redux-toolkit/features/userSlice'
+import useFetchLocationState from '../../custom/hooks/useFetchLocationState'
 import {
   previewImage,
   stringIsNullOrEmpty,
-} from '../utils/helper-methods/methods'
-import { db_roles } from '../enums/roles'
+} from '../../utils/helper-methods/methods'
+import { db_roles } from '../../enums/roles'
 import { toast } from 'react-toastify'
 
 import RegisterCSS from './Register.css'

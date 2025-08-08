@@ -4,8 +4,8 @@ import {
   hideHoveredContentCounter,
   previewHoveredContentCounter,
   setIsReviewingState,
-} from './redux-toolkit/features/regularUserSlice'
-import { stringIsNullOrEmpty } from './utils/helper-methods/methods'
+} from '../redux-toolkit/features/regularUserSlice'
+import { stringIsNullOrEmpty } from '../utils/helper-methods/methods'
 
 import defaultPhoto from '../images/default-avatar.png'
 

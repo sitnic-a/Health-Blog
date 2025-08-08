@@ -2,14 +2,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   openShareModal,
   openShareViaLink,
-} from '../../redux-toolkit/features/modalSlice'
+} from '../../../redux-toolkit/features/modalSlice'
 
 import {
   filterSuggestedPossibleToShareWith,
   resetShareLinkUrl,
   shareContent,
-} from '../../redux-toolkit/features/shareExportSlice'
-import { prepareContentToShare } from '../../utils/helper-methods/methods'
+} from '../../../redux-toolkit/features/shareExportSlice'
+import { prepareContentToShare } from '../../../utils/helper-methods/methods'
 
 import { toast } from 'react-toastify'
 

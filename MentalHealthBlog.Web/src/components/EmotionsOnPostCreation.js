@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setSuggestedEmotions } from './redux-toolkit/features/emotionSlice'
+import { setSuggestedEmotions } from '../redux-toolkit/features/emotionSlice'
 
 import { PickedEmotions } from './PickedEmotions'
 import { SuggestedEmotions } from './SuggestedEmotions'

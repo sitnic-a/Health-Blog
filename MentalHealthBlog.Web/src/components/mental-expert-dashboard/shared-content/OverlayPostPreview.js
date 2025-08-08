@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux'
-import { setOverlayPost } from '../../redux-toolkit/features/mentalExpertSlice'
-import { formatDateToString } from '../../utils/helper-methods/methods'
+import { setOverlayPost } from '../../../redux-toolkit/features/mentalExpertSlice'
+import { formatDateToString } from '../../../utils/helper-methods/methods'
 
 import { PostTags } from '../../PostTags'
 import { PostEmotions } from '../../PostEmotions'

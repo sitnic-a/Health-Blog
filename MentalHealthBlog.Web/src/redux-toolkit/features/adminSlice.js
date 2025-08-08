@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { application } from '../../../application'
+import { application } from '../../application'
 import { toast } from 'react-toastify'
 import { manipulateSidebarAndAdminStatusActions } from '../../utils/helper-methods/methods'
 

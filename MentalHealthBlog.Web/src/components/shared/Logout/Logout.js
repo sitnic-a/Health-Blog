@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { logout } from '../../../components/redux-toolkit/features/userSlice'
-import { resetSharedContent } from '../../redux-toolkit/features/mentalExpertSlice'
+import { logout } from '../../../redux-toolkit/features/userSlice'
+import { resetSharedContent } from '../../../redux-toolkit/features/mentalExpertSlice'
 
 import Cookies from 'js-cookie'
 import { CiLogout } from 'react-icons/ci'

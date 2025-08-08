@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { checkIfShareContentActionIsDisabled } from '../../redux-toolkit/features/shareExportSlice'
+import { checkIfShareContentActionIsDisabled } from '../../../redux-toolkit/features/shareExportSlice'
 
 import defaultAvatar from '../../../images/default-avatar.png'
 import { MdPhone, MdEmail } from 'react-icons/md'
-import { stringIsNullOrEmpty } from '../../utils/helper-methods/methods'
+import { stringIsNullOrEmpty } from '../../../utils/helper-methods/methods'
 
 export const ExpertsToShareContentWith = () => {
   let dispatch = useDispatch()

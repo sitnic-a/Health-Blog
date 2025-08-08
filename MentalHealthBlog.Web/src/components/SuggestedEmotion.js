@@ -1,12 +1,12 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setPickedEmotions } from './redux-toolkit/features/emotionSlice'
+import { setPickedEmotions } from '../redux-toolkit/features/emotionSlice'
 
 import { IoIosCheckmarkCircleOutline } from 'react-icons/io'
 import {
   deselectEmotion,
   selectEmotion,
-} from './utils/helper-methods/addPostSuggestedEmotionsMethods'
+} from '../utils/helper-methods/addPostSuggestedEmotionsMethods'
 
 export const SuggestedEmotion = (props) => {
   let dispatch = useDispatch()

@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom'
 import {
   refreshAccessToken,
   setAuthenticatedUser,
-} from './redux-toolkit/features/userSlice'
+} from '../redux-toolkit/features/userSlice'
 import { Login } from './Login/Login'
 import Cookies from 'js-cookie'
 import { Loader } from './shared/Loader/Loader'

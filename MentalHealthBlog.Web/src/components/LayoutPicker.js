@@ -1,4 +1,4 @@
-import { setActiveLayoutType, swap } from './utils/helper-methods/postHelper'
+import { setActiveLayoutType, swap } from '../utils/helper-methods/postHelper'
 
 import { TbColumns2 } from 'react-icons/tb'
 import { TbColumns1 } from 'react-icons/tb'

@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { shareByLink } from './redux-toolkit/features/shareExportSlice'
+import { shareByLink } from '../redux-toolkit/features/shareExportSlice'
 import { ListOfSharedPosts } from './share-export/share/ListOfSharedPosts'
 import { useNavigate } from 'react-router-dom'
 

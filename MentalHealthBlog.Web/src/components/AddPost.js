@@ -1,15 +1,15 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { openAddModal } from './redux-toolkit/features/modalSlice'
-import { createPost } from './redux-toolkit/features/postSlice'
+import { openAddModal } from '../redux-toolkit/features/modalSlice'
+import { createPost } from '../redux-toolkit/features/postSlice'
 import {
   setSuggestedTags,
   setDisplayedSuggestedTags,
   setChosenTags,
   setPickedTags,
   getTags,
-} from './redux-toolkit/features/tagSlice'
-import { getEmotions } from './redux-toolkit/features/emotionSlice'
+} from '../redux-toolkit/features/tagSlice'
+import { getEmotions } from '../redux-toolkit/features/emotionSlice'
 
 import Modal from 'react-modal'
 import { application } from '../application'

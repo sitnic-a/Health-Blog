@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { formatDateToString } from '../../utils/helper-methods/methods'
+import { formatDateToString } from '../../../utils/helper-methods/methods'
 import { toast } from 'react-toastify'
 import { PostEmotions } from '../../PostEmotions'
 import { PostTags } from '../../PostTags'

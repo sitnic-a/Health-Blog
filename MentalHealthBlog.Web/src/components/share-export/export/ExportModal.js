@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { openExportModal } from '../../redux-toolkit/features/modalSlice'
+import { openExportModal } from '../../../redux-toolkit/features/modalSlice'
 import { BiError } from 'react-icons/bi'
 import { MdOutlineDownloadDone } from 'react-icons/md'
 

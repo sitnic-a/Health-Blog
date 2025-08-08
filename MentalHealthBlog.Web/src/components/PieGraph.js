@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { prepareForPieGraph } from './redux-toolkit/features/pieSlice'
+import { prepareForPieGraph } from '../redux-toolkit/features/pieSlice'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 import { Pie } from 'react-chartjs-2'
 import { toast } from 'react-toastify'

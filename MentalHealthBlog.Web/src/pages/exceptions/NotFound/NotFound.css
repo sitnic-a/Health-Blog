@@ -1,0 +1,20 @@
+.not-found-container {
+  text-align: center;
+  margin-top: 20%;
+}
+
+.not-found-container > h1:first-child {
+  font-family: 'Klee One';
+  font-size: 3rem;
+}
+
+.not-found-container > h1 {
+  font-family: 'Klee One';
+  font-size: 2rem;
+  margin-block: 0;
+  color: #c93232;
+}
+
+.not-found-container > p {
+  font-family: 'Klee One';
+}

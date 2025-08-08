@@ -10,7 +10,7 @@ import { PostById } from './components/PostById'
 import { Login } from './components/Login/Login'
 import { Register } from './components/Register/Register'
 
-import { store } from './components/redux-toolkit/store'
+import { store } from './redux-toolkit/store'
 import { Provider } from 'react-redux'
 import { Dashboard } from './pages/Dashboard'
 import { SharedPosts } from './components/SharedPosts'
@@ -20,10 +20,10 @@ import { SharedContentPermission } from './components/SharedContentPermission'
 import { SharedContentPostsViaLink } from './components/SharedContentPostsViaLink'
 import { RequireAuth } from './components/RequireAuth'
 import { CreateAssignment } from './components/mental-expert-dashboard/shared-content/CreateAssignment'
-import { windowResize } from './components/utils/helper-methods/methods'
+import { windowResize } from './utils/helper-methods/methods'
 import { application } from './application'
 import { Assignments } from './components/shared/Assignments'
-import { NotFound } from './pages/exceptions/NotFound'
+import { NotFound } from './pages/exceptions/NotFound/NotFound'
 
 function App() {
   windowResize(application.layouts.min_screen_single_col_width)

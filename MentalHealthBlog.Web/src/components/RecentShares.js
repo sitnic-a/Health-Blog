@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux'
 import {
   returnSharePerMentalHealthExpertRecentShareBasicInfoElements,
   formatDateToString,
-} from './utils/helper-methods/methods'
+} from '../utils/helper-methods/methods'
 
 import { FaRegSquareMinus } from 'react-icons/fa6'
 import { FaRegSquarePlus } from 'react-icons/fa6'

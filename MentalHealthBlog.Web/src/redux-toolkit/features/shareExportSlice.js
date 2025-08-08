@@ -5,7 +5,7 @@ import {
   stringIsNullOrEmpty,
 } from '../../utils/helper-methods/methods'
 import { setIsSharingExporting } from './postSlice'
-import { application } from '../../../application'
+import { application } from '../../application'
 import { toast } from 'react-toastify'
 
 let initialState = {

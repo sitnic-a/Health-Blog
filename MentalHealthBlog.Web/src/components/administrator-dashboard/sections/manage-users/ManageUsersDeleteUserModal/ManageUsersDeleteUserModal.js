@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { removeUserById } from '../../../../redux-toolkit/features/adminSlice'
-import { openDeleteModal } from '../../../../redux-toolkit/features/modalSlice'
+import { removeUserById } from '../../../../../redux-toolkit/features/adminSlice'
+import { openDeleteModal } from '../../../../../redux-toolkit/features/modalSlice'
 import Modal from 'react-modal'
 import { application } from '../../../../../application'
 import { toast } from 'react-toastify'

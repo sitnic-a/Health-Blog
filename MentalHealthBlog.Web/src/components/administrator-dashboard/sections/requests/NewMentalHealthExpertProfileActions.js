@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   getNewRegisteredExperts,
   setRegisteredExpertStatus,
-} from '../../../redux-toolkit/features/adminSlice'
+} from '../../../../redux-toolkit/features/adminSlice'
 import { toast } from 'react-toastify'
 import { FaCheck } from 'react-icons/fa'
 import { HiX } from 'react-icons/hi'

@@ -1,4 +1,4 @@
-import { application } from '../../../application'
+import { application } from '../../application'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 let initialState = {

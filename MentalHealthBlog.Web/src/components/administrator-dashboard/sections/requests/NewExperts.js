@@ -4,7 +4,7 @@ import {
   displayProfilesContainer,
   displayStatusActionsContainer,
   getNewRegisteredExperts,
-} from '../../../redux-toolkit/features/adminSlice'
+} from '../../../../redux-toolkit/features/adminSlice'
 
 import { NewMentalHealthExpertProfile } from './NewMentalHealthExpertProfile'
 import { Navbar } from '../../../shared/Navbar/Navbar'

@@ -1,7 +1,7 @@
 import { MdEmail, MdLocalPhone } from 'react-icons/md'
 import { NewMentalHealthExpertProfileActions } from './NewMentalHealthExpertProfileActions'
 import defaultPhoto from '../../../../images/default-avatar.png'
-import { stringIsNullOrEmpty } from '../../../utils/helper-methods/methods'
+import { stringIsNullOrEmpty } from '../../../../utils/helper-methods/methods'
 
 export const NewMentalHealthExpertProfile = (props) => {
   let expert = props?.expert

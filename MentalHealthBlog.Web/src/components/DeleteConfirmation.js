@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { openDeleteModal } from './redux-toolkit/features/modalSlice'
-import { deletePostById } from './redux-toolkit/features/postSlice'
+import { openDeleteModal } from '../redux-toolkit/features/modalSlice'
+import { deletePostById } from '../redux-toolkit/features/postSlice'
 import { application } from '../application'
 import { toast } from 'react-toastify'
 import Modal from 'react-modal'

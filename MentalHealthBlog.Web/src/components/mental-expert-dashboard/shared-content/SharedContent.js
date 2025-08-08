@@ -1,4 +1,4 @@
-import { formatDateToString } from '../../utils/helper-methods/methods'
+import { formatDateToString } from '../../../utils/helper-methods/methods'
 
 import { PostEmotions } from '../../PostEmotions'
 

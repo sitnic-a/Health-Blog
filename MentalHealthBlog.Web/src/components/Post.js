@@ -3,19 +3,19 @@ import { useNavigate } from 'react-router-dom'
 import {
   setIsSharingExporting,
   setPost,
-} from './redux-toolkit/features/postSlice'
-import { openDeleteModal } from './redux-toolkit/features/modalSlice'
-import { setOverlayForShareExport } from './redux-toolkit/features/shareExportSlice'
+} from '../redux-toolkit/features/postSlice'
+import { openDeleteModal } from '../redux-toolkit/features/modalSlice'
+import { setOverlayForShareExport } from '../redux-toolkit/features/shareExportSlice'
 import {
   resetSharesPerMentalHealthExpert,
   revokeContentPermission,
-} from './redux-toolkit/features/regularUserSlice'
+} from '../redux-toolkit/features/regularUserSlice'
 import {
   formatDateToString,
   getSelectedPosts,
-} from './utils/helper-methods/methods'
+} from '../utils/helper-methods/methods'
 
-import { showTags, showEmotions } from './utils/helper-methods/postHelper'
+import { showTags, showEmotions } from '../utils/helper-methods/postHelper'
 import { PostTags } from './PostTags'
 import { PostEmotions } from './PostEmotions'
 

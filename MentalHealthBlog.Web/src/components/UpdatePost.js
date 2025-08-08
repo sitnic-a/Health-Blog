@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { getById, updatePost } from './redux-toolkit/features/postSlice'
+import { getById, updatePost } from '../redux-toolkit/features/postSlice'
 
 export const UpdatePost = () => {
   let { id } = useParams()

@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import useFetchLocationState from './custom/hooks/useFetchLocationState'
+import useFetchLocationState from '../custom/hooks/useFetchLocationState'
 import {
   getSharesPerMentalHealthExpert,
   setIsReviewingState,
-} from './redux-toolkit/features/regularUserSlice'
+} from '../redux-toolkit/features/regularUserSlice'
 
 import { Post } from './Post'
 
