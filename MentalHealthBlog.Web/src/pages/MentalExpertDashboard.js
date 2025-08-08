@@ -7,7 +7,7 @@ import {
 import { toast } from 'react-toastify'
 import { ListSharingContentUsers } from '../components/mental-expert-dashboard/shared-content/ListSharingContentUsers'
 import { ListSharedContent } from '../components/mental-expert-dashboard/shared-content/ListSharedContent'
-import { Navbar } from '../components/shared/Navbar'
+import { Navbar } from '../components/shared/Navbar/Navbar'
 
 export const MentalExpertDashboard = () => {
   let dispatch = useDispatch()

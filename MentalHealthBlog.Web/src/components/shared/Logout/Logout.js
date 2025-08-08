@@ -1,10 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { logout } from '../../components/redux-toolkit/features/userSlice'
+import { useNavigate } from 'react-router-dom'
+import { logout } from '../../../components/redux-toolkit/features/userSlice'
+import { resetSharedContent } from '../../redux-toolkit/features/mentalExpertSlice'
 
 import Cookies from 'js-cookie'
 import { CiLogout } from 'react-icons/ci'
-import { useNavigate } from 'react-router-dom'
-import { resetSharedContent } from '../redux-toolkit/features/mentalExpertSlice'
+
+import LogoutCSS from '../Logout/Logout.css'
 
 export const Logout = () => {
   let dispatch = useDispatch()

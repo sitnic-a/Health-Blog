@@ -5,7 +5,7 @@ import * as signalR from '@microsoft/signalr'
 import { getNewRegisteredExperts } from '../components/redux-toolkit/features/adminSlice'
 import { application } from '../application'
 import { FaUser } from 'react-icons/fa'
-import { Navbar } from '../components/shared/Navbar'
+import { Navbar } from '../components/shared/Navbar/Navbar'
 import { toast } from 'react-toastify'
 
 export const AdminDashboard = () => {

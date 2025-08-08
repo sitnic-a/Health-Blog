@@ -1,0 +1,22 @@
+.logout-container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.logout-container:hover {
+  color: #a5a5a5;
+  transform: scale(1.1);
+  transition: 80ms;
+}
+
+.logout-icon {
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.logout-title {
+  font-family: 'Klee One';
+  font-size: 0.9rem;
+}

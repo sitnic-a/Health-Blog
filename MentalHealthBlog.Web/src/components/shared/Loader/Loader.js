@@ -1,3 +1,5 @@
+import LoaderCSS from './Loader.css'
+
 export const Loader = () => {
   return (
     <div className="loader-container">
@@ -8,5 +10,5 @@ export const Loader = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

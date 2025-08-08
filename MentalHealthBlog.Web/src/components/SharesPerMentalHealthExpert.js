@@ -5,10 +5,9 @@ import {
   getSharesPerMentalHealthExpert,
 } from './redux-toolkit/features/regularUserSlice'
 
-import { Navbar } from './shared/Navbar'
 import { RecentShares } from './RecentShares'
 import { SharedContent } from './SharedContent'
-import { Loader } from './Loader'
+import { Loader } from './shared/Loader/Loader'
 import { toast } from 'react-toastify'
 import { BiError } from 'react-icons/bi'
 

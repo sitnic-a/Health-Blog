@@ -1,7 +1,9 @@
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import { Logout } from './Logout'
+import { Logout } from '../Logout/Logout'
+
+import NavbarCSS from '../Navbar/Navbar.css'
 
 export const Navbar = () => {
   let { authenticatedUser } = useSelector((store) => store.user)
@@ -19,7 +21,7 @@ export const Navbar = () => {
         <div className="navigation-bar-container">
           <div className="navigation-bar-features"></div>
 
-          <div className="signout-container">
+          <div className="logout-main-container">
             <Logout />
           </div>
         </div>
@@ -41,7 +43,7 @@ export const Navbar = () => {
             </Link>
           </div>
 
-          <div className="signout-container">
+          <div className="logout-main-container">
             <Logout />
           </div>
         </div>

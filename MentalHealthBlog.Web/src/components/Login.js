@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { login, setIsFailed } from './redux-toolkit/features/userSlice'
 import { toast } from 'react-toastify'
-import { Loader } from './Loader'
+import { Loader } from './shared/Loader/Loader'
 import { stringIsNullOrEmpty } from './utils/helper-methods/methods'
 
 export const Login = () => {

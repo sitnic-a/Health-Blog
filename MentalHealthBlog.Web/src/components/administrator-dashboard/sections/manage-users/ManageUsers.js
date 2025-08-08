@@ -3,7 +3,7 @@ import { ManageUsersFilter } from '../../ManageUsersFilter'
 import { ManageUsersTable } from '../../ManageUsersTable'
 import { ManageUsersDeleteUserModal } from '../../ManageUsersDeleteUserModal'
 
-import { Navbar } from '../../../shared/Navbar'
+import { Navbar } from '../../../shared/Navbar/Navbar'
 
 import { BiError } from 'react-icons/bi'
 

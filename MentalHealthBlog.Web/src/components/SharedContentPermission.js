@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux'
 import useFetchLocationState from './custom/hooks/useFetchLocationState'
-import { Navbar } from './shared/Navbar'
+import { Navbar } from './shared/Navbar/Navbar'
 import { SharedContentPermissionExpertInfo } from './SharedContentPermissionExpertInfo'
 
 import { SharedContentPermissionPosts } from './SharedContentPermissionPosts'

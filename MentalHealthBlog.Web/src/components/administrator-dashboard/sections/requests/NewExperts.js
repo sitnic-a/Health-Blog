@@ -7,7 +7,7 @@ import {
 } from '../../../redux-toolkit/features/adminSlice'
 
 import { NewMentalHealthExpertProfile } from './NewMentalHealthExpertProfile'
-import { Navbar } from '../../../shared/Navbar'
+import { Navbar } from '../../../shared/Navbar/Navbar'
 import { toast } from 'react-toastify'
 
 export const NewExperts = () => {

@@ -7,7 +7,7 @@ import {
 } from './redux-toolkit/features/userSlice'
 import { Login } from './Login'
 import Cookies from 'js-cookie'
-import { Loader } from './Loader'
+import { Loader } from './shared/Loader/Loader'
 
 export const RequireAuth = () => {
   let dispatch = useDispatch()
