@@ -1,11 +1,12 @@
-import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setPickedEmotions } from '../redux-toolkit/features/emotionSlice'
+import { setPickedEmotions } from '../../redux-toolkit/features/emotionSlice'
 
-import { PickedEmotion } from './PickedEmotion'
+import { AddPostPickedEmotion } from '../AddPostPickedEmotion/AddPostPickedEmotion'
 import { CiTrash } from 'react-icons/ci'
 
-export const PickedEmotions = () => {
+import AddPostPickedEmotionsCSS from './AddPostPickedEmotions.css'
+
+export const AddPostPickedEmotions = () => {
   let dispatch = useDispatch()
   let { pickedEmotions } = useSelector((store) => store.emotion)
 
@@ -21,7 +22,7 @@ export const PickedEmotions = () => {
         {pickedEmotions.map((emotion) => {
           if (emotion.name.includes('Bad')) {
             return (
-              <PickedEmotion
+              <AddPostPickedEmotion
                 key={emotion.id}
                 emotionType="bad"
                 emotion={emotion}
@@ -29,7 +30,7 @@ export const PickedEmotions = () => {
             )
           } else if (emotion.name.includes('Happy')) {
             return (
-              <PickedEmotion
+              <AddPostPickedEmotion
                 key={emotion.id}
                 emotionType="happy"
                 emotion={emotion}
@@ -37,7 +38,7 @@ export const PickedEmotions = () => {
             )
           } else if (emotion.name.includes('Surprised')) {
             return (
-              <PickedEmotion
+              <AddPostPickedEmotion
                 key={emotion.id}
                 emotionType="surprised"
                 emotion={emotion}
@@ -45,7 +46,7 @@ export const PickedEmotions = () => {
             )
           } else if (emotion.name.includes('Angry')) {
             return (
-              <PickedEmotion
+              <AddPostPickedEmotion
                 key={emotion.id}
                 emotionType="angry"
                 emotion={emotion}
@@ -53,7 +54,7 @@ export const PickedEmotions = () => {
             )
           } else if (emotion.name.includes('Sad')) {
             return (
-              <PickedEmotion
+              <AddPostPickedEmotion
                 key={emotion.id}
                 emotionType="sad"
                 emotion={emotion}
@@ -61,7 +62,7 @@ export const PickedEmotions = () => {
             )
           } else if (emotion.name.includes('Disgusted')) {
             return (
-              <PickedEmotion
+              <AddPostPickedEmotion
                 key={emotion.id}
                 emotionType="disgusted"
                 emotion={emotion}
@@ -69,7 +70,7 @@ export const PickedEmotions = () => {
             )
           } else if (emotion.name.includes('Fearful')) {
             return (
-              <PickedEmotion
+              <AddPostPickedEmotion
                 key={emotion.id}
                 emotionType="fearful"
                 emotion={emotion}

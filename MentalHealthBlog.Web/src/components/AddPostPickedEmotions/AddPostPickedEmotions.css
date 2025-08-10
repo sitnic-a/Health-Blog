@@ -1,0 +1,16 @@
+.add-post-picked-emotions-container {
+  margin-block: 0.8rem;
+}
+
+.add-post-picked-emotions-unpick-all-emotions-button {
+  margin-top: 8px;
+  float: right;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.add-post-picked-emotions-unpick-all-emotions-button:hover {
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: #c93232;
+}

@@ -6,7 +6,7 @@ import {
   setPickedTags,
   getTags,
 } from '../../redux-toolkit/features/tagSlice'
-import { EmotionsOnPostCreation } from '../EmotionsOnPostCreation'
+import { AddPostEmotions } from '../AddPostEmotions/AddPostEmotions'
 
 import AddPostTagsCSS from './AddPostTags.css'
 
@@ -175,7 +175,7 @@ export const AddPostTags = () => {
           })}
         </div>
       )}
-      <EmotionsOnPostCreation />
+      <AddPostEmotions />
     </>
   )
 }

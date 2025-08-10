@@ -1,11 +1,11 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setSuggestedEmotions } from '../redux-toolkit/features/emotionSlice'
+import { setSuggestedEmotions } from '../../redux-toolkit/features/emotionSlice'
 
-import { PickedEmotions } from './PickedEmotions'
-import { SuggestedEmotions } from './SuggestedEmotions'
+import { AddPostPickedEmotions } from '../AddPostPickedEmotions/AddPostPickedEmotions'
+import { AddPostSuggestedEmotions } from '../AddPostSuggestedEmotions/AddPostSuggestedEmotions'
 
-export const EmotionsOnPostCreation = () => {
+export const AddPostEmotions = () => {
   let dispatch = useDispatch()
 
   let { dbEmotions, suggestedEmotions } = useSelector((store) => store.emotion)
@@ -17,7 +17,7 @@ export const EmotionsOnPostCreation = () => {
         </label>
         <br />
 
-        <PickedEmotions />
+        <AddPostPickedEmotions />
 
         <input
           className="form-field"
@@ -48,7 +48,7 @@ export const EmotionsOnPostCreation = () => {
         />
       </div>
 
-      <SuggestedEmotions />
+      <AddPostSuggestedEmotions />
     </>
   )
 }

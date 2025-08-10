@@ -1,0 +1,29 @@
+.add-post-picked-emotion-container {
+  max-width: fit-content;
+  display: inline-block;
+  position: relative;
+  margin-block: 0.1rem;
+  margin-right: 0.6rem;
+  padding: 0.5rem;
+  padding-right: 1rem;
+  font-family: 'Klee One';
+}
+
+.add-post-picked-emotion-remove-from-list-button {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  padding-inline: 0.2rem;
+  font-size: 0.8rem;
+  font-weight: 400;
+  border-radius: 360px;
+  cursor: pointer;
+  color: #fff;
+  background: #c93232;
+}
+
+.add-post-picked-emotion-remove-from-list-button:hover {
+  font-weight: 500;
+  color: #c93232;
+  background: #fff;
+}

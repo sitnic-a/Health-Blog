@@ -1,73 +1,74 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { SuggestedEmotion } from "./SuggestedEmotion";
+import { useSelector } from 'react-redux'
+import { AddPostSuggestedEmotion } from '../AddPostSuggestedEmotion/AddPostSuggestedEmotion'
 
-export const SuggestedEmotions = () => {
-  let { suggestedEmotions } = useSelector((store) => store.emotion);
+import AddPostSuggestedEmotionsCSS from './AddPostSuggestedEmotions.css'
+
+export const AddPostSuggestedEmotions = () => {
+  let { suggestedEmotions } = useSelector((store) => store.emotion)
 
   return (
     suggestedEmotions.length > 0 && (
       <div className="add-post-suggested-emotions-container">
         {suggestedEmotions.map((emotion) => {
-          if (emotion.name.includes("Bad")) {
+          if (emotion.name.includes('Bad')) {
             return (
-              <SuggestedEmotion
+              <AddPostSuggestedEmotion
                 key={emotion.id}
                 emotionType="bad"
                 emotion={emotion}
               />
-            );
-          } else if (emotion.name.includes("Happy")) {
+            )
+          } else if (emotion.name.includes('Happy')) {
             return (
-              <SuggestedEmotion
+              <AddPostSuggestedEmotion
                 key={emotion.id}
                 emotionType="happy"
                 emotion={emotion}
               />
-            );
-          } else if (emotion.name.includes("Surprised")) {
+            )
+          } else if (emotion.name.includes('Surprised')) {
             return (
-              <SuggestedEmotion
+              <AddPostSuggestedEmotion
                 key={emotion.id}
                 emotionType="surprised"
                 emotion={emotion}
               />
-            );
-          } else if (emotion.name.includes("Angry")) {
+            )
+          } else if (emotion.name.includes('Angry')) {
             return (
-              <SuggestedEmotion
+              <AddPostSuggestedEmotion
                 key={emotion.id}
                 emotionType="angry"
                 emotion={emotion}
               />
-            );
-          } else if (emotion.name.includes("Sad")) {
+            )
+          } else if (emotion.name.includes('Sad')) {
             return (
-              <SuggestedEmotion
+              <AddPostSuggestedEmotion
                 key={emotion.id}
                 emotionType="sad"
                 emotion={emotion}
               />
-            );
-          } else if (emotion.name.includes("Disgusted")) {
+            )
+          } else if (emotion.name.includes('Disgusted')) {
             return (
-              <SuggestedEmotion
+              <AddPostSuggestedEmotion
                 key={emotion.id}
                 emotionType="disgusted"
                 emotion={emotion}
               />
-            );
-          } else if (emotion.name.includes("Fearful")) {
+            )
+          } else if (emotion.name.includes('Fearful')) {
             return (
-              <SuggestedEmotion
+              <AddPostSuggestedEmotion
                 key={emotion.id}
                 emotionType="fearful"
                 emotion={emotion}
               />
-            );
+            )
           }
         })}
       </div>
     )
-  );
-};
+  )
+}
