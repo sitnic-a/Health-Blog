@@ -1,9 +1,11 @@
 import { MdEmail, MdLocalPhone } from 'react-icons/md'
-import { NewMentalHealthExpertProfileActions } from './NewMentalHealthExpertProfileActions'
-import defaultPhoto from '../../../../images/default-avatar.png'
-import { stringIsNullOrEmpty } from '../../../../utils/helper-methods/methods'
+import { NewExpertProfileActions } from '../NewExpertProfileActions/NewExpertProfileActions'
+import defaultPhoto from '../../../../../images/default-avatar.png'
+import { stringIsNullOrEmpty } from '../../../../../utils/helper-methods/methods'
 
-export const NewMentalHealthExpertProfile = (props) => {
+import NewExpertProfileCSS from './NewExpertProfile.css'
+
+export const NewExpertProfile = (props) => {
   let expert = props?.expert
   let base64Photo = `data:image/png;base64,${expert?.photoAsFile}`
 
@@ -59,7 +61,7 @@ export const NewMentalHealthExpertProfile = (props) => {
           </div>
         </div>
         {expert?.isApproved === false && expert?.isRejected === false && (
-          <NewMentalHealthExpertProfileActions expert={expert} />
+          <NewExpertProfileActions expert={expert} />
         )}
       </div>
     )

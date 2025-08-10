@@ -12,7 +12,9 @@ export const EmotionsOnPostCreation = () => {
   return (
     <>
       <div className="add-post-emotions-container">
-        <label htmlFor="emotion">Emotions</label>
+        <label className="add-post-form-field-label" htmlFor="emotion">
+          Emotions
+        </label>
         <br />
 
         <PickedEmotions />

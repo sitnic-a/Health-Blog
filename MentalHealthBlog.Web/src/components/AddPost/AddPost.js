@@ -1,20 +1,22 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { openAddModal } from '../redux-toolkit/features/modalSlice'
-import { createPost } from '../redux-toolkit/features/postSlice'
+import { openAddModal } from '../../redux-toolkit/features/modalSlice'
+import { createPost } from '../../redux-toolkit/features/postSlice'
 import {
   setSuggestedTags,
   setDisplayedSuggestedTags,
   setChosenTags,
   setPickedTags,
   getTags,
-} from '../redux-toolkit/features/tagSlice'
-import { getEmotions } from '../redux-toolkit/features/emotionSlice'
+} from '../../redux-toolkit/features/tagSlice'
+import { getEmotions } from '../../redux-toolkit/features/emotionSlice'
 
 import Modal from 'react-modal'
-import { application } from '../application'
-import { TagsOnPostCreation } from './TagsOnPostCreation'
+import { application } from '../../application'
+import { AddPostTags } from '../AddPostTags/AddPostTags'
 import { toast } from 'react-toastify'
+
+import AddPostCSS from './AddPost.css'
 
 export const AddPost = () => {
   let dispatch = useDispatch()
@@ -93,7 +95,7 @@ export const AddPost = () => {
 
         <div className="add-post-modal-content">
           <div className="add-post-title-container">
-            <label htmlFor="title">
+            <label className="add-post-form-field-label" htmlFor="title">
               Title
               <span className="required-field"> *</span>
             </label>
@@ -106,7 +108,7 @@ export const AddPost = () => {
             />
           </div>
           <div className="add-post-content-container">
-            <label htmlFor="content">
+            <label className="add-post-form-field-label" htmlFor="content">
               Content
               <span className="required-field"> *</span>
             </label>
@@ -120,7 +122,7 @@ export const AddPost = () => {
             ></textarea>
           </div>
 
-          <TagsOnPostCreation />
+          <AddPostTags />
         </div>
         <button type="submit" className="add-post-modal-save-button">
           Save

@@ -2,12 +2,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   getNewRegisteredExperts,
   setRegisteredExpertStatus,
-} from '../../../../redux-toolkit/features/adminSlice'
+} from '../../../../../redux-toolkit/features/adminSlice'
 import { toast } from 'react-toastify'
 import { FaCheck } from 'react-icons/fa'
 import { HiX } from 'react-icons/hi'
 
-export const NewMentalHealthExpertProfileActions = (props) => {
+import NewExpertProfileActionsCSS from './NewExpertProfileActions.css'
+
+export const NewExpertProfileActions = (props) => {
   let dispatch = useDispatch()
   let { authenticatedUser } = useSelector((store) => store.user)
   let expert = props.expert

@@ -1,0 +1,71 @@
+.new-expert-profile-container {
+  max-width: 280px;
+  width: 100%;
+  padding: 0.3rem;
+  /* border: 1px dashed #c4c4c4; */
+  border-radius: 0.6rem;
+  background: #f0eae1;
+}
+
+.new-expert-profile-basic-info {
+  max-width: 200px;
+  margin: auto;
+}
+
+.new-expert-profile-img-wrapper {
+  max-width: 150px;
+  max-height: 150px;
+  margin: auto;
+  overflow: hidden;
+  border-radius: 360px;
+}
+
+.new-expert-profile-img {
+  max-width: 200px;
+  width: 100%;
+  border-radius: 360px;
+}
+
+.new-expert-profile-wrapper {
+  max-width: 200px;
+  margin: auto;
+  /* background: yellow; */
+}
+
+.new-expert-profile-username {
+  margin: 0;
+  text-align: center;
+  font-family: 'Klee One';
+  font-size: 1.2rem;
+  /* text-decoration: underline; */
+}
+
+.new-expert-profile-bio {
+  max-width: 200px;
+  margin: 14px auto;
+}
+
+.new-expert-profile-bio-info {
+  margin: 6px 0px;
+  font-family: 'Klee One';
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.new-expert-profile-bio-info span {
+  font-family: 'Klee One';
+  font-weight: 300;
+  font-size: 0.99rem;
+}
+
+.new-expert-profile-phone-number {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.new-expert-profile-email {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}

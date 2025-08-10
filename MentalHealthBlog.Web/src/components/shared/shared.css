@@ -47,3 +47,8 @@
 .form-field-label {
   font-family: 'Klee One';
 }
+
+.required-field {
+  font-family: 'Klee One';
+  color: #c93232;
+}

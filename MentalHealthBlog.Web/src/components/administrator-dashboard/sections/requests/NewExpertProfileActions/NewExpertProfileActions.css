@@ -1,0 +1,73 @@
+.new-expert-profile-bio-actions {
+  max-width: 280px;
+  width: 100%;
+  display: flex;
+  gap: 7px;
+  margin-top: 20px;
+  /* background: red; */
+}
+
+.new-expert-profile-action {
+  max-width: 136.5px;
+  width: 100%;
+  /* background-color: yellow; */
+}
+
+.new-expert-profile-action-btn {
+  max-width: 136.5px;
+  width: 100%;
+  padding-block: 0.3rem;
+  outline: none;
+  border: none;
+  border-radius: 0.5rem;
+  transition: 200ms;
+  cursor: pointer;
+  background: none;
+}
+
+.new-expert-profile-accept-btn {
+  border: 1px solid #5eba69;
+}
+
+.new-expert-profile-accept-btn:hover {
+  border: 1px solid #5eba69;
+  background: #5eba69;
+  .new-expert-profile-action-accept-icon {
+    fill: none;
+    stroke: #f3f1e3;
+    stroke-width: 30px;
+    background: none;
+  }
+}
+
+.new-expert-profile-action-accept-icon {
+  fill: none;
+  stroke: #5eba69;
+  stroke-width: 12px;
+  background: none;
+}
+
+.new-expert-profile-reject-btn {
+  border: 1px solid #c93232;
+}
+
+.new-expert-profile-reject-btn:hover {
+  border: 1px solid #c93232;
+  background: #c93232;
+  .new-expert-profile-action-reject-icon {
+    fill: none;
+    stroke: #f3f1e3;
+    stroke-width: 2px;
+    background: none;
+  }
+}
+
+.new-expert-profile-action-reject-icon {
+  fill: none;
+  stroke: #c93232;
+  stroke-width: 1px;
+}
+
+.new-expert-profile-action-icon {
+  font-size: 1.5rem;
+}

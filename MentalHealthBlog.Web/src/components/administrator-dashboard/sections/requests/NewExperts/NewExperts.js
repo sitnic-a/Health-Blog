@@ -4,11 +4,13 @@ import {
   displayProfilesContainer,
   displayStatusActionsContainer,
   getNewRegisteredExperts,
-} from '../../../../redux-toolkit/features/adminSlice'
+} from '../../../../../redux-toolkit/features/adminSlice'
 
-import { NewMentalHealthExpertProfile } from './NewMentalHealthExpertProfile'
-import { Navbar } from '../../../shared/Navbar/Navbar'
+import { NewExpertProfile } from '../NewExpertProfile/NewExpertProfile'
+import { Navbar } from '../../../../shared/Navbar/Navbar'
 import { toast } from 'react-toastify'
+
+import NewExpertsCSS from './NewExperts.css'
 
 export const NewExperts = () => {
   let dispatch = useDispatch()
@@ -126,12 +128,7 @@ export const NewExperts = () => {
         {newlyRegisteredMentalHealthExperts?.length > 0 ? (
           <div className="new-experts-main-profiles-container">
             {newlyRegisteredMentalHealthExperts?.map((expert) => {
-              return (
-                <NewMentalHealthExpertProfile
-                  key={expert.userId}
-                  expert={expert}
-                />
-              )
+              return <NewExpertProfile key={expert.userId} expert={expert} />
             })}
           </div>
         ) : (

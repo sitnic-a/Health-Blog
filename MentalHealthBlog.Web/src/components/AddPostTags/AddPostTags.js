@@ -5,10 +5,12 @@ import {
   setChosenTags,
   setPickedTags,
   getTags,
-} from '../redux-toolkit/features/tagSlice'
-import { EmotionsOnPostCreation } from './EmotionsOnPostCreation'
+} from '../../redux-toolkit/features/tagSlice'
+import { EmotionsOnPostCreation } from '../EmotionsOnPostCreation'
 
-export const TagsOnPostCreation = () => {
+import AddPostTagsCSS from './AddPostTags.css'
+
+export const AddPostTags = () => {
   let dispatch = useDispatch()
   let { suggestedTags, displayedSuggestedTags, chosenTags, pickedTags } =
     useSelector((store) => store.tag)
@@ -126,7 +128,7 @@ export const TagsOnPostCreation = () => {
   return (
     <>
       <div className="add-post-tags-container">
-        <label htmlFor="tag">
+        <label className="add-post-form-field-label" htmlFor="tag">
           Tags
           <span className="required-field"> *</span>
         </label>

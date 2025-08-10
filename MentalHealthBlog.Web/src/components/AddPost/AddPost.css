@@ -1,0 +1,17 @@
+.add-post-modal-header {
+  font-family: 'Overlock';
+  font-size: 1.2rem;
+}
+
+.add-post-modal-content {
+  margin-block: 10px;
+}
+
+.add-post-form-field-label {
+  font-family: 'Overlock';
+}
+
+.add-post-title-input,
+.add-post-content-textarea {
+  width: 100%;
+}
