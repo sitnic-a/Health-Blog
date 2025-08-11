@@ -1,0 +1,97 @@
+.shares-per-mental-health-expert-recent-shares-main-container {
+  max-width: 550px;
+  width: 100%;
+  margin-top: -4rem;
+  box-sizing: border-box;
+}
+
+@media (width<=1160px) {
+  .shares-per-mental-health-expert-recent-shares-main-container {
+    margin-top: 0;
+    margin-left: 0.8rem;
+  }
+}
+
+@media (width<680px) {
+  .shares-per-mental-health-expert-recent-shares-main-container {
+    display: none;
+  }
+}
+
+.shares-per-mental-health-expert-recent-shares-header-title {
+  font-family: 'Klee One';
+  font-size: 1.3rem;
+  color: #000;
+}
+
+.shares-per-mental-health-expert-recent-shares-container {
+  max-width: 550px;
+  max-height: 450px;
+  padding: 1rem;
+  overflow-y: scroll;
+  border-radius: 0.4rem;
+  background: #a0bbcf;
+}
+
+.shares-per-mental-health-expert-recent-shares-container::-webkit-scrollbar {
+  width: 10px;
+  margin-right: 1rem;
+  background: #b4d2e9;
+}
+
+.shares-per-mental-health-expert-recent-shares-container::-webkit-scrollbar-thumb {
+  border-radius: 0.5rem;
+  background: #82a3bc;
+}
+
+.shares-per-mental-health-expert-recent-share-container {
+  margin-bottom: 0.5rem;
+  padding: 1rem;
+  border-radius: 0.4rem;
+  background: #f0eae1;
+}
+
+.shares-per-mental-health-expert-recent-share-title-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  /* border: 1px solid red; */
+}
+
+.shares-per-mental-health-expert-recent-share-title {
+  margin: 0;
+  font-family: 'Overlock';
+  font-size: 1.4rem;
+}
+
+.shares-per-mental-health-expert-recent-share-actions-container {
+  margin-top: 0.3rem;
+}
+
+.shares-per-mental-health-expert-recent-share-action {
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  transition: 200ms;
+  background: #edb572;
+  color: #f3f1e3;
+}
+
+.shares-per-mental-health-expert-recent-share-action:hover {
+  background: none;
+  color: #edb572;
+}
+
+.recent-share-expand-info-action {
+  display: none;
+}
+
+.shares-per-mental-health-expert-recent-share-basic-info {
+  margin-block: 0.3em;
+  font-family: 'Klee One';
+}
+
+.shares-per-mental-health-expert-recent-share-basic-info:nth-of-type(3) {
+  margin-top: 0.9em;
+}

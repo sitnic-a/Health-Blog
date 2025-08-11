@@ -3,13 +3,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   getRecentShares,
   getSharesPerMentalHealthExpert,
-} from '../redux-toolkit/features/regularUserSlice'
+} from '../../redux-toolkit/features/regularUserSlice'
 
-import { RecentShares } from './RecentShares'
-import { SharedContent } from './SharedContent'
-import { Loader } from './shared/Loader/Loader'
+import { RecentShares } from '../RecentShares/RecentShares'
+import { SharedContent } from '../SharedContent/SharedContent'
+import { Loader } from '../shared/Loader/Loader'
 import { toast } from 'react-toastify'
 import { BiError } from 'react-icons/bi'
+
+import SharesPerMentalHealthExpertCSS from './SharesPerMentalHealthExpert.css'
 
 export const SharesPerMentalHealthExpert = () => {
   let dispatch = useDispatch()

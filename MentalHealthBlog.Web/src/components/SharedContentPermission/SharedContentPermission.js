@@ -1,9 +1,11 @@
 import { useSelector } from 'react-redux'
-import useFetchLocationState from '../custom/hooks/useFetchLocationState'
-import { Navbar } from './shared/Navbar/Navbar'
-import { SharedContentPermissionExpertInfo } from './SharedContentPermissionExpertInfo'
+import useFetchLocationState from '../../custom/hooks/useFetchLocationState'
+import { Navbar } from '../shared/Navbar/Navbar'
+import { SharedContentPermissionExpertInfo } from '../SharedContentPermissionExpertInfo/SharedContentPermissionExpertInfo'
 
-import { SharedContentPermissionPosts } from './SharedContentPermissionPosts'
+import { SharedContentPermissionPosts } from '../SharedContentPermissionPosts/SharedContentPermissionPosts'
+
+import SharedContentPermissionCSS from './SharedContentPermission.css'
 
 export const SharedContentPermission = () => {
   let { mentalHealthExpert } = useFetchLocationState()

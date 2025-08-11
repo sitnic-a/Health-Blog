@@ -1,0 +1,23 @@
+.list-of-posts-header {
+  transition: 100ms;
+}
+
+.list-of-posts-author {
+  font-family: 'Klee One';
+  font-size: 1.3rem;
+  /* letter-spacing: 1px; */
+  /* padding: 0.5rem; */
+  margin-left: 0.5rem;
+}
+
+.header-actions {
+  display: flex;
+  max-width: 780px;
+  flex-wrap: wrap;
+  row-gap: 10px;
+}
+
+.header-actions-button {
+  font-family: 'Klee One';
+  font-size: 1rem;
+}

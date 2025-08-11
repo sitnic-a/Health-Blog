@@ -1,12 +1,14 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { setIsSharingExporting } from '../redux-toolkit/features/postSlice'
-import { setVisibility } from '../redux-toolkit/features/filterSlice'
-import { openAddModal } from '../redux-toolkit/features/modalSlice'
+import { setIsSharingExporting } from '../../redux-toolkit/features/postSlice'
+import { setVisibility } from '../../redux-toolkit/features/filterSlice'
+import { openAddModal } from '../../redux-toolkit/features/modalSlice'
 
-import { AddPost } from './AddPost/AddPost'
+import { AddPost } from '../AddPost/AddPost'
 import { MdOutlineAddCircleOutline } from 'react-icons/md'
 import { BiSelectMultiple } from 'react-icons/bi'
-import { LayoutPicker } from './LayoutPicker'
+import { LayoutPicker } from '../LayoutPicker'
+
+import ListOfPostsHeaderCSS from './ListOfPostsHeader.css'
 
 export const ListOfPostsHeader = () => {
   let dispatch = useDispatch()

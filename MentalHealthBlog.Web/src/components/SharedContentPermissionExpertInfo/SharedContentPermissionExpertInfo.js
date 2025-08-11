@@ -1,5 +1,7 @@
 import { MdEmail, MdLocalPhone } from 'react-icons/md'
 
+import SharedContentPermissionExpertInfoCSS from './SharedContentPermissionExpertInfo.css'
+
 export const SharedContentPermissionExpertInfo = ({ mentalHealthExpert }) => {
   let base64Photo = `data:image/png;base64, ${mentalHealthExpert?.photoAsFile}`
 
