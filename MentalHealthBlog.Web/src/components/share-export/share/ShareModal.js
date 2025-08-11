@@ -13,11 +13,11 @@ import { prepareContentToShare } from '../../../utils/helper-methods/methods'
 
 import { toast } from 'react-toastify'
 
-import { ExpertsToShareContentWith } from './ExpertsToShareContentWith'
+import { ExpertsToShareContentWith } from './ExpertsToShareContentWith/ExpertsToShareContentWith'
 
 import { LiaSearchSolid } from 'react-icons/lia'
 import { PostsToBeShared } from './PostsToBeShared'
-import { ShareViaLink } from './ShareViaLink'
+import { ShareViaLink } from './ShareViaLink/ShareViaLink'
 
 export const ShareModal = () => {
   let dispatch = useDispatch()

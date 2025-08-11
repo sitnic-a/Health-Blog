@@ -1,0 +1,13 @@
+.share-export-close-modal-btn {
+  position: absolute;
+  top: 0;
+  right: 0px;
+  padding: 5px;
+  font-weight: 600;
+  font-size: 1.2rem;
+  transition: 150ms;
+  border-top-right-radius: 0.4rem;
+  cursor: pointer;
+  color: #fff;
+  background: #c93232;
+}

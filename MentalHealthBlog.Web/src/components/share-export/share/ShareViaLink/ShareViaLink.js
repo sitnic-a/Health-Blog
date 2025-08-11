@@ -1,20 +1,22 @@
-import { useSelector } from "react-redux";
+import { useSelector } from 'react-redux'
 
-import { SiViber, SiGmail } from "react-icons/si";
-import { LuCopy } from "react-icons/lu";
-import { Link } from "react-router-dom";
+import { SiViber, SiGmail } from 'react-icons/si'
+import { LuCopy } from 'react-icons/lu'
+import { Link } from 'react-router-dom'
+
+import ShareViaLinkCSS from './ShareViaLink.css'
 
 export const ShareViaLink = () => {
-  let { isShareViaLinkOpen } = useSelector((store) => store.modal);
-  let { shareLinkUrl } = useSelector((store) => store.shareExport);
+  let { isShareViaLinkOpen } = useSelector((store) => store.modal)
+  let { shareLinkUrl } = useSelector((store) => store.shareExport)
 
   let openExternal = (source) => {
-    window.open(`${source}`, "_blank");
-  };
+    window.open(`${source}`, '_blank')
+  }
 
   return (
     isShareViaLinkOpen === true &&
-    shareLinkUrl !== "" && (
+    shareLinkUrl !== '' && (
       <section id="share-via-link-main-container">
         <div className="share-via-link-container">
           <div className="share-via-link-heading">
@@ -62,7 +64,7 @@ export const ShareViaLink = () => {
                 >
                   <span>
                     <SiGmail
-                      style={{ stroke: "url(#es-gmail-container-gradient)" }}
+                      style={{ stroke: 'url(#es-gmail-container-gradient)' }}
                     />
                   </span>
                 </div>
@@ -84,16 +86,16 @@ export const ShareViaLink = () => {
               <div
                 className="share-via-link-url-copy-container"
                 onClick={() => {
-                  let indicator = document.querySelector(".indicator");
-                  var timeout = 0;
+                  let indicator = document.querySelector('.indicator')
+                  var timeout = 0
 
-                  navigator.clipboard.writeText(shareLinkUrl);
+                  navigator.clipboard.writeText(shareLinkUrl)
 
-                  indicator.classList.add("share-via-link-copy-indicator");
+                  indicator.classList.add('share-via-link-copy-indicator')
 
                   timeout = setTimeout(function () {
-                    indicator.classList.remove("share-via-link-copy-indicator");
-                  }, 1500);
+                    indicator.classList.remove('share-via-link-copy-indicator')
+                  }, 1500)
                 }}
               >
                 <LuCopy />
@@ -104,5 +106,5 @@ export const ShareViaLink = () => {
         </div>
       </section>
     )
-  );
-};
+  )
+}

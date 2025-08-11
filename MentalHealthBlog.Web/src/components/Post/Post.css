@@ -1,0 +1,125 @@
+button[data-action-update='update'] {
+  position: absolute;
+  top: 0.4rem;
+  left: 0.3rem;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  background: none;
+}
+
+.post-container-action-icon {
+  transform: scale(1.8);
+  color: #000;
+  transition: 200ms;
+}
+
+.post-container-action-icon:hover {
+  transform: scale(2.3);
+  color: #edb572;
+}
+
+button[data-action-delete='delete'] {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.3rem;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  background: none;
+}
+
+.post-overlay {
+  max-width: 400px;
+  width: 100%;
+  min-height: 99%;
+  position: absolute;
+  top: 4.3px;
+  left: 0;
+  z-index: 1;
+  opacity: 0.7;
+  border-radius: 0.4rem;
+  visibility: hidden;
+  border-radius: 0.4rem;
+  background: #000;
+}
+
+.post-overlay-single-col {
+  max-width: 800px;
+  min-height: 100%;
+  top: 0;
+}
+
+input[name='share-export'] {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 0.45rem;
+  right: 0.15rem;
+  z-index: 2;
+  border: none;
+  outline: none;
+  visibility: hidden;
+  cursor: pointer;
+}
+
+.post-reveal-action-containers {
+  max-width: 370px;
+  width: 100%;
+  display: block;
+  border-top-left-radius: 0rem;
+  border-top-right-radius: 0rem;
+  background: #f2e0c4;
+}
+
+.post-reveal-action-containers-single-col {
+  padding: 0.2rem;
+  border-top-left-radius: 0rem;
+  border-top-right-radius: 0.4rem;
+  border-bottom-right-radius: 0.4rem;
+}
+
+.post-tags-reveal-action-main-container {
+  max-width: 370px;
+  font-family: 'Klee One';
+}
+
+.post-tags-reveal-action-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+  border-radius: 0.2rem;
+  border-top-left-radius: 0rem;
+  border-top-right-radius: 0rem;
+  background: #eeeeee;
+}
+
+.post-tags-reveal-action-container-single-col {
+  border-top-left-radius: 0.2rem;
+  border-top-right-radius: 0.2rem;
+}
+
+.post-reveal-option-title {
+  margin: 0;
+  font-weight: 300;
+}
+
+.post-reveal-expand-button {
+  cursor: pointer;
+}
+
+.post-emotions-reveal-action-main-container {
+  max-width: 370px;
+  margin-top: 0.15rem;
+  font-family: 'Klee One';
+}
+
+.post-emotions-reveal-action-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+  border-radius: 0.2rem;
+  background: #eeeeee;
+}

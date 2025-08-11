@@ -6,7 +6,7 @@ import {
   setIsReviewingState,
 } from '../../redux-toolkit/features/regularUserSlice'
 
-import { Post } from '../Post'
+import { Post } from '../Post/Post'
 
 import SharedContentPermissionPostsCSS from './SharedContentPermissionPosts.css'
 

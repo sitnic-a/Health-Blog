@@ -1,20 +1,22 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getPosts } from '../redux-toolkit/features/postSlice'
+import { getPosts } from '../../redux-toolkit/features/postSlice'
 import { toast } from 'react-toastify'
 
-import { Post } from './Post'
-import { ListOfPostsHeader } from './ListOfPostsHeader/ListOfPostsHeader'
-import { Loader } from './shared/Loader/Loader'
-import { PieGraph } from './PieGraph'
+import { Post } from '../Post/Post'
+import { ListOfPostsHeader } from '../ListOfPostsHeader/ListOfPostsHeader'
+import { Loader } from '../shared/Loader/Loader'
+import { PieGraph } from '../PieGraph'
 
-import { FilterOptions } from './FilterOptions'
+import { FilterOptions } from '../FilterOptions'
 
-import { ShareExportOverlay } from './share-export/ShareExportOverlay'
-import { ShareModal } from './share-export/share/ShareModal'
-import { ExportModal } from './share-export/export/ExportModal'
-import { setIsReviewingState } from '../redux-toolkit/features/regularUserSlice'
-import { DeleteConfirmation } from './DeleteConfirmation'
+import { ShareExportOverlay } from '../share-export/ShareExportOverlay'
+import { ShareModal } from '../share-export/share/ShareModal'
+import { ExportModal } from '../share-export/export/ExportModal/ExportModal'
+import { setIsReviewingState } from '../../redux-toolkit/features/regularUserSlice'
+import { DeleteConfirmation } from '../DeleteConfirmation'
+
+import ListOfPostsCSS from './ListOfPosts.css'
 
 export const ListOfPosts = () => {
   let dispatch = useDispatch()

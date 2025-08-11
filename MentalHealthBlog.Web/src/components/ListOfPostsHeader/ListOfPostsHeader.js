@@ -6,7 +6,7 @@ import { openAddModal } from '../../redux-toolkit/features/modalSlice'
 import { AddPost } from '../AddPost/AddPost'
 import { MdOutlineAddCircleOutline } from 'react-icons/md'
 import { BiSelectMultiple } from 'react-icons/bi'
-import { LayoutPicker } from '../LayoutPicker'
+import { LayoutPicker } from '../LayoutPicker/LayoutPicker'
 
 import ListOfPostsHeaderCSS from './ListOfPostsHeader.css'
 

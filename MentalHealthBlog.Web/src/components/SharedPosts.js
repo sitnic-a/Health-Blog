@@ -1,5 +1,5 @@
 import { SharesPerMentalHealthExpert } from './SharesPerMentalHealthExpert/SharesPerMentalHealthExpert'
-import { ShareViaLink } from './share-export/share/ShareViaLink'
+import { ShareViaLink } from './share-export/share/ShareViaLink/ShareViaLink'
 
 export const SharedPosts = () => {
   return (

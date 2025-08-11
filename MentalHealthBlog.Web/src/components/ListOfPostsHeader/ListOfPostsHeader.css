@@ -21,3 +21,127 @@
   font-family: 'Klee One';
   font-size: 1rem;
 }
+
+button[data-action-add='add'] {
+  margin-left: 0.5rem;
+  padding: 0.7rem 1.7rem;
+  outline: none;
+  border: none;
+  border-radius: 0.5rem;
+  transition: 200ms;
+  color: #f3f1e3;
+  background: #edb572;
+}
+
+.add-post-icon {
+  margin-right: 0.8rem;
+  transform: scale(1.8);
+  color: #f3f1e3;
+}
+
+button[data-action-add='filter'] {
+  width: 84.8px;
+  margin-left: 0.5rem;
+  padding: 0.5rem 1rem;
+  outline: none;
+  border: none;
+  border-radius: 0.5rem;
+  transition: 200ms;
+  color: #f3f1e3;
+  background: #82a3bc;
+}
+
+button[data-action-add='add']:hover,
+button[data-action-add='filter']:hover {
+  cursor: pointer;
+  color: #edb572;
+  background: #f3f1e3;
+
+  .add-post-icon {
+    color: #edb572;
+  }
+}
+
+button[data-action-select='select'] {
+  outline: none;
+  border: none;
+  cursor: pointer;
+  background: none;
+}
+
+.share-export {
+  max-width: 60px;
+  width: 100%;
+  min-height: 40px;
+  margin-left: 0.5rem;
+  padding: 0.1rem;
+  cursor: pointer;
+  background: #8bb8da;
+}
+
+.share-export:hover {
+  color: #8bb8da;
+  background: #f3f1e3;
+  .select-data-icon {
+    color: #edb572;
+  }
+}
+
+.share-export-select {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(50%);
+  top: 50%;
+}
+
+[data-tooltip-title] {
+  position: relative;
+}
+
+[data-tooltip-title]:after {
+  content: attr(data-tooltip-title);
+  width: max-content;
+  position: absolute;
+  left: 35%;
+  bottom: 100%;
+  padding: 0.2rem;
+  opacity: 0;
+  -webkit-transition: opacity 0.15s ease-in-out;
+  font-family: 'Klee One';
+  font-size: 0.85rem;
+  border-radius: 0.3rem;
+  color: #fff;
+  background: #edb572;
+}
+
+[data-tooltip-title]:hover:after {
+  opacity: 1;
+}
+
+div[data-tooltip-title]:after {
+  left: 5px !important;
+}
+
+@media (width<310px) {
+  [data-tooltip-title]:after {
+    left: 15%;
+  }
+}
+
+.share-export-select svg {
+  width: 23px;
+  height: 23px;
+  margin-top: -0.1rem;
+  color: #f3f1e3;
+}
+
+@media (width<=555px) {
+  .share-export-select svg {
+    margin-top: -0.2rem;
+  }
+}
+
+.share-export-select svg:hover {
+  color: #f4f4f4;
+}

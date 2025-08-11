@@ -1,0 +1,140 @@
+#share-via-link-main-container {
+  max-width: 750px;
+  /* min-height: 180px; */
+  margin-inline: 0.5rem;
+  margin-top: 0.2rem;
+  /* background: yellow; */
+  overflow: hidden;
+  color: #000;
+}
+
+.share-via-link-container {
+  max-width: 350px;
+  margin: auto;
+  padding: 0.3rem;
+  /* border: 1px solid blue; */
+}
+
+.share-via-link-heading {
+  max-width: 350px;
+  /* background: red; */
+}
+
+.share-via-link-heading > h2 {
+  /* margin-block: 0.4rem; */
+  font-family: 'Klee One';
+  font-size: 1.18rem;
+  text-align: center;
+}
+
+.share-via-link-systems {
+  margin-top: -0.85rem;
+  /* background: green; */
+}
+
+.external-systems-main-container {
+  max-width: 200px;
+  margin: auto;
+  /* background: greenyellow; */
+}
+
+.external-systems-container {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.external-system {
+  padding: 0.3rem;
+  cursor: pointer;
+}
+
+.external-system > span > svg {
+  font-size: 2rem;
+}
+
+.es-viber-container > span > svg:hover {
+  color: #7360f2;
+  font-weight: 700;
+}
+
+.es-gmail-container > span > svg:hover {
+  fill: url('#es-gmail-container-gradient');
+}
+
+.share-via-link-url-main-container {
+  max-width: 350px;
+  margin-top: -5px;
+  overflow-x: scroll;
+  border-radius: 0.3rem;
+  color: #f3f1e3;
+  background: #edb572;
+}
+
+.share-via-link-url-main-container::-webkit-scrollbar {
+  display: none;
+}
+
+.share-via-link-url-container {
+  max-height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.share-via-link-url-container > .share-via-link-url {
+  margin-inline: 1rem;
+  margin-top: 30px;
+  padding-inline: 0.3rem;
+  font-family: 'Klee One';
+  font-size: 0.95rem;
+  overflow-x: scroll;
+  white-space: nowrap;
+}
+
+.share-via-link-url::-webkit-scrollbar {
+  width: 1px;
+}
+
+.share-via-link-url-value {
+  margin-left: 5px;
+  /* background: red; */
+}
+
+.share-via-link-url-copy-container {
+  cursor: pointer;
+}
+
+.share-via-link-url-container .share-via-link-url-copy-container > svg {
+  padding: 1rem;
+  border-left: 1px solid #000;
+  font-size: 1.3rem;
+}
+
+.indicator {
+  margin-bottom: 0.5rem;
+  opacity: 0;
+}
+
+.share-via-link-copy-indicator {
+  margin-top: 0.2rem;
+  padding: 0.3rem;
+  text-align: center;
+  border-radius: 0.4rem;
+  color: #f3f1e3;
+  background: #34688f;
+  animation: hideShareViaLinkCopyIndicator ease-in-out 1500ms;
+  animation-fill-mode: both;
+  font-family: 'Klee One';
+  /* transition: 1s; */
+}
+
+@keyframes hideShareViaLinkCopyIndicator {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

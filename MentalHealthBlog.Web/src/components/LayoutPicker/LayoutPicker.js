@@ -1,7 +1,12 @@
-import { setActiveLayoutType, swap } from '../utils/helper-methods/postHelper'
+import {
+  setActiveLayoutType,
+  swap,
+} from '../../utils/helper-methods/postHelper'
 
 import { TbColumns2 } from 'react-icons/tb'
 import { TbColumns1 } from 'react-icons/tb'
+
+import LayoutPickerCSS from './LayoutPicker.css'
 
 export const LayoutPicker = () => {
   let layoutPickerTypes = document.querySelector('.layout-picker-types')
@@ -49,15 +54,6 @@ export const LayoutPicker = () => {
           >
             <TbColumns2 className="layout-view-icon" />
           </div>
-
-          {/* <div
-                  className="layout-type default-layout-container"
-                  onClick={(e) => {
-                    alert('Default')
-                  }}
-                >
-                  <TbColumns3 className="layout-view-icon" />
-                </div> */}
 
           <div
             className="layout-type single-column-layout-container"
