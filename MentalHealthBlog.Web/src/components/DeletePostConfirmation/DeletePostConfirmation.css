@@ -1,0 +1,74 @@
+.confirmation-container {
+  max-width: 500px;
+  margin: auto;
+  overflow: hidden;
+}
+
+.confirmation-title > h2 {
+  font-family: 'Klee One';
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+@media (width <=430px) {
+  .confirmation-title > h2 {
+    font-size: 1.2rem;
+  }
+}
+
+.confirmation-actions {
+  display: flex;
+  justify-content: space-around;
+}
+
+.confirmation-action-delete {
+  max-width: 150px;
+  width: 100%;
+  padding-block: 0.8rem;
+  outline: none;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  transition: 200ms;
+  cursor: pointer;
+  color: #f3f1e3;
+  background: #c93232;
+}
+
+@media (width<=430px) {
+  .confirmation-action-delete {
+    max-width: 120px;
+  }
+}
+
+.confirmation-action-delete:hover {
+  border: 1px solid #c93232;
+  color: #c93232;
+  background: none;
+}
+
+.confirmation-action-cancel {
+  max-width: 150px;
+  width: 100%;
+  padding-block: 0.8rem;
+  font-size: 1.1rem;
+  outline: none;
+  border: none;
+  border-radius: 0.5rem;
+  transition: 200ms;
+  cursor: pointer;
+  color: #f3f1e3;
+  background: #82a3bc;
+}
+
+@media (width<=430px) {
+  .confirmation-action-cancel {
+    max-width: 120px;
+  }
+}
+
+.confirmation-action-cancel:hover {
+  border: 1px solid #82a3bc;
+  color: #82a3bc;
+  background: none;
+}

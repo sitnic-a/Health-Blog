@@ -2,22 +2,24 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   openShareModal,
   openShareViaLink,
-} from '../../../redux-toolkit/features/modalSlice'
+} from '../../../../redux-toolkit/features/modalSlice'
 
 import {
   filterSuggestedPossibleToShareWith,
   resetShareLinkUrl,
   shareContent,
-} from '../../../redux-toolkit/features/shareExportSlice'
-import { prepareContentToShare } from '../../../utils/helper-methods/methods'
+} from '../../../../redux-toolkit/features/shareExportSlice'
+import { prepareContentToShare } from '../../../../utils/helper-methods/methods'
 
 import { toast } from 'react-toastify'
 
-import { ExpertsToShareContentWith } from './ExpertsToShareContentWith/ExpertsToShareContentWith'
+import { ExpertsToShareContentWith } from '../ExpertsToShareContentWith/ExpertsToShareContentWith'
 
 import { LiaSearchSolid } from 'react-icons/lia'
-import { PostsToBeShared } from './PostsToBeShared'
-import { ShareViaLink } from './ShareViaLink/ShareViaLink'
+import { PostsToShare } from '../PostsToShare/PostsToShare'
+import { ShareViaLink } from '../ShareViaLink/ShareViaLink'
+
+import ShareModalCSS from './ShareModal.css'
 
 export const ShareModal = () => {
   let dispatch = useDispatch()
@@ -51,7 +53,7 @@ export const ShareModal = () => {
             <p>Share posts...</p>
           </div>
 
-          <PostsToBeShared />
+          <PostsToShare />
 
           <div className="share-modal-action-container">
             <div className="share-modal-filter-container">
@@ -62,6 +64,7 @@ export const ShareModal = () => {
                   let searchCondition = e.target.value
                   dispatch(filterSuggestedPossibleToShareWith(searchCondition))
                 }}
+                placeholder="Search by name or surname..."
               />
               <button
                 className="search-by-name-surname-organization-filter-button"

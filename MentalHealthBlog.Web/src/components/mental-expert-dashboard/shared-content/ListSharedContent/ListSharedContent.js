@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setOverlayPost } from '../../../../redux-toolkit/features/mentalExpertSlice'
 import { initialDisplayScrollsOnMentalHealthExpertSharingUsersMainPostContainers } from '../../../../utils/helper-methods/postHelper'
 
-import { SharedContent } from '../SharedContent'
-import { OverlayPostPreview } from '../OverlayPostPreview'
+import { SharedContent } from '../SharedContent/SharedContent'
+import { OverlayPostPreview } from '../OverlayPostPreview/OverlayPostPreview'
 
 import { AssignmentButton } from '../../../shared/AssignmentButton/AssignmentButton'
 

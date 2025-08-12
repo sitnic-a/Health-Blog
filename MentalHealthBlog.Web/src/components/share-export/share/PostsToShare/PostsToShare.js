@@ -1,7 +1,9 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { revokeShareContent } from '../../../redux-toolkit/features/shareExportSlice'
+import { revokeShareContent } from '../../../../redux-toolkit/features/shareExportSlice'
 
-export const PostsToBeShared = () => {
+import PostsToShareCSS from './PostsToShare.css'
+
+export const PostsToShare = () => {
   let dispatch = useDispatch()
   let { postsToExport } = useSelector((store) => store.shareExport)
 

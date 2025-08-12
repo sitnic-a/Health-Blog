@@ -1,11 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { openDeleteModal } from '../redux-toolkit/features/modalSlice'
-import { deletePostById } from '../redux-toolkit/features/postSlice'
-import { application } from '../application'
+import { openDeleteModal } from '../../redux-toolkit/features/modalSlice'
+import { deletePostById } from '../../redux-toolkit/features/postSlice'
+import { application } from '../../application'
 import { toast } from 'react-toastify'
 import Modal from 'react-modal'
 
-export const DeleteConfirmation = () => {
+import DeletePostConfirmationCSS from './DeletePostConfirmation.css'
+
+export const DeletePostConfirmation = () => {
   let dispatch = useDispatch()
   let { authenticatedUser } = useSelector((store) => store.user)
   let { isDeleteOpen } = useSelector((store) => store.modal)

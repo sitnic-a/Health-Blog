@@ -1,0 +1,44 @@
+.share-modal-posts-to-share-container {
+  /* max-width: 800px; */
+  margin-top: 1rem;
+  margin-inline: 3rem;
+  border: 1px solid #82a3bc;
+  border-radius: 0.5rem;
+}
+
+.share-modal-posts-to-share {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 5px;
+}
+
+.share-modal-post-to-share-container {
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-inline: 0.3rem;
+  background: #edb572;
+}
+
+.share-modal-post-to-share-title {
+  max-width: 120px;
+  width: 100%;
+  font-family: 'Klee One';
+  font-size: 11.5px;
+  font-weight: 500;
+  overflow-x: hidden;
+}
+
+.share-modal-post-to-share-remove-from-list {
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+
+.share-modal-post-to-share-remove-from-list:hover {
+  font-weight: 600;
+  transform: scale(1.05);
+  color: #c93232;
+}

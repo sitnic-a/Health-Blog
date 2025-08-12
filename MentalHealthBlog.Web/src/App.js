@@ -19,7 +19,7 @@ import { ManageUsers } from './components/administrator-dashboard/sections/manag
 import { SharedContentPermission } from './components/SharedContentPermission/SharedContentPermission'
 import { SharedContentPostsViaLink } from './components/SharedContentPostsViaLink/SharedContentPostsViaLink'
 import { RequireAuth } from './components/RequireAuth'
-import { CreateAssignment } from './components/mental-expert-dashboard/shared-content/CreateAssignment'
+import { CreateAssignment } from './components/mental-expert-dashboard/shared-content/CreateAssignment/CreateAssignment'
 import { windowResize } from './utils/helper-methods/methods'
 import { application } from './application'
 import { Assignments } from './components/shared/Assignments'

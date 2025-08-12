@@ -11,10 +11,10 @@ import { PieGraph } from '../PieGraph/PieGraph'
 import { ListOfPostsFilterOptions } from '../ListOfPostsFilterOptions/ListOfPostsFilterOptions'
 
 import { ShareExportOverlay } from '../share-export/share/ShareExportOverlay/ShareExportOverlay'
-import { ShareModal } from '../share-export/share/ShareModal'
+import { ShareModal } from '../share-export/share/ShareModal/ShareModal'
 import { ExportModal } from '../share-export/export/ExportModal/ExportModal'
 import { setIsReviewingState } from '../../redux-toolkit/features/regularUserSlice'
-import { DeleteConfirmation } from '../DeleteConfirmation'
+import { DeletePostConfirmation } from '../DeletePostConfirmation/DeletePostConfirmation'
 
 import ListOfPostsCSS from './ListOfPosts.css'
 
@@ -81,7 +81,7 @@ export const ListOfPosts = () => {
 
       <div className="dashboard-cols">
         <section className="list-of-posts-main-container">
-          {isDeleteOpen && <DeleteConfirmation />}
+          {isDeleteOpen && <DeletePostConfirmation />}
           {posts.map((post) => {
             return <Post key={post.id} post={post} />
           })}
