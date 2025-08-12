@@ -1,0 +1,38 @@
+.share-export-main-container {
+  position: fixed;
+  left: 50%;
+  z-index: 3;
+  transition: 500ms;
+}
+
+.share-export-position-in {
+  bottom: 30px;
+  transform: translateX(-50%);
+}
+
+.share-export-position-out {
+  bottom: -50px;
+  transform: translateX(-50%);
+}
+
+.share-export-container {
+  display: flex;
+  gap: 10px;
+}
+
+.share-export-icon {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  padding: 0.3rem;
+  transition: 300ms ease-in-out;
+  cursor: pointer;
+  border-radius: 50%;
+  color: #fff;
+  background: #cab587;
+}
+
+.share-export-icon:hover {
+  color: #cab587;
+  background: #fff;
+}

@@ -8,9 +8,9 @@ import { ListOfPostsHeader } from '../ListOfPostsHeader/ListOfPostsHeader'
 import { Loader } from '../shared/Loader/Loader'
 import { PieGraph } from '../PieGraph'
 
-import { FilterOptions } from '../FilterOptions'
+import { ListOfPostsFilterOptions } from '../ListOfPostsFilterOptions/ListOfPostsFilterOptions'
 
-import { ShareExportOverlay } from '../share-export/ShareExportOverlay'
+import { ShareExportOverlay } from '../share-export/share/ShareExportOverlay/ShareExportOverlay'
 import { ShareModal } from '../share-export/share/ShareModal'
 import { ExportModal } from '../share-export/export/ExportModal/ExportModal'
 import { setIsReviewingState } from '../../redux-toolkit/features/regularUserSlice'
@@ -77,7 +77,7 @@ export const ListOfPosts = () => {
         </p>
       </div>
 
-      <FilterOptions searchPostDto={searchPostDto} />
+      <ListOfPostsFilterOptions searchPostDto={searchPostDto} />
 
       <div className="dashboard-cols">
         <section className="list-of-posts-main-container">

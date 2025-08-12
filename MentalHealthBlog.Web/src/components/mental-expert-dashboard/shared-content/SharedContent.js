@@ -1,6 +1,6 @@
 import { formatDateToString } from '../../../utils/helper-methods/methods'
 
-import { PostEmotions } from '../../PostEmotions'
+import { PostEmotions } from '../../PostEmotions/PostEmotions'
 
 export const SharedContent = (props) => {
   let content = props.content

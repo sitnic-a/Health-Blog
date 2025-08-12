@@ -1,9 +1,11 @@
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { formatDateToString } from '../../../utils/helper-methods/methods'
+import { formatDateToString } from '../../../../utils/helper-methods/methods'
 import { toast } from 'react-toastify'
-import { PostEmotions } from '../../PostEmotions'
-import { PostTags } from '../../PostTags'
+import { PostEmotions } from '../../../PostEmotions/PostEmotions'
+import { PostTags } from '../../../PostTags/PostTags'
+
+import ListOfSharedPostsCSS from './ListOfSharedPosts.css'
 
 export const ListOfSharedPosts = () => {
   let { postsToShare } = useSelector((store) => store.shareExport)
@@ -31,15 +33,11 @@ export const ListOfSharedPosts = () => {
         postContainerEmotions.style.overflowY = 'hidden'
       }
     })
-    console.log('PTags ', postContainersTags)
-    console.log('PEmotions ', postContainersEmotions)
   }, [])
 
   return (
     <section id="shared-posts-via-link-main-container">
       {postsToShare?.map((post, index) => {
-        console.log('Post LS ', post)
-
         let date = formatDateToString(post?.createdAt)
         let tags = post.tags
         let emotions = post?.emotions

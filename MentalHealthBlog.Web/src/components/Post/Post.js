@@ -16,8 +16,8 @@ import {
 } from '../../utils/helper-methods/methods'
 
 import { showTags, showEmotions } from '../../utils/helper-methods/postHelper'
-import { PostTags } from '../PostTags'
-import { PostEmotions } from '../PostEmotions'
+import { PostTags } from '../PostTags/PostTags'
+import { PostEmotions } from '../PostEmotions/PostEmotions'
 
 import { MdOutlineModeEditOutline, MdOutlineDelete } from 'react-icons/md'
 import { TiArrowSortedDown } from 'react-icons/ti'

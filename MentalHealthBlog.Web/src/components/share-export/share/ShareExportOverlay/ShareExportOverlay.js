@@ -2,19 +2,21 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   openShareModal,
   openExportModal,
-} from '../../redux-toolkit/features/modalSlice'
+} from '../../../../redux-toolkit/features/modalSlice'
 import {
   exportToPDF,
   getExpertsAndRelatives,
-} from '../../redux-toolkit/features/shareExportSlice'
+} from '../../../../redux-toolkit/features/shareExportSlice'
 import {
   getSelectedPosts,
   base64ToArrayBuffer,
-} from '../../utils/helper-methods/methods'
+} from '../../../../utils/helper-methods/methods'
 
 import { FaShare } from 'react-icons/fa'
 import { FaFileExport } from 'react-icons/fa'
 import { toast } from 'react-toastify'
+
+import ShareExportOverlayCSS from './ShareExportOverlay.css'
 
 export const ShareExportOverlay = () => {
   let dispatch = useDispatch()

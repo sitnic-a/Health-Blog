@@ -1,3 +1,102 @@
+.main-container {
+  max-width: 340px;
+  width: 100%;
+  position: relative;
+  margin: 0.5rem;
+  border-radius: 0.4rem;
+}
+
+@media (width <= 680px) {
+  .main-container {
+    margin-inline: auto;
+  }
+}
+
+.main-single-col {
+  max-width: 800px;
+  display: flex;
+  /* background: red; */
+}
+
+.post-container {
+  max-width: 340px;
+  position: relative;
+  margin-top: 0.3rem;
+  padding: 0.3rem;
+  border-radius: 0.4rem;
+  border-bottom-left-radius: 0rem;
+  border-bottom-right-radius: 0rem;
+  cursor: pointer;
+  background: #f3f1e3;
+}
+
+.post-container-single-col {
+  max-width: 340px;
+  width: 100%;
+  margin-top: 0px;
+  border-bottom-left-radius: 0.4rem;
+  border-top-right-radius: 0rem;
+}
+
+.post-container-content {
+  margin-top: 1.5rem;
+  margin-inline: 1rem;
+}
+
+.post-header {
+  font-family: 'Overlock';
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  color: #000;
+  /* background: #89cff0; */
+}
+
+.post-header h1 {
+  margin-bottom: 1rem;
+  padding: 0.2rem;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.post-information {
+  height: 100%;
+}
+
+.post-content {
+  width: 100%;
+  height: fit-content;
+  padding-right: 0.7rem;
+  text-align: justify;
+  font-family: 'Klee One';
+  font-size: 1rem;
+  border: none;
+  resize: none;
+  line-height: 1.3rem;
+  background: #f3f1e3;
+}
+
+.post-date {
+  margin-top: 0.4rem;
+  font-family: 'Klee One';
+  font-size: 1rem;
+  line-height: 1.3rem;
+}
+
+.post-date p {
+  margin-block: 0;
+  font-size: 0.8em;
+  text-decoration: none;
+  color: #920d0d;
+}
+
+.post-date p > span {
+  margin-left: 0.7rem;
+}
+
+.post-date p:nth-child(2) {
+  color: #c93232;
+}
+
 button[data-action-update='update'] {
   position: absolute;
   top: 0.4rem;

@@ -2,8 +2,8 @@ import { useDispatch } from 'react-redux'
 import { setOverlayPost } from '../../../redux-toolkit/features/mentalExpertSlice'
 import { formatDateToString } from '../../../utils/helper-methods/methods'
 
-import { PostTags } from '../../PostTags'
-import { PostEmotions } from '../../PostEmotions'
+import { PostTags } from '../../PostTags/PostTags'
+import { PostEmotions } from '../../PostEmotions/PostEmotions'
 
 export const OverlayPostPreview = (props) => {
   let dispatch = useDispatch()

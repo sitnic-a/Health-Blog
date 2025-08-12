@@ -1,21 +1,22 @@
-import React from 'react'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import moment from 'moment'
 
-import { getPosts } from '../redux-toolkit/features/postSlice'
+import { getPosts } from '../../redux-toolkit/features/postSlice'
 import {
   prepareForPieGraph,
   setRerendering,
-} from '../redux-toolkit/features/pieSlice'
+} from '../../redux-toolkit/features/pieSlice'
 
-export const FilterOptions = (props) => {
+import ListOfPostsFilterOptionsCSS from './ListOfPostsFilterOptions.css'
+
+export const ListOfPostsFilterOptions = (props) => {
   let dispatch = useDispatch()
   let { isFiltering } = useSelector((store) => store.filter)
   let { authenticatedUser } = useSelector((store) => store.user)
   let [months, setMonths] = useState([])
 
-  let searchPostDto = props.searchPostDto
+  let searchPostDto = props?.searchPostDto
 
   useEffect(() => {
     setMonths(moment.months())
@@ -26,7 +27,7 @@ export const FilterOptions = (props) => {
       authenticatedUser,
       monthOfPostCreation: e.target.selectedIndex,
     }
-    console.log('On change obj ', searchPostDto)
+
     dispatch(getPosts(searchPostDto))
     dispatch(setRerendering())
     dispatch(prepareForPieGraph(searchPostDto))

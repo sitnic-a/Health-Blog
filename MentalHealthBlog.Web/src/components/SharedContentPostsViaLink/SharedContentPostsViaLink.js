@@ -1,9 +1,11 @@
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { shareByLink } from '../redux-toolkit/features/shareExportSlice'
-import { ListOfSharedPosts } from './share-export/share/ListOfSharedPosts'
+import { shareByLink } from '../../redux-toolkit/features/shareExportSlice'
+import { ListOfSharedPosts } from '../share-export/share/ListOfSharedPosts/ListOfSharedPosts'
 import { useNavigate } from 'react-router-dom'
+
+import SharedContentPostsViaLinkCSS from './SharedContentPostsViaLink.css'
 
 export const SharedContentPostsViaLink = () => {
   let dispatch = useDispatch()
