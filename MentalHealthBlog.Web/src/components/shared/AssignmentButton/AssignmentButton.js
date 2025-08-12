@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 import { FaTasks } from 'react-icons/fa'
 
+import AssignmentButtonCSS from './AssignmentButton.css'
+
 export const AssignmentButton = () => {
   let navigate = useNavigate()
 

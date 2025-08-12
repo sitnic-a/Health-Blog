@@ -6,7 +6,7 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 //Import components
-import { PostById } from './components/PostById'
+import { PostById } from './components/PostById/PostById'
 import { Login } from './components/Login/Login'
 import { Register } from './components/Register/Register'
 

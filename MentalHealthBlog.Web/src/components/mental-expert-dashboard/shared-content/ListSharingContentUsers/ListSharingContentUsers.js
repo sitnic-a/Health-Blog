@@ -2,11 +2,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   getSharedContentOfPickedUser,
   setOverlayPost,
-} from '../../../redux-toolkit/features/mentalExpertSlice'
-import { expandShrinkSidebar } from '../../../utils/helper-methods/methods'
+} from '../../../../redux-toolkit/features/mentalExpertSlice'
+import { expandShrinkSidebar } from '../../../../utils/helper-methods/methods'
 
 import { BiExpandAlt } from 'react-icons/bi'
-import { getUserById } from '../../../redux-toolkit/features/userSlice'
+import { getUserById } from '../../../../redux-toolkit/features/userSlice'
+
+import ListSharingContentUsersCSS from './ListSharingContentUsers.css'
 
 export const ListSharingContentUsers = () => {
   let dispatch = useDispatch()

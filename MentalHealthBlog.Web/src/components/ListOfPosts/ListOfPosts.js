@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 import { Post } from '../Post/Post'
 import { ListOfPostsHeader } from '../ListOfPostsHeader/ListOfPostsHeader'
 import { Loader } from '../shared/Loader/Loader'
-import { PieGraph } from '../PieGraph'
+import { PieGraph } from '../PieGraph/PieGraph'
 
 import { ListOfPostsFilterOptions } from '../ListOfPostsFilterOptions/ListOfPostsFilterOptions'
 

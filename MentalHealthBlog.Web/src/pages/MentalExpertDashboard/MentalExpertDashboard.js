@@ -3,11 +3,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   getOnlyUsersThatSharedContent,
   getSharesPerUser,
-} from '../redux-toolkit/features/mentalExpertSlice'
+} from '../../redux-toolkit/features/mentalExpertSlice'
 import { toast } from 'react-toastify'
-import { ListSharingContentUsers } from '../components/mental-expert-dashboard/shared-content/ListSharingContentUsers'
-import { ListSharedContent } from '../components/mental-expert-dashboard/shared-content/ListSharedContent'
-import { Navbar } from '../components/shared/Navbar/Navbar'
+import { ListSharingContentUsers } from '../../components/mental-expert-dashboard/shared-content/ListSharingContentUsers/ListSharingContentUsers'
+import { ListSharedContent } from '../../components/mental-expert-dashboard/shared-content/ListSharedContent/ListSharedContent'
+import { Navbar } from '../../components/shared/Navbar/Navbar'
+
+import MentalExpertDashboardCSS from './MentalExpertDashboard.css'
 
 export const MentalExpertDashboard = () => {
   let dispatch = useDispatch()

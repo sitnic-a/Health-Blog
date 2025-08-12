@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { getById, updatePost } from '../redux-toolkit/features/postSlice'
+import { getById, updatePost } from '../../redux-toolkit/features/postSlice'
+
+import UpdatePostCSS from './UpdatePost.css'
 
 export const UpdatePost = () => {
   let { id } = useParams()
@@ -52,7 +54,7 @@ export const UpdatePost = () => {
   }
 
   return (
-    <form onSubmit={update}>
+    <form className="update-post-form" onSubmit={update}>
       <section className="update-post-main-container">
         <h1 className="update-post-main-container-title"> Update post:</h1>
         <div className="update-post-main-container-header">
@@ -73,7 +75,7 @@ export const UpdatePost = () => {
 
         <div className="update-post-main-container-content-container">
           <textarea
-            className="update-post-main-container-content-value"
+            className="form-field update-post-main-container-content-value"
             name="content"
             rows={20}
             value={content}
