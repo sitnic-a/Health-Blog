@@ -116,12 +116,12 @@ export const ManageUsersTable = () => {
                     {user?.roles &&
                       user?.roles.map((role) => {
                         return (
-                          <span
+                          <tr
                             className="manage-users-table-data-cell manage-users-data-role"
                             key={role?.id}
                           >
                             {role?.name}
-                          </span>
+                          </tr>
                         )
                       })}
                   </td>

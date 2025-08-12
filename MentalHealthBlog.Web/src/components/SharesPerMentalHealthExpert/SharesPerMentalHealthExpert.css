@@ -28,6 +28,11 @@
   }
 }
 
+.shares-per-mental-health-expert-content-main-container p {
+  font-family: 'Klee One';
+  font-size: 1.1rem;
+}
+
 .shares-per-mental-health-expert-error-container {
   display: flex;
   align-items: center;
