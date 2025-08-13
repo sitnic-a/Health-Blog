@@ -1,0 +1,152 @@
+#shared-posts-via-link-main-container {
+  max-width: 100vw;
+  margin-inline: auto;
+}
+
+.shared-posts-via-link-post-main-container {
+  margin-block: 1rem;
+  padding-bottom: 1rem;
+  box-sizing: border-box;
+  border-radius: 1.3rem;
+  background: #f3f1e3;
+}
+
+.shared-post-via-link-post-number {
+  width: fit-content;
+  display: block;
+  position: relative;
+  margin-bottom: 1.5rem;
+  padding-inline: 1.3rem;
+  padding-block: 0.8rem;
+  font-family: 'Klee One';
+  font-size: 1.1em;
+  border-radius: 360px;
+  background: #edb572;
+}
+
+.shared-posts-via-link-post-container {
+  display: flex;
+  margin-top: -2rem;
+  overflow-y: scroll;
+}
+
+@media (width<=600px) {
+  .shared-posts-via-link-post-container {
+    margin-top: -1.5rem;
+    flex-wrap: wrap-reverse;
+  }
+}
+
+.shared-posts-via-link-post-container::-webkit-scrollbar {
+  width: 10px;
+  margin-right: 1rem;
+  background-color: #b4d2e9;
+}
+
+.shared-posts-via-link-post-container::-webkit-scrollbar-thumb {
+  border-radius: 0.5rem;
+  background: #edb572;
+}
+
+.shared-posts-via-link-post-details {
+  max-width: 350px;
+  width: 100%;
+  padding: 1rem;
+}
+
+.shared-posts-via-link-post-details-subtitle {
+  margin: 0;
+  margin-block: 0.4rem;
+  font-family: 'Klee One';
+  font-weight: 600;
+}
+
+.shared-posts-via-link-tags-container .post-container-main-tags {
+  padding: 0;
+}
+
+.shared-posts-via-link-tags-container
+  .post-container-main-tags
+  .post-container-tags {
+  max-height: 200px;
+  height: 100%;
+  padding: 0;
+  opacity: 1;
+  overflow-y: scroll;
+}
+
+.shared-posts-via-link-tags-container
+  .post-container-main-tags
+  .post-container-tags::-webkit-scrollbar {
+  width: 10px;
+  margin-right: 1rem;
+  background: #b4d2e9;
+}
+
+.shared-posts-via-link-tags-container
+  .post-container-main-tags
+  .post-container-tags::-webkit-scrollbar-thumb {
+  border-radius: 0.5rem;
+  background: #edb572;
+}
+
+.shared-posts-via-link-emotions-main-container
+  .shared-posts-via-link-emotions-container
+  .post-container-main-emotions
+  .post-container-emotions {
+  max-height: 200px;
+  height: 100%;
+  opacity: 1;
+  overflow-y: scroll;
+}
+
+.shared-posts-via-link-emotions-main-container
+  .shared-posts-via-link-emotions-container
+  .post-container-main-emotions
+  .post-container-emotions::-webkit-scrollbar {
+  width: 10px;
+  margin-right: 1rem;
+  background: #b4d2e9;
+}
+
+.shared-posts-via-link-emotions-main-container
+  .shared-posts-via-link-emotions-container
+  .post-container-main-emotions
+  .post-container-emotions::-webkit-scrollbar-thumb {
+  border-radius: 0.5rem;
+  background: #edb572;
+}
+
+.shared-posts-via-link-post-details-date {
+  font-family: 'Klee One';
+  font-size: 0.85rem;
+}
+
+.shared-posts-via-link-post-content {
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 1rem 1rem 0rem 1rem;
+}
+
+.shared-posts-via-link-header-title {
+  margin: 0;
+  font-family: 'Overlock';
+  font-size: 1.4rem;
+}
+
+.shared-posts-via-link-post-content-details {
+  max-height: 220px;
+  margin-block: auto;
+  margin-top: 1rem;
+  font-family: 'Klee One';
+  font-size: 0.9rem;
+  white-space: pre-wrap;
+}
+
+@media (width<=600px) {
+  .shared-posts-via-link-post-content-details {
+    max-width: 390px;
+    max-height: 240px;
+    overflow-y: scroll;
+  }
+}

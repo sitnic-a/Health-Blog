@@ -1,0 +1,99 @@
+.sharing-users-main-users-container {
+  max-width: 200px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  padding: 0.3rem;
+  border-right: 1px solid #f3f1e3;
+}
+
+@media (width > 550px) {
+  .sharing-users-main-users-container {
+    max-width: 200px;
+  }
+}
+
+@media (width<=550px) {
+  .sharing-users-main-users-container {
+    max-width: 20px;
+    width: 100%;
+    transition: 250ms;
+  }
+}
+
+.sharing-users-main-users-container-expanded {
+  max-width: 500px;
+  width: 100%;
+  /* background: red; */
+}
+
+@media (width > 550px) {
+  .sharing-users-main-users-container-expanded {
+    max-width: 200px;
+  }
+}
+
+.sharing-users-expander-action {
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  padding: 0.3rem;
+  opacity: 0;
+}
+
+@media (width<=550px) {
+  .sharing-users-expander-action {
+    opacity: 1;
+  }
+}
+
+.sharing-users-users-container {
+  margin: 2rem 0.5rem;
+  padding-block: 0.2rem;
+}
+
+.sharing-user-user-container {
+  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
+  padding-block: 0.3rem;
+  text-align: center;
+  border-radius: 0.7rem;
+  transition: 200ms;
+  cursor: pointer;
+  background: #edb572;
+}
+
+@media (width<=550px) {
+  .sharing-user-user-container {
+    max-width: 0px;
+  }
+}
+
+.sharing-user-user-container:hover {
+  background: #f1e0c4;
+
+  .sharing-user-title {
+    color: #000;
+  }
+}
+
+.sharing-user-user-container-expanded {
+  max-width: 550px;
+  opacity: 1;
+}
+
+.sharing-user-title {
+  font-family: 'Klee One';
+  font-weight: 500;
+  color: #f3f1e3;
+}
+
+@media (width<=550px) {
+  .sharing-user-title {
+    opacity: 0;
+  }
+}
+
+.sharing-user-title-expanded {
+  opacity: 1;
+}

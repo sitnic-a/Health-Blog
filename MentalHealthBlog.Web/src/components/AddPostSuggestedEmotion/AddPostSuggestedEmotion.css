@@ -1,0 +1,69 @@
+.add-post-suggested-emotion-container {
+  max-width: fit-content;
+  display: inline-block;
+  position: relative;
+  margin-block: 0.1rem;
+  margin-right: 0.6rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 0.3rem;
+  font-family: 'Klee One';
+}
+
+.emotion-bad {
+  color: #fff;
+  background: red;
+}
+
+.emotion-happy {
+  color: #fff;
+  background: green;
+}
+
+.emotion-surprised {
+  background: lightblue;
+}
+
+.emotion-angry {
+  background: orange;
+}
+
+.emotion-sad {
+  background: lightpink;
+}
+
+.emotion-disgusted {
+  background: limegreen;
+}
+
+.emotion-fearful {
+  color: #000;
+  background: yellow;
+}
+
+.add-post-suggested-emotion-container-checked {
+  border: 1px solid #000;
+  border-radius: 0.3rem;
+  color: #0000004d;
+  background: #fff;
+}
+
+.add-post-suggested-emotion-marker {
+  position: absolute;
+  left: 50%;
+  top: 7%;
+  transform: translateX(-50%);
+  border-radius: 360px;
+  font-size: 2rem;
+  color: #fff;
+  background: none;
+}
+
+.emotion-marker-unchecked {
+  opacity: 0;
+}
+
+.emotion-marker-checked {
+  opacity: 1;
+  color: #00ff;
+}

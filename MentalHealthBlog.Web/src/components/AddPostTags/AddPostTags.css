@@ -1,0 +1,66 @@
+.add-post-picked-tags-container {
+  overflow: hidden;
+}
+
+.add-post-content-picked-tags-span-tag {
+  min-height: 20px;
+  display: inline-block;
+  position: relative;
+  margin: 0.3rem 0.05rem;
+  padding: 0.5rem 1rem;
+  font-family: 'Klee One';
+  font-size: 0.9em;
+  border-radius: 0.7rem;
+  color: #f3f1e3;
+  background: #34688f;
+}
+
+.add-post-content-picked-tags-span-tag-remove {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.2rem;
+  font-size: 0.6rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: #f3f1e3;
+}
+
+.add-post-content-picked-tags-span-tag-remove:hover {
+  font-size: 0.64em;
+  border-radius: 100%;
+  color: #fff;
+  background: #c93232;
+}
+
+.add-post-content-tags-input {
+  width: 100%;
+  margin-bottom: 1rem;
+  font-family: 'Klee One';
+  font-size: 0.8em;
+}
+
+.add-post-suggested-tags-container {
+  width: 100%;
+  height: 100px;
+  margin-top: 0.15rem;
+  border: 1px solid #a8a8a8;
+  border-radius: 0.4rem;
+  overflow-y: scroll;
+}
+
+.add-post-suggested-tag {
+  margin: 0.3rem;
+  padding: 0.2rem;
+  border: 1px solid #a8a8a8;
+  border-radius: 0.4rem;
+  font-family: 'Klee One';
+  font-size: 0.8em;
+}
+
+.add-post-suggested-tag:hover {
+  border: none;
+  cursor: pointer;
+  color: #f3f1e3;
+  background: #34688f;
+}

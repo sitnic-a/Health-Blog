@@ -1,0 +1,75 @@
+.manage-users-filter-container {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-left: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.manage-users-select-filter-title {
+  font-family: 'Klee One';
+  font-size: 1rem;
+}
+
+.manage-users-select-role-filter {
+  max-width: 200px;
+  margin-left: 0.4rem;
+  padding: 0.6rem 0.5rem;
+  background: #82a3bc;
+  color: #f3f1e3;
+  outline: none;
+  border: none;
+  border-radius: 0.5rem;
+  font-family: 'Klee One';
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: 200ms;
+}
+
+.manage-users-select-role-filter:hover {
+  background: none;
+  color: #34688f;
+  border: 1px solid #34688f;
+}
+
+.input-filter-main-container {
+  display: none;
+}
+
+.manage-users-filter-condition-title {
+  font-family: 'Klee One';
+  font-size: 1rem;
+}
+
+input[name='manage-users-name-input-filter'] {
+  max-width: 300px;
+  padding: 0.6rem;
+  padding-right: 3rem;
+  background: #f0eae1;
+  font-family: 'Klee One';
+  border-radius: 0.4rem;
+  outline: none;
+  border: 1px solid #82a3bc;
+}
+
+.manage-users-search-filter-button {
+  margin-top: 0.2rem;
+  padding: 0.7rem 2rem;
+  font-family: 'Klee One';
+  background: #34688f;
+  outline: none;
+  border: none;
+  color: #fff;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: 200ms;
+}
+
+.manage-users-search-filter-button:hover {
+  background: none;
+  color: #34688f;
+  border: 1px solid #34688f;
+}

@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux'
-import { AdminDashboard } from './AdminDashboard'
-import { MentalExpertDashboard } from './MentalExpertDashboard'
-import { UserDashboard } from './UserDashboard'
+import { AdminDashboard } from './AdminDashboard/AdminDashboard'
+import { MentalExpertDashboard } from './MentalExpertDashboard/MentalExpertDashboard'
+import { UserDashboard } from './UserDashboard/UserDashboard'
 
 export const Dashboard = () => {
   let { authenticatedUser } = useSelector((store) => store.user)

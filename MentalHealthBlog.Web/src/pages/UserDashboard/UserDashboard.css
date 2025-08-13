@@ -1,0 +1,8 @@
+.user-dashboard {
+  max-width: 100vw;
+  min-height: 100vh;
+  margin-inline: -2rem;
+  padding-inline: 2rem;
+  align-items: normal;
+  background: #cce5f1;
+}

@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { db_roles } from '../enums/roles'
+import { db_roles } from '../../enums/roles'
 import { Assignments as UserAssignments } from '../Assignments'
 import { Assignments as MentalHealthExpertAssignments } from '../mental-expert-dashboard/assignments/Assignments'
 

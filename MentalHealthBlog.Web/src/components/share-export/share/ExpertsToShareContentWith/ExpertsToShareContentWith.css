@@ -1,0 +1,173 @@
+.share-modal-people-to-share-with {
+  display: flex;
+  margin-inline: 3rem;
+  border: 1px solid #82a3bc;
+  overflow-x: scroll;
+}
+
+.person-to-share-with-main-container {
+  max-width: fit-content;
+  margin: 0.3rem;
+  padding-inline: 0.7rem;
+  padding-bottom: 3rem;
+  background: #bcd0e0;
+}
+
+@media (width<=420px) {
+  .person-to-share-with-main-container {
+    padding-inline: 0.3rem;
+  }
+}
+
+.person-permission-info {
+  max-width: 160px;
+  margin: 0;
+  margin-bottom: 0.1rem;
+  overflow-x: hidden;
+  font-size: 0.9rem;
+  color: #000;
+}
+
+.person-to-share-content-with-checkbox {
+  width: 20px;
+  height: 20px;
+  margin-right: -0.3rem;
+  float: right;
+  clear: both;
+}
+
+@media (width<=420px) {
+  .person-to-share-content-with-checkbox {
+    margin-right: -0rem;
+  }
+}
+
+.person-to-share-with-container {
+  clear: both;
+}
+
+.person-to-share-with-img-container {
+  max-width: 100px;
+  max-height: 100px;
+  margin: auto;
+}
+
+@media (width<=420px) {
+  .person-to-share-with-img-container {
+    max-width: 80px;
+    max-height: 80px;
+    margin: auto;
+  }
+}
+
+.person-to-share-with-img {
+  max-width: 100px;
+  max-height: 100px;
+}
+
+@media (width<=420px) {
+  .person-to-share-with-img {
+    max-width: 80px;
+    max-height: 80px;
+    margin: auto;
+  }
+}
+
+.person-to-share-with-header-info-container {
+  text-align: center;
+}
+
+.person-to-share-with-name {
+  max-width: 200px;
+  margin: 0;
+  font-family: 'Klee One';
+  font-size: 1rem;
+}
+
+.person-to-share-with-role {
+  max-width: 200px;
+  margin: 0;
+  font-family: 'Klee One';
+  font-size: 1rem;
+}
+
+.person-to-share-with-additional-info-field {
+  display: flex;
+  align-items: center;
+}
+
+.person-to-share-with-phone-field {
+  margin-top: 0.7rem;
+  margin-bottom: 0.3rem;
+  gap: 3px;
+}
+
+@media (width<=420px) {
+  .person-to-share-with-phone-field {
+    margin-top: 25px;
+    flex-direction: column;
+  }
+}
+
+.person-to-share-with-phone-icon {
+  width: 15px;
+  height: 15px;
+  margin-top: 0.1rem;
+  font-size: 0.9rem;
+}
+
+@media (width<=420px) {
+  .person-to-share-with-phone-icon {
+    width: 23px;
+    height: 23px;
+  }
+}
+
+.person-to-share-with-phone-value {
+  max-width: 180px;
+  margin: 0;
+  font-family: 'Klee One';
+  font-size: 0.9rem;
+}
+
+.person-to-share-with-email-field {
+  gap: 3px;
+  margin-bottom: 0.3rem;
+}
+
+@media (width<=420px) {
+  .person-to-share-with-email-field {
+    flex-direction: column;
+  }
+}
+
+.person-to-share-with-email-icon {
+  width: 15px;
+  height: 15px;
+  margin-top: 0.2rem;
+}
+
+@media (width<=420px) {
+  .person-to-share-with-email-icon {
+    width: 23px;
+    height: 23px;
+  }
+}
+
+.person-to-share-with-email-value {
+  max-width: 190px;
+  margin: 0;
+  font-size: 0.9rem;
+  font-family: 'Klee One';
+  word-wrap: break-word;
+}
+
+.person-to-share-with-organization-field {
+  justify-content: center;
+}
+
+.person-to-share-with-organization-value {
+  margin: 0;
+  font-family: 'Klee One';
+  text-align: center;
+}

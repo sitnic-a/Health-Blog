@@ -1,0 +1,115 @@
+#admin-dashboard-main-container {
+  max-width: 100vw;
+  min-height: 100vh;
+  margin-inline: -2rem;
+  /* margin-top: 2rem; -- space for navbar (settings, logout, etc...)  */
+  padding-inline: 2rem;
+  /* border: 1px solid red; */
+  background: #cce5f1;
+}
+
+.admin-dashboard-container {
+}
+
+.admin-dashboard-actions-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 2rem 0;
+  /* border: 1px solid green; */
+}
+
+.admin-dashboard-link-request {
+  max-width: 250px;
+  width: 100%;
+  min-height: 240px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 0.6rem;
+}
+
+.admin-link-mental-health-experts-requests {
+  position: relative;
+  background: #34688f;
+  color: #fff;
+  transition: 200ms;
+}
+
+.admin-link-mental-health-experts-requests:hover {
+  background: none;
+  color: #34688f;
+  border: 1px solid #34688f;
+}
+
+.admin-dashboard-request-container-notification {
+  position: absolute;
+  right: 15px;
+  top: -15px;
+  padding: 0.5rem 1rem;
+  border-radius: 360px;
+  background: #edb572;
+  font-weight: 500;
+  font-size: 1.2rem;
+  color: #f3f1e3;
+}
+
+.admin-dashboard-link-container {
+  transform: translateY(4rem);
+}
+
+.admin-dashboard-request-container-title {
+  margin: 0;
+  font-family: 'Klee One';
+  font-size: 1.5rem;
+}
+
+.admin-dashboard-request-container-subtitle {
+  margin-block: 0.3rem;
+  font-family: 'Klee One';
+  font-size: 1.1rem;
+}
+
+.admin-dashboard-request-container-info {
+  font-family: 'Klee One';
+}
+
+.admin-dashboard-request-container-number-of-registered {
+  margin-left: 5px;
+}
+
+.admin-dashboard-error-container {
+  font-family: 'Klee One';
+  color: #c93232;
+}
+
+.admin-link-manage-users {
+  background: #82a3bc;
+  color: #f3f1e3;
+  transition: 200ms;
+}
+
+.admin-link-manage-users:hover {
+  background: none;
+  color: #82a3bc;
+  border: 1px solid #82a3bc;
+}
+
+.admin-link-manage-users > .admin-dashboard-link-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  max-width: 200px;
+  margin: auto;
+  transform: translateY(6rem);
+}
+
+.admin-link-manage-users-icon {
+  font-size: 1.5rem;
+}
+
+.admin-link-manage-users-title {
+  margin: 0;
+  font-family: 'Klee One';
+  font-size: 1.8rem;
+}

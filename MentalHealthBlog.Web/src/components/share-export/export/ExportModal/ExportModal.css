@@ -1,0 +1,139 @@
+.export-modal-overlay {
+  max-width: 100vw;
+  width: 100%;
+  min-height: 100vh;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  text-align: center;
+  background: #82a3bc60;
+}
+
+.export-modal-container {
+  max-width: 430px;
+  width: 100%;
+  min-height: 230px;
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  margin: auto;
+  padding: 1rem;
+  transform: translateX(-50%);
+  border-radius: 0.4rem;
+  background: #f3f1e3;
+}
+
+@media (width <= 490px) {
+  .export-modal-container {
+    max-width: 250px;
+    min-height: 190px;
+    margin-inline: auto;
+  }
+}
+
+@media (width <= 490px) {
+  .export-modal-container > span {
+    right: 10px;
+    font-size: 1rem;
+  }
+}
+
+.share-export-close-modal-btn {
+  position: absolute;
+  top: 0;
+  right: 0px;
+  padding: 5px;
+  font-weight: 600;
+  font-size: 1.2rem;
+  transition: 150ms;
+  border-top-right-radius: 0.4rem;
+  cursor: pointer;
+  color: #fff;
+  background: #c93232;
+}
+
+.share-export-close-modal-btn:hover {
+  color: #c93232;
+  background: #f3f1e3;
+}
+
+.export-modal {
+  margin-inline: -1rem;
+  margin-block: 1rem;
+  padding-inline: 1rem;
+}
+
+.export-modal-content {
+  min-height: 220px;
+  position: relative;
+  margin-inline: -1rem;
+  margin-top: 2.5rem;
+  padding-inline: 1rem;
+  color: #000;
+}
+
+.export-modal-content-title {
+  padding-block: 0.2rem;
+  font-family: 'Overlock';
+}
+
+.export-modal-files-container {
+  max-height: 100px;
+  margin-inline: -1rem;
+  margin-top: -0.3rem;
+  margin-bottom: 0.5rem;
+  padding-inline: 1rem;
+  overflow-y: scroll;
+}
+
+.export-modal-file-wrapper {
+  margin-top: 0px;
+  padding: 0.1rem;
+}
+
+.export-modal-file-file-name {
+  display: flex;
+  flex-direction: row;
+  gap: 1px;
+  margin-block: -0.1rem;
+  padding-block: 0.2rem;
+  font-family: 'Klee One';
+  font-size: 0.9rem;
+}
+
+.export-modal-progress-container {
+  position: relative;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.export-modal-successfully-exported-container {
+  color: #5eba69;
+}
+
+.export-modal-exported-success-icon {
+  font-size: 4rem;
+  font-weight: 200;
+}
+
+.export-modal-exported-description {
+  margin-top: 0;
+  font-family: 'Klee One';
+  font-size: 1rem;
+}
+
+.export-modal-not-exported-container {
+  color: #c93232;
+}
+
+.export-modal-not-exported-error-icon {
+  font-size: 6rem;
+}
+
+.export-modal-not-exported-description {
+  margin-top: 0rem;
+  font-family: 'Klee One';
+}

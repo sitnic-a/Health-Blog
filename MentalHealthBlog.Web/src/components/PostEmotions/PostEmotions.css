@@ -1,0 +1,11 @@
+.post-container-main-emotions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.post-container-emotions {
+  height: 0px;
+  opacity: 0;
+  transition: 300ms;
+}

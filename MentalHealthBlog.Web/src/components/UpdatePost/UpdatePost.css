@@ -1,0 +1,107 @@
+.update-post-form {
+  margin-left: -0.5rem;
+}
+
+.update-post-main-container {
+  max-width: 900px;
+  margin: auto;
+  height: 80%;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  /* background: red; */
+}
+
+@media (width<=450px) {
+  .update-post-main-container {
+    margin-inline: -1rem;
+  }
+}
+
+.update-post-main-container-title {
+  margin-block: 1rem;
+  margin-inline: 1rem;
+  font-weight: 550;
+  font-family: 'Klee One';
+  font-size: 1.8rem;
+  /* background: red; */
+}
+
+.update-post-main-container-header {
+  max-width: 900px;
+  margin-inline: 1rem;
+  /* background: red; */
+}
+
+.update-post-main-container-header-title {
+  margin-block: 0.3rem;
+  font-family: 'Klee One';
+  font-size: 1.3rem;
+}
+
+.update-post-main-container-header-post-title {
+  max-width: 900px;
+  width: 100%;
+  padding-block: 0.5rem;
+  padding-inline: 0.3rem;
+  font-family: 'Klee One';
+  border: none;
+  outline: none;
+  border-radius: 0.4rem;
+  transition: 200ms;
+  background: #f3f1e3;
+}
+
+.update-post-main-container-header-post-title:hover {
+  background: #faffff;
+}
+
+.update-post-main-container-content-container {
+  max-width: 900px;
+  height: 100%;
+  margin-inline: 1rem;
+}
+
+.update-post-main-container-content-value {
+  max-width: 900px;
+  width: 100%;
+  margin-top: 0px;
+  margin-right: 1rem;
+  padding-block: 0.7rem;
+  padding-inline: 0.3rem;
+  font-family: 'Klee One';
+  border: none;
+  outline: none;
+  border-radius: 0.4rem;
+  text-align: justify;
+  transition: 200ms;
+  background: #f3f1e3;
+}
+
+.update-post-main-container-content-value:hover {
+  background: #faffff;
+  outline: none;
+  cursor: text;
+}
+
+.update-post-main-container-submit-btn {
+  position: relative;
+  left: 50%;
+  margin: 0.6rem auto;
+  padding: 0.5rem 1rem;
+  transform: translateX(-50%);
+  font-family: 'Klee One';
+  font-weight: 600;
+  outline: none;
+  border: none;
+  border-radius: 0.4rem;
+  text-align: center;
+  transition: 200ms;
+  cursor: pointer;
+  color: #f3f1e3;
+  background: #edb572;
+}
+
+.update-post-main-container-submit-btn:hover {
+  color: #edb572;
+  background: #f3f1e3;
+}

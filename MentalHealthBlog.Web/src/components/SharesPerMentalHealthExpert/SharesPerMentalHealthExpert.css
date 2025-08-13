@@ -1,0 +1,49 @@
+.shares-per-mental-health-expert-main-container {
+  min-height: 100vh;
+  margin-inline: -2rem;
+  padding-inline: 2rem;
+  padding-top: 0.01rem;
+  background: #cce5f1;
+}
+
+.shares-per-mental-health-expert-title {
+  margin-top: 3rem;
+  margin-left: 0.5rem;
+  font-family: 'Klee One';
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.shares-per-mental-health-expert-content-main-container {
+  max-width: 1440px;
+  min-height: 100vh;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 2rem;
+}
+
+@media (width<=1160px) {
+  .shares-per-mental-health-expert-content-main-container {
+    justify-content: center;
+  }
+}
+
+.shares-per-mental-health-expert-content-main-container p {
+  font-family: 'Klee One';
+  font-size: 1.1rem;
+}
+
+.shares-per-mental-health-expert-error-container {
+  display: flex;
+  align-items: center;
+  color: #c93232;
+}
+
+.shares-per-mental-health-expert-error-icon {
+  font-size: 6rem;
+}
+
+.shares-per-mental-health-expert-error-description {
+  margin: 0;
+  font-family: 'Klee One';
+}

@@ -1,0 +1,98 @@
+.shares-per-mental-health-expert-content-posts {
+  max-width: 550px;
+  max-height: 330px;
+  display: flex;
+  flex-wrap: wrap;
+  /* background-color: red; */
+}
+
+@media (width<=1160px) {
+  .shares-per-mental-health-expert-content-posts {
+    max-width: 290px;
+    justify-content: center;
+    transform: translateY(30%);
+    overflow-y: scroll;
+  }
+}
+
+@media (width<680px) {
+  .shares-per-mental-health-expert-content-posts {
+    max-width: 550px;
+    transform: translateY(0%);
+    overflow: hidden;
+  }
+}
+
+@media (width<=592px) {
+  .shares-per-mental-health-expert-content-posts {
+    max-width: 290px;
+    overflow-y: scroll;
+  }
+}
+
+.shares-per-mental-health-expert-content-posts::-webkit-scrollbar {
+  width: 10px;
+  margin-right: 1rem;
+  background: #b4d2e9;
+}
+
+.shares-per-mental-health-expert-content-posts::-webkit-scrollbar-thumb {
+  border-radius: 0.5rem;
+  background: #82a3bc;
+}
+
+.shares-per-mental-health-expert-expert-main-container {
+  display: inline-block;
+  margin: 0.5rem;
+  /* margin-inline: 0.5rem; */
+  padding: 1.5rem;
+  padding-block: 3rem;
+  border-radius: 0.4rem;
+  /* border: 1px solid gray; */
+  background: #f0eae1;
+}
+
+.shares-per-mental-health-expert-expert-image-wrapper {
+  max-width: 150px;
+  max-height: 150px;
+  margin: auto;
+  margin-top: -2rem;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+  border-radius: 360px;
+}
+
+.shares-per-mental-health-expert-expert-image {
+  max-width: 150px;
+  width: 100%;
+  border-radius: 360px;
+}
+
+.shares-per-mental-health-expert-expert-info-paragraph {
+  margin: 0;
+  margin-block: 0.2rem;
+  text-align: center;
+  font-family: 'Klee One';
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.shares-per-mental-health-expert-expert-info-paragraph:nth-of-type(2) {
+  margin-bottom: 0.7rem;
+  font-size: 0.87rem;
+  font-weight: 500;
+}
+
+.shares-per-mental-health-expert-separator-line {
+  border-color: #edb572;
+  border-width: 1.21px;
+}
+
+.posts-counter-paragraph {
+  margin-top: 1rem;
+  margin: 0;
+  opacity: 0;
+  transition: 600ms;
+  text-align: center;
+  font-family: 'Klee One';
+}
