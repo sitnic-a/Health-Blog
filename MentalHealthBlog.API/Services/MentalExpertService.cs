@@ -8,6 +8,7 @@ using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
 using MentalHealthBlogAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 #pragma warning disable CS8620
 #pragma warning disable CS8602
@@ -36,6 +37,51 @@ namespace MentalHealthBlog.API.Services
             _mentalExpertLoggerService = mentalExpertLoggerService;
         }
 
+
+        public async Task<Response> GetMentalHealthExperts()
+        {
+            try
+            {
+                var mentalHealthExperts = new List<MentalHealthExpertDto>();
+                var dbMentalHealthExperts = await _context.MentalHealthExperts
+                    .OrderByDescending(mhe => mhe.FirstName)
+                    .Where(mhe => mhe.IsApproved == true)
+                    .ToListAsync();
+
+                if (!dbMentalHealthExperts.Any())
+                {
+                    _mentalExpertLoggerService.LogWarning($"EXPERTS: {MentalExpertServiceLogTypes.EMPTY.ToString()}");
+                    throw new EmptyListException("No records found in database");
+                }
+
+                foreach (var dbMentalHealthExpert in dbMentalHealthExperts)
+                {
+                    var mentalHealthExpertDto = _mapper.Map<MentalHealthExpertDto>(dbMentalHealthExpert);
+
+                    if (mentalHealthExpertDto == null)
+                    {
+                        _mentalExpertLoggerService.LogWarning($"EXPERTS: {MentalExpertServiceLogTypes.NOT_FOUND.ToString()}");
+                        throw new EmptyListException("Mental health expert doesn't exist");
+                    }
+                    mentalHealthExperts.Add(mentalHealthExpertDto);
+                }
+
+                if (!mentalHealthExperts.Any())
+                {
+                    _mentalExpertLoggerService.LogWarning($"EXPERTS: {MentalExpertServiceLogTypes.EMPTY.ToString()}");
+                    throw new EmptyListException("Experts are not found!");
+                }
+
+                _mentalExpertLoggerService.LogInformation($"EXPERTS: {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
+                return new Response(mentalHealthExperts, StatusCodes.Status200OK, $"EXPERTS: {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
+            }
+            catch (Exception e)
+            {
+                _mentalExpertLoggerService.LogError($"EXPERTS: {e.Message}", e);
+                throw;
+            }
+
+        }
 
         public async Task<Response> GetSharesPerUser(ExpertSearchContentDto query)
         {
@@ -180,6 +226,7 @@ namespace MentalHealthBlog.API.Services
                 throw;
             }
         }
+
     }
 }
 
