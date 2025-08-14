@@ -1,0 +1,14 @@
+.post-container-main-tags {
+  max-width: 370px;
+  padding-right: 0.5rem;
+  font-size: 0.9em;
+  border-radius: 0.4rem;
+  color: #000;
+  background: #89cff0;
+}
+
+.post-container-tags {
+  height: 0px;
+  opacity: 0;
+  transition: 300ms;
+}

@@ -1,0 +1,155 @@
+.overlay-post-main-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  cursor: pointer;
+  background: #82a3bc60;
+}
+
+.overlay-post-container {
+  max-width: 550px;
+  height: 90vh;
+  position: relative;
+  margin-inline: auto;
+  margin-block: 2rem;
+  cursor: default;
+  overflow-y: scroll;
+  /* background: yellow; */
+}
+
+.overlay-post-container::-webkit-scrollbar {
+  display: none;
+}
+
+@media (width<=1100px) {
+  .overlay-post-container {
+    max-width: 400px;
+  }
+}
+
+@media (width<=720px) {
+  .overlay-post-container {
+    max-width: 340px;
+  }
+}
+
+@media ((width<=660px) and (width>550px)) {
+  .overlay-post-container {
+    margin-inline: 1rem;
+  }
+}
+
+@media (width<=460px) {
+  .overlay-post-container {
+    margin-inline: 1rem;
+  }
+}
+
+.overlay-post-actions {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.3rem 0.5rem;
+  z-index: 1;
+  background: #c93232;
+  border-top-right-radius: 0.3rem;
+  color: #f3f1e3;
+  cursor: pointer;
+}
+
+.overlay-post-actions:hover {
+  background: #b30000;
+}
+
+.overlay-post-actions-close-modal {
+  font-family: 'Klee One';
+}
+
+.overlay-post-content-container {
+  max-width: 100%;
+  min-height: 90%;
+  position: relative;
+  padding: 1rem;
+  /* border: 1px solid red; */
+  border-radius: 0.4rem;
+  cursor: default;
+  background: #f3f1e3;
+}
+
+@media (width<440px) {
+  .overlay-post-content-container {
+    padding: 0.5rem;
+  }
+}
+
+.overlay-post-title {
+  font-family: 'Overlock';
+  font-size: 1.3rem;
+  text-align: center;
+  cursor: default;
+}
+
+.overlay-post-content > pre {
+  max-width: 530px;
+  min-height: 150px;
+  font-family: 'Klee One';
+  font-size: 1rem;
+  text-align: justify;
+  overflow-y: scroll;
+  text-wrap: wrap;
+  cursor: default;
+}
+
+@media (width<=740px) {
+  .overlay-post-content > pre {
+    max-width: 400px;
+  }
+}
+
+@media (width<=700px) {
+  .overlay-post-content > pre {
+    max-width: 300px;
+  }
+}
+
+.overlay-post-tags-subtitle {
+  font-family: 'Klee One';
+  font-size: 1.1rem;
+}
+
+.overlay-post-tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 3px;
+  margin-top: -5px;
+  cursor: default;
+  /* background: red; */
+}
+
+.overlay-post-tags-container .post-container-main-tags .post-container-tags {
+  height: fit-content;
+  opacity: 1;
+}
+
+.overlay-post-emotions-subtitle {
+  font-family: 'Klee One';
+  font-size: 1.1rem;
+}
+
+.overlay-post-emotions-container .post-container-main-emotions {
+  height: max-content;
+}
+
+.overlay-post-emotions-container .post-container-emotions {
+  height: fit-content;
+  opacity: 1;
+}
+
+.overlay-post-date {
+  font-family: 'Klee One';
+  font-size: 0.8rem;
+  cursor: default;
+}

@@ -1,0 +1,14 @@
+#user-shared-posts-via-link {
+  min-height: 100vh;
+  margin-top: -1.5rem;
+  margin-inline: -2rem;
+  padding-inline: 1rem;
+  padding-bottom: 2rem;
+  background: #cce5f1;
+}
+
+.user-shared-posts-via-link-title {
+  padding-top: 3rem;
+  font-family: 'Klee One';
+  font-size: 1.5rem;
+}

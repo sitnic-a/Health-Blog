@@ -1,5 +1,5 @@
-import { SharesPerMentalHealthExpert } from "./SharesPerMentalHealthExpert";
-import { ShareViaLink } from "./share-export/share/ShareViaLink";
+import { SharesPerMentalHealthExpert } from './SharesPerMentalHealthExpert/SharesPerMentalHealthExpert'
+import { ShareViaLink } from './share-export/share/ShareViaLink/ShareViaLink'
 
 export const SharedPosts = () => {
   return (
@@ -9,5 +9,5 @@ export const SharedPosts = () => {
       {/* Shares per doctor to make */}
       <SharesPerMentalHealthExpert />
     </>
-  );
-};
+  )
+}

@@ -1,0 +1,106 @@
+.manage-users-table {
+  max-width: 1440px;
+  width: 100%;
+  border-spacing: 0px;
+  border-radius: 0.5rem;
+  -webkit-border-vertical-spacing: 2px;
+  background: #f1e0c4;
+  /* padding-block: 1rem; */
+}
+
+.manage-users-table-row,
+.manage-users-table-body-row {
+  text-align: center;
+}
+
+.manage-users-table-body-row:last-child
+  > .manage-users-table-data-cell:first-child {
+  position: relative;
+  border-bottom-left-radius: 0.5rem;
+}
+
+.manage-users-table-body-row:last-child
+  > .manage-users-table-data-cell:last-child {
+  position: relative;
+  border-bottom-right-radius: 0.5rem;
+}
+
+.manage-users-table-body-row:hover {
+  border-radius: 0.4rem;
+  cursor: pointer;
+  background: #e1e1e1;
+}
+
+@media (width<700px) {
+  .manage-users-more-cell-organization {
+    display: none;
+  }
+}
+
+@media (width<700px) {
+  .manage-users-more-cell-phone-number {
+    display: none;
+  }
+}
+
+@media (width<700px) {
+  .manage-users-more-cell-email {
+    display: none;
+  }
+}
+
+.manage-users-table-row-head-cell {
+  position: relative;
+  padding-block: 1rem;
+  font-family: 'Klee One';
+}
+
+.manage-users-table-body {
+  background: #f0eae1;
+}
+
+.manage-users-table-data-cell {
+  padding-block: 0.7rem;
+  font-family: 'Klee One';
+}
+
+@media (width<500px) {
+  .manage-users-table-data-cell {
+    max-width: 40px;
+    padding-inline: 0.3rem;
+    overflow-x: scroll;
+  }
+}
+
+@media (width<700px) {
+  .manage-users-data-organization {
+    display: none;
+  }
+}
+
+@media (width<700px) {
+  .manage-users-data-phone-number {
+    display: none;
+  }
+}
+
+@media (width<700px) {
+  .manage-users-data-email {
+    display: none;
+  }
+}
+
+@media (width<=500px) {
+  .manage-users-data-role {
+    max-width: 40px;
+    overflow-x: scroll;
+  }
+}
+
+.manage-users-remove-user-button {
+  font-size: 1.5rem;
+}
+
+.manage-users-remove-user-button:hover {
+  color: #c93232;
+}

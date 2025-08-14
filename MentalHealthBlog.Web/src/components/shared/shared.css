@@ -1,0 +1,54 @@
+.form-fields {
+  margin: auto;
+  max-width: 500px;
+  /* background: blue; */
+}
+
+.form-field {
+  /* background: green; */
+  padding-inline: 0;
+  padding-block: 0.5rem;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #e1e1e1;
+  outline: none;
+  border-radius: 0.3rem;
+  font-family: 'Klee One';
+}
+
+@keyframes blink {
+  0% {
+    border: 2px solid #edb572;
+  }
+  50% {
+    border: 2px solid #e1e1e1;
+  }
+  100% {
+    border: 2px solid #edb572;
+  }
+}
+
+.form-field:focus {
+  animation: blink 3000ms infinite;
+}
+
+.form-field::placeholder {
+  padding-left: 0.3rem;
+}
+
+.form-fields {
+  margin-top: 3rem;
+}
+
+.form-fields * {
+  margin-top: 4px;
+}
+
+.form-field-label {
+  font-family: 'Klee One';
+}
+
+.required-field {
+  font-family: 'Klee One';
+  color: #c93232;
+}

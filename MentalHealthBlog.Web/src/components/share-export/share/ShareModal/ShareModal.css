@@ -1,0 +1,229 @@
+.share-modal-container-overlay {
+  width: 100vw;
+  height: 100vh;
+  /* min-height: 100vh; */
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 4;
+  background: #82a3bc60;
+  /* overflow-y: scroll; */
+}
+
+#share-modal-container {
+  max-width: 760px;
+  max-height: 550px;
+  position: relative;
+  top: 50%;
+  margin: auto;
+  padding-bottom: 1rem;
+  transform: translateY(-50%);
+  border-radius: 0.7rem;
+  overflow-y: scroll;
+  background: #f3f1e3;
+}
+
+@media (width<=800px) {
+  #share-modal-container {
+    margin-inline: 1rem;
+  }
+}
+
+#share-modal-container::-webkit-scrollbar {
+  width: 10px;
+  margin-right: 1rem;
+  background-color: #f3f1e3;
+}
+
+#share-modal-container::-webkit-scrollbar-thumb {
+  border-radius: 0.5rem;
+  background: #edb572;
+}
+
+.share-modal-close-modal-btn {
+  margin-top: 0.2rem;
+  margin-right: 0.5rem;
+  float: right;
+  font-family: 'Klee One';
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.share-modal-close-modal-btn:hover {
+  color: #c93232;
+  font-weight: 600;
+}
+
+.share-modal-header {
+  margin: 0;
+  margin-inline: 3rem;
+  clear: both;
+}
+
+.share-modal-header > p {
+  margin: 0;
+  text-align: center;
+  font-family: 'Klee One';
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.share-modal-action-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  margin-bottom: 0.8rem;
+  margin-inline: 3rem;
+}
+
+.share-modal-filter-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  flex-grow: 1;
+}
+
+@media (width<=635px) {
+  .share-modal-filter-container {
+    max-width: 800px;
+    width: 100%;
+  }
+}
+
+.search-by-name-surname-organization {
+  width: 54%;
+  margin-right: 8px;
+  padding: 0.5rem 4px;
+  font-family: 'Klee One';
+  font-size: 14px;
+  border: 1px solid #82a3bc;
+  border-radius: 0.4rem;
+  background: transparent;
+}
+
+@media (width>=720px) {
+  .search-by-name-surname-organization {
+    max-width: 700px;
+    width: 65%;
+  }
+}
+
+@media (width<=635px) {
+  .search-by-name-surname-organization {
+    max-width: 700px;
+    width: 50%;
+    margin-right: 0;
+    text-align: center;
+  }
+}
+
+@media (width<=420px) {
+  .search-by-name-surname-organization {
+    width: 100%;
+  }
+}
+
+.search-by-name-surname-organization-filter-button {
+  max-width: 150px;
+  height: 0px;
+  display: flex;
+  align-items: center;
+  margin-top: 0.3rem;
+  padding-inline: 0.7rem;
+  padding-block: 1.1rem;
+  border: none;
+  border-radius: 0.4rem;
+  font-family: 'Klee One';
+  cursor: pointer;
+  color: #f3f1e3;
+  background: #82a3bc;
+}
+
+@media (width<=635px) {
+  .search-by-name-surname-organization-filter-button {
+    max-width: 700px;
+    width: 44%;
+    display: flex;
+    justify-content: center;
+    margin-left: 0.5rem;
+    font-size: 0.93rem;
+  }
+}
+
+@media (width<=420px) {
+  .search-by-name-surname-organization-filter-button {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+@media (width<=530px) {
+  .search-by-name-surname-organization-filter-button {
+    padding-inline: 7px;
+  }
+}
+
+.search-by-name-surname-organization-filter-icon {
+  margin-left: 20px;
+  font-size: 24px;
+}
+
+@media (width<=530px) {
+  .search-by-name-surname-organization-filter-icon {
+    margin-left: 10px;
+    font-size: 24px;
+  }
+}
+
+.share-modal-share-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+  margin-top: 0.4rem;
+}
+
+@media (width<=635px) {
+  .share-modal-share-actions {
+    max-width: 700px;
+    width: 100%;
+  }
+}
+
+.share-content-to-experts {
+  padding-block: 0.5rem;
+  padding-inline: 0.7rem;
+  font-family: 'Klee One';
+  outline: none;
+  border: none;
+  border-radius: 0.5rem;
+  transition: 200ms;
+  cursor: pointer;
+  color: #f3f1e3;
+  background: #edb572;
+}
+
+@media (width<=635px) {
+  .share-content-to-experts {
+    width: 100%;
+  }
+}
+
+.share-content-to-experts:hover {
+  border: 1px solid #edb572;
+  color: #edb572;
+  background: #f3f1e3;
+}
+
+.share-content-to-experts:disabled {
+  color: #f3f1e3;
+  background: #bbc5cd;
+}
+
+.share-content-to-experts:disabled:hover {
+  border: none;
+  cursor: not-allowed;
+  color: #f3f1e3;
+  background: #bbc5cd;
+}

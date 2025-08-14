@@ -1,0 +1,53 @@
+.main-manage-users-container {
+  max-width: 100vw;
+  min-height: 100vh;
+  margin-top: -2rem;
+  margin-inline: -2rem;
+  padding: 2rem;
+  background: #cce5f1;
+}
+
+.manage-users-header {
+  margin-left: 0.5rem;
+}
+
+.manage-users-header-title {
+  font-family: 'Klee One';
+  font-size: 1.5rem;
+}
+
+.manage-users-header-subtitle {
+  font-family: 'Klee One';
+  font-size: 1.2rem;
+  font-weight: 400;
+}
+
+.manage-users-error-container {
+  display: flex;
+  align-items: center;
+}
+
+.manage-users-error-no-data-icon {
+  font-size: 6rem;
+  color: #c93232;
+}
+
+.manage-users-error-information {
+  font-family: 'Klee One';
+  color: #c93232;
+}
+
+.manage-users-users-list-main-container {
+  max-width: 1440px;
+  max-height: 400px;
+  position: relative;
+  top: 1rem;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  /* background: green; */
+}
+
+.manage-users-users-list-info {
+  font-family: 'Klee One';
+  color: #c93232;
+}
