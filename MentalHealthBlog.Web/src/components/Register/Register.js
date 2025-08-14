@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useDispatch, useSelector } from 'react-redux'
@@ -10,12 +10,17 @@ import {
 } from '../../utils/helper-methods/methods'
 import { db_roles } from '../../enums/roles'
 import { toast } from 'react-toastify'
+import { getExpertsAndRelatives } from '../../redux-toolkit/features/shareExportSlice'
 
 import RegisterCSS from './Register.css'
 
 export const Register = () => {
-  let { dbRoles } = useSelector((store) => store.user)
+  let { authenticatedUser, dbRoles } = useSelector((store) => store.user)
+  let { suggestedPossibleToShareWith } = useSelector(
+    (store) => store.shareExport
+  )
   let { isMentalHealthExpert } = useFetchLocationState()
+  let [isInTherapy, setIsInTherapy] = useState(false)
 
   useEffect(() => {
     dispatch(getDbRoles())
@@ -192,28 +197,123 @@ export const Register = () => {
           </div>
         </div>
         {isMentalHealthExpert !== true && (
-          <div>
-            <label className="form-field-label" htmlFor="register-roles">
-              User type:
-            </label>
-            <br />
-            {dbRoles?.length > 0 &&
-              dbRoles?.map((role) => {
-                return (
-                  <div key={role.id}>
-                    <input
-                      type="checkbox"
-                      name="db-role"
-                      id="db-role"
-                      value={role.id}
-                    />
-                    <label className="form-field-label" htmlFor="db-role-name">
-                      {role.name}
-                    </label>
-                    <br />
-                  </div>
-                )
-              })}
+          <div className="register-info-main-container">
+            <div className="register-info-more-info">
+              <div className="register-info-first-name-container">
+                <label
+                  htmlFor="register-first-name"
+                  className="form-field-label"
+                >
+                  First Name:
+                  <span className="required-field"> *</span>
+                </label>
+                <input
+                  type="text"
+                  className="form-field"
+                  placeholder="Enter your first name..."
+                />
+              </div>
+
+              <div className="register-info-last-name-container">
+                <label
+                  htmlFor="register-last-name"
+                  className="form-field-label"
+                >
+                  Last Name:
+                  <span className="required-field"> *</span>
+                </label>
+                <input
+                  type="text"
+                  className="form-field"
+                  placeholder="Enter your last name..."
+                />
+              </div>
+
+              <div className="register-info-email-container">
+                <label htmlFor="register-email" className="form-field-label">
+                  Email:
+                  <span className="required-field"> *</span>
+                </label>
+                <input
+                  type="text"
+                  className="form-field"
+                  placeholder="Enter your email..."
+                />
+              </div>
+            </div>
+
+            <div className="register-info-in-therapy-container">
+              <label htmlFor="register-in-therapy" className="form-field-label">
+                In therapy?
+              </label>
+              <input
+                className="register-in-therapy-checkbox"
+                type="checkbox"
+                checked={isInTherapy}
+                onChange={() => {
+                  setIsInTherapy(!isInTherapy)
+                }}
+              />
+            </div>
+
+            {isInTherapy && (
+              <div className="select-mental-health-experts-main-container">
+                <label className="form-field-label">Choose your experts:</label>
+                <span className="required-field"> *</span>
+                <div className="possible-mental-health-experts">
+                  {/* {suggestedPossibleToShareWith?.map((expert) => { */}
+                  {/* return ( */}
+                  <>
+                    <div className="possible-mental-health-expert-container">
+                      <span>Admir Sitnić</span>
+                      <input
+                        type="checkbox"
+                        name="possible-to-share-with"
+                        id="possible-to-share-with"
+                      />
+                    </div>
+
+                    <div className="possible-mental-health-expert-container">
+                      <span>Merima Bradarić Srna</span>
+                      <input
+                        type="checkbox"
+                        name="possible-to-share-with"
+                        id="possible-to-share-with"
+                      />
+                    </div>
+                  </>
+                  {/* ) */}
+                  {/* })} */}
+                </div>
+              </div>
+            )}
+
+            <div>
+              <label className="form-field-label" htmlFor="register-roles">
+                User type:
+              </label>
+              <br />
+              {dbRoles?.length > 0 &&
+                dbRoles?.map((role) => {
+                  return (
+                    <div key={role.id}>
+                      <input
+                        type="checkbox"
+                        name="db-role"
+                        id="db-role"
+                        value={role.id}
+                      />
+                      <label
+                        className="form-field-label"
+                        htmlFor="db-role-name"
+                      >
+                        {role.name}
+                      </label>
+                      <br />
+                    </div>
+                  )
+                })}
+            </div>
           </div>
         )}
 

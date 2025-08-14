@@ -22,12 +22,26 @@
   }
 }
 
+#register-container > * {
+  margin-top: 5px;
+}
+
 .register-credentials-container {
   margin-bottom: 1.5rem;
 }
 
-.register-credentials-container * {
-  margin-top: 5px;
+.register-info-in-therapy-container {
+  margin-block: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.register-in-therapy-checkbox {
+  width: 1rem;
+  height: 1rem;
+  margin: 0;
+  margin-left: 0.5rem;
+  margin-top: 3px;
 }
 
 .mental-health-expert-register-info-main-container {
