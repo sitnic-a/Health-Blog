@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { register, getDbRoles } from '../../redux-toolkit/features/userSlice'
+import { getMentalHealthExperts } from '../../redux-toolkit/features/mentalExpertSlice'
 import useFetchLocationState from '../../custom/hooks/useFetchLocationState'
 import {
   previewImage,
@@ -10,20 +11,20 @@ import {
 } from '../../utils/helper-methods/methods'
 import { db_roles } from '../../enums/roles'
 import { toast } from 'react-toastify'
-import { getExpertsAndRelatives } from '../../redux-toolkit/features/shareExportSlice'
 
 import RegisterCSS from './Register.css'
 
 export const Register = () => {
-  let { authenticatedUser, dbRoles } = useSelector((store) => store.user)
-  let { suggestedPossibleToShareWith } = useSelector(
-    (store) => store.shareExport
+  let { dbRoles } = useSelector((store) => store.user)
+  let { suggestedMentalHealthExperts } = useSelector(
+    (store) => store.mentalExpert
   )
   let { isMentalHealthExpert } = useFetchLocationState()
   let [isInTherapy, setIsInTherapy] = useState(false)
 
   useEffect(() => {
     dispatch(getDbRoles())
+    dispatch(getMentalHealthExperts())
   }, [])
 
   let navigate = useNavigate()
@@ -260,30 +261,26 @@ export const Register = () => {
               <div className="select-mental-health-experts-main-container">
                 <label className="form-field-label">Choose your experts:</label>
                 <span className="required-field"> *</span>
-                <div className="possible-mental-health-experts">
-                  {/* {suggestedPossibleToShareWith?.map((expert) => { */}
-                  {/* return ( */}
-                  <>
-                    <div className="possible-mental-health-expert-container">
-                      <span>Admir Sitnić</span>
-                      <input
-                        type="checkbox"
-                        name="possible-to-share-with"
-                        id="possible-to-share-with"
-                      />
-                    </div>
-
-                    <div className="possible-mental-health-expert-container">
-                      <span>Merima Bradarić Srna</span>
-                      <input
-                        type="checkbox"
-                        name="possible-to-share-with"
-                        id="possible-to-share-with"
-                      />
-                    </div>
-                  </>
-                  {/* ) */}
-                  {/* })} */}
+                <div className="mental-health-experts-possible-to-choose">
+                  {suggestedMentalHealthExperts?.map((expert) => {
+                    let fullName = `${expert?.firstName} ${expert?.lastName}`
+                    return (
+                      <div
+                        key={expert?.userId}
+                        className="mental-health-experts-possible-to-choose-expert-container"
+                      >
+                        <span className="mental-health-experts-possible-to-choose-expert-name">
+                          {fullName}
+                        </span>
+                        <input
+                          className="mental-health-experts-possible-to-choose-expert-checkbox"
+                          type="checkbox"
+                          name="possible-to-share-with"
+                          id="possible-to-share-with"
+                        />
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
             )}

@@ -1,13 +1,26 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { application } from '../../application'
-import { toast } from 'react-toastify'
 
 let initialState = {
+  dbMentalHealthExperts: [],
+  suggestedMentalHealthExperts: [],
   usersThatSharedContent: [],
   sharedContent: [],
   usersThatSharedIncludingItsContent: {},
   overlayPost: null,
 }
+
+export const getMentalHealthExperts = createAsyncThunk('experts', async () => {
+  let url = `${application.application_url}/mentalExpert/experts`
+  let request = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  let response = await request.json()
+  return response
+})
 
 export const getSharesPerUser = createAsyncThunk(
   'shares-per-user',
@@ -85,6 +98,20 @@ export const mentalExpertSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+
+      //experts
+      .addCase(getMentalHealthExperts.pending, () => {
+        console.log('Db experts pending...')
+      })
+      .addCase(getMentalHealthExperts.fulfilled, (state, action) => {
+        state.dbMentalHealthExperts = action.payload.serviceResponseObject
+        state.suggestedMentalHealthExperts =
+          action.payload.serviceResponseObject
+      })
+      .addCase(getMentalHealthExperts.rejected, (state, action) => {
+        console.log('Db Experts rejected...')
+      })
+
       //shares-per-user
       .addCase(getSharesPerUser.pending, () => {
         console.log('Pending request for shares per user')
