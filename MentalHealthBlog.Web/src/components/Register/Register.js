@@ -12,6 +12,8 @@ import {
 import { db_roles } from '../../enums/roles'
 import { toast } from 'react-toastify'
 
+import { TiArrowSortedUp, TiArrowSortedDown } from 'react-icons/ti'
+
 import RegisterCSS from './Register.css'
 
 export const Register = () => {
@@ -259,28 +261,107 @@ export const Register = () => {
 
             {isInTherapy && (
               <div className="select-mental-health-experts-main-container">
-                <label className="form-field-label">Choose your experts:</label>
+                <label className="form-field-label">
+                  Choose your expert(s):
+                </label>
                 <span className="required-field"> *</span>
-                <div className="mental-health-experts-possible-to-choose">
-                  {suggestedMentalHealthExperts?.map((expert) => {
-                    let fullName = `${expert?.firstName} ${expert?.lastName}`
-                    return (
-                      <div
-                        key={expert?.userId}
-                        className="mental-health-experts-possible-to-choose-expert-container"
-                      >
-                        <span className="mental-health-experts-possible-to-choose-expert-name">
-                          {fullName}
-                        </span>
-                        <input
-                          className="mental-health-experts-possible-to-choose-expert-checkbox"
-                          type="checkbox"
-                          name="possible-to-share-with"
-                          id="possible-to-share-with"
-                        />
-                      </div>
-                    )
-                  })}
+                <p className="select-mental-health-experts-main-container-important-note">
+                  NOTE: You can choose the max of 2 experts at time...
+                </p>
+
+                <div className="main-mental-health-expert-picker-container">
+                  <label
+                    className="form-field-label main-mental-health-expert-picker-choose-label"
+                    onClick={() => {
+                      let mainMentalHealthExpertPicker =
+                        document.getElementById(
+                          'main-mental-health-expert-picker'
+                        )
+                      let mainMentalHealthExpertExpandIcon =
+                        document.getElementById(
+                          'main-mental-health-expert-expand-icon'
+                        )
+
+                      if (
+                        mainMentalHealthExpertPicker.classList.contains(
+                          'main-mental-health-expert-picker-shrinked'
+                        )
+                      ) {
+                        mainMentalHealthExpertPicker.classList.remove(
+                          'main-mental-health-expert-picker-shrinked'
+                        )
+                        mainMentalHealthExpertExpandIcon.classList.remove(
+                          'main-mental-health-expert-expand-icon'
+                        )
+
+                        mainMentalHealthExpertPicker.classList.add(
+                          'main-mental-health-expert-picker-expanded'
+                        )
+                        mainMentalHealthExpertExpandIcon.classList.add(
+                          'main-mental-health-expert-expand-icon-clicked'
+                        )
+                      } else if (
+                        mainMentalHealthExpertPicker.classList.contains(
+                          'main-mental-health-expert-picker-expanded'
+                        )
+                      ) {
+                        mainMentalHealthExpertPicker.classList.remove(
+                          'main-mental-health-expert-picker-expanded'
+                        )
+                        mainMentalHealthExpertExpandIcon.classList.remove(
+                          'main-mental-health-expert-expand-icon-clicked'
+                        )
+
+                        mainMentalHealthExpertPicker.classList.add(
+                          'main-mental-health-expert-picker-shrinked'
+                        )
+                        mainMentalHealthExpertExpandIcon.classList.add(
+                          'main-mental-health-expert-expand-icon'
+                        )
+                      }
+                    }}
+                  >
+                    Main expert{' '}
+                    <TiArrowSortedDown
+                      id="main-mental-health-expert-expand-icon"
+                      className="main-mental-health-expert-expand-icon"
+                    />
+                  </label>
+                  <div
+                    id="main-mental-health-expert-picker"
+                    className="main-mental-health-expert-picker-shrinked"
+                  >
+                    {suggestedMentalHealthExperts?.map((expert) => {
+                      let fullName = `${expert?.firstName} ${expert?.lastName}`
+                      return (
+                        <div className="main-mental-health-expert-selected-picker-option">
+                          <div className="main-mental-health-expert-picker-option main-mental-health-expert-picker-option-expanded">
+                            <span className="main-mental-health-expert-picker-option-name">
+                              {fullName}{' '}
+                            </span>
+                            <button
+                              className="main-mental-health-expert-picker-option-action picker-option-add-action"
+                              type="button"
+                              onClick={(e) => {
+                                let mainMentalHealthExpertSelectedPickerOption =
+                                  e.currentTarget.parentNode.parentNode
+                                console.log(
+                                  'Main ',
+                                  mainMentalHealthExpertSelectedPickerOption
+                                )
+
+                                mainMentalHealthExpertSelectedPickerOption.classList.toggle(
+                                  'main-mental-health-expert-selected-picker-option-active'
+                                )
+                              }}
+                            >
+                              + Add
+                            </button>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
                 </div>
               </div>
             )}
