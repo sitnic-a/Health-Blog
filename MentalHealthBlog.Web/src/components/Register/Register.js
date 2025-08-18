@@ -12,7 +12,7 @@ import {
 import { db_roles } from '../../enums/roles'
 import { toast } from 'react-toastify'
 
-import { TiArrowSortedUp, TiArrowSortedDown } from 'react-icons/ti'
+import { TiArrowSortedDown } from 'react-icons/ti'
 
 import RegisterCSS from './Register.css'
 
@@ -23,6 +23,8 @@ export const Register = () => {
   )
   let { isMentalHealthExpert } = useFetchLocationState()
   let [isInTherapy, setIsInTherapy] = useState(false)
+  let [selectedMentalHealthExpertIds, setSelectedMentalHealthExpertIds] =
+    useState([])
 
   useEffect(() => {
     dispatch(getDbRoles())
@@ -42,14 +44,18 @@ export const Register = () => {
     if (isMentalHealthExpert === true) {
       roles.push(db_roles.PSYCHOLOGIST)
     } else {
-      selectedRoles.forEach((role) => {
-        roles.push(role.value)
-      })
+      roles.push(db_roles.USER)
+      // selectedRoles.forEach((role) => {
+      //   roles.push(role.value)
+      // })
     }
 
     let sendData
     let username = document.getElementById('register-username').value
     let password = document.getElementById('register-password').value
+    let firstName = document.getElementById('register-first-name').value
+    let lastName = document.getElementById('register-last-name').value
+    let email = document.getElementById('register-email').value
     let mentalHealthExpertFirstName
     let mentalHealthExpertLastName
     let mentalHealthExpertOrganization
@@ -141,9 +147,16 @@ export const Register = () => {
     }
 
     if (isMentalHealthExpert !== true) {
+      console.log(
+        `First name ${firstName} - Last name ${lastName} - Email ${email}`
+      )
+
       if (
         stringIsNullOrEmpty(form.get('username')) ||
         stringIsNullOrEmpty(form.get('password')) ||
+        stringIsNullOrEmpty(firstName) ||
+        stringIsNullOrEmpty(lastName) ||
+        stringIsNullOrEmpty(email) ||
         form.get('roles').length <= 0
       ) {
         toast.error(
@@ -211,7 +224,9 @@ export const Register = () => {
                   <span className="required-field"> *</span>
                 </label>
                 <input
+                  id="register-first-name"
                   type="text"
+                  name="register-first-name"
                   className="form-field"
                   placeholder="Enter your first name..."
                 />
@@ -226,7 +241,9 @@ export const Register = () => {
                   <span className="required-field"> *</span>
                 </label>
                 <input
+                  id="register-last-name"
                   type="text"
+                  name="register-last-name"
                   className="form-field"
                   placeholder="Enter your last name..."
                 />
@@ -238,7 +255,9 @@ export const Register = () => {
                   <span className="required-field"> *</span>
                 </label>
                 <input
+                  id="register-email"
                   type="text"
+                  name="register-email"
                   className="form-field"
                   placeholder="Enter your email..."
                 />
@@ -334,8 +353,17 @@ export const Register = () => {
                     {suggestedMentalHealthExperts?.map((expert) => {
                       let fullName = `${expert?.firstName} ${expert?.lastName}`
                       return (
-                        <div className="main-mental-health-expert-selected-picker-option">
+                        <div
+                          key={expert?.userId}
+                          className="main-mental-health-expert-selected-picker-option"
+                        >
                           <div className="main-mental-health-expert-picker-option main-mental-health-expert-picker-option-expanded">
+                            <input
+                              id="main-mental-health-expert-picker-option-id"
+                              type="hidden"
+                              placeholder={expert?.userId}
+                              value={expert?.userId}
+                            />
                             <span className="main-mental-health-expert-picker-option-name">
                               {fullName}{' '}
                             </span>
@@ -345,17 +373,91 @@ export const Register = () => {
                               onClick={(e) => {
                                 let mainMentalHealthExpertSelectedPickerOption =
                                   e.currentTarget.parentNode.parentNode
-                                console.log(
-                                  'Main ',
-                                  mainMentalHealthExpertSelectedPickerOption
-                                )
 
-                                mainMentalHealthExpertSelectedPickerOption.classList.toggle(
+                                let pickedMentalHealthExpertId =
+                                  mainMentalHealthExpertSelectedPickerOption.querySelector(
+                                    '#main-mental-health-expert-picker-option-id'
+                                  ).value
+
+                                let optionAddAction =
+                                  mainMentalHealthExpertSelectedPickerOption.querySelector(
+                                    '.picker-option-add-action'
+                                  )
+                                let optionCancelAction =
+                                  mainMentalHealthExpertSelectedPickerOption.querySelector(
+                                    '.picker-option-cancel-action'
+                                  )
+
+                                let selectedMentalHealthExpertIdsTemp = [
+                                  ...selectedMentalHealthExpertIds,
+                                ]
+
+                                mainMentalHealthExpertSelectedPickerOption.classList.add(
                                   'main-mental-health-expert-selected-picker-option-active'
                                 )
+
+                                optionAddAction.style.display = 'none'
+                                optionCancelAction.style.display = 'initial'
+
+                                selectedMentalHealthExpertIdsTemp = [
+                                  ...selectedMentalHealthExpertIdsTemp,
+                                  pickedMentalHealthExpertId,
+                                ]
+
+                                setSelectedMentalHealthExpertIds(
+                                  selectedMentalHealthExpertIdsTemp
+                                )
+                                return
                               }}
                             >
                               + Add
+                            </button>
+                            <button
+                              className="main-mental-health-expert-picker-option-action picker-option-cancel-action"
+                              type="button"
+                              onClick={(e) => {
+                                let mainMentalHealthExpertSelectedPickerOption =
+                                  e.currentTarget.parentNode.parentNode
+
+                                let pickedMentalHealthExpertId =
+                                  mainMentalHealthExpertSelectedPickerOption.querySelector(
+                                    '#main-mental-health-expert-picker-option-id'
+                                  ).value
+
+                                let optionAddAction =
+                                  mainMentalHealthExpertSelectedPickerOption.querySelector(
+                                    '.picker-option-add-action'
+                                  )
+                                let optionCancelAction =
+                                  mainMentalHealthExpertSelectedPickerOption.querySelector(
+                                    '.picker-option-cancel-action'
+                                  )
+
+                                let selectedMentalHealthExpertIdsTemp = [
+                                  ...selectedMentalHealthExpertIds,
+                                ]
+
+                                mainMentalHealthExpertSelectedPickerOption.classList.remove(
+                                  'main-mental-health-expert-selected-picker-option-active'
+                                )
+
+                                optionCancelAction.style.display = 'none'
+                                optionAddAction.style.display = 'initial'
+
+                                selectedMentalHealthExpertIdsTemp = [
+                                  ...selectedMentalHealthExpertIdsTemp,
+                                ].filter(
+                                  (mentalHealthExpert) =>
+                                    mentalHealthExpert !==
+                                    pickedMentalHealthExpertId
+                                )
+
+                                setSelectedMentalHealthExpertIds(
+                                  selectedMentalHealthExpertIdsTemp
+                                )
+                              }}
+                            >
+                              Cancel
                             </button>
                           </div>
                         </div>
@@ -366,7 +468,7 @@ export const Register = () => {
               </div>
             )}
 
-            <div>
+            {/* <div>
               <label className="form-field-label" htmlFor="register-roles">
                 User type:
               </label>
@@ -391,7 +493,7 @@ export const Register = () => {
                     </div>
                   )
                 })}
-            </div>
+            </div> */}
           </div>
         )}
 

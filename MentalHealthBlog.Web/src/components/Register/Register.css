@@ -42,6 +42,7 @@
   margin: 0;
   margin-left: 0.5rem;
   margin-top: 3px;
+  cursor: pointer;
 }
 
 .select-mental-health-experts-main-container-important-note {
@@ -111,8 +112,9 @@
 
 .main-mental-health-expert-selected-picker-option-active {
   margin-block: 0.4rem;
-  padding: 0.3rem;
-  background: #c93232;
+  padding: 0.1rem;
+  padding-inline: 0.3rem;
+  background: #edb572;
 }
 
 .main-mental-health-expert-picker-option {
@@ -130,8 +132,8 @@
 }
 
 .main-mental-health-expert-picker-option-action {
-  padding-inline: 1.5rem;
-  padding-block: 0.1rem;
+  padding-inline: 1rem;
+  padding-block: 0.2rem;
   color: #f3f1e3;
 }
 
@@ -140,12 +142,31 @@
   font-size: 0.9rem;
   outline: none;
   border: none;
+  border-radius: 0.2rem;
+  transition: 200ms;
   cursor: pointer;
   background: #edb572;
 }
 
 .picker-option-add-action:hover {
   background: #82a3bc;
+}
+
+.picker-option-cancel-action {
+  display: none;
+  outline: none;
+  border: none;
+  border-radius: 0.2rem;
+  transition: 200ms;
+  cursor: pointer;
+  color: #f3f1e3;
+  background: #c93232;
+}
+
+.picker-option-cancel-action:hover {
+  color: #c93232;
+  border: 1px solid #c93232;
+  background: none;
 }
 
 .mental-health-expert-register-info-main-container {
