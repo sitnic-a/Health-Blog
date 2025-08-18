@@ -24,6 +24,25 @@ namespace MentalHealthBlogAPI.Data
         public DbSet<PostEmotion> PostsEmotions { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
+        public DbSet<RegularUser> RegularUsers { get; set; }
+
+        public void SeedRegularUsers()
+        {
+            if (Users.Any() && !RegularUsers.Any())
+            {
+                const int __USER_ROLE_ID__ = 2;
+                var userIds = UserRoles
+                    .Where(ur => ur.RoleId == __USER_ROLE_ID__)
+                    .Select(ur => ur.UserId)
+                    .ToList();
+
+                foreach (var userId in userIds)
+                {
+                    RegularUsers.Add(new RegularUser(userId,"N/A", "N/A", "N/A"));
+                }
+                SaveChanges();
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -49,6 +68,9 @@ namespace MentalHealthBlogAPI.Data
                 pe.EmotionId
             });
 
+
+            modelBuilder.Entity<RegularUser>().HasKey(u => u.UserId);
+            
             modelBuilder.Entity<User>().HasData(
                 new { Id = 1, Username = "test_01", PasswordHash = "TT1", PasswordSalt = Encoding.UTF8.GetBytes("SetBytes_TT1") },
                 new { Id = 2, Username = "test_02", PasswordHash = "TT2", PasswordSalt = Encoding.UTF8.GetBytes("SetBytes_TT2") },
@@ -81,7 +103,5 @@ namespace MentalHealthBlogAPI.Data
                 new { Id = 7, Name = "Novac" }
                 );
         }
-
-
     }
 }
