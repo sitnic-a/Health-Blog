@@ -25,6 +25,7 @@ namespace MentalHealthBlogAPI.Data
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
         public DbSet<RegularUser> RegularUsers { get; set; }
+        public DbSet<TherapyRequest> TherapyRequests { get; set; }
 
         public void SeedRegularUsers()
         {
@@ -70,6 +71,11 @@ namespace MentalHealthBlogAPI.Data
 
 
             modelBuilder.Entity<RegularUser>().HasKey(u => u.UserId);
+            modelBuilder.Entity<TherapyRequest>().HasKey(t => new
+            {
+                t.RegularUserId,
+                t.MentalHealthExpertId
+            });
             
             modelBuilder.Entity<User>().HasData(
                 new { Id = 1, Username = "test_01", PasswordHash = "TT1", PasswordSalt = Encoding.UTF8.GetBytes("SetBytes_TT1") },
