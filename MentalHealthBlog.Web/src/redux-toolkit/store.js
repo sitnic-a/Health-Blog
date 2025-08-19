@@ -10,6 +10,7 @@ import mentalExpertReducer from './features/mentalExpertSlice'
 import adminReducer from './features/adminSlice'
 import regularUserReducer from './features/regularUserSlice'
 import emotionReducer from './features/emotionSlice'
+import therapyReducer from './features/therapySlice'
 
 export const store = configureStore({
   reducer: {
@@ -24,5 +25,6 @@ export const store = configureStore({
     admin: adminReducer,
     regularUser: regularUserReducer,
     emotion: emotionReducer,
+    therapy: therapyReducer,
   },
 })

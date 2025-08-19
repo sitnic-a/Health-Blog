@@ -54,6 +54,10 @@ export const Navbar = () => {
       ) && (
         <div className="navigation-bar-container">
           <div className="navigation-bar-features">
+            <Link to={`/therapy/requests`} className="navigation-bar-action">
+              Requests
+            </Link>
+
             <Link
               to={`/assignments/user/${authenticatedUser?.id}`}
               className="navigation-bar-action"

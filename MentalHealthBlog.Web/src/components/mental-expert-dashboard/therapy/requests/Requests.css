@@ -1,0 +1,47 @@
+#therapy-requests-main-container {
+  max-width: 100vw;
+  min-height: 100vh;
+  margin-inline: -2rem;
+  padding-inline: 2rem;
+  background: #cce5f1;
+}
+
+.therapy-requests-container {
+  min-height: 500px;
+  background: red;
+}
+
+.therapy-requests-requests-container {
+  margin-inline: 0.5rem;
+}
+
+.therapy-requests-requests-content {
+  padding-top: 2rem;
+}
+
+.therapy-requests-requests-content-row {
+  margin-bottom: 0.3rem;
+  border: 1px solid #edb572;
+  border-radius: 0.4rem;
+  padding-block: 0.5rem;
+  clear: both;
+}
+
+.therapy-requests-requests-content-cell {
+  max-width: 150px;
+  width: 100%;
+  padding-block: 0.5rem;
+
+  margin-right: 0.3rem;
+  background: beige;
+}
+
+.therapy-requests-requests-content-cell:first-of-type {
+  max-width: 100px;
+  padding-inline: 0.7rem;
+}
+
+.therapy-requests-requests-content-cell:last-of-type {
+  max-width: 300px;
+  padding-inline: 0.7rem;
+}

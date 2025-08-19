@@ -37,14 +37,14 @@ namespace MentalHealthBlog.API.Services.Therapy
                     throw new ArgumentException("Bad request!");
                 }
 
-                if (query?._LoggedUserId <= 0)
+                if (query?.LoggedUserId <= 0)
                 {
                     _therapyRequestLoggerService.LogWarning($"REQUESTS-FOR-MENTAL-HEALTH-EXPERT: {TherapyRequestLogTypes.ARGUMENT_NOT_VALID.ToString()}");
                     throw new ArgumentException("Bad request!");
                 }
 
                 var dbTherapyRequests = await _context.TherapyRequests
-                    .Where(tr => tr.MentalHealthExpertId == query._LoggedUserId)
+                    .Where(tr => tr.MentalHealthExpertId == query.LoggedUserId)
                     .Join((_context.RegularUsers),
                           (therapyRequest) => therapyRequest.RegularUserId,
                           (regularUser) => regularUser.UserId,

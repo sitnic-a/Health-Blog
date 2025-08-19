@@ -2,13 +2,13 @@
 {
     public class SearchTherapyRequestDto
     {
-        public int _LoggedUserId { get; set; }
-        public RequestStatusEnum RequestStatus { get; set; }
+        public int LoggedUserId { get; set; }
+        public RequestStatusEnum? RequestStatus { get; set; }
 
         public SearchTherapyRequestDto(){}
         public SearchTherapyRequestDto(int loggedUserId,RequestStatusEnum requestStatus)
         {
-            _LoggedUserId = loggedUserId;
+            LoggedUserId = loggedUserId;
             RequestStatus = requestStatus;
         }
     }
