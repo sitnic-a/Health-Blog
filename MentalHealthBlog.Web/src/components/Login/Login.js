@@ -112,7 +112,7 @@ export const Login = () => {
                     <Link
                       className="register-link regular-user-link"
                       to={'/register'}
-                      state={{ regularUser: true }}
+                      state={{ isRegularUser: true }}
                     >
                       Create an account
                     </Link>

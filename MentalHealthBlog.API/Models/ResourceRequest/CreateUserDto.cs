@@ -4,6 +4,7 @@
     {
         public string Username { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
+        public CreateRegularUserDto? RegularUser { get; set; }
         public List<int> Roles { get; set; }
         public bool?IsMentalHealthExpert { get; set; }
         public CreateMentalHealthExpertDto? MentalHealthExpert { get; set; }
@@ -15,10 +16,11 @@
             Roles = new List<int>();
         }
 
-        public CreateUserDto(string username, string password, List<int> roles,bool?isMentalHealthExpert=null, CreateMentalHealthExpertDto? mentalHealthExpertDto=null, IFormFile? photo =null)
+        public CreateUserDto(string username, string password, CreateRegularUserDto? regularUser, List<int> roles,bool?isMentalHealthExpert=null, CreateMentalHealthExpertDto? mentalHealthExpertDto=null, IFormFile? photo =null)
         {
             Username = username;
             Password = password;
+            RegularUser = regularUser;
             Roles = roles;
             IsMentalHealthExpert = isMentalHealthExpert;
 

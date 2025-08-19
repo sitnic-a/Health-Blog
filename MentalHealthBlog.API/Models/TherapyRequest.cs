@@ -5,7 +5,6 @@
         public int RegularUserId { get; set; }
         public RegularUser? RegularUser { get; set; }
         public int MentalHealthExpertId { get; set; }
-        public MentalHealthExpert? MentalHealthExpert { get; set; }
 
         public RequestStatusEnum RequestStatus { get; set; } = RequestStatusEnum.Pending;
         public DateTime SentAt { get; set; } = DateTime.UtcNow;

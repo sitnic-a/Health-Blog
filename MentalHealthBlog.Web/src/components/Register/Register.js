@@ -21,7 +21,7 @@ export const Register = () => {
   let { suggestedMentalHealthExperts } = useSelector(
     (store) => store.mentalExpert
   )
-  let { isMentalHealthExpert } = useFetchLocationState()
+  let { isMentalHealthExpert, isRegularUser } = useFetchLocationState()
   let [isInTherapy, setIsInTherapy] = useState(false)
   let [selectedMentalHealthExpertIds, setSelectedMentalHealthExpertIds] =
     useState([])
@@ -41,55 +41,51 @@ export const Register = () => {
       'input[type="checkbox"]:checked'
     )
 
-    if (isMentalHealthExpert === true) {
-      roles.push(db_roles.PSYCHOLOGIST)
-    } else {
-      roles.push(db_roles.USER)
-      // selectedRoles.forEach((role) => {
-      //   roles.push(role.value)
-      // })
-    }
-
     let sendData
+    let form = new FormData()
     let username = document.getElementById('register-username').value
     let password = document.getElementById('register-password').value
-    let firstName = document.getElementById('register-first-name').value
-    let lastName = document.getElementById('register-last-name').value
-    let email = document.getElementById('register-email').value
-    let mentalHealthExpertFirstName
-    let mentalHealthExpertLastName
-    let mentalHealthExpertOrganization
-    let mentalHealthExpertPhoneNumber
-    let mentalHealthExpertEmail
-    let mentalHealthExpertPhoto
-
-    sendData = {
-      username: username,
-      password: password,
-      roles: roles,
-    }
-
-    console.log('SEND DATA ', sendData)
 
     if (isMentalHealthExpert === true) {
-      mentalHealthExpertFirstName = document.getElementById(
+      let mentalHealthExpertFirstName = document.getElementById(
         'register-mental-health-expert-first-name'
       ).value
-      mentalHealthExpertLastName = document.getElementById(
+      let mentalHealthExpertLastName = document.getElementById(
         'register-mental-health-expert-last-name'
       ).value
-      mentalHealthExpertOrganization = document.getElementById(
+      let mentalHealthExpertOrganization = document.getElementById(
         'register-mental-health-expert-organization'
       ).value
-      mentalHealthExpertPhoneNumber = document.getElementById(
+      let mentalHealthExpertPhoneNumber = document.getElementById(
         'register-mental-health-expert-phone-number'
       ).value
-      mentalHealthExpertEmail = document.getElementById(
+      let mentalHealthExpertEmail = document.getElementById(
         'register-mental-health-expert-email'
       ).value
-      mentalHealthExpertPhoto = document.getElementById(
+      let mentalHealthExpertPhoto = document.getElementById(
         'register-mental-health-expert-photo'
       ).files[0]
+
+      roles.push(db_roles.PSYCHOLOGIST)
+
+      if (
+        stringIsNullOrEmpty(username) ||
+        stringIsNullOrEmpty(password) ||
+        roles.length <= 0 ||
+        stringIsNullOrEmpty(mentalHealthExpertFirstName) ||
+        stringIsNullOrEmpty(mentalHealthExpertLastName) ||
+        stringIsNullOrEmpty(mentalHealthExpertOrganization) ||
+        stringIsNullOrEmpty(mentalHealthExpertEmail)
+      ) {
+        toast.error(
+          'Something went wrong! Please check are all fields populated',
+          {
+            autoClose: 1500,
+            position: 'bottom-right',
+          }
+        )
+        return
+      }
 
       sendData = {
         username: username,
@@ -105,11 +101,48 @@ export const Register = () => {
         },
         photo: mentalHealthExpertPhoto,
       }
+    } else {
+      let firstName = document.getElementById('register-first-name').value
+      let lastName = document.getElementById('register-last-name').value
+      let email = document.getElementById('register-email').value
+      roles.push(db_roles.USER)
 
-      console.log('SEND DATA 2 ', sendData)
+      if (
+        stringIsNullOrEmpty(username) ||
+        stringIsNullOrEmpty(password) ||
+        roles.length <= 0 ||
+        stringIsNullOrEmpty(firstName) ||
+        stringIsNullOrEmpty(lastName) ||
+        stringIsNullOrEmpty(email) ||
+        selectedMentalHealthExpertIds?.length <= 0
+      ) {
+        toast.error(
+          'Something went wrong! Please check are all fields populated',
+          {
+            autoClose: 1500,
+            position: 'bottom-right',
+          }
+        )
+        return
+      }
+
+      sendData = {
+        username,
+        password,
+        regularUser: {
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          isInTherapy: isInTherapy,
+          mentalHealthExpertsToConnectWithIds: selectedMentalHealthExpertIds,
+        },
+        isMentalHealthExpert: false,
+        roles,
+      }
     }
 
-    let form = new FormData()
+    console.log('SEND DATA ', sendData)
+
     for (let dataKey in sendData) {
       if (dataKey === 'mentalHealthExpert') {
         for (let previewKey in sendData[dataKey]) {
@@ -120,53 +153,14 @@ export const Register = () => {
         }
       } else {
         form.append(dataKey, sendData[dataKey])
-      }
-    }
-
-    console.log('Form ', form)
-
-    if (isMentalHealthExpert === true) {
-      if (
-        stringIsNullOrEmpty(form.get('username')) ||
-        stringIsNullOrEmpty(form.get('password')) ||
-        form.get('roles').length <= 0 ||
-        stringIsNullOrEmpty(sendData.mentalHealthExpert.firstName) ||
-        stringIsNullOrEmpty(sendData.mentalHealthExpert.lastName) ||
-        stringIsNullOrEmpty(sendData.mentalHealthExpert.organization) ||
-        stringIsNullOrEmpty(sendData.mentalHealthExpert.phoneNumber)
-      ) {
-        toast.error(
-          'Something went wrong! Please check are all fields populated',
-          {
-            autoClose: 1500,
-            position: 'bottom-right',
+        if (dataKey === 'regularUser') {
+          for (let previewKey in sendData[dataKey]) {
+            form.append(
+              `regularUser[${previewKey}]`,
+              sendData[dataKey][previewKey]
+            )
           }
-        )
-        return
-      }
-    }
-
-    if (isMentalHealthExpert !== true) {
-      console.log(
-        `First name ${firstName} - Last name ${lastName} - Email ${email}`
-      )
-
-      if (
-        stringIsNullOrEmpty(form.get('username')) ||
-        stringIsNullOrEmpty(form.get('password')) ||
-        stringIsNullOrEmpty(firstName) ||
-        stringIsNullOrEmpty(lastName) ||
-        stringIsNullOrEmpty(email) ||
-        form.get('roles').length <= 0
-      ) {
-        toast.error(
-          'Something went wrong! Please check are all fields populated',
-          {
-            autoClose: 1500,
-            position: 'bottom-right',
-          }
-        )
-        return
+        }
       }
     }
 
@@ -176,6 +170,10 @@ export const Register = () => {
         navigate('/login')
       }
     })
+
+    // selectedRoles.forEach((role) => {
+    //   roles.push(role.value)
+    // })
   }
 
   return (
@@ -401,7 +399,7 @@ export const Register = () => {
 
                                 selectedMentalHealthExpertIdsTemp = [
                                   ...selectedMentalHealthExpertIdsTemp,
-                                  pickedMentalHealthExpertId,
+                                  parseInt(pickedMentalHealthExpertId),
                                 ]
 
                                 setSelectedMentalHealthExpertIds(
@@ -449,7 +447,7 @@ export const Register = () => {
                                 ].filter(
                                   (mentalHealthExpert) =>
                                     mentalHealthExpert !==
-                                    pickedMentalHealthExpertId
+                                    parseInt(pickedMentalHealthExpertId)
                                 )
 
                                 setSelectedMentalHealthExpertIds(
