@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using MentalHealthBlog.API.Utils.SignalR;
 using MentalHealthBlog.API.Middlewares;
+using MentalHealthBlog.API.Services.Therapy;
 
 #pragma warning disable 8604
 
@@ -83,6 +84,7 @@ builder.Services.AddScoped<IMentalExpertService, MentalExpertService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IRegularUserService, RegularUserService>();
 builder.Services.AddScoped<IEmotionService, EmotionService>();
+builder.Services.AddScoped<ITherapyRequestService, TherapyRequestService>();
 
 builder.Services.AddDbContext<DataContext>(options =>
 {

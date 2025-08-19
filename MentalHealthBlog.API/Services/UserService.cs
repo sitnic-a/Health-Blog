@@ -14,6 +14,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
 
+#pragma warning disable CS8602,CS8604
+
 namespace MentalHealthBlog.API.Services
 {
 
