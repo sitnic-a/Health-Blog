@@ -1,10 +1,13 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getRequestsForMentalHealthExpert } from '../../../../redux-toolkit/features/therapySlice'
+import { formatDateToString } from '../../../../utils/helper-methods/methods'
 import { Navbar } from '../../../shared/Navbar/Navbar'
 
+import { FaCheck } from 'react-icons/fa'
+import { HiX } from 'react-icons/hi'
+
 import RequestsCSS from './Requests.css'
-import { formatDateToString } from '../../../../utils/helper-methods/methods'
 
 export const Requests = () => {
   let dispatch = useDispatch()
@@ -31,20 +34,40 @@ export const Requests = () => {
           <div className="therapy-requests-requests-container">
             <div className="therapy-requests-requests-content">
               {requestsForMentalHealthExpert?.map((request) => {
+                let fullName = `${request?.regularUserFirstName} ${request?.regularUserLastName}`
                 let sentAt = formatDateToString(request?.sentAt)
                 return (
                   <div className="therapy-requests-requests-content-row">
-                    <span className="therapy-requests-requests-content-cell">
-                      {request?.regularUserLastName}
-                      {request?.regularUserFirstName}
-                    </span>
-                    <span className="therapy-requests-requests-content-cell">
-                      {sentAt}
-                    </span>
-                    <span className="therapy-requests-requests-content-cell">
-                      <button type="button">Approve</button>
-                      <button type="button">Decline</button>
-                    </span>
+                    <div className="therapy-requests-requests-content-cell">
+                      <span className="therapy-request-request-content-cell-value">
+                        {fullName}
+                      </span>
+                    </div>
+
+                    <div className="therapy-requests-requests-content-cell">
+                      <div className="therapy-requests-requests-content-actions-main-container">
+                        <button
+                          className="therapy-requests-request-content-action therapy-request-approve-action"
+                          type="button"
+                        >
+                          Approve
+                        </button>
+                        <FaCheck className="therapy-requests-request-content-action therapy-request-icon-action therapy-request-approve-icon-action" />
+                        <button
+                          className="therapy-requests-request-content-action therapy-request-decline-action"
+                          type="button"
+                        >
+                          Decline
+                        </button>
+                        <HiX className="therapy-requests-request-content-action therapy-request-icon-action therapy-request-decline-icon-action" />
+                      </div>
+                    </div>
+
+                    <div className="therapy-requests-requests-content-cell">
+                      <span className="therapy-request-request-content-cell-value">
+                        {sentAt}
+                      </span>
+                    </div>
                   </div>
                 )
               })}
