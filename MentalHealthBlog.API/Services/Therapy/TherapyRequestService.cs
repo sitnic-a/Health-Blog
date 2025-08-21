@@ -59,10 +59,10 @@ namespace MentalHealthBlog.API.Services.Therapy
                           })
                     .ToListAsync();
 
-                if (!dbTherapyRequests.Any())
+                if (!dbTherapyRequests.Any() && dbTherapyRequests is not null)
                 {
                     _therapyRequestLoggerService.LogWarning($"REQUESTS-FOR-MENTAL-HEALTH-EXPERT: {TherapyRequestLogTypes.EMPTY.ToString()}");
-                    throw new EmptyListException("Therapy requests not found");
+                    return new Response(dbTherapyRequests, StatusCodes.Status200OK, $"REQUESTS-FOR-MENTAL-HEALTH-EXPERT: {TherapyRequestLogTypes.EMPTY.ToString()}");
                 }
 
                 _therapyRequestLoggerService.LogInformation($"REQUESTS-FOR-MENTAL-HEALTH-EXPERT: {TherapyRequestLogTypes.SUCCESS.ToString()}");

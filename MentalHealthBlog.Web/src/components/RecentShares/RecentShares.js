@@ -1,8 +1,6 @@
 import { useSelector } from 'react-redux'
-import {
-  returnSharePerMentalHealthExpertRecentShareBasicInfoElements,
-  formatDateToString,
-} from '../../utils/helper-methods/methods'
+import moment from 'moment'
+import { returnSharePerMentalHealthExpertRecentShareBasicInfoElements } from '../../utils/helper-methods/methods'
 
 import { FaRegSquareMinus } from 'react-icons/fa6'
 import { FaRegSquarePlus } from 'react-icons/fa6'
@@ -24,8 +22,14 @@ export const RecentShares = () => {
           {recentShares?.map((share, index) => {
             let basicInfoContainerHeight
             let person = `${share?.sharedWith?.firstName} ${share?.sharedWith?.lastName}`
-            let createdAt = formatDateToString(share?.sharedPost?.createdAt)
-            let sharedAt = formatDateToString(share?.sharedPost?.sharedAt)
+            let createdAt = moment(
+              share?.sharedPost?.createdAt,
+              'YYYYMMDDHHmmss'
+            ).fromNow()
+            let sharedAt = moment(
+              share?.sharedPost?.sharedAt,
+              'YYYYMMDDHHmmss'
+            ).fromNow()
             return (
               <div
                 className="shares-per-mental-health-expert-recent-share-container"

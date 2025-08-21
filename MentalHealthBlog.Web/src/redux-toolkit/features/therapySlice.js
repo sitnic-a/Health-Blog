@@ -41,10 +41,12 @@ let therapySlice = createSlice({
         console.log('Fetching requests pending...')
       })
       .addCase(getRequestsForMentalHealthExpert.fulfilled, (state, action) => {
-        console.log('Action payload ', action.payload)
-
-        state.requestsForMentalHealthExpert =
-          action.payload.serviceResponseObject
+        let statusCode = action?.payload?.statusCode
+        console.log('Action payload ', action?.payload)
+        if (statusCode === 200) {
+          state.requestsForMentalHealthExpert =
+            action.payload.serviceResponseObject
+        }
 
         console.log('Requests ', state.requestsForMentalHealthExpert)
       })

@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import moment from 'moment'
 import { getRequestsForMentalHealthExpert } from '../../../../redux-toolkit/features/therapySlice'
-import { formatDateToString } from '../../../../utils/helper-methods/methods'
 import { Navbar } from '../../../shared/Navbar/Navbar'
 
 import { FaCheck } from 'react-icons/fa'
@@ -29,13 +29,13 @@ export const Requests = () => {
     <section id="therapy-requests-main-container">
       <Navbar />
 
-      <div className="therapy-requests-container">
-        {requestsForMentalHealthExpert?.length > 0 && (
+      {requestsForMentalHealthExpert?.length > 0 && (
+        <div className="therapy-requests-container">
           <div className="therapy-requests-requests-container">
             <div className="therapy-requests-requests-content">
               {requestsForMentalHealthExpert?.map((request) => {
                 let fullName = `${request?.regularUserFirstName} ${request?.regularUserLastName}`
-                let sentAt = formatDateToString(request?.sentAt)
+                let sentAt = moment(request?.sentAt, 'YYYYMMDDHHmmss').fromNow()
                 return (
                   <div className="therapy-requests-requests-content-row">
                     <div className="therapy-requests-requests-content-cell">
@@ -73,8 +73,8 @@ export const Requests = () => {
               })}
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {requestsForMentalHealthExpert?.length <= 0 && (
         <div className="therapy-requests-main-error-container">

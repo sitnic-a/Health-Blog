@@ -1,5 +1,4 @@
-import { formatDateToString } from '../../../../utils/helper-methods/methods'
-
+import moment from 'moment'
 import { PostTags } from '../../../PostTags/PostTags'
 import { PostEmotions } from '../../../PostEmotions/PostEmotions'
 
@@ -7,13 +6,13 @@ import SharedContentCSS from './SharedContent.css'
 
 export const SharedContent = (props) => {
   let content = props?.content
-  let date = formatDateToString(content?.createdAt)
+  let date = moment(content?.createdAt, 'YYYYMMDDHHmmss').fromNow()
 
   return (
     <div className="sharing-users-post-container">
       <div className="sharing-users-post-header">
         <h2 className="sharing-users-post-header-title">{content?.title}</h2>
-        <p className="sharing-users-post-header-datetime">{date} AAAAAAAAAAA</p>
+        <p className="sharing-users-post-header-datetime">{date}</p>
       </div>
 
       <div className="sharing-users-post-content">
