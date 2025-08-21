@@ -21,5 +21,11 @@ namespace MentalHealthBlog.API.Controllers
         {
             return await _therapyRequestService.GetRequestsForMentalHealthExpert(query);
         }
+
+        [HttpPut("change-request-status")]
+        public async Task<Response> ChangeRequestStatus([FromBody] Models.ResourceRequest.TherapyRequestDto request)
+        {
+            return await _therapyRequestService.ChangeRequestStatus(request);
+        }
     }
 }

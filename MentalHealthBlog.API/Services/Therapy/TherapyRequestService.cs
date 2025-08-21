@@ -1,8 +1,8 @@
 ﻿using MentalHealthBlog.API.Exceptions;
+using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 #pragma warning disable CS8602,CS8604
@@ -48,7 +48,7 @@ namespace MentalHealthBlog.API.Services.Therapy
                     .Join((_context.RegularUsers),
                           (therapyRequest) => therapyRequest.RegularUserId,
                           (regularUser) => regularUser.UserId,
-                          (tr, ru) => new TherapyRequestDto
+                          (tr, ru) => new Models.ResourceResponse.TherapyRequestDto
                           {
                               RegularUserId = ru.UserId,
                               RegularUserFirstName = ru.FirstName,
@@ -73,6 +73,49 @@ namespace MentalHealthBlog.API.Services.Therapy
                 _therapyRequestLoggerService.LogError($"REQUESTS-FOR-MENTAL-HEALTH-EXPERT: {e.Message}");
                 throw;
             }
+        }
+        public async Task<Response> ChangeRequestStatus(Models.ResourceRequest.TherapyRequestDto request)
+        {
+            try
+            {
+                if (request is null)
+                {
+                    _therapyRequestLoggerService.LogWarning($"CHANGE-REQUEST-STATUS: {TherapyRequestLogTypes.ARGUMENT_NOT_VALID.ToString()}");
+                    throw new ArgumentException("Bad request!");
+                }
+
+                if (request != null)
+                {
+                    if (request.MentalHealthExpertId <= 0 || request.RegularUserId <= 0)
+                    {
+                        _therapyRequestLoggerService.LogWarning($"CHANGE-REQUEST-STATUS: {TherapyRequestLogTypes.ARGUMENT_NOT_VALID.ToString()}");
+                        throw new ArgumentException("Bad request!");
+                    }
+                }
+
+                var requestToModify = await _context.TherapyRequests
+                    .SingleOrDefaultAsync(tr => tr.MentalHealthExpertId == request.MentalHealthExpertId &&
+                                         tr.RegularUserId == request.RegularUserId);
+
+                if (requestToModify is null)
+                {
+                    _therapyRequestLoggerService.LogWarning($"CHANGE-REQUEST-STATUS : {TherapyRequestLogTypes.NOT_FOUND.ToString()}");
+                    throw new RecordNotFoundException("Request couldn't be located!");
+                }
+
+                requestToModify.RequestStatus = (RequestStatusEnum) request.NewRequestStatus;
+                await _context.SaveChangesAsync();
+
+                var requests = await GetRequestsForMentalHealthExpert(new SearchTherapyRequestDto(request.MentalHealthExpertId,null));
+                _therapyRequestLoggerService.LogInformation($"CHANGE-REQUEST-STATUS: {TherapyRequestLogTypes.SUCCESS.ToString()}", requestToModify);
+                return new Response(requests.ServiceResponseObject, StatusCodes.Status200OK, $"CHANGE-REQUEST-STATUS: {TherapyRequestLogTypes.SUCCESS.ToString()}");
+            }
+            catch (Exception e)
+            {
+                _therapyRequestLoggerService.LogError($"CHANGE-REQUEST-STATUS: {e.Message}");
+                throw;
+            }
+            
         }
     }
 }
