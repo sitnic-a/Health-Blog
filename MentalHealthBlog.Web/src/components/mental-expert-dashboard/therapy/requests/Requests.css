@@ -159,6 +159,23 @@
   color: #c93232;
 }
 
+.therapy-request-stop-sharing-action {
+  display: initial;
+  padding: 0.3rem 1.3rem;
+  border: 1px solid #c93232;
+  border-radius: 0.4rem;
+  outline: none;
+  cursor: pointer;
+  transition: 200ms;
+  color: #c93232;
+  background: #fff;
+}
+
+.therapy-request-stop-sharing-action:hover {
+  color: #fff;
+  background: #c93232;
+}
+
 .therapy-request-decline-icon-action:hover {
   stroke-width: 2;
   color: #a02929;

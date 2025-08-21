@@ -10,6 +10,7 @@ import { HiX } from 'react-icons/hi'
 import RequestsCSS from './Requests.css'
 
 export const Requests = () => {
+  const __STATUS_APPROVED__ = 1
   let dispatch = useDispatch()
   let { authenticatedUser } = useSelector((store) => store.user)
   let { requestsForMentalHealthExpert, isLoading } = useSelector(
@@ -46,12 +47,15 @@ export const Requests = () => {
 
                     <div className="therapy-requests-requests-content-cell">
                       <div className="therapy-requests-requests-content-actions-main-container">
-                        <button
-                          className="therapy-requests-request-content-action therapy-request-approve-action"
-                          type="button"
-                        >
-                          Approve
-                        </button>
+                        {request?.requestStatus === __STATUS_APPROVED__ || (
+                          <button
+                            className="therapy-requests-request-content-action therapy-request-approve-action"
+                            type="button"
+                          >
+                            Approve
+                          </button>
+                        )}
+
                         <FaCheck className="therapy-requests-request-content-action therapy-request-icon-action therapy-request-approve-icon-action" />
                         <button
                           className="therapy-requests-request-content-action therapy-request-decline-action"
@@ -59,6 +63,16 @@ export const Requests = () => {
                         >
                           Decline
                         </button>
+
+                        {request?.requestStatus !== 0 && (
+                          <button
+                            className="therapy-requests-request-content-action therapy-request-stop-sharing-action"
+                            type="button"
+                          >
+                            Stop sharing
+                          </button>
+                        )}
+
                         <HiX className="therapy-requests-request-content-action therapy-request-icon-action therapy-request-decline-icon-action" />
                       </div>
                     </div>
