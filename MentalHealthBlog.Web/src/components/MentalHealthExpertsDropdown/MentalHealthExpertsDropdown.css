@@ -1,0 +1,123 @@
+.select-mental-health-experts-main-container-important-note {
+  margin-block: 0.2rem;
+  font-family: 'Klee One';
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #c93232;
+}
+
+.main-mental-health-expert-picker-container {
+  max-width: 350px;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 0.4rem;
+  background: #34688f;
+}
+
+.main-mental-health-expert-picker-choose-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  margin-block: 0.5rem;
+  padding: 0.2rem;
+  border-top-left-radius: 0.4rem;
+  border-top-right-radius: 0.4rem;
+  cursor: pointer;
+
+  color: #f3f1e3;
+  background: #82a3bc;
+}
+
+#main-mental-health-expert-expand-icon {
+  position: absolute;
+  right: 0.2rem;
+  transition: 300ms;
+}
+
+.main-mental-health-expert-expand-icon {
+  transform: rotateZ(0deg);
+}
+
+.main-mental-health-expert-expand-icon-clicked {
+  transform: rotateZ(-180deg);
+}
+
+#main-mental-health-expert-picker {
+  display: block;
+}
+
+.main-mental-health-expert-picker-shrinked {
+  height: 0;
+  margin-top: -0.2rem;
+  opacity: 0;
+  /* background: blue; */
+}
+
+.main-mental-health-expert-picker-expanded {
+  height: auto;
+  transition: 300ms;
+  opacity: 1;
+}
+
+.main-mental-health-expert-selected-picker-option {
+}
+
+.main-mental-health-expert-selected-picker-option-active {
+  margin-block: 0.4rem;
+  padding: 0.1rem;
+  padding-inline: 0.3rem;
+  background: #edb572;
+}
+
+.main-mental-health-expert-picker-option {
+  display: flex;
+  justify-content: space-between;
+  margin-block: 0.2rem;
+  padding: 0.4rem 0.2rem;
+  border-radius: 0.3rem;
+  /* border: 1px solid red; */
+  background: #f0eae1;
+}
+
+.main-mental-health-expert-picker-option-name {
+  font-family: 'Klee One';
+}
+
+.main-mental-health-expert-picker-option-action {
+  padding-inline: 1rem;
+  padding-block: 0.2rem;
+  color: #f3f1e3;
+}
+
+.picker-option-add-action {
+  font-family: 'Klee One';
+  font-size: 0.9rem;
+  outline: none;
+  border: none;
+  border-radius: 0.2rem;
+  transition: 200ms;
+  cursor: pointer;
+  background: #edb572;
+}
+
+.picker-option-add-action:hover {
+  background: #82a3bc;
+}
+
+.picker-option-cancel-action {
+  display: none;
+  outline: none;
+  border: none;
+  border-radius: 0.2rem;
+  transition: 200ms;
+  cursor: pointer;
+  color: #f3f1e3;
+  background: #c93232;
+}
+
+.picker-option-cancel-action:hover {
+  color: #c93232;
+  border: 1px solid #c93232;
+  background: none;
+}

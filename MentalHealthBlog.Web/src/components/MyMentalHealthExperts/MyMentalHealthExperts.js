@@ -1,0 +1,115 @@
+import { useSelector } from 'react-redux'
+import { Navbar } from '../shared/Navbar/Navbar'
+import { MyMentalHealthExpertPocket } from '../MyMentalHealthExpertPocket/MyMentalHealthExpertPocket'
+import { MentalHealthExpertsDropdown } from '../MentalHealthExpertsDropdown/MentalHealthExpertsDropdown'
+
+import { TiArrowSortedDown } from 'react-icons/ti'
+
+import MyMentalHealthExpertsCSS from './MyMentalHealthExperts.css'
+
+export const MyMentalHealthExperts = () => {
+  const __MAX_EXPERTS_PER_USER = 2
+  let { myMentalHealthExperts } = useSelector((store) => store.therapy)
+
+  return (
+    <section id="my-mental-health-experts-main-container">
+      <Navbar />
+
+      <div className="my-mental-health-experts-filter-main-container">
+        <button
+          className="my-mental-health-experts-filter-action my-mental-health-filter-current-action"
+          type="button"
+        >
+          Current
+        </button>
+        <button
+          className="my-mental-health-experts-filter-action my-mental-health-filter-past-action"
+          type="button"
+        >
+          Past
+        </button>
+        <button
+          className="my-mental-health-experts-filter-action my-mental-health-experts-filter-all-action my-mental-health-experts-active-filter"
+          type="button"
+        >
+          All
+        </button>
+
+        <div className="my-mental-health-filter-choose-action-main-container">
+          <button
+            className="my-mental-health-experts-filter-action my-mental-health-filter-choose-action"
+            type="button"
+            onClick={() => {
+              let mainMentalHealthExpertPicker = document.getElementById(
+                'main-mental-health-expert-picker'
+              )
+
+              let expandIcon = document.querySelector(
+                '.my-mental-health-filter-choose-action-icon'
+              )
+
+              if (
+                mainMentalHealthExpertPicker.classList.contains(
+                  'main-mental-health-expert-picker-shrinked'
+                )
+              ) {
+                mainMentalHealthExpertPicker.classList.remove(
+                  'main-mental-health-expert-picker-shrinked'
+                )
+                mainMentalHealthExpertPicker.classList.add(
+                  'main-mental-health-expert-picker-expanded'
+                )
+
+                expandIcon.classList.remove(
+                  'my-mental-health-filter-choose-action-icon-expand'
+                )
+                expandIcon.classList.add(
+                  'my-mental-health-filter-choose-action-icon-shrink'
+                )
+                return
+              }
+
+              if (
+                mainMentalHealthExpertPicker.classList.contains(
+                  'main-mental-health-expert-picker-expanded'
+                )
+              ) {
+                mainMentalHealthExpertPicker.classList.remove(
+                  'main-mental-health-expert-picker-expanded'
+                )
+                mainMentalHealthExpertPicker.classList.add(
+                  'main-mental-health-expert-picker-shrinked'
+                )
+
+                expandIcon.classList.remove(
+                  'my-mental-health-filter-choose-action-icon-shrink'
+                )
+                expandIcon.classList.add(
+                  'my-mental-health-filter-choose-action-icon-expand'
+                )
+              }
+            }}
+          >
+            <span>Choose an expert:</span>
+            <TiArrowSortedDown className="my-mental-health-filter-choose-action-icon my-mental-health-filter-choose-action-icon-expand" />
+          </button>
+
+          <MentalHealthExpertsDropdown />
+        </div>
+      </div>
+
+      <div className="my-mental-health-experts-experts-container">
+        {myMentalHealthExperts?.length <= 0 ? (
+          <>
+            <MyMentalHealthExpertPocket />
+            <MyMentalHealthExpertPocket />
+          </>
+        ) : (
+          myMentalHealthExperts?.map((myExpert) => {
+            return <p>{myExpert?.id}</p>
+          })
+        )}
+      </div>
+    </section>
+  )
+}

@@ -1,0 +1,115 @@
+#my-mental-health-experts-main-container {
+  min-height: 100vh;
+  margin-inline: -2rem;
+  padding-inline: 2rem;
+  padding-bottom: 2rem;
+  background: #cce5f1;
+}
+
+.my-mental-health-experts-filter-main-container {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  row-gap: 0.15rem;
+  margin-top: 2rem;
+  /* padding: 0.5rem; */
+  /* border: 1px solid red; */
+}
+
+.my-mental-health-experts-filter-action {
+  margin-left: 0.15rem;
+  padding: 0.5rem 2rem;
+  outline: none;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: 200ms;
+  color: #f3f1e3;
+  background: #34688f;
+}
+
+@media (width<=600px) {
+  .my-mental-health-experts-filter-action {
+    padding: 0.5rem 1.5rem;
+  }
+}
+
+.my-mental-health-experts-filter-action:first-of-type {
+  margin-left: 0rem;
+}
+
+.my-mental-health-experts-active-filter {
+  background: #82a3bc;
+}
+
+.my-mental-health-filter-choose-action-main-container {
+  max-width: 350px;
+  width: 100%;
+  position: relative;
+  margin-left: 0.15rem;
+}
+
+@media (width<=700px) {
+  .my-mental-health-filter-choose-action-main-container {
+    margin-left: 0;
+  }
+}
+
+.my-mental-health-filter-choose-action {
+  display: flex;
+  align-items: center;
+  margin-left: 0;
+}
+
+.my-mental-health-filter-choose-action-icon {
+  margin-left: 10px;
+}
+
+.my-mental-health-filter-choose-action-icon-expand {
+  transform: rotateZ(0deg);
+  transition: 200ms;
+}
+
+.my-mental-health-filter-choose-action-icon-shrink {
+  transform: rotateZ(-180deg);
+  transition: 200ms;
+}
+
+.my-mental-health-filter-choose-action-main-container
+  .select-mental-health-experts-main-container {
+  max-width: 350px;
+  width: 100%;
+  position: absolute;
+  z-index: 1;
+}
+
+.my-mental-health-filter-choose-action-main-container
+  #main-mental-health-expert-picker {
+  margin-top: 0.2rem;
+  padding: 0.3rem;
+  border-radius: 0.4rem;
+  background: #34688f;
+}
+
+.my-mental-health-experts-experts-container {
+  max-width: 100vw;
+  display: flex;
+  column-gap: 20px;
+  margin-top: 2rem;
+}
+
+@media (width<=610px) {
+  .my-mental-health-experts-experts-container {
+    flex-wrap: wrap;
+    row-gap: 20px;
+    justify-content: center;
+  }
+}
+
+.my-expert-main-container {
+  max-width: 300px;
+  width: 100%;
+  min-height: 450px;
+  border: 1px dashed #34688f;
+  background: #b4d3ea;
+}

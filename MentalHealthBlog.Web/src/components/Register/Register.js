@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { register, getDbRoles } from '../../redux-toolkit/features/userSlice'
 import { getMentalHealthExperts } from '../../redux-toolkit/features/mentalExpertSlice'
+import { setSelectedMentalHealthExpertIds } from '../../redux-toolkit/features/therapySlice'
 import useFetchLocationState from '../../custom/hooks/useFetchLocationState'
 import {
   previewImage,
@@ -12,23 +13,20 @@ import {
 import { db_roles } from '../../enums/roles'
 import { toast } from 'react-toastify'
 
+import { MentalHealthExpertsDropdown } from '../MentalHealthExpertsDropdown/MentalHealthExpertsDropdown'
 import { TiArrowSortedDown } from 'react-icons/ti'
 
 import RegisterCSS from './Register.css'
 
 export const Register = () => {
   let { dbRoles } = useSelector((store) => store.user)
-  let { suggestedMentalHealthExperts } = useSelector(
-    (store) => store.mentalExpert
-  )
+  let { selectedMentalHealthExpertIds } = useSelector((store) => store.therapy)
+
   let { isMentalHealthExpert, isRegularUser } = useFetchLocationState()
   let [isInTherapy, setIsInTherapy] = useState(false)
-  let [selectedMentalHealthExpertIds, setSelectedMentalHealthExpertIds] =
-    useState([])
 
   useEffect(() => {
     dispatch(getDbRoles())
-    dispatch(getMentalHealthExperts())
   }, [])
 
   let navigate = useNavigate()
@@ -164,9 +162,12 @@ export const Register = () => {
       }
     }
 
+    // console.log('Register object ', Object.fromEntries(form.entries()))
+
     dispatch(register(form)).then((response) => {
       let statusCode = response.payload.statusCode
       if (statusCode === 201) {
+        dispatch(setSelectedMentalHealthExpertIds([]))
         navigate('/login')
       }
     })
@@ -344,7 +345,10 @@ export const Register = () => {
                       className="main-mental-health-expert-expand-icon"
                     />
                   </label>
-                  <div
+
+                  <MentalHealthExpertsDropdown />
+
+                  {/* <div
                     id="main-mental-health-expert-picker"
                     className="main-mental-health-expert-picker-shrinked"
                   >
@@ -461,7 +465,7 @@ export const Register = () => {
                         </div>
                       )
                     })}
-                  </div>
+                  </div> */}
                 </div>
               </div>
             )}

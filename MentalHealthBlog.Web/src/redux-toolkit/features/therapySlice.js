@@ -5,6 +5,8 @@ let initialState = {
   requestsForMentalHealthExpert: [],
   isLoading: false,
   isFailed: false,
+  myMentalHealthExperts: [],
+  selectedMentalHealthExpertIds: [],
 }
 
 export const getRequestsForMentalHealthExpert = createAsyncThunk(
@@ -57,7 +59,12 @@ export const changeRequestStatus = createAsyncThunk(
 let therapySlice = createSlice({
   name: 'therapySlice',
   initialState,
-  reducers: {},
+  reducers: {
+    setSelectedMentalHealthExpertIds: (state, action) => {
+      state.selectedMentalHealthExpertIds = action?.payload
+      console.log('Selected Ids ', state.selectedMentalHealthExpertIds)
+    },
+  },
   extraReducers: (builder) => {
     builder
 
@@ -98,5 +105,5 @@ let therapySlice = createSlice({
   },
 })
 
-export const {} = therapySlice.actions
+export const { setSelectedMentalHealthExpertIds } = therapySlice.actions
 export default therapySlice.reducer

@@ -35,6 +35,11 @@ export const Navbar = () => {
             <Link to={'/shared-posts'} className="navigation-bar-action">
               Shared Content
             </Link>
+
+            <Link to={'/my-experts'} className="navigation-bar-action">
+              My Mental Health Experts
+            </Link>
+
             <Link
               to={`/assignments/user/${authenticatedUser.id}`}
               className="navigation-bar-action"
