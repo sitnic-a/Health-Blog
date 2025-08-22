@@ -1,21 +1,22 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import moment from 'moment'
-import { getRequestsForMentalHealthExpert } from '../../../../redux-toolkit/features/therapySlice'
+import {
+  changeRequestStatus,
+  getRequestsForMentalHealthExpert,
+} from '../../../../redux-toolkit/features/therapySlice'
 import { Navbar } from '../../../shared/Navbar/Navbar'
 
+import { requestStatuses } from '../../../../enums/requestStatuses'
 import { FaCheck } from 'react-icons/fa'
 import { HiX } from 'react-icons/hi'
 
 import RequestsCSS from './Requests.css'
 
 export const Requests = () => {
-  const __STATUS_APPROVED__ = 1
   let dispatch = useDispatch()
   let { authenticatedUser } = useSelector((store) => store.user)
-  let { requestsForMentalHealthExpert, isLoading } = useSelector(
-    (store) => store.therapy
-  )
+  let { requestsForMentalHealthExpert } = useSelector((store) => store.therapy)
 
   console.log('Authenticated user ', authenticatedUser)
 
@@ -46,35 +47,88 @@ export const Requests = () => {
                     </div>
 
                     <div className="therapy-requests-requests-content-cell">
-                      <div className="therapy-requests-requests-content-actions-main-container">
-                        {request?.requestStatus === __STATUS_APPROVED__ || (
+                      {request?.requestStatus === requestStatuses.DECLINED ? (
+                        <div className="therapy-requests-requests-content-actions-main-container">
+                          <p className="therapy-requests-requests-content-actions-description-message">
+                            Declined
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="therapy-requests-requests-content-actions-main-container">
+                          {request?.requestStatus ===
+                            requestStatuses.APPROVED || (
+                            <button
+                              className="therapy-requests-request-content-action therapy-request-approve-action"
+                              type="button"
+                              onClick={() => {
+                                let objectWithData = {
+                                  authenticatedUser,
+                                  request,
+                                  newRequestStatus: requestStatuses.APPROVED,
+                                }
+                                dispatch(changeRequestStatus(objectWithData))
+                              }}
+                            >
+                              Approve
+                            </button>
+                          )}
+
+                          <FaCheck
+                            className="therapy-requests-request-content-action therapy-request-icon-action therapy-request-approve-icon-action"
+                            onClick={() => {
+                              let objectWithData = {
+                                authenticatedUser,
+                                request,
+                                newRequestStatus: requestStatuses.APPROVED,
+                              }
+                              dispatch(changeRequestStatus(objectWithData))
+                            }}
+                          />
                           <button
-                            className="therapy-requests-request-content-action therapy-request-approve-action"
+                            className="therapy-requests-request-content-action therapy-request-decline-action"
                             type="button"
+                            onClick={() => {
+                              let objectWithData = {
+                                authenticatedUser,
+                                request,
+                                newRequestStatus: requestStatuses.DECLINED,
+                              }
+                              dispatch(changeRequestStatus(objectWithData))
+                            }}
                           >
-                            Approve
+                            Decline
                           </button>
-                        )}
 
-                        <FaCheck className="therapy-requests-request-content-action therapy-request-icon-action therapy-request-approve-icon-action" />
-                        <button
-                          className="therapy-requests-request-content-action therapy-request-decline-action"
-                          type="button"
-                        >
-                          Decline
-                        </button>
+                          {request?.requestStatus !== 0 && (
+                            <button
+                              className="therapy-requests-request-content-action therapy-request-stop-sharing-action"
+                              type="button"
+                              onClick={() => {
+                                let objectWithData = {
+                                  authenticatedUser,
+                                  request,
+                                  newRequestStatus: requestStatuses.PENDING,
+                                }
+                                dispatch(changeRequestStatus(objectWithData))
+                              }}
+                            >
+                              Stop sharing
+                            </button>
+                          )}
 
-                        {request?.requestStatus !== 0 && (
-                          <button
-                            className="therapy-requests-request-content-action therapy-request-stop-sharing-action"
-                            type="button"
-                          >
-                            Stop sharing
-                          </button>
-                        )}
-
-                        <HiX className="therapy-requests-request-content-action therapy-request-icon-action therapy-request-decline-icon-action" />
-                      </div>
+                          <HiX
+                            className="therapy-requests-request-content-action therapy-request-icon-action therapy-request-decline-icon-action"
+                            onClick={() => {
+                              let objectWithData = {
+                                authenticatedUser,
+                                request,
+                                newRequestStatus: requestStatuses.DECLINED,
+                              }
+                              dispatch(changeRequestStatus(objectWithData))
+                            }}
+                          />
+                        </div>
+                      )}
                     </div>
 
                     <div className="therapy-requests-requests-content-cell">

@@ -29,14 +29,39 @@ export const getRequestsForMentalHealthExpert = createAsyncThunk(
   }
 )
 
+export const changeRequestStatus = createAsyncThunk(
+  'change-request-status',
+  async (objectWithData) => {
+    let requestObj = {
+      mentalHealthExpertId: objectWithData?.authenticatedUser?.id,
+      regularUserId: objectWithData?.request?.regularUserId,
+      newRequestStatus: objectWithData?.newRequestStatus,
+    }
+
+    console.log('Req obj ', requestObj)
+
+    let url = `${application.application_url}/therapy/change-request-status`
+    let request = await fetch(url, {
+      method: 'PUT',
+      body: JSON.stringify(requestObj),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
+      },
+    })
+    let response = await request.json()
+    return response
+  }
+)
+
 let therapySlice = createSlice({
   name: 'therapySlice',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    //requests-for-mental-health-expert
     builder
 
+      //requests-for-mental-health-expert
       .addCase(getRequestsForMentalHealthExpert.pending, () => {
         console.log('Fetching requests pending...')
       })
@@ -49,6 +74,26 @@ let therapySlice = createSlice({
         }
 
         console.log('Requests ', state.requestsForMentalHealthExpert)
+      })
+      .addCase(getRequestsForMentalHealthExpert.rejected, () => {
+        console.log('Requests rejected...')
+      })
+
+      //change-request-status
+      .addCase(changeRequestStatus.pending, () => {
+        console.log('Request status change pending...')
+      })
+      .addCase(changeRequestStatus.fulfilled, (state, action) => {
+        let statusCode = action?.payload?.statusCode
+        if (statusCode === 200) {
+          console.log('Successfully changed status')
+
+          state.requestsForMentalHealthExpert =
+            action?.payload?.serviceResponseObject
+        }
+      })
+      .addCase(changeRequestStatus.rejected, () => {
+        console.log('Request status change rejected...')
       })
   },
 })
