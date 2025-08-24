@@ -41,6 +41,13 @@ export const MentalHealthExpertsDropdown = () => {
                 <span className="main-mental-health-expert-picker-option-name">
                   {fullName}{' '}
                 </span>
+
+                <button
+                  className='className="main-mental-health-expert-picker-option-action picker-option-send-request-action'
+                  type="button"
+                >
+                  Send request
+                </button>
                 <button
                   className="main-mental-health-expert-picker-option-action picker-option-add-action"
                   type="button"

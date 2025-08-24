@@ -90,6 +90,20 @@
   color: #f3f1e3;
 }
 
+.picker-option-send-request-action {
+  outline: none;
+  border-radius: 0.2rem;
+  border: none;
+  cursor: pointer;
+  transition: 200ms;
+  color: #f3f1e3;
+  background: #edb572;
+}
+
+.picker-option-send-request-action:hover {
+  background: #82a3bc;
+}
+
 .picker-option-add-action {
   font-family: 'Klee One';
   font-size: 0.9rem;

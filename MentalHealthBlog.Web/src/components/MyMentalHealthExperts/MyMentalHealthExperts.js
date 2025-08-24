@@ -46,67 +46,69 @@ export const MyMentalHealthExperts = () => {
           All
         </button>
 
-        <div className="my-mental-health-filter-choose-action-main-container">
-          <button
-            className="my-mental-health-experts-filter-action my-mental-health-filter-choose-action"
-            type="button"
-            onClick={() => {
-              let mainMentalHealthExpertPicker = document.getElementById(
-                'main-mental-health-expert-picker'
-              )
-
-              let expandIcon = document.querySelector(
-                '.my-mental-health-filter-choose-action-icon'
-              )
-
-              if (
-                mainMentalHealthExpertPicker.classList.contains(
-                  'main-mental-health-expert-picker-shrinked'
-                )
-              ) {
-                mainMentalHealthExpertPicker.classList.remove(
-                  'main-mental-health-expert-picker-shrinked'
-                )
-                mainMentalHealthExpertPicker.classList.add(
-                  'main-mental-health-expert-picker-expanded'
+        {myMentalHealthExperts?.length >= 2 || (
+          <div className="my-mental-health-filter-choose-action-main-container">
+            <button
+              className="my-mental-health-experts-filter-action my-mental-health-filter-choose-action"
+              type="button"
+              onClick={() => {
+                let mainMentalHealthExpertPicker = document.getElementById(
+                  'main-mental-health-expert-picker'
                 )
 
-                expandIcon.classList.remove(
-                  'my-mental-health-filter-choose-action-icon-expand'
-                )
-                expandIcon.classList.add(
-                  'my-mental-health-filter-choose-action-icon-shrink'
-                )
-                return
-              }
-
-              if (
-                mainMentalHealthExpertPicker.classList.contains(
-                  'main-mental-health-expert-picker-expanded'
-                )
-              ) {
-                mainMentalHealthExpertPicker.classList.remove(
-                  'main-mental-health-expert-picker-expanded'
-                )
-                mainMentalHealthExpertPicker.classList.add(
-                  'main-mental-health-expert-picker-shrinked'
+                let expandIcon = document.querySelector(
+                  '.my-mental-health-filter-choose-action-icon'
                 )
 
-                expandIcon.classList.remove(
-                  'my-mental-health-filter-choose-action-icon-shrink'
-                )
-                expandIcon.classList.add(
-                  'my-mental-health-filter-choose-action-icon-expand'
-                )
-              }
-            }}
-          >
-            <span>Choose an expert:</span>
-            <TiArrowSortedDown className="my-mental-health-filter-choose-action-icon my-mental-health-filter-choose-action-icon-expand" />
-          </button>
+                if (
+                  mainMentalHealthExpertPicker.classList.contains(
+                    'main-mental-health-expert-picker-shrinked'
+                  )
+                ) {
+                  mainMentalHealthExpertPicker.classList.remove(
+                    'main-mental-health-expert-picker-shrinked'
+                  )
+                  mainMentalHealthExpertPicker.classList.add(
+                    'main-mental-health-expert-picker-expanded'
+                  )
 
-          <MentalHealthExpertsDropdown />
-        </div>
+                  expandIcon.classList.remove(
+                    'my-mental-health-filter-choose-action-icon-expand'
+                  )
+                  expandIcon.classList.add(
+                    'my-mental-health-filter-choose-action-icon-shrink'
+                  )
+                  return
+                }
+
+                if (
+                  mainMentalHealthExpertPicker.classList.contains(
+                    'main-mental-health-expert-picker-expanded'
+                  )
+                ) {
+                  mainMentalHealthExpertPicker.classList.remove(
+                    'main-mental-health-expert-picker-expanded'
+                  )
+                  mainMentalHealthExpertPicker.classList.add(
+                    'main-mental-health-expert-picker-shrinked'
+                  )
+
+                  expandIcon.classList.remove(
+                    'my-mental-health-filter-choose-action-icon-shrink'
+                  )
+                  expandIcon.classList.add(
+                    'my-mental-health-filter-choose-action-icon-expand'
+                  )
+                }
+              }}
+            >
+              <span>Choose an expert:</span>
+              <TiArrowSortedDown className="my-mental-health-filter-choose-action-icon my-mental-health-filter-choose-action-icon-expand" />
+            </button>
+
+            <MentalHealthExpertsDropdown />
+          </div>
+        )}
       </div>
 
       <div className="my-mental-health-experts-experts-container">
