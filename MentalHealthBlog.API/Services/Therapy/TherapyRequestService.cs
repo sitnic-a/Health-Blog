@@ -112,6 +112,7 @@ namespace MentalHealthBlog.API.Services.Therapy
                                   MentalHealthExpertFirstName = mhe.FirstName,
                                   MentalHealthExpertLastName = mhe.LastName,
                                   MentalHealthExpertOrganization = mhe.Organization,
+                                  MentalHealthExpertEmail = mhe.Email,
                                   MentalHealthExpertPhoneNumber = mhe.PhoneNumber,
                                   MentalHealthExpertPhotoAsPath = mhe.PhotoAsPath,
                                   MentalHealthExpertPhotoAsFile = mhe.PhotoAsFile,

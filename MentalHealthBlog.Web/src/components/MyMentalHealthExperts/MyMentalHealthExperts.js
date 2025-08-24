@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Navbar } from '../shared/Navbar/Navbar'
 import { MyMentalHealthExpertPocket } from '../MyMentalHealthExpertPocket/MyMentalHealthExpertPocket'
 import { MentalHealthExpertsDropdown } from '../MentalHealthExpertsDropdown/MentalHealthExpertsDropdown'
@@ -6,10 +6,21 @@ import { MentalHealthExpertsDropdown } from '../MentalHealthExpertsDropdown/Ment
 import { TiArrowSortedDown } from 'react-icons/ti'
 
 import MyMentalHealthExpertsCSS from './MyMentalHealthExperts.css'
+import { useEffect } from 'react'
+import { getMyExperts } from '../../redux-toolkit/features/therapySlice'
+import { MyMentalHealthExpertProfile } from '../MyMentalHealthExpertProfile/MyMentalHealthExpertProfile'
 
 export const MyMentalHealthExperts = () => {
-  const __MAX_EXPERTS_PER_USER = 2
+  let dispatch = useDispatch()
+  let { authenticatedUser } = useSelector((store) => store.user)
   let { myMentalHealthExperts } = useSelector((store) => store.therapy)
+
+  useEffect(() => {
+    let objectWithData = {
+      authenticatedUser,
+    }
+    dispatch(getMyExperts(objectWithData))
+  }, [])
 
   return (
     <section id="my-mental-health-experts-main-container">
@@ -99,15 +110,23 @@ export const MyMentalHealthExperts = () => {
       </div>
 
       <div className="my-mental-health-experts-experts-container">
-        {myMentalHealthExperts?.length <= 0 ? (
+        {myMentalHealthExperts?.length === 0 && (
           <>
             <MyMentalHealthExpertPocket />
             <MyMentalHealthExpertPocket />
           </>
-        ) : (
-          myMentalHealthExperts?.map((myExpert) => {
-            return <p>{myExpert?.id}</p>
-          })
+        )}
+        {myMentalHealthExperts?.length === 1 && (
+          <>
+            <MyMentalHealthExpertProfile expert={myMentalHealthExperts[0]} />
+            <MyMentalHealthExpertPocket />
+          </>
+        )}
+        {myMentalHealthExperts?.length === 2 && (
+          <>
+            <MyMentalHealthExpertProfile expert={myMentalHealthExperts[0]} />
+            <MyMentalHealthExpertProfile expert={myMentalHealthExperts[1]} />
+          </>
         )}
       </div>
     </section>

@@ -31,6 +31,28 @@ export const getRequestsForMentalHealthExpert = createAsyncThunk(
   }
 )
 
+export const getMyExperts = createAsyncThunk(
+  'my-experts',
+  async (objectWithData) => {
+    let query = {
+      loggedUserId: objectWithData?.authenticatedUser?.id,
+      requestStatus: null,
+    }
+
+    let url = `${application.application_url}/therapy/my-experts`
+    let request = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(query),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
+      },
+    })
+    let response = await request.json()
+    return response
+  }
+)
+
 export const changeRequestStatus = createAsyncThunk(
   'change-request-status',
   async (objectWithData) => {
@@ -84,6 +106,22 @@ let therapySlice = createSlice({
       })
       .addCase(getRequestsForMentalHealthExpert.rejected, () => {
         console.log('Requests rejected...')
+      })
+
+      //my-experts
+      .addCase(getMyExperts.pending, () => {
+        console.log('My experts pending...')
+      })
+      .addCase(getMyExperts.fulfilled, (state, action) => {
+        console.log('My experts fulfilled')
+        let statusCode = action?.payload?.statusCode
+        if (statusCode === 200) {
+          state.myMentalHealthExperts = action?.payload?.serviceResponseObject
+          console.log('My experts ', state.myMentalHealthExperts)
+        }
+      })
+      .addCase(getMyExperts.rejected, () => {
+        console.log('My experts rejected...')
       })
 
       //change-request-status
