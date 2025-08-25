@@ -18,10 +18,10 @@ namespace MentalHealthBlog.API.Controllers
             _mentalExpertService = mentalExpertService;
         }
 
-        [HttpGet("experts")]
-        public async Task<Response> GetExperts()
+        [HttpPost("experts")]
+        public async Task<Response> GetExperts([FromBody] SearchExpertDto? request = null)
         {
-            return await _mentalExpertService.GetMentalHealthExperts();
+            return await _mentalExpertService.GetMentalHealthExperts(request);
         }
 
 
