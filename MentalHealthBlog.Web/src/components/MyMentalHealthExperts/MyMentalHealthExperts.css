@@ -10,7 +10,7 @@
   display: flex;
   align-items: flex-start;
   flex-wrap: wrap;
-  row-gap: 0.15rem;
+  row-gap: 0.2rem;
   margin-top: 2rem;
   /* padding: 0.5rem; */
   /* border: 1px solid red; */
@@ -19,6 +19,8 @@
 .my-mental-health-experts-filter-action {
   margin-left: 0.15rem;
   padding: 0.5rem 2rem;
+  font-family: 'Klee One';
+  font-size: 0.87rem;
   outline: none;
   border: none;
   border-radius: 0.5rem;

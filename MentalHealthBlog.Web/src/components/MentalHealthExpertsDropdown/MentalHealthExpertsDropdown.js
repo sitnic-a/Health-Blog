@@ -1,11 +1,16 @@
 import { useDispatch, useSelector } from 'react-redux'
 
-import { setSelectedMentalHealthExpertIds } from '../../redux-toolkit/features/therapySlice'
+import {
+  changeRequestStatus,
+  setSelectedMentalHealthExpertIds,
+} from '../../redux-toolkit/features/therapySlice'
+import { requestStatuses } from '../../enums/requestStatuses'
 
 import MentalHealthExpertsDropdownCSS from './MentalHealthExpertsDropdown.css'
 
 export const MentalHealthExpertsDropdown = () => {
   let dispatch = useDispatch()
+  let { authenticatedUser } = useSelector((store) => store.user)
   let { suggestedMentalHealthExperts } = useSelector(
     (store) => store.mentalExpert
   )
@@ -35,66 +40,84 @@ export const MentalHealthExpertsDropdown = () => {
                   {fullName}{' '}
                 </span>
 
-                <button
-                  className='className="main-mental-health-expert-picker-option-action picker-option-send-request-action'
-                  type="button"
-                >
-                  Send request
-                </button>
-                <button
-                  className="main-mental-health-expert-picker-option-action picker-option-add-action"
-                  type="button"
-                  onClick={(e) => {
-                    let mainMentalHealthExpertSelectedPickerOption =
-                      e.currentTarget.parentNode.parentNode
+                {expert?.requestStatus === requestStatuses.UNDEFINED && (
+                  <button
+                    className="main-mental-health-expert-picker-option-action picker-option-send-request-action"
+                    type="button"
+                    onClick={() => {
+                      let objectWithData = {
+                        mentalHealthExpertId: expert?.mentalHealthExpertId,
+                        regularUserId: authenticatedUser?.id,
+                        newRequestStatus: requestStatuses.PENDING,
+                        authenticatedUser,
+                      }
 
-                    let pickedMentalHealthExpertId =
-                      mainMentalHealthExpertSelectedPickerOption.querySelector(
-                        '#main-mental-health-expert-picker-option-id'
-                      ).value
+                      dispatch(changeRequestStatus(objectWithData))
+                    }}
+                  >
+                    Send request
+                  </button>
+                )}
 
-                    let optionAddAction =
-                      mainMentalHealthExpertSelectedPickerOption.querySelector(
-                        '.picker-option-add-action'
-                      )
-                    let optionCancelAction =
-                      mainMentalHealthExpertSelectedPickerOption.querySelector(
-                        '.picker-option-cancel-action'
-                      )
+                {expert?.requestStatus === requestStatuses.UNDEFINED || (
+                  <button
+                    className="main-mental-health-expert-picker-option-action picker-option-add-action"
+                    type="button"
+                    onClick={(e) => {
+                      let mainMentalHealthExpertSelectedPickerOption =
+                        e.currentTarget.parentNode.parentNode
 
-                    let selectedMentalHealthExpertIdsTemp = [
-                      ...selectedMentalHealthExpertIds,
-                    ]
+                      let pickedMentalHealthExpertId =
+                        mainMentalHealthExpertSelectedPickerOption.querySelector(
+                          '#main-mental-health-expert-picker-option-id'
+                        ).value
 
-                    console.log(
-                      'NEW selected ',
-                      selectedMentalHealthExpertIdsTemp
-                    )
+                      let optionAddAction =
+                        mainMentalHealthExpertSelectedPickerOption.querySelector(
+                          '.picker-option-add-action'
+                        )
+                      let optionCancelAction =
+                        mainMentalHealthExpertSelectedPickerOption.querySelector(
+                          '.picker-option-cancel-action'
+                        )
 
-                    mainMentalHealthExpertSelectedPickerOption.classList.add(
-                      'main-mental-health-expert-selected-picker-option-active'
-                    )
+                      let selectedMentalHealthExpertIdsTemp = [
+                        ...selectedMentalHealthExpertIds,
+                      ]
 
-                    optionAddAction.style.display = 'none'
-                    optionCancelAction.style.display = 'initial'
-
-                    selectedMentalHealthExpertIdsTemp = [
-                      ...selectedMentalHealthExpertIdsTemp,
-                      parseInt(pickedMentalHealthExpertId),
-                    ]
-
-                    console.log('New array ', selectedMentalHealthExpertIdsTemp)
-
-                    dispatch(
-                      setSelectedMentalHealthExpertIds(
+                      console.log(
+                        'NEW selected ',
                         selectedMentalHealthExpertIdsTemp
                       )
-                    )
-                    return
-                  }}
-                >
-                  + Add
-                </button>
+
+                      mainMentalHealthExpertSelectedPickerOption.classList.add(
+                        'main-mental-health-expert-selected-picker-option-active'
+                      )
+
+                      optionAddAction.style.display = 'none'
+                      optionCancelAction.style.display = 'initial'
+
+                      selectedMentalHealthExpertIdsTemp = [
+                        ...selectedMentalHealthExpertIdsTemp,
+                        parseInt(pickedMentalHealthExpertId),
+                      ]
+
+                      console.log(
+                        'New array ',
+                        selectedMentalHealthExpertIdsTemp
+                      )
+
+                      dispatch(
+                        setSelectedMentalHealthExpertIds(
+                          selectedMentalHealthExpertIdsTemp
+                        )
+                      )
+                      return
+                    }}
+                  >
+                    + Add
+                  </button>
+                )}
                 <button
                   className="main-mental-health-expert-picker-option-action picker-option-cancel-action"
                   type="button"

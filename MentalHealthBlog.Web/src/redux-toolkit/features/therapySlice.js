@@ -56,18 +56,10 @@ export const getMyExperts = createAsyncThunk(
 export const changeRequestStatus = createAsyncThunk(
   'change-request-status',
   async (objectWithData) => {
-    let requestObj = {
-      mentalHealthExpertId: objectWithData?.authenticatedUser?.id,
-      regularUserId: objectWithData?.request?.regularUserId,
-      newRequestStatus: objectWithData?.newRequestStatus,
-    }
-
-    console.log('Req obj ', requestObj)
-
     let url = `${application.application_url}/therapy/change-request-status`
     let request = await fetch(url, {
       method: 'PUT',
-      body: JSON.stringify(requestObj),
+      body: JSON.stringify(objectWithData),
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,

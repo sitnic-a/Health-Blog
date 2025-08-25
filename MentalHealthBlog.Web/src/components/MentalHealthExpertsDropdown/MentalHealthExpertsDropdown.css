@@ -81,12 +81,14 @@
 }
 
 .main-mental-health-expert-picker-option-name {
+  max-width: 220px;
+  word-wrap: break-word;
   font-family: 'Klee One';
 }
 
 .main-mental-health-expert-picker-option-action {
   padding-inline: 1rem;
-  padding-block: 0.2rem;
+  padding-block: 0.5rem;
   color: #f3f1e3;
 }
 
