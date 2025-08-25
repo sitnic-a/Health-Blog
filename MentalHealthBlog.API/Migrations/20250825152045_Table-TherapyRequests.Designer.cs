@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MentalHealthBlogAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250825130625_Table-TherapyRequests")]
+    [Migration("20250825152045_Table-TherapyRequests")]
     partial class TableTherapyRequests
     {
         /// <inheritdoc />
@@ -757,8 +757,6 @@ namespace MentalHealthBlogAPI.Migrations
 
                     b.HasKey("RegularUserId", "MentalHealthExpertId");
 
-                    b.HasIndex("MentalHealthExpertId");
-
                     b.ToTable("TherapyRequests");
                 });
 
@@ -810,7 +808,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 1,
                             Content = "Content_T01",
-                            CreatedAt = new DateTime(2025, 8, 25, 15, 6, 25, 861, DateTimeKind.Local).AddTicks(5408),
+                            CreatedAt = new DateTime(2025, 8, 25, 17, 20, 45, 176, DateTimeKind.Local).AddTicks(402),
                             Title = "Title_01",
                             UserId = 1
                         },
@@ -818,7 +816,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 2,
                             Content = "Content_T02",
-                            CreatedAt = new DateTime(2025, 8, 25, 15, 6, 25, 861, DateTimeKind.Local).AddTicks(5470),
+                            CreatedAt = new DateTime(2025, 8, 25, 17, 20, 45, 176, DateTimeKind.Local).AddTicks(459),
                             Title = "Title_02",
                             UserId = 1
                         },
@@ -826,7 +824,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 3,
                             Content = "Content_T03",
-                            CreatedAt = new DateTime(2025, 8, 25, 15, 6, 25, 861, DateTimeKind.Local).AddTicks(5472),
+                            CreatedAt = new DateTime(2025, 8, 25, 17, 20, 45, 176, DateTimeKind.Local).AddTicks(461),
                             Title = "Title_03",
                             UserId = 2
                         },
@@ -834,7 +832,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 4,
                             Content = "Content_T04",
-                            CreatedAt = new DateTime(2025, 8, 25, 15, 6, 25, 861, DateTimeKind.Local).AddTicks(5479),
+                            CreatedAt = new DateTime(2025, 8, 25, 17, 20, 45, 176, DateTimeKind.Local).AddTicks(462),
                             Title = "Title_04",
                             UserId = 2
                         },
@@ -842,7 +840,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 5,
                             Content = "Content_T05",
-                            CreatedAt = new DateTime(2025, 8, 25, 15, 6, 25, 861, DateTimeKind.Local).AddTicks(5480),
+                            CreatedAt = new DateTime(2025, 8, 25, 17, 20, 45, 176, DateTimeKind.Local).AddTicks(464),
                             Title = "Title_05",
                             UserId = 1
                         });
@@ -1001,19 +999,11 @@ namespace MentalHealthBlogAPI.Migrations
 
             modelBuilder.Entity("MentalHealthBlog.API.Models.TherapyRequest", b =>
                 {
-                    b.HasOne("MentalHealthBlog.API.Models.MentalHealthExpert", "MentalHealthExpert")
-                        .WithMany()
-                        .HasForeignKey("MentalHealthExpertId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("MentalHealthBlog.API.Models.RegularUser", "RegularUser")
                         .WithMany()
                         .HasForeignKey("RegularUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("MentalHealthExpert");
 
                     b.Navigation("RegularUser");
                 });

@@ -2,8 +2,9 @@
 {
     public enum RequestStatusEnum
     {
-        Pending = 0,
-        Approved = 1,
-        Declined = 2,
+        Undefined = 0,
+        Pending = 1,
+        Approved = 2,
+        Declined = 3,
     }
 }

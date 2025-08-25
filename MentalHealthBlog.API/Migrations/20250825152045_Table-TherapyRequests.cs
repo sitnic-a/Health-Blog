@@ -24,12 +24,6 @@ namespace MentalHealthBlogAPI.Migrations
                 {
                     table.PrimaryKey("PK_TherapyRequests", x => new { x.RegularUserId, x.MentalHealthExpertId });
                     table.ForeignKey(
-                        name: "FK_TherapyRequests_MentalHealthExperts_MentalHealthExpertId",
-                        column: x => x.MentalHealthExpertId,
-                        principalTable: "MentalHealthExperts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_TherapyRequests_RegularUsers_RegularUserId",
                         column: x => x.RegularUserId,
                         principalTable: "RegularUsers",
@@ -42,40 +36,35 @@ namespace MentalHealthBlogAPI.Migrations
                 keyColumn: "Id",
                 keyValue: 1,
                 column: "CreatedAt",
-                value: new DateTime(2025, 8, 25, 15, 6, 25, 861, DateTimeKind.Local).AddTicks(5408));
+                value: new DateTime(2025, 8, 25, 17, 20, 45, 176, DateTimeKind.Local).AddTicks(402));
 
             migrationBuilder.UpdateData(
                 table: "Posts",
                 keyColumn: "Id",
                 keyValue: 2,
                 column: "CreatedAt",
-                value: new DateTime(2025, 8, 25, 15, 6, 25, 861, DateTimeKind.Local).AddTicks(5470));
+                value: new DateTime(2025, 8, 25, 17, 20, 45, 176, DateTimeKind.Local).AddTicks(459));
 
             migrationBuilder.UpdateData(
                 table: "Posts",
                 keyColumn: "Id",
                 keyValue: 3,
                 column: "CreatedAt",
-                value: new DateTime(2025, 8, 25, 15, 6, 25, 861, DateTimeKind.Local).AddTicks(5472));
+                value: new DateTime(2025, 8, 25, 17, 20, 45, 176, DateTimeKind.Local).AddTicks(461));
 
             migrationBuilder.UpdateData(
                 table: "Posts",
                 keyColumn: "Id",
                 keyValue: 4,
                 column: "CreatedAt",
-                value: new DateTime(2025, 8, 25, 15, 6, 25, 861, DateTimeKind.Local).AddTicks(5479));
+                value: new DateTime(2025, 8, 25, 17, 20, 45, 176, DateTimeKind.Local).AddTicks(462));
 
             migrationBuilder.UpdateData(
                 table: "Posts",
                 keyColumn: "Id",
                 keyValue: 5,
                 column: "CreatedAt",
-                value: new DateTime(2025, 8, 25, 15, 6, 25, 861, DateTimeKind.Local).AddTicks(5480));
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TherapyRequests_MentalHealthExpertId",
-                table: "TherapyRequests",
-                column: "MentalHealthExpertId");
+                value: new DateTime(2025, 8, 25, 17, 20, 45, 176, DateTimeKind.Local).AddTicks(464));
         }
 
         /// <inheritdoc />

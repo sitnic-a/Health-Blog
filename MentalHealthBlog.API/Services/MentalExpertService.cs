@@ -46,24 +46,46 @@ namespace MentalHealthBlog.API.Services
                 var mentalHealthExperts = new List<MentalHealthExpertDto>();
                 List<MentalHealthExpert> dbMentalHealthExperts = new List<MentalHealthExpert>();
                 List<TherapyMentalHealthExpertDto> dbMentalHealthExpertsCombinedWithTherapies = new List<TherapyMentalHealthExpertDto>();
-
+                List<TherapyRequest> dbUsersMentalHealthExperts = new List<TherapyRequest>();
                 if (request is not null)
                 {
-                    dbMentalHealthExpertsCombinedWithTherapies = await _context.TherapyRequests
-                        .Include(mhe => mhe.MentalHealthExpert)
-                        .Select(tr => new TherapyMentalHealthExpertDto
+                    dbMentalHealthExpertsCombinedWithTherapies = await _context.MentalHealthExperts
+                        .Select(mhe => new TherapyMentalHealthExpertDto
                         {
-                            MentalHealthExpertId = tr.MentalHealthExpertId,
-                            FirstName = tr.MentalHealthExpert.FirstName,
-                            LastName = tr.MentalHealthExpert.LastName,
-                            Organization = tr.MentalHealthExpert.Organization,
-                            PhoneNumber = tr.MentalHealthExpert.PhoneNumber,
-                            Email = tr.MentalHealthExpert.Email,
-                            RequestStatus = tr.RequestStatus,
-                            RegularUserId = tr.RegularUserId,
+                            MentalHealthExpertuUserId = mhe.UserId,
+                            FirstName = mhe.FirstName,
+                            LastName = mhe.LastName,
+                            Organization = mhe.Organization,
+                            PhoneNumber = mhe.PhoneNumber,
+                            Email = mhe.Email,
+                            PhotoAsFile = mhe.PhotoAsFile,
+                            PhotoAsPath = mhe.PhotoAsPath,
+                            RequestStatus = RequestStatusEnum.Undefined,
+                            RegularUserId = request.LoggedUserId
                         })
-                        .DistinctBy(tr => tr.MentalHealthExpertId)
                         .ToListAsync();
+
+                    dbUsersMentalHealthExperts = await _context.TherapyRequests
+                        .Where(tr => tr.RegularUserId == request.LoggedUserId)
+                        .ToListAsync();
+
+                    foreach (var mentalHealthExpert in dbMentalHealthExpertsCombinedWithTherapies)
+                    {
+                        var mentalHealthExpertInRequests = dbUsersMentalHealthExperts
+                            .SingleOrDefault(mhe => mhe.MentalHealthExpertId == mentalHealthExpert.MentalHealthExpertuUserId && 
+                                             mhe.RegularUserId == request.LoggedUserId);
+
+                        
+                        if (mentalHealthExpertInRequests != null)
+                        {
+                            mentalHealthExpert.RequestStatus = mentalHealthExpertInRequests.RequestStatus;
+                            continue;
+                        }
+                    }
+
+                    dbMentalHealthExpertsCombinedWithTherapies = dbMentalHealthExpertsCombinedWithTherapies
+                        .DistinctBy(mhe => mhe.MentalHealthExpertuUserId)
+                        .ToList();
 
                     if (!dbMentalHealthExpertsCombinedWithTherapies.Any())
                     {

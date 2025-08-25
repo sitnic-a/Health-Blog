@@ -182,8 +182,8 @@ namespace MentalHealthBlog.API.Services
                             {
                                 foreach (var mentalHealthExpertToConnectWith in mentalHealthExpertsId)
                                 {
-                                    int Id = int.Parse(mentalHealthExpertToConnectWith);
-                                    await _context.TherapyRequests.AddAsync(new TherapyRequest(regularUser.UserId, Id));
+                                    int MentalHealthExpertId = int.Parse(mentalHealthExpertToConnectWith);
+                                    await _context.TherapyRequests.AddAsync(new TherapyRequest(regularUser.UserId, MentalHealthExpertId));
                                 }
                                 await _context.SaveChangesAsync();
                                 _userLoggerService.LogInformation($"REGISTER: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", user);

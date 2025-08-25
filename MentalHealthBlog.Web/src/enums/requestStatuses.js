@@ -1,5 +1,6 @@
 export const requestStatuses = {
-  PENDING: 0,
-  APPROVED: 1,
-  DECLINED: 2,
+  UNDEFINED: 0,
+  PENDING: 1,
+  APPROVED: 2,
+  DECLINED: 3,
 }

@@ -10,6 +10,7 @@ import { useEffect } from 'react'
 import { getMyExperts } from '../../redux-toolkit/features/therapySlice'
 import { MyMentalHealthExpertProfile } from '../MyMentalHealthExpertProfile/MyMentalHealthExpertProfile'
 import { getMentalHealthExperts } from '../../redux-toolkit/features/mentalExpertSlice'
+import { requestStatuses } from '../../enums/requestStatuses'
 
 export const MyMentalHealthExperts = () => {
   let dispatch = useDispatch()
@@ -23,6 +24,13 @@ export const MyMentalHealthExperts = () => {
     dispatch(getMyExperts(objectWithData))
     dispatch(getMentalHealthExperts(objectWithData))
   }, [])
+
+  let usersMentalHealthExperts = myMentalHealthExperts?.filter(
+    (mhe) =>
+      (mhe.regularUserId === authenticatedUser?.id &&
+        mhe.requestStatus === requestStatuses.APPROVED) ||
+      mhe.requestStatus === requestStatuses.PENDING
+  )
 
   return (
     <section id="my-mental-health-experts-main-container">
@@ -48,7 +56,7 @@ export const MyMentalHealthExperts = () => {
           All
         </button>
 
-        {myMentalHealthExperts?.length >= 2 || (
+        {usersMentalHealthExperts?.length >= 2 || (
           <div className="my-mental-health-filter-choose-action-main-container">
             <button
               className="my-mental-health-experts-filter-action my-mental-health-filter-choose-action"
@@ -114,19 +122,19 @@ export const MyMentalHealthExperts = () => {
       </div>
 
       <div className="my-mental-health-experts-experts-container">
-        {myMentalHealthExperts?.length === 0 && (
+        {usersMentalHealthExperts?.length === 0 && (
           <>
             <MyMentalHealthExpertPocket />
             <MyMentalHealthExpertPocket />
           </>
         )}
-        {myMentalHealthExperts?.length === 1 && (
+        {usersMentalHealthExperts?.length === 1 && (
           <>
             <MyMentalHealthExpertProfile expert={myMentalHealthExperts[0]} />
             <MyMentalHealthExpertPocket />
           </>
         )}
-        {myMentalHealthExperts?.length === 2 && (
+        {usersMentalHealthExperts?.length === 2 && (
           <>
             <MyMentalHealthExpertProfile expert={myMentalHealthExperts[0]} />
             <MyMentalHealthExpertProfile expert={myMentalHealthExperts[1]} />

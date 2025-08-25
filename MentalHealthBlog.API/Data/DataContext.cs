@@ -39,7 +39,7 @@ namespace MentalHealthBlogAPI.Data
 
                 foreach (var userId in userIds)
                 {
-                    RegularUsers.Add(new RegularUser(userId,"N/A", "N/A", "N/A"));
+                    RegularUsers.Add(new RegularUser(userId, "N/A", "N/A", "N/A"));
                 }
                 SaveChanges();
             }
@@ -71,12 +71,14 @@ namespace MentalHealthBlogAPI.Data
 
 
             modelBuilder.Entity<RegularUser>().HasKey(u => u.UserId);
-            modelBuilder.Entity<TherapyRequest>().HasKey(t => new
+            modelBuilder.Entity<TherapyRequest>().HasKey(tr =>
+            new
             {
-                t.RegularUserId,
-                t.MentalHealthExpertId
+                tr.RegularUserId,
+                tr.MentalHealthExpertId
             });
-            
+
+
             modelBuilder.Entity<User>().HasData(
                 new { Id = 1, Username = "test_01", PasswordHash = "TT1", PasswordSalt = Encoding.UTF8.GetBytes("SetBytes_TT1") },
                 new { Id = 2, Username = "test_02", PasswordHash = "TT2", PasswordSalt = Encoding.UTF8.GetBytes("SetBytes_TT2") },

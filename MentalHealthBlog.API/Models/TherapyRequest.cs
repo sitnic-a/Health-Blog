@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace MentalHealthBlog.API.Models
 {
@@ -7,8 +8,6 @@ namespace MentalHealthBlog.API.Models
         public int RegularUserId { get; set; }
         public RegularUser? RegularUser { get; set; }
         public int MentalHealthExpertId { get; set; }
-        [JsonIgnore]
-        public MentalHealthExpert? MentalHealthExpert { get; set; }
 
         public RequestStatusEnum RequestStatus { get; set; } = RequestStatusEnum.Pending;
         public DateTime SentAt { get; set; } = DateTime.UtcNow;
