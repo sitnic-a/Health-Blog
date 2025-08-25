@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MentalHealthBlogAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250819130300_Table-TherapyRequests")]
+    [Migration("20250825130625_Table-TherapyRequests")]
     partial class TableTherapyRequests
     {
         /// <inheritdoc />
@@ -757,6 +757,8 @@ namespace MentalHealthBlogAPI.Migrations
 
                     b.HasKey("RegularUserId", "MentalHealthExpertId");
 
+                    b.HasIndex("MentalHealthExpertId");
+
                     b.ToTable("TherapyRequests");
                 });
 
@@ -808,7 +810,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 1,
                             Content = "Content_T01",
-                            CreatedAt = new DateTime(2025, 8, 19, 15, 3, 0, 48, DateTimeKind.Local).AddTicks(3408),
+                            CreatedAt = new DateTime(2025, 8, 25, 15, 6, 25, 861, DateTimeKind.Local).AddTicks(5408),
                             Title = "Title_01",
                             UserId = 1
                         },
@@ -816,7 +818,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 2,
                             Content = "Content_T02",
-                            CreatedAt = new DateTime(2025, 8, 19, 15, 3, 0, 48, DateTimeKind.Local).AddTicks(3465),
+                            CreatedAt = new DateTime(2025, 8, 25, 15, 6, 25, 861, DateTimeKind.Local).AddTicks(5470),
                             Title = "Title_02",
                             UserId = 1
                         },
@@ -824,7 +826,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 3,
                             Content = "Content_T03",
-                            CreatedAt = new DateTime(2025, 8, 19, 15, 3, 0, 48, DateTimeKind.Local).AddTicks(3466),
+                            CreatedAt = new DateTime(2025, 8, 25, 15, 6, 25, 861, DateTimeKind.Local).AddTicks(5472),
                             Title = "Title_03",
                             UserId = 2
                         },
@@ -832,7 +834,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 4,
                             Content = "Content_T04",
-                            CreatedAt = new DateTime(2025, 8, 19, 15, 3, 0, 48, DateTimeKind.Local).AddTicks(3468),
+                            CreatedAt = new DateTime(2025, 8, 25, 15, 6, 25, 861, DateTimeKind.Local).AddTicks(5479),
                             Title = "Title_04",
                             UserId = 2
                         },
@@ -840,7 +842,7 @@ namespace MentalHealthBlogAPI.Migrations
                         {
                             Id = 5,
                             Content = "Content_T05",
-                            CreatedAt = new DateTime(2025, 8, 19, 15, 3, 0, 48, DateTimeKind.Local).AddTicks(3469),
+                            CreatedAt = new DateTime(2025, 8, 25, 15, 6, 25, 861, DateTimeKind.Local).AddTicks(5480),
                             Title = "Title_05",
                             UserId = 1
                         });
@@ -999,11 +1001,19 @@ namespace MentalHealthBlogAPI.Migrations
 
             modelBuilder.Entity("MentalHealthBlog.API.Models.TherapyRequest", b =>
                 {
+                    b.HasOne("MentalHealthBlog.API.Models.MentalHealthExpert", "MentalHealthExpert")
+                        .WithMany()
+                        .HasForeignKey("MentalHealthExpertId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("MentalHealthBlog.API.Models.RegularUser", "RegularUser")
                         .WithMany()
                         .HasForeignKey("RegularUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("MentalHealthExpert");
 
                     b.Navigation("RegularUser");
                 });

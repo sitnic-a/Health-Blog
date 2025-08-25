@@ -49,29 +49,30 @@ namespace MentalHealthBlog.API.Services
 
                 if (request is not null)
                 {
-                    //dbMentalHealthExpertsCombinedWithTherapies = await _context.TherapyRequests
-                    //    .Select(tr => new TherapyMentalHealthExpertDto
-                    //    {
-                    //        MentalHealthExpertId = tr.MentalHealthExpertId,
-                    //        FirstName = _context.MentalHealthExperts.(tr.MentalHealthExpertId).FirstName,
-                    //        LastName = _context.MentalHealthExperts.Find(tr.MentalHealthExpertId).LastName,
-                    //        Organization = _context.MentalHealthExperts.Find(tr.MentalHealthExpertId).Organization,
-                    //        PhoneNumber = _context.MentalHealthExperts.Find(tr.MentalHealthExpertId).PhoneNumber,
-                    //        Email = _context.MentalHealthExperts.Find(tr.MentalHealthExpertId).Email,
-                    //        RequestStatus = tr.RequestStatus,
-                    //        RegularUserId = tr.RegularUserId,
-                    //    })
-                    //    .DistinctBy(tr => tr.MentalHealthExpertId)
-                    //    .ToListAsync();
+                    dbMentalHealthExpertsCombinedWithTherapies = await _context.TherapyRequests
+                        .Include(mhe => mhe.MentalHealthExpert)
+                        .Select(tr => new TherapyMentalHealthExpertDto
+                        {
+                            MentalHealthExpertId = tr.MentalHealthExpertId,
+                            FirstName = tr.MentalHealthExpert.FirstName,
+                            LastName = tr.MentalHealthExpert.LastName,
+                            Organization = tr.MentalHealthExpert.Organization,
+                            PhoneNumber = tr.MentalHealthExpert.PhoneNumber,
+                            Email = tr.MentalHealthExpert.Email,
+                            RequestStatus = tr.RequestStatus,
+                            RegularUserId = tr.RegularUserId,
+                        })
+                        .DistinctBy(tr => tr.MentalHealthExpertId)
+                        .ToListAsync();
 
-                    //if (!dbMentalHealthExpertsCombinedWithTherapies.Any())
-                    //{
-                    //    _mentalExpertLoggerService.LogWarning($"EXPERTS: {MentalExpertServiceLogTypes.EMPTY.ToString()}");
-                    //    throw new EmptyListException("No records found in database");
-                    //}
+                    if (!dbMentalHealthExpertsCombinedWithTherapies.Any())
+                    {
+                        _mentalExpertLoggerService.LogWarning($"EXPERTS: {MentalExpertServiceLogTypes.EMPTY.ToString()}");
+                        throw new EmptyListException("No records found in database");
+                    }
 
-                    //_mentalExpertLoggerService.LogInformation($"EXPERTS: {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
-                    //return new Response(dbMentalHealthExpertsCombinedWithTherapies, StatusCodes.Status200OK, $"EXPERTS: {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
+                    _mentalExpertLoggerService.LogInformation($"EXPERTS: {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
+                    return new Response(dbMentalHealthExpertsCombinedWithTherapies, StatusCodes.Status200OK, $"EXPERTS: {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
                 }
 
                 dbMentalHealthExperts = await _context.MentalHealthExperts
