@@ -1,8 +1,5 @@
-import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getMentalHealthExperts } from '../../redux-toolkit/features/mentalExpertSlice'
 
-import { TiArrowSortedDown } from 'react-icons/ti'
 import { setSelectedMentalHealthExpertIds } from '../../redux-toolkit/features/therapySlice'
 
 import MentalHealthExpertsDropdownCSS from './MentalHealthExpertsDropdown.css'
@@ -13,10 +10,6 @@ export const MentalHealthExpertsDropdown = () => {
     (store) => store.mentalExpert
   )
   let { selectedMentalHealthExpertIds } = useSelector((store) => store.therapy)
-
-  useEffect(() => {
-    dispatch(getMentalHealthExperts())
-  }, [])
 
   return (
     <div className="select-mental-health-experts-main-container">

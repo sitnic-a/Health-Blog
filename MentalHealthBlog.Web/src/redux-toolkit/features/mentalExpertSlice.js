@@ -10,17 +10,28 @@ let initialState = {
   overlayPost: null,
 }
 
-export const getMentalHealthExperts = createAsyncThunk('experts', async () => {
-  let url = `${application.application_url}/mentalExpert/experts`
-  let request = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-  let response = await request.json()
-  return response
-})
+export const getMentalHealthExperts = createAsyncThunk(
+  'experts',
+  async (objectWithData) => {
+    let url = `${application.application_url}/mentalExpert/experts`
+    let query
+    if (objectWithData !== null && objectWithData !== undefined) {
+      query = {
+        loggedUserId: objectWithData?.authenticatedUser?.id,
+        isFiltering: true,
+      }
+    }
+    let request = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(query),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    let response = await request.json()
+    return response
+  }
+)
 
 export const getSharesPerUser = createAsyncThunk(
   'shares-per-user',
@@ -107,6 +118,8 @@ export const mentalExpertSlice = createSlice({
         state.dbMentalHealthExperts = action.payload.serviceResponseObject
         state.suggestedMentalHealthExperts =
           action.payload.serviceResponseObject
+
+        console.log('Suggested ', state.suggestedMentalHealthExperts)
       })
       .addCase(getMentalHealthExperts.rejected, (state, action) => {
         console.log('Db Experts rejected...')

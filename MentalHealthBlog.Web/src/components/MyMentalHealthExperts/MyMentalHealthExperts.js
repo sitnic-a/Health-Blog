@@ -9,6 +9,7 @@ import MyMentalHealthExpertsCSS from './MyMentalHealthExperts.css'
 import { useEffect } from 'react'
 import { getMyExperts } from '../../redux-toolkit/features/therapySlice'
 import { MyMentalHealthExpertProfile } from '../MyMentalHealthExpertProfile/MyMentalHealthExpertProfile'
+import { getMentalHealthExperts } from '../../redux-toolkit/features/mentalExpertSlice'
 
 export const MyMentalHealthExperts = () => {
   let dispatch = useDispatch()
@@ -20,6 +21,7 @@ export const MyMentalHealthExperts = () => {
       authenticatedUser,
     }
     dispatch(getMyExperts(objectWithData))
+    dispatch(getMentalHealthExperts(objectWithData))
   }, [])
 
   return (

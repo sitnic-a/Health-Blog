@@ -27,6 +27,7 @@ export const Register = () => {
 
   useEffect(() => {
     dispatch(getDbRoles())
+    dispatch(getMentalHealthExperts(null))
   }, [])
 
   let navigate = useNavigate()
