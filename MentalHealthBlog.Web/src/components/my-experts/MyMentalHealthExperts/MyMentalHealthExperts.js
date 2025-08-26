@@ -60,7 +60,7 @@ export const MyMentalHealthExperts = () => {
       <Navbar />
 
       <div className="my-mental-health-experts-filter-main-container">
-        <button
+        {/* <button
           className="my-mental-health-experts-filter-action my-mental-health-filter-current-action"
           type="button"
           onClick={(e) => {
@@ -86,7 +86,7 @@ export const MyMentalHealthExperts = () => {
           }}
         >
           All
-        </button>
+        </button> */}
 
         {myApprovedOrPendingMentalHealthExperts?.filter(
           (mhe) =>

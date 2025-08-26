@@ -48,50 +48,52 @@ export const MentalHealthExpertsDropdown = () => {
                     {fullName}{' '}
                   </span>
 
-                  {expert?.requestStatus === requestStatuses.UNDEFINED && (
-                    <button
-                      className="main-mental-health-expert-picker-option-action picker-option-send-request-action"
-                      type="button"
-                      onClick={() => {
-                        let objectWithData = {
-                          mentalHealthExpertId: expert?.mentalHealthExpertId,
-                          regularUserId: authenticatedUser?.id,
-                          newRequestStatus: requestStatuses.PENDING,
-                          authenticatedUser,
-                          userSendingRequest: true,
-                        }
-
-                        dispatch(changeRequestStatus(objectWithData)).then(
-                          (data) => {
-                            let statusCode = data?.payload?.statusCode
-                            if (statusCode === 200) {
-                              objectWithData = {
-                                authenticatedUser,
-                                loggedUserId: authenticatedUser?.id,
-                              }
-
-                              dispatch(getMentalHealthExperts(objectWithData))
-
-                              objectWithData = {
-                                loggedUserId: authenticatedUser?.id,
-                              }
-                              dispatch(getMyExperts(objectWithData))
-
-                              toast.success('Succesfully made request!', {
-                                position: 'bottom-right',
-                                autoClose: 1500,
-                              })
-                            }
+                  {expert?.requestStatus !== requestStatuses.APPROVED &&
+                    expert?.requestStatus !== requestStatuses.PENDING && (
+                      <button
+                        className="main-mental-health-expert-picker-option-action picker-option-send-request-action"
+                        type="button"
+                        onClick={() => {
+                          let objectWithData = {
+                            mentalHealthExpertId: expert?.mentalHealthExpertId,
+                            regularUserId: authenticatedUser?.id,
+                            newRequestStatus: requestStatuses.PENDING,
+                            authenticatedUser,
+                            userSendingRequest: true,
                           }
-                        )
-                      }}
-                    >
-                      Send request
-                    </button>
-                  )}
+
+                          dispatch(changeRequestStatus(objectWithData)).then(
+                            (data) => {
+                              let statusCode = data?.payload?.statusCode
+                              if (statusCode === 200) {
+                                objectWithData = {
+                                  authenticatedUser,
+                                  loggedUserId: authenticatedUser?.id,
+                                }
+
+                                dispatch(getMentalHealthExperts(objectWithData))
+
+                                objectWithData = {
+                                  loggedUserId: authenticatedUser?.id,
+                                }
+                                dispatch(getMyExperts(objectWithData))
+
+                                toast.success('Succesfully made request!', {
+                                  position: 'bottom-right',
+                                  autoClose: 1500,
+                                })
+                              }
+                            }
+                          )
+                        }}
+                      >
+                        Send request
+                      </button>
+                    )}
 
                   {expert?.requestStatus === requestStatuses.UNDEFINED ||
-                    expert?.requestStatus === requestStatuses.PENDING || (
+                    expert?.requestStatus === requestStatuses.PENDING ||
+                    expert?.requestStatus === requestStatuses.DECLINED || (
                       <button
                         className="main-mental-health-expert-picker-option-action picker-option-add-action"
                         type="button"

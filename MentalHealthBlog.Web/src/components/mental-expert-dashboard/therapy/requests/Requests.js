@@ -66,6 +66,7 @@ export const Requests = () => {
                                   mentalHealthExpertId: authenticatedUser?.id,
                                   regularUserId: request?.regularUserId,
                                   newRequestStatus: requestStatuses.APPROVED,
+                                  userSendingRequest: false,
                                 }
                                 dispatch(changeRequestStatus(objectWithData))
                               }}
@@ -82,6 +83,7 @@ export const Requests = () => {
                                 mentalHealthExpertId: authenticatedUser?.id,
                                 regularUserId: request?.regularUserId,
                                 newRequestStatus: requestStatuses.APPROVED,
+                                userSendingRequest: false,
                               }
                               dispatch(changeRequestStatus(objectWithData))
                             }}
@@ -95,6 +97,7 @@ export const Requests = () => {
                                 mentalHealthExpertId: authenticatedUser?.id,
                                 regularUserId: request?.regularUserId,
                                 newRequestStatus: requestStatuses.DECLINED,
+                                userSendingRequest: false,
                               }
                               dispatch(changeRequestStatus(objectWithData))
                             }}
@@ -102,7 +105,8 @@ export const Requests = () => {
                             Decline
                           </button>
 
-                          {request?.requestStatus !== 0 && (
+                          {request?.requestStatus ===
+                            requestStatuses.APPROVED && (
                             <button
                               className="therapy-requests-request-content-action therapy-request-stop-sharing-action"
                               type="button"
@@ -112,6 +116,7 @@ export const Requests = () => {
                                   mentalHealthExpertId: authenticatedUser?.id,
                                   regularUserId: request?.regularUserId,
                                   newRequestStatus: requestStatuses.PENDING,
+                                  userSendingRequest: false,
                                 }
                                 dispatch(changeRequestStatus(objectWithData))
                               }}
@@ -128,6 +133,7 @@ export const Requests = () => {
                                 mentalHealthExpertId: authenticatedUser?.id,
                                 regularUserId: request?.regularUserId,
                                 newRequestStatus: requestStatuses.DECLINED,
+                                userSendingRequest: false,
                               }
                               dispatch(changeRequestStatus(objectWithData))
                             }}
