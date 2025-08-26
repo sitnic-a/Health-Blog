@@ -25,7 +25,7 @@
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
-  transition: 200ms;
+  transition: 300ms;
   color: #f3f1e3;
   background: #34688f;
 }
@@ -34,6 +34,10 @@
   .my-mental-health-experts-filter-action {
     padding: 0.5rem 1.5rem;
   }
+}
+
+.my-mental-health-experts-filter-action:hover {
+  background: #28506e;
 }
 
 .my-mental-health-experts-filter-action:first-of-type {

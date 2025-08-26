@@ -1,16 +1,17 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { Navbar } from '../shared/Navbar/Navbar'
+import { Navbar } from '../../shared/Navbar/Navbar'
 import { MyMentalHealthExpertPocket } from '../MyMentalHealthExpertPocket/MyMentalHealthExpertPocket'
-import { MentalHealthExpertsDropdown } from '../MentalHealthExpertsDropdown/MentalHealthExpertsDropdown'
+import { MentalHealthExpertsDropdown } from '../../MentalHealthExpertsDropdown/MentalHealthExpertsDropdown'
 
 import { TiArrowSortedDown } from 'react-icons/ti'
 
 import MyMentalHealthExpertsCSS from './MyMentalHealthExperts.css'
 import { useEffect } from 'react'
-import { getMyExperts } from '../../redux-toolkit/features/therapySlice'
+import { getMyExperts } from '../../../redux-toolkit/features/therapySlice'
 import { MyMentalHealthExpertProfile } from '../MyMentalHealthExpertProfile/MyMentalHealthExpertProfile'
-import { getMentalHealthExperts } from '../../redux-toolkit/features/mentalExpertSlice'
-import { requestStatuses } from '../../enums/requestStatuses'
+import { getMentalHealthExperts } from '../../../redux-toolkit/features/mentalExpertSlice'
+import { requestStatuses } from '../../../enums/requestStatuses'
+import { setActiveMyMentalHealthExpertFilterActionTab } from '../../../utils/helper-methods/methods'
 
 export const MyMentalHealthExperts = () => {
   let dispatch = useDispatch()
@@ -50,18 +51,27 @@ export const MyMentalHealthExperts = () => {
         <button
           className="my-mental-health-experts-filter-action my-mental-health-filter-current-action"
           type="button"
+          onClick={(e) => {
+            setActiveMyMentalHealthExpertFilterActionTab(e)
+          }}
         >
           Current
         </button>
         <button
           className="my-mental-health-experts-filter-action my-mental-health-filter-past-action"
           type="button"
+          onClick={(e) => {
+            setActiveMyMentalHealthExpertFilterActionTab(e)
+          }}
         >
           Past
         </button>
         <button
           className="my-mental-health-experts-filter-action my-mental-health-experts-filter-all-action my-mental-health-experts-active-filter"
           type="button"
+          onClick={(e) => {
+            setActiveMyMentalHealthExpertFilterActionTab(e)
+          }}
         >
           All
         </button>

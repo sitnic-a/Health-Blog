@@ -25,7 +25,7 @@ import { application } from './application'
 import { Assignments } from './components/shared/Assignments'
 import { NotFound } from './pages/exceptions/NotFound/NotFound'
 import { Requests } from './components/mental-expert-dashboard/therapy/requests/Requests'
-import { MyMentalHealthExperts } from './components/MyMentalHealthExperts/MyMentalHealthExperts'
+import { MyMentalHealthExperts } from './components/my-experts/MyMentalHealthExperts/MyMentalHealthExperts'
 
 function App() {
   windowResize(application.layouts.min_screen_single_col_width)
