@@ -2,11 +2,15 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import {
   changeRequestStatus,
+  getMyExperts,
+  setExperts,
   setSelectedMentalHealthExpertIds,
 } from '../../redux-toolkit/features/therapySlice'
 import { requestStatuses } from '../../enums/requestStatuses'
 
 import MentalHealthExpertsDropdownCSS from './MentalHealthExpertsDropdown.css'
+import { getMentalHealthExperts } from '../../redux-toolkit/features/mentalExpertSlice'
+import { toast } from 'react-toastify'
 
 export const MentalHealthExpertsDropdown = () => {
   let dispatch = useDispatch()
@@ -50,9 +54,32 @@ export const MentalHealthExpertsDropdown = () => {
                         regularUserId: authenticatedUser?.id,
                         newRequestStatus: requestStatuses.PENDING,
                         authenticatedUser,
+                        userSendingRequest: true,
                       }
 
-                      dispatch(changeRequestStatus(objectWithData))
+                      dispatch(changeRequestStatus(objectWithData)).then(
+                        (data) => {
+                          let statusCode = data?.payload?.statusCode
+                          if (statusCode === 200) {
+                            objectWithData = {
+                              authenticatedUser,
+                              loggedUserId: authenticatedUser?.id,
+                            }
+
+                            dispatch(getMentalHealthExperts(objectWithData))
+
+                            objectWithData = {
+                              loggedUserId: authenticatedUser?.id,
+                            }
+                            dispatch(getMyExperts(objectWithData))
+
+                            toast.success('Succesfully made request!', {
+                              position: 'bottom-right',
+                              autoClose: 1500,
+                            })
+                          }
+                        }
+                      )
                     }}
                   >
                     Send request

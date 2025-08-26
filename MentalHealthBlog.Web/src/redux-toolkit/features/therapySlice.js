@@ -5,7 +5,8 @@ let initialState = {
   requestsForMentalHealthExpert: [],
   isLoading: false,
   isFailed: false,
-  myMentalHealthExperts: [],
+  myApprovedOrPendingMentalHealthExperts: [],
+  myCurrentMentalHealthExperts: [],
   selectedMentalHealthExpertIds: [],
 }
 
@@ -34,15 +35,10 @@ export const getRequestsForMentalHealthExpert = createAsyncThunk(
 export const getMyExperts = createAsyncThunk(
   'my-experts',
   async (objectWithData) => {
-    let query = {
-      loggedUserId: objectWithData?.authenticatedUser?.id,
-      requestStatus: null,
-    }
-
     let url = `${application.application_url}/therapy/my-experts`
     let request = await fetch(url, {
       method: 'POST',
-      body: JSON.stringify(query),
+      body: JSON.stringify(objectWithData),
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
@@ -56,6 +52,8 @@ export const getMyExperts = createAsyncThunk(
 export const changeRequestStatus = createAsyncThunk(
   'change-request-status',
   async (objectWithData) => {
+    console.log('CHANGE ', objectWithData)
+
     let url = `${application.application_url}/therapy/change-request-status`
     let request = await fetch(url, {
       method: 'PUT',
@@ -77,6 +75,12 @@ let therapySlice = createSlice({
     setSelectedMentalHealthExpertIds: (state, action) => {
       state.selectedMentalHealthExpertIds = action?.payload
       console.log('Selected Ids ', state.selectedMentalHealthExpertIds)
+    },
+    setExperts: (state, action) => {
+      console.log('Payload ', action)
+
+      state.myApprovedOrPendingMentalHealthExperts =
+        action?.payload?.serviceResponseObject
     },
   },
   extraReducers: (builder) => {
@@ -102,14 +106,18 @@ let therapySlice = createSlice({
 
       //my-experts
       .addCase(getMyExperts.pending, () => {
-        console.log('My experts pending...')
+        // console.log('My experts pending...')
       })
       .addCase(getMyExperts.fulfilled, (state, action) => {
-        console.log('My experts fulfilled')
+        // console.log('My experts fulfilled')
         let statusCode = action?.payload?.statusCode
         if (statusCode === 200) {
-          state.myMentalHealthExperts = action?.payload?.serviceResponseObject
-          console.log('My experts ', state.myMentalHealthExperts)
+          state.myApprovedOrPendingMentalHealthExperts =
+            action?.payload?.serviceResponseObject
+          console.log(
+            'My experts ',
+            state.myApprovedOrPendingMentalHealthExperts
+          )
         }
       })
       .addCase(getMyExperts.rejected, () => {
@@ -118,12 +126,12 @@ let therapySlice = createSlice({
 
       //change-request-status
       .addCase(changeRequestStatus.pending, () => {
-        console.log('Request status change pending...')
+        // console.log('Request status change pending...')
       })
       .addCase(changeRequestStatus.fulfilled, (state, action) => {
         let statusCode = action?.payload?.statusCode
         if (statusCode === 200) {
-          console.log('Successfully changed status')
+          // console.log('Successfully changed status')
 
           state.requestsForMentalHealthExpert =
             action?.payload?.serviceResponseObject
@@ -135,5 +143,6 @@ let therapySlice = createSlice({
   },
 })
 
-export const { setSelectedMentalHealthExpertIds } = therapySlice.actions
+export const { setSelectedMentalHealthExpertIds, setExperts } =
+  therapySlice.actions
 export default therapySlice.reducer

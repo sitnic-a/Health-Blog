@@ -15,22 +15,32 @@ import { requestStatuses } from '../../enums/requestStatuses'
 export const MyMentalHealthExperts = () => {
   let dispatch = useDispatch()
   let { authenticatedUser } = useSelector((store) => store.user)
-  let { myMentalHealthExperts } = useSelector((store) => store.therapy)
+  let { myApprovedOrPendingMentalHealthExperts } = useSelector(
+    (store) => store.therapy
+  )
 
   useEffect(() => {
     let objectWithData = {
       authenticatedUser,
+      loggedUserId: authenticatedUser?.id,
     }
     dispatch(getMyExperts(objectWithData))
     dispatch(getMentalHealthExperts(objectWithData))
   }, [])
 
-  let usersMentalHealthExperts = myMentalHealthExperts?.filter(
+  let usersMentalHealthExperts = myApprovedOrPendingMentalHealthExperts?.filter(
     (mhe) =>
       (mhe.regularUserId === authenticatedUser?.id &&
         mhe.requestStatus === requestStatuses.APPROVED) ||
       mhe.requestStatus === requestStatuses.PENDING
   )
+
+  let usersCurrentMentalHealthExperts =
+    myApprovedOrPendingMentalHealthExperts?.filter(
+      (mhe) =>
+        mhe.regularUserId === authenticatedUser?.id &&
+        mhe.requestStatus === requestStatuses.APPROVED
+    )
 
   return (
     <section id="my-mental-health-experts-main-container">
@@ -56,7 +66,12 @@ export const MyMentalHealthExperts = () => {
           All
         </button>
 
-        {usersMentalHealthExperts?.length >= 2 || (
+        {myApprovedOrPendingMentalHealthExperts?.filter(
+          (mhe) =>
+            (mhe.regularUserId === authenticatedUser?.id &&
+              mhe.requestStatus === requestStatuses.APPROVED) ||
+            mhe.requestStatus === requestStatuses.PENDING
+        )?.length >= 2 || (
           <div className="my-mental-health-filter-choose-action-main-container">
             <button
               className="my-mental-health-experts-filter-action my-mental-health-filter-choose-action"
@@ -122,22 +137,43 @@ export const MyMentalHealthExperts = () => {
       </div>
 
       <div className="my-mental-health-experts-experts-container">
-        {usersMentalHealthExperts?.length === 0 && (
+        {myApprovedOrPendingMentalHealthExperts?.filter(
+          (mhe) =>
+            (mhe.regularUserId === authenticatedUser?.id &&
+              mhe.requestStatus === requestStatuses.APPROVED) ||
+            mhe.requestStatus === requestStatuses.PENDING
+        )?.length === 0 && (
           <>
             <MyMentalHealthExpertPocket />
             <MyMentalHealthExpertPocket />
           </>
         )}
-        {usersMentalHealthExperts?.length === 1 && (
+
+        {myApprovedOrPendingMentalHealthExperts?.filter(
+          (mhe) =>
+            mhe.regularUserId === authenticatedUser?.id &&
+            mhe.requestStatus === requestStatuses.APPROVED
+        )?.length === 1 && (
           <>
-            <MyMentalHealthExpertProfile expert={myMentalHealthExperts[0]} />
+            <MyMentalHealthExpertProfile
+              expert={myApprovedOrPendingMentalHealthExperts[0]}
+            />
             <MyMentalHealthExpertPocket />
           </>
         )}
-        {usersMentalHealthExperts?.length === 2 && (
+
+        {myApprovedOrPendingMentalHealthExperts?.filter(
+          (mhe) =>
+            mhe.regularUserId === authenticatedUser?.id &&
+            mhe.requestStatus === requestStatuses.APPROVED
+        )?.length === 2 && (
           <>
-            <MyMentalHealthExpertProfile expert={myMentalHealthExperts[0]} />
-            <MyMentalHealthExpertProfile expert={myMentalHealthExperts[1]} />
+            <MyMentalHealthExpertProfile
+              expert={myApprovedOrPendingMentalHealthExperts[0]}
+            />
+            <MyMentalHealthExpertProfile
+              expert={myApprovedOrPendingMentalHealthExperts[1]}
+            />
           </>
         )}
       </div>
