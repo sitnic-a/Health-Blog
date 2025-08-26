@@ -27,8 +27,6 @@ export const MentalHealthExpertsDropdown = () => {
         className="main-mental-health-expert-picker-shrinked"
       >
         {suggestedMentalHealthExperts?.map((expert) => {
-          console.log('Expert ', expert)
-
           let fullName = `${expert?.firstName} ${expert?.lastName}`
           return (
             expert?.requestStatus === requestStatuses.PENDING ||
@@ -48,8 +46,10 @@ export const MentalHealthExpertsDropdown = () => {
                     {fullName}{' '}
                   </span>
 
-                  {expert?.requestStatus !== requestStatuses.APPROVED &&
-                    expert?.requestStatus !== requestStatuses.PENDING && (
+                  {(expert?.requestStatus !== requestStatuses.APPROVED &&
+                    expert?.requestStatus !== requestStatuses.PENDING &&
+                    expert?.requestStatus !== null) ||
+                    (expert?.requestStatus !== undefined && (
                       <button
                         className="main-mental-health-expert-picker-option-action picker-option-send-request-action"
                         type="button"
@@ -89,7 +89,7 @@ export const MentalHealthExpertsDropdown = () => {
                       >
                         Send request
                       </button>
-                    )}
+                    ))}
 
                   {expert?.requestStatus === requestStatuses.UNDEFINED ||
                     expert?.requestStatus === requestStatuses.PENDING ||
