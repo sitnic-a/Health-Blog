@@ -20,6 +20,18 @@ export const MyMentalHealthExperts = () => {
     (store) => store.therapy
   )
 
+  let firstElement = myApprovedOrPendingMentalHealthExperts?.filter(
+    (mhe) =>
+      mhe.regularUserId === authenticatedUser?.id &&
+      mhe.requestStatus === requestStatuses.APPROVED
+  )[0]
+
+  let secondElement = myApprovedOrPendingMentalHealthExperts?.filter(
+    (mhe) =>
+      mhe.regularUserId === authenticatedUser?.id &&
+      mhe.requestStatus === requestStatuses.APPROVED
+  )[1]
+
   useEffect(() => {
     let objectWithData = {
       authenticatedUser,
@@ -165,9 +177,7 @@ export const MyMentalHealthExperts = () => {
             mhe.requestStatus === requestStatuses.APPROVED
         )?.length === 1 && (
           <>
-            <MyMentalHealthExpertProfile
-              expert={myApprovedOrPendingMentalHealthExperts[0]}
-            />
+            <MyMentalHealthExpertProfile expert={firstElement} />
             <MyMentalHealthExpertPocket />
           </>
         )}
@@ -178,12 +188,8 @@ export const MyMentalHealthExperts = () => {
             mhe.requestStatus === requestStatuses.APPROVED
         )?.length === 2 && (
           <>
-            <MyMentalHealthExpertProfile
-              expert={myApprovedOrPendingMentalHealthExperts[0]}
-            />
-            <MyMentalHealthExpertProfile
-              expert={myApprovedOrPendingMentalHealthExperts[1]}
-            />
+            <MyMentalHealthExpertProfile expert={firstElement} />
+            <MyMentalHealthExpertProfile expert={secondElement} />
           </>
         )}
       </div>

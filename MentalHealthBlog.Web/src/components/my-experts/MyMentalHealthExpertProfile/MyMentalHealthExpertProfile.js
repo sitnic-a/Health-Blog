@@ -1,8 +1,18 @@
+import {
+  changeRequestStatus,
+  setExperts,
+} from '../../../redux-toolkit/features/therapySlice'
 import { MdPhone, MdEmail } from 'react-icons/md'
 
 import MyMentalHealthExpertProfileCSS from './MyMentalHealthExpertProfile.css'
+import { useDispatch, useSelector } from 'react-redux'
+import { getMentalHealthExperts } from '../../../redux-toolkit/features/mentalExpertSlice'
+
+import { requestStatuses } from '../../../enums/requestStatuses'
 
 export const MyMentalHealthExpertProfile = (props) => {
+  let dispatch = useDispatch()
+  let { authenticatedUser } = useSelector((store) => store.user)
   let expert = props?.expert
   return (
     <div className="my-expert-main-container">
@@ -78,7 +88,28 @@ export const MyMentalHealthExpertProfile = (props) => {
         </div>
 
         <div className="my-expert-actions">
-          <button className="my-expert-stop-sharing-action">
+          <button
+            className="my-expert-stop-sharing-action"
+            onClick={() => {
+              let objectWithData = {
+                mentalHealthExpertId: expert?.mentalHealthExpertId,
+                regularUserId: authenticatedUser?.id,
+                newRequestStatus: requestStatuses.UNDEFINED,
+                authenticatedUser,
+              }
+              dispatch(changeRequestStatus(objectWithData)).then((data) => {
+                let statusCode = data?.payload?.statusCode
+                if (statusCode === 200) {
+                  let myMentalHealthExperts = data?.payload
+                  dispatch(setExperts(myMentalHealthExperts))
+                  objectWithData = {
+                    authenticatedUser,
+                  }
+                  dispatch(getMentalHealthExperts(objectWithData))
+                }
+              })
+            }}
+          >
             STOP SHARING
           </button>
         </div>
