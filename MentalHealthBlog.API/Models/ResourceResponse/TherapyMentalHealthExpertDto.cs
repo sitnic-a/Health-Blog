@@ -3,7 +3,6 @@
     public class TherapyMentalHealthExpertDto
     {
         public int MentalHealthExpertId { get; set; }
-        public int MentalHealthExpertuUserId { get; set; }
         public int RegularUserId { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;

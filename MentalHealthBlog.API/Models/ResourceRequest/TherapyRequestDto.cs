@@ -5,5 +5,6 @@
         public int MentalHealthExpertId { get; set; }
         public int RegularUserId { get; set; }
         public int NewRequestStatus { get; set; }
+        public bool? UserSendingRequest { get; set; }
     }
 }

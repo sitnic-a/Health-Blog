@@ -19,11 +19,13 @@ namespace MentalHealthBlog.API.Services.Therapy
     public class TherapyRequestService : ITherapyRequestService
     {
         private readonly DataContext _context;
+        private readonly IMentalExpertService _mentalExpertService;
         private readonly ILogger<ITherapyRequestService> _therapyRequestLoggerService;
 
-        public TherapyRequestService(DataContext context, ILogger<ITherapyRequestService> therapyRequestLoggerService)
+        public TherapyRequestService(DataContext context,IMentalExpertService mentalExpertService, ILogger<ITherapyRequestService> therapyRequestLoggerService)
         {
             _context = context;
+            _mentalExpertService = mentalExpertService;
             _therapyRequestLoggerService = therapyRequestLoggerService;
         }
 
@@ -164,14 +166,48 @@ namespace MentalHealthBlog.API.Services.Therapy
                     }
                 }
 
+
                 var requestToModify = await _context.TherapyRequests
                     .SingleOrDefaultAsync(tr => tr.MentalHealthExpertId == request.MentalHealthExpertId &&
                                          tr.RegularUserId == request.RegularUserId);
 
                 if (requestToModify is null)
                 {
-                    _therapyRequestLoggerService.LogWarning($"CHANGE-REQUEST-STATUS : {TherapyRequestLogTypes.NOT_FOUND.ToString()}");
+                    if (request.UserSendingRequest == true)
+                    {
+                        var userTherapyRequest = new TherapyRequest(request.RegularUserId, request.MentalHealthExpertId);
+                        if (userTherapyRequest != null)
+                        {
+                            await _context.TherapyRequests.AddAsync(userTherapyRequest);
+                            await _context.SaveChangesAsync();
+
+                            var searchQuery = new SearchExpertDto
+                            {
+                                LoggedUserId = request.MentalHealthExpertId
+                            };
+                            var usersMentalHealthExperts = await _mentalExpertService.GetMentalHealthExperts(searchQuery);
+                            _therapyRequestLoggerService.LogInformation($"CHANGE-REQUEST-STATUS: {TherapyRequestLogTypes.SUCCESS.ToString()}");
+                            return new Response(usersMentalHealthExperts.ServiceResponseObject, StatusCodes.Status200OK, $"CHANGE-REQUEST-STATUS: {TherapyRequestLogTypes.SUCCESS.ToString()}");
+                        }
+
+                        _therapyRequestLoggerService.LogWarning($"CHANGE-REQUEST-STATUS : {TherapyRequestLogTypes.NOT_FOUND.ToString()}");
+                        throw new CreateRecordException("Request couldn't be initialized!");
+                    }
+                    _therapyRequestLoggerService.LogWarning($"CHANGE-REQUEST-STATUS: {TherapyRequestLogTypes.NOT_FOUND.ToString()}");
                     throw new RecordNotFoundException("Request couldn't be located!");
+                }
+
+                if (request.UserSendingRequest == true)
+                {
+                    requestToModify.RequestStatus = (RequestStatusEnum)request.NewRequestStatus;
+                    await _context.SaveChangesAsync();
+                    var searchQuery = new SearchExpertDto
+                    {
+                        LoggedUserId = request.MentalHealthExpertId
+                    };
+                    var usersMentalHealthExperts = await _mentalExpertService.GetMentalHealthExperts(searchQuery);
+                    _therapyRequestLoggerService.LogInformation($"CHANGE-REQUEST-STATUS: {TherapyRequestLogTypes.SUCCESS.ToString()}");
+                    return new Response(usersMentalHealthExperts.ServiceResponseObject, StatusCodes.Status200OK, $"CHANGE-REQUEST-STATUS: {TherapyRequestLogTypes.SUCCESS.ToString()}");
                 }
 
                 requestToModify.RequestStatus = (RequestStatusEnum)request.NewRequestStatus;
