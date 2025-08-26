@@ -95,10 +95,50 @@ namespace MentalHealthBlog.API.Services.Therapy
                         throw new ArgumentException("Bad request!");
                     }
 
+                    if (query.RequestStatus != null)
+                    {
+                        var dbMentalHealthExpertsFilteredByRequestStatus = await _context.TherapyRequests
+                        .Where(u => u.RegularUserId == query.LoggedUserId && u.RequestStatus == query.RequestStatus)
+                        .Join(_context.MentalHealthExperts,
+
+                              (tr) => tr.MentalHealthExpertId,
+                              (mhe) => mhe.UserId,
+                              (tr, mhe) => new
+                              {
+                                  MentalHealthExpertId = tr.MentalHealthExpertId,
+                                  RegularUserId = tr.RegularUserId,
+                                  MentalHealthExpertUsername = _context.Users.SingleOrDefault(u => u.Id == mhe.UserId).Username,
+                                  MentalHealthExpertFirstName = mhe.FirstName,
+                                  MentalHealthExpertLastName = mhe.LastName,
+                                  MentalHealthExpertOrganization = mhe.Organization,
+                                  MentalHealthExpertEmail = mhe.Email,
+                                  MentalHealthExpertPhoneNumber = mhe.PhoneNumber,
+                                  MentalHealthExpertPhotoAsPath = mhe.PhotoAsPath,
+                                  MentalHealthExpertPhotoAsFile = mhe.PhotoAsFile,
+                                  RequestStatus = tr.RequestStatus,
+                              })
+                        .ToListAsync();
+
+                        if (dbMentalHealthExpertsFilteredByRequestStatus is not null)
+                        {
+                            if (dbMentalHealthExpertsFilteredByRequestStatus.Any())
+                            {
+                                _therapyRequestLoggerService.LogInformation($"MY-EXPERTS: {TherapyRequestLogTypes.SUCCESS.ToString()}", dbMentalHealthExpertsFilteredByRequestStatus);
+                                return new Response(dbMentalHealthExpertsFilteredByRequestStatus, StatusCodes.Status200OK, $"MY-EXPERTS: {TherapyRequestLogTypes.SUCCESS.ToString()}");
+                            }
+
+                            _therapyRequestLoggerService.LogInformation($"MY-EXPERTS: {TherapyRequestLogTypes.SUCCESS.ToString()}", dbMentalHealthExpertsFilteredByRequestStatus);
+                            return new Response(dbMentalHealthExpertsFilteredByRequestStatus, StatusCodes.Status200OK, $"MY-EXPERTS: {TherapyRequestLogTypes.SUCCESS.ToString()}");
+                        }
+
+                        _therapyRequestLoggerService.LogWarning($"MY-EXPERTS: {TherapyRequestLogTypes.NOT_FOUND.ToString()}");
+                        throw new RecordNotFoundException("Couldn't return data!");
+                    }
+
                     //Dodati provjere za filtere sa frontenda:
-                        // za sve experte
-                        // za trenutno aktivne experte
-                        // za experte koji su nekada imali pristup sadrzaju
+                    // za sve experte
+                    // za trenutno aktivne experte
+                    // za experte koji su nekada imali pristup sadrzaju
 
                     var dbMentalHealthExperts = await _context.TherapyRequests
                         .Where(u => u.RegularUserId == query.LoggedUserId)
@@ -195,6 +235,20 @@ namespace MentalHealthBlog.API.Services.Therapy
                     }
                     _therapyRequestLoggerService.LogWarning($"CHANGE-REQUEST-STATUS: {TherapyRequestLogTypes.NOT_FOUND.ToString()}");
                     throw new RecordNotFoundException("Request couldn't be located!");
+                }
+
+                if (request.UserSendingRequest == null)
+                {
+                    requestToModify.RequestStatus = (RequestStatusEnum)request.NewRequestStatus;
+                    await _context.SaveChangesAsync();
+                    var searchQuery = new SearchTherapyRequestDto
+                    {
+                        LoggedUserId = request.RegularUserId,
+                        RequestStatus = RequestStatusEnum.Approved
+                    };
+                    var usersMentalHealthExperts = await GetUsersMentalHealthExperts(searchQuery);
+                    _therapyRequestLoggerService.LogInformation($"CHANGE-REQUEST-STATUS: {TherapyRequestLogTypes.SUCCESS.ToString()}");
+                    return new Response(usersMentalHealthExperts.ServiceResponseObject, StatusCodes.Status200OK, $"CHANGE-REQUEST-STATUS: {TherapyRequestLogTypes.SUCCESS.ToString()}");
                 }
 
                 if (request.UserSendingRequest == true)
