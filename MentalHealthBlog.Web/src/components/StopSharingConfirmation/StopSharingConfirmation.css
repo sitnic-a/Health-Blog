@@ -1,0 +1,74 @@
+.stop-sharing-modal-main-container {
+  max-width: 500px;
+  margin: auto;
+  /* border: 1px solid red; */
+}
+
+.stop-sharing-modal-header-title {
+  font-family: 'Klee One';
+  font-size: 1.1rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.stop-sharing-modal-content {
+  margin-top: 2rem;
+}
+
+.stop-sharing-modal-content-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.stop-sharing-modal-content-action {
+  padding-inline: 2.5rem;
+  padding-block: 0.8rem;
+  font-family: 'Klee One';
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 0.6rem;
+  outline: none;
+  cursor: pointer;
+  transition: 200ms;
+  background: none;
+}
+
+@media (width<=550px) {
+  .stop-sharing-modal-content-action {
+    padding-inline: 1.5rem;
+    /* padding-block: 0.8rem; */
+  }
+}
+
+@media (width<=450px) {
+  .stop-sharing-modal-content-action {
+    padding-inline: 0.65rem;
+  }
+}
+
+.stop-sharing-modal-action-remove {
+  color: #f3f1e3;
+  background: #c93232;
+}
+
+.stop-sharing-modal-action-remove:hover {
+  background: #a02929;
+}
+
+.stop-sharing-modal-action-keep-content {
+  color: #f3f1e3;
+  background: #34688f;
+}
+
+.stop-sharing-modal-action-keep-content:hover {
+  background: #28506e;
+}
+
+.stop-sharing-modal-action-cancel {
+  color: #f3f1e3;
+  background: #82a3bc;
+}
+
+.stop-sharing-modal-action-cancel:hover {
+  background: #6b869b;
+}

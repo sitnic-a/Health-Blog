@@ -8,6 +8,7 @@ let initialState = {
   myApprovedOrPendingMentalHealthExperts: [],
   myCurrentMentalHealthExperts: [],
   selectedMentalHealthExpertIds: [],
+  stopSharingObject: {},
 }
 
 export const getRequestsForMentalHealthExpert = createAsyncThunk(
@@ -82,6 +83,9 @@ let therapySlice = createSlice({
       state.myApprovedOrPendingMentalHealthExperts =
         action?.payload?.serviceResponseObject
     },
+    setStopSharingObject: (state, action) => {
+      state.stopSharingObject = action?.payload
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -143,6 +147,9 @@ let therapySlice = createSlice({
   },
 })
 
-export const { setSelectedMentalHealthExpertIds, setExperts } =
-  therapySlice.actions
+export const {
+  setSelectedMentalHealthExpertIds,
+  setExperts,
+  setStopSharingObject,
+} = therapySlice.actions
 export default therapySlice.reducer
