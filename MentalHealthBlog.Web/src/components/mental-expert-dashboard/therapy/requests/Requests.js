@@ -63,7 +63,8 @@ export const Requests = () => {
                               onClick={() => {
                                 let objectWithData = {
                                   authenticatedUser,
-                                  mentalHealthExpertId: authenticatedUser?.id,
+                                  mentalHealthExpertUserId:
+                                    authenticatedUser?.id,
                                   regularUserId: request?.regularUserId,
                                   newRequestStatus: requestStatuses.APPROVED,
                                   userSendingRequest: false,
@@ -80,7 +81,7 @@ export const Requests = () => {
                             onClick={() => {
                               let objectWithData = {
                                 authenticatedUser,
-                                mentalHealthExpertId: authenticatedUser?.id,
+                                mentalHealthExpertUserId: authenticatedUser?.id,
                                 regularUserId: request?.regularUserId,
                                 newRequestStatus: requestStatuses.APPROVED,
                                 userSendingRequest: false,
@@ -94,7 +95,7 @@ export const Requests = () => {
                             onClick={() => {
                               let objectWithData = {
                                 authenticatedUser,
-                                mentalHealthExpertId: authenticatedUser?.id,
+                                mentalHealthExpertUserId: authenticatedUser?.id,
                                 regularUserId: request?.regularUserId,
                                 newRequestStatus: requestStatuses.DECLINED,
                                 userSendingRequest: false,
@@ -113,7 +114,8 @@ export const Requests = () => {
                               onClick={() => {
                                 let objectWithData = {
                                   authenticatedUser,
-                                  mentalHealthExpertId: authenticatedUser?.id,
+                                  mentalHealthExpertUserId:
+                                    authenticatedUser?.id,
                                   regularUserId: request?.regularUserId,
                                   newRequestStatus: requestStatuses.PENDING,
                                   userSendingRequest: false,
@@ -130,7 +132,7 @@ export const Requests = () => {
                             onClick={() => {
                               let objectWithData = {
                                 authenticatedUser,
-                                mentalHealthExpertId: authenticatedUser?.id,
+                                mentalHealthExpertUserId: authenticatedUser?.id,
                                 regularUserId: request?.regularUserId,
                                 newRequestStatus: requestStatuses.DECLINED,
                                 userSendingRequest: false,

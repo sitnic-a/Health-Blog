@@ -52,7 +52,8 @@ namespace MentalHealthBlog.API.Services
                     dbMentalHealthExpertsCombinedWithTherapies = await _context.MentalHealthExperts
                         .Select(mhe => new TherapyMentalHealthExpertDto
                         {
-                            MentalHealthExpertId = mhe.UserId,
+                            MentalHealthExpertId = mhe.Id,
+                            MentalHealthExpertUserId = mhe.UserId,
                             FirstName = mhe.FirstName,
                             LastName = mhe.LastName,
                             Organization = mhe.Organization,
@@ -72,7 +73,7 @@ namespace MentalHealthBlog.API.Services
                     foreach (var mentalHealthExpert in dbMentalHealthExpertsCombinedWithTherapies)
                     {
                         var mentalHealthExpertInRequests = dbUsersMentalHealthExperts
-                            .SingleOrDefault(mhe => mhe.MentalHealthExpertId == mentalHealthExpert.MentalHealthExpertId && 
+                            .SingleOrDefault(mhe => mhe.MentalHealthExpertId == mentalHealthExpert.MentalHealthExpertUserId && 
                                              mhe.RegularUserId == request.LoggedUserId);
 
                         
@@ -86,7 +87,7 @@ namespace MentalHealthBlog.API.Services
                     dbMentalHealthExpertsCombinedWithTherapies = dbMentalHealthExpertsCombinedWithTherapies
                         .Where(mhe => mhe.RequestStatus == RequestStatusEnum.Undefined || 
                                mhe.RequestStatus == RequestStatusEnum.Declined)                        
-                        .DistinctBy(mhe => mhe.MentalHealthExpertId)
+                        .DistinctBy(mhe => mhe.MentalHealthExpertUserId)
                         .ToList();
 
                     if (!dbMentalHealthExpertsCombinedWithTherapies.Any())

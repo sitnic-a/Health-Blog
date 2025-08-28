@@ -100,6 +100,7 @@ export const MyMentalHealthExpertProfile = (props) => {
                 dispatch(openStopSharing(!isStopSharingOpen))
                 let objectWithData = {
                   mentalHealthExpertId: expert?.mentalHealthExpertId,
+                  mentalHealthExpertUserId: expert?.mentalHealthExpertUserId,
                   regularUserId: authenticatedUser?.id,
                   newRequestStatus: requestStatuses.UNDEFINED,
                   authenticatedUser,

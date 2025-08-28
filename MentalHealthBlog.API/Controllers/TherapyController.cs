@@ -25,7 +25,7 @@ namespace MentalHealthBlog.API.Controllers
         [HttpPost("my-experts")]
         public async Task<Response> GetUsersMentalHealthExperts([FromBody] SearchTherapyRequestDto? query = null)
         {
-            return await _therapyRequestService.GetUsersMentalHealthExperts(query);
+            return await _therapyRequestService.GetMyExperts(query);
         }
 
         [HttpPut("change-request-status")]

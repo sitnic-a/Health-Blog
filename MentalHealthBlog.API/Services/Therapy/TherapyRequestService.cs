@@ -53,7 +53,7 @@ namespace MentalHealthBlog.API.Services.Therapy
                                RegularUserId = ru.UserId,
                                RegularUserFirstName = ru.FirstName,
                                RegularUserLastName = ru.LastName,
-                               MentalHealthExpertId = tr.MentalHealthExpertId,
+                               MentalHealthExpertUserId = tr.MentalHealthExpertId,
                                RequestStatus = tr.RequestStatus,
                                SentAt = tr.SentAt,
                            })
@@ -83,7 +83,7 @@ namespace MentalHealthBlog.API.Services.Therapy
                 throw;
             }
         }
-        public async Task<Response> GetUsersMentalHealthExperts(SearchTherapyRequestDto? query = null)
+        public async Task<Response> GetMyExperts(SearchTherapyRequestDto? query = null)
         {
             try
             {
@@ -105,7 +105,8 @@ namespace MentalHealthBlog.API.Services.Therapy
                               (mhe) => mhe.UserId,
                               (tr, mhe) => new
                               {
-                                  MentalHealthExpertId = tr.MentalHealthExpertId,
+                                  MentalHealthExpertId = mhe.Id,
+                                  MentalHealthExpertUserId = tr.MentalHealthExpertId,
                                   RegularUserId = tr.RegularUserId,
                                   MentalHealthExpertUsername = _context.Users.SingleOrDefault(u => u.Id == mhe.UserId).Username,
                                   MentalHealthExpertFirstName = mhe.FirstName,
@@ -148,7 +149,8 @@ namespace MentalHealthBlog.API.Services.Therapy
                               (mhe) => mhe.UserId,
                               (tr, mhe) => new
                               {
-                                  MentalHealthExpertId = tr.MentalHealthExpertId,
+                                  MentalHealthExpertId = mhe.Id,
+                                  MentalHealthExpertUserId = tr.MentalHealthExpertId,
                                   RegularUserId = tr.RegularUserId,
                                   MentalHealthExpertUsername = _context.Users.SingleOrDefault(u => u.Id == mhe.UserId).Username,
                                   MentalHealthExpertFirstName = mhe.FirstName,
@@ -199,7 +201,7 @@ namespace MentalHealthBlog.API.Services.Therapy
 
                 if (request != null)
                 {
-                    if (request.MentalHealthExpertId <= 0 || request.RegularUserId <= 0)
+                    if (request.MentalHealthExpertUserId <= 0 || request.RegularUserId <= 0)
                     {
                         _therapyRequestLoggerService.LogWarning($"CHANGE-REQUEST-STATUS: {TherapyRequestLogTypes.ARGUMENT_NOT_VALID.ToString()}");
                         throw new ArgumentException("Bad request!");
@@ -208,14 +210,14 @@ namespace MentalHealthBlog.API.Services.Therapy
 
 
                 var requestToModify = await _context.TherapyRequests
-                    .SingleOrDefaultAsync(tr => tr.MentalHealthExpertId == request.MentalHealthExpertId &&
+                    .SingleOrDefaultAsync(tr => tr.MentalHealthExpertId == request.MentalHealthExpertUserId &&
                                          tr.RegularUserId == request.RegularUserId);
 
                 if (requestToModify is null)
                 {
                     if (request.UserSendingRequest == true)
                     {
-                        var userTherapyRequest = new TherapyRequest(request.RegularUserId, request.MentalHealthExpertId);
+                        var userTherapyRequest = new TherapyRequest(request.RegularUserId, request.MentalHealthExpertUserId);
                         if (userTherapyRequest != null)
                         {
                             await _context.TherapyRequests.AddAsync(userTherapyRequest);
@@ -223,7 +225,7 @@ namespace MentalHealthBlog.API.Services.Therapy
 
                             var searchQuery = new SearchExpertDto
                             {
-                                LoggedUserId = request.MentalHealthExpertId
+                                LoggedUserId = request.MentalHealthExpertUserId
                             };
                             var usersMentalHealthExperts = await _mentalExpertService.GetMentalHealthExperts(searchQuery);
                             _therapyRequestLoggerService.LogInformation($"CHANGE-REQUEST-STATUS: {TherapyRequestLogTypes.SUCCESS.ToString()}");
@@ -246,7 +248,7 @@ namespace MentalHealthBlog.API.Services.Therapy
                         LoggedUserId = request.RegularUserId,
                         RequestStatus = RequestStatusEnum.Approved
                     };
-                    var usersMentalHealthExperts = await GetUsersMentalHealthExperts(searchQuery);
+                    var usersMentalHealthExperts = await GetMyExperts(searchQuery);
                     _therapyRequestLoggerService.LogInformation($"CHANGE-REQUEST-STATUS: {TherapyRequestLogTypes.SUCCESS.ToString()}");
                     return new Response(usersMentalHealthExperts.ServiceResponseObject, StatusCodes.Status200OK, $"CHANGE-REQUEST-STATUS: {TherapyRequestLogTypes.SUCCESS.ToString()}");
                 }
@@ -257,7 +259,7 @@ namespace MentalHealthBlog.API.Services.Therapy
                     await _context.SaveChangesAsync();
                     var searchQuery = new SearchExpertDto
                     {
-                        LoggedUserId = request.MentalHealthExpertId
+                        LoggedUserId = request.MentalHealthExpertUserId
                     };
                     var usersMentalHealthExperts = await _mentalExpertService.GetMentalHealthExperts(searchQuery);
                     _therapyRequestLoggerService.LogInformation($"CHANGE-REQUEST-STATUS: {TherapyRequestLogTypes.SUCCESS.ToString()}");
@@ -267,7 +269,7 @@ namespace MentalHealthBlog.API.Services.Therapy
                 requestToModify.RequestStatus = (RequestStatusEnum)request.NewRequestStatus;
                 await _context.SaveChangesAsync();
 
-                var query = new SearchTherapyRequestDto(request.MentalHealthExpertId, null);
+                var query = new SearchTherapyRequestDto(request.MentalHealthExpertUserId, null);
                 var requests = await GetRequestsForMentalHealthExpert(query);
                 _therapyRequestLoggerService.LogInformation($"CHANGE-REQUEST-STATUS: {TherapyRequestLogTypes.SUCCESS.ToString()}", requestToModify);
                 return new Response(requests.ServiceResponseObject, StatusCodes.Status200OK, $"CHANGE-REQUEST-STATUS: {TherapyRequestLogTypes.SUCCESS.ToString()}");
@@ -279,7 +281,6 @@ namespace MentalHealthBlog.API.Services.Therapy
             }
 
         }
-
         public async Task<Response> StopSharing(Models.ResourceRequest.TherapyRequestDto request)
         {
             try
@@ -295,10 +296,18 @@ namespace MentalHealthBlog.API.Services.Therapy
                     if (request.IsKeepingContent != null)
                     {
                         var sharedContent = await _context.Shares
-                               .Where(s => s.SharedWithId == request._MentalHealthExpertId &&
+                               .Where(s => s.SharedWithId == request.MentalHealthExpertId &&
                                            s.SharedPost.UserId == request.RegularUserId)
                                .Include(s => s.SharedPost)
                                .ToListAsync();
+
+                        sharedContent = sharedContent
+                            .DistinctBy(s => new
+                            {
+                                s.SharedPostId,
+                                s.SharedWithId
+                            })
+                            .ToList();
 
                         if (sharedContent.Any())
                         {

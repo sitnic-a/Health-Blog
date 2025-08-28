@@ -113,7 +113,6 @@ let therapySlice = createSlice({
       })
       .addCase(getRequestsForMentalHealthExpert.fulfilled, (state, action) => {
         let statusCode = action?.payload?.statusCode
-        console.log('Action payload ', action?.payload)
         if (statusCode === 200) {
           state.requestsForMentalHealthExpert =
             action.payload.serviceResponseObject
