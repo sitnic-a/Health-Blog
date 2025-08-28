@@ -69,6 +69,23 @@ export const changeRequestStatus = createAsyncThunk(
   }
 )
 
+export const stopSharing = createAsyncThunk(
+  '[delete]',
+  async (objectWithData) => {
+    let url = `${application.application_url}/therapy`
+    let request = await fetch(url, {
+      method: 'DELETE',
+      body: JSON.stringify(objectWithData),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
+      },
+    })
+    let response = await request.json()
+    return response
+  }
+)
+
 let therapySlice = createSlice({
   name: 'therapySlice',
   initialState,
@@ -143,6 +160,17 @@ let therapySlice = createSlice({
       })
       .addCase(changeRequestStatus.rejected, () => {
         console.log('Request status change rejected...')
+      })
+
+      //stop-sharing
+      .addCase(stopSharing.pending, () => {
+        console.log('Stop sharing invoked...')
+      })
+      .addCase(stopSharing.fulfilled, (state, action) => {
+        console.log('Stop sharing fulfilled')
+      })
+      .addCase(stopSharing.rejected, () => {
+        console.log('Stop sharing rejected')
       })
   },
 })
