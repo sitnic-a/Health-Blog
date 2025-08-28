@@ -96,7 +96,7 @@ namespace MentalHealthBlog.API.Methods
             return await SaveNewShares(context, contentToBeShared);
         }
 
-        private async Task<List<PostDto>> FillSharedContentAsync(IGrouping<MentalHealthExpert, Share> userAndContent, List<PostDto> content)
+        private async Task<CurrentAndHistorySharedContent> FillSharedContentAsync(IGrouping<MentalHealthExpert, Share> userAndContent, CurrentAndHistorySharedContent content)
         {
             try
             {
@@ -121,8 +121,15 @@ namespace MentalHealthBlog.API.Methods
                         throw new RecordNotFoundException("Posts you shared can not be fetched!");
                     }
 
-                    content.Add(postDto);
+                    if (sharedPost?.IsKeepingContent == true)
+                    {
+                        content.History.Add(postDto);
+                        continue;
+                    }
+
+                    content.SharedContent.Add(postDto);
                 }
+
                 return content;
             }
             catch (Exception)
@@ -161,7 +168,7 @@ namespace MentalHealthBlog.API.Methods
 
         }
 
-        public async Task<List<PostDto>> CallFillSharedContentAsync(IGrouping<MentalHealthExpert, Share> userAndContent, List<PostDto> content)
+        public async Task<CurrentAndHistorySharedContent> CallFillSharedContentAsync(IGrouping<MentalHealthExpert, Share> userAndContent, CurrentAndHistorySharedContent content)
         {
             return await FillSharedContentAsync(userAndContent, content);
         }

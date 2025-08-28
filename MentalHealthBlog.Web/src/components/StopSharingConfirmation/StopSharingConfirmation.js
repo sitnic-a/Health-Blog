@@ -66,6 +66,28 @@ export const StopSharingConfirmation = () => {
             <button
               type="button"
               className="stop-sharing-modal-content-action stop-sharing-modal-action-keep-content"
+              onClick={() => {
+                dispatch(changeRequestStatus(stopSharingObject)).then(
+                  (data) => {
+                    let statusCode = data?.payload?.statusCode
+                    if (statusCode === 200) {
+                      let myMentalHealthExperts = data?.payload
+                      dispatch(setExperts(myMentalHealthExperts))
+                      let objectWithData = {
+                        authenticatedUser,
+                      }
+                      dispatch(getMentalHealthExperts(objectWithData))
+                    }
+                  }
+                )
+                let request = {
+                  mentalHealthExpertId: stopSharingObject?.mentalHealthExpertId,
+                  regularUserId: stopSharingObject?.regularUserId,
+                  isKeepingContent: true,
+                }
+                dispatch(stopSharing(request))
+                dispatch(openStopSharing(!isStopSharingOpen))
+              }}
             >
               Keep content
             </button>
@@ -73,12 +95,6 @@ export const StopSharingConfirmation = () => {
               type="button"
               className="stop-sharing-modal-content-action stop-sharing-modal-action-cancel"
               onClick={() => {
-                let request = {
-                  mentalHealthExpertId: stopSharingObject?.mentalHealthExpertId,
-                  regularUserId: stopSharingObject?.regularUserId,
-                  isKeepingContent: true,
-                }
-                dispatch(stopSharing(request))
                 dispatch(openStopSharing(!isStopSharingOpen))
               }}
             >

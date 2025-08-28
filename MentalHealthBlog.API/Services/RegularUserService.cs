@@ -43,7 +43,10 @@ namespace MentalHealthBlog.API.Services
                 }
 
                 var dbShares = await _context.Shares
-                    .Where(s => s.SharedPost.UserId == query.LoggedUserId && s.SharedWithId > 0)
+                    .Where(s => s.SharedPost.UserId == query.LoggedUserId && 
+                                s.SharedWithId != null && 
+                                s.SharedWithId > 0 &&
+                                s.IsKeepingContent == null)
                     .Include(p => p.SharedPost)
                     .Include(mhe => mhe.SharedWith)
                     .OrderByDescending(s => s.SharedAt)
@@ -95,7 +98,9 @@ namespace MentalHealthBlog.API.Services
                 }
 
                 var userShares = await _context.Shares
-                    .Where(s => s.SharedPost.UserId == query.LoggedUserId && s.SharedWithId > 0)
+                    .Where(s => s.SharedPost.UserId == query.LoggedUserId && 
+                                s.SharedWithId > 0 && 
+                                s.IsKeepingContent == null)
                     .OrderByDescending(s => s.SharedAt)
                     .Take(5)
                     .Include(s => s.SharedPost)
@@ -247,14 +252,21 @@ namespace MentalHealthBlog.API.Services
                     mentalHealthExpertContentIsSharedWith.Username = mentalHealthExpertAsUser.Username;
                     mentalHealthExpertContentIsSharedWith.Roles = mentalHealthExpertRoles;
 
-                    List<PostDto> sharedContentWithMentalHealthExpert = await shareHelper.CallFillSharedContentAsync(mentalHealthExpertFromGroup, new List<PostDto>());
+                    CurrentAndHistorySharedContent currentAndHistorySharedContentWithMentalHealthExpert = await shareHelper.CallFillSharedContentAsync(mentalHealthExpertFromGroup, new CurrentAndHistorySharedContent());
+                    List<PostDto> sharedContentWithMentalHealthExpert = currentAndHistorySharedContentWithMentalHealthExpert.SharedContent;
+                    List<PostDto> history = currentAndHistorySharedContentWithMentalHealthExpert.History;
 
                     if (sharedContentWithMentalHealthExpert.Any() && mentalHealthExpertContentIsSharedWith != null)
                     {
                         sharedContentWithMentalHealthExpert = sharedContentWithMentalHealthExpert
                             .OrderByDescending(s => s.SharedAt)
                             .ToList();
-                        sharesPerMentalHealthExpert.Add(new SharesPerMentalHealthExpertDto(mentalHealthExpertContentIsSharedWith, sharedContentWithMentalHealthExpert));
+                        var shareContentWithMentalHealthExpertObject = new SharesPerMentalHealthExpertDto(mentalHealthExpertContentIsSharedWith, sharedContentWithMentalHealthExpert);
+                        if (history.Any())
+                        {
+                            shareContentWithMentalHealthExpertObject.History = history;
+                        }
+                        sharesPerMentalHealthExpert.Add(shareContentWithMentalHealthExpertObject);
                         continue;
                     }
 

@@ -55,7 +55,7 @@ export const MentalHealthExpertsDropdown = () => {
                         type="button"
                         onClick={() => {
                           let objectWithData = {
-                            mentalHealthExpertId:
+                            mentalHealthExpertUserId:
                               expert?.mentalHealthExpertUserId,
                             regularUserId: authenticatedUser?.id,
                             newRequestStatus: requestStatuses.PENDING,
