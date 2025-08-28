@@ -8,5 +8,6 @@ namespace MentalHealthBlog.API.Services.Therapy
         public Task<Response> GetRequestsForMentalHealthExpert(SearchTherapyRequestDto? query=null);
         public Task<Response> GetUsersMentalHealthExperts(SearchTherapyRequestDto? query = null);
         public Task<Response> ChangeRequestStatus(Models.ResourceRequest.TherapyRequestDto request);
+        public Task<Response> StopSharing(Models.ResourceRequest.TherapyRequestDto request);
     }
 }

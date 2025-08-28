@@ -34,6 +34,10 @@ namespace MentalHealthBlog.API.Controllers
             return await _therapyRequestService.ChangeRequestStatus(request);
         }
 
-        
+        [HttpDelete]
+        public async Task<Response> StopSharing(Models.ResourceRequest.TherapyRequestDto request)
+        {
+            return await _therapyRequestService.StopSharing(request);
+        }
     }
 }

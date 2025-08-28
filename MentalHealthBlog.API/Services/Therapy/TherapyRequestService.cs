@@ -22,7 +22,7 @@ namespace MentalHealthBlog.API.Services.Therapy
         private readonly IMentalExpertService _mentalExpertService;
         private readonly ILogger<ITherapyRequestService> _therapyRequestLoggerService;
 
-        public TherapyRequestService(DataContext context,IMentalExpertService mentalExpertService, ILogger<ITherapyRequestService> therapyRequestLoggerService)
+        public TherapyRequestService(DataContext context, IMentalExpertService mentalExpertService, ILogger<ITherapyRequestService> therapyRequestLoggerService)
         {
             _context = context;
             _mentalExpertService = mentalExpertService;
@@ -280,5 +280,74 @@ namespace MentalHealthBlog.API.Services.Therapy
 
         }
 
+        public async Task<Response> StopSharing(Models.ResourceRequest.TherapyRequestDto request)
+        {
+            try
+            {
+                if (request != null)
+                {
+                    if (request.MentalHealthExpertId <= 0 || request.RegularUserId <= 0)
+                    {
+                        _therapyRequestLoggerService.LogWarning($"DELETE: {TherapyRequestLogTypes.ARGUMENT_NOT_VALID.ToString()}");
+                        throw new ArgumentException("Bad request!");
+                    }
+
+                    if (request.IsKeepingContent != null)
+                    {
+                        var sharedContent = await _context.Shares
+                               .Where(s => s.SharedWithId == request._MentalHealthExpertId &&
+                                           s.SharedPost.UserId == request.RegularUserId)
+                               .Include(s => s.SharedPost)
+                               .ToListAsync();
+
+                        if (sharedContent.Any())
+                        {
+                            //Obrisati sve shared stvari tako sto ce se staviti flag na false
+                            //Pozvati servis za punjenje podataka
+
+                            if (request.IsKeepingContent == false)
+                            {
+                                foreach (var share in sharedContent)
+                                {
+                                    share.IsKeepingContent = false;
+                                }
+                                await _context.SaveChangesAsync();
+                                
+                                _therapyRequestLoggerService.LogInformation($"DELETE: {TherapyRequestLogTypes.SUCCESS.ToString()}");
+                                return new Response(new List<Share>(), StatusCodes.Status200OK, $"DELETE: {TherapyRequestLogTypes.SUCCESS.ToString()}");
+                            }
+
+                            //Sacuvati stvari tako sto ce se staviti flag na true
+                            //Pozvati servis za punjenje podataka
+
+                            if (request.IsKeepingContent == true)
+                            {
+                                foreach (var share in sharedContent)
+                                {
+                                    share.IsKeepingContent = true;
+                                }
+                                await _context.SaveChangesAsync();
+
+                                _therapyRequestLoggerService.LogInformation($"DELETE: {TherapyRequestLogTypes.SUCCESS.ToString()}");
+                                return new Response(new List<Share>(), StatusCodes.Status200OK, $"DELETE: {TherapyRequestLogTypes.SUCCESS.ToString()}");
+
+                            }
+                        }
+
+                        _therapyRequestLoggerService.LogInformation($"DELETE: {TherapyRequestLogTypes.EMPTY.ToString()}");
+                        return new Response(new List<Share>(), StatusCodes.Status200OK, $"DELETE: {TherapyRequestLogTypes.EMPTY.ToString()}");
+                    }
+                    _therapyRequestLoggerService.LogWarning($"DELETE: {TherapyRequestLogTypes.ARGUMENT_NOT_VALID.ToString()}");
+                    throw new ArgumentException("Bad request!");
+                }
+                _therapyRequestLoggerService.LogWarning($"DELETE: {TherapyRequestLogTypes.ARGUMENT_NOT_VALID.ToString()}");
+                throw new ArgumentException("Bad request!");
+            }
+            catch (Exception e)
+            {
+                _therapyRequestLoggerService.LogError($"DELETE: {e.Message}");
+                throw;
+            }
+        }
     }
 }
