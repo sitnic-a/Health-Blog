@@ -15,6 +15,7 @@ namespace MentalHealthBlog.API.Models
         public Post SharedPost { get; set; }
         public int SharedPostId { get; set; }
         public DateTime SharedAt { get; set; }
+        public bool? IsKeepingContent { get; set; }
 
         public Share(){}
 
