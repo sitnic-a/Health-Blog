@@ -161,24 +161,25 @@ namespace MentalHealthBlog.API.Services
                     if (newUserRequest?.RegularUser != null)
                     {
                         var newRegularUserRequest = newUserRequest?.RegularUser;
-                        var mentalHealthExpertsToConnectWithId = newRegularUserRequest?.MentalHealthExpertsToConnectWithIds;
-                        if (mentalHealthExpertsToConnectWithId.Any())
-                        {
-                             mentalHealthExpertsId = mentalHealthExpertsToConnectWithId[0]
-                                .Split(',')
-                                .ToList();
-
-                            mentalHealthExpertsId.Cast<int>();
-                        }
-
-
                         if (RegularUserExtension.IsValid(newRegularUserRequest))
                         {
+                            var mentalHealthExpertsToConnectWithId = newRegularUserRequest?.MentalHealthExpertsToConnectWithIds;
+                            var hasSelectedMentalHealthExperts = mentalHealthExpertsToConnectWithId.Any() && 
+                                !mentalHealthExpertsToConnectWithId.Any(e => e == null );
+                            if (hasSelectedMentalHealthExperts)
+                            {
+                                mentalHealthExpertsId = mentalHealthExpertsToConnectWithId[0]
+                                   .Split(',')
+                                   .ToList();
+
+                                mentalHealthExpertsId.Cast<int>();
+                            }
+
                             var regularUser = new RegularUser(user.Id, newRegularUserRequest.FirstName, newRegularUserRequest.LastName, newRegularUserRequest.Email);
                             await _context.RegularUsers.AddAsync(regularUser);
                             await _context.SaveChangesAsync();
 
-                            if (newRegularUserRequest.IsInTherapy == true && newRegularUserRequest.MentalHealthExpertsToConnectWithIds.Any())
+                            if (newRegularUserRequest.IsInTherapy == true && hasSelectedMentalHealthExperts)
                             {
                                 foreach (var mentalHealthExpertToConnectWith in mentalHealthExpertsId)
                                 {
@@ -188,8 +189,9 @@ namespace MentalHealthBlog.API.Services
                                 await _context.SaveChangesAsync();
                                 _userLoggerService.LogInformation($"REGISTER: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", user);
                                 return new Response(new SignedUserDto(user.Id, user.Username), StatusCodes.Status201Created, UserServiceLogTypes.USER_SUCCESFULL.ToString());
-
                             }
+                            _userLoggerService.LogInformation($"REGISTER: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", user);
+                            return new Response(new SignedUserDto(user.Id, user.Username), StatusCodes.Status201Created, UserServiceLogTypes.USER_SUCCESFULL.ToString());
                         }
                         _userLoggerService.LogError($"REGISTER: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", new { RegularUser = newRegularUserRequest });
                         throw new CreateRecordException("New user couldn't be created!");

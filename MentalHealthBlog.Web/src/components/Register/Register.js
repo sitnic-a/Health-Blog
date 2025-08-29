@@ -20,6 +20,9 @@ import RegisterCSS from './Register.css'
 
 export const Register = () => {
   let { dbRoles } = useSelector((store) => store.user)
+  let { suggestedMentalHealthExperts } = useSelector(
+    (store) => store.mentalExpert
+  )
   let { selectedMentalHealthExpertIds } = useSelector((store) => store.therapy)
 
   let { isMentalHealthExpert, isRegularUser } = useFetchLocationState()
@@ -112,31 +115,48 @@ export const Register = () => {
         roles.length <= 0 ||
         stringIsNullOrEmpty(firstName) ||
         stringIsNullOrEmpty(lastName) ||
-        stringIsNullOrEmpty(email) ||
-        selectedMentalHealthExpertIds?.length <= 0
+        stringIsNullOrEmpty(email)
       ) {
-        toast.error(
-          'Something went wrong! Please check are all fields populated',
-          {
-            autoClose: 1500,
-            position: 'bottom-right',
-          }
-        )
-        return
+        if (isInTherapy && suggestedMentalHealthExperts?.length > 0) {
+          toast.error(
+            'Something went wrong! Please check are all fields populated',
+            {
+              autoClose: 1500,
+              position: 'bottom-right',
+            }
+          )
+          return
+        }
       }
 
-      sendData = {
-        username,
-        password,
-        regularUser: {
-          firstName: firstName,
-          lastName: lastName,
-          email: email,
-          isInTherapy: isInTherapy,
-          mentalHealthExpertsToConnectWithIds: selectedMentalHealthExpertIds,
-        },
-        isMentalHealthExpert: false,
-        roles,
+      if (isInTherapy) {
+        sendData = {
+          username,
+          password,
+          regularUser: {
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            isInTherapy: isInTherapy,
+            mentalHealthExpertsToConnectWithIds: selectedMentalHealthExpertIds,
+          },
+          isMentalHealthExpert: false,
+          roles,
+        }
+      } else {
+        sendData = {
+          username,
+          password,
+          regularUser: {
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            isInTherapy: isInTherapy,
+            mentalHealthExpertsToConnectWithIds: [],
+          },
+          isMentalHealthExpert: false,
+          roles,
+        }
       }
     }
 

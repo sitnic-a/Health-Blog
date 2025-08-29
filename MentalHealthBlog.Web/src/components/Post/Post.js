@@ -38,7 +38,7 @@ export const Post = (props) => {
   let { authenticatedUser } = useSelector((store) => store.user)
 
   //Helpers
-  let createdAt = moment(post?.createdAt, 'YYYYMMDDHHmmss').fromNow()
+  let createdAt = moment(post?.createdAt, 'YYYYMMDDhhmmss').fromNow()
   let sharedAt = moment(post?.sharedAt, 'YYYYMMDDHHmmss').fromNow()
 
   return (
