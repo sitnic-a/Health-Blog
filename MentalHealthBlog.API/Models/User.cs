@@ -20,6 +20,15 @@ namespace MentalHealthBlogAPI.Models
             Posts = new List<Post>();
         }
 
+        public User(int id, string username,byte[] passwordSalt, string passwordHash)
+        {
+            Id= id;
+            Username = username;
+            PasswordSalt = passwordSalt;
+            PasswordHash = passwordHash;
+            Posts = new List<Post>();
+        }
+
         public User(string username, string passwordHash)
         {
             Username = username;

@@ -10,6 +10,8 @@ namespace MentalHealthBlog.API.Models
         public int MentalHealthExpertId { get; set; }
 
         public RequestStatusEnum RequestStatus { get; set; } = RequestStatusEnum.Pending;
+        
+        [NpgsqlTypes.PgName("TIMESTAMP")]
         public DateTime SentAt { get; set; } = DateTime.UtcNow;
 
         public TherapyRequest() { }

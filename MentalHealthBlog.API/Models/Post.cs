@@ -11,6 +11,8 @@ namespace MentalHealthBlogAPI.Models
         public int UserId { get; set; }
         [JsonIgnore]
         public User? User { get; set; }
+
+        [NpgsqlTypes.PgName("TIMESTAMP")]
         public DateTime CreatedAt { get; set; }
 
         public Post(){  }
@@ -19,7 +21,7 @@ namespace MentalHealthBlogAPI.Models
             Title = title;
             Content = content;
             UserId = userId;
-            CreatedAt = DateTime.Now;
+            CreatedAt = DateTime.UtcNow;
         }
     }
 }

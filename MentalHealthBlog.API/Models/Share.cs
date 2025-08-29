@@ -14,6 +14,8 @@ namespace MentalHealthBlog.API.Models
         public int? SharedWithId { get; set; }
         public Post SharedPost { get; set; }
         public int SharedPostId { get; set; }
+        
+        [NpgsqlTypes.PgName("TIMESTAMP")]
         public DateTime SharedAt { get; set; }
         public bool? IsKeepingContent { get; set; }
 

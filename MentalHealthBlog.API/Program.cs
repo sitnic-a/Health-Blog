@@ -1,15 +1,19 @@
+using MentalHealthBlog.API.Middlewares;
 using MentalHealthBlog.API.Services;
+using MentalHealthBlog.API.Services.Therapy;
+using MentalHealthBlog.API.Utils;
+using MentalHealthBlog.API.Utils.SignalR;
 using MentalHealthBlogAPI.Data;
 using MentalHealthBlogAPI.Services;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using MentalHealthBlog.API.Utils;
-using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Npgsql;
+using System.Data.Common;
+using System.Diagnostics;
 using System.Text;
-using MentalHealthBlog.API.Utils.SignalR;
-using MentalHealthBlog.API.Middlewares;
-using MentalHealthBlog.API.Services.Therapy;
 
 #pragma warning disable 8604
 
@@ -20,6 +24,12 @@ builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSet
 
 // Add services to the container.
 builder.Services.AddControllers();
+
+//Add user secrets
+var config = new ConfigurationBuilder()
+    .AddUserSecrets<Program>()
+    .Build();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
@@ -89,13 +99,23 @@ builder.Services.AddScoped<ITherapyRequestService, TherapyRequestService>();
 builder.Services.AddDbContext<DataContext>(options =>
 {
 
-    options.UseSqlServer(builder
-        .Configuration
-        .GetConnectionString("DevelopmentConnection"));
+    //options.UseSqlServer(builder
+    //    .Configuration
+    //    .GetConnectionString("DevelopmentConnection"));
 
-    options.UseSqlServer(builder
-        .Configuration
-        .GetConnectionString("DevelopmentConnectionExpress"));
+    //options.UseSqlServer(builder
+    //    .Configuration
+    //    .GetConnectionString("DevelopmentConnectionExpress"));
+
+    var POSTGRES_CONNECTION = config["PostgreSQL:CONNECTION"];
+    var POSTRES_PASSWORD = config["PostgreSQL:PASSWORD"];
+    var npsql = new NpgsqlConnectionStringBuilder(POSTGRES_CONNECTION)
+    {
+        Password = POSTRES_PASSWORD
+    };
+
+    options
+        .UseNpgsql(npsql.ConnectionString);
 });
 
 builder.Services.AddAuthentication(options =>

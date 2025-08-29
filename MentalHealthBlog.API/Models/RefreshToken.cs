@@ -8,8 +8,14 @@ namespace MentalHealthBlog.API.Models
         [JsonIgnore]
         public int Id { get; set; }
         public string Token { get; set; } = string.Empty;
+
+        [NpgsqlTypes.PgName("TIMESTAMP")]
         public DateTime CreatedAt { get; set; }
+
+        [NpgsqlTypes.PgName("TIMESTAMP")]
         public DateTime ExpiresAt { get; set; }
+        
+        [NpgsqlTypes.PgName("TIMESTAMP")]
         public DateTime? RevokedAt { get; set; }
         public bool IsExpired => DateTime.UtcNow.AddHours(1) >= ExpiresAt.AddMinutes(-3);
         public bool IsActive => !IsExpired && !IsRevoked;

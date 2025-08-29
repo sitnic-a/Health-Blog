@@ -56,8 +56,8 @@ namespace MentalHealthBlog.API.Utils
             {
                 Subject = new ClaimsIdentity(claims),
                 Issuer = "http://localhost:3000",
-                IssuedAt = DateTime.Now,
-                Expires = DateTime.Now.AddMinutes(15),
+                IssuedAt = DateTime.UtcNow,
+                Expires = DateTime.UtcNow.AddMinutes(15),
 
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
@@ -126,8 +126,8 @@ namespace MentalHealthBlog.API.Utils
             var refreshToken = new RefreshToken
             {
                 Token = CreateUniqueRefreshToken(),
-                CreatedAt = DateTime.UtcNow.AddHours(1),
-                ExpiresAt = DateTime.UtcNow.AddHours(1).AddDays(_options.RefreshTokenTTL),
+                CreatedAt = DateTime.UtcNow,
+                ExpiresAt = DateTime.UtcNow.AddDays(_options.RefreshTokenTTL),
             };
             return refreshToken;
         }
@@ -137,7 +137,7 @@ namespace MentalHealthBlog.API.Utils
             var inactiveAndExpiredTokens = _context.RefreshTokens
                 .Where(rt =>
                 user.Id == rt.UserId &&
-                DateTime.UtcNow.AddHours(1) >= rt.ExpiresAt);
+                DateTime.UtcNow >= rt.ExpiresAt);
 
             _context.RemoveRange(inactiveAndExpiredTokens);
         }

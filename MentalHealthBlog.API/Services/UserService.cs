@@ -198,8 +198,6 @@ namespace MentalHealthBlog.API.Services
                     throw new ArgumentException("Bad request while register!");
                 }
 
-
-
                 if (newUserRequest.IsMentalHealthExpert == true)
                 {
                     var newMentalHealthExpert = _mapper.Map<MentalHealthExpert>(newUserRequest.MentalHealthExpert);
@@ -341,7 +339,7 @@ namespace MentalHealthBlog.API.Services
                                             .FirstOrDefaultAsync(t => t.Token == logoutRequest.RefreshToken);
                         if (refreshToken is not null)
                         {
-                            refreshToken.RevokedAt = DateTime.UtcNow.AddHours(1);
+                            refreshToken.RevokedAt = DateTime.UtcNow;
 
                             var dbRefreshTokensByLoggedUser = _context.RefreshTokens
                                                 .Where(rt => rt.UserId == logoutRequest.UserId);

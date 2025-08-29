@@ -65,7 +65,7 @@ namespace MentalHealthBlog.API.Services
                         var tags = await convertHelper.CallReturnPostTagsAsync(post.Id);
                         var emotions = await convertHelper.CallReturnPostEmotionsAsync(post.Id);
                         var postDto = new PostDto(post.Id, post.Title, post.Content, post.UserId, post.CreatedAt, tags, emotions);
-                        postDto.SharedAt = DateTime.Now;
+                        postDto.SharedAt = DateTime.UtcNow;
 
                         if (postDto == null)
                         {

@@ -50,7 +50,7 @@ namespace MentalHealthBlog.API.Controllers
                 Response.Cookies.Append("refreshToken", signedUserData.RefreshToken, new CookieOptions
                 {
                     HttpOnly = false,
-                    Expires = DateTime.UtcNow.AddHours(1).AddMinutes(10),
+                    Expires = DateTime.UtcNow.AddMinutes(10),
                     Secure = true,
                     SameSite = SameSiteMode.None
                 });
