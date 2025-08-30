@@ -33,11 +33,11 @@ namespace MentalHealthBlog.API.Controllers
             return await _shareService.ShareContent(contentToBeShared);
         }
 
-        [HttpGet("experts-relatives")]
+        [HttpPost("experts-relatives")]
         [Authorize]
-        public async Task<Response> GetExpertsRelatives()
+        public async Task<Response> GetExpertsRelatives(SearchTherapyRequestDto query)
         {
-            return await _shareService.GetExpertsAndRelatives();
+            return await _shareService.GetExpertsAndRelatives(query);
         }
 
     }

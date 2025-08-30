@@ -17,6 +17,7 @@ import { FaFileExport } from 'react-icons/fa'
 import { toast } from 'react-toastify'
 
 import ShareExportOverlayCSS from './ShareExportOverlay.css'
+import { requestStatuses } from '../../../../enums/requestStatuses'
 
 export const ShareExportOverlay = () => {
   let dispatch = useDispatch()
@@ -36,6 +37,8 @@ export const ShareExportOverlay = () => {
             )
             shareExportContainer.style.display = 'none'
             let objectWithData = {
+              loggedUserId: authenticatedUser?.id,
+              requestStatus: requestStatuses.APPROVED,
               authenticatedUser,
             }
             dispatch(getExpertsAndRelatives(objectWithData)).then((data) => {
@@ -50,7 +53,7 @@ export const ShareExportOverlay = () => {
               }
               if (
                 data?.payload?.statusCode === 200 &&
-                data?.payload?.serviceResponseObject.length === 0
+                data?.payload?.serviceResponseObject?.length === 0
               ) {
                 toast.warning('Reach some mental health expert first!', {
                   position: 'bottom-right',

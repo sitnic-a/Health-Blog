@@ -103,10 +103,11 @@ namespace MentalHealthBlog.API.Services.Therapy
 
                               (tr) => tr.MentalHealthExpertId,
                               (mhe) => mhe.UserId,
-                              (tr, mhe) => new
+                              (tr, mhe) => new MyExpertDto
                               {
                                   MentalHealthExpertId = mhe.Id,
                                   MentalHealthExpertUserId = tr.MentalHealthExpertId,
+                                  MentalHealthExpert = mhe,
                                   RegularUserId = tr.RegularUserId,
                                   MentalHealthExpertUsername = _context.Users.SingleOrDefault(u => u.Id == mhe.UserId).Username,
                                   MentalHealthExpertFirstName = mhe.FirstName,
@@ -147,10 +148,11 @@ namespace MentalHealthBlog.API.Services.Therapy
 
                               (tr) => tr.MentalHealthExpertId,
                               (mhe) => mhe.UserId,
-                              (tr, mhe) => new
+                              (tr, mhe) => new MyExpertDto
                               {
                                   MentalHealthExpertId = mhe.Id,
                                   MentalHealthExpertUserId = tr.MentalHealthExpertId,
+                                  MentalHealthExpert = mhe,
                                   RegularUserId = tr.RegularUserId,
                                   MentalHealthExpertUsername = _context.Users.SingleOrDefault(u => u.Id == mhe.UserId).Username,
                                   MentalHealthExpertFirstName = mhe.FirstName,

@@ -79,10 +79,11 @@ export const getExpertsAndRelatives = createAsyncThunk(
   async (objectWithData) => {
     let url = `${application.application_url}/share/experts-relatives`
     let request = await fetch(url, {
-      method: 'GET',
+      method: 'POST',
+      body: JSON.stringify(objectWithData),
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
+        Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
       },
     })
     let response = request.json()

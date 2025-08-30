@@ -20,6 +20,13 @@ export const MyMentalHealthExperts = () => {
     (store) => store.therapy
   )
 
+  let myApprovedOrPendingRequests =
+    myApprovedOrPendingMentalHealthExperts.filter(
+      (tr) =>
+        tr.requestStatus === requestStatuses.APPROVED ||
+        tr.requestStatus === requestStatuses.PENDING
+    )
+
   let firstElement = myApprovedOrPendingMentalHealthExperts?.filter(
     (mhe) =>
       mhe.regularUserId === authenticatedUser?.id &&
@@ -91,6 +98,7 @@ export const MyMentalHealthExperts = () => {
         {myApprovedOrPendingMentalHealthExperts?.filter(
           (mhe) =>
             (mhe.regularUserId === authenticatedUser?.id &&
+              myApprovedOrPendingRequests.length >= 2 &&
               mhe.requestStatus === requestStatuses.APPROVED) ||
             mhe.requestStatus === requestStatuses.PENDING
         )?.length >= 2 || (
