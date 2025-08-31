@@ -38,7 +38,8 @@ export const Post = (props) => {
   let { authenticatedUser } = useSelector((store) => store.user)
 
   //Helpers
-  let createdAt = moment(post?.createdAt, 'YYYYMMDDhhmmss').fromNow()
+  let createdAt = post?.createdAt
+  let createdAtFormatted = moment(post?.createdAt, 'YYYYMMDDhhmmss').fromNow()
   let sharedAt = moment(post?.sharedAt, 'YYYYMMDDHHmmss').fromNow()
 
   return (
@@ -68,6 +69,10 @@ export const Post = (props) => {
           </div>
           <div className="post-date">
             <p>
+              Created at: <span>{createdAtFormatted}</span>
+            </p>
+
+            <p className="post-date-value">
               Created at: <span>{createdAt}</span>
             </p>
             {isReviewingSharedPosts && (

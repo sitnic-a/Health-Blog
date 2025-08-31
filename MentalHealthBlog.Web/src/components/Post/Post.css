@@ -97,6 +97,10 @@
   color: #c93232;
 }
 
+.post-date-value {
+  display: none;
+}
+
 button[data-action-update='update'] {
   position: absolute;
   top: 0.4rem;

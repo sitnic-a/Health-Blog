@@ -67,7 +67,7 @@ export function getSelectedPosts(loggedUser) {
     ).innerHTML
 
     let postDateString = postContainerContent.querySelector(
-      '.post-date > p > span'
+      '.post-date > .post-date-value > span'
     ).innerHTML
 
     let postDate = new Date(postDateString)
