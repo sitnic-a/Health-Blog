@@ -7,12 +7,9 @@ using MentalHealthBlogAPI.Data;
 using MentalHealthBlogAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Npgsql;
-using System.Data.Common;
-using System.Diagnostics;
 using System.Text;
 
 #pragma warning disable 8604
