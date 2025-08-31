@@ -7,6 +7,10 @@ import { getMentalHealthExperts } from '../../redux-toolkit/features/mentalExper
 import { setSelectedMentalHealthExpertIds } from '../../redux-toolkit/features/therapySlice'
 import useFetchLocationState from '../../custom/hooks/useFetchLocationState'
 import {
+  checkEmailValidity,
+  checkPasswordValidity,
+  checkPersonalInformationValidity,
+  checkUsernameValidity,
   previewImage,
   stringIsNullOrEmpty,
 } from '../../utils/helper-methods/methods'
@@ -72,20 +76,23 @@ export const Register = () => {
 
       if (
         stringIsNullOrEmpty(username) ||
+        !checkUsernameValidity(username) ||
         stringIsNullOrEmpty(password) ||
+        !checkPasswordValidity(password) ||
         roles.length <= 0 ||
         stringIsNullOrEmpty(mentalHealthExpertFirstName) ||
+        !checkPersonalInformationValidity(mentalHealthExpertFirstName) ||
         stringIsNullOrEmpty(mentalHealthExpertLastName) ||
+        !checkPersonalInformationValidity(mentalHealthExpertLastName) ||
         stringIsNullOrEmpty(mentalHealthExpertOrganization) ||
-        stringIsNullOrEmpty(mentalHealthExpertEmail)
+        !checkPersonalInformationValidity(mentalHealthExpertOrganization) ||
+        stringIsNullOrEmpty(mentalHealthExpertEmail) ||
+        !checkEmailValidity(mentalHealthExpertEmail)
       ) {
-        toast.error(
-          'Something went wrong! Please check are all fields populated',
-          {
-            autoClose: 1500,
-            position: 'bottom-right',
-          }
-        )
+        toast.error('Fields are required or not valid!', {
+          autoClose: 1500,
+          position: 'bottom-right',
+        })
         return
       }
 
@@ -111,20 +118,32 @@ export const Register = () => {
 
       if (
         stringIsNullOrEmpty(username) ||
+        !checkUsernameValidity(username) ||
         stringIsNullOrEmpty(password) ||
+        !checkPasswordValidity(password) ||
         roles.length <= 0 ||
         stringIsNullOrEmpty(firstName) ||
+        !checkPersonalInformationValidity(firstName) ||
         stringIsNullOrEmpty(lastName) ||
-        stringIsNullOrEmpty(email)
+        !checkPersonalInformationValidity(lastName) ||
+        stringIsNullOrEmpty(email) ||
+        !checkEmailValidity(email)
       ) {
-        if (isInTherapy && suggestedMentalHealthExperts?.length > 0) {
-          toast.error(
-            'Something went wrong! Please check are all fields populated',
-            {
-              autoClose: 1500,
-              position: 'bottom-right',
-            }
-          )
+        toast.error('Fields are required or not valid!', {
+          autoClose: 1500,
+          position: 'bottom-right',
+        })
+        return
+      } else {
+        if (
+          isInTherapy &&
+          suggestedMentalHealthExperts?.length > 0 &&
+          selectedMentalHealthExpertIds?.length <= 0
+        ) {
+          toast.error('Please check are all fields populated and valid', {
+            autoClose: 1500,
+            position: 'bottom-right',
+          })
           return
         }
       }
@@ -284,19 +303,24 @@ export const Register = () => {
               </div>
             </div>
 
-            <div className="register-info-in-therapy-container">
-              <label htmlFor="register-in-therapy" className="form-field-label">
-                In therapy?
-              </label>
-              <input
-                className="register-in-therapy-checkbox"
-                type="checkbox"
-                checked={isInTherapy}
-                onChange={() => {
-                  setIsInTherapy(!isInTherapy)
-                }}
-              />
-            </div>
+            {suggestedMentalHealthExperts?.length > 0 && (
+              <div className="register-info-in-therapy-container">
+                <label
+                  htmlFor="register-in-therapy"
+                  className="form-field-label"
+                >
+                  In therapy?
+                </label>
+                <input
+                  className="register-in-therapy-checkbox"
+                  type="checkbox"
+                  checked={isInTherapy}
+                  onChange={() => {
+                    setIsInTherapy(!isInTherapy)
+                  }}
+                />
+              </div>
+            )}
 
             {isInTherapy && (
               <div className="select-mental-health-experts-main-container">

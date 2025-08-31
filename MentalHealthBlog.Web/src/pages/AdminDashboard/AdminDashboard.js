@@ -63,24 +63,7 @@ export const AdminDashboard = () => {
     let objectWithData = {
       authenticatedUser,
     }
-    dispatch(getNewRegisteredExperts(objectWithData)).then((data) => {
-      let statusCode = data?.payload?.StatusCode
-      if (statusCode !== 200) {
-        if (statusCode === 404) {
-          toast.error('Users not fetched properly!', {
-            position: 'bottom-right',
-          })
-          return
-        }
-      }
-
-      if (data?.payload?.statusCode === 200) {
-        toast.success('New request arrived!', {
-          autoClose: 1500,
-          position: 'bottom-right',
-        })
-      }
-    })
+    dispatch(getNewRegisteredExperts(objectWithData))
   })
 
   connection.start().catch((e) => {
