@@ -26,6 +26,7 @@ namespace MentalHealthBlog.API.Utils
     {
         private readonly AppSettings _options;
         private readonly DataContext _context;
+        private IConfiguration _configuration;
 
         private string CreateUniqueRefreshToken()
         {
@@ -39,15 +40,16 @@ namespace MentalHealthBlog.API.Utils
         }
 
 
-        public JWTService(IOptions<AppSettings> options, DataContext context)
+        public JWTService(IOptions<AppSettings> options, DataContext context, IConfiguration configuration)
         {
             _options = options.Value;
             _context = context;
+            _configuration = configuration;
         }
 
         public string GenerateToken(User user)
         {
-            string configurationKey = _options.TokenKey;
+            string configurationKey = _configuration["JWTKEY"];
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(configurationKey);
             var claims = GetClaims(user);

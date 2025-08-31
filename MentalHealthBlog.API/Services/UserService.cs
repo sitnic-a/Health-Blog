@@ -39,6 +39,7 @@ namespace MentalHealthBlog.API.Services
         private readonly ILogger<UserService> _userLoggerService;
         private readonly AppSettings _optionsAppSettings;
         private readonly IOptions<AppSettings> _options;
+        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         private readonly DataContext _context;
         private const int __KEYSIZE__ = 128;
@@ -50,11 +51,12 @@ namespace MentalHealthBlog.API.Services
         private User user = new();
 
 
-        public UserService(DataContext context, IOptions<AppSettings> options, IMapper mapper, ILogger<UserService> userLoggerService)
+        public UserService(DataContext context, IOptions<AppSettings> options, IConfiguration configuration, IMapper mapper, ILogger<UserService> userLoggerService)
         {
             _context = context;
             _optionsAppSettings = options.Value;
             _options = options;
+            _configuration = configuration;
             _mapper = mapper;
             _userLoggerService = userLoggerService;
         }
@@ -240,7 +242,7 @@ namespace MentalHealthBlog.API.Services
                     _userLoggerService.LogError($"REGISTER: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", loginCredentials);
                     throw new CreateRecordException("Credentials not valid!");
                 }
-                var jwtMiddleware = new JWTService(_options, _context);
+                var jwtMiddleware = new JWTService(_options, _context, _configuration);
                 var authenticated = await VerifyCredentials(loginCredentials);
                 var dbUser = await _context.Users.SingleOrDefaultAsync(u => u.Username == loginCredentials.Username);
                 if (authenticated && dbUser is not null)
@@ -313,7 +315,7 @@ namespace MentalHealthBlog.API.Services
         {
             try
             {
-                var jwtMiddleware = new JWTService(_options, _context);
+                var jwtMiddleware = new JWTService(_options, _context, _configuration);
                 var accessToken = await jwtMiddleware.RefreshAccessToken(refreshToken);
                 if (accessToken.StatusCode == 200 || accessToken.StatusCode == 201)
                 {
