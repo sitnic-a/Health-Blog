@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { formatDateToString } from '../../../../utils/helper-methods/methods'
+import moment from 'moment'
 import { toast } from 'react-toastify'
 import { PostEmotions } from '../../../PostEmotions/PostEmotions'
 import { PostTags } from '../../../PostTags/PostTags'
@@ -38,7 +38,7 @@ export const ListOfSharedPosts = () => {
   return (
     <section id="shared-posts-via-link-main-container">
       {postsToShare?.map((post, index) => {
-        let date = formatDateToString(post?.createdAt)
+        let date = moment(post?.createdAt, 'YYYYMMDDHHmmss').fromNow()
         let tags = post.tags
         let emotions = post?.emotions
         return (

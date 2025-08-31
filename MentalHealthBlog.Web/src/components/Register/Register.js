@@ -1,8 +1,10 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { register, getDbRoles } from '../../redux-toolkit/features/userSlice'
+import { getMentalHealthExperts } from '../../redux-toolkit/features/mentalExpertSlice'
+import { setSelectedMentalHealthExpertIds } from '../../redux-toolkit/features/therapySlice'
 import useFetchLocationState from '../../custom/hooks/useFetchLocationState'
 import {
   previewImage,
@@ -11,14 +13,24 @@ import {
 import { db_roles } from '../../enums/roles'
 import { toast } from 'react-toastify'
 
+import { MentalHealthExpertsDropdown } from '../MentalHealthExpertsDropdown/MentalHealthExpertsDropdown'
+import { TiArrowSortedDown } from 'react-icons/ti'
+
 import RegisterCSS from './Register.css'
 
 export const Register = () => {
   let { dbRoles } = useSelector((store) => store.user)
-  let { isMentalHealthExpert } = useFetchLocationState()
+  let { suggestedMentalHealthExperts } = useSelector(
+    (store) => store.mentalExpert
+  )
+  let { selectedMentalHealthExpertIds } = useSelector((store) => store.therapy)
+
+  let { isMentalHealthExpert, isRegularUser } = useFetchLocationState()
+  let [isInTherapy, setIsInTherapy] = useState(false)
 
   useEffect(() => {
     dispatch(getDbRoles())
+    dispatch(getMentalHealthExperts(null))
   }, [])
 
   let navigate = useNavigate()
@@ -31,51 +43,51 @@ export const Register = () => {
       'input[type="checkbox"]:checked'
     )
 
-    if (isMentalHealthExpert === true) {
-      roles.push(db_roles.PSYCHOLOGIST)
-    } else {
-      selectedRoles.forEach((role) => {
-        roles.push(role.value)
-      })
-    }
-
     let sendData
+    let form = new FormData()
     let username = document.getElementById('register-username').value
     let password = document.getElementById('register-password').value
-    let mentalHealthExpertFirstName
-    let mentalHealthExpertLastName
-    let mentalHealthExpertOrganization
-    let mentalHealthExpertPhoneNumber
-    let mentalHealthExpertEmail
-    let mentalHealthExpertPhoto
-
-    sendData = {
-      username: username,
-      password: password,
-      roles: roles,
-    }
-
-    console.log('SEND DATA ', sendData)
 
     if (isMentalHealthExpert === true) {
-      mentalHealthExpertFirstName = document.getElementById(
+      let mentalHealthExpertFirstName = document.getElementById(
         'register-mental-health-expert-first-name'
       ).value
-      mentalHealthExpertLastName = document.getElementById(
+      let mentalHealthExpertLastName = document.getElementById(
         'register-mental-health-expert-last-name'
       ).value
-      mentalHealthExpertOrganization = document.getElementById(
+      let mentalHealthExpertOrganization = document.getElementById(
         'register-mental-health-expert-organization'
       ).value
-      mentalHealthExpertPhoneNumber = document.getElementById(
+      let mentalHealthExpertPhoneNumber = document.getElementById(
         'register-mental-health-expert-phone-number'
       ).value
-      mentalHealthExpertEmail = document.getElementById(
+      let mentalHealthExpertEmail = document.getElementById(
         'register-mental-health-expert-email'
       ).value
-      mentalHealthExpertPhoto = document.getElementById(
+      let mentalHealthExpertPhoto = document.getElementById(
         'register-mental-health-expert-photo'
       ).files[0]
+
+      roles.push(db_roles.PSYCHOLOGIST)
+
+      if (
+        stringIsNullOrEmpty(username) ||
+        stringIsNullOrEmpty(password) ||
+        roles.length <= 0 ||
+        stringIsNullOrEmpty(mentalHealthExpertFirstName) ||
+        stringIsNullOrEmpty(mentalHealthExpertLastName) ||
+        stringIsNullOrEmpty(mentalHealthExpertOrganization) ||
+        stringIsNullOrEmpty(mentalHealthExpertEmail)
+      ) {
+        toast.error(
+          'Something went wrong! Please check are all fields populated',
+          {
+            autoClose: 1500,
+            position: 'bottom-right',
+          }
+        )
+        return
+      }
 
       sendData = {
         username: username,
@@ -91,11 +103,65 @@ export const Register = () => {
         },
         photo: mentalHealthExpertPhoto,
       }
+    } else {
+      let firstName = document.getElementById('register-first-name').value
+      let lastName = document.getElementById('register-last-name').value
+      let email = document.getElementById('register-email').value
+      roles.push(db_roles.USER)
 
-      console.log('SEND DATA 2 ', sendData)
+      if (
+        stringIsNullOrEmpty(username) ||
+        stringIsNullOrEmpty(password) ||
+        roles.length <= 0 ||
+        stringIsNullOrEmpty(firstName) ||
+        stringIsNullOrEmpty(lastName) ||
+        stringIsNullOrEmpty(email)
+      ) {
+        if (isInTherapy && suggestedMentalHealthExperts?.length > 0) {
+          toast.error(
+            'Something went wrong! Please check are all fields populated',
+            {
+              autoClose: 1500,
+              position: 'bottom-right',
+            }
+          )
+          return
+        }
+      }
+
+      if (isInTherapy) {
+        sendData = {
+          username,
+          password,
+          regularUser: {
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            isInTherapy: isInTherapy,
+            mentalHealthExpertsToConnectWithIds: selectedMentalHealthExpertIds,
+          },
+          isMentalHealthExpert: false,
+          roles,
+        }
+      } else {
+        sendData = {
+          username,
+          password,
+          regularUser: {
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            isInTherapy: isInTherapy,
+            mentalHealthExpertsToConnectWithIds: [],
+          },
+          isMentalHealthExpert: false,
+          roles,
+        }
+      }
     }
 
-    let form = new FormData()
+    console.log('SEND DATA ', sendData)
+
     for (let dataKey in sendData) {
       if (dataKey === 'mentalHealthExpert') {
         for (let previewKey in sendData[dataKey]) {
@@ -106,55 +172,30 @@ export const Register = () => {
         }
       } else {
         form.append(dataKey, sendData[dataKey])
-      }
-    }
-
-    console.log('Form ', form)
-
-    if (isMentalHealthExpert === true) {
-      if (
-        stringIsNullOrEmpty(form.get('username')) ||
-        stringIsNullOrEmpty(form.get('password')) ||
-        form.get('roles').length <= 0 ||
-        stringIsNullOrEmpty(sendData.mentalHealthExpert.firstName) ||
-        stringIsNullOrEmpty(sendData.mentalHealthExpert.lastName) ||
-        stringIsNullOrEmpty(sendData.mentalHealthExpert.organization) ||
-        stringIsNullOrEmpty(sendData.mentalHealthExpert.phoneNumber)
-      ) {
-        toast.error(
-          'Something went wrong! Please check are all fields populated',
-          {
-            autoClose: 1500,
-            position: 'bottom-right',
+        if (dataKey === 'regularUser') {
+          for (let previewKey in sendData[dataKey]) {
+            form.append(
+              `regularUser[${previewKey}]`,
+              sendData[dataKey][previewKey]
+            )
           }
-        )
-        return
+        }
       }
     }
 
-    if (isMentalHealthExpert !== true) {
-      if (
-        stringIsNullOrEmpty(form.get('username')) ||
-        stringIsNullOrEmpty(form.get('password')) ||
-        form.get('roles').length <= 0
-      ) {
-        toast.error(
-          'Something went wrong! Please check are all fields populated',
-          {
-            autoClose: 1500,
-            position: 'bottom-right',
-          }
-        )
-        return
-      }
-    }
+    // console.log('Register object ', Object.fromEntries(form.entries()))
 
     dispatch(register(form)).then((response) => {
       let statusCode = response.payload.statusCode
       if (statusCode === 201) {
+        dispatch(setSelectedMentalHealthExpertIds([]))
         navigate('/login')
       }
     })
+
+    // selectedRoles.forEach((role) => {
+    //   roles.push(role.value)
+    // })
   }
 
   return (
@@ -192,28 +233,290 @@ export const Register = () => {
           </div>
         </div>
         {isMentalHealthExpert !== true && (
-          <div>
-            <label className="form-field-label" htmlFor="register-roles">
-              User type:
-            </label>
-            <br />
-            {dbRoles?.length > 0 &&
-              dbRoles?.map((role) => {
-                return (
-                  <div key={role.id}>
-                    <input
-                      type="checkbox"
-                      name="db-role"
-                      id="db-role"
-                      value={role.id}
+          <div className="register-info-main-container">
+            <div className="register-info-more-info">
+              <div className="register-info-first-name-container">
+                <label
+                  htmlFor="register-first-name"
+                  className="form-field-label"
+                >
+                  First Name:
+                  <span className="required-field"> *</span>
+                </label>
+                <input
+                  id="register-first-name"
+                  type="text"
+                  name="register-first-name"
+                  className="form-field"
+                  placeholder="Enter your first name..."
+                />
+              </div>
+
+              <div className="register-info-last-name-container">
+                <label
+                  htmlFor="register-last-name"
+                  className="form-field-label"
+                >
+                  Last Name:
+                  <span className="required-field"> *</span>
+                </label>
+                <input
+                  id="register-last-name"
+                  type="text"
+                  name="register-last-name"
+                  className="form-field"
+                  placeholder="Enter your last name..."
+                />
+              </div>
+
+              <div className="register-info-email-container">
+                <label htmlFor="register-email" className="form-field-label">
+                  Email:
+                  <span className="required-field"> *</span>
+                </label>
+                <input
+                  id="register-email"
+                  type="text"
+                  name="register-email"
+                  className="form-field"
+                  placeholder="Enter your email..."
+                />
+              </div>
+            </div>
+
+            <div className="register-info-in-therapy-container">
+              <label htmlFor="register-in-therapy" className="form-field-label">
+                In therapy?
+              </label>
+              <input
+                className="register-in-therapy-checkbox"
+                type="checkbox"
+                checked={isInTherapy}
+                onChange={() => {
+                  setIsInTherapy(!isInTherapy)
+                }}
+              />
+            </div>
+
+            {isInTherapy && (
+              <div className="select-mental-health-experts-main-container">
+                <label className="form-field-label">
+                  Choose your expert(s):
+                </label>
+                <span className="required-field"> *</span>
+                <p className="select-mental-health-experts-main-container-important-note">
+                  NOTE: You can choose the max of 2 experts at time...
+                </p>
+
+                <div className="main-mental-health-expert-picker-container">
+                  <label
+                    className="form-field-label main-mental-health-expert-picker-choose-label"
+                    onClick={() => {
+                      let mainMentalHealthExpertPicker =
+                        document.getElementById(
+                          'main-mental-health-expert-picker'
+                        )
+                      let mainMentalHealthExpertExpandIcon =
+                        document.getElementById(
+                          'main-mental-health-expert-expand-icon'
+                        )
+
+                      if (
+                        mainMentalHealthExpertPicker.classList.contains(
+                          'main-mental-health-expert-picker-shrinked'
+                        )
+                      ) {
+                        mainMentalHealthExpertPicker.classList.remove(
+                          'main-mental-health-expert-picker-shrinked'
+                        )
+                        mainMentalHealthExpertExpandIcon.classList.remove(
+                          'main-mental-health-expert-expand-icon'
+                        )
+
+                        mainMentalHealthExpertPicker.classList.add(
+                          'main-mental-health-expert-picker-expanded'
+                        )
+                        mainMentalHealthExpertExpandIcon.classList.add(
+                          'main-mental-health-expert-expand-icon-clicked'
+                        )
+                      } else if (
+                        mainMentalHealthExpertPicker.classList.contains(
+                          'main-mental-health-expert-picker-expanded'
+                        )
+                      ) {
+                        mainMentalHealthExpertPicker.classList.remove(
+                          'main-mental-health-expert-picker-expanded'
+                        )
+                        mainMentalHealthExpertExpandIcon.classList.remove(
+                          'main-mental-health-expert-expand-icon-clicked'
+                        )
+
+                        mainMentalHealthExpertPicker.classList.add(
+                          'main-mental-health-expert-picker-shrinked'
+                        )
+                        mainMentalHealthExpertExpandIcon.classList.add(
+                          'main-mental-health-expert-expand-icon'
+                        )
+                      }
+                    }}
+                  >
+                    Main expert{' '}
+                    <TiArrowSortedDown
+                      id="main-mental-health-expert-expand-icon"
+                      className="main-mental-health-expert-expand-icon"
                     />
-                    <label className="form-field-label" htmlFor="db-role-name">
-                      {role.name}
-                    </label>
-                    <br />
-                  </div>
-                )
-              })}
+                  </label>
+
+                  <MentalHealthExpertsDropdown />
+
+                  {/* <div
+                    id="main-mental-health-expert-picker"
+                    className="main-mental-health-expert-picker-shrinked"
+                  >
+                    {suggestedMentalHealthExperts?.map((expert) => {
+                      let fullName = `${expert?.firstName} ${expert?.lastName}`
+                      return (
+                        <div
+                          key={expert?.userId}
+                          className="main-mental-health-expert-selected-picker-option"
+                        >
+                          <div className="main-mental-health-expert-picker-option main-mental-health-expert-picker-option-expanded">
+                            <input
+                              id="main-mental-health-expert-picker-option-id"
+                              type="hidden"
+                              placeholder={expert?.userId}
+                              value={expert?.userId}
+                            />
+                            <span className="main-mental-health-expert-picker-option-name">
+                              {fullName}{' '}
+                            </span>
+                            <button
+                              className="main-mental-health-expert-picker-option-action picker-option-add-action"
+                              type="button"
+                              onClick={(e) => {
+                                let mainMentalHealthExpertSelectedPickerOption =
+                                  e.currentTarget.parentNode.parentNode
+
+                                let pickedMentalHealthExpertId =
+                                  mainMentalHealthExpertSelectedPickerOption.querySelector(
+                                    '#main-mental-health-expert-picker-option-id'
+                                  ).value
+
+                                let optionAddAction =
+                                  mainMentalHealthExpertSelectedPickerOption.querySelector(
+                                    '.picker-option-add-action'
+                                  )
+                                let optionCancelAction =
+                                  mainMentalHealthExpertSelectedPickerOption.querySelector(
+                                    '.picker-option-cancel-action'
+                                  )
+
+                                let selectedMentalHealthExpertIdsTemp = [
+                                  ...selectedMentalHealthExpertIds,
+                                ]
+
+                                mainMentalHealthExpertSelectedPickerOption.classList.add(
+                                  'main-mental-health-expert-selected-picker-option-active'
+                                )
+
+                                optionAddAction.style.display = 'none'
+                                optionCancelAction.style.display = 'initial'
+
+                                selectedMentalHealthExpertIdsTemp = [
+                                  ...selectedMentalHealthExpertIdsTemp,
+                                  parseInt(pickedMentalHealthExpertId),
+                                ]
+
+                                setSelectedMentalHealthExpertIds(
+                                  selectedMentalHealthExpertIdsTemp
+                                )
+                                return
+                              }}
+                            >
+                              + Add
+                            </button>
+                            <button
+                              className="main-mental-health-expert-picker-option-action picker-option-cancel-action"
+                              type="button"
+                              onClick={(e) => {
+                                let mainMentalHealthExpertSelectedPickerOption =
+                                  e.currentTarget.parentNode.parentNode
+
+                                let pickedMentalHealthExpertId =
+                                  mainMentalHealthExpertSelectedPickerOption.querySelector(
+                                    '#main-mental-health-expert-picker-option-id'
+                                  ).value
+
+                                let optionAddAction =
+                                  mainMentalHealthExpertSelectedPickerOption.querySelector(
+                                    '.picker-option-add-action'
+                                  )
+                                let optionCancelAction =
+                                  mainMentalHealthExpertSelectedPickerOption.querySelector(
+                                    '.picker-option-cancel-action'
+                                  )
+
+                                let selectedMentalHealthExpertIdsTemp = [
+                                  ...selectedMentalHealthExpertIds,
+                                ]
+
+                                mainMentalHealthExpertSelectedPickerOption.classList.remove(
+                                  'main-mental-health-expert-selected-picker-option-active'
+                                )
+
+                                optionCancelAction.style.display = 'none'
+                                optionAddAction.style.display = 'initial'
+
+                                selectedMentalHealthExpertIdsTemp = [
+                                  ...selectedMentalHealthExpertIdsTemp,
+                                ].filter(
+                                  (mentalHealthExpert) =>
+                                    mentalHealthExpert !==
+                                    parseInt(pickedMentalHealthExpertId)
+                                )
+
+                                setSelectedMentalHealthExpertIds(
+                                  selectedMentalHealthExpertIdsTemp
+                                )
+                              }}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div> */}
+                </div>
+              </div>
+            )}
+
+            {/* <div>
+              <label className="form-field-label" htmlFor="register-roles">
+                User type:
+              </label>
+              <br />
+              {dbRoles?.length > 0 &&
+                dbRoles?.map((role) => {
+                  return (
+                    <div key={role.id}>
+                      <input
+                        type="checkbox"
+                        name="db-role"
+                        id="db-role"
+                        value={role.id}
+                      />
+                      <label
+                        className="form-field-label"
+                        htmlFor="db-role-name"
+                      >
+                        {role.name}
+                      </label>
+                      <br />
+                    </div>
+                  )
+                })}
+            </div> */}
           </div>
         )}
 

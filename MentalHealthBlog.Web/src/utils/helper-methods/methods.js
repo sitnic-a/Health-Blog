@@ -316,3 +316,20 @@ export const checkNewAssignmentValidity = (assignmentRequest) => {
   }
   return true
 }
+
+export const setActiveMyMentalHealthExpertFilterActionTab = (element) => {
+  var myMentalHealthExpertsFilterActions = document.querySelectorAll(
+    '.my-mental-health-experts-filter-action'
+  )
+  myMentalHealthExpertsFilterActions.forEach((filterAction) => {
+    if (
+      filterAction?.classList?.contains(
+        'my-mental-health-experts-active-filter'
+      )
+    ) {
+      filterAction?.classList?.remove('my-mental-health-experts-active-filter')
+    }
+  })
+
+  element.currentTarget.classList.add('my-mental-health-experts-active-filter')
+}

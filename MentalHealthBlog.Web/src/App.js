@@ -24,6 +24,8 @@ import { windowResize } from './utils/helper-methods/methods'
 import { application } from './application'
 import { Assignments } from './components/shared/Assignments'
 import { NotFound } from './pages/exceptions/NotFound/NotFound'
+import { Requests } from './components/mental-expert-dashboard/therapy/requests/Requests'
+import { MyMentalHealthExperts } from './components/my-experts/MyMentalHealthExperts/MyMentalHealthExperts'
 
 function App() {
   windowResize(application.layouts.min_screen_single_col_width)
@@ -57,6 +59,8 @@ function App() {
               ></Route>
               <Route path="/create-assignment" element={<CreateAssignment />} />
               <Route path="/assignments/user/:id" element={<Assignments />} />
+              <Route path="/my-experts/" element={<MyMentalHealthExperts />} />
+              <Route path="/therapy/requests" element={<Requests />} />
             </Route>
 
             <Route path="*" element={<NotFound />} />

@@ -5,6 +5,7 @@ namespace MentalHealthBlog.API.Services
 {
     public interface IMentalExpertService
     {
+        public Task<Response> GetMentalHealthExperts(SearchExpertDto? request);
         public Task<Response> GetSharesPerUser(ExpertSearchContentDto query);
         public Task<Response> CreateAssignment(CreateAssignmentDto request); 
     }

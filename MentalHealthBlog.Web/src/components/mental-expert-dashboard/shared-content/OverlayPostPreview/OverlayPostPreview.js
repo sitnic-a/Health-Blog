@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux'
+import moment from 'moment'
 import { setOverlayPost } from '../../../../redux-toolkit/features/mentalExpertSlice'
-import { formatDateToString } from '../../../../utils/helper-methods/methods'
 
 import { PostTags } from '../../../PostTags/PostTags'
 import { PostEmotions } from '../../../PostEmotions/PostEmotions'
@@ -13,7 +13,7 @@ export const OverlayPostPreview = (props) => {
 
   let createdAt
   if (contentPost !== null || contentPost !== undefined) {
-    createdAt = formatDateToString(contentPost?.createdAt)
+    createdAt = moment(contentPost?.createdAt, 'YYYYMMDDHHmmss').fromNow()
   }
 
   return (

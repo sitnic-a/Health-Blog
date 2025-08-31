@@ -18,6 +18,13 @@ namespace MentalHealthBlog.API.Controllers
             _mentalExpertService = mentalExpertService;
         }
 
+        [HttpPost("experts")]
+        public async Task<Response> GetExperts([FromBody] SearchExpertDto? request = null)
+        {
+            return await _mentalExpertService.GetMentalHealthExperts(request);
+        }
+
+
         [HttpGet("shares-per-user")]
         [Authorize(Roles= "Psychologist / Psychotherapist")]
         public async Task<Response> GetSharesPerUser([FromQuery] ExpertSearchContentDto query)

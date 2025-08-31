@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import moment from 'moment'
 import {
   setIsSharingExporting,
   setPost,
@@ -10,10 +11,7 @@ import {
   resetSharesPerMentalHealthExpert,
   revokeContentPermission,
 } from '../../redux-toolkit/features/regularUserSlice'
-import {
-  formatDateToString,
-  getSelectedPosts,
-} from '../../utils/helper-methods/methods'
+import { getSelectedPosts } from '../../utils/helper-methods/methods'
 
 import { showTags, showEmotions } from '../../utils/helper-methods/postHelper'
 import { PostTags } from '../PostTags/PostTags'
@@ -40,8 +38,8 @@ export const Post = (props) => {
   let { authenticatedUser } = useSelector((store) => store.user)
 
   //Helpers
-  let createdAt = formatDateToString(post?.createdAt)
-  let sharedAt = formatDateToString(post?.sharedAt)
+  let createdAt = moment(post?.createdAt, 'YYYYMMDDhhmmss').fromNow()
+  let sharedAt = moment(post?.sharedAt, 'YYYYMMDDHHmmss').fromNow()
 
   return (
     <div

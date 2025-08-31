@@ -14,6 +14,7 @@ namespace MentalHealthBlog.API.Middlewares
             {
                 case KeyNotFoundException
                     or RecordNotFoundException
+                    or EmptyListException
                     or FileNotFoundException:
                     code = HttpStatusCode.NotFound;
                     break;

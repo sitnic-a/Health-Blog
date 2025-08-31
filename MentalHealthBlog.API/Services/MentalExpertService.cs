@@ -37,6 +37,108 @@ namespace MentalHealthBlog.API.Services
         }
 
 
+        public async Task<Response> GetMentalHealthExperts(SearchExpertDto? request)
+        {
+            try
+            {
+                var mentalHealthExperts = new List<MentalHealthExpertDto>();
+                List<MentalHealthExpert> dbMentalHealthExperts = new List<MentalHealthExpert>();
+                List<TherapyMentalHealthExpertDto> dbMentalHealthExpertsCombinedWithTherapies = new List<TherapyMentalHealthExpertDto>();
+                List<TherapyRequest> dbUsersMentalHealthExperts = new List<TherapyRequest>();
+                if (request is not null)
+                {
+                    dbMentalHealthExpertsCombinedWithTherapies = await _context.MentalHealthExperts
+                        .Where(mhe => mhe.IsApproved == true)
+                        .Select(mhe => new TherapyMentalHealthExpertDto
+                        {
+                            MentalHealthExpertId = mhe.Id,
+                            MentalHealthExpertUserId = mhe.UserId,
+                            FirstName = mhe.FirstName,
+                            LastName = mhe.LastName,
+                            Organization = mhe.Organization,
+                            PhoneNumber = mhe.PhoneNumber,
+                            Email = mhe.Email,
+                            PhotoAsFile = mhe.PhotoAsFile,
+                            PhotoAsPath = mhe.PhotoAsPath,
+                            RequestStatus = RequestStatusEnum.Undefined,
+                            RegularUserId = request.LoggedUserId
+                        })
+                        .ToListAsync();
+
+                    dbUsersMentalHealthExperts = await _context.TherapyRequests
+                        .Where(tr => tr.RegularUserId == request.LoggedUserId)
+                        .ToListAsync();
+
+                    foreach (var mentalHealthExpert in dbMentalHealthExpertsCombinedWithTherapies)
+                    {
+                        var mentalHealthExpertInRequests = dbUsersMentalHealthExperts
+                            .SingleOrDefault(mhe => mhe.MentalHealthExpertId == mentalHealthExpert.MentalHealthExpertUserId && 
+                                             mhe.RegularUserId == request.LoggedUserId);
+
+                        
+                        if (mentalHealthExpertInRequests != null)
+                        {
+                            mentalHealthExpert.RequestStatus = mentalHealthExpertInRequests.RequestStatus;
+                            continue;
+                        }
+                    }
+
+                    dbMentalHealthExpertsCombinedWithTherapies = dbMentalHealthExpertsCombinedWithTherapies
+                        .Where(mhe => mhe.RequestStatus == RequestStatusEnum.Undefined || 
+                               mhe.RequestStatus == RequestStatusEnum.Declined)                        
+                        .DistinctBy(mhe => mhe.MentalHealthExpertUserId)
+                        .ToList();
+
+                    if (!dbMentalHealthExpertsCombinedWithTherapies.Any())
+                    {
+                        _mentalExpertLoggerService.LogWarning($"EXPERTS: {MentalExpertServiceLogTypes.EMPTY.ToString()}");
+                        throw new EmptyListException("No records found in database");
+                    }
+
+                    _mentalExpertLoggerService.LogInformation($"EXPERTS: {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
+                    return new Response(dbMentalHealthExpertsCombinedWithTherapies, StatusCodes.Status200OK, $"EXPERTS: {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
+                }
+
+                dbMentalHealthExperts = await _context.MentalHealthExperts
+                    .OrderByDescending(mhe => mhe.FirstName)
+                    .Where(mhe => mhe.IsApproved == true)
+                    .ToListAsync();
+
+                if (!dbMentalHealthExperts.Any())
+                {
+                    _mentalExpertLoggerService.LogWarning($"EXPERTS: {MentalExpertServiceLogTypes.EMPTY.ToString()}");
+                    throw new EmptyListException("No records found in database");
+                }
+
+                foreach (var dbMentalHealthExpert in dbMentalHealthExperts)
+                {
+                    var mentalHealthExpertDto = _mapper.Map<MentalHealthExpertDto>(dbMentalHealthExpert);
+
+                    if (mentalHealthExpertDto == null)
+                    {
+                        _mentalExpertLoggerService.LogWarning($"EXPERTS: {MentalExpertServiceLogTypes.NOT_FOUND.ToString()}");
+                        throw new EmptyListException("Mental health expert doesn't exist");
+                    }
+                    mentalHealthExperts.Add(mentalHealthExpertDto);
+                }
+
+                if (!mentalHealthExperts.Any())
+                {
+                    _mentalExpertLoggerService.LogWarning($"EXPERTS: {MentalExpertServiceLogTypes.EMPTY.ToString()}");
+                    throw new EmptyListException("Experts are not found!");
+                }
+
+                _mentalExpertLoggerService.LogInformation($"EXPERTS: {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
+                return new Response(mentalHealthExperts, StatusCodes.Status200OK, $"EXPERTS: {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
+            }
+            catch (Exception e)
+            {
+                _mentalExpertLoggerService.LogError($"EXPERTS: {e.Message}", e);
+                throw;
+            }
+
+        }
+
         public async Task<Response> GetSharesPerUser(ExpertSearchContentDto query)
         {
             try
@@ -51,10 +153,12 @@ namespace MentalHealthBlog.API.Services
                     .SingleOrDefaultAsync(mhe => mhe.UserId == query.LoggedExpertId);
 
                 var dbShares = await _context.Shares
-                    .Where(mhe => mhe.SharedWithId == mentalHealthExpert.Id)
+                    .Where(mhe => mhe.SharedWithId == mentalHealthExpert.Id && 
+                                  mhe.IsKeepingContent == null)
                     .Include(p => p.SharedPost)
                     .Include(u => u.SharedPost.User)
                     .ToListAsync();
+
                 var isSharedWithThisMentalHealthExpert = dbShares.Any();
 
                 if (!isSharedWithThisMentalHealthExpert)
@@ -87,7 +191,7 @@ namespace MentalHealthBlog.API.Services
 
                 _mentalExpertLoggerService.LogInformation($"SHARES-PER-USER: {MentalExpertServiceLogTypes.SUCCESS.ToString()}", sharesPerUser);
                 return new Response(sharesPerUser, StatusCodes.Status200OK, MentalExpertServiceLogTypes.SUCCESS.ToString());
-                
+
             }
             catch (Exception e)
             {
@@ -114,7 +218,7 @@ namespace MentalHealthBlog.API.Services
                     throw new RecordNotFoundException("Couldn't create an assignment!");
                 }
 
-                var newAssignment = new Assignment(request.AssignmentGivenToId, dbMentalHealthExpert.Id, request.Content, DateTime.Now);
+                var newAssignment = new Assignment(request.AssignmentGivenToId, dbMentalHealthExpert.Id, request.Content, DateTime.UtcNow);
 
                 if (newAssignment == null)
                 {
@@ -163,7 +267,7 @@ namespace MentalHealthBlog.API.Services
                             _mentalExpertLoggerService.LogWarning($"SHARES-PER-USER: {MentalExpertServiceLogTypes.NOT_FOUND.ToString()}");
                             throw new RecordNotFoundException("Shares aren't populated properly!");
                         }
-                        
+
                         sharesPerUser.Add(new SharesPerUserDto(userThatSharedContent, contentUserShared));
                         continue;
                     }
@@ -180,6 +284,7 @@ namespace MentalHealthBlog.API.Services
                 throw;
             }
         }
+
     }
 }
 

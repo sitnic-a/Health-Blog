@@ -12,8 +12,8 @@ namespace MentalHealthBlog.API.Utils
     {
         public async Task<FileDto> CreatePdfFile(List<PostDto> posts)
         {
-            string date = DateTime.Now.ToString("ddMMyyyy");
-            string time = DateTime.Now.ToString("Hmmss");
+            string date = DateTime.UtcNow.ToString("ddMMyyyy");
+            string time = DateTime.UtcNow.ToString("Hmmss");
             string fileName = $"exported-posts {date}-{time}.pdf";
             string currentDir = Environment.CurrentDirectory;
             string fileDirectory = System.IO.Directory.GetCurrentDirectory();

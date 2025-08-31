@@ -10,6 +10,7 @@ namespace MentalHealthBlog.API.Models
         public MentalHealthExpert AssignmentGivenBy { get; set; }
         public int AssignmentGivenById { get; set; }
         public string Content { get; set; }
+        [NpgsqlTypes.PgName("TIMESTAMP")]
         public DateTime CreatedAt { get; set; }
 
         public Assignment(int assignmentGivenToId, int assignmentGivenById, string content, DateTime createdAt)

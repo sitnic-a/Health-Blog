@@ -1,0 +1,138 @@
+.my-expert-main-container {
+  max-width: 300px;
+  min-height: 400px;
+  box-sizing: border-box;
+  border-radius: 0.6rem;
+  border: none;
+  background: #f3f1e3;
+}
+
+.my-expert-container {
+  padding: 1rem;
+}
+
+.my-expert-photo-container {
+  max-width: 150px;
+  max-height: 150px;
+  margin: auto;
+  overflow: hidden;
+  border-radius: 360px;
+}
+
+.my-expert-photo {
+  max-width: 150px;
+  width: 100%;
+  border-radius: 360px;
+}
+
+.my-expert-username-field {
+  font-family: 'Klee One';
+  font-size: 0.95em;
+  font-weight: 600;
+  text-align: center;
+}
+
+.my-expert-additional-information-container {
+  padding-inline: 1.3rem;
+}
+
+@media (width<=400px) {
+  .my-expert-additional-information-container {
+    padding-inline: 1rem;
+  }
+}
+
+.my-expert-field-container {
+  display: flex;
+  column-gap: 0.3rem;
+  align-items: center;
+}
+
+.my-expert-field {
+  font-family: 'Klee One';
+  font-weight: 600;
+}
+
+.my-expert-field-value {
+  max-width: 200px;
+  word-wrap: break-word;
+  font-family: 'Klee One';
+  margin-block: 0.2rem;
+}
+
+.my-expert-first-name-value {
+  max-width: 120px;
+  word-break: break-all;
+}
+
+@media (width<=400px) {
+  .my-expert-first-name-value {
+    max-width: 140px;
+    word-break: break-all;
+  }
+}
+
+.my-expert-last-name-value {
+  max-width: 120px;
+  word-break: break-all;
+}
+
+@media (width<=400px) {
+  .my-expert-last-name-value {
+    max-width: 140px;
+    word-break: break-all;
+  }
+}
+
+.my-expert-organization-value {
+  max-width: 120px;
+  word-break: break-all;
+}
+
+@media (width<=400px) {
+  .my-expert-organization-value {
+    max-width: 140px;
+    word-break: break-all;
+  }
+}
+
+.my-expert-email-value {
+  max-width: 170px;
+  word-break: break-all;
+}
+
+@media (width<=400px) {
+  .my-expert-email-value {
+    max-width: 210px;
+    word-break: break-all;
+  }
+}
+
+.my-expert-actions {
+  /* background: blue; */
+  margin-block: 1rem;
+  text-align: center;
+}
+
+.my-expert-stop-sharing-action {
+  width: 100%;
+  padding: 0.7rem 2rem;
+  font-family: 'Klee One';
+  border-radius: 0.5rem;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: 200ms;
+  color: #f3f1e3;
+  background: #c93232;
+}
+
+.my-expert-stop-sharing-action:hover {
+  background: #a02929;
+}
+
+@media (width<=400px) {
+  .my-expert-stop-sharing-action {
+    padding: 0.7rem 1rem;
+  }
+}

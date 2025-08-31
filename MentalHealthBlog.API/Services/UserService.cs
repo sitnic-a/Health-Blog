@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MentalHealthBlog.API.Exceptions;
+using MentalHealthBlog.API.ExtensionMethods.ExtensionRegularUserClass;
 using MentalHealthBlog.API.ExtensionMethods.ExtensionUserClass;
 using MentalHealthBlog.API.Methods;
 using MentalHealthBlog.API.Models;
@@ -12,6 +13,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
+
+#pragma warning disable CS8602,CS8604
 
 namespace MentalHealthBlog.API.Services
 {
@@ -149,6 +152,52 @@ namespace MentalHealthBlog.API.Services
                 foreach (var role in newUserRequest.Roles)
                 {
                     await _context.UserRoles.AddAsync(new UserRole(user.Id, int.Parse(role.ToString())));
+                }
+
+                List<string> mentalHealthExpertsId = new List<string>();
+
+                if (newUserRequest.IsMentalHealthExpert == false)
+                {
+                    if (newUserRequest?.RegularUser != null)
+                    {
+                        var newRegularUserRequest = newUserRequest?.RegularUser;
+                        if (RegularUserExtension.IsValid(newRegularUserRequest))
+                        {
+                            var mentalHealthExpertsToConnectWithId = newRegularUserRequest?.MentalHealthExpertsToConnectWithIds;
+                            var hasSelectedMentalHealthExperts = mentalHealthExpertsToConnectWithId.Any() && 
+                                !mentalHealthExpertsToConnectWithId.Any(e => e == null );
+                            if (hasSelectedMentalHealthExperts)
+                            {
+                                mentalHealthExpertsId = mentalHealthExpertsToConnectWithId[0]
+                                   .Split(',')
+                                   .ToList();
+
+                                mentalHealthExpertsId.Cast<int>();
+                            }
+
+                            var regularUser = new RegularUser(user.Id, newRegularUserRequest.FirstName, newRegularUserRequest.LastName, newRegularUserRequest.Email);
+                            await _context.RegularUsers.AddAsync(regularUser);
+                            await _context.SaveChangesAsync();
+
+                            if (newRegularUserRequest.IsInTherapy == true && hasSelectedMentalHealthExperts)
+                            {
+                                foreach (var mentalHealthExpertToConnectWith in mentalHealthExpertsId)
+                                {
+                                    int MentalHealthExpertId = int.Parse(mentalHealthExpertToConnectWith);
+                                    await _context.TherapyRequests.AddAsync(new TherapyRequest(regularUser.UserId, MentalHealthExpertId));
+                                }
+                                await _context.SaveChangesAsync();
+                                _userLoggerService.LogInformation($"REGISTER: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", user);
+                                return new Response(new SignedUserDto(user.Id, user.Username), StatusCodes.Status201Created, UserServiceLogTypes.USER_SUCCESFULL.ToString());
+                            }
+                            _userLoggerService.LogInformation($"REGISTER: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", user);
+                            return new Response(new SignedUserDto(user.Id, user.Username), StatusCodes.Status201Created, UserServiceLogTypes.USER_SUCCESFULL.ToString());
+                        }
+                        _userLoggerService.LogError($"REGISTER: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", new { RegularUser = newRegularUserRequest });
+                        throw new CreateRecordException("New user couldn't be created!");
+                    }
+                    _userLoggerService.LogError($"REGISTER: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", new { Username = newUserRequest.Username, Password = newUserRequest.Password });
+                    throw new ArgumentException("Bad request while register!");
                 }
 
                 if (newUserRequest.IsMentalHealthExpert == true)
@@ -292,7 +341,7 @@ namespace MentalHealthBlog.API.Services
                                             .FirstOrDefaultAsync(t => t.Token == logoutRequest.RefreshToken);
                         if (refreshToken is not null)
                         {
-                            refreshToken.RevokedAt = DateTime.UtcNow.AddHours(1);
+                            refreshToken.RevokedAt = DateTime.UtcNow;
 
                             var dbRefreshTokensByLoggedUser = _context.RefreshTokens
                                                 .Where(rt => rt.UserId == logoutRequest.UserId);

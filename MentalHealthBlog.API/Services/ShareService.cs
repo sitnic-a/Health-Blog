@@ -4,6 +4,7 @@ using MentalHealthBlog.API.Methods;
 using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
+using MentalHealthBlog.API.Services.Therapy;
 using MentalHealthBlogAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -23,13 +24,15 @@ namespace MentalHealthBlog.API.Services
     public class ShareService : IShareService
     {
         private readonly DataContext _context;
+        private readonly ITherapyRequestService _therapyRequestService;
         private readonly ILogger<IShareService> _shareLoggerService;
         private const string _ADMIN_ROLE = "Administrator";
         private const string _USER_ROLE = "User";
 
-        public ShareService(DataContext context, ILogger<IShareService> shareLoggerService)
+        public ShareService(DataContext context, ITherapyRequestService therapyRequestService, ILogger<IShareService> shareLoggerService)
         {
             _context = context;
+            _therapyRequestService = therapyRequestService;
             _shareLoggerService = shareLoggerService;
         }
 
@@ -65,14 +68,14 @@ namespace MentalHealthBlog.API.Services
                         var tags = await convertHelper.CallReturnPostTagsAsync(post.Id);
                         var emotions = await convertHelper.CallReturnPostEmotionsAsync(post.Id);
                         var postDto = new PostDto(post.Id, post.Title, post.Content, post.UserId, post.CreatedAt, tags, emotions);
-                        postDto.SharedAt = DateTime.Now;
+                        postDto.SharedAt = DateTime.UtcNow;
 
                         if (postDto == null)
                         {
                             _shareLoggerService.LogWarning($"LINK/shareId: {ShareServiceLogTypes.NOT_FOUND.ToString()}");
                             throw new RecordNotFoundException("Content not shared properly!");
                         }
-                        
+
                         sharedContent.Add(postDto);
                         continue;
                     }
@@ -86,7 +89,7 @@ namespace MentalHealthBlog.API.Services
                     _shareLoggerService.LogWarning($"LINK/shareId: {ShareServiceLogTypes.NOT_FOUND.ToString()}");
                     throw new RecordNotFoundException("Content not retrieved properly!");
                 }
-                
+
                 _shareLoggerService.LogInformation($"LINK/shareId: {ShareServiceLogTypes.SUCCESS.ToString()}", sharedContent);
                 return new Response(sharedContent, StatusCodes.Status200OK, ShareServiceLogTypes.SUCCESS.ToString());
             }
@@ -152,53 +155,45 @@ namespace MentalHealthBlog.API.Services
                 throw;
             }
         }
-        public async Task<Response> GetExpertsAndRelatives()
+        public async Task<Response> GetExpertsAndRelatives(SearchTherapyRequestDto query)
         {
             try
             {
-                var dbMentalHealthExperts = await _context.MentalHealthExperts
-                    .Where(mhe => mhe.IsApproved)
-                    .ToListAsync();
+                var dbMyExperts = await _therapyRequestService.GetMyExperts(query);
+                var myExperts = dbMyExperts.ServiceResponseObject as List<MyExpertDto>;
 
-                var hasRegisteredExpertsInDatabase = dbMentalHealthExperts.Any();
+                var hasRegisteredExpertsInDatabase = myExperts?.Any();
 
-                if (!hasRegisteredExpertsInDatabase)
+                if (hasRegisteredExpertsInDatabase.GetValueOrDefault() == false)
                 {
-                    _shareLoggerService.LogWarning($"EXPERTS-RELATIVES: {ShareServiceLogTypes.EMPTY.ToString()}", dbMentalHealthExperts);
-                    return new Response(dbMentalHealthExperts, StatusCodes.Status200OK, ShareServiceLogTypes.EMPTY.ToString());
+                    _shareLoggerService.LogWarning($"EXPERTS-RELATIVES: {ShareServiceLogTypes.EMPTY.ToString()}", myExperts);
+                    return new Response(myExperts, StatusCodes.Status200OK, ShareServiceLogTypes.EMPTY.ToString());
                 }
 
                 var possibleToShareWith = new List<UserDto>();
 
-                var expertsAndRelatives = _context.UserRoles
-                    .Include(r => r.Role)
-                    .Include(u => u.User)
-                    .Where(ur => ur.Role.Name != _ADMIN_ROLE && ur.Role.Name != _USER_ROLE)
-                    .GroupBy(ur => ur.UserId);
-
-                var hasRegisteredExpertsOrRelativesInDatabase = expertsAndRelatives.Any();
-
-                if (!hasRegisteredExpertsOrRelativesInDatabase)
-                {
-                    _shareLoggerService.LogWarning($"EXPERTS-RELATIVES: {ShareServiceLogTypes.EMPTY.ToString()}", expertsAndRelatives);
-                    throw new RecordNotFoundException("Experts couldn't be fetched!");
-                }
-
                 var dbUserRoles = new List<Role>();
                 MentalHealthExpert mentalHealthExpert = new MentalHealthExpert();
+                var userHelper = new UserHelper(_context);
 
-                foreach (var item in expertsAndRelatives)
+                foreach (var item in myExperts)
                 {
-                    mentalHealthExpert = dbMentalHealthExperts.FirstOrDefault(mhe => mhe.UserId == item.Key);
-                    dbUserRoles = item?.Select(r => new Role(r.RoleId, r.Role.Name)).ToList();
+                    mentalHealthExpert = myExperts
+                        .FirstOrDefault(mhe => mhe.MentalHealthExpertUserId == item.MentalHealthExpertUserId).MentalHealthExpert;
 
-                    if (mentalHealthExpert == null || dbUserRoles.IsNullOrEmpty())
+                    if (mentalHealthExpert == null)
                         continue;
 
                     var mentalHealthExpertAsUser = await _context.Users
-                        .FindAsync(mentalHealthExpert.UserId);
+                    .FindAsync(mentalHealthExpert.UserId);
 
                     if (mentalHealthExpertAsUser == null)
+                        continue;
+
+                    dbUserRoles = await userHelper
+                        .GetUserRolesAsync(new UserDto(mentalHealthExpertAsUser.Id, mentalHealthExpertAsUser.Username));
+
+                    if (dbUserRoles == null || !dbUserRoles.Any())
                         continue;
 
                     possibleToShareWith.Add(new UserDto
@@ -217,14 +212,12 @@ namespace MentalHealthBlog.API.Services
                     });
                 }
 
-                if (hasRegisteredExpertsInDatabase &&
-                    hasRegisteredExpertsOrRelativesInDatabase &&
-                    !possibleToShareWith.Any())
+                if (hasRegisteredExpertsInDatabase.GetValueOrDefault() == true && !possibleToShareWith.Any())
                 {
                     _shareLoggerService.LogInformation($"EXPERTS-RELATIVES: {ShareServiceLogTypes.NOT_FOUND.ToString()}", possibleToShareWith);
-                    throw new RecordNotFoundException("Experts not fetched properly!");
+                    throw new RecordNotFoundException("Experts couldn't be fetched properly!");
                 }
-
+                
                 _shareLoggerService.LogInformation($"EXPERTS-RELATIVES: {ShareServiceLogTypes.SUCCESS.ToString()}", possibleToShareWith);
                 return new Response(possibleToShareWith, StatusCodes.Status200OK, ShareServiceLogTypes.SUCCESS.ToString());
             }
