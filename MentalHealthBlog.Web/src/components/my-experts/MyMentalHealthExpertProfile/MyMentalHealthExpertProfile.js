@@ -103,6 +103,7 @@ export const MyMentalHealthExpertProfile = (props) => {
                   mentalHealthExpertUserId: expert?.mentalHealthExpertUserId,
                   regularUserId: authenticatedUser?.id,
                   newRequestStatus: requestStatuses.UNDEFINED,
+                  userSendingRequest: false,
                   authenticatedUser,
                 }
                 dispatch(setStopSharingObject(objectWithData))

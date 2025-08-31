@@ -50,6 +50,7 @@ namespace MentalHealthBlog.API.Services
                 if (request is not null)
                 {
                     dbMentalHealthExpertsCombinedWithTherapies = await _context.MentalHealthExperts
+                        .Where(mhe => mhe.IsApproved == true)
                         .Select(mhe => new TherapyMentalHealthExpertDto
                         {
                             MentalHealthExpertId = mhe.Id,
@@ -154,10 +155,12 @@ namespace MentalHealthBlog.API.Services
                     .SingleOrDefaultAsync(mhe => mhe.UserId == query.LoggedExpertId);
 
                 var dbShares = await _context.Shares
-                    .Where(mhe => mhe.SharedWithId == mentalHealthExpert.Id)
+                    .Where(mhe => mhe.SharedWithId == mentalHealthExpert.Id && 
+                                  mhe.IsKeepingContent == null)
                     .Include(p => p.SharedPost)
                     .Include(u => u.SharedPost.User)
                     .ToListAsync();
+
                 var isSharedWithThisMentalHealthExpert = dbShares.Any();
 
                 if (!isSharedWithThisMentalHealthExpert)

@@ -268,6 +268,20 @@ namespace MentalHealthBlog.API.Services.Therapy
                     return new Response(usersMentalHealthExperts.ServiceResponseObject, StatusCodes.Status200OK, $"CHANGE-REQUEST-STATUS: {TherapyRequestLogTypes.SUCCESS.ToString()}");
                 }
 
+                if (request.NewRequestStatus == (int)RequestStatusEnum.Undefined)
+                {
+                    _context.TherapyRequests.Remove(requestToModify);
+                    await _context.SaveChangesAsync();
+                    var searchQuery = new SearchTherapyRequestDto
+                    {
+                        LoggedUserId = request.RegularUserId,
+                        RequestStatus = RequestStatusEnum.Approved
+                    };
+                    var usersMentalHealthExperts = await GetMyExperts(searchQuery);
+                    _therapyRequestLoggerService.LogInformation($"CHANGE-REQUEST-STATUS: {TherapyRequestLogTypes.SUCCESS.ToString()}");
+                    return new Response(usersMentalHealthExperts.ServiceResponseObject, StatusCodes.Status200OK, $"CHANGE-REQUEST-STATUS: {TherapyRequestLogTypes.SUCCESS.ToString()}");
+                }
+
                 requestToModify.RequestStatus = (RequestStatusEnum)request.NewRequestStatus;
                 await _context.SaveChangesAsync();
 
@@ -303,13 +317,7 @@ namespace MentalHealthBlog.API.Services.Therapy
                                .Include(s => s.SharedPost)
                                .ToListAsync();
 
-                        sharedContent = sharedContent
-                            .DistinctBy(s => new
-                            {
-                                s.SharedPostId,
-                                s.SharedWithId
-                            })
-                            .ToList();
+                        sharedContent = sharedContent.ToList();
 
                         if (sharedContent.Any())
                         {
@@ -323,7 +331,7 @@ namespace MentalHealthBlog.API.Services.Therapy
                                     share.IsKeepingContent = false;
                                 }
                                 await _context.SaveChangesAsync();
-                                
+
                                 _therapyRequestLoggerService.LogInformation($"DELETE: {TherapyRequestLogTypes.SUCCESS.ToString()}");
                                 return new Response(new List<Share>(), StatusCodes.Status200OK, $"DELETE: {TherapyRequestLogTypes.SUCCESS.ToString()}");
                             }
