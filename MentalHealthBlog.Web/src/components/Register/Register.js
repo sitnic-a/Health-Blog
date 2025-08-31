@@ -140,7 +140,7 @@ export const Register = () => {
           suggestedMentalHealthExperts?.length > 0 &&
           selectedMentalHealthExpertIds?.length <= 0
         ) {
-          toast.error('Please check are all fields populated and valid', {
+          toast.error('Fields are required or not valid!', {
             autoClose: 1500,
             position: 'bottom-right',
           })

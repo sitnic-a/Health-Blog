@@ -1,7 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { application } from '../../application'
 import { toast } from 'react-toastify'
-import { stringIsNullOrEmpty } from '../../utils/helper-methods/methods'
+import {
+  checkInputDataValidity,
+  stringIsNullOrEmpty,
+} from '../../utils/helper-methods/methods'
 
 let initialState = {
   posts: [],
@@ -54,11 +57,13 @@ export const createPost = createAsyncThunk('post/add/', async (addPostObj) => {
   }
 
   if (
-    stringIsNullOrEmpty(newPost.title) ||
-    stringIsNullOrEmpty(newPost.content) ||
-    newPost.tags.length <= 0
+    stringIsNullOrEmpty(newPost?.title) ||
+    !checkInputDataValidity(newPost?.title) ||
+    stringIsNullOrEmpty(newPost?.content) ||
+    !checkInputDataValidity(newPost?.content) ||
+    newPost?.tags?.length <= 0
   ) {
-    toast.error('Enter required fields!', {
+    toast.error('Fields are required or not valid!', {
       position: 'bottom-right',
     })
     return

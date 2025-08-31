@@ -373,3 +373,13 @@ export const checkEmailValidity = (email) => {
 
   return false
 }
+
+export const checkInputDataValidity = (data) => {
+  let regexPattern = /^(?!.*[<>;'"\\&]).{3,30}$/
+
+  if (regexPattern.test(data)) {
+    return true
+  }
+
+  return false
+}
