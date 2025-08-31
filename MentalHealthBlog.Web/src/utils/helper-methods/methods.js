@@ -67,7 +67,7 @@ export function getSelectedPosts(loggedUser) {
     ).innerHTML
 
     let postDateString = postContainerContent.querySelector(
-      '.post-date > p > span'
+      '.post-date > .post-date-value > span'
     ).innerHTML
 
     let postDate = new Date(postDateString)
@@ -332,4 +332,54 @@ export const setActiveMyMentalHealthExpertFilterActionTab = (element) => {
   })
 
   element.currentTarget.classList.add('my-mental-health-experts-active-filter')
+}
+
+export const checkUsernameValidity = (username) => {
+  let regexPattern = /^(?!.*[<>;'"\\&]).{3,30}$/
+
+  if (regexPattern.test(username)) {
+    return true
+  }
+
+  return false
+}
+
+export const checkPasswordValidity = (password) => {
+  let regexPattern =
+    /^(?!(.)\1)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$/
+
+  if (regexPattern.test(password)) {
+    return true
+  }
+  return false
+}
+
+export const checkPersonalInformationValidity = (personalInfo) => {
+  let regexPattern = /^(?!.*[<>;'"\\&`/]).{2,50}$/
+
+  if (regexPattern.test(personalInfo)) {
+    return true
+  }
+
+  return false
+}
+
+export const checkEmailValidity = (email) => {
+  let regexPattern = /^(?!.*[<>;'"\\]).{1,256}@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/
+
+  if (regexPattern.test(email)) {
+    return true
+  }
+
+  return false
+}
+
+export const checkInputDataValidity = (data) => {
+  let regexPattern = /^(?!.*[<>;'"\\&]).{3,30}$/
+
+  if (regexPattern.test(data)) {
+    return true
+  }
+
+  return false
 }

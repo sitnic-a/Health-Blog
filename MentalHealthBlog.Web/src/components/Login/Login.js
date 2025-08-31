@@ -3,7 +3,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { login, setIsFailed } from '../../redux-toolkit/features/userSlice'
 import { toast } from 'react-toastify'
 import { Loader } from '../shared/Loader/Loader'
-import { stringIsNullOrEmpty } from '../../utils/helper-methods/methods'
+import {
+  checkPasswordValidity,
+  checkUsernameValidity,
+  stringIsNullOrEmpty,
+} from '../../utils/helper-methods/methods'
 
 import LoginCSS from './Login.css'
 
@@ -26,9 +30,11 @@ export const Login = () => {
 
     if (
       stringIsNullOrEmpty(user.username) ||
-      stringIsNullOrEmpty(user.password)
+      !checkUsernameValidity(user.username) ||
+      stringIsNullOrEmpty(user.password) ||
+      !checkPasswordValidity(user.password)
     ) {
-      toast.error('Fields are required', {
+      toast.error('Fields are required or not valid!', {
         autoClose: 1500,
         position: 'bottom-right',
       })

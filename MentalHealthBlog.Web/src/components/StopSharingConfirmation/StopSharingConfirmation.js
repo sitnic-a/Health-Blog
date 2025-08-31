@@ -53,6 +53,7 @@ export const StopSharingConfirmation = () => {
                   }
                 )
                 let request = {
+                  authenticatedUser,
                   mentalHealthExpertId: stopSharingObject?.mentalHealthExpertId,
                   regularUserId: stopSharingObject?.regularUserId,
                   isKeepingContent: false,
@@ -81,6 +82,7 @@ export const StopSharingConfirmation = () => {
                   }
                 )
                 let request = {
+                  authenticatedUser,
                   mentalHealthExpertId: stopSharingObject?.mentalHealthExpertId,
                   regularUserId: stopSharingObject?.regularUserId,
                   isKeepingContent: true,
