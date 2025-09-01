@@ -119,7 +119,7 @@ builder.Services.AddAuthentication(options =>
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
-    var JWTKEY = builder.Configuration.GetValue<string>("Tokens:JWTKEY");
+    var JWTKEY = builder.Configuration.GetValue<string>("Tokens__JWTKEY");
 
     options.RequireHttpsMetadata = false;
     options.SaveToken = true;

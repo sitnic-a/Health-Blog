@@ -346,7 +346,7 @@ export const checkUsernameValidity = (username) => {
 
 export const checkPasswordValidity = (password) => {
   let regexPattern =
-    /^(?!(.)\1)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$/
+    /^(?!.*(.)\1{3,})(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#_])[A-Za-z\d@$!%*?&#_]{10,}$/
 
   if (regexPattern.test(password)) {
     return true
