@@ -3,7 +3,7 @@ services:
     build:
       context: ./MentalHealthBlog.API
     ports:
-      - '5000:5000'
+      - '5150:80'
     environment:
       ConnectionStrings__Postgres: Host=${DB_HOST};Port=${DB_PORT};Username=${DB_USER};Database=${DB_NAME};Password=${DB_PASS}
       Tokens__JWTKEY: ${Tokens__JWTKEY}

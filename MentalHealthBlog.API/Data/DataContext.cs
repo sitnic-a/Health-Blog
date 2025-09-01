@@ -2,6 +2,7 @@
 using MentalHealthBlog.API.Utils.Handlers;
 using MentalHealthBlogAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -14,7 +15,6 @@ namespace MentalHealthBlogAPI.Data
         public DataContext(DbContextOptions<DataContext> options, IConfiguration configuration) : base(options)
         {
             _configuration = configuration;
-            _adminPass = _configuration.GetValue<string>("ADMINPASS");
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
@@ -51,6 +51,10 @@ namespace MentalHealthBlogAPI.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            var _adminPass = _configuration.GetValue<string>("ADMINPASS");
+
+            Debug.WriteLine("ADMIN PASS : ", _adminPass);
+
             base.OnModelCreating(modelBuilder);
 
             if (string.IsNullOrEmpty(_adminPass))
@@ -80,10 +84,6 @@ namespace MentalHealthBlogAPI.Data
             const int __KEYSIZE__ = 128;
             const int __ITERATIONS = 350000;
             HashAlgorithmName __HASHALGORITHM__ = HashAlgorithmName.SHA512;
-
-            var config = new ConfigurationBuilder()
-                            .AddUserSecrets<Program>()
-                            .Build();
 
 
             var salt = RandomNumberGenerator.GetBytes(__KEYSIZE__);

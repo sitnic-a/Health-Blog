@@ -1,5 +1,6 @@
 export const application = {
-  application_url: 'https://localhost:7029/api',
+  // application_url: 'https://localhost:7029/api',
+  application_url: 'http://localhost:5150/api',
   modal_style: {
     overlay: {
       background: '#82a3bc60',
