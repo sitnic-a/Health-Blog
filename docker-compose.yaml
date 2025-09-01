@@ -2,15 +2,25 @@ services:
   mapp.api:
     build:
       context: ./MentalHealthBlog.API
-      dockerfile: ./Dockerfile
     ports:
-      - '8080:8080'
+      - '5000:5000'
     environment:
-        "CONN": ""
+      ConnectionStrings__Postgres=Host=${DB_HOST};Port=${DB_PORT};Username=${DB_USER};Database=${DB_NAME};Password=${DB_PASS}
+      Tokens__JWTKEY=${Tokens__JWTKEY}
+      ADMINPASS=${ADMINPASS}
+    networks:
+      - mappnetwork
+    restart: unless-stopped
   mapp.web:
-    # image: mapp.web
     build:
-      context: MentalHealthBlog.Web
-      dockerfile: ./Dockerfile
+      context: ./MentalHealthBlog.Web
+    depends_on:
+      - mapp.api
     ports:
       - '3000:3000'
+    networks:
+      - mappnetwork
+    restart: unless-stopped
+
+networks:
+  mappnetwork:
