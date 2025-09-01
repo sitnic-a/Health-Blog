@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Npgsql;
+using System.Configuration;
 using System.Text;
 
 #pragma warning disable 8604
@@ -104,13 +105,9 @@ builder.Services.AddDbContext<DataContext>(options =>
     //    .Configuration
     //    .GetConnectionString("DevelopmentConnectionExpress"));
 
-    var POSTGRES_CONNECTION = config["PostgreSQL:CONNECTION"];
-    var POSTRES_PASSWORD = config["PostgreSQL:PASSWORD"];
-    var npsql = new NpgsqlConnectionStringBuilder(POSTGRES_CONNECTION)
-    {
-        Password = POSTRES_PASSWORD
-    };
-
+    var POSTGRES_CONNECTION = builder.Configuration.GetConnectionString("Postgres");
+    var npsql = new NpgsqlConnectionStringBuilder(POSTGRES_CONNECTION);
+    
     options
         .UseNpgsql(npsql.ConnectionString);
 });
@@ -122,7 +119,7 @@ builder.Services.AddAuthentication(options =>
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
-    var JWTKEY = config["JWTKEY"];
+    var JWTKEY = builder.Configuration.GetValue<string>("Tokens:JWTKEY");
 
     options.RequireHttpsMetadata = false;
     options.SaveToken = true;

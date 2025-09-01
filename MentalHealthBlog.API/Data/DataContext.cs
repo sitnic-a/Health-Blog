@@ -9,8 +9,12 @@ namespace MentalHealthBlogAPI.Data
 {
     public class DataContext : DbContext
     {
-        public DataContext(DbContextOptions<DataContext> options) : base(options)
+        private readonly IConfiguration _configuration;
+        private readonly string _adminPass;
+        public DataContext(DbContextOptions<DataContext> options, IConfiguration configuration) : base(options)
         {
+            _configuration = configuration;
+            _adminPass = _configuration.GetValue<string>("ADMINPASS");
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
@@ -49,6 +53,9 @@ namespace MentalHealthBlogAPI.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            if (string.IsNullOrEmpty(_adminPass))
+                throw new InvalidOperationException("JWTKEY not found in configuration.");
+
             //Predefined emotions loaded on making database
             ExcelHandler excelHandler = new ExcelHandler();
             List<Emotion> emotions = excelHandler.CallGetAllEmotionsFromEmotionWheelFile();
@@ -78,10 +85,9 @@ namespace MentalHealthBlogAPI.Data
                             .AddUserSecrets<Program>()
                             .Build();
 
-            var adminPass = config["ADMIN_PASS"];
 
             var salt = RandomNumberGenerator.GetBytes(__KEYSIZE__);
-            var hash = Rfc2898DeriveBytes.Pbkdf2(Encoding.UTF8.GetBytes(adminPass), salt, __ITERATIONS, __HASHALGORITHM__, __KEYSIZE__);
+            var hash = Rfc2898DeriveBytes.Pbkdf2(Encoding.UTF8.GetBytes(_adminPass), salt, __ITERATIONS, __HASHALGORITHM__, __KEYSIZE__);
             string passwordHash = Convert.ToHexString(hash).ToLower();
 
             var adminUser = new User(1, "admin",salt, passwordHash);

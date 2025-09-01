@@ -1,0 +1,16 @@
+services:
+  mapp.api:
+    build:
+      context: ./MentalHealthBlog.API
+      dockerfile: ./Dockerfile
+    ports:
+      - '8080:8080'
+    environment:
+        "CONN": ""
+  mapp.web:
+    # image: mapp.web
+    build:
+      context: MentalHealthBlog.Web
+      dockerfile: ./Dockerfile
+    ports:
+      - '3000:3000'

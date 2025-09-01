@@ -49,7 +49,7 @@ namespace MentalHealthBlog.API.Utils
 
         public string GenerateToken(User user)
         {
-            string configurationKey = _configuration["JWTKEY"];
+            string configurationKey = _configuration.GetValue<string>("Tokens:JWTKEY");
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(configurationKey);
             var claims = GetClaims(user);
