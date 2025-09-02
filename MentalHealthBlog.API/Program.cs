@@ -143,9 +143,9 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<DataContext>();
-
+    var adminPass = builder.Configuration.GetValue<string>("ADMINPASS");
     db.Database.Migrate();
-    db.SeedRegularUsers();
+    db.SeedRegularUsers(adminPass);
 }
 
 
