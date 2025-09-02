@@ -69,9 +69,13 @@ builder.Services.AddSignalR();
 //CORS registration
 builder.Services.AddCors(options =>
 {
+    var PROD_IP_ADDRESS = builder.Configuration.GetValue<string>("PROD_IP_ADDRESS");
     options.AddPolicy(name: "localPolicy", policy =>
     {
-        policy.WithOrigins("http://localhost:3000")
+        policy.WithOrigins(
+            "http://localhost:3000",
+            "http://164.92.137.115:3000",
+            "http://health-mapp.com:3000")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();

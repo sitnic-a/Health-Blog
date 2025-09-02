@@ -1,8 +1,9 @@
 FROM node:18.20.8-alpine
 WORKDIR /app
-EXPOSE 3000
 COPY ["package.json", "." ]
 RUN npm install
+COPY .env .env
 COPY . .
 RUN npm run build
-CMD [ "npm", "start" ]
+EXPOSE 3000
+CMD ["npm", "start"]

@@ -1,6 +1,7 @@
+const APPLICATION_ENDPOINT = process.env.REACT_APP_APPLICATION_ENDPOINT
 export const application = {
   // application_url: 'https://localhost:7029/api',
-  application_url: 'http://localhost:5150/api',
+  application_url: `http://${APPLICATION_ENDPOINT}`,
   modal_style: {
     overlay: {
       background: '#82a3bc60',

@@ -1,23 +1,28 @@
 services:
   mapp.api:
-    build:
-      context: ./MentalHealthBlog.API
+    # build:
+    #   context: ./MentalHealthBlog.API
+    image: registry.digitalocean.com/mapp-image/mapp.api:latest
     ports:
       - '5150:80'
     environment:
       ConnectionStrings__Postgres: Host=${DB_HOST};Port=${DB_PORT};Username=${DB_USER};Database=${DB_NAME};Password=${DB_PASS}
       Tokens__JWTKEY: ${Tokens__JWTKEY}
       ADMINPASS: ${ADMINPASS}
+      PROD_IP_ADDRESS: ${PROD_IP_ADDRESS}
     networks:
       - mappnetwork
     restart: unless-stopped
   mapp.web:
-    build:
-      context: ./MentalHealthBlog.Web
+    # build:
+    #   context: ./MentalHealthBlog.Web
+    image: sitnica/docker-hub-mapp.web:latest
     depends_on:
       - mapp.api
     ports:
       - '3000:3000'
+    environment:
+      IP_ADDRESS: ${IP_ADDRESS}
     networks:
       - mappnetwork
     restart: unless-stopped
