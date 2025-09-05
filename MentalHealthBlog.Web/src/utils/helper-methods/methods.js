@@ -334,14 +334,22 @@ export const setActiveMyMentalHealthExpertFilterActionTab = (element) => {
   element.currentTarget.classList.add('my-mental-health-experts-active-filter')
 }
 
-export const checkUsernameValidity = (username) => {
-  let regexPattern = /^(?!.*[<>;'"\\&]).{3,30}$/
+export const checkUsernameValidity = (username, validationMessages) => {
+  let regexPattern = /^(?![.-])(?!.*\.\.)(?!.*--)[a-zA-Z0-9._-]{1,60}(?<![.-])$/
+
+  let isValid = true
 
   if (regexPattern.test(username)) {
-    return true
+    return [isValid, validationMessages]
   }
 
-  return false
+  validationMessages.push('Username is required')
+  validationMessages.push('Can contain letters, numbers and special characters')
+  validationMessages.push('Permitted characters: _ , - , . ')
+  validationMessages.push('Cannot contain two - or . in a row')
+  validationMessages.push('Cannot start or end with - or .')
+
+  return [!isValid, validationMessages]
 }
 
 export const checkPasswordValidity = (password, validationMessages) => {
@@ -353,6 +361,7 @@ export const checkPasswordValidity = (password, validationMessages) => {
     return [isValid, validationMessages]
   }
 
+  validationMessages.push('Password is required!')
   validationMessages.push('Password length must be 10-100 characters long')
   validationMessages.push('Must contain lowercase letter')
   validationMessages.push('Must contain uppercase letter')

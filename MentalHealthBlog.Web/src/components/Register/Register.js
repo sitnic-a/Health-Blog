@@ -23,7 +23,10 @@ import { TiArrowSortedDown } from 'react-icons/ti'
 import RegisterCSS from './Register.css'
 import ValidationCSS from '../shared/Validation/Validation.css'
 
-import { setPasswordValidationData } from '../../redux-toolkit/features/validationSlice'
+import {
+  setPasswordValidationData,
+  setUsernameValidationData,
+} from '../../redux-toolkit/features/validationSlice'
 
 export const Register = () => {
   let { dbRoles } = useSelector((store) => store.user)
@@ -34,7 +37,9 @@ export const Register = () => {
 
   let { isMentalHealthExpert, isRegularUser } = useFetchLocationState()
   let [isInTherapy, setIsInTherapy] = useState(false)
-  let { passwordValidationData } = useSelector((store) => store.validation)
+  let { usernameValidationData, passwordValidationData } = useSelector(
+    (store) => store.validation
+  )
 
   useEffect(() => {
     dispatch(getDbRoles())
@@ -78,21 +83,11 @@ export const Register = () => {
 
       roles.push(db_roles.PSYCHOLOGIST)
 
-      let [passwordIsValid, passwordValidationMessages] =
-        checkPasswordValidity(password)
-
-      dispatch(
-        setPasswordValidationData({
-          passwordIsValid,
-          passwordValidationMessages,
-        })
-      )
-
       if (
         stringIsNullOrEmpty(username) ||
-        !checkUsernameValidity(username) ||
+        !usernameValidationData?.usernameIsValid ||
         stringIsNullOrEmpty(password) ||
-        !passwordIsValid ||
+        !passwordValidationData?.passwordIsValid ||
         roles.length <= 0 ||
         stringIsNullOrEmpty(mentalHealthExpertFirstName) ||
         !checkPersonalInformationValidity(mentalHealthExpertFirstName) ||
@@ -136,10 +131,10 @@ export const Register = () => {
       roles.push(db_roles.USER)
 
       if (
-        stringIsNullOrEmpty(username) ||
-        !checkUsernameValidity(username) ||
-        stringIsNullOrEmpty(password) ||
-        !passwordValidationData?.passwordIsValid(password) ||
+        // stringIsNullOrEmpty(username) ||
+        !usernameValidationData?.usernameIsValid ||
+        // stringIsNullOrEmpty(password) ||
+        !passwordValidationData?.passwordIsValid ||
         roles.length <= 0 ||
         stringIsNullOrEmpty(firstName) ||
         !checkPersonalInformationValidity(firstName) ||
@@ -253,7 +248,38 @@ export const Register = () => {
               type="text"
               placeholder="Enter your username"
               autoComplete="true"
+              onBlur={(e) => {
+                let username = e.target.value
+                let [isValid, validationMessages] = checkUsernameValidity(
+                  username,
+                  []
+                )
+                dispatch(
+                  setUsernameValidationData({
+                    usernameIsValid: isValid,
+                    usernameValidationMessages: validationMessages,
+                  })
+                )
+
+                console.log(
+                  `Username valid ${usernameValidationData?.usernameIsValid} messages ${usernameValidationData?.usernameValidationMessages}`
+                )
+              }}
             />
+
+            {!usernameValidationData?.usernameIsValid && (
+              <div className="validation-message-main-container">
+                {usernameValidationData?.usernameValidationMessages?.map(
+                  (message, index) => {
+                    return (
+                      <p key={index} className="validation-message">
+                        - {message}
+                      </p>
+                    )
+                  }
+                )}
+              </div>
+            )}
           </div>
 
           <div>
@@ -268,8 +294,9 @@ export const Register = () => {
               className="form-field"
               type="password"
               onBlur={(e) => {
+                let password = e.target.value
                 let [isValid, passwordValidationMessages] =
-                  checkPasswordValidity(e.target.value, [])
+                  checkPasswordValidity(password, [])
 
                 dispatch(
                   setPasswordValidationData({
@@ -283,8 +310,12 @@ export const Register = () => {
             {!passwordValidationData?.passwordIsValid && (
               <div className="validation-message-main-container">
                 {passwordValidationData?.passwordValidationMessages?.map(
-                  (message) => {
-                    return <p className="validation-message">{message}</p>
+                  (message, index) => {
+                    return (
+                      <p key={index} className="validation-message">
+                        - {message}
+                      </p>
+                    )
                   }
                 )}
               </div>
