@@ -344,14 +344,21 @@ export const checkUsernameValidity = (username) => {
   return false
 }
 
-export const checkPasswordValidity = (password) => {
-  let regexPattern =
-    /^(?!.*(.)\1{3,})(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#_])[A-Za-z\d@$!%*?&#_]{10,}$/
+export const checkPasswordValidity = (password, validationMessages) => {
+  let regexPattern = /^[a-zA-Z0-9 _\-\.@]{10,100}$/
+
+  let isValid = true
 
   if (regexPattern.test(password)) {
-    return true
+    return [isValid, validationMessages]
   }
-  return false
+
+  validationMessages.push('Password length must be 10-100 characters long')
+  validationMessages.push('Must contain lowercase letter')
+  validationMessages.push('Must contain uppercase letter')
+  validationMessages.push('Must contain number')
+  validationMessages.push('Special character: - , _ , . , @ ')
+  return [!isValid, validationMessages]
 }
 
 export const checkPersonalInformationValidity = (personalInfo) => {

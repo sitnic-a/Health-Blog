@@ -11,6 +11,7 @@ import adminReducer from './features/adminSlice'
 import regularUserReducer from './features/regularUserSlice'
 import emotionReducer from './features/emotionSlice'
 import therapyReducer from './features/therapySlice'
+import validationReducer from './features/validationSlice'
 
 export const store = configureStore({
   reducer: {
@@ -26,5 +27,6 @@ export const store = configureStore({
     regularUser: regularUserReducer,
     emotion: emotionReducer,
     therapy: therapyReducer,
+    validation: validationReducer,
   },
 })

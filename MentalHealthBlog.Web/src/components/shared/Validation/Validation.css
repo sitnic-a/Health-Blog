@@ -1,0 +1,10 @@
+.validation-message-main-container {
+  margin-top: 0.5rem;
+}
+
+.validation-message {
+  margin-block: 0.3rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #c93232;
+}

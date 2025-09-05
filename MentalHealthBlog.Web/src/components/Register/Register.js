@@ -21,6 +21,9 @@ import { MentalHealthExpertsDropdown } from '../MentalHealthExpertsDropdown/Ment
 import { TiArrowSortedDown } from 'react-icons/ti'
 
 import RegisterCSS from './Register.css'
+import ValidationCSS from '../shared/Validation/Validation.css'
+
+import { setPasswordValidationData } from '../../redux-toolkit/features/validationSlice'
 
 export const Register = () => {
   let { dbRoles } = useSelector((store) => store.user)
@@ -31,6 +34,7 @@ export const Register = () => {
 
   let { isMentalHealthExpert, isRegularUser } = useFetchLocationState()
   let [isInTherapy, setIsInTherapy] = useState(false)
+  let { passwordValidationData } = useSelector((store) => store.validation)
 
   useEffect(() => {
     dispatch(getDbRoles())
@@ -74,11 +78,21 @@ export const Register = () => {
 
       roles.push(db_roles.PSYCHOLOGIST)
 
+      let [passwordIsValid, passwordValidationMessages] =
+        checkPasswordValidity(password)
+
+      dispatch(
+        setPasswordValidationData({
+          passwordIsValid,
+          passwordValidationMessages,
+        })
+      )
+
       if (
         stringIsNullOrEmpty(username) ||
         !checkUsernameValidity(username) ||
         stringIsNullOrEmpty(password) ||
-        !checkPasswordValidity(password) ||
+        !passwordIsValid ||
         roles.length <= 0 ||
         stringIsNullOrEmpty(mentalHealthExpertFirstName) ||
         !checkPersonalInformationValidity(mentalHealthExpertFirstName) ||
@@ -114,13 +128,18 @@ export const Register = () => {
       let firstName = document.getElementById('register-first-name').value
       let lastName = document.getElementById('register-last-name').value
       let email = document.getElementById('register-email').value
+
+      // console.log(
+      //   `Password validity ${passwordValidationData?.isValid} , messages ${passwordValidationData?.validationMessages}`
+      // )
+
       roles.push(db_roles.USER)
 
       if (
         stringIsNullOrEmpty(username) ||
         !checkUsernameValidity(username) ||
         stringIsNullOrEmpty(password) ||
-        !checkPasswordValidity(password) ||
+        !passwordValidationData?.passwordIsValid(password) ||
         roles.length <= 0 ||
         stringIsNullOrEmpty(firstName) ||
         !checkPersonalInformationValidity(firstName) ||
@@ -248,7 +267,28 @@ export const Register = () => {
               id="register-password"
               className="form-field"
               type="password"
+              onBlur={(e) => {
+                let [isValid, passwordValidationMessages] =
+                  checkPasswordValidity(e.target.value, [])
+
+                dispatch(
+                  setPasswordValidationData({
+                    passwordIsValid: isValid,
+                    passwordValidationMessages,
+                  })
+                )
+              }}
             />
+
+            {!passwordValidationData?.passwordIsValid && (
+              <div className="validation-message-main-container">
+                {passwordValidationData?.passwordValidationMessages?.map(
+                  (message) => {
+                    return <p className="validation-message">{message}</p>
+                  }
+                )}
+              </div>
+            )}
           </div>
         </div>
         {isMentalHealthExpert !== true && (
