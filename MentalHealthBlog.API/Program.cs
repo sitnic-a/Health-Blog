@@ -75,7 +75,8 @@ builder.Services.AddCors(options =>
         policy.WithOrigins(
             "http://localhost:3000",
             "http://164.92.137.115:3000",
-            "http://mapp-terapija.com")
+            "https://mapp-terapija.com",
+            "https://www.mapp-terapija.com")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
