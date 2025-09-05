@@ -2,6 +2,9 @@
 using MentalHealthBlog.API.Utils.Handlers;
 using MentalHealthBlogAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Configuration;
+using System.Diagnostics;
+using System.Reflection.Emit;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -9,9 +12,7 @@ namespace MentalHealthBlogAPI.Data
 {
     public class DataContext : DbContext
     {
-        public DataContext(DbContextOptions<DataContext> options) : base(options)
-        {
-        }
+        public DataContext(DbContextOptions<DataContext> options) : base(options){}
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
@@ -27,8 +28,26 @@ namespace MentalHealthBlogAPI.Data
         public DbSet<RegularUser> RegularUsers { get; set; }
         public DbSet<TherapyRequest> TherapyRequests { get; set; }
 
-        public void SeedRegularUsers()
+        public void SeedRegularUsers(string adminPass)
         {
+            if (!Users.Any())
+            {
+                const int __KEYSIZE__ = 128;
+                const int __ITERATIONS = 350000;
+                HashAlgorithmName __HASHALGORITHM__ = HashAlgorithmName.SHA512;
+
+
+                var salt = RandomNumberGenerator.GetBytes(__KEYSIZE__);
+                var hash = Rfc2898DeriveBytes.Pbkdf2(Encoding.UTF8.GetBytes(adminPass), salt, __ITERATIONS, __HASHALGORITHM__, __KEYSIZE__);
+                string passwordHash = Convert.ToHexString(hash).ToLower();
+
+                var adminUser = new User(1, "admin", salt, passwordHash);
+                var adminRole = new UserRole(1, 1);
+                Users.Add(adminUser);
+                UserRoles.Add(adminRole);
+                SaveChanges();
+            }
+
             if (Users.Any() && !RegularUsers.Any())
             {
                 const int __USER_ROLE_ID__ = 2;
@@ -70,27 +89,7 @@ namespace MentalHealthBlogAPI.Data
                 new { Id = 7, Name = "Novac" }
                 );
 
-            const int __KEYSIZE__ = 128;
-            const int __ITERATIONS = 350000;
-            HashAlgorithmName __HASHALGORITHM__ = HashAlgorithmName.SHA512;
-
-            var config = new ConfigurationBuilder()
-                            .AddUserSecrets<Program>()
-                            .Build();
-
-            var adminPass = config["ADMIN_PASS"];
-
-            var salt = RandomNumberGenerator.GetBytes(__KEYSIZE__);
-            var hash = Rfc2898DeriveBytes.Pbkdf2(Encoding.UTF8.GetBytes(adminPass), salt, __ITERATIONS, __HASHALGORITHM__, __KEYSIZE__);
-            string passwordHash = Convert.ToHexString(hash).ToLower();
-
-            var adminUser = new User(1, "admin",salt, passwordHash);
-            var adminRole = new UserRole(1, 1);
-
-            modelBuilder.Entity<User>().HasData(adminUser);
-            modelBuilder.Entity<UserRole>().HasData(adminRole);
             modelBuilder.Entity<Emotion>().HasData(emotions);
-
             modelBuilder.Entity<UserRole>().HasKey(ur => new { ur.UserId, ur.RoleId });
             modelBuilder.Entity<PostTag>().HasKey(pt => new
             {

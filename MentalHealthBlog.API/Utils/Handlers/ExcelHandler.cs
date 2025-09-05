@@ -17,7 +17,7 @@ namespace MentalHealthBlog.API.Utils.Handlers
             string currentDir = Environment.CurrentDirectory;
             string fileDirectory = System.IO.Directory.GetCurrentDirectory();
             DirectoryInfo directory = new DirectoryInfo(
-                System.IO.Path.GetFullPath(System.IO.Path.Combine(currentDir, "Data\\" + $"EmotionWheel.xlsx")));
+                System.IO.Path.GetFullPath(System.IO.Path.Combine(currentDir, @"Data/" + $"EmotionWheel.xlsx")));
 
             string filePath = directory.FullName;
 

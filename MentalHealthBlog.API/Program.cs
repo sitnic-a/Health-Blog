@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Npgsql;
+using System.Configuration;
 using System.Text;
 
 #pragma warning disable 8604
@@ -68,9 +69,14 @@ builder.Services.AddSignalR();
 //CORS registration
 builder.Services.AddCors(options =>
 {
+    var PROD_IP_ADDRESS = builder.Configuration.GetValue<string>("PROD_IP_ADDRESS");
     options.AddPolicy(name: "localPolicy", policy =>
     {
-        policy.WithOrigins("http://localhost:3000")
+        policy.WithOrigins(
+            "http://localhost:3000",
+            "http://164.92.137.115:3000",
+            "https://mapp-terapija.com",
+            "https://www.mapp-terapija.com")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
@@ -104,13 +110,9 @@ builder.Services.AddDbContext<DataContext>(options =>
     //    .Configuration
     //    .GetConnectionString("DevelopmentConnectionExpress"));
 
-    var POSTGRES_CONNECTION = config["PostgreSQL:CONNECTION"];
-    var POSTRES_PASSWORD = config["PostgreSQL:PASSWORD"];
-    var npsql = new NpgsqlConnectionStringBuilder(POSTGRES_CONNECTION)
-    {
-        Password = POSTRES_PASSWORD
-    };
-
+    var POSTGRES_CONNECTION = builder.Configuration.GetConnectionString("Postgres");
+    var npsql = new NpgsqlConnectionStringBuilder(POSTGRES_CONNECTION);
+    
     options
         .UseNpgsql(npsql.ConnectionString);
 });
@@ -122,6 +124,8 @@ builder.Services.AddAuthentication(options =>
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
+    var JWTKEY = builder.Configuration.GetValue<string>("Tokens:JWTKEY");
+
     options.RequireHttpsMetadata = false;
     options.SaveToken = true;
     options.TokenValidationParameters = new TokenValidationParameters
@@ -129,7 +133,7 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.Zero,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["AppSettings:TokenKey"])),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(JWTKEY)),
         ValidateIssuer = false,
         ValidateAudience = false,
         
@@ -144,9 +148,9 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<DataContext>();
-
+    var adminPass = builder.Configuration.GetValue<string>("ADMINPASS");
     db.Database.Migrate();
-    db.SeedRegularUsers();
+    db.SeedRegularUsers(adminPass);
 }
 
 
