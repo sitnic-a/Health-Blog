@@ -398,14 +398,34 @@ export const checkPersonalInformationValidity = (
   // let regexPattern =
 }
 
-export const checkEmailValidity = (email) => {
-  let regexPattern = /^(?!.*[<>;'"\\]).{1,256}@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/
+export const checkEmailValidity = (
+  email,
+  validationMessages,
+  isMentalHealthExpert
+) => {
+  let regexPattern
 
-  if (regexPattern.test(email)) {
-    return true
+  if (isMentalHealthExpert) {
+    regexPattern =
+      /^$|^(?!.*[.\-]{2})[\p{L}\p{N}._%+-]+@[a-zA-Z0-9](?!.*[.\-%]{2})[a-zA-Z0-9.-]*\.[a-zA-Z]{2,}$/u
+  } else {
+    regexPattern =
+      /^(?!.*[.\-]{2})[\p{L}\p{N}._%+-]+@[a-zA-Z0-9](?!.*[.\-%]{2})[a-zA-Z0-9.-]*\.[a-zA-Z]{2,}$/u
   }
 
-  return false
+  let isValid = true
+
+  if (regexPattern.test(email)) {
+    return [isValid, validationMessages]
+  }
+
+  validationMessages.push('Enter corrent email eg. email_21@email.com')
+  validationMessages.push('Permitted characters: . , _ , + , % , - ')
+  validationMessages.push('Cannot start with special character')
+  validationMessages.push(
+    'Cannot have more special characters in a row, eg. -- or ..'
+  )
+  return [!isValid, validationMessages]
 }
 
 export const checkInputDataValidity = (data) => {

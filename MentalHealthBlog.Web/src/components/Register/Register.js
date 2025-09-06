@@ -29,6 +29,7 @@ import {
   setUsernameValidationData,
   setFirstNameValidationData,
   setLastNameValidationData,
+  setEmailValidationData,
 } from '../../redux-toolkit/features/validationSlice'
 
 export const Register = () => {
@@ -45,6 +46,7 @@ export const Register = () => {
     passwordValidationData,
     firstNameValidationData,
     lastNameValidationData,
+    emailValidationData,
   } = useSelector((store) => store.validation)
 
   let resetValidationData = () => {
@@ -52,6 +54,7 @@ export const Register = () => {
     dispatch(setPasswordValidationData({}))
     dispatch(setFirstNameValidationData({}))
     dispatch(setLastNameValidationData({}))
+    dispatch(setEmailValidationData({}))
   }
 
   useEffect(() => {
@@ -445,7 +448,36 @@ export const Register = () => {
                   name="register-email"
                   className="form-field"
                   placeholder="Enter your email..."
+                  onBlur={(e) => {
+                    let email = e.target.value
+                    let isMentalHealthExpert = false
+                    let [isValid, validationMessages] = checkEmailValidity(
+                      email,
+                      [],
+                      isMentalHealthExpert
+                    )
+                    dispatch(
+                      setEmailValidationData({
+                        emailIsValid: isValid,
+                        emailValidationMessages: validationMessages,
+                      })
+                    )
+                  }}
                 />
+
+                {!emailValidationData?.emailIsValid && (
+                  <div className="validation-message-main-container">
+                    {emailValidationData?.emailValidationMessages?.map(
+                      (message, index) => {
+                        return (
+                          <p key={index} className="validation-message">
+                            - {message}
+                          </p>
+                        )
+                      }
+                    )}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -841,7 +873,36 @@ export const Register = () => {
                   name="register-mental-health-expert-email"
                   type="email"
                   placeholder="Enter your email: "
-                ></input>
+                  onBlur={(e) => {
+                    let email = e.target.value
+                    let isMentalHealthExpert = true
+                    let [isValid, validationMessages] = checkEmailValidity(
+                      email,
+                      [],
+                      isMentalHealthExpert
+                    )
+                    dispatch(
+                      setEmailValidationData({
+                        emailIsValid: isValid,
+                        emailValidationMessages: validationMessages,
+                      })
+                    )
+                  }}
+                />
+
+                {!emailValidationData?.emailIsValid && (
+                  <div className="validation-message-main-container">
+                    {emailValidationData?.emailValidationMessages?.map(
+                      (message, index) => {
+                        return (
+                          <p key={index} className="validation-message">
+                            - {message}
+                          </p>
+                        )
+                      }
+                    )}
+                  </div>
+                )}
               </div>
             </div>
 
