@@ -12,6 +12,7 @@ import {
   checkPersonalInformationValidity,
   checkUsernameValidity,
   previewImage,
+  resetValidationData,
   stringIsNullOrEmpty,
 } from '../../utils/helper-methods/methods'
 import { db_roles } from '../../enums/roles'
@@ -26,6 +27,8 @@ import ValidationCSS from '../shared/Validation/Validation.css'
 import {
   setPasswordValidationData,
   setUsernameValidationData,
+  setFirstNameValidationData,
+  setLastNameValidationData,
 } from '../../redux-toolkit/features/validationSlice'
 
 export const Register = () => {
@@ -37,11 +40,22 @@ export const Register = () => {
 
   let { isMentalHealthExpert, isRegularUser } = useFetchLocationState()
   let [isInTherapy, setIsInTherapy] = useState(false)
-  let { usernameValidationData, passwordValidationData } = useSelector(
-    (store) => store.validation
-  )
+  let {
+    usernameValidationData,
+    passwordValidationData,
+    firstNameValidationData,
+    lastNameValidationData,
+  } = useSelector((store) => store.validation)
+
+  let resetValidationData = () => {
+    dispatch(setUsernameValidationData({}))
+    dispatch(setPasswordValidationData({}))
+    dispatch(setFirstNameValidationData({}))
+    dispatch(setLastNameValidationData({}))
+  }
 
   useEffect(() => {
+    resetValidationData()
     dispatch(getDbRoles())
     dispatch(getMentalHealthExperts(null))
   }, [])
@@ -339,7 +353,38 @@ export const Register = () => {
                   name="register-first-name"
                   className="form-field"
                   placeholder="Enter your first name..."
+                  onBlur={(e) => {
+                    let firstName = e.target.value
+                    let isOrganization = false
+                    let [isValid, validationMessages] =
+                      checkPersonalInformationValidity(
+                        firstName,
+                        [],
+                        isOrganization
+                      )
+
+                    dispatch(
+                      setFirstNameValidationData({
+                        firstNameIsValid: isValid,
+                        firstNameValidationMessages: validationMessages,
+                      })
+                    )
+                  }}
                 />
+
+                {!firstNameValidationData?.firstNameIsValid && (
+                  <div className="validation-message-main-container">
+                    {firstNameValidationData?.firstNameValidationMessages?.map(
+                      (message, index) => {
+                        return (
+                          <p key={index} className="validation-message">
+                            - {message}
+                          </p>
+                        )
+                      }
+                    )}
+                  </div>
+                )}
               </div>
 
               <div className="register-info-last-name-container">
@@ -356,7 +401,37 @@ export const Register = () => {
                   name="register-last-name"
                   className="form-field"
                   placeholder="Enter your last name..."
+                  onBlur={(e) => {
+                    let lastName = e.target.value
+                    let isOrganization = false
+                    let [isValid, validationMessages] =
+                      checkPersonalInformationValidity(
+                        lastName,
+                        [],
+                        isOrganization
+                      )
+                    dispatch(
+                      setLastNameValidationData({
+                        lastNameIsValid: isValid,
+                        lastNameValidationMessages: validationMessages,
+                      })
+                    )
+                  }}
                 />
+
+                {!lastNameValidationData?.lastNameIsValid && (
+                  <div className="validation-message-main-container">
+                    {lastNameValidationData?.lastNameValidationMessages?.map(
+                      (message, index) => {
+                        return (
+                          <p key={index} className="validation-message">
+                            - {message}
+                          </p>
+                        )
+                      }
+                    )}
+                  </div>
+                )}
               </div>
 
               <div className="register-info-email-container">
@@ -633,7 +708,38 @@ export const Register = () => {
                   className="form-field"
                   type="text"
                   placeholder="Enter your first name: "
-                ></input>
+                  onBlur={(e) => {
+                    let firstName = e.target.value
+                    let isOrganization = false
+                    let [isValid, validationMessages] =
+                      checkPersonalInformationValidity(
+                        firstName,
+                        [],
+                        isOrganization
+                      )
+
+                    dispatch(
+                      setFirstNameValidationData({
+                        firstNameIsValid: isValid,
+                        firstNameValidationMessages: validationMessages,
+                      })
+                    )
+                  }}
+                />
+
+                {!firstNameValidationData?.firstNameIsValid && (
+                  <div className="validation-message-main-container">
+                    {firstNameValidationData?.firstNameValidationMessages?.map(
+                      (message, index) => {
+                        return (
+                          <p key={index} className="validation-message">
+                            - {message}
+                          </p>
+                        )
+                      }
+                    )}
+                  </div>
+                )}
               </div>
 
               <div className="mental-health-expert-register-info last-name">
@@ -651,7 +757,38 @@ export const Register = () => {
                   name="register-mental-health-expert-last-name"
                   type="text"
                   placeholder="Enter your last name: "
-                ></input>
+                  onBlur={(e) => {
+                    let lastName = e.target.value
+                    let isOrganization = false
+                    let [isValid, validationMessages] =
+                      checkPersonalInformationValidity(
+                        lastName,
+                        [],
+                        isOrganization
+                      )
+
+                    dispatch(
+                      setLastNameValidationData({
+                        lastNameIsValid: isValid,
+                        lastNameValidationMessages: validationMessages,
+                      })
+                    )
+                  }}
+                />
+
+                {!lastNameValidationData?.lastNameIsValid && (
+                  <div className="validation-message-main-container">
+                    {lastNameValidationData?.lastNameValidationMessages?.map(
+                      (message, index) => {
+                        return (
+                          <p key={index} className="validation-message">
+                            - {message}
+                          </p>
+                        )
+                      }
+                    )}
+                  </div>
+                )}
               </div>
 
               <div className="mental-health-expert-register-info organization">

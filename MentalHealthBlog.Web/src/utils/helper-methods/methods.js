@@ -370,14 +370,32 @@ export const checkPasswordValidity = (password, validationMessages) => {
   return [!isValid, validationMessages]
 }
 
-export const checkPersonalInformationValidity = (personalInfo) => {
-  let regexPattern = /^(?!.*[<>;'"\\&`/]).{2,50}$/
+export const checkPersonalInformationValidity = (
+  personalInfo,
+  valitionMessages,
+  isOrganization
+) => {
+  if (!isOrganization) {
+    let isValid = true
+    //First and last name validation
+    let regexPattern = /^\p{Lu}\p{Ll}*(?:(?:[ -]| - )\p{Lu}\p{Ll}*)*$/u
 
-  if (regexPattern.test(personalInfo)) {
-    return true
+    if (regexPattern.test(personalInfo)) {
+      return [isValid, valitionMessages]
+    }
+
+    valitionMessages.push('Name must start with uppercase')
+    valitionMessages.push(
+      'Cannot have numbers or special characters beside - and space'
+    )
+    valitionMessages.push(
+      'If contains special characters each next name must start with uppercase'
+    )
+    valitionMessages.push('Cannot end with space or -')
+    return [!isValid, valitionMessages]
   }
-
-  return false
+  //Organization validation
+  // let regexPattern =
 }
 
 export const checkEmailValidity = (email) => {
