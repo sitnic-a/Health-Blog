@@ -104,9 +104,9 @@ export const Register = () => {
         !passwordValidationData?.passwordIsValid ||
         roles.length <= 0 ||
         stringIsNullOrEmpty(mentalHealthExpertFirstName) ||
-        !checkPersonalInformationValidity(mentalHealthExpertFirstName) ||
+        !firstNameValidationData?.firstNameIsValid ||
         stringIsNullOrEmpty(mentalHealthExpertLastName) ||
-        !checkPersonalInformationValidity(mentalHealthExpertLastName) ||
+        !lastNameValidationData?.lastNameIsValid ||
         stringIsNullOrEmpty(mentalHealthExpertOrganization) ||
         !checkPersonalInformationValidity(mentalHealthExpertOrganization) ||
         stringIsNullOrEmpty(mentalHealthExpertEmail) ||
@@ -151,9 +151,9 @@ export const Register = () => {
         !passwordValidationData?.passwordIsValid ||
         roles.length <= 0 ||
         stringIsNullOrEmpty(firstName) ||
-        !checkPersonalInformationValidity(firstName) ||
+        !firstNameValidationData?.firstNameIsValid ||
         stringIsNullOrEmpty(lastName) ||
-        !checkPersonalInformationValidity(lastName) ||
+        !lastNameValidationData?.lastNameIsValid ||
         stringIsNullOrEmpty(email) ||
         !checkEmailValidity(email)
       ) {
