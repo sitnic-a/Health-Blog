@@ -15,6 +15,7 @@ import {
 } from '../../utils/helper-methods/methods'
 
 import LoginCSS from './Login.css'
+import { useEffect } from 'react'
 
 export const Login = () => {
   let dispatch = useDispatch()
@@ -25,6 +26,15 @@ export const Login = () => {
     (store) => store.validation
   )
 
+  let resetValidationData = () => {
+    dispatch(setUsernameValidationData({}))
+    dispatch(setPasswordValidationData({}))
+  }
+
+  useEffect(() => {
+    resetValidationData()
+  }, [])
+
   let loginUser = async (e) => {
     e.preventDefault()
     let form = new FormData(e.target)
@@ -32,14 +42,43 @@ export const Login = () => {
     let data = Object.fromEntries([...formData])
 
     let user = {
-      username: data.username,
-      password: data.password,
+      username: data?.username,
+      password: data?.password,
     }
 
+    let [usernameIsValid, usernameValidationMessages] = checkUsernameValidity(
+      data?.username,
+      []
+    )
+    dispatch(
+      setUsernameValidationData({
+        usernameIsValid,
+        usernameValidationMessages,
+      })
+    )
+
+    let [passwordIsValid, passwordValidationMessages] = checkPasswordValidity(
+      data?.password,
+      []
+    )
+    dispatch(
+      setPasswordValidationData({
+        passwordIsValid,
+        passwordValidationMessages,
+      })
+    )
+
+    console.log(
+      'VALID ',
+      passwordValidationData?.passwordIsValid,
+      'MESAGGES ',
+      passwordValidationData?.passwordValidationMessages
+    )
+
     if (
-      stringIsNullOrEmpty(user.username) ||
+      stringIsNullOrEmpty(user?.username) ||
       !usernameValidationData?.usernameIsValid ||
-      stringIsNullOrEmpty(user.password) ||
+      stringIsNullOrEmpty(user?.password) ||
       !passwordValidationData?.passwordIsValid
     ) {
       toast.error('Fields are required or not valid!', {
@@ -103,7 +142,6 @@ export const Login = () => {
                     type="text"
                     name="username"
                     autoComplete="username"
-                    autoFocus={true}
                     onBlur={(e) => {
                       let username = e.target.value
                       let [isValid, validationMessages] = checkUsernameValidity(
@@ -148,12 +186,12 @@ export const Login = () => {
                     name="password"
                     onBlur={(e) => {
                       let password = e.target.value
-                      let [isValid, passwordValidationMessages] =
+                      let [passwordIsValid, passwordValidationMessages] =
                         checkPasswordValidity(password, [])
 
                       dispatch(
                         setPasswordValidationData({
-                          passwordIsValid: isValid,
+                          passwordIsValid,
                           passwordValidationMessages,
                         })
                       )
@@ -180,6 +218,9 @@ export const Login = () => {
                       className="register-link regular-user-link"
                       to={'/register'}
                       state={{ isRegularUser: true }}
+                      onClick={() => {
+                        resetValidationData()
+                      }}
                     >
                       Create an account
                     </Link>

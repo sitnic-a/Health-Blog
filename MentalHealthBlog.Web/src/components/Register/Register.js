@@ -107,6 +107,88 @@ export const Register = () => {
 
       roles.push(db_roles.PSYCHOLOGIST)
 
+      let [usernameIsValid, usernameValidationMessages] = checkUsernameValidity(
+        username,
+        []
+      )
+      dispatch(
+        setUsernameValidationData({
+          usernameIsValid,
+          usernameValidationMessages,
+        })
+      )
+
+      let [passwordIsValid, passwordValidationMessages] = checkPasswordValidity(
+        password,
+        []
+      )
+      dispatch(
+        setPasswordValidationData({
+          passwordIsValid,
+          passwordValidationMessages,
+        })
+      )
+
+      let isOrganization = false
+      let [firstNameIsValid, firstNameValidationMessages] =
+        checkPersonalInformationValidity(
+          mentalHealthExpertFirstName,
+          [],
+          isOrganization
+        )
+
+      dispatch(
+        setFirstNameValidationData({
+          firstNameIsValid,
+          firstNameValidationMessages,
+        })
+      )
+
+      let [lastNameIsValid, lastNameValidationMessages] =
+        checkPersonalInformationValidity(
+          mentalHealthExpertLastName,
+          [],
+          isOrganization
+        )
+      dispatch(
+        setLastNameValidationData({
+          lastNameIsValid,
+          lastNameValidationMessages,
+        })
+      )
+
+      isOrganization = true
+      let [organizationIsValid, organizationValidationMessages] =
+        checkPersonalInformationValidity(
+          mentalHealthExpertOrganization,
+          [],
+          isOrganization
+        )
+      dispatch(
+        setOrganizationValidationData({
+          organizationIsValid,
+          organizationValidationMessages,
+        })
+      )
+
+      let [phoneNumberIsValid, phoneNumberValidationMessages] =
+        checkPhoneNumberValidity(mentalHealthExpertPhoneNumber, [])
+      dispatch(
+        setPhoneNumberValidationData({
+          phoneNumberIsValid,
+          phoneNumberValidationMessages,
+        })
+      )
+
+      let [emailIsValid, emailValidationMessages] = checkEmailValidity(
+        mentalHealthExpertEmail,
+        [],
+        isMentalHealthExpert
+      )
+      dispatch(
+        setEmailValidationData({ emailIsValid, emailValidationMessages })
+      )
+
       if (
         stringIsNullOrEmpty(username) ||
         !usernameValidationData?.usernameIsValid ||
@@ -149,8 +231,58 @@ export const Register = () => {
       let firstName = document.getElementById('register-first-name').value
       let lastName = document.getElementById('register-last-name').value
       let email = document.getElementById('register-email').value
-
       roles.push(db_roles.USER)
+
+      let [usernameIsValid, usernameValidationMessages] = checkUsernameValidity(
+        username,
+        []
+      )
+      dispatch(
+        setUsernameValidationData({
+          usernameIsValid,
+          usernameValidationMessages,
+        })
+      )
+
+      let [passwordIsValid, passwordValidationMessages] = checkPasswordValidity(
+        password,
+        []
+      )
+      dispatch(
+        setPasswordValidationData({
+          passwordIsValid,
+          passwordValidationMessages,
+        })
+      )
+
+      let isOrganization = false
+
+      let [firstNameIsValid, firstNameValidationMessages] =
+        checkPersonalInformationValidity(firstName, [], isOrganization)
+      dispatch(
+        setFirstNameValidationData({
+          firstNameIsValid,
+          firstNameValidationMessages,
+        })
+      )
+
+      let [lastNameIsValid, lastNameValidationMessages] =
+        checkPersonalInformationValidity(lastName, [], isOrganization)
+      dispatch(
+        setLastNameValidationData({
+          lastNameIsValid,
+          lastNameValidationMessages,
+        })
+      )
+
+      let [emailIsValid, emailValidationMessages] = checkEmailValidity(
+        email,
+        [],
+        isMentalHealthExpert
+      )
+      dispatch(
+        setEmailValidationData({ emailIsValid, emailValidationMessages })
+      )
 
       if (
         // stringIsNullOrEmpty(username) ||
