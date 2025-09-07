@@ -405,16 +405,17 @@ export const Register = () => {
               autoComplete="true"
               onBlur={(e) => {
                 let username = e.target.value
-                let [isValid, validationMessages] = checkUsernameValidity(
-                  username,
-                  []
-                )
+                let [usernameIsValid, usernameValidationMessages] =
+                  checkUsernameValidity(username, [])
+
                 dispatch(
                   setUsernameValidationData({
-                    usernameIsValid: isValid,
-                    usernameValidationMessages: validationMessages,
+                    usernameIsValid,
+                    usernameValidationMessages,
                   })
                 )
+
+                console.log('UserVALDAT ', usernameValidationData)
               }}
             />
 
@@ -458,7 +459,7 @@ export const Register = () => {
               }}
             />
 
-            {!passwordValidationData?.passwordIsValid && (
+            {!passwordValidationData?.isValid && (
               <div className="validation-message-main-container">
                 {passwordValidationData?.passwordValidationMessages?.map(
                   (message, index) => {

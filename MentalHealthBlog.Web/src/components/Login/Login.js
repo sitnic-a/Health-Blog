@@ -61,6 +61,7 @@ export const Login = () => {
       user?.password,
       []
     )
+
     dispatch(
       setPasswordValidationData({
         passwordIsValid,
@@ -137,22 +138,20 @@ export const Login = () => {
                     autoComplete="username"
                     onBlur={(e) => {
                       let username = e.target.value
-                      let [isValid, validationMessages] = checkUsernameValidity(
-                        username,
-                        []
-                      )
+                      let [usernameIsValid, usernameValidationMessages] =
+                        checkUsernameValidity(username, [])
                       dispatch(
                         setUsernameValidationData({
-                          usernameIsValid: isValid,
-                          usernameValidationMessages: validationMessages,
+                          usernameIsValid,
+                          usernameValidationMessages,
                         })
                       )
                     }}
                   />
 
-                  {!usernameValidationData?.isValid && (
+                  {!usernameValidationData?.usernameIsValid && (
                     <div className="validation-message-main-container">
-                      {usernameValidationData?.validationMessages?.map(
+                      {usernameValidationData?.usernameValidationMessages?.map(
                         (message, index) => {
                           return (
                             <p key={index} className="validation-message">
@@ -191,9 +190,9 @@ export const Login = () => {
                     }}
                   />
 
-                  {!passwordValidationData?.isValid && (
+                  {!passwordValidationData?.passwordIsValid && (
                     <div className="validation-message-main-container">
-                      {passwordValidationData?.validationMessages?.map(
+                      {passwordValidationData?.passwordValidationMessages?.map(
                         (message, index) => {
                           return (
                             <p key={index} className="validation-message">
