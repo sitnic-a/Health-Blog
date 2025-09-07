@@ -114,9 +114,9 @@ export const Register = () => {
         stringIsNullOrEmpty(mentalHealthExpertLastName) ||
         !lastNameValidationData?.lastNameIsValid ||
         stringIsNullOrEmpty(mentalHealthExpertOrganization) ||
-        !checkPersonalInformationValidity(mentalHealthExpertOrganization) ||
-        stringIsNullOrEmpty(mentalHealthExpertEmail) ||
-        !checkEmailValidity(mentalHealthExpertEmail)
+        !organizationValidationData?.organizationIsValid ||
+        // stringIsNullOrEmpty(mentalHealthExpertEmail) ||
+        !emailValidationData?.emailIsValid
       ) {
         toast.error('Fields are required or not valid!', {
           autoClose: 1500,
@@ -161,7 +161,7 @@ export const Register = () => {
         stringIsNullOrEmpty(lastName) ||
         !lastNameValidationData?.lastNameIsValid ||
         stringIsNullOrEmpty(email) ||
-        !checkEmailValidity(email)
+        !emailValidationData?.emailIsValid
       ) {
         toast.error('Fields are required or not valid!', {
           autoClose: 1500,
@@ -254,6 +254,7 @@ export const Register = () => {
   return (
     <section id="register-container">
       <h1>Populate required fields to continue...</h1>
+      <p className="required-field">Required fields *</p>
       <form onSubmit={registerUser} encType="multipart/form-data">
         <div className="register-credentials-container">
           <div>
