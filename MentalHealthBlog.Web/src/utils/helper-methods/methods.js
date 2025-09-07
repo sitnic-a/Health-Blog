@@ -345,7 +345,7 @@ export const checkUsernameValidity = (username, validationMessages) => {
 
   validationMessages.push('Username is required')
   validationMessages.push('Can contain letters, numbers and special characters')
-  validationMessages.push('Permitted characters: _ , - , . ')
+  validationMessages.push('Permitted characters: _ - . ')
   validationMessages.push('Cannot contain two - or . in a row')
   validationMessages.push('Cannot start or end with - or .')
 
@@ -366,13 +366,13 @@ export const checkPasswordValidity = (password, validationMessages) => {
   validationMessages.push('Must contain lowercase letter')
   validationMessages.push('Must contain uppercase letter')
   validationMessages.push('Must contain number')
-  validationMessages.push('Special character: - , _ , . , @ ')
+  validationMessages.push('Special characters: - _ . @ ')
   return [!isValid, validationMessages]
 }
 
 export const checkPersonalInformationValidity = (
   personalInfo,
-  valitionMessages,
+  validationMessages,
   isOrganization
 ) => {
   if (!isOrganization) {
@@ -381,21 +381,33 @@ export const checkPersonalInformationValidity = (
     let regexPattern = /^\p{Lu}\p{Ll}*(?:(?:[ -]| - )\p{Lu}\p{Ll}*)*$/u
 
     if (regexPattern.test(personalInfo)) {
-      return [isValid, valitionMessages]
+      return [isValid, validationMessages]
     }
 
-    valitionMessages.push('Name must start with uppercase')
-    valitionMessages.push(
+    validationMessages.push('Name must start with uppercase')
+    validationMessages.push(
       'Cannot have numbers or special characters beside - and space'
     )
-    valitionMessages.push(
+    validationMessages.push(
       'If contains special characters each next name must start with uppercase'
     )
-    valitionMessages.push('Cannot end with space or -')
-    return [!isValid, valitionMessages]
+    validationMessages.push('Cannot end with space or -')
+    return [!isValid, validationMessages]
   }
   //Organization validation
-  // let regexPattern =
+  let regexPattern =
+    /^(?!.*[.\-\/&,:()'"]{2})(?!^[\-\/.,&:()'"])(?!.*[\-\/.,&:()'"]$)[\p{L}\p{N} ._\-\/&,:()'"]{1,100}$/u
+  let isValid = true
+  if (regexPattern.test(personalInfo)) {
+    return [isValid, validationMessages]
+  }
+  validationMessages.push('Organization is required')
+  validationMessages.push(
+    'Organization name can contain letters, numbers and some special characters'
+  )
+  validationMessages.push('Cannot start or end with special character')
+  validationMessages.push("Special characters: . - _ & / , ( ) ' ")
+  return [!isValid, validationMessages]
 }
 
 export const checkEmailValidity = (
@@ -420,11 +432,11 @@ export const checkEmailValidity = (
   }
 
   validationMessages.push('Enter corrent email eg. email_21@email.com')
-  validationMessages.push('Permitted characters: . , _ , + , % , - ')
   validationMessages.push('Cannot start with special character')
   validationMessages.push(
     'Cannot have more special characters in a row, eg. -- or ..'
   )
+  validationMessages.push('Special characters: . _ + % -')
   return [!isValid, validationMessages]
 }
 

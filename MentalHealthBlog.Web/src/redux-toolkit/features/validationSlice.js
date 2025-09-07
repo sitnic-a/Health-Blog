@@ -5,6 +5,7 @@ let initialState = {
   passwordValidationData: { isValid: true, validationMessages: [] },
   firstNameValidationData: { isValid: true, validationMessages: [] },
   lastNameValidationData: { isValid: true, validationMessages: [] },
+  organizationValidationData: { isValid: true, validationMessages: [] },
   emailValidationData: { isValid: true, validationMessages: [] },
 }
 
@@ -24,6 +25,9 @@ const validationSlice = createSlice({
     setLastNameValidationData: (state, action) => {
       state.lastNameValidationData = action?.payload
     },
+    setOrganizationValidationData: (state, action) => {
+      state.organizationValidationData = action?.payload
+    },
     setEmailValidationData: (state, action) => {
       state.emailValidationData = action?.payload
     },
@@ -35,6 +39,7 @@ export const {
   setPasswordValidationData,
   setFirstNameValidationData,
   setLastNameValidationData,
+  setOrganizationValidationData,
   setEmailValidationData,
 } = validationSlice.actions
 export default validationSlice.reducer

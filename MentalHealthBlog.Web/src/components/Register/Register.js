@@ -30,6 +30,7 @@ import {
   setFirstNameValidationData,
   setLastNameValidationData,
   setEmailValidationData,
+  setOrganizationValidationData,
 } from '../../redux-toolkit/features/validationSlice'
 
 export const Register = () => {
@@ -46,6 +47,7 @@ export const Register = () => {
     passwordValidationData,
     firstNameValidationData,
     lastNameValidationData,
+    organizationValidationData,
     emailValidationData,
   } = useSelector((store) => store.validation)
 
@@ -54,6 +56,7 @@ export const Register = () => {
     dispatch(setPasswordValidationData({}))
     dispatch(setFirstNameValidationData({}))
     dispatch(setLastNameValidationData({}))
+    dispatch(setOrganizationValidationData({}))
     dispatch(setEmailValidationData({}))
   }
 
@@ -838,7 +841,37 @@ export const Register = () => {
                   name="register-mental-health-expert-organization"
                   type="text"
                   placeholder="Enter your organization: "
-                ></input>
+                  onBlur={(e) => {
+                    let organization = e.target.value
+                    let isOrganization = true
+                    let [isValid, validationMessages] =
+                      checkPersonalInformationValidity(
+                        organization,
+                        [],
+                        isOrganization
+                      )
+                    dispatch(
+                      setOrganizationValidationData({
+                        organizationIsValid: isValid,
+                        organizationValidationMessages: validationMessages,
+                      })
+                    )
+                  }}
+                />
+
+                {!organizationValidationData?.organizationIsValid && (
+                  <div className="validation-message-main-container">
+                    {organizationValidationData?.organizationValidationMessages?.map(
+                      (message, index) => {
+                        return (
+                          <p key={index} className="validation-message">
+                            - {message}
+                          </p>
+                        )
+                      }
+                    )}
+                  </div>
+                )}
               </div>
 
               <div className="mental-health-expert-register-info phone-number">
