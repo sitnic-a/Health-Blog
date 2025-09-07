@@ -10,6 +10,7 @@ import {
   checkEmailValidity,
   checkPasswordValidity,
   checkPersonalInformationValidity,
+  checkPhoneNumberValidity,
   checkUsernameValidity,
   previewImage,
   resetValidationData,
@@ -29,8 +30,9 @@ import {
   setUsernameValidationData,
   setFirstNameValidationData,
   setLastNameValidationData,
-  setEmailValidationData,
   setOrganizationValidationData,
+  setPhoneNumberValidationData,
+  setEmailValidationData,
 } from '../../redux-toolkit/features/validationSlice'
 
 export const Register = () => {
@@ -48,6 +50,7 @@ export const Register = () => {
     firstNameValidationData,
     lastNameValidationData,
     organizationValidationData,
+    phoneNumberValidationData,
     emailValidationData,
   } = useSelector((store) => store.validation)
 
@@ -57,6 +60,7 @@ export const Register = () => {
     dispatch(setFirstNameValidationData({}))
     dispatch(setLastNameValidationData({}))
     dispatch(setOrganizationValidationData({}))
+    dispatch(setPhoneNumberValidationData({}))
     dispatch(setEmailValidationData({}))
   }
 
@@ -115,6 +119,8 @@ export const Register = () => {
         !lastNameValidationData?.lastNameIsValid ||
         stringIsNullOrEmpty(mentalHealthExpertOrganization) ||
         !organizationValidationData?.organizationIsValid ||
+        stringIsNullOrEmpty(mentalHealthExpertPhoneNumber) ||
+        !organizationValidationData?.phoneNumberIsValid ||
         // stringIsNullOrEmpty(mentalHealthExpertEmail) ||
         !emailValidationData?.emailIsValid
       ) {
@@ -143,10 +149,6 @@ export const Register = () => {
       let firstName = document.getElementById('register-first-name').value
       let lastName = document.getElementById('register-last-name').value
       let email = document.getElementById('register-email').value
-
-      // console.log(
-      //   `Password validity ${passwordValidationData?.isValid} , messages ${passwordValidationData?.validationMessages}`
-      // )
 
       roles.push(db_roles.USER)
 
@@ -254,7 +256,7 @@ export const Register = () => {
   return (
     <section id="register-container">
       <h1>Populate required fields to continue...</h1>
-      <p className="required-field">Required fields *</p>
+      <p className="required-field">Required field *</p>
       <form onSubmit={registerUser} encType="multipart/form-data">
         <div className="register-credentials-container">
           <div>
@@ -890,7 +892,32 @@ export const Register = () => {
                   name="register-mental-health-expert-phone-number"
                   type="text"
                   placeholder="Enter your phone number: "
-                ></input>
+                  onBlur={(e) => {
+                    let phoneNumber = e.target.value
+                    let [isValid, validationMessages] =
+                      checkPhoneNumberValidity(phoneNumber, [])
+                    dispatch(
+                      setPhoneNumberValidationData({
+                        phoneNumberIsValid: isValid,
+                        phoneNumberValidationMessages: validationMessages,
+                      })
+                    )
+                  }}
+                />
+
+                {!phoneNumberValidationData?.phoneNumberIsValid && (
+                  <div className="validation-message-main-container">
+                    {phoneNumberValidationData?.phoneNumberValidationMessages?.map(
+                      (message, index) => {
+                        return (
+                          <p key={index} className="validation-message">
+                            - {message}
+                          </p>
+                        )
+                      }
+                    )}
+                  </div>
+                )}
               </div>
 
               <div className="mental-health-expert-register-info email">

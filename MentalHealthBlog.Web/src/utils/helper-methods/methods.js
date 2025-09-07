@@ -406,6 +406,7 @@ export const checkPersonalInformationValidity = (
     'Organization name can contain letters, numbers and some special characters'
   )
   validationMessages.push('Cannot start or end with special character')
+  validationMessages.push('Cannot have multiple special characters in a row')
   validationMessages.push("Special characters: . - _ & / , ( ) ' ")
   return [!isValid, validationMessages]
 }
@@ -448,4 +449,20 @@ export const checkInputDataValidity = (data) => {
   }
 
   return false
+}
+
+export const checkPhoneNumberValidity = (phoneNumber, validationMessages) => {
+  let regexPattern = /^\+?[0-9](?:[0-9]|[ \-/](?![ \-/]))*[0-9]$/
+  let isValid = true
+  if (regexPattern.test(phoneNumber)) {
+    return [isValid, validationMessages]
+  }
+  validationMessages.push(
+    'Phone number can contain numbers in combination with several special characters'
+  )
+  validationMessages.push(
+    'Special characters are not required. Used for better readability'
+  )
+  validationMessages.push('Special characters: + - / and space')
+  return [!isValid, validationMessages]
 }
