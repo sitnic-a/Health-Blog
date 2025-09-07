@@ -9,9 +9,13 @@ import {
 import { AddPostEmotions } from '../AddPostEmotions/AddPostEmotions'
 
 import AddPostTagsCSS from './AddPostTags.css'
+import { checkTagsValidity } from '../../utils/helper-methods/methods'
+import { setTagsValidationData } from '../../redux-toolkit/features/validationSlice'
 
 export const AddPostTags = () => {
   let dispatch = useDispatch()
+  let { tagsValidationData } = useSelector((store) => store.validation)
+
   let { suggestedTags, displayedSuggestedTags, chosenTags, pickedTags } =
     useSelector((store) => store.tag)
 
@@ -45,6 +49,20 @@ export const AddPostTags = () => {
 
     if (e.key === 'Enter') {
       let tag = e.target.value
+      let afterAddChosenTags = [...chosenTags, tag]
+      let tagToAdd = {
+        id: -1,
+        name: e.target.value,
+      }
+      let afterEnterPickedTags = [...pickedTags, tagToAdd]
+      dispatch(setPickedTags(afterEnterPickedTags))
+      dispatch(setChosenTags(afterAddChosenTags))
+      e.target.value = ''
+      return
+    }
+
+    if (e.key === ',') {
+      let tag = e.target.value.substr(0, e.target.value.length - 1)
       let afterAddChosenTags = [...chosenTags, tag]
       let tagToAdd = {
         id: -1,
@@ -132,9 +150,12 @@ export const AddPostTags = () => {
           Tags
           <span className="required-field"> *</span>
         </label>
-        <br />
+        <p className="add-post-picked-tags-note">
+          NOTE: You can use either , or enter for adding tags to list!
+        </p>
+
         <div className="add-post-picked-tags-container">
-          {chosenTags.map((tag) => {
+          {chosenTags?.map((tag) => {
             return (
               <span key={tag} className="add-post-content-picked-tags-span-tag">
                 {tag}
@@ -153,9 +174,37 @@ export const AddPostTags = () => {
           id="tag"
           type="text"
           className="add-post-content-tags-input form-field"
+          placeholder="Either write your own or choose one..."
           onKeyUp={(e) => handleTagAdding(e)}
           onChange={(e) => handleSuggestedTagsChange(e)}
+          onBlur={(e) => {
+            let [isValid, validationMessages] = checkTagsValidity(
+              chosenTags,
+              []
+            )
+
+            dispatch(
+              setTagsValidationData({
+                tagsIsValid: isValid,
+                tagsValidationMessages: validationMessages,
+              })
+            )
+          }}
         />
+
+        {!tagsValidationData?.tagsIsValid && (
+          <div className="validation-message-main-container">
+            {tagsValidationData?.tagsValidationMessages?.map(
+              (message, index) => {
+                return (
+                  <p key={index} className="validation-message">
+                    - {message}
+                  </p>
+                )
+              }
+            )}
+          </div>
+        )}
       </div>
       {displayedSuggestedTags.length > 0 && (
         <div

@@ -38,9 +38,9 @@ export const Login = () => {
 
     if (
       stringIsNullOrEmpty(user.username) ||
-      !checkUsernameValidity(user.username) ||
+      !usernameValidationData?.usernameIsValid ||
       stringIsNullOrEmpty(user.password) ||
-      !checkPasswordValidity(user.password)
+      !passwordValidationData?.passwordIsValid
     ) {
       toast.error('Fields are required or not valid!', {
         autoClose: 1500,

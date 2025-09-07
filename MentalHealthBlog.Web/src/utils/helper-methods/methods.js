@@ -441,14 +441,38 @@ export const checkEmailValidity = (
   return [!isValid, validationMessages]
 }
 
-export const checkInputDataValidity = (data) => {
-  let regexPattern = /^(?!.*[<>;'"\\&]).{3,30}$/
-
-  if (regexPattern.test(data)) {
-    return true
+export const checkInputDataValidity = (
+  data,
+  validationMessages,
+  isTitle,
+  isContent
+) => {
+  let isValid = true
+  if (isTitle) {
+    let regexPattern =
+      /^(?!.*[ \-_.:,!?'"()]{2})(?!^[\s\-_.:,!?'"()])(?!.*[\-_.:,!?'"()]\s?$)[\p{L}\p{N} \-_.:,!?'"()]{1,150}$/u
+    if (regexPattern.test(data)) {
+      return [isValid, validationMessages]
+    }
+    validationMessages.push(
+      'Can contain letters, numbers and some special characters'
+    )
+    validationMessages.push(
+      'Special characters are not allowed to repeat in a row'
+    )
+    validationMessages.push('Special characters: - _ . , : ! ? \' /" ()')
+    return [!isValid, validationMessages]
   }
 
-  return false
+  if (isContent) {
+    let regexPattern = /^[^<>`]+$/u
+    if (regexPattern.test(data)) {
+      return [isValid, validationMessages]
+    }
+
+    validationMessages.push('Content is required')
+    return [!isValid, validationMessages]
+  }
 }
 
 export const checkPhoneNumberValidity = (phoneNumber, validationMessages) => {
@@ -465,4 +489,37 @@ export const checkPhoneNumberValidity = (phoneNumber, validationMessages) => {
   )
   validationMessages.push('Special characters: + - / and space')
   return [!isValid, validationMessages]
+}
+
+export const checkTagsValidity = (tags, validationMessages) => {
+  console.log('Tags ', tags)
+
+  let isValid = true
+  let regexPattern =
+    /^(?!.*[ \-_]{2})(?!^[ \-_])(?!.*[ \-_]$)[\p{L}\p{N} \-_]{1,60}$/u
+
+  if (tags?.length <= 0) {
+    validationMessages.push('Tags are required')
+    return [!isValid, validationMessages]
+  }
+
+  for (let i = 0; i < tags?.length; i++) {
+    console.log('Tag value ', tags[i])
+    if (!regexPattern.test(tags[i])) {
+      validationMessages.push(
+        'Each tag can contain either letters, numbers or some special characters'
+      )
+      validationMessages.push('Can be max 60 characters long')
+      validationMessages.push('Cannot start or end with special character')
+      validationMessages.push(
+        'Cannot contain multiple special characters in a row'
+      )
+      validationMessages.push("Special characters: ' ' - _")
+      return [!isValid, validationMessages]
+    }
+  }
+
+  if (isValid === true) {
+    return [isValid, validationMessages]
+  }
 }

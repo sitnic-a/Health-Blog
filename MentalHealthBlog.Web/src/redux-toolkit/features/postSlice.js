@@ -42,44 +42,23 @@ export const getById = createAsyncThunk('post/id', async (requestObject) => {
   return response
 })
 
-export const createPost = createAsyncThunk('post/add/', async (addPostObj) => {
-  let url = `${application.application_url}/post`
-  addPostObj.e.preventDefault()
-  let form = new FormData(addPostObj.e.target)
-  let data = Object.fromEntries([...form.entries()])
+export const createPost = createAsyncThunk(
+  'post/add/',
+  async (objectWithData) => {
+    let url = `${application.application_url}/post`
 
-  let newPost = {
-    title: data.title,
-    content: data.content,
-    userId: addPostObj.authenticatedUser.id,
-    tags: addPostObj.chosenTags,
-    emotions: addPostObj.chosenEmotions,
-  }
-
-  if (
-    stringIsNullOrEmpty(newPost?.title) ||
-    !checkInputDataValidity(newPost?.title) ||
-    stringIsNullOrEmpty(newPost?.content) ||
-    !checkInputDataValidity(newPost?.content) ||
-    newPost?.tags?.length <= 0
-  ) {
-    toast.error('Fields are required or not valid!', {
-      position: 'bottom-right',
+    let request = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(objectWithData),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
+      },
     })
-    return
+    let response = await request.json()
+    return response
   }
-
-  let request = await fetch(url, {
-    method: 'POST',
-    body: JSON.stringify(newPost),
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${addPostObj.authenticatedUser.jwToken}`,
-    },
-  })
-  let response = await request.json()
-  return response
-})
+)
 
 export const updatePost = createAsyncThunk(
   'post/update/{id}',

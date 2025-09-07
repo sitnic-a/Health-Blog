@@ -24,6 +24,7 @@ export const AddPostEmotions = () => {
           id="emotion"
           name="emotion"
           type="text"
+          placeholder="Choose from the list below"
           onFocus={() => {
             if (suggestedEmotions.length <= 0) {
               dispatch(setSuggestedEmotions(dbEmotions))

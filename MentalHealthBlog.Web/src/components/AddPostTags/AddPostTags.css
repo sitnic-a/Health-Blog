@@ -1,3 +1,10 @@
+.add-post-picked-tags-note {
+  font-family: 'Overlock';
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #34688f;
+}
+
 .add-post-picked-tags-container {
   overflow: hidden;
 }
