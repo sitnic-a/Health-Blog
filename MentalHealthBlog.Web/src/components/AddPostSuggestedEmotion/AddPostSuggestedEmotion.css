@@ -10,6 +10,12 @@
   font-family: 'Klee One';
 }
 
+@media (width<420px) {
+  .add-post-suggested-emotion-container {
+    font-size: 0.85rem;
+  }
+}
+
 .emotion-bad {
   color: #fff;
   background: red;

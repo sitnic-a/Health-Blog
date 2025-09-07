@@ -47,7 +47,7 @@ export const Login = () => {
     }
 
     let [usernameIsValid, usernameValidationMessages] = checkUsernameValidity(
-      data?.username,
+      user?.username,
       []
     )
     dispatch(
@@ -58,7 +58,7 @@ export const Login = () => {
     )
 
     let [passwordIsValid, passwordValidationMessages] = checkPasswordValidity(
-      data?.password,
+      user?.password,
       []
     )
     dispatch(
@@ -68,18 +68,11 @@ export const Login = () => {
       })
     )
 
-    console.log(
-      'VALID ',
-      passwordValidationData?.passwordIsValid,
-      'MESAGGES ',
-      passwordValidationData?.passwordValidationMessages
-    )
-
     if (
       stringIsNullOrEmpty(user?.username) ||
-      !usernameValidationData?.usernameIsValid ||
+      !usernameIsValid ||
       stringIsNullOrEmpty(user?.password) ||
-      !passwordValidationData?.passwordIsValid
+      !passwordIsValid
     ) {
       toast.error('Fields are required or not valid!', {
         autoClose: 1500,
@@ -157,9 +150,9 @@ export const Login = () => {
                     }}
                   />
 
-                  {!usernameValidationData?.usernameIsValid && (
+                  {!usernameValidationData?.isValid && (
                     <div className="validation-message-main-container">
-                      {usernameValidationData?.usernameValidationMessages?.map(
+                      {usernameValidationData?.validationMessages?.map(
                         (message, index) => {
                           return (
                             <p key={index} className="validation-message">
@@ -198,9 +191,9 @@ export const Login = () => {
                     }}
                   />
 
-                  {!passwordValidationData?.passwordIsValid && (
+                  {!passwordValidationData?.isValid && (
                     <div className="validation-message-main-container">
-                      {passwordValidationData?.passwordValidationMessages?.map(
+                      {passwordValidationData?.validationMessages?.map(
                         (message, index) => {
                           return (
                             <p key={index} className="validation-message">
@@ -218,9 +211,6 @@ export const Login = () => {
                       className="register-link regular-user-link"
                       to={'/register'}
                       state={{ isRegularUser: true }}
-                      onClick={() => {
-                        resetValidationData()
-                      }}
                     >
                       Create an account
                     </Link>

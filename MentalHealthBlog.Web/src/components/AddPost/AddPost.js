@@ -58,13 +58,40 @@ export const AddPost = () => {
       emotions: chosenEmotions,
     }
 
-    checkTagsValidity(chosenTags, [])
+    let isTitle = true
+    let isContent = false
+    let [titleIsValid, titleValidationMessages] = checkInputDataValidity(
+      objectWithData?.title,
+      [],
+      isTitle,
+      isContent
+    )
+    dispatch(setTitleValidationData({ titleIsValid, titleValidationMessages }))
+
+    isTitle = false
+    isContent = true
+    let [contentIsValid, contentValidationMessages] = checkInputDataValidity(
+      objectWithData?.content,
+      [],
+      isTitle,
+      isContent
+    )
+
+    dispatch(
+      setContentValidationData({ contentIsValid, contentValidationMessages })
+    )
+
+    let [tagsIsValid, tagsValidationMessages] = checkTagsValidity(
+      objectWithData?.tags,
+      []
+    )
+    dispatch(setTagsValidationData({ tagsIsValid, tagsValidationMessages }))
 
     if (
       stringIsNullOrEmpty(objectWithData?.title) ||
       !titleValidationData?.titleIsValid ||
       stringIsNullOrEmpty(objectWithData?.content) ||
-      !checkInputDataValidity(objectWithData?.title, [], true) ||
+      !contentValidationData?.contentIsValid ||
       objectWithData?.tags?.length <= 0 ||
       !tagsValidationData?.tagsIsValid
     ) {

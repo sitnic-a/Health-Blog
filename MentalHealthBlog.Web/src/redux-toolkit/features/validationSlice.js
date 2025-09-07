@@ -19,10 +19,14 @@ const validationSlice = createSlice({
   name: 'validationSlice',
   reducers: {
     setUsernameValidationData: (state, action) => {
-      state.usernameValidationData = action?.payload
+      state.usernameValidationData.isValid = action?.payload?.usernameIsValid
+      state.usernameValidationData.validationMessages =
+        action?.payload?.usernameValidationMessages
     },
     setPasswordValidationData: (state, action) => {
-      state.passwordValidationData = action?.payload
+      state.passwordValidationData.isValid = action?.payload?.passwordIsValid
+      state.passwordValidationData.validationMessages =
+        action?.payload?.passwordValidationMessages
     },
     setFirstNameValidationData: (state, action) => {
       state.firstNameValidationData = action?.payload
