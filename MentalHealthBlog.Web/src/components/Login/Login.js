@@ -1,6 +1,11 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { login, setIsFailed } from '../../redux-toolkit/features/userSlice'
+import {
+  setUsernameValidationData,
+  setPasswordValidationData,
+} from '../../redux-toolkit/features/validationSlice'
+
 import { toast } from 'react-toastify'
 import { Loader } from '../shared/Loader/Loader'
 import {
@@ -16,6 +21,9 @@ export const Login = () => {
   let navigate = useNavigate()
 
   let { isLogging } = useSelector((store) => store.user)
+  let { usernameValidationData, passwordValidationData } = useSelector(
+    (store) => store.validation
+  )
 
   let loginUser = async (e) => {
     e.preventDefault()
@@ -95,8 +103,35 @@ export const Login = () => {
                     type="text"
                     name="username"
                     autoComplete="username"
-                    autoFocus
+                    autoFocus={true}
+                    onBlur={(e) => {
+                      let username = e.target.value
+                      let [isValid, validationMessages] = checkUsernameValidity(
+                        username,
+                        []
+                      )
+                      dispatch(
+                        setUsernameValidationData({
+                          usernameIsValid: isValid,
+                          usernameValidationMessages: validationMessages,
+                        })
+                      )
+                    }}
                   />
+
+                  {!usernameValidationData?.usernameIsValid && (
+                    <div className="validation-message-main-container">
+                      {usernameValidationData?.usernameValidationMessages?.map(
+                        (message, index) => {
+                          return (
+                            <p key={index} className="validation-message">
+                              - {message}
+                            </p>
+                          )
+                        }
+                      )}
+                    </div>
+                  )}
                 </div>
                 <br />
                 <div>
@@ -111,7 +146,33 @@ export const Login = () => {
                     id="password"
                     type="password"
                     name="password"
+                    onBlur={(e) => {
+                      let password = e.target.value
+                      let [isValid, passwordValidationMessages] =
+                        checkPasswordValidity(password, [])
+
+                      dispatch(
+                        setPasswordValidationData({
+                          passwordIsValid: isValid,
+                          passwordValidationMessages,
+                        })
+                      )
+                    }}
                   />
+
+                  {!passwordValidationData?.passwordIsValid && (
+                    <div className="validation-message-main-container">
+                      {passwordValidationData?.passwordValidationMessages?.map(
+                        (message, index) => {
+                          return (
+                            <p key={index} className="validation-message">
+                              - {message}
+                            </p>
+                          )
+                        }
+                      )}
+                    </div>
+                  )}
                 </div>
                 <section id="register-main-container">
                   <div className="register-regular-user-main-container">

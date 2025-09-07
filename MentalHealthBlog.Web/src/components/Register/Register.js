@@ -283,10 +283,6 @@ export const Register = () => {
                     usernameValidationMessages: validationMessages,
                   })
                 )
-
-                console.log(
-                  `Username valid ${usernameValidationData?.usernameIsValid} messages ${usernameValidationData?.usernameValidationMessages}`
-                )
               }}
             />
 
