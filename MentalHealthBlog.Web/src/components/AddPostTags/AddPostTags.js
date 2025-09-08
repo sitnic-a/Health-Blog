@@ -61,16 +61,21 @@ export const AddPostTags = () => {
       return
     }
 
-    if (e.key === ',') {
-      let tag = e.target.value.substr(0, e.target.value.length - 1)
-      let afterAddChosenTags = [...chosenTags, tag]
-      let tagToAdd = {
-        id: -1,
-        name: e.target.value,
+    if (e.key === ',' || e.which === 188) {
+      let tag
+      if (e.target.value.length !== 1 && e.target.value !== ',') {
+        tag = e.target.value.substr(0, e.target.value.length - 1)
+        let afterAddChosenTags = [...chosenTags, tag]
+        let tagToAdd = {
+          id: -1,
+          name: e.target.value,
+        }
+        let afterEnterPickedTags = [...pickedTags, tagToAdd]
+        dispatch(setPickedTags(afterEnterPickedTags))
+        dispatch(setChosenTags(afterAddChosenTags))
+        e.target.value = ''
+        return
       }
-      let afterEnterPickedTags = [...pickedTags, tagToAdd]
-      dispatch(setPickedTags(afterEnterPickedTags))
-      dispatch(setChosenTags(afterAddChosenTags))
       e.target.value = ''
       return
     }
@@ -175,7 +180,11 @@ export const AddPostTags = () => {
           type="text"
           className="add-post-content-tags-input form-field"
           placeholder="Either write your own or choose one..."
-          onKeyUp={(e) => handleTagAdding(e)}
+          onKeyUp={(e) => {
+            console.log('E value ', e)
+
+            handleTagAdding(e)
+          }}
           onChange={(e) => handleSuggestedTagsChange(e)}
           onBlur={(e) => {
             let [isValid, validationMessages] = checkTagsValidity(

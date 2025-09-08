@@ -32,7 +32,7 @@ export const MentalHealthExpertsDropdown = () => {
             expert?.requestStatus === requestStatuses.PENDING ||
             expert?.requestStatus === requestStatuses.APPROVED || (
               <div
-                key={expert?.userId}
+                key={expert?.mentalHealthExpertId}
                 className="main-mental-health-expert-selected-picker-option"
               >
                 <div className="main-mental-health-expert-picker-option main-mental-health-expert-picker-option-expanded">

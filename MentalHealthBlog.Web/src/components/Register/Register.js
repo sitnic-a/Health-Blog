@@ -191,20 +191,20 @@ export const Register = () => {
 
       if (
         stringIsNullOrEmpty(username) ||
-        !usernameValidationData?.usernameIsValid ||
+        !usernameIsValid ||
         stringIsNullOrEmpty(password) ||
-        !passwordValidationData?.passwordIsValid ||
+        !passwordIsValid ||
         roles.length <= 0 ||
         stringIsNullOrEmpty(mentalHealthExpertFirstName) ||
-        !firstNameValidationData?.firstNameIsValid ||
+        !firstNameIsValid ||
         stringIsNullOrEmpty(mentalHealthExpertLastName) ||
-        !lastNameValidationData?.lastNameIsValid ||
+        !lastNameIsValid ||
         stringIsNullOrEmpty(mentalHealthExpertOrganization) ||
-        !organizationValidationData?.organizationIsValid ||
+        !organizationIsValid ||
         stringIsNullOrEmpty(mentalHealthExpertPhoneNumber) ||
-        !organizationValidationData?.phoneNumberIsValid ||
+        !phoneNumberIsValid ||
         // stringIsNullOrEmpty(mentalHealthExpertEmail) ||
-        !emailValidationData?.emailIsValid
+        !emailIsValid
       ) {
         toast.error('Fields are required or not valid!', {
           autoClose: 1500,
