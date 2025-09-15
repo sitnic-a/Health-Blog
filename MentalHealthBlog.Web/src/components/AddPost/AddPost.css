@@ -1,3 +1,7 @@
+#add-post-form {
+  margin-inline: 0rem;
+}
+
 .add-post-modal-header {
   font-family: 'Overlock';
   font-size: 1.2rem;
@@ -28,4 +32,10 @@
   cursor: pointer;
   color: #f3f1e3;
   background: #edb572;
+}
+
+.add-post-modal-save-button:hover {
+  border: 1px solid #edb572;
+  color: #edb572;
+  background: #fff;
 }

@@ -1,6 +1,11 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { login, setIsFailed } from '../../redux-toolkit/features/userSlice'
+import {
+  setUsernameValidationData,
+  setPasswordValidationData,
+} from '../../redux-toolkit/features/validationSlice'
+
 import { toast } from 'react-toastify'
 import { Loader } from '../shared/Loader/Loader'
 import {
@@ -10,12 +15,25 @@ import {
 } from '../../utils/helper-methods/methods'
 
 import LoginCSS from './Login.css'
+import { useEffect } from 'react'
 
 export const Login = () => {
   let dispatch = useDispatch()
   let navigate = useNavigate()
 
   let { isLogging } = useSelector((store) => store.user)
+  let { usernameValidationData, passwordValidationData } = useSelector(
+    (store) => store.validation
+  )
+
+  let resetValidationData = () => {
+    dispatch(setUsernameValidationData({}))
+    dispatch(setPasswordValidationData({}))
+  }
+
+  useEffect(() => {
+    resetValidationData()
+  }, [])
 
   let loginUser = async (e) => {
     e.preventDefault()
@@ -24,15 +42,38 @@ export const Login = () => {
     let data = Object.fromEntries([...formData])
 
     let user = {
-      username: data.username,
-      password: data.password,
+      username: data?.username,
+      password: data?.password,
     }
 
+    let [usernameIsValid, usernameValidationMessages] = checkUsernameValidity(
+      user?.username,
+      []
+    )
+    dispatch(
+      setUsernameValidationData({
+        usernameIsValid,
+        usernameValidationMessages,
+      })
+    )
+
+    let [passwordIsValid, passwordValidationMessages] = checkPasswordValidity(
+      user?.password,
+      []
+    )
+
+    dispatch(
+      setPasswordValidationData({
+        passwordIsValid,
+        passwordValidationMessages,
+      })
+    )
+
     if (
-      stringIsNullOrEmpty(user.username) ||
-      !checkUsernameValidity(user.username) ||
-      stringIsNullOrEmpty(user.password) ||
-      !checkPasswordValidity(user.password)
+      stringIsNullOrEmpty(user?.username) ||
+      !usernameIsValid ||
+      stringIsNullOrEmpty(user?.password) ||
+      !passwordIsValid
     ) {
       toast.error('Fields are required or not valid!', {
         autoClose: 1500,
@@ -95,8 +136,32 @@ export const Login = () => {
                     type="text"
                     name="username"
                     autoComplete="username"
-                    autoFocus
+                    onBlur={(e) => {
+                      let username = e.target.value
+                      let [usernameIsValid, usernameValidationMessages] =
+                        checkUsernameValidity(username, [])
+                      dispatch(
+                        setUsernameValidationData({
+                          usernameIsValid,
+                          usernameValidationMessages,
+                        })
+                      )
+                    }}
                   />
+
+                  {!usernameValidationData?.usernameIsValid && (
+                    <div className="validation-message-main-container">
+                      {usernameValidationData?.usernameValidationMessages?.map(
+                        (message, index) => {
+                          return (
+                            <p key={index} className="validation-message">
+                              - {message}
+                            </p>
+                          )
+                        }
+                      )}
+                    </div>
+                  )}
                 </div>
                 <br />
                 <div>
@@ -111,7 +176,33 @@ export const Login = () => {
                     id="password"
                     type="password"
                     name="password"
+                    onBlur={(e) => {
+                      let password = e.target.value
+                      let [passwordIsValid, passwordValidationMessages] =
+                        checkPasswordValidity(password, [])
+
+                      dispatch(
+                        setPasswordValidationData({
+                          passwordIsValid,
+                          passwordValidationMessages,
+                        })
+                      )
+                    }}
                   />
+
+                  {!passwordValidationData?.passwordIsValid && (
+                    <div className="validation-message-main-container">
+                      {passwordValidationData?.passwordValidationMessages?.map(
+                        (message, index) => {
+                          return (
+                            <p key={index} className="validation-message">
+                              - {message}
+                            </p>
+                          )
+                        }
+                      )}
+                    </div>
+                  )}
                 </div>
                 <section id="register-main-container">
                   <div className="register-regular-user-main-container">

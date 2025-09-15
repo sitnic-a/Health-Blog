@@ -10,8 +10,10 @@ import {
   checkEmailValidity,
   checkPasswordValidity,
   checkPersonalInformationValidity,
+  checkPhoneNumberValidity,
   checkUsernameValidity,
   previewImage,
+  resetValidationData,
   stringIsNullOrEmpty,
 } from '../../utils/helper-methods/methods'
 import { db_roles } from '../../enums/roles'
@@ -21,6 +23,17 @@ import { MentalHealthExpertsDropdown } from '../MentalHealthExpertsDropdown/Ment
 import { TiArrowSortedDown } from 'react-icons/ti'
 
 import RegisterCSS from './Register.css'
+import ValidationCSS from '../shared/Validation/Validation.css'
+
+import {
+  setPasswordValidationData,
+  setUsernameValidationData,
+  setFirstNameValidationData,
+  setLastNameValidationData,
+  setOrganizationValidationData,
+  setPhoneNumberValidationData,
+  setEmailValidationData,
+} from '../../redux-toolkit/features/validationSlice'
 
 export const Register = () => {
   let { dbRoles } = useSelector((store) => store.user)
@@ -31,8 +44,28 @@ export const Register = () => {
 
   let { isMentalHealthExpert, isRegularUser } = useFetchLocationState()
   let [isInTherapy, setIsInTherapy] = useState(false)
+  let {
+    usernameValidationData,
+    passwordValidationData,
+    firstNameValidationData,
+    lastNameValidationData,
+    organizationValidationData,
+    phoneNumberValidationData,
+    emailValidationData,
+  } = useSelector((store) => store.validation)
+
+  let resetValidationData = () => {
+    dispatch(setUsernameValidationData({}))
+    dispatch(setPasswordValidationData({}))
+    dispatch(setFirstNameValidationData({}))
+    dispatch(setLastNameValidationData({}))
+    dispatch(setOrganizationValidationData({}))
+    dispatch(setPhoneNumberValidationData({}))
+    dispatch(setEmailValidationData({}))
+  }
 
   useEffect(() => {
+    resetValidationData()
     dispatch(getDbRoles())
     dispatch(getMentalHealthExperts(null))
   }, [])
@@ -74,20 +107,104 @@ export const Register = () => {
 
       roles.push(db_roles.PSYCHOLOGIST)
 
+      let [usernameIsValid, usernameValidationMessages] = checkUsernameValidity(
+        username,
+        []
+      )
+      dispatch(
+        setUsernameValidationData({
+          usernameIsValid,
+          usernameValidationMessages,
+        })
+      )
+
+      let [passwordIsValid, passwordValidationMessages] = checkPasswordValidity(
+        password,
+        []
+      )
+      dispatch(
+        setPasswordValidationData({
+          passwordIsValid,
+          passwordValidationMessages,
+        })
+      )
+
+      let isOrganization = false
+      let [firstNameIsValid, firstNameValidationMessages] =
+        checkPersonalInformationValidity(
+          mentalHealthExpertFirstName,
+          [],
+          isOrganization
+        )
+
+      dispatch(
+        setFirstNameValidationData({
+          firstNameIsValid,
+          firstNameValidationMessages,
+        })
+      )
+
+      let [lastNameIsValid, lastNameValidationMessages] =
+        checkPersonalInformationValidity(
+          mentalHealthExpertLastName,
+          [],
+          isOrganization
+        )
+      dispatch(
+        setLastNameValidationData({
+          lastNameIsValid,
+          lastNameValidationMessages,
+        })
+      )
+
+      isOrganization = true
+      let [organizationIsValid, organizationValidationMessages] =
+        checkPersonalInformationValidity(
+          mentalHealthExpertOrganization,
+          [],
+          isOrganization
+        )
+      dispatch(
+        setOrganizationValidationData({
+          organizationIsValid,
+          organizationValidationMessages,
+        })
+      )
+
+      let [phoneNumberIsValid, phoneNumberValidationMessages] =
+        checkPhoneNumberValidity(mentalHealthExpertPhoneNumber, [])
+      dispatch(
+        setPhoneNumberValidationData({
+          phoneNumberIsValid,
+          phoneNumberValidationMessages,
+        })
+      )
+
+      let [emailIsValid, emailValidationMessages] = checkEmailValidity(
+        mentalHealthExpertEmail,
+        [],
+        isMentalHealthExpert
+      )
+      dispatch(
+        setEmailValidationData({ emailIsValid, emailValidationMessages })
+      )
+
       if (
         stringIsNullOrEmpty(username) ||
-        !checkUsernameValidity(username) ||
+        !usernameIsValid ||
         stringIsNullOrEmpty(password) ||
-        !checkPasswordValidity(password) ||
+        !passwordIsValid ||
         roles.length <= 0 ||
         stringIsNullOrEmpty(mentalHealthExpertFirstName) ||
-        !checkPersonalInformationValidity(mentalHealthExpertFirstName) ||
+        !firstNameIsValid ||
         stringIsNullOrEmpty(mentalHealthExpertLastName) ||
-        !checkPersonalInformationValidity(mentalHealthExpertLastName) ||
+        !lastNameIsValid ||
         stringIsNullOrEmpty(mentalHealthExpertOrganization) ||
-        !checkPersonalInformationValidity(mentalHealthExpertOrganization) ||
-        stringIsNullOrEmpty(mentalHealthExpertEmail) ||
-        !checkEmailValidity(mentalHealthExpertEmail)
+        !organizationIsValid ||
+        stringIsNullOrEmpty(mentalHealthExpertPhoneNumber) ||
+        !phoneNumberIsValid ||
+        // stringIsNullOrEmpty(mentalHealthExpertEmail) ||
+        !emailIsValid
       ) {
         toast.error('Fields are required or not valid!', {
           autoClose: 1500,
@@ -116,18 +233,69 @@ export const Register = () => {
       let email = document.getElementById('register-email').value
       roles.push(db_roles.USER)
 
+      let [usernameIsValid, usernameValidationMessages] = checkUsernameValidity(
+        username,
+        []
+      )
+      dispatch(
+        setUsernameValidationData({
+          usernameIsValid,
+          usernameValidationMessages,
+        })
+      )
+
+      let [passwordIsValid, passwordValidationMessages] = checkPasswordValidity(
+        password,
+        []
+      )
+      dispatch(
+        setPasswordValidationData({
+          passwordIsValid,
+          passwordValidationMessages,
+        })
+      )
+
+      let isOrganization = false
+
+      let [firstNameIsValid, firstNameValidationMessages] =
+        checkPersonalInformationValidity(firstName, [], isOrganization)
+      dispatch(
+        setFirstNameValidationData({
+          firstNameIsValid,
+          firstNameValidationMessages,
+        })
+      )
+
+      let [lastNameIsValid, lastNameValidationMessages] =
+        checkPersonalInformationValidity(lastName, [], isOrganization)
+      dispatch(
+        setLastNameValidationData({
+          lastNameIsValid,
+          lastNameValidationMessages,
+        })
+      )
+
+      let [emailIsValid, emailValidationMessages] = checkEmailValidity(
+        email,
+        [],
+        isMentalHealthExpert
+      )
+      dispatch(
+        setEmailValidationData({ emailIsValid, emailValidationMessages })
+      )
+
       if (
-        stringIsNullOrEmpty(username) ||
-        !checkUsernameValidity(username) ||
-        stringIsNullOrEmpty(password) ||
-        !checkPasswordValidity(password) ||
+        // stringIsNullOrEmpty(username) ||
+        !usernameValidationData?.usernameIsValid ||
+        // stringIsNullOrEmpty(password) ||
+        !passwordValidationData?.passwordIsValid ||
         roles.length <= 0 ||
         stringIsNullOrEmpty(firstName) ||
-        !checkPersonalInformationValidity(firstName) ||
+        !firstNameValidationData?.firstNameIsValid ||
         stringIsNullOrEmpty(lastName) ||
-        !checkPersonalInformationValidity(lastName) ||
+        !lastNameValidationData?.lastNameIsValid ||
         stringIsNullOrEmpty(email) ||
-        !checkEmailValidity(email)
+        !emailValidationData?.emailIsValid
       ) {
         toast.error('Fields are required or not valid!', {
           autoClose: 1500,
@@ -220,6 +388,7 @@ export const Register = () => {
   return (
     <section id="register-container">
       <h1>Populate required fields to continue...</h1>
+      <p className="required-field">Required field *</p>
       <form onSubmit={registerUser} encType="multipart/form-data">
         <div className="register-credentials-container">
           <div>
@@ -234,7 +403,35 @@ export const Register = () => {
               type="text"
               placeholder="Enter your username"
               autoComplete="true"
+              onBlur={(e) => {
+                let username = e.target.value
+                let [usernameIsValid, usernameValidationMessages] =
+                  checkUsernameValidity(username, [])
+
+                dispatch(
+                  setUsernameValidationData({
+                    usernameIsValid,
+                    usernameValidationMessages,
+                  })
+                )
+
+                console.log('UserVALDAT ', usernameValidationData)
+              }}
             />
+
+            {!usernameValidationData?.usernameIsValid && (
+              <div className="validation-message-main-container">
+                {usernameValidationData?.usernameValidationMessages?.map(
+                  (message, index) => {
+                    return (
+                      <p key={index} className="validation-message">
+                        - {message}
+                      </p>
+                    )
+                  }
+                )}
+              </div>
+            )}
           </div>
 
           <div>
@@ -248,7 +445,33 @@ export const Register = () => {
               id="register-password"
               className="form-field"
               type="password"
+              onBlur={(e) => {
+                let password = e.target.value
+                let [isValid, passwordValidationMessages] =
+                  checkPasswordValidity(password, [])
+
+                dispatch(
+                  setPasswordValidationData({
+                    passwordIsValid: isValid,
+                    passwordValidationMessages,
+                  })
+                )
+              }}
             />
+
+            {!passwordValidationData?.isValid && (
+              <div className="validation-message-main-container">
+                {passwordValidationData?.passwordValidationMessages?.map(
+                  (message, index) => {
+                    return (
+                      <p key={index} className="validation-message">
+                        - {message}
+                      </p>
+                    )
+                  }
+                )}
+              </div>
+            )}
           </div>
         </div>
         {isMentalHealthExpert !== true && (
@@ -268,7 +491,38 @@ export const Register = () => {
                   name="register-first-name"
                   className="form-field"
                   placeholder="Enter your first name..."
+                  onBlur={(e) => {
+                    let firstName = e.target.value
+                    let isOrganization = false
+                    let [isValid, validationMessages] =
+                      checkPersonalInformationValidity(
+                        firstName,
+                        [],
+                        isOrganization
+                      )
+
+                    dispatch(
+                      setFirstNameValidationData({
+                        firstNameIsValid: isValid,
+                        firstNameValidationMessages: validationMessages,
+                      })
+                    )
+                  }}
                 />
+
+                {!firstNameValidationData?.firstNameIsValid && (
+                  <div className="validation-message-main-container">
+                    {firstNameValidationData?.firstNameValidationMessages?.map(
+                      (message, index) => {
+                        return (
+                          <p key={index} className="validation-message">
+                            - {message}
+                          </p>
+                        )
+                      }
+                    )}
+                  </div>
+                )}
               </div>
 
               <div className="register-info-last-name-container">
@@ -285,7 +539,37 @@ export const Register = () => {
                   name="register-last-name"
                   className="form-field"
                   placeholder="Enter your last name..."
+                  onBlur={(e) => {
+                    let lastName = e.target.value
+                    let isOrganization = false
+                    let [isValid, validationMessages] =
+                      checkPersonalInformationValidity(
+                        lastName,
+                        [],
+                        isOrganization
+                      )
+                    dispatch(
+                      setLastNameValidationData({
+                        lastNameIsValid: isValid,
+                        lastNameValidationMessages: validationMessages,
+                      })
+                    )
+                  }}
                 />
+
+                {!lastNameValidationData?.lastNameIsValid && (
+                  <div className="validation-message-main-container">
+                    {lastNameValidationData?.lastNameValidationMessages?.map(
+                      (message, index) => {
+                        return (
+                          <p key={index} className="validation-message">
+                            - {message}
+                          </p>
+                        )
+                      }
+                    )}
+                  </div>
+                )}
               </div>
 
               <div className="register-info-email-container">
@@ -299,7 +583,36 @@ export const Register = () => {
                   name="register-email"
                   className="form-field"
                   placeholder="Enter your email..."
+                  onBlur={(e) => {
+                    let email = e.target.value
+                    let isMentalHealthExpert = false
+                    let [isValid, validationMessages] = checkEmailValidity(
+                      email,
+                      [],
+                      isMentalHealthExpert
+                    )
+                    dispatch(
+                      setEmailValidationData({
+                        emailIsValid: isValid,
+                        emailValidationMessages: validationMessages,
+                      })
+                    )
+                  }}
                 />
+
+                {!emailValidationData?.emailIsValid && (
+                  <div className="validation-message-main-container">
+                    {emailValidationData?.emailValidationMessages?.map(
+                      (message, index) => {
+                        return (
+                          <p key={index} className="validation-message">
+                            - {message}
+                          </p>
+                        )
+                      }
+                    )}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -562,7 +875,38 @@ export const Register = () => {
                   className="form-field"
                   type="text"
                   placeholder="Enter your first name: "
-                ></input>
+                  onBlur={(e) => {
+                    let firstName = e.target.value
+                    let isOrganization = false
+                    let [isValid, validationMessages] =
+                      checkPersonalInformationValidity(
+                        firstName,
+                        [],
+                        isOrganization
+                      )
+
+                    dispatch(
+                      setFirstNameValidationData({
+                        firstNameIsValid: isValid,
+                        firstNameValidationMessages: validationMessages,
+                      })
+                    )
+                  }}
+                />
+
+                {!firstNameValidationData?.firstNameIsValid && (
+                  <div className="validation-message-main-container">
+                    {firstNameValidationData?.firstNameValidationMessages?.map(
+                      (message, index) => {
+                        return (
+                          <p key={index} className="validation-message">
+                            - {message}
+                          </p>
+                        )
+                      }
+                    )}
+                  </div>
+                )}
               </div>
 
               <div className="mental-health-expert-register-info last-name">
@@ -580,7 +924,38 @@ export const Register = () => {
                   name="register-mental-health-expert-last-name"
                   type="text"
                   placeholder="Enter your last name: "
-                ></input>
+                  onBlur={(e) => {
+                    let lastName = e.target.value
+                    let isOrganization = false
+                    let [isValid, validationMessages] =
+                      checkPersonalInformationValidity(
+                        lastName,
+                        [],
+                        isOrganization
+                      )
+
+                    dispatch(
+                      setLastNameValidationData({
+                        lastNameIsValid: isValid,
+                        lastNameValidationMessages: validationMessages,
+                      })
+                    )
+                  }}
+                />
+
+                {!lastNameValidationData?.lastNameIsValid && (
+                  <div className="validation-message-main-container">
+                    {lastNameValidationData?.lastNameValidationMessages?.map(
+                      (message, index) => {
+                        return (
+                          <p key={index} className="validation-message">
+                            - {message}
+                          </p>
+                        )
+                      }
+                    )}
+                  </div>
+                )}
               </div>
 
               <div className="mental-health-expert-register-info organization">
@@ -598,7 +973,37 @@ export const Register = () => {
                   name="register-mental-health-expert-organization"
                   type="text"
                   placeholder="Enter your organization: "
-                ></input>
+                  onBlur={(e) => {
+                    let organization = e.target.value
+                    let isOrganization = true
+                    let [isValid, validationMessages] =
+                      checkPersonalInformationValidity(
+                        organization,
+                        [],
+                        isOrganization
+                      )
+                    dispatch(
+                      setOrganizationValidationData({
+                        organizationIsValid: isValid,
+                        organizationValidationMessages: validationMessages,
+                      })
+                    )
+                  }}
+                />
+
+                {!organizationValidationData?.organizationIsValid && (
+                  <div className="validation-message-main-container">
+                    {organizationValidationData?.organizationValidationMessages?.map(
+                      (message, index) => {
+                        return (
+                          <p key={index} className="validation-message">
+                            - {message}
+                          </p>
+                        )
+                      }
+                    )}
+                  </div>
+                )}
               </div>
 
               <div className="mental-health-expert-register-info phone-number">
@@ -616,7 +1021,32 @@ export const Register = () => {
                   name="register-mental-health-expert-phone-number"
                   type="text"
                   placeholder="Enter your phone number: "
-                ></input>
+                  onBlur={(e) => {
+                    let phoneNumber = e.target.value
+                    let [isValid, validationMessages] =
+                      checkPhoneNumberValidity(phoneNumber, [])
+                    dispatch(
+                      setPhoneNumberValidationData({
+                        phoneNumberIsValid: isValid,
+                        phoneNumberValidationMessages: validationMessages,
+                      })
+                    )
+                  }}
+                />
+
+                {!phoneNumberValidationData?.phoneNumberIsValid && (
+                  <div className="validation-message-main-container">
+                    {phoneNumberValidationData?.phoneNumberValidationMessages?.map(
+                      (message, index) => {
+                        return (
+                          <p key={index} className="validation-message">
+                            - {message}
+                          </p>
+                        )
+                      }
+                    )}
+                  </div>
+                )}
               </div>
 
               <div className="mental-health-expert-register-info email">
@@ -633,7 +1063,36 @@ export const Register = () => {
                   name="register-mental-health-expert-email"
                   type="email"
                   placeholder="Enter your email: "
-                ></input>
+                  onBlur={(e) => {
+                    let email = e.target.value
+                    let isMentalHealthExpert = true
+                    let [isValid, validationMessages] = checkEmailValidity(
+                      email,
+                      [],
+                      isMentalHealthExpert
+                    )
+                    dispatch(
+                      setEmailValidationData({
+                        emailIsValid: isValid,
+                        emailValidationMessages: validationMessages,
+                      })
+                    )
+                  }}
+                />
+
+                {!emailValidationData?.emailIsValid && (
+                  <div className="validation-message-main-container">
+                    {emailValidationData?.emailValidationMessages?.map(
+                      (message, index) => {
+                        return (
+                          <p key={index} className="validation-message">
+                            - {message}
+                          </p>
+                        )
+                      }
+                    )}
+                  </div>
+                )}
               </div>
             </div>
 

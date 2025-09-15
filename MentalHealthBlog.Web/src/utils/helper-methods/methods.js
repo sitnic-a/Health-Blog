@@ -334,52 +334,192 @@ export const setActiveMyMentalHealthExpertFilterActionTab = (element) => {
   element.currentTarget.classList.add('my-mental-health-experts-active-filter')
 }
 
-export const checkUsernameValidity = (username) => {
-  let regexPattern = /^(?!.*[<>;'"\\&]).{3,30}$/
+export const checkUsernameValidity = (username, validationMessages) => {
+  let regexPattern = /^(?![.-])(?!.*\.\.)(?!.*--)[a-zA-Z0-9._-]{1,60}(?<![.-])$/
+
+  let isValid = true
 
   if (regexPattern.test(username)) {
-    return true
+    return [isValid, validationMessages]
   }
 
-  return false
+  validationMessages.push('Username is required')
+  validationMessages.push('Can contain letters, numbers and special characters')
+  validationMessages.push('Permitted characters: _ - . ')
+  validationMessages.push('Cannot contain two - or . in a row')
+  validationMessages.push('Cannot start or end with - or .')
+
+  return [!isValid, validationMessages]
 }
 
-export const checkPasswordValidity = (password) => {
-  let regexPattern =
-    /^(?!.*(.)\1{3,})(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#_])[A-Za-z\d@$!%*?&#_]{10,}$/
+export const checkPasswordValidity = (password, validationMessages) => {
+  let regexPattern = /^[a-zA-Z0-9 _\-\.@]{10,100}$/
+
+  let isValid = true
 
   if (regexPattern.test(password)) {
-    return true
+    return [isValid, validationMessages]
   }
-  return false
+
+  validationMessages.push('Password is required!')
+  validationMessages.push('Password length must be 10-100 characters long')
+  validationMessages.push('Must contain lowercase letter')
+  validationMessages.push('Must contain uppercase letter')
+  validationMessages.push('Must contain number')
+  validationMessages.push('Special characters: - _ . @ ')
+  return [!isValid, validationMessages]
 }
 
-export const checkPersonalInformationValidity = (personalInfo) => {
-  let regexPattern = /^(?!.*[<>;'"\\&`/]).{2,50}$/
+export const checkPersonalInformationValidity = (
+  personalInfo,
+  validationMessages,
+  isOrganization
+) => {
+  if (!isOrganization) {
+    let isValid = true
+    //First and last name validation
+    let regexPattern = /^\p{Lu}\p{Ll}*(?:(?:[ -]| - )\p{Lu}\p{Ll}*)*$/u
 
+    if (regexPattern.test(personalInfo)) {
+      return [isValid, validationMessages]
+    }
+
+    validationMessages.push('Name must start with uppercase')
+    validationMessages.push(
+      'Cannot have numbers or special characters beside - and space'
+    )
+    validationMessages.push(
+      'If contains special characters each next name must start with uppercase'
+    )
+    validationMessages.push('Cannot end with space or -')
+    return [!isValid, validationMessages]
+  }
+  //Organization validation
+  let regexPattern =
+    /^(?!.*[.\-\/&,:()'"]{2})(?!^[\-\/.,&:()'"])(?!.*[\-\/.,&:()'"]$)[\p{L}\p{N} ._\-\/&,:()'"]{1,100}$/u
+  let isValid = true
   if (regexPattern.test(personalInfo)) {
-    return true
+    return [isValid, validationMessages]
   }
-
-  return false
+  validationMessages.push('Organization is required')
+  validationMessages.push(
+    'Organization name can contain letters, numbers and some special characters'
+  )
+  validationMessages.push('Cannot start or end with special character')
+  validationMessages.push('Cannot have multiple special characters in a row')
+  validationMessages.push("Special characters: . - _ & / , ( ) ' ")
+  return [!isValid, validationMessages]
 }
 
-export const checkEmailValidity = (email) => {
-  let regexPattern = /^(?!.*[<>;'"\\]).{1,256}@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/
+export const checkEmailValidity = (
+  email,
+  validationMessages,
+  isMentalHealthExpert
+) => {
+  let regexPattern
+
+  if (isMentalHealthExpert) {
+    regexPattern =
+      /^$|^(?!.*[.\-]{2})[\p{L}\p{N}._%+-]+@[a-zA-Z0-9](?!.*[.\-%]{2})[a-zA-Z0-9.-]*\.[a-zA-Z]{2,}$/u
+  } else {
+    regexPattern =
+      /^(?!.*[.\-]{2})[\p{L}\p{N}._%+-]+@[a-zA-Z0-9](?!.*[.\-%]{2})[a-zA-Z0-9.-]*\.[a-zA-Z]{2,}$/u
+  }
+
+  let isValid = true
 
   if (regexPattern.test(email)) {
-    return true
+    return [isValid, validationMessages]
   }
 
-  return false
+  validationMessages.push('Enter corrent email eg. email_21@email.com')
+  validationMessages.push('Cannot start with special character')
+  validationMessages.push(
+    'Cannot have more special characters in a row, eg. -- or ..'
+  )
+  validationMessages.push('Special characters: . _ + % -')
+  return [!isValid, validationMessages]
 }
 
-export const checkInputDataValidity = (data) => {
-  let regexPattern = /^(?!.*[<>;'"\\&]).{3,30}$/
-
-  if (regexPattern.test(data)) {
-    return true
+export const checkInputDataValidity = (
+  data,
+  validationMessages,
+  isTitle,
+  isContent
+) => {
+  let isValid = true
+  if (isTitle) {
+    let regexPattern =
+      /^(?!.*[ \-_.:,!?'"()]{2})(?!^[\s\-_.:,!?'"()])(?!.*[\-_.:,!?'"()]\s?$)[\p{L}\p{N} \-_.:,!?'"()]{1,150}$/u
+    if (regexPattern.test(data)) {
+      return [isValid, validationMessages]
+    }
+    validationMessages.push(
+      'Can contain letters, numbers and some special characters'
+    )
+    validationMessages.push(
+      'Special characters are not allowed to repeat in a row'
+    )
+    validationMessages.push('Special characters: - _ . , : ! ? \' /" ()')
+    return [!isValid, validationMessages]
   }
 
-  return false
+  if (isContent) {
+    let regexPattern = /^[^<>`]+$/u
+    if (regexPattern.test(data)) {
+      return [isValid, validationMessages]
+    }
+
+    validationMessages.push('Content is required')
+    return [!isValid, validationMessages]
+  }
+}
+
+export const checkPhoneNumberValidity = (phoneNumber, validationMessages) => {
+  let regexPattern = /^\+?[0-9](?:[0-9]|[ \-/](?![ \-/]))*[0-9]$/
+  let isValid = true
+  if (regexPattern.test(phoneNumber)) {
+    return [isValid, validationMessages]
+  }
+  validationMessages.push(
+    'Phone number can contain numbers in combination with several special characters'
+  )
+  validationMessages.push(
+    'Special characters are not required. Used for better readability'
+  )
+  validationMessages.push('Special characters: + - / and space')
+  return [!isValid, validationMessages]
+}
+
+export const checkTagsValidity = (tags, validationMessages) => {
+  console.log('Tags ', tags)
+
+  let isValid = true
+  let regexPattern =
+    /^(?!.*[ \-_]{2})(?!^[ \-_])(?!.*[ \-_]$)[\p{L}\p{N} \-_]{1,60}$/u
+
+  if (tags?.length <= 0) {
+    validationMessages.push('Tags are required')
+    return [!isValid, validationMessages]
+  }
+
+  for (let i = 0; i < tags?.length; i++) {
+    console.log('Tag value ', tags[i])
+    if (!regexPattern.test(tags[i])) {
+      validationMessages.push(
+        'Each tag can contain either letters, numbers or some special characters'
+      )
+      validationMessages.push('Can be max 60 characters long')
+      validationMessages.push('Cannot start or end with special character')
+      validationMessages.push(
+        'Cannot contain multiple special characters in a row'
+      )
+      validationMessages.push("Special characters: ' ' - _")
+      return [!isValid, validationMessages]
+    }
+  }
+
+  if (isValid === true) {
+    return [isValid, validationMessages]
+  }
 }

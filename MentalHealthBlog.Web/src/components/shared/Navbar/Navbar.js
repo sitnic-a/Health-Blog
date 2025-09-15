@@ -40,12 +40,12 @@ export const Navbar = () => {
               My Mental Health Experts
             </Link>
 
-            <Link
+            {/* <Link
               to={`/assignments/user/${authenticatedUser.id}`}
               className="navigation-bar-action"
             >
               Assignments
-            </Link>
+            </Link> */}
           </div>
 
           <div className="logout-main-container">

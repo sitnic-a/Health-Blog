@@ -38,7 +38,7 @@ export const application = {
       maxWidth: '700px',
       maxHeight: '500px',
       width: '80%',
-      padding: '0rem 2rem 1rem 2rem',
+      paddingInline: '1.5rem',
     },
   },
   layouts: {
