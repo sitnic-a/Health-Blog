@@ -53,7 +53,7 @@ export const NewExpertProfile = (props) => {
           </div>
           <div className="new-expert-profile-wrapper new-expert-profile-email-wrapper">
             <p className="new-expert-profile-bio-info new-expert-profile-email">
-              <MdEmail />
+              <MdEmail className="new-expert-profile-email-icon" />
               <span>
                 {!stringIsNullOrEmpty(expert?.email) ? expert?.email : '-'}
               </span>

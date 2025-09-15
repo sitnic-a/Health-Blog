@@ -27,9 +27,14 @@
 }
 
 .new-expert-profile-wrapper {
-  max-width: 200px;
   margin: auto;
   /* background: yellow; */
+}
+
+@media (width<=420px) {
+  .new-expert-profile-wrapper {
+    max-width: 280px;
+  }
 }
 
 .new-expert-profile-username {
@@ -41,7 +46,7 @@
 }
 
 .new-expert-profile-bio {
-  max-width: 200px;
+  max-width: 270px;
   margin: 14px auto;
 }
 
@@ -53,9 +58,17 @@
 }
 
 .new-expert-profile-bio-info span {
+  max-width: 260px;
+  word-wrap: break-word;
   font-family: 'Klee One';
   font-weight: 300;
   font-size: 0.99rem;
+}
+
+@media (width<=420px) {
+  .new-expert-profile-bio-info span {
+    word-break: break-all;
+  }
 }
 
 .new-expert-profile-phone-number {
@@ -68,4 +81,8 @@
   display: flex;
   align-items: center;
   gap: 6px;
+}
+
+.new-expert-profile-email-icon {
+  overflow: initial;
 }
