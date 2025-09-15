@@ -23,11 +23,12 @@ export const ListSharedContent = (props) => {
     <section className="sharing-users-content-container">
       <div className="sharing-users-content-header">
         <h1>Shared content</h1>
-        <div className="sharing-users-content-actions">
-          {/* Should be changed to icon for assignment and should make hover over
-           item to show tooltip about feature when it's clicked and explanation how to use it */}
-          <AssignmentButton />
-        </div>
+        {/*
+          <div className="sharing-users-content-actions">
+             Should be changed to icon for assignment and should make hover over item to show tooltip about feature when it's clicked and explanation how to use it }
+            <AssignmentButton />
+          </div>
+        */}
       </div>
 
       {overlayPost !== null && <OverlayPostPreview content={overlayPost} />}

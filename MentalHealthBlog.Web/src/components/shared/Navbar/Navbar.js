@@ -63,12 +63,14 @@ export const Navbar = () => {
               Requests
             </Link>
 
+            {/*
             <Link
               to={`/assignments/user/${authenticatedUser?.id}`}
               className="navigation-bar-action"
             >
               Assignments
             </Link>
+             */}
           </div>
 
           <Logout />

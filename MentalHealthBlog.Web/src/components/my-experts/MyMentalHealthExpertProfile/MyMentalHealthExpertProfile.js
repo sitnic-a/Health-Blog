@@ -13,11 +13,17 @@ import { requestStatuses } from '../../../enums/requestStatuses'
 import { openStopSharing } from '../../../redux-toolkit/features/modalSlice'
 import { StopSharingConfirmation } from '../../StopSharingConfirmation/StopSharingConfirmation'
 
+import defaultAvatar from '../../../images/default-avatar.png'
+import { stringIsNullOrEmpty } from '../../../utils/helper-methods/methods'
+
 export const MyMentalHealthExpertProfile = (props) => {
   let dispatch = useDispatch()
   let { isStopSharingOpen } = useSelector((store) => store.modal)
   let { authenticatedUser } = useSelector((store) => store.user)
   let expert = props?.expert
+  console.log('Expert ', expert)
+
+  let expertPhoto = `data:image/png;base64,${expert?.mentalHealthExpertPhotoAsFile}`
   return (
     <>
       <StopSharingConfirmation />
@@ -26,8 +32,12 @@ export const MyMentalHealthExpertProfile = (props) => {
           <div className="my-expert-photo-container">
             <img
               className="my-expert-photo"
-              src={`data:image/png;base64,${expert?.mentalHealthExpertPhotoAsFile}`}
-              alt={`{${expert?.mentalHealthExpertFirstName} ${expert?.mentalHealthExpertLastName}}`}
+              src={
+                !stringIsNullOrEmpty(expert?.mentalHealthExpertPhotoAsFile)
+                  ? expertPhoto
+                  : defaultAvatar
+              }
+              alt={`${expert?.mentalHealthExpertFirstName} ${expert?.mentalHealthExpertLastName}`}
             />
           </div>
 
