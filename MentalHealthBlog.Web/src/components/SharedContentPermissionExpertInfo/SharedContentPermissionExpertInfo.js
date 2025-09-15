@@ -1,5 +1,7 @@
 import { MdEmail, MdLocalPhone } from 'react-icons/md'
+import { stringIsNullOrEmpty } from '../../utils/helper-methods/methods'
 
+import defaultAvatar from '../../images/default-avatar.png'
 import SharedContentPermissionExpertInfoCSS from './SharedContentPermissionExpertInfo.css'
 
 export const SharedContentPermissionExpertInfo = ({ mentalHealthExpert }) => {
@@ -10,7 +12,11 @@ export const SharedContentPermissionExpertInfo = ({ mentalHealthExpert }) => {
       <div className="content-shared-with-mental-health-expert-expert-photo-container">
         <img
           className="content-shared-with-mental-health-expert-photo"
-          src={base64Photo}
+          src={
+            !stringIsNullOrEmpty(mentalHealthExpert?.photoAsFile)
+              ? base64Photo
+              : defaultAvatar
+          }
           alt={`${mentalHealthExpert?.firstName} ${mentalHealthExpert?.lastName}`}
         />
       </div>
@@ -31,7 +37,9 @@ export const SharedContentPermissionExpertInfo = ({ mentalHealthExpert }) => {
             className="content-shared-with-mental-health-expert-email-value"
             title={mentalHealthExpert?.email}
           >
-            {mentalHealthExpert?.email}
+            {!stringIsNullOrEmpty(mentalHealthExpert?.email)
+              ? mentalHealthExpert?.email
+              : 'N/A'}
           </p>
         </div>
 
