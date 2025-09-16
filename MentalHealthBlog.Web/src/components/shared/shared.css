@@ -13,7 +13,7 @@
   border-bottom: 1px solid #e1e1e1;
   outline: none;
   border-radius: 0.3rem;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
 }
 
 @keyframes blink {
@@ -45,10 +45,11 @@
 }
 
 .form-field-label {
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
+  font-size: 0.95rem;
 }
 
 .required-field {
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   color: #c93232;
 }

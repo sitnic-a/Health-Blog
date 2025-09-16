@@ -119,10 +119,8 @@ export const Login = () => {
         <section className="login">
           <form onSubmit={loginUser}>
             <div className="login-container">
-              <h1>
-                Welcome to Mental Health Blog. Feel free to write express your
-                emotions!
-              </h1>
+              <h1>Dobrodošli na Psihonet!</h1>
+              <h1> Osjećajte se slobodno da izrazite sve svoje emocije!</h1>
               <div className="form-fields">
                 <div>
                   <label className="form-field-label" htmlFor="username">
@@ -136,6 +134,7 @@ export const Login = () => {
                     type="text"
                     name="username"
                     autoComplete="username"
+                    placeholder="Unesite svoj username..."
                     onBlur={(e) => {
                       let username = e.target.value
                       let [usernameIsValid, usernameValidationMessages] =
@@ -176,6 +175,7 @@ export const Login = () => {
                     id="password"
                     type="password"
                     name="password"
+                    placeholder="Unesite svoj password..."
                     onBlur={(e) => {
                       let password = e.target.value
                       let [passwordIsValid, passwordValidationMessages] =
@@ -211,7 +211,7 @@ export const Login = () => {
                       to={'/register'}
                       state={{ isRegularUser: true }}
                     >
-                      Create an account
+                      Registruj se kao korisnik
                     </Link>
                   </div>
                   <div className="register-mental-health-expert-main-container">
@@ -220,7 +220,7 @@ export const Login = () => {
                       to={'/register'}
                       state={{ isMentalHealthExpert: true }}
                     >
-                      Register as mental health expert
+                      Registruj se kao stručnjak mentalnog zdravlja
                     </Link>
                   </div>
                 </section>
