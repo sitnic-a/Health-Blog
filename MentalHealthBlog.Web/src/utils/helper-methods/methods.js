@@ -343,11 +343,11 @@ export const checkUsernameValidity = (username, validationMessages) => {
     return [isValid, validationMessages]
   }
 
-  validationMessages.push('Username is required')
-  validationMessages.push('Can contain letters, numbers and special characters')
-  validationMessages.push('Permitted characters: _ - . ')
-  validationMessages.push('Cannot contain two - or . in a row')
-  validationMessages.push('Cannot start or end with - or .')
+  validationMessages.push('Unos polja je obavezan!')
+  validationMessages.push('Može imati slova, brojeve i specijalne karaktere')
+  validationMessages.push('Dozvoljeni karakteri: _ - . ')
+  validationMessages.push('Ne smije imati dvije ili više - ili . u nizu')
+  validationMessages.push('Ne smije početi - ili .')
 
   return [!isValid, validationMessages]
 }
@@ -361,12 +361,11 @@ export const checkPasswordValidity = (password, validationMessages) => {
     return [isValid, validationMessages]
   }
 
-  validationMessages.push('Password is required!')
-  validationMessages.push('Password length must be 10-100 characters long')
-  validationMessages.push('Must contain lowercase letter')
-  validationMessages.push('Must contain uppercase letter')
-  validationMessages.push('Must contain number')
-  validationMessages.push('Special characters: - _ . @ ')
+  validationMessages.push('Unos polja je obavezan!')
+  validationMessages.push('Mora imati minimalno 10 i maksimalno 100 karaktera!')
+  validationMessages.push('Mora imati malo i veliko slovo!')
+  validationMessages.push('Mora imati broj i specijalni karakter!')
+  validationMessages.push('Dozvoljeni karakteri: - _ . @ ')
   return [!isValid, validationMessages]
 }
 

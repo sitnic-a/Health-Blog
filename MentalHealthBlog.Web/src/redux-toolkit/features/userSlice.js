@@ -152,8 +152,8 @@ export const userSlice = createSlice({
           state.statusCode !== 201 ||
           state.statusCode !== 204
         ) {
-          toast.error('Invalid credentials, try again', {
-            autoClose: 1500,
+          toast.error('Korisnik ne postoji, probajte ponovo!', {
+            autoClose: 3000,
             position: 'bottom-right',
           })
           // console.log("Logged unsuccessfully");

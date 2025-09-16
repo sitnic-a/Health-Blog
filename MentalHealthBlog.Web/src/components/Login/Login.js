@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { login, setIsFailed } from '../../redux-toolkit/features/userSlice'
@@ -15,7 +16,6 @@ import {
 } from '../../utils/helper-methods/methods'
 
 import LoginCSS from './Login.css'
-import { useEffect } from 'react'
 
 export const Login = () => {
   let dispatch = useDispatch()
@@ -75,8 +75,8 @@ export const Login = () => {
       stringIsNullOrEmpty(user?.password) ||
       !passwordIsValid
     ) {
-      toast.error('Fields are required or not valid!', {
-        autoClose: 1500,
+      toast.error('Molimo slijedite upute prilikom popunjavanja polja!', {
+        autoClose: 3000,
         position: 'bottom-right',
       })
       dispatch(setIsFailed(true))
@@ -87,8 +87,8 @@ export const Login = () => {
       let statusCode = response?.payload?.statusCode
 
       if (statusCode === undefined) {
-        toast.error('Something went wrong', {
-          autoClose: 1500,
+        toast.error('Login nije moguć!', {
+          autoClose: 3000,
           position: 'bottom-right',
         })
       }
