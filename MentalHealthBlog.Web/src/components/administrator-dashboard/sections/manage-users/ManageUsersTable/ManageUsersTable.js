@@ -26,14 +26,16 @@ export const ManageUsersTable = () => {
       let statusCode = data?.payload?.StatusCode
       if (statusCode !== 200) {
         if (statusCode === 400) {
-          toast.error('Check your search parameters!', {
+          toast.error('Provjerite parametre pretrage!', {
+            autoClose: 1500,
             position: 'bottom-right',
           })
           return
         }
 
         if (statusCode === 404) {
-          toast.error('Users are not fetched properly!', {
+          toast.error('Korisnici nisu uspješno dobavljeni!', {
+            autoClose: 3000,
             position: 'bottom-right',
           })
           return
@@ -43,14 +45,15 @@ export const ManageUsersTable = () => {
           data?.payload?.statusCode === 200 &&
           data?.payload?.serviceResponseObject.length <= 0
         ) {
-          toast.warning('There are currenly no users that uses this system!', {
+          toast.warning('Trenutno nema registrovanih korisnika!', {
+            autoClose: 1500,
             position: 'bottom-right',
           })
           return
         }
 
         if (data?.payload?.statusCode === 200) {
-          toast.success('Successfully retrieved users!', {
+          toast.success('Uspješno dobavljeni korisnici!', {
             autoClose: 1500,
             position: 'bottom-right',
           })
@@ -71,28 +74,28 @@ export const ManageUsersTable = () => {
               {selectedRole === 4 && (
                 <>
                   <th className="manage-users-table-row-head-cell manage-users-more-cell-name">
-                    Name
+                    Ime
                   </th>
                   <th className="manage-users-table-row-head-cell manage-users-more-cell-organization">
-                    Organization
+                    Organizacija
                   </th>
                   <th className="manage-users-table-row-head-cell manage-users-more-cell-phone-number">
-                    Phone number
+                    Broj telefona
                   </th>
                   <th className="manage-users-table-row-head-cell manage-users-more-cell-email">
                     Email
                   </th>
                 </>
               )}
-              <th className="manage-users-table-row-head-cell">Roles</th>
-              <th className="manage-users-table-row-head-cell">Action</th>
+              <th className="manage-users-table-row-head-cell">Uloga</th>
+              <th className="manage-users-table-row-head-cell">Akcija</th>
             </tr>
           </thead>
           <tbody className="manage-users-table-body">
             {dbUsers?.map((user) => {
               let person = `${user?.firstName} ${user?.lastName}`
               return (
-                <tr className="manage-users-table-body-row" key={user.id}>
+                <tr className="manage-users-table-body-row" key={user?.id}>
                   <td className="manage-users-table-data-cell manage-users-data-username">
                     {user?.username}
                   </td>

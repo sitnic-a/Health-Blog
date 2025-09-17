@@ -204,7 +204,7 @@ let adminSlice = createSlice({
         let statusCode = action?.payload?.statusCode
 
         if (statusCode === 200) {
-          toast.success('Succesfully deleted user', {
+          toast.success('Korisnik uspješno obrisan', {
             autoClose: 1500,
             position: 'bottom-right',
           })
@@ -216,7 +216,8 @@ let adminSlice = createSlice({
       })
       .addCase(removeUserById.rejected, (state, action) => {
         console.log('Remove rejected...')
-        toast.error('Something went wrong!', {
+        toast.error('Radnja nije uspješno završena!', {
+          autoClose: 3000,
           position: 'bottom-right',
         })
       })
