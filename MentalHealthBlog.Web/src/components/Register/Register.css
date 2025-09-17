@@ -5,19 +5,20 @@
 }
 
 #register-container > h1 {
-  margin-inline: 3rem;
   max-width: 700px;
-  font-family: 'Klee One';
+  margin-inline: 3rem;
+  font-family: 'SansDeva';
   font-size: 2.3rem;
   font-weight: 700;
+  text-align: center;
   color: #edb572;
 }
 
 @media (width<=580px) {
   #register-container > h1 {
-    margin-inline: 0;
     max-width: 670px;
-    font-family: 'Klee One';
+    margin-inline: 0;
+    font-family: 'SansDeva';
     font-size: 1.7rem;
   }
 }
@@ -31,8 +32,8 @@
 }
 
 .register-info-in-therapy-container {
-  margin-block: 1rem;
   display: flex;
+  margin-block: 1rem;
   align-items: center;
 }
 
@@ -41,13 +42,12 @@
   height: 1rem;
   margin: 0;
   margin-left: 0.5rem;
-  margin-top: 3px;
   cursor: pointer;
 }
 
 .select-mental-health-experts-main-container-important-note {
   margin-block: 0.2rem;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 0.8rem;
   font-weight: 600;
   color: #c93232;
@@ -71,7 +71,6 @@
   border-top-left-radius: 0.4rem;
   border-top-right-radius: 0.4rem;
   cursor: pointer;
-
   color: #f3f1e3;
   background: #82a3bc;
 }
@@ -118,7 +117,7 @@
 }
 
 #register-mental-health-expert-photo {
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
 }
 
 #mental-health-expert-register-photo-main-container {
@@ -131,19 +130,21 @@
 }
 
 #register-container-button {
-  border-radius: 0.3rem;
-  margin-top: 20px;
   width: 50%;
+  position: relative;
+  z-index: 1;
+  margin-top: 1.25rem;
+  margin-bottom: 2rem;
   padding-block: 0.4rem;
-  outline: none;
   border: none;
-  background: #edb572;
-  color: #f3f1e3;
+  border-radius: 0.3rem;
+  outline: none;
+  font-family: 'SansDeva';
   font-size: 1rem;
   font-weight: 600;
-  font-family: 'Klee One';
   cursor: pointer;
-  margin-bottom: 2rem;
+  color: #f3f1e3;
+  background: #edb572;
 }
 
 @media (width<=760px) {
@@ -153,7 +154,7 @@
 }
 
 #register-container-button:hover {
-  background: none;
   border: 1px solid #edb572;
   color: #edb572;
+  background: none;
 }

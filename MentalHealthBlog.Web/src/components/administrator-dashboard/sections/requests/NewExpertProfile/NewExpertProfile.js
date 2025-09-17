@@ -1,7 +1,8 @@
 import { MdEmail, MdLocalPhone } from 'react-icons/md'
 import { NewExpertProfileActions } from '../NewExpertProfileActions/NewExpertProfileActions'
-import defaultPhoto from '../../../../../images/default-avatar.png'
 import { stringIsNullOrEmpty } from '../../../../../utils/helper-methods/methods'
+
+import defaultPhoto from '../../../../../images/default-avatar.png'
 
 import NewExpertProfileCSS from './NewExpertProfile.css'
 
@@ -25,24 +26,24 @@ export const NewExpertProfile = (props) => {
             />
           </div>
           <div className="new-expert-profile-wrapper">
-            <p className="new-expert-profile-username">{expert.username}</p>
+            <p className="new-expert-profile-username">{expert?.username}</p>
           </div>
         </div>
 
         <div className="new-expert-profile-bio">
           <div className="new-expert-profile-wrapper new-expert-profile-first-name-wrapper">
             <p className="new-expert-profile-bio-info new-expert-profile-first-name">
-              First name: <span>{expert?.firstName}</span>
+              Ime: <span>{expert?.firstName}</span>
             </p>
           </div>
           <div className="new-expert-profile-wrapper new-expert-profile-last-name-wrapper">
             <p className="new-expert-profile-bio-info new-expert-profile-last-name">
-              Last name: <span>{expert?.lastName}</span>
+              Prezime: <span>{expert?.lastName}</span>
             </p>
           </div>
           <div className="new-expert-profile-wrapper new-expert-profile-organization-wrapper">
             <p className="new-expert-profile-bio-info new-expert-profile-organization">
-              Organization: <span>{expert?.organization}</span>
+              Organizacija: <span>{expert?.organization}</span>
             </p>
           </div>
           <div className="new-expert-profile-wrapper new-expert-profile-phone-number-wrapper">

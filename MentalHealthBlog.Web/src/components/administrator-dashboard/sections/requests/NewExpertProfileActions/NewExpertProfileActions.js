@@ -31,14 +31,16 @@ export const NewExpertProfileActions = (props) => {
 
               if (statusCode !== 200) {
                 if (statusCode === 400) {
-                  toast.error("Couldn't change the status!", {
+                  toast.error('Status nije promijenjen!', {
+                    autoClose: 3000,
                     position: 'bottom-right',
                   })
                   return
                 }
 
                 if (statusCode === 404) {
-                  toast.error("Expert couldn't be located!", {
+                  toast.error('Stručnjak nije pronađen!', {
+                    autoClose: 3000,
                     position: 'bottom-right',
                   })
                   return
@@ -46,7 +48,7 @@ export const NewExpertProfileActions = (props) => {
               }
 
               if (data.payload.statusCode === 200) {
-                toast.success('Successfully approved mental health expert', {
+                toast.success('Zahtjev uspješno odobren!', {
                   autoClose: 2000,
                   position: 'bottom-right',
                 })
@@ -80,14 +82,16 @@ export const NewExpertProfileActions = (props) => {
 
               if (statusCode !== 200) {
                 if (statusCode === 400) {
-                  toast.error("Couldn't change the status!", {
+                  toast.error('Status nije promijenjen!', {
+                    autoClose: 3000,
                     position: 'bottom-right',
                   })
                   return
                 }
 
                 if (statusCode === 404) {
-                  toast.error("Expert couldn't be located!", {
+                  toast.error('Stručnjak nije pronađen!', {
+                    autoClose: 3000,
                     position: 'bottom-right',
                   })
                   return
@@ -95,7 +99,7 @@ export const NewExpertProfileActions = (props) => {
               }
 
               if (data?.payload?.statusCode === 200) {
-                toast.success('Successfully rejected mental health expert', {
+                toast.success('Zahtjev uspješno odbijen!', {
                   autoClose: 2000,
                   position: 'bottom-right',
                 })

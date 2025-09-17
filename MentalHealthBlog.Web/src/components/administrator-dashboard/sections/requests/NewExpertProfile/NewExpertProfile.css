@@ -27,6 +27,7 @@
 }
 
 .new-expert-profile-wrapper {
+  /* max-width: 200px; */
   margin: auto;
   /* background: yellow; */
 }
@@ -39,9 +40,9 @@
 
 .new-expert-profile-username {
   margin: 0;
-  text-align: center;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 1.2rem;
+  text-align: center;
   /* text-decoration: underline; */
 }
 
@@ -52,20 +53,21 @@
 
 .new-expert-profile-bio-info {
   margin: 6px 0px;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 1rem;
   font-weight: 600;
+  line-height: 1.6rem;
 }
 
 .new-expert-profile-bio-info span {
   max-width: 260px;
   word-wrap: break-word;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-weight: 300;
   font-size: 0.99rem;
 }
 
-@media (width<=420px) {
+@media (width <= 420px) {
   .new-expert-profile-bio-info span {
     word-break: break-all;
   }
