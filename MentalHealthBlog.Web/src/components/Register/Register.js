@@ -13,7 +13,6 @@ import {
   checkPhoneNumberValidity,
   checkUsernameValidity,
   previewImage,
-  resetValidationData,
   stringIsNullOrEmpty,
 } from '../../utils/helper-methods/methods'
 import { db_roles } from '../../enums/roles'
@@ -206,8 +205,8 @@ export const Register = () => {
         // stringIsNullOrEmpty(mentalHealthExpertEmail) ||
         !emailIsValid
       ) {
-        toast.error('Fields are required or not valid!', {
-          autoClose: 1500,
+        toast.error('Molimo slijedite upute prilikom popunjavanja polja!', {
+          autoClose: 3000,
           position: 'bottom-right',
         })
         return
@@ -297,8 +296,8 @@ export const Register = () => {
         stringIsNullOrEmpty(email) ||
         !emailValidationData?.emailIsValid
       ) {
-        toast.error('Fields are required or not valid!', {
-          autoClose: 1500,
+        toast.error('Molimo slijedite upute prilikom popunjavanja polja!', {
+          autoClose: 3000,
           position: 'bottom-right',
         })
         return
@@ -308,8 +307,8 @@ export const Register = () => {
           suggestedMentalHealthExperts?.length > 0 &&
           selectedMentalHealthExpertIds?.length <= 0
         ) {
-          toast.error('Fields are required or not valid!', {
-            autoClose: 1500,
+          toast.error('Molimo označite maksimalno dva stručnjaka!', {
+            autoClose: 3000,
             position: 'bottom-right',
           })
           return
@@ -387,8 +386,8 @@ export const Register = () => {
 
   return (
     <section id="register-container">
-      <h1>Populate required fields to continue...</h1>
-      <p className="required-field">Required field *</p>
+      <h1>Registracija novog korisnika</h1>
+      <p className="required-field">Polja obavezna za unos *</p>
       <form onSubmit={registerUser} encType="multipart/form-data">
         <div className="register-credentials-container">
           <div>
@@ -401,7 +400,7 @@ export const Register = () => {
               id="register-username"
               className="form-field"
               type="text"
-              placeholder="Enter your username"
+              placeholder="Unesite username..."
               autoComplete="true"
               onBlur={(e) => {
                 let username = e.target.value
@@ -445,6 +444,7 @@ export const Register = () => {
               id="register-password"
               className="form-field"
               type="password"
+              placeholder="Unesite password..."
               onBlur={(e) => {
                 let password = e.target.value
                 let [isValid, passwordValidationMessages] =
@@ -482,7 +482,7 @@ export const Register = () => {
                   htmlFor="register-first-name"
                   className="form-field-label"
                 >
-                  First Name:
+                  Ime:
                   <span className="required-field"> *</span>
                 </label>
                 <input
@@ -490,7 +490,7 @@ export const Register = () => {
                   type="text"
                   name="register-first-name"
                   className="form-field"
-                  placeholder="Enter your first name..."
+                  placeholder="Unesite svoje ime..."
                   onBlur={(e) => {
                     let firstName = e.target.value
                     let isOrganization = false
@@ -530,7 +530,7 @@ export const Register = () => {
                   htmlFor="register-last-name"
                   className="form-field-label"
                 >
-                  Last Name:
+                  Prezime:
                   <span className="required-field"> *</span>
                 </label>
                 <input
@@ -538,7 +538,7 @@ export const Register = () => {
                   type="text"
                   name="register-last-name"
                   className="form-field"
-                  placeholder="Enter your last name..."
+                  placeholder="Unesite svoje prezime..."
                   onBlur={(e) => {
                     let lastName = e.target.value
                     let isOrganization = false
@@ -582,7 +582,7 @@ export const Register = () => {
                   type="text"
                   name="register-email"
                   className="form-field"
-                  placeholder="Enter your email..."
+                  placeholder="Unesite svoj email..."
                   onBlur={(e) => {
                     let email = e.target.value
                     let isMentalHealthExpert = false
@@ -622,7 +622,7 @@ export const Register = () => {
                   htmlFor="register-in-therapy"
                   className="form-field-label"
                 >
-                  In therapy?
+                  Da li idete na terapiju?
                 </label>
                 <input
                   className="register-in-therapy-checkbox"
@@ -638,11 +638,11 @@ export const Register = () => {
             {isInTherapy && (
               <div className="select-mental-health-experts-main-container">
                 <label className="form-field-label">
-                  Choose your expert(s):
+                  Odaberite eksperta(e):
                 </label>
                 <span className="required-field"> *</span>
                 <p className="select-mental-health-experts-main-container-important-note">
-                  NOTE: You can choose the max of 2 experts at time...
+                  BITNO: Moguće je odabrati maksimalno dva stručnjaka
                 </p>
 
                 <div className="main-mental-health-expert-picker-container">
@@ -697,7 +697,7 @@ export const Register = () => {
                       }
                     }}
                   >
-                    Main expert{' '}
+                    Odaberite stručnjaka iz liste
                     <TiArrowSortedDown
                       id="main-mental-health-expert-expand-icon"
                       className="main-mental-health-expert-expand-icon"
@@ -865,7 +865,7 @@ export const Register = () => {
                   className="form-field-label"
                   htmlFor="register-mental-health-expert-first-name"
                 >
-                  First name:
+                  Ime:
                 </label>
                 <span className="required-field"> *</span>
 
@@ -874,7 +874,7 @@ export const Register = () => {
                   name="register-mental-health-expert-first-name"
                   className="form-field"
                   type="text"
-                  placeholder="Enter your first name: "
+                  placeholder="Unesite svoje ime..."
                   onBlur={(e) => {
                     let firstName = e.target.value
                     let isOrganization = false
@@ -914,7 +914,7 @@ export const Register = () => {
                   className="form-field-label"
                   htmlFor="register-mental-health-expert-last-name"
                 >
-                  Last name:
+                  Prezime:
                 </label>
                 <span className="required-field"> *</span>
 
@@ -923,7 +923,7 @@ export const Register = () => {
                   id="register-mental-health-expert-last-name"
                   name="register-mental-health-expert-last-name"
                   type="text"
-                  placeholder="Enter your last name: "
+                  placeholder="Unesite svoje prezime..."
                   onBlur={(e) => {
                     let lastName = e.target.value
                     let isOrganization = false
@@ -963,7 +963,7 @@ export const Register = () => {
                   className="form-field-label"
                   htmlFor="register-mental-health-expert-organization"
                 >
-                  Organization:
+                  Organizacija:
                 </label>
                 <span className="required-field"> *</span>
 
@@ -972,7 +972,7 @@ export const Register = () => {
                   id="register-mental-health-expert-organization"
                   name="register-mental-health-expert-organization"
                   type="text"
-                  placeholder="Enter your organization: "
+                  placeholder="Unesite ime organizacije/firme..."
                   onBlur={(e) => {
                     let organization = e.target.value
                     let isOrganization = true
@@ -1011,7 +1011,7 @@ export const Register = () => {
                   className="form-field-label"
                   htmlFor="register-mental-health-expert-phone-number"
                 >
-                  Phone number:
+                  Broj telefona:
                 </label>
                 <span className="required-field"> *</span>
 
@@ -1020,7 +1020,7 @@ export const Register = () => {
                   id="register-mental-health-expert-phone-number"
                   name="register-mental-health-expert-phone-number"
                   type="text"
-                  placeholder="Enter your phone number: "
+                  placeholder="Unesite svoj broj telefona..."
                   onBlur={(e) => {
                     let phoneNumber = e.target.value
                     let [isValid, validationMessages] =
@@ -1062,7 +1062,7 @@ export const Register = () => {
                   id="register-mental-health-expert-email"
                   name="register-mental-health-expert-email"
                   type="email"
-                  placeholder="Enter your email: "
+                  placeholder="Unesite svoj email..."
                   onBlur={(e) => {
                     let email = e.target.value
                     let isMentalHealthExpert = true
@@ -1102,7 +1102,7 @@ export const Register = () => {
                   className="form-field-label"
                   htmlFor="register-mental-health-expert-photo"
                 >
-                  Photo:{' '}
+                  Fotografija:
                 </label>
                 <input
                   onChange={(e) => {

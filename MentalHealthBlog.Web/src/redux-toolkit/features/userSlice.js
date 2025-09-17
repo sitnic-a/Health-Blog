@@ -189,7 +189,7 @@ export const userSlice = createSlice({
         console.log('Register fulfilled ', action.payload)
         state.statusCode = action.payload.statusCode
         if (state.statusCode === 201) {
-          toast.success("You've successfully created an account", {
+          toast.success('Uspješno ste kreirali profil', {
             autoClose: 1500,
             position: 'bottom-right',
           })
@@ -202,8 +202,8 @@ export const userSlice = createSlice({
           state.statusCode !== 201 ||
           state.statusCode !== 204
         ) {
-          toast.error("Couldn't register this user", {
-            autoClose: 1500,
+          toast.error('Registracija korisnika nije moguća!', {
+            autoClose: 3000,
             position: 'bottom-right',
           })
           // console.log("Logged unsuccessfully");
