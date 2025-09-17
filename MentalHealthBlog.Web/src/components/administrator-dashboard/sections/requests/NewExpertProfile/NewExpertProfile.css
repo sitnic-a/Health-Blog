@@ -27,35 +27,50 @@
 }
 
 .new-expert-profile-wrapper {
-  max-width: 200px;
+  /* max-width: 200px; */
   margin: auto;
   /* background: yellow; */
 }
 
+@media (width<=420px) {
+  .new-expert-profile-wrapper {
+    max-width: 280px;
+  }
+}
+
 .new-expert-profile-username {
   margin: 0;
-  text-align: center;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 1.2rem;
+  text-align: center;
   /* text-decoration: underline; */
 }
 
 .new-expert-profile-bio {
-  max-width: 200px;
+  max-width: 270px;
   margin: 14px auto;
 }
 
 .new-expert-profile-bio-info {
   margin: 6px 0px;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 1rem;
   font-weight: 600;
+  line-height: 1.6rem;
 }
 
 .new-expert-profile-bio-info span {
-  font-family: 'Klee One';
+  max-width: 260px;
+  word-wrap: break-word;
+  font-family: 'SansDeva';
   font-weight: 300;
   font-size: 0.99rem;
+}
+
+@media (width <= 420px) {
+  .new-expert-profile-bio-info span {
+    word-break: break-all;
+  }
 }
 
 .new-expert-profile-phone-number {
@@ -68,4 +83,8 @@
   display: flex;
   align-items: center;
   gap: 6px;
+}
+
+.new-expert-profile-email-icon {
+  overflow: initial;
 }

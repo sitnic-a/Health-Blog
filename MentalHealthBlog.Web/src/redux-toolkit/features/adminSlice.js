@@ -189,7 +189,7 @@ let adminSlice = createSlice({
       })
       .addCase(setRegisteredExpertStatus.rejected, (state, action) => {
         console.log('Approval: Rejected')
-        toast.error('Something was wrong', {
+        toast.error('Radnja nije uspješno završena!', {
           position: 'bottom-right',
         })
       })
