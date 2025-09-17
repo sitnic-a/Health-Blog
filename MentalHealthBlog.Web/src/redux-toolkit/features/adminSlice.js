@@ -165,7 +165,8 @@ let adminSlice = createSlice({
         state.isFailed = true
       })
       .addCase(getNewRegisteredExperts.rejected, (state, action) => {
-        toast.error('Something went wrong!', {
+        toast.error('Radnja nije uspješno završena!', {
+          autoClose: 3000,
           position: 'bottom-right',
         })
       })

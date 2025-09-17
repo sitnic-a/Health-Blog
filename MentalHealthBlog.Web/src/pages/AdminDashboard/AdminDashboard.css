@@ -30,15 +30,15 @@
 
 .admin-link-mental-health-experts-requests {
   position: relative;
-  background: #34688f;
-  color: #fff;
   transition: 200ms;
+  color: #fff;
+  background: #34688f;
 }
 
 .admin-link-mental-health-experts-requests:hover {
-  background: none;
-  color: #34688f;
   border: 1px solid #34688f;
+  color: #34688f;
+  background: none;
 }
 
 .admin-dashboard-request-container-notification {
@@ -47,10 +47,10 @@
   top: -15px;
   padding: 0.5rem 1rem;
   border-radius: 360px;
-  background: #edb572;
   font-weight: 500;
   font-size: 1.2rem;
   color: #f3f1e3;
+  background: #edb572;
 }
 
 .admin-dashboard-link-container {
@@ -59,18 +59,19 @@
 
 .admin-dashboard-request-container-title {
   margin: 0;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 1.5rem;
 }
 
 .admin-dashboard-request-container-subtitle {
   margin-block: 0.3rem;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 1.1rem;
+  line-height: 1.6rem;
 }
 
 .admin-dashboard-request-container-info {
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
 }
 
 .admin-dashboard-request-container-number-of-registered {
@@ -78,20 +79,20 @@
 }
 
 .admin-dashboard-error-container {
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   color: #c93232;
 }
 
 .admin-link-manage-users {
-  background: #82a3bc;
-  color: #f3f1e3;
   transition: 200ms;
+  color: #f3f1e3;
+  background: #82a3bc;
 }
 
 .admin-link-manage-users:hover {
-  background: none;
-  color: #82a3bc;
   border: 1px solid #82a3bc;
+  color: #82a3bc;
+  background: none;
 }
 
 .admin-link-manage-users > .admin-dashboard-link-container {
@@ -110,6 +111,6 @@
 
 .admin-link-manage-users-title {
   margin: 0;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 1.8rem;
 }

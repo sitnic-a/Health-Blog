@@ -100,7 +100,7 @@ export const Login = () => {
             prevUrl: window.location.href,
           },
         })
-        toast.success('Succesfully logged in', {
+        toast.success('Login uspješan', {
           autoClose: 1500,
           position: 'bottom-right',
         })
