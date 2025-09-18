@@ -7,6 +7,12 @@
   background: #f0eae1;
 }
 
+@media (width<=500px) {
+  .new-expert-profile-container {
+    margin-inline: auto;
+  }
+}
+
 .new-expert-profile-basic-info {
   max-width: 200px;
   margin: auto;

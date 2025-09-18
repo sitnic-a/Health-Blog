@@ -215,7 +215,7 @@ export const manipulateSidebarAndAdminStatusActions = () => {
       !stringIsNullOrEmpty(statusHamburger)
     ) {
       profilesContainer.style.display = 'flex'
-      profilesContainer.style.marginLeft = '0.5rem'
+      // profilesContainer.style.marginLeft = '0.5rem'
       statusActionsContainer.style.display = 'none'
       statusHamburger.style.display = 'block'
     }
