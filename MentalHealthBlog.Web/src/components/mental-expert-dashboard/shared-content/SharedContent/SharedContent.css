@@ -12,7 +12,7 @@
 
 .sharing-users-post-header-datetime {
   margin-block: 0.4rem;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 0.75rem;
   cursor: pointer;
 }
@@ -22,7 +22,9 @@
 }
 
 .sharing-users-post-content-text {
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
+  line-height: 1.45rem;
+  letter-spacing: 0.1px;
   text-align: justify;
   cursor: pointer;
 }
@@ -34,7 +36,7 @@
 }
 
 .sharing-users-post-tags-subtitle {
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
 }
 
 .sharing-users-post-tags .post-container-main-tags .post-container-tags {
@@ -48,7 +50,7 @@
 }
 
 .sharing-users-post-emotions-subtitle {
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
 }
 
 .sharing-users-post-emotions .post-container-emotions {

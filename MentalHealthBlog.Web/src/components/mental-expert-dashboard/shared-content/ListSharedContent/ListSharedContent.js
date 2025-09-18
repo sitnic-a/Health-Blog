@@ -22,7 +22,7 @@ export const ListSharedContent = (props) => {
   return (
     <section className="sharing-users-content-container">
       <div className="sharing-users-content-header">
-        <h1>Shared content</h1>
+        <h1>Podijeljeni sadržaj</h1>
         {/*
           <div className="sharing-users-content-actions">
              Should be changed to icon for assignment and should make hover over item to show tooltip about feature when it's clicked and explanation how to use it }
@@ -34,12 +34,12 @@ export const ListSharedContent = (props) => {
       {overlayPost !== null && <OverlayPostPreview content={overlayPost} />}
 
       <div className="sharing-users-posts">
-        {sharedContent.length > 0 &&
-          sharedContent.map((content) => {
+        {sharedContent?.length > 0 &&
+          sharedContent?.map((content) => {
             return (
               <div
                 className="sharing-users-main-post-container"
-                key={content.id}
+                key={content?.id}
                 onClick={() => dispatch(setOverlayPost(content))}
               >
                 <SharedContent content={content} />

@@ -21,23 +21,14 @@ export const SharedContent = (props) => {
 
       <div className="sharing-users-main-post-tags">
         <div className="sharing-users-post-tags">
-          <span className="sharing-users-post-tags-subtitle">Tags: </span>
-          {/* {content?.tags?.map((tag) => {
-            return (
-              <span className="sharing-users-post-tag" key={tag}>
-                {tag}
-              </span>
-            )
-          })} */}
+          <span className="sharing-users-post-tags-subtitle">Tagovi: </span>
           <PostTags post={content} />
         </div>
       </div>
 
       <div className="sharing-users-main-post-emotions">
         <div className="sharing-users-post-emotions">
-          <span className="sharing-users-post-emotions-subtitle">
-            Emotions:
-          </span>
+          <span className="sharing-users-post-emotions-subtitle">Emocije:</span>
           <PostEmotions post={content} />
         </div>
       </div>
