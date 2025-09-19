@@ -36,10 +36,10 @@ export const ListOfPostsFilterOptions = (props) => {
   return (
     isFiltering && (
       <div className="dashboard-filter-container">
-        <h3>Filter:</h3>
+        <h3>Filteri:</h3>
         <div className="dashboard-filter-options">
           <div className="filter-by-month">
-            <p>Month:</p>
+            <p>Mjesec:</p>
             <select
               name="filter-by-month"
               id="filter-by-month"
@@ -47,8 +47,8 @@ export const ListOfPostsFilterOptions = (props) => {
                 filterPosts(e)
               }}
             >
-              <option>Pick a month</option>
-              {months.map((month, index) => {
+              <option>Odaberite mjesec</option>
+              {months?.map((month, index) => {
                 return (
                   <option key={index} value={index + 1}>
                     {month}

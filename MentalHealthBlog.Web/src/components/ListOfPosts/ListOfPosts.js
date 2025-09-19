@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getPosts } from '../../redux-toolkit/features/postSlice'
+import { setIsReviewingState } from '../../redux-toolkit/features/regularUserSlice'
 import { toast } from 'react-toastify'
 
 import { Post } from '../Post/Post'
@@ -13,7 +14,6 @@ import { ListOfPostsFilterOptions } from '../ListOfPostsFilterOptions/ListOfPost
 import { ShareExportOverlay } from '../share-export/share/ShareExportOverlay/ShareExportOverlay'
 import { ShareModal } from '../share-export/share/ShareModal/ShareModal'
 import { ExportModal } from '../share-export/export/ExportModal/ExportModal'
-import { setIsReviewingState } from '../../redux-toolkit/features/regularUserSlice'
 import { DeletePostConfirmation } from '../DeletePostConfirmation/DeletePostConfirmation'
 
 import ListOfPostsCSS from './ListOfPosts.css'
@@ -35,8 +35,8 @@ export const ListOfPosts = () => {
       let statusCode = data?.payload?.statusCode
 
       if (statusCode !== 200) {
-        toast.error("Posts aren't fetched properly!", {
-          autoClose: 1500,
+        toast.error('Postovi nisu uspješno dobavljeni!', {
+          autoClose: 3000,
           position: 'bottom-right',
         })
         return
@@ -46,13 +46,14 @@ export const ListOfPosts = () => {
         data?.payload?.statusCode === 200 &&
         data?.payload?.serviceResponseObject?.length === 0
       ) {
-        toast.warning('Currently, no posts to retrieve', {
+        toast.warning('Trenutno nemate postova objavljenih', {
+          autoClose: 1500,
           position: 'bottom-right',
         })
         return
       }
 
-      toast.success('Posts fetched properly!', {
+      toast.success('Postovi uspješno dobavljeni!', {
         autoClose: 1500,
         position: 'bottom-right',
       })
@@ -72,8 +73,8 @@ export const ListOfPosts = () => {
       <ShareExportOverlay />
       <div className="reminder">
         <p className="unselect-data-reminder">
-          IMPORTANT: Uncheck all selected post if you want to exit share/export
-          mode!!
+          BITNO: Sve označene postove potrebno je desektovati kako biste izašli
+          iz share/export moda!!
         </p>
       </div>
 
@@ -82,8 +83,8 @@ export const ListOfPosts = () => {
       <div className="dashboard-cols">
         <section className="list-of-posts-main-container">
           {isDeleteOpen && <DeletePostConfirmation />}
-          {posts.map((post) => {
-            return <Post key={post.id} post={post} />
+          {posts?.map((post) => {
+            return <Post key={post?.id} post={post} />
           })}
         </section>
 
