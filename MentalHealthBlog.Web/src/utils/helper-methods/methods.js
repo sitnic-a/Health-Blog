@@ -445,13 +445,9 @@ export const checkInputDataValidity = (
     if (regexPattern.test(data)) {
       return [isValid, validationMessages]
     }
-    validationMessages.push(
-      'Can contain letters, numbers and some special characters'
-    )
-    validationMessages.push(
-      'Special characters are not allowed to repeat in a row'
-    )
-    validationMessages.push('Special characters: - _ . , : ! ? \' /" ()')
+    validationMessages.push('Može imati slova, brojeve i specijalne karaktere')
+    validationMessages.push('Ne smije imati više specijalnih znakova u nizu')
+    validationMessages.push('Dozvoljeni karakteri: - _ . , : ! ? \' /" ()')
     return [!isValid, validationMessages]
   }
 
@@ -461,7 +457,7 @@ export const checkInputDataValidity = (
       return [isValid, validationMessages]
     }
 
-    validationMessages.push('Content is required')
+    validationMessages.push('Sadržaj posta je obavezan!')
     return [!isValid, validationMessages]
   }
 }
@@ -487,7 +483,7 @@ export const checkTagsValidity = (tags, validationMessages) => {
     /^(?!.*[ \-_]{2})(?!^[ \-_])(?!.*[ \-_]$)[\p{L}\p{N} \-_]{1,60}$/u
 
   if (tags?.length <= 0) {
-    validationMessages.push('Tags are required')
+    validationMessages.push('Tagovi su obavezni!')
     return [!isValid, validationMessages]
   }
 
@@ -495,14 +491,14 @@ export const checkTagsValidity = (tags, validationMessages) => {
     console.log('Tag value ', tags[i])
     if (!regexPattern.test(tags[i])) {
       validationMessages.push(
-        'Each tag can contain either letters, numbers or some special characters'
+        'Svaki tag može imati slova, brojeve ili specijalne karaktere'
       )
-      validationMessages.push('Can be max 60 characters long')
-      validationMessages.push('Cannot start or end with special character')
+      validationMessages.push('Maksimalna dužina je 60 karaktera')
       validationMessages.push(
-        'Cannot contain multiple special characters in a row'
+        'Ne smije početi ili završiti specijalnim karakterom'
       )
-      validationMessages.push("Special characters: ' ' - _")
+      validationMessages.push('Ne smije imati više specijalnih znakova u nizu')
+      validationMessages.push('Dozvoljeni karakteri: - _ i razmak')
       return [!isValid, validationMessages]
     }
   }

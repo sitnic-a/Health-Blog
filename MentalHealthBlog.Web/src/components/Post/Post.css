@@ -67,17 +67,17 @@
   height: fit-content;
   padding-right: 0.7rem;
   text-align: justify;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 1rem;
   border: none;
   resize: none;
-  line-height: 1.3rem;
+  line-height: 1.45rem;
   background: #f3f1e3;
 }
 
 .post-date {
   margin-top: 0.4rem;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 1rem;
   line-height: 1.3rem;
 }
@@ -184,7 +184,7 @@ input[name='share-export'] {
 
 .post-tags-reveal-action-main-container {
   max-width: 370px;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
 }
 
 .post-tags-reveal-action-container {
@@ -215,7 +215,7 @@ input[name='share-export'] {
 .post-emotions-reveal-action-main-container {
   max-width: 370px;
   margin-top: 0.15rem;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
 }
 
 .post-emotions-reveal-action-container {

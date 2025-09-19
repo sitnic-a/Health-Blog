@@ -1,4 +1,3 @@
-import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setSuggestedEmotions } from '../../redux-toolkit/features/emotionSlice'
 
@@ -13,7 +12,7 @@ export const AddPostEmotions = () => {
     <>
       <div className="add-post-emotions-container">
         <label className="add-post-form-field-label" htmlFor="emotion">
-          Emotions
+          Emocije
         </label>
         <br />
 
@@ -24,9 +23,9 @@ export const AddPostEmotions = () => {
           id="emotion"
           name="emotion"
           type="text"
-          placeholder="Choose from the list below"
+          placeholder="Odaberite emocije iz liste ispod"
           onFocus={() => {
-            if (suggestedEmotions.length <= 0) {
+            if (suggestedEmotions?.length <= 0) {
               dispatch(setSuggestedEmotions(dbEmotions))
             }
           }}

@@ -143,7 +143,8 @@ export const regularUserSlice = createSlice({
       .addCase(getSharesPerMentalHealthExpert.rejected, (state, action) => {
         state.isLoading = false
         state.successfullyFetchedSharesPerMentalHealthExpert = false
-        toast.error('Something went wrong!', {
+        toast.error('Radnja nije uspješno izvršena!', {
+          autoClose: 3000,
           position: 'bottom-right',
         })
       })

@@ -21,7 +21,7 @@
   margin-block: 1rem;
   margin-inline: 1rem;
   font-weight: 550;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 1.8rem;
   /* background: red; */
 }
@@ -34,7 +34,7 @@
 
 .update-post-main-container-header-title {
   margin-block: 0.3rem;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 1.3rem;
 }
 
@@ -43,7 +43,7 @@
   width: 100%;
   padding-block: 0.5rem;
   padding-inline: 0.3rem;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   border: none;
   outline: none;
   border-radius: 0.4rem;
@@ -68,7 +68,7 @@
   margin-right: 1rem;
   padding-block: 0.7rem;
   padding-inline: 0.3rem;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   border: none;
   outline: none;
   border-radius: 0.4rem;
@@ -89,7 +89,7 @@
   margin: 0.6rem auto;
   padding: 0.5rem 1rem;
   transform: translateX(-50%);
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-weight: 600;
   outline: none;
   border: none;

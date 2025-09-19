@@ -17,8 +17,8 @@ export const AddPostSuggestedEmotion = (props) => {
   let emotion = props.emotion
   let pickedEmotionsFromList = []
 
-  let emotionIsAlreadyPicked = pickedEmotions.some(
-    (pickedEmotion) => pickedEmotion.name === emotion.name
+  let emotionIsAlreadyPicked = pickedEmotions?.some(
+    (pickedEmotion) => pickedEmotion?.name === emotion?.name
   )
 
   return (
@@ -31,8 +31,8 @@ export const AddPostSuggestedEmotion = (props) => {
       data-emotion-id={emotion.id}
       onClick={(e) => {
         let pickedEmotion = {
-          id: emotion.id,
-          name: emotion.name,
+          id: emotion?.id,
+          name: emotion?.name,
         }
 
         let emotionContainer = e.currentTarget
@@ -52,7 +52,7 @@ export const AddPostSuggestedEmotion = (props) => {
         pickedEmotionsFromList = [...pickedEmotions, pickedEmotion]
         dispatch(setPickedEmotions(pickedEmotionsFromList))
 
-        if (parseInt(emotionContainerId) === emotion.id) {
+        if (parseInt(emotionContainerId) === emotion?.id) {
           let isSelected = emotionContainer.classList.contains(
             `emotion-${emotionType}`
           )
@@ -64,14 +64,14 @@ export const AddPostSuggestedEmotion = (props) => {
       }}
     >
       <IoIosCheckmarkCircleOutline
-        id={emotion.id}
+        id={emotion?.id}
         className={`add-post-suggested-emotion-marker ${
           emotionIsAlreadyPicked
             ? `emotion-marker-checked`
             : 'emotion-marker-unchecked'
         }`}
       />
-      {emotion.name}
+      {emotion?.name}
     </div>
   )
 }

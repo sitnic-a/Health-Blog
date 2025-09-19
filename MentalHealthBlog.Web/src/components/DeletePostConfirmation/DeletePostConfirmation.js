@@ -27,7 +27,7 @@ export const DeletePostConfirmation = () => {
     >
       <div className="confirmation-container">
         <div className="confirmation-title">
-          <h2>Are you sure you want to delete this post?</h2>
+          <h2>Jeste li sigurni da želite obrisati ovaj post?</h2>
         </div>
         <div className="confirmation-actions">
           <button
@@ -40,7 +40,8 @@ export const DeletePostConfirmation = () => {
 
                 if (statusCode !== 200) {
                   if (statusCode === 404) {
-                    toast.error("Post doesn't exist! Please refresh page.", {
+                    toast.error('Post ne postoji! Molimo osvježite stranicu', {
+                      autoClose: 3000,
                       position: 'bottom-right',
                     })
                     return
@@ -50,14 +51,14 @@ export const DeletePostConfirmation = () => {
               })
             }}
           >
-            Yes
+            Obriši
           </button>
           <button
             className="confirmation-action-cancel"
             type="button"
             onClick={() => dispatch(openDeleteModal(false))}
           >
-            No
+            Napusti
           </button>
         </div>
       </div>

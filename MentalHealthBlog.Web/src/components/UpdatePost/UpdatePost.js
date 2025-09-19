@@ -56,10 +56,10 @@ export const UpdatePost = () => {
   return (
     <form className="update-post-form" onSubmit={update}>
       <section className="update-post-main-container">
-        <h1 className="update-post-main-container-title"> Update post:</h1>
+        <h1 className="update-post-main-container-title"> Uredi post:</h1>
         <div className="update-post-main-container-header">
           <p className="update-post-main-container-header-title">
-            New Title
+            Novi naslov
             <span className="required-field"> *</span>
             <br />
             <input
@@ -85,7 +85,7 @@ export const UpdatePost = () => {
         </div>
       </section>
       <button className="update-post-main-container-submit-btn" type="submit">
-        Update post
+        Snimi promjene
       </button>
     </form>
   )
