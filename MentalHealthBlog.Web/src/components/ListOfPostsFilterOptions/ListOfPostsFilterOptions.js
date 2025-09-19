@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import moment from 'moment'
+import 'moment/locale/bs'
 
 import { getPosts } from '../../redux-toolkit/features/postSlice'
 import {
@@ -19,7 +20,11 @@ export const ListOfPostsFilterOptions = (props) => {
   let searchPostDto = props?.searchPostDto
 
   useEffect(() => {
-    setMonths(moment.months())
+    moment.locale('bs')
+    let bsMonthsWithFirstUppercaseLetter = moment.months().map((month) => {
+      return month.charAt(0).toUpperCase() + month.slice(1)
+    })
+    setMonths(bsMonthsWithFirstUppercaseLetter)
   }, [])
 
   let filterPosts = (e) => {
