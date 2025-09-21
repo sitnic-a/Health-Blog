@@ -225,7 +225,7 @@ export const userSlice = createSlice({
       })
       .addCase(logout.fulfilled, (state, action) => {
         console.log('User successfully signed out...')
-        toast.success('Successfully logged out', {
+        toast.success('Uspješno ste se odjavili!', {
           autoClose: 1500,
           position: 'bottom-right',
         })

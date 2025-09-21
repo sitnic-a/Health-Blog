@@ -140,7 +140,7 @@ let shareExportSlice = createSlice({
       state.postsToExport = state.postsToExport.filter(
         (post) => post.id !== action.payload
       )
-      toast.success('The post is removed from list to share  ', {
+      toast.success('Post uspješno obrisan iz liste za dijeljenje', {
         autoClose: 2000,
         position: 'bottom-right',
       })
@@ -200,8 +200,8 @@ let shareExportSlice = createSlice({
       .addCase(exportToPDF.rejected, (state, action) => {
         state.isLoading = false
         console.log('FAILED')
-        toast.error('Something went wrong', {
-          autoClose: 1500,
+        toast.error('Radnja nije uspješno izvršena!', {
+          autoClose: 3000,
           position: 'bottom-right',
         })
       })
@@ -215,8 +215,8 @@ let shareExportSlice = createSlice({
       })
       .addCase(shareByLink.rejected, (state, action) => {
         state.isLoading = false
-        toast.error('Something went wrong. Try again!', {
-          autoClose: 2000,
+        toast.error('Radnja nije uspješno izvršena. Pokušajte ponovo!', {
+          autoClose: 3000,
           position: 'bottom-right',
         })
       })
@@ -241,7 +241,7 @@ let shareExportSlice = createSlice({
               let host = window.location.origin
               state.shareLinkUrl = `${host}/share/link/${shareId}`
             }
-            toast.success('You have succesfully shared content!', {
+            toast.success('Uspješno ste podijelili sadržaj!', {
               autoClose: 2000,
               position: 'bottom-right',
             })
@@ -250,7 +250,7 @@ let shareExportSlice = createSlice({
         }
 
         if (statusCode === 201) {
-          toast.success('You have succesfully shared content!', {
+          toast.success('Uspješno ste podijelili sadržaj!', {
             autoClose: 2000,
             position: 'bottom-right',
           })
@@ -262,8 +262,8 @@ let shareExportSlice = createSlice({
       })
 
       .addCase(shareContent.rejected, () => {
-        toast.error('Something went wrong. Try again!', {
-          autoClose: 2000,
+        toast.error('Radnja nije uspješno izvršena. Pokušajte ponovo!', {
+          autoClose: 3000,
           position: 'bottom-right',
         })
       })
@@ -286,8 +286,8 @@ let shareExportSlice = createSlice({
 
       .addCase(getExpertsAndRelatives.rejected, (state, action) => {
         state.possibleToShareWithError = action?.payload
-        toast.error('Something went wrong. Try again!', {
-          autoClose: 2000,
+        toast.error('Radnja nije uspješno izvršena. Pokušajte ponovo!', {
+          autoClose: 3000,
           position: 'bottom-right',
         })
       })

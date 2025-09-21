@@ -18,7 +18,7 @@
   margin-bottom: 1.5rem;
   padding-inline: 1.3rem;
   padding-block: 0.8rem;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 1.1em;
   border-radius: 360px;
   background: #edb572;
@@ -57,7 +57,7 @@
 .shared-posts-via-link-post-details-subtitle {
   margin: 0;
   margin-block: 0.4rem;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-weight: 600;
 }
 
@@ -118,7 +118,7 @@
 }
 
 .shared-posts-via-link-post-details-date {
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 0.85rem;
 }
 
@@ -138,7 +138,7 @@
   max-height: 220px;
   margin-block: auto;
   margin-top: 1rem;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 0.9rem;
   white-space: pre-wrap;
 }

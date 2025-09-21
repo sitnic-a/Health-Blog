@@ -44,7 +44,7 @@
   margin-top: 0.2rem;
   margin-right: 0.5rem;
   float: right;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 1.2rem;
   cursor: pointer;
 }
@@ -63,7 +63,7 @@
 .share-modal-header > p {
   margin: 0;
   text-align: center;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 1.2rem;
   font-weight: 700;
 }
@@ -96,7 +96,7 @@
   width: 54%;
   margin-right: 8px;
   padding: 0.5rem 4px;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 14px;
   border: 1px solid #82a3bc;
   border-radius: 0.4rem;
@@ -135,7 +135,7 @@
   padding-block: 1.1rem;
   border: none;
   border-radius: 0.4rem;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   cursor: pointer;
   color: #f3f1e3;
   background: #82a3bc;
@@ -194,7 +194,7 @@
 .share-content-to-experts {
   padding-block: 0.5rem;
   padding-inline: 0.7rem;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   outline: none;
   border: none;
   border-radius: 0.5rem;

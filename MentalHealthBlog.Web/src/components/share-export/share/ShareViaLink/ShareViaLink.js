@@ -20,7 +20,7 @@ export const ShareViaLink = () => {
       <section id="share-via-link-main-container">
         <div className="share-via-link-container">
           <div className="share-via-link-heading">
-            <h2>Choose how to share content...</h2>
+            <h2>Odaberite način podjele sadržaja...</h2>
           </div>
           <div className="share-via-link-systems">
             <div className="external-systems-main-container">
@@ -102,7 +102,7 @@ export const ShareViaLink = () => {
               </div>
             </div>
           </div>
-          <div className="indicator">Copied</div>
+          <div className="indicator">Kopirano</div>
         </div>
       </section>
     )

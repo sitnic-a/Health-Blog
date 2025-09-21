@@ -34,7 +34,7 @@ export const Logout = () => {
       }}
     >
       <CiLogout className="logout-icon" />
-      <span className="logout-title">Sign Out</span>
+      <span className="logout-title">Odjavi se</span>
     </div>
   )
 }

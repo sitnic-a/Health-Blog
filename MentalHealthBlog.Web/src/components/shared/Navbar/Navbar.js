@@ -33,11 +33,11 @@ export const Navbar = () => {
         <div className="navigation-bar-container">
           <div className="navigation-bar-features">
             <Link to={'/shared-posts'} className="navigation-bar-action">
-              Shared Content
+              Podijeljeni sadržaj
             </Link>
 
             <Link to={'/my-experts'} className="navigation-bar-action">
-              My Mental Health Experts
+              Moji stručnjaci
             </Link>
 
             {/* <Link
@@ -60,7 +60,7 @@ export const Navbar = () => {
         <div className="navigation-bar-container">
           <div className="navigation-bar-features">
             <Link to={`/therapy/requests`} className="navigation-bar-action">
-              Requests
+              Zahtjevi
             </Link>
 
             {/*

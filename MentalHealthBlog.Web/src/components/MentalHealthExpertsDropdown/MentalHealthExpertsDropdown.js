@@ -79,9 +79,9 @@ export const MentalHealthExpertsDropdown = () => {
                                 }
                                 dispatch(getMyExperts(objectWithData))
 
-                                toast.success('Succesfully made request!', {
-                                  position: 'bottom-right',
+                                toast.success('Uspješno ste poslali zahtjev!', {
                                   autoClose: 1500,
+                                  position: 'bottom-right',
                                 })
                               }
                             }
