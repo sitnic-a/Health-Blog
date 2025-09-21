@@ -88,7 +88,7 @@ export const MentalHealthExpertsDropdown = () => {
                           )
                         }}
                       >
-                        Send request
+                        Pošalji zahtjev
                       </button>
                     )}
 
@@ -150,7 +150,7 @@ export const MentalHealthExpertsDropdown = () => {
                           return
                         }}
                       >
-                        + Add
+                        + Dodaj
                       </button>
                     )}
                   <button
@@ -200,7 +200,7 @@ export const MentalHealthExpertsDropdown = () => {
                       )
                     }}
                   >
-                    Cancel
+                    Odustani
                   </button>
                 </div>
               </div>

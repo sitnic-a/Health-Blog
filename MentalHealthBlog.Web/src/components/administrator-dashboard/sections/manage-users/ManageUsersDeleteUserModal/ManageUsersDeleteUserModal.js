@@ -88,14 +88,14 @@ export const ManageUsersDeleteUserModal = ({ dbUser }) => {
               dispatch(openDeleteModal(false))
             }}
           >
-            OBRIŠI
+            Obriši
           </button>
           <button
             type="button"
             className="manage-users-modal-abort-delete-button"
             onClick={() => dispatch(openDeleteModal(false))}
           >
-            ODUSTANI
+            Odustani
           </button>
         </div>
       </div>

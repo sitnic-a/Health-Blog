@@ -29,7 +29,8 @@ export const StopSharingConfirmation = () => {
       <div className="stop-sharing-modal-main-container">
         <div className="stop-sharing-modal-header">
           <p className="stop-sharing-modal-header-title">
-            Would you also like to remove shared content from your page?
+            Da li sačuvati historiju sadržaja na svom profilu?
+            {/* Would you also like to remove shared content from your page? */}
           </p>
         </div>
 
@@ -62,7 +63,7 @@ export const StopSharingConfirmation = () => {
                 dispatch(openStopSharing(!isStopSharingOpen))
               }}
             >
-              Remove
+              Obriši
             </button>
             <button
               type="button"
@@ -91,7 +92,7 @@ export const StopSharingConfirmation = () => {
                 dispatch(openStopSharing(!isStopSharingOpen))
               }}
             >
-              Keep content
+              Sačuvaj sadržaj
             </button>
             <button
               type="button"
@@ -100,7 +101,7 @@ export const StopSharingConfirmation = () => {
                 dispatch(openStopSharing(!isStopSharingOpen))
               }}
             >
-              Cancel
+              Odustani
             </button>
           </div>
         </div>

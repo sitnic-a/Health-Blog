@@ -49,7 +49,7 @@ export const MyMentalHealthExpertProfile = (props) => {
 
           <div className="my-expert-additional-information-container">
             <div className="my-expert-field-container">
-              <span className="my-expert-field">First Name: </span>
+              <span className="my-expert-field">Ime: </span>
               <p
                 className="my-expert-field-value my-expert-first-name-value"
                 title={expert?.mentalHealthExpertFirstName}
@@ -59,7 +59,7 @@ export const MyMentalHealthExpertProfile = (props) => {
             </div>
 
             <div className="my-expert-field-container">
-              <span className="my-expert-field">Last Name: </span>
+              <span className="my-expert-field">Prezime: </span>
               <p
                 className="my-expert-field-value my-expert-last-name-value"
                 title={expert?.mentalHealthExpertLastName}
@@ -69,7 +69,7 @@ export const MyMentalHealthExpertProfile = (props) => {
             </div>
 
             <div className="my-expert-field-container">
-              <span className="my-expert-field">Organization: </span>
+              <span className="my-expert-field">Organizacija: </span>
               <p
                 className="my-expert-field-value my-expert-organization-value"
                 title={expert?.mentalHealthExpertOrganization}
@@ -90,7 +90,7 @@ export const MyMentalHealthExpertProfile = (props) => {
               </p>
             </div>
 
-            <div className="my-expert-field-container">
+            <div className="my-expert-field-container my-experts-field-email-container">
               <span className="my-expert-field">
                 <MdEmail />
               </span>
@@ -119,7 +119,7 @@ export const MyMentalHealthExpertProfile = (props) => {
                 dispatch(setStopSharingObject(objectWithData))
               }}
             >
-              STOP SHARING
+              ZAUSTAVI DIJELJENJE
             </button>
           </div>
         </div>

@@ -1,6 +1,6 @@
 .select-mental-health-experts-main-container-important-note {
   margin-block: 0.2rem;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 0.8rem;
   font-weight: 600;
   color: #c93232;
@@ -72,6 +72,7 @@
 
 .main-mental-health-expert-picker-option {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   margin-block: 0.2rem;
   padding: 0.4rem 0.2rem;
@@ -83,12 +84,13 @@
 .main-mental-health-expert-picker-option-name {
   max-width: 220px;
   word-wrap: break-word;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
 }
 
 .main-mental-health-expert-picker-option-action {
   padding-inline: 1rem;
   padding-block: 0.5rem;
+  font-family: 'SansDeva';
   color: #f3f1e3;
 }
 
@@ -107,7 +109,7 @@
 }
 
 .picker-option-add-action {
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 0.9rem;
   outline: none;
   border: none;

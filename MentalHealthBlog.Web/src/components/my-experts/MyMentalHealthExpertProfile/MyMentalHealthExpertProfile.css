@@ -26,19 +26,19 @@
 }
 
 .my-expert-username-field {
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 0.95em;
   font-weight: 600;
   text-align: center;
 }
 
 .my-expert-additional-information-container {
-  padding-inline: 1.3rem;
+  /* padding-inline: 1.3rem; */
 }
 
 @media (width<=400px) {
   .my-expert-additional-information-container {
-    padding-inline: 1rem;
+    /* padding-inline: 1rem; */
   }
 }
 
@@ -49,15 +49,19 @@
 }
 
 .my-expert-field {
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-weight: 600;
+  line-height: 1.3rem;
 }
 
 .my-expert-field-value {
-  max-width: 200px;
-  word-wrap: break-word;
-  font-family: 'Klee One';
+  max-width: 280px;
+  width: 100%;
   margin-block: 0.2rem;
+  word-wrap: break-word;
+  font-family: 'SansDeva';
+  font-size: 0.95rem;
+  line-height: 1.3rem;
 }
 
 .my-expert-first-name-value {
@@ -96,8 +100,12 @@
   }
 }
 
+.my-experts-field-email-container {
+  align-items: end;
+}
+
 .my-expert-email-value {
-  max-width: 170px;
+  max-width: 280px;
   word-break: break-all;
 }
 
@@ -117,7 +125,7 @@
 .my-expert-stop-sharing-action {
   width: 100%;
   padding: 0.7rem 2rem;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   border-radius: 0.5rem;
   border: none;
   outline: none;
