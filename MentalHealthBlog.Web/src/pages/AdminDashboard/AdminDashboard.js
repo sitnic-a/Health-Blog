@@ -121,7 +121,7 @@ export const AdminDashboard = () => {
         <div className="admin-dashboard-error-container">
           <p>
             Nije moguće dobaviti zahtjeve. Ukoliko se ovo nastavi dešavati,
-            kontaktirajte administratora!
+            kontaktirajte podršku!
           </p>
         </div>
       )}

@@ -171,7 +171,8 @@ export const regularUserSlice = createSlice({
         }
       })
       .addCase(getRecentShares.rejected, (state, action) => {
-        toast.error('Something went wrong', {
+        toast.error('Radnja nije uspješno obavljena', {
+          autoClose: 3000,
           position: 'bottom-right',
         })
         state.isLoading = false

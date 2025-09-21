@@ -21,14 +21,14 @@ export const SharedContentPermissionPosts = () => {
 
   let contentSharedWithMentalHealthExpert = sharesPerMentalHealthExpert?.filter(
     (mhe) =>
-      mhe.mentalHealthExpertContentSharedWith.id === mentalHealthExpert.id
+      mhe?.mentalHealthExpertContentSharedWith?.id === mentalHealthExpert?.id
   )
 
   useEffect(() => {
     dispatch(setIsReviewingState(isReviewingSharedContent))
     let objectWithData = {
       query: {
-        loggedUserId: authenticatedUser.id,
+        loggedUserId: authenticatedUser?.id,
       },
       authenticatedUser,
     }
@@ -43,7 +43,7 @@ export const SharedContentPermissionPosts = () => {
             (post) => {
               return (
                 <Post
-                  key={post.id}
+                  key={post?.id}
                   post={post}
                   sharedWith={mentalHealthExpert}
                 />
@@ -54,7 +54,10 @@ export const SharedContentPermissionPosts = () => {
       )}
       {contentSharedWithMentalHealthExpert?.length <= 0 && (
         <div className="content-shared-with-mental-health-expert-posts">
-          <p>There are no posts or content to revoke permission for!</p>
+          <p className="content-shared-with-mental-health-expert-description">
+            Ništa od Vašeg sadržaja nije dijeljeno sa stručnjacima za mentalno
+            zdravlje!
+          </p>
         </div>
       )}
     </>

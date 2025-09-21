@@ -9,7 +9,7 @@
 .shares-per-mental-health-expert-title {
   margin-top: 3rem;
   margin-left: 0.5rem;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 1.5rem;
   font-weight: 600;
 }
@@ -29,7 +29,7 @@
 }
 
 .shares-per-mental-health-expert-content-main-container p {
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 1.1rem;
 }
 
@@ -45,5 +45,5 @@
 
 .shares-per-mental-health-expert-error-description {
   margin: 0;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
 }

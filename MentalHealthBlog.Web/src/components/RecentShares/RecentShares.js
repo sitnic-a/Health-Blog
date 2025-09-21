@@ -15,7 +15,7 @@ export const RecentShares = () => {
       <div className="shares-per-mental-health-expert-recent-shares-main-container">
         <div className="shares-per-mental-health-expert-recent-shares-header">
           <h2 className="shares-per-mental-health-expert-recent-shares-header-title">
-            Recent posts:
+            Nedavno objavljeni postovi:
           </h2>
         </div>
         <div className="shares-per-mental-health-expert-recent-shares-container">
@@ -84,15 +84,17 @@ export const RecentShares = () => {
                   <p className="shares-per-mental-health-expert-recent-share-basic-info">
                     {share?.sharedPost?.content}
                   </p>
-                  <p className="shares-per-mental-health-expert-recent-share-basic-info">
-                    Shared with: {person}
-                  </p>
-                  <p className="shares-per-mental-health-expert-recent-share-basic-info">
-                    <b>Shared at: </b> {sharedAt}
-                  </p>
-                  <p className="shares-per-mental-health-expert-recent-share-basic-info">
-                    <b>Created at: </b> {createdAt}
-                  </p>
+                  <div className="shares-per-mental-health-expert-recent-share-basic-info-about-share-container">
+                    <p className="shares-per-mental-health-expert-recent-share-basic-info">
+                      <b>Podijeljeno sa: </b> {person}
+                    </p>
+                    <p className="shares-per-mental-health-expert-recent-share-basic-info">
+                      <b>Podijeljeno: </b> {sharedAt}
+                    </p>
+                    <p className="shares-per-mental-health-expert-recent-share-basic-info">
+                      <b>Kreirano: </b> {createdAt}
+                    </p>
+                  </div>
                 </div>
               </div>
             )

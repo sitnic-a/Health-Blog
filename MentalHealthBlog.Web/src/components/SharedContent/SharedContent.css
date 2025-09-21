@@ -72,7 +72,7 @@
   margin: 0;
   margin-block: 0.2rem;
   text-align: center;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 1.2rem;
   font-weight: 700;
 }
@@ -94,5 +94,5 @@
   opacity: 0;
   transition: 600ms;
   text-align: center;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
 }

@@ -19,7 +19,7 @@
 }
 
 .shares-per-mental-health-expert-recent-shares-header-title {
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 1.3rem;
   color: #000;
 }
@@ -87,11 +87,24 @@
   display: none;
 }
 
-.shares-per-mental-health-expert-recent-share-basic-info {
-  margin-block: 0.3em;
-  font-family: 'Klee One';
+.shares-per-mental-health-expert-recent-share-basic-info-about-share-container {
+  margin-top: 0.9rem;
 }
 
-.shares-per-mental-health-expert-recent-share-basic-info:nth-of-type(3) {
-  margin-top: 0.9em;
+.shares-per-mental-health-expert-recent-share-basic-info {
+  margin-block: 0.3em;
+  font-family: 'SansDeva';
+}
+
+.shares-per-mental-health-expert-recent-share-basic-info-container
+  > .shares-per-mental-health-expert-recent-share-basic-info:first-of-type {
+  line-height: 1.8rem;
+}
+
+.shares-per-mental-health-expert-recent-share-basic-info-about-share-container
+  .shares-per-mental-health-expert-recent-share-basic-info {
+  margin-block: 0;
+  line-height: 1.8rem;
+  font-size: 0.95rem;
+  /* background: yellow; */
 }

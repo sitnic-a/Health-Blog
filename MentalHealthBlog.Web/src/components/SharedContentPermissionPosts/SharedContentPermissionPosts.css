@@ -72,3 +72,7 @@
 .zoom {
   animation: zoom forwards 0.7s ease-out 1;
 }
+
+.content-shared-with-mental-health-expert-description {
+  font-family: 'SansDeva';
+}
