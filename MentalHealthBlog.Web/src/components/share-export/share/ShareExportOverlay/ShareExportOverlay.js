@@ -71,8 +71,7 @@ export const ShareExportOverlay = () => {
                 position: 'bottom-right',
               })
             })
-            let selectedPosts = getSelectedPosts(authenticatedUser)
-            console.log('In LIST on Share ', selectedPosts)
+            // let selectedPosts = getSelectedPosts(authenticatedUser)
           }}
         >
           <FaShare className="share-export-icon" />
@@ -95,7 +94,6 @@ export const ShareExportOverlay = () => {
             dispatch(exportToPDF(objectWithData)).then((response) => {
               let statusCode = response?.payload?.StatusCode
               let fileLength = response?.payload?.fileLength
-              console.log('File ', fileLength)
 
               if (statusCode !== 200 && fileLength === undefined) {
                 toast.error('Document is not exported! Try again!', {

@@ -29,4 +29,8 @@ export const store = configureStore({
     therapy: therapyReducer,
     validation: validationReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 })

@@ -182,8 +182,6 @@ export const AddPost = () => {
                   isContent
                 )
 
-                console.log('Validation ', validationMessages)
-
                 dispatch(
                   setTitleValidationData({
                     titleIsValid: isValid,

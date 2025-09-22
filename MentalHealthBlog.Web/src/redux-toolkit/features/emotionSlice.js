@@ -31,9 +31,7 @@ let emotionSlice = createSlice({
     builder
 
       //getDbEmotions
-      .addCase(getEmotions.pending, (state, action) => {
-        console.log('Db emotions pending...')
-      })
+      .addCase(getEmotions.pending, (state, action) => {})
       .addCase(getEmotions.fulfilled, (state, action) => {
         console.clear()
         let serviceResponseObject = action.payload.serviceResponseObject

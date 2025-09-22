@@ -21,7 +21,6 @@ export const MyMentalHealthExpertProfile = (props) => {
   let { isStopSharingOpen } = useSelector((store) => store.modal)
   let { authenticatedUser } = useSelector((store) => store.user)
   let expert = props?.expert
-  console.log('Expert ', expert)
 
   let expertPhoto = `data:image/png;base64,${expert?.mentalHealthExpertPhotoAsFile}`
   return (

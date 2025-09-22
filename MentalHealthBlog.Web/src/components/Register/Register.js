@@ -346,8 +346,6 @@ export const Register = () => {
       }
     }
 
-    console.log('SEND DATA ', sendData)
-
     for (let dataKey in sendData) {
       if (dataKey === 'mentalHealthExpert') {
         for (let previewKey in sendData[dataKey]) {
@@ -368,8 +366,6 @@ export const Register = () => {
         }
       }
     }
-
-    // console.log('Register object ', Object.fromEntries(form.entries()))
 
     dispatch(register(form)).then((response) => {
       let statusCode = response.payload.statusCode
@@ -413,8 +409,6 @@ export const Register = () => {
                     usernameValidationMessages,
                   })
                 )
-
-                console.log('UserVALDAT ', usernameValidationData)
               }}
             />
 
@@ -705,125 +699,6 @@ export const Register = () => {
                   </label>
 
                   <MentalHealthExpertsDropdown />
-
-                  {/* <div
-                    id="main-mental-health-expert-picker"
-                    className="main-mental-health-expert-picker-shrinked"
-                  >
-                    {suggestedMentalHealthExperts?.map((expert) => {
-                      let fullName = `${expert?.firstName} ${expert?.lastName}`
-                      return (
-                        <div
-                          key={expert?.userId}
-                          className="main-mental-health-expert-selected-picker-option"
-                        >
-                          <div className="main-mental-health-expert-picker-option main-mental-health-expert-picker-option-expanded">
-                            <input
-                              id="main-mental-health-expert-picker-option-id"
-                              type="hidden"
-                              placeholder={expert?.userId}
-                              value={expert?.userId}
-                            />
-                            <span className="main-mental-health-expert-picker-option-name">
-                              {fullName}{' '}
-                            </span>
-                            <button
-                              className="main-mental-health-expert-picker-option-action picker-option-add-action"
-                              type="button"
-                              onClick={(e) => {
-                                let mainMentalHealthExpertSelectedPickerOption =
-                                  e.currentTarget.parentNode.parentNode
-
-                                let pickedMentalHealthExpertId =
-                                  mainMentalHealthExpertSelectedPickerOption.querySelector(
-                                    '#main-mental-health-expert-picker-option-id'
-                                  ).value
-
-                                let optionAddAction =
-                                  mainMentalHealthExpertSelectedPickerOption.querySelector(
-                                    '.picker-option-add-action'
-                                  )
-                                let optionCancelAction =
-                                  mainMentalHealthExpertSelectedPickerOption.querySelector(
-                                    '.picker-option-cancel-action'
-                                  )
-
-                                let selectedMentalHealthExpertIdsTemp = [
-                                  ...selectedMentalHealthExpertIds,
-                                ]
-
-                                mainMentalHealthExpertSelectedPickerOption.classList.add(
-                                  'main-mental-health-expert-selected-picker-option-active'
-                                )
-
-                                optionAddAction.style.display = 'none'
-                                optionCancelAction.style.display = 'initial'
-
-                                selectedMentalHealthExpertIdsTemp = [
-                                  ...selectedMentalHealthExpertIdsTemp,
-                                  parseInt(pickedMentalHealthExpertId),
-                                ]
-
-                                setSelectedMentalHealthExpertIds(
-                                  selectedMentalHealthExpertIdsTemp
-                                )
-                                return
-                              }}
-                            >
-                              + Add
-                            </button>
-                            <button
-                              className="main-mental-health-expert-picker-option-action picker-option-cancel-action"
-                              type="button"
-                              onClick={(e) => {
-                                let mainMentalHealthExpertSelectedPickerOption =
-                                  e.currentTarget.parentNode.parentNode
-
-                                let pickedMentalHealthExpertId =
-                                  mainMentalHealthExpertSelectedPickerOption.querySelector(
-                                    '#main-mental-health-expert-picker-option-id'
-                                  ).value
-
-                                let optionAddAction =
-                                  mainMentalHealthExpertSelectedPickerOption.querySelector(
-                                    '.picker-option-add-action'
-                                  )
-                                let optionCancelAction =
-                                  mainMentalHealthExpertSelectedPickerOption.querySelector(
-                                    '.picker-option-cancel-action'
-                                  )
-
-                                let selectedMentalHealthExpertIdsTemp = [
-                                  ...selectedMentalHealthExpertIds,
-                                ]
-
-                                mainMentalHealthExpertSelectedPickerOption.classList.remove(
-                                  'main-mental-health-expert-selected-picker-option-active'
-                                )
-
-                                optionCancelAction.style.display = 'none'
-                                optionAddAction.style.display = 'initial'
-
-                                selectedMentalHealthExpertIdsTemp = [
-                                  ...selectedMentalHealthExpertIdsTemp,
-                                ].filter(
-                                  (mentalHealthExpert) =>
-                                    mentalHealthExpert !==
-                                    parseInt(pickedMentalHealthExpertId)
-                                )
-
-                                setSelectedMentalHealthExpertIds(
-                                  selectedMentalHealthExpertIdsTemp
-                                )
-                              }}
-                            >
-                              Cancel
-                            </button>
-                          </div>
-                        </div>
-                      )
-                    })}
-                  </div> */}
                 </div>
               </div>
             )}

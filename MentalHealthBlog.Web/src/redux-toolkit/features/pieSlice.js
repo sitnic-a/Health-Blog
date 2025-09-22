@@ -13,13 +13,12 @@ let initialState = {
 export const prepareForPieGraph = createAsyncThunk(
   '/statistics/pie',
   async (filteringObject) => {
-    // console.log('Filtering object ', filteringObject)
-    let url = `${application.application_url}/statistics/pie?MonthOfPostCreation=${filteringObject.monthOfPostCreation}`
+    let url = `${application.application_url}/statistics/pie?MonthOfPostCreation=${filteringObject?.monthOfPostCreation}`
     let request = await fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${filteringObject.authenticatedUser.jwToken}`,
+        Authorization: `Bearer ${filteringObject?.authenticatedUser?.jwToken}`,
       },
     })
     let response = await request.json()
@@ -51,9 +50,9 @@ export const pieSlice = createSlice({
         state.statisticsData = null
 
         state.statisticsLoading = false
-        state.statisticsData = action.payload.serviceResponseObject
+        state.statisticsData = action?.payload?.serviceResponseObject
 
-        let data = action.payload.serviceResponseObject
+        let data = action?.payload?.serviceResponseObject
         if (data?.length > 0) {
           state.statisticsData = [...data]
 

@@ -114,8 +114,6 @@ export const regularUserSlice = createSlice({
       state.isReviewingSharedPosts = action.payload
     },
     resetSharesPerMentalHealthExpert: (state, action) => {
-      console.log('Data 2 ', action)
-
       state.sharesPerMentalHealthExpert =
         action?.payload?.serviceResponseObject?.serviceResponseObject
     },
@@ -124,7 +122,6 @@ export const regularUserSlice = createSlice({
     builder
       //shares-per-mental-health-expert
       .addCase(getSharesPerMentalHealthExpert.pending, (state, action) => {
-        console.log('Shares per mental health expert pending... ')
         state.isLoading = true
       })
       .addCase(getSharesPerMentalHealthExpert.fulfilled, (state, action) => {
@@ -151,7 +148,6 @@ export const regularUserSlice = createSlice({
 
       //recent
       .addCase(getRecentShares.pending, (state, action) => {
-        console.log('Recent shares pending...')
         state.isLoading = true
       })
       .addCase(getRecentShares.fulfilled, (state, action) => {
@@ -179,21 +175,15 @@ export const regularUserSlice = createSlice({
       })
 
       //revoke
-      .addCase(revokeContentPermission.pending, (state, action) => {
-        console.log('Revoke pending...')
-      })
+      .addCase(revokeContentPermission.pending, (state, action) => {})
       .addCase(revokeContentPermission.fulfilled, (state, action) => {
-        console.log('Permission to read deleted!')
-
         if (
           action?.payload?.serviceResponseObject?.serviceResponseObject <= 0
         ) {
           state.hasSharedPosts = false
         }
       })
-      .addCase(revokeContentPermission.rejected, (state, action) => {
-        console.log('Revoke error ', action.payload)
-      })
+      .addCase(revokeContentPermission.rejected, (state, action) => {})
   },
 })
 

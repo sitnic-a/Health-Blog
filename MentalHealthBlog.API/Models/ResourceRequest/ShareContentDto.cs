@@ -16,8 +16,7 @@ namespace MentalHealthBlog.API.Models.ResourceRequest
         {
             PostIds = postIds;
             SharedWithIds= sharedWithIds;
-            if (sharedAt.HasValue) SharedAt = sharedAt;
-            else SharedAt = DateTime.UtcNow;
+            SharedAt = DateTime.UtcNow;
             ShareLink = shareLink;
         }
     }

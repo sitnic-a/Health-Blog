@@ -62,33 +62,14 @@ export const createPost = createAsyncThunk(
 
 export const updatePost = createAsyncThunk(
   'post/update/{id}',
-  async (updatePostObj) => {
-    updatePostObj.e.preventDefault()
-
-    let form = new FormData(updatePostObj.e.target)
-    let formEntries = [...form.entries()]
-    let formObject = Object.fromEntries(formEntries)
-
-    let data = {
-      title: formObject.title,
-      content: formObject.content,
-      userId: updatePostObj.post.userId,
-    }
-
-    if (stringIsNullOrEmpty(data.title) || stringIsNullOrEmpty(data.content)) {
-      toast.error('Populate all fields!', {
-        position: 'bottom-right',
-      })
-      return
-    }
-
-    let url = `${application.application_url}/post/${updatePostObj.post.id}`
+  async (objectWithData) => {
+    let url = `${application.application_url}/post/${objectWithData?.post?.id}`
     let request = await fetch(url, {
       method: 'PUT',
-      body: JSON.stringify(data),
+      body: JSON.stringify(objectWithData),
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${updatePostObj.authenticatedUser.jwToken}`,
+        Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
       },
     })
 
@@ -236,7 +217,7 @@ let postSlice = createSlice({
           })
           setTimeout(() => {
             window.location.reload()
-          }, 1500)
+          }, 500)
         }
       })
   },

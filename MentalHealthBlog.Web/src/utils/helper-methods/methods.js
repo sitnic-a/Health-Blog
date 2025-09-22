@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 export function stringIsNullOrEmpty(variable) {
   return variable === null || variable === undefined || variable === ''
 }
@@ -142,9 +144,6 @@ export function prepareContentToShare(paramsForPreparation) {
     sharedAt: new Date(),
     shareLink: shareLink,
   }
-
-  console.log('Content ', contentToBeShared)
-
   return contentToBeShared
 }
 
@@ -476,8 +475,6 @@ export const checkPhoneNumberValidity = (phoneNumber, validationMessages) => {
 }
 
 export const checkTagsValidity = (tags, validationMessages) => {
-  console.log('Tags ', tags)
-
   let isValid = true
   let regexPattern =
     /^(?!.*[ \-_]{2})(?!^[ \-_])(?!.*[ \-_]$)[\p{L}\p{N} \-_]{1,60}$/u
@@ -488,7 +485,6 @@ export const checkTagsValidity = (tags, validationMessages) => {
   }
 
   for (let i = 0; i < tags?.length; i++) {
-    console.log('Tag value ', tags[i])
     if (!regexPattern.test(tags[i])) {
       validationMessages.push(
         'Svaki tag može imati slova, brojeve ili specijalne karaktere'

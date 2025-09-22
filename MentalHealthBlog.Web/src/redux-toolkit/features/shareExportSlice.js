@@ -26,13 +26,12 @@ let initialState = {
 export const exportToPDF = createAsyncThunk(
   '/export',
   async (objectWithData) => {
-    console.log('Posts to export ', objectWithData.postsToExport)
     let request = await fetch(`${application.application_url}/export`, {
       method: 'POST',
-      body: JSON.stringify(objectWithData.postsToExport),
+      body: JSON.stringify(objectWithData?.postsToExport),
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
+        Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
       },
     })
 
@@ -45,7 +44,7 @@ export const exportToPDF = createAsyncThunk(
 export const shareByLink = createAsyncThunk(
   'share/link/{shareId}',
   async (objectWithData) => {
-    let url = `${application.application_url}/share/link/${objectWithData.shareGuid}`
+    let url = `${application.application_url}/share/link/${objectWithData?.shareGuid}`
     let request = await fetch(url, {
       method: 'GET',
       headers: {
@@ -62,10 +61,10 @@ export const shareContent = createAsyncThunk(
   async (objectWithData) => {
     let request = await fetch(`${application.application_url}/share`, {
       method: 'POST',
-      body: JSON.stringify(objectWithData.contentToBeShared),
+      body: JSON.stringify(objectWithData?.contentToBeShared),
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
+        Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
       },
     })
 
@@ -138,7 +137,7 @@ let shareExportSlice = createSlice({
 
     revokeShareContent: (state, action) => {
       state.postsToExport = state.postsToExport.filter(
-        (post) => post.id !== action.payload
+        (post) => post.id !== action?.payload
       )
       toast.success('Post uspješno obrisan iz liste za dijeljenje', {
         autoClose: 2000,
@@ -183,7 +182,6 @@ let shareExportSlice = createSlice({
     builder
       //Export
       .addCase(exportToPDF.pending, (state) => {
-        console.log('Pending')
         state.isLoading = true
       })
       .addCase(exportToPDF.fulfilled, (state, action) => {
@@ -199,7 +197,6 @@ let shareExportSlice = createSlice({
       })
       .addCase(exportToPDF.rejected, (state, action) => {
         state.isLoading = false
-        console.log('FAILED')
         toast.error('Radnja nije uspješno izvršena!', {
           autoClose: 3000,
           position: 'bottom-right',
@@ -223,7 +220,6 @@ let shareExportSlice = createSlice({
 
       //Share
       .addCase(shareContent.pending, (state, action) => {
-        console.log('Pending...', action.meta)
         let contentToBeShared = action.meta.arg.contentToBeShared
 
         if (contentToBeShared.shareLink === true) {
@@ -269,9 +265,7 @@ let shareExportSlice = createSlice({
       })
 
       //get suggested experts or relatives
-      .addCase(getExpertsAndRelatives.pending, (state, action) => {
-        console.log('gEAR Pending...')
-      })
+      .addCase(getExpertsAndRelatives.pending, (state, action) => {})
 
       .addCase(getExpertsAndRelatives.fulfilled, (state, action) => {
         let statusCode = action?.payload?.statusCode

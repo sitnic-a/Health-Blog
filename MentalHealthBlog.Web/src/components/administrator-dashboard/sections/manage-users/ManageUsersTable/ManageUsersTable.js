@@ -1,12 +1,12 @@
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   getDbUsers,
   setSelectedUser,
 } from '../../../../../redux-toolkit/features/adminSlice'
+import { getDbRoles } from '../../../../../redux-toolkit/features/userSlice'
 import { openDeleteModal } from '../../../../../redux-toolkit/features/modalSlice'
 import { CiTrash } from 'react-icons/ci'
-import { getDbRoles } from '../../../../../redux-toolkit/features/userSlice'
-import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 
 import ManageUsersTableCSS from './ManageUsersTable.css'
@@ -43,7 +43,7 @@ export const ManageUsersTable = () => {
 
         if (
           data?.payload?.statusCode === 200 &&
-          data?.payload?.serviceResponseObject.length <= 0
+          data?.payload?.serviceResponseObject?.length <= 0
         ) {
           toast.warning('Trenutno nema registrovanih korisnika!', {
             autoClose: 1500,
@@ -119,12 +119,12 @@ export const ManageUsersTable = () => {
                     {user?.roles &&
                       user?.roles.map((role) => {
                         return (
-                          <tr
+                          <span
                             className="manage-users-table-data-cell manage-users-data-role"
                             key={role?.id}
                           >
                             {role?.name}
-                          </tr>
+                          </span>
                         )
                       })}
                   </td>

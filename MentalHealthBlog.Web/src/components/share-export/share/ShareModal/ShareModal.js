@@ -96,8 +96,6 @@ export const ShareModal = () => {
                     authenticatedUser,
                   }
 
-                  console.log('CTBS ', contentToBeShared)
-
                   dispatch(shareContent(objectWithData)).then((data) => {
                     let statusCode = data?.payload?.StatusCode
                     if (statusCode === 400) {

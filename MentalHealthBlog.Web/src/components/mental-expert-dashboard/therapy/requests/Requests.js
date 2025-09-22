@@ -18,8 +18,6 @@ export const Requests = () => {
   let { authenticatedUser } = useSelector((store) => store.user)
   let { requestsForMentalHealthExpert } = useSelector((store) => store.therapy)
 
-  console.log('Authenticated user ', authenticatedUser)
-
   useEffect(() => {
     let objectWithData = {
       authenticatedUser,
@@ -35,11 +33,14 @@ export const Requests = () => {
         <div className="therapy-requests-container">
           <div className="therapy-requests-requests-container">
             <div className="therapy-requests-requests-content">
-              {requestsForMentalHealthExpert?.map((request) => {
+              {requestsForMentalHealthExpert?.map((request, index) => {
                 let fullName = `${request?.regularUserFirstName} ${request?.regularUserLastName}`
                 let sentAt = moment(request?.sentAt, 'YYYYMMDDHHmmss').fromNow()
                 return (
-                  <div className="therapy-requests-requests-content-row">
+                  <div
+                    key={index}
+                    className="therapy-requests-requests-content-row"
+                  >
                     <div className="therapy-requests-requests-content-cell">
                       <span className="therapy-request-request-content-cell-value">
                         {fullName}

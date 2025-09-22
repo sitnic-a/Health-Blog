@@ -45,7 +45,6 @@ export const MentalExpertDashboard = () => {
           return
         }
       }
-      console.log('Data ', data.payload)
 
       if (data?.payload.serviceResponseObject?.length === 0) {
         toast.warning('Trenutno nema podijeljenog sadržaja', {

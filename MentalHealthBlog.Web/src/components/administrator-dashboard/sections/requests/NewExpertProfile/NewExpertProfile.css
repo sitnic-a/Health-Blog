@@ -1,7 +1,7 @@
 .new-expert-profile-container {
-  max-width: 280px;
+  max-width: 310px;
   width: 100%;
-  padding: 0.3rem;
+  padding: 1rem 0.3rem;
   /* border: 1px dashed #c4c4c4; */
   border-radius: 0.6rem;
   background: #f0eae1;

@@ -36,7 +36,6 @@ export const DeletePostConfirmation = () => {
             onClick={() => {
               dispatch(deletePostById(deletePostObj)).then((data) => {
                 let statusCode = data?.payload?.StatusCode
-                console.log('Status code ', statusCode)
 
                 if (statusCode !== 200) {
                   if (statusCode === 404) {

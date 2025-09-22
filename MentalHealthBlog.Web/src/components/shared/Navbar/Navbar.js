@@ -7,7 +7,6 @@ import NavbarCSS from '../Navbar/Navbar.css'
 
 export const Navbar = () => {
   let { authenticatedUser } = useSelector((store) => store.user)
-  console.log('Authenticated user ', authenticatedUser)
 
   let __ADMIN_ROLE_ID = 1
   let __USER_ROLE_ID = 2

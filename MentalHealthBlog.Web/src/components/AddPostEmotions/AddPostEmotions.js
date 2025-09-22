@@ -30,12 +30,8 @@ export const AddPostEmotions = () => {
             }
           }}
           onKeyUp={(e) => {
-            console.log('Suggested emotions ', suggestedEmotions)
-
             let dbEmotionsCopy = [...dbEmotions]
-
             if (e.target.value === '') {
-              console.log('Emotion copy ', dbEmotionsCopy)
               dispatch(setSuggestedEmotions(dbEmotionsCopy))
               return
             }

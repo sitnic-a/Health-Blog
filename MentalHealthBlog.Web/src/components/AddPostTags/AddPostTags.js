@@ -65,12 +65,12 @@ export const AddPostTags = () => {
 
   let handleTagRemoval = (tagName) => {
     let tagThatIsNotRecorded
-    if (pickedTags.find((t) => t.id <= 0)) {
-      tagThatIsNotRecorded = pickedTags.find((t) => t.name === tagName)
+    if (pickedTags.find((t) => t?.id <= 0)) {
+      tagThatIsNotRecorded = pickedTags.find((t) => t?.name === tagName)
     }
 
     if (tagThatIsNotRecorded !== undefined || tagThatIsNotRecorded !== null) {
-      let afterRemovePickedTags = pickedTags.filter((t) => t.name !== tagName)
+      let afterRemovePickedTags = pickedTags.filter((t) => t?.name !== tagName)
       dispatch(setPickedTags(afterRemovePickedTags))
       let updatedSuggestedTagsForTagThatIsNotRecorded = [
         ...suggestedTags,
@@ -78,12 +78,13 @@ export const AddPostTags = () => {
       dispatch(setSuggestedTags(updatedSuggestedTagsForTagThatIsNotRecorded))
       let afterDeleteChosenTags = [...chosenTags].filter((t) => t !== tagName)
       dispatch(setChosenTags(afterDeleteChosenTags))
+      return
     }
 
-    if (pickedTags.find((t) => t.id > 0)) {
-      let tag = pickedTags.find((t) => t.name === tagName)
+    if (pickedTags.find((t) => t?.id > 0)) {
+      let tag = pickedTags.find((t) => t?.name === tagName)
       let updatedSuggestedTags = [...suggestedTags, tag]
-      let afterRemovePickedTags = pickedTags.filter((t) => t.id !== tag.id)
+      let afterRemovePickedTags = pickedTags.filter((t) => t?.id !== tag?.id)
       dispatch(setPickedTags(afterRemovePickedTags))
       updatedSuggestedTags = [...updatedSuggestedTags].filter(
         (t) => !afterRemovePickedTags.includes(t)
@@ -172,7 +173,7 @@ export const AddPostTags = () => {
                 let afterAddChosenTags = [...chosenTags, tag]
                 let tagToAdd = {
                   id: -1,
-                  name: e.target.value,
+                  name: tag,
                 }
                 let afterEnterPickedTags = [...pickedTags, tagToAdd]
                 dispatch(setPickedTags(afterEnterPickedTags))
