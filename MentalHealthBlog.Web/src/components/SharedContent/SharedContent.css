@@ -9,6 +9,7 @@
 @media (width<=1160px) {
   .shares-per-mental-health-expert-content-posts {
     max-width: 290px;
+    width: 100%;
     justify-content: center;
     transform: translateY(30%);
     overflow-y: scroll;

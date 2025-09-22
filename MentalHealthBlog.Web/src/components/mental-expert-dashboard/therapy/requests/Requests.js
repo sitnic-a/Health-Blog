@@ -35,7 +35,7 @@ export const Requests = () => {
             <div className="therapy-requests-requests-content">
               {requestsForMentalHealthExpert?.map((request, index) => {
                 let fullName = `${request?.regularUserFirstName} ${request?.regularUserLastName}`
-                let sentAt = moment(request?.sentAt, 'YYYYMMDDHHmmss').fromNow()
+                let sentAt = moment(request?.sentAt).fromNow()
                 return (
                   <div
                     key={index}

@@ -167,7 +167,7 @@ let postSlice = createSlice({
           })
           setTimeout(() => {
             window.location.reload()
-          }, 1000)
+          }, 500)
           return
         }
       })

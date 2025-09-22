@@ -13,7 +13,7 @@ export const OverlayPostPreview = (props) => {
 
   let createdAt
   if (contentPost !== null || contentPost !== undefined) {
-    createdAt = moment(contentPost?.createdAt, 'YYYYMMDDHHmmss').fromNow()
+    createdAt = moment(contentPost?.createdAt).fromNow()
   }
 
   return (

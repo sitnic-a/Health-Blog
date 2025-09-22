@@ -39,8 +39,8 @@ export const Post = (props) => {
 
   //Helpers
   let createdAt = post?.createdAt
-  let createdAtFormatted = moment(post?.createdAt, 'YYYYMMDDhhmmss').fromNow()
-  let sharedAt = moment(post?.sharedAt, 'YYYYMMDDHHmmss').fromNow()
+  let createdAtFormatted = moment(post?.createdAt).fromNow()
+  let sharedAt = moment(post?.sharedAt).fromNow()
 
   return (
     <div

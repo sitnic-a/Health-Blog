@@ -39,7 +39,7 @@ export const ListOfSharedPosts = () => {
   return (
     <section id="shared-posts-via-link-main-container">
       {postsToShare?.map((post, index) => {
-        let date = moment(post?.createdAt, 'YYYYMMDDHHmmss').fromNow()
+        let date = moment(post?.createdAt).fromNow()
         let tags = post.tags
         let emotions = post?.emotions
         return (

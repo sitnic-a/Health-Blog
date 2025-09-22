@@ -6,7 +6,7 @@ import SharedContentCSS from './SharedContent.css'
 
 export const SharedContent = (props) => {
   let content = props?.content
-  let date = moment(content?.createdAt, 'YYYYMMDDHHmmss').fromNow()
+  let date = moment(content?.createdAt).fromNow()
 
   return (
     <div className="sharing-users-post-container">

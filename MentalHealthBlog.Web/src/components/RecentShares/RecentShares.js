@@ -22,14 +22,8 @@ export const RecentShares = () => {
           {recentShares?.map((share, index) => {
             let basicInfoContainerHeight
             let person = `${share?.sharedWith?.firstName} ${share?.sharedWith?.lastName}`
-            let createdAt = moment(
-              share?.sharedPost?.createdAt,
-              'YYYYMMDDHHmmss'
-            ).fromNow()
-            let sharedAt = moment(
-              share?.sharedPost?.sharedAt,
-              'YYYYMMDDHHmmss'
-            ).fromNow()
+            let createdAt = moment(share?.sharedPost?.createdAt).fromNow()
+            let sharedAt = moment(share?.sharedPost?.sharedAt).fromNow()
             return (
               <div
                 className="shares-per-mental-health-expert-recent-share-container"
