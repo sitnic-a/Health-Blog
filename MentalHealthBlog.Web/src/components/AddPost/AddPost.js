@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 import { openAddModal } from '../../redux-toolkit/features/modalSlice'
 import { createPost } from '../../redux-toolkit/features/postSlice'
 import {
@@ -10,23 +11,22 @@ import {
   getTags,
 } from '../../redux-toolkit/features/tagSlice'
 import { getEmotions } from '../../redux-toolkit/features/emotionSlice'
-
-import Modal from 'react-modal'
-import { application } from '../../application'
-import { AddPostTags } from '../AddPostTags/AddPostTags'
-import { toast } from 'react-toastify'
-
-import AddPostCSS from './AddPost.css'
-import {
-  checkInputDataValidity,
-  checkTagsValidity,
-  stringIsNullOrEmpty,
-} from '../../utils/helper-methods/methods'
 import {
   setContentValidationData,
   setTagsValidationData,
   setTitleValidationData,
 } from '../../redux-toolkit/features/validationSlice'
+import {
+  checkInputDataValidity,
+  checkTagsValidity,
+  stringIsNullOrEmpty,
+} from '../../utils/helper-methods/methods'
+
+import Modal from 'react-modal'
+import { application } from '../../application'
+import { AddPostTags } from '../AddPostTags/AddPostTags'
+
+import AddPostCSS from './AddPost.css'
 
 export const AddPost = () => {
   let dispatch = useDispatch()
@@ -44,7 +44,7 @@ export const AddPost = () => {
 
   let submitForm = (e) => {
     e.preventDefault()
-    let chosenEmotions = pickedEmotions.map((emotion) => emotion.id)
+    let chosenEmotions = pickedEmotions?.map((emotion) => emotion.id)
 
     let form = new FormData(e.target)
     let data = Object.fromEntries([...form.entries()])
@@ -95,7 +95,8 @@ export const AddPost = () => {
       objectWithData?.tags?.length <= 0 ||
       !tagsValidationData?.tagsIsValid
     ) {
-      toast.error('Fields are required or not valid!', {
+      toast.error('Molimo slijedite upute prilikom popunjavanja polja!', {
+        autoClose: 3000,
         position: 'bottom-right',
       })
       return
@@ -107,13 +108,15 @@ export const AddPost = () => {
       if (statusCode !== null || statusCode !== undefined) {
         if (statusCode !== 201) {
           if (statusCode === 400) {
-            toast.error('Data either invalid or not entered', {
+            toast.error('Podaci ili nisu ispravni ili nisu unešeni', {
+              autoClose: 3000,
               position: 'bottom-right',
             })
             return
           }
           if (statusCode === 404) {
-            toast.error("New post can't be created!", {
+            toast.error('Post nije uspješno kreiran!', {
+              autoClose: 3000,
               position: 'bottom-right',
             })
             return
@@ -153,12 +156,12 @@ export const AddPost = () => {
           <h2>Post</h2>
         </div>
 
-        <span className="required-field">Required fields *</span>
+        <span className="required-field">Polja obavezna za unos *</span>
 
         <div className="add-post-modal-content">
           <div className="add-post-title-container">
             <label className="add-post-form-field-label" htmlFor="title">
-              Title
+              Naslov
               <span className="required-field"> *</span>
             </label>
             <br />
@@ -167,7 +170,7 @@ export const AddPost = () => {
               type="text"
               id="title"
               name="title"
-              placeholder="Enter your post's title"
+              placeholder="Unesite naziv posta..."
               onBlur={(e) => {
                 let title = e.target.value
                 let isTitle = true
@@ -178,8 +181,6 @@ export const AddPost = () => {
                   isTitle,
                   isContent
                 )
-
-                console.log('Validation ', validationMessages)
 
                 dispatch(
                   setTitleValidationData({
@@ -206,7 +207,7 @@ export const AddPost = () => {
           </div>
           <div className="add-post-content-container">
             <label className="add-post-form-field-label" htmlFor="content">
-              Content
+              Sadržaj
               <span className="required-field"> *</span>
             </label>
             <br />
@@ -216,7 +217,7 @@ export const AddPost = () => {
               id="content"
               rows="10"
               spellCheck={false}
-              placeholder="Write down the content..."
+              placeholder="Unesite sadržaj posta..."
               onBlur={(e) => {
                 let content = e.target.value
                 let isTitle = false
@@ -255,7 +256,7 @@ export const AddPost = () => {
           <AddPostTags />
         </div>
         <button type="submit" className="add-post-modal-save-button">
-          Save
+          Snimi
         </button>
       </form>
     </Modal>

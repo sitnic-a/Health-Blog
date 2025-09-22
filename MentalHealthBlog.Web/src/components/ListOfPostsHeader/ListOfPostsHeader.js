@@ -32,7 +32,7 @@ export const ListOfPostsHeader = () => {
         }}
       >
         <h1 className="list-of-posts-author">
-          Written by: <span>{authenticatedUser.username}</span>
+          Napisao: <span>{authenticatedUser?.username}</span>
         </h1>
         <div className="header-actions">
           <button
@@ -42,7 +42,7 @@ export const ListOfPostsHeader = () => {
             onClick={() => dispatch(openAddModal(true))}
           >
             <MdOutlineAddCircleOutline className="add-post-icon" />
-            Add new post
+            Dodaj post
           </button>
 
           <button
@@ -53,7 +53,7 @@ export const ListOfPostsHeader = () => {
               dispatch(setVisibility())
             }}
           >
-            Filter
+            Filtriraj
           </button>
 
           <section className="share-export" id="share-export-id">
@@ -61,7 +61,7 @@ export const ListOfPostsHeader = () => {
               <button
                 data-action-select="select"
                 type="button"
-                data-tooltip-title="Select data"
+                data-tooltip-title="Označi postove"
                 onClick={(e) => {
                   dispatch(setIsSharingExporting(!isSharingExporting))
                 }}

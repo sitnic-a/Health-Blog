@@ -11,6 +11,7 @@ import { requestStatuses } from '../../enums/requestStatuses'
 import MentalHealthExpertsDropdownCSS from './MentalHealthExpertsDropdown.css'
 import { getMentalHealthExperts } from '../../redux-toolkit/features/mentalExpertSlice'
 import { toast } from 'react-toastify'
+import { stringIsNullOrEmpty } from '../../utils/helper-methods/methods'
 
 export const MentalHealthExpertsDropdown = () => {
   let dispatch = useDispatch()
@@ -32,7 +33,11 @@ export const MentalHealthExpertsDropdown = () => {
             expert?.requestStatus === requestStatuses.PENDING ||
             expert?.requestStatus === requestStatuses.APPROVED || (
               <div
-                key={expert?.mentalHealthExpertId}
+                key={
+                  !stringIsNullOrEmpty(expert?.id)
+                    ? expert?.id
+                    : expert?.mentalHealthExpertId
+                }
                 className="main-mental-health-expert-selected-picker-option"
               >
                 <div className="main-mental-health-expert-picker-option main-mental-health-expert-picker-option-expanded">
@@ -79,16 +84,16 @@ export const MentalHealthExpertsDropdown = () => {
                                 }
                                 dispatch(getMyExperts(objectWithData))
 
-                                toast.success('Succesfully made request!', {
-                                  position: 'bottom-right',
+                                toast.success('Uspješno ste poslali zahtjev!', {
                                   autoClose: 1500,
+                                  position: 'bottom-right',
                                 })
                               }
                             }
                           )
                         }}
                       >
-                        Send request
+                        Pošalji zahtjev
                       </button>
                     )}
 
@@ -120,11 +125,6 @@ export const MentalHealthExpertsDropdown = () => {
                             ...selectedMentalHealthExpertIds,
                           ]
 
-                          console.log(
-                            'NEW selected ',
-                            selectedMentalHealthExpertIdsTemp
-                          )
-
                           mainMentalHealthExpertSelectedPickerOption.classList.add(
                             'main-mental-health-expert-selected-picker-option-active'
                           )
@@ -137,11 +137,6 @@ export const MentalHealthExpertsDropdown = () => {
                             parseInt(pickedMentalHealthExpertId),
                           ]
 
-                          console.log(
-                            'New array ',
-                            selectedMentalHealthExpertIdsTemp
-                          )
-
                           dispatch(
                             setSelectedMentalHealthExpertIds(
                               selectedMentalHealthExpertIdsTemp
@@ -150,7 +145,7 @@ export const MentalHealthExpertsDropdown = () => {
                           return
                         }}
                       >
-                        + Add
+                        + Dodaj
                       </button>
                     )}
                   <button
@@ -200,7 +195,7 @@ export const MentalHealthExpertsDropdown = () => {
                       )
                     }}
                   >
-                    Cancel
+                    Odustani
                   </button>
                 </div>
               </div>

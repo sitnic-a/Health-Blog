@@ -65,7 +65,7 @@
 }
 
 .overlay-post-actions-close-modal {
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
 }
 
 .overlay-post-content-container {
@@ -95,8 +95,9 @@
 .overlay-post-content > pre {
   max-width: 530px;
   min-height: 150px;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 1rem;
+  line-height: 1.45rem;
   text-align: justify;
   overflow-y: scroll;
   text-wrap: wrap;
@@ -116,7 +117,7 @@
 }
 
 .overlay-post-tags-subtitle {
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 1.1rem;
 }
 
@@ -135,7 +136,7 @@
 }
 
 .overlay-post-emotions-subtitle {
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 1.1rem;
 }
 
@@ -149,7 +150,7 @@
 }
 
 .overlay-post-date {
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 0.8rem;
   cursor: default;
 }

@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 export function stringIsNullOrEmpty(variable) {
   return variable === null || variable === undefined || variable === ''
 }
@@ -142,9 +144,6 @@ export function prepareContentToShare(paramsForPreparation) {
     sharedAt: new Date(),
     shareLink: shareLink,
   }
-
-  console.log('Content ', contentToBeShared)
-
   return contentToBeShared
 }
 
@@ -215,7 +214,7 @@ export const manipulateSidebarAndAdminStatusActions = () => {
       !stringIsNullOrEmpty(statusHamburger)
     ) {
       profilesContainer.style.display = 'flex'
-      profilesContainer.style.marginLeft = '0.5rem'
+      // profilesContainer.style.marginLeft = '0.5rem'
       statusActionsContainer.style.display = 'none'
       statusHamburger.style.display = 'block'
     }
@@ -343,11 +342,11 @@ export const checkUsernameValidity = (username, validationMessages) => {
     return [isValid, validationMessages]
   }
 
-  validationMessages.push('Username is required')
-  validationMessages.push('Can contain letters, numbers and special characters')
-  validationMessages.push('Permitted characters: _ - . ')
-  validationMessages.push('Cannot contain two - or . in a row')
-  validationMessages.push('Cannot start or end with - or .')
+  validationMessages.push('Unos polja je obavezan!')
+  validationMessages.push('Može imati slova, brojeve i specijalne karaktere')
+  validationMessages.push('Dozvoljeni karakteri: _ - . ')
+  validationMessages.push('Ne smije imati dvije ili više - ili . u nizu')
+  validationMessages.push('Ne smije početi - ili .')
 
   return [!isValid, validationMessages]
 }
@@ -361,12 +360,11 @@ export const checkPasswordValidity = (password, validationMessages) => {
     return [isValid, validationMessages]
   }
 
-  validationMessages.push('Password is required!')
-  validationMessages.push('Password length must be 10-100 characters long')
-  validationMessages.push('Must contain lowercase letter')
-  validationMessages.push('Must contain uppercase letter')
-  validationMessages.push('Must contain number')
-  validationMessages.push('Special characters: - _ . @ ')
+  validationMessages.push('Unos polja je obavezan!')
+  validationMessages.push('Mora imati minimalno 10 i maksimalno 100 karaktera!')
+  validationMessages.push('Mora imati malo i veliko slovo!')
+  validationMessages.push('Mora imati broj i specijalni karakter!')
+  validationMessages.push('Dozvoljeni karakteri: - _ . @ ')
   return [!isValid, validationMessages]
 }
 
@@ -384,14 +382,10 @@ export const checkPersonalInformationValidity = (
       return [isValid, validationMessages]
     }
 
-    validationMessages.push('Name must start with uppercase')
-    validationMessages.push(
-      'Cannot have numbers or special characters beside - and space'
-    )
-    validationMessages.push(
-      'If contains special characters each next name must start with uppercase'
-    )
-    validationMessages.push('Cannot end with space or -')
+    validationMessages.push('Mora početi velikim slovom')
+    validationMessages.push('Ne smije imati broj ili specijalni znak osim -')
+    validationMessages.push('Sljedeće ime mora početi velikim slovom ako ima -')
+    validationMessages.push('Ne smije početi ili završiti razmakom ili -')
     return [!isValid, validationMessages]
   }
   //Organization validation
@@ -401,13 +395,11 @@ export const checkPersonalInformationValidity = (
   if (regexPattern.test(personalInfo)) {
     return [isValid, validationMessages]
   }
-  validationMessages.push('Organization is required')
-  validationMessages.push(
-    'Organization name can contain letters, numbers and some special characters'
-  )
-  validationMessages.push('Cannot start or end with special character')
-  validationMessages.push('Cannot have multiple special characters in a row')
-  validationMessages.push("Special characters: . - _ & / , ( ) ' ")
+  validationMessages.push('Unos polja je obavezan')
+  validationMessages.push('Može imati slova, brojeve i specijalne karaktere')
+  validationMessages.push('Ne smije početi ili završiti specijalnim znakom')
+  validationMessages.push('Ne može imati više specijalnih znakova u nizu')
+  validationMessages.push("Dozvoljeni znakovi: . - _ & / , ( ) ' ")
   return [!isValid, validationMessages]
 }
 
@@ -432,12 +424,10 @@ export const checkEmailValidity = (
     return [isValid, validationMessages]
   }
 
-  validationMessages.push('Enter corrent email eg. email_21@email.com')
-  validationMessages.push('Cannot start with special character')
-  validationMessages.push(
-    'Cannot have more special characters in a row, eg. -- or ..'
-  )
-  validationMessages.push('Special characters: . _ + % -')
+  validationMessages.push('Unesite korektan email, npr. email_21@email.com')
+  validationMessages.push('Ne smije početi specijalnim znakom')
+  validationMessages.push('Ne smije imati više specijalnih znakova u nizu')
+  validationMessages.push('Dozvoljeni znakovi: . _ + % -')
   return [!isValid, validationMessages]
 }
 
@@ -454,13 +444,9 @@ export const checkInputDataValidity = (
     if (regexPattern.test(data)) {
       return [isValid, validationMessages]
     }
-    validationMessages.push(
-      'Can contain letters, numbers and some special characters'
-    )
-    validationMessages.push(
-      'Special characters are not allowed to repeat in a row'
-    )
-    validationMessages.push('Special characters: - _ . , : ! ? \' /" ()')
+    validationMessages.push('Može imati slova, brojeve i specijalne karaktere')
+    validationMessages.push('Ne smije imati više specijalnih znakova u nizu')
+    validationMessages.push('Dozvoljeni karakteri: - _ . , : ! ? \' /" ()')
     return [!isValid, validationMessages]
   }
 
@@ -470,7 +456,7 @@ export const checkInputDataValidity = (
       return [isValid, validationMessages]
     }
 
-    validationMessages.push('Content is required')
+    validationMessages.push('Sadržaj posta je obavezan!')
     return [!isValid, validationMessages]
   }
 }
@@ -481,40 +467,34 @@ export const checkPhoneNumberValidity = (phoneNumber, validationMessages) => {
   if (regexPattern.test(phoneNumber)) {
     return [isValid, validationMessages]
   }
-  validationMessages.push(
-    'Phone number can contain numbers in combination with several special characters'
-  )
-  validationMessages.push(
-    'Special characters are not required. Used for better readability'
-  )
-  validationMessages.push('Special characters: + - / and space')
+  validationMessages.push('Dozvoljena kombinacija sa specijalnim karakterima')
+  validationMessages.push('Specijalni karakteri nisu obavezni')
+  validationMessages.push('Mogu se koristiti zbog bolje čitljivosti')
+  validationMessages.push('Dozvoljeni karakteri: + - / and space')
   return [!isValid, validationMessages]
 }
 
 export const checkTagsValidity = (tags, validationMessages) => {
-  console.log('Tags ', tags)
-
   let isValid = true
   let regexPattern =
     /^(?!.*[ \-_]{2})(?!^[ \-_])(?!.*[ \-_]$)[\p{L}\p{N} \-_]{1,60}$/u
 
   if (tags?.length <= 0) {
-    validationMessages.push('Tags are required')
+    validationMessages.push('Tagovi su obavezni!')
     return [!isValid, validationMessages]
   }
 
   for (let i = 0; i < tags?.length; i++) {
-    console.log('Tag value ', tags[i])
     if (!regexPattern.test(tags[i])) {
       validationMessages.push(
-        'Each tag can contain either letters, numbers or some special characters'
+        'Svaki tag može imati slova, brojeve ili specijalne karaktere'
       )
-      validationMessages.push('Can be max 60 characters long')
-      validationMessages.push('Cannot start or end with special character')
+      validationMessages.push('Maksimalna dužina je 60 karaktera')
       validationMessages.push(
-        'Cannot contain multiple special characters in a row'
+        'Ne smije početi ili završiti specijalnim karakterom'
       )
-      validationMessages.push("Special characters: ' ' - _")
+      validationMessages.push('Ne smije imati više specijalnih znakova u nizu')
+      validationMessages.push('Dozvoljeni karakteri: - _ i razmak')
       return [!isValid, validationMessages]
     }
   }

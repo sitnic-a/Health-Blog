@@ -15,7 +15,6 @@ let initialState = {
 }
 
 export const getDbUsers = createAsyncThunk('', async (objectWithData) => {
-  console.log('Query value ', objectWithData?.query)
   let url = `${application.application_url}/admin`
 
   if (objectWithData?.query?.role > 0) {
@@ -31,13 +30,11 @@ export const getDbUsers = createAsyncThunk('', async (objectWithData) => {
     url += `?searchCondition=${objectWithData?.query?.searchCondition}`
   }
 
-  console.log('URL ', url)
-
   let request = await fetch(url, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
+      Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
     },
   })
   let response = await request.json()
@@ -54,7 +51,7 @@ export const getNewRegisteredExperts = createAsyncThunk(
       body: JSON.stringify(objectWithData?.query),
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
+        Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
       },
     })
     let response = await request.json()
@@ -71,7 +68,7 @@ export const setRegisteredExpertStatus = createAsyncThunk(
       body: JSON.stringify(objectWithData?.patchDto),
       headers: {
         'Content-Type': 'application/json-patch+json',
-        Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
+        Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
       },
     })
 
@@ -86,7 +83,7 @@ export const removeUserById = createAsyncThunk('id', async (objectWithData) => {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
+      Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
     },
   })
   let response = await request.json()
@@ -118,10 +115,9 @@ let adminSlice = createSlice({
     setSelectedRole: (state) => {
       let select = document.getElementById('manage-users-select-role-filter')
       state.selectedRole = parseInt(select.value)
-      console.log('Selected role ', state.selectedRole)
     },
     setSelectedUser: (state, action) => {
-      state.dbUser = action.payload
+      state.dbUser = action?.payload
     },
   },
   extraReducers: (builder) => {
@@ -133,9 +129,9 @@ let adminSlice = createSlice({
       .addCase(getDbUsers.fulfilled, (state, action) => {
         let statusCode = action?.payload?.statusCode
         if (statusCode === 200) {
-          let serviceResponseObject = action.payload
+          let serviceResponseObject = action?.payload
           state.isLoading = false
-          state.dbUsers = serviceResponseObject.serviceResponseObject
+          state.dbUsers = serviceResponseObject?.serviceResponseObject
           state.isFailed = false
           return
         }
@@ -146,11 +142,8 @@ let adminSlice = createSlice({
       })
 
       //New registered experts
-      .addCase(getNewRegisteredExperts.pending, (state, action) => {
-        console.log('New-Request: Pending...')
-      })
+      .addCase(getNewRegisteredExperts.pending, (state, action) => {})
       .addCase(getNewRegisteredExperts.fulfilled, (state, action) => {
-        console.log('New-Request: Fullfilled')
         let statusCode = action?.payload?.statusCode
         let serviceResponseObject = action?.payload?.serviceResponseObject
 
@@ -165,17 +158,15 @@ let adminSlice = createSlice({
         state.isFailed = true
       })
       .addCase(getNewRegisteredExperts.rejected, (state, action) => {
-        toast.error('Something went wrong!', {
+        toast.error('Radnja nije uspješno završena!', {
+          autoClose: 3000,
           position: 'bottom-right',
         })
       })
 
       //Set registered expert status
-      .addCase(setRegisteredExpertStatus.pending, (state, action) => {
-        console.log('Approval: Pending... ')
-      })
+      .addCase(setRegisteredExpertStatus.pending, (state, action) => {})
       .addCase(setRegisteredExpertStatus.fulfilled, (state, action) => {
-        console.log('Approval: Fullfilled')
         let statusCode = action?.payload?.statusCode
 
         if (statusCode === 200) {
@@ -187,23 +178,18 @@ let adminSlice = createSlice({
         }
       })
       .addCase(setRegisteredExpertStatus.rejected, (state, action) => {
-        console.log('Approval: Rejected')
-        toast.error('Something was wrong', {
+        toast.error('Radnja nije uspješno završena!', {
           position: 'bottom-right',
         })
       })
 
       //Remove user by id
-      .addCase(removeUserById.pending, (state, action) => {
-        console.log('Remove pending... ')
-      })
+      .addCase(removeUserById.pending, (state, action) => {})
       .addCase(removeUserById.fulfilled, (state, action) => {
-        console.log('Remove done...', action?.payload)
-
         let statusCode = action?.payload?.statusCode
 
         if (statusCode === 200) {
-          toast.success('Succesfully deleted user', {
+          toast.success('Korisnik uspješno obrisan', {
             autoClose: 1500,
             position: 'bottom-right',
           })
@@ -214,8 +200,8 @@ let adminSlice = createSlice({
         }
       })
       .addCase(removeUserById.rejected, (state, action) => {
-        console.log('Remove rejected...')
-        toast.error('Something went wrong!', {
+        toast.error('Radnja nije uspješno završena!', {
+          autoClose: 3000,
           position: 'bottom-right',
         })
       })

@@ -45,7 +45,8 @@ export const ShareExportOverlay = () => {
               let statusCode = data?.payload?.StatusCode
               if (statusCode !== 200) {
                 if (statusCode === 404) {
-                  toast.error("Experts couldn't be fetched!", {
+                  toast.error('Stručnjaci nisu uspješno dobavljeni!', {
+                    autoClose: 3000,
                     position: 'bottom-right',
                   })
                   return
@@ -55,18 +56,22 @@ export const ShareExportOverlay = () => {
                 data?.payload?.statusCode === 200 &&
                 data?.payload?.serviceResponseObject?.length === 0
               ) {
-                toast.warning('Reach some mental health expert first!', {
-                  position: 'bottom-right',
-                })
+                toast.warning(
+                  'Povežite se sa stručnjakom s kojim biste htjeli podijeliti sadržaj!',
+                  {
+                    autoClose: 3000,
+                    position: 'bottom-right',
+                  }
+                )
                 return
               }
 
-              toast.success('Successfuly retrieved experts!', {
+              toast.success('Uspješno dobavljeni stručnjaci!', {
+                autoClose: 1500,
                 position: 'bottom-right',
               })
             })
-            let selectedPosts = getSelectedPosts(authenticatedUser)
-            console.log('In LIST on Share ', selectedPosts)
+            // let selectedPosts = getSelectedPosts(authenticatedUser)
           }}
         >
           <FaShare className="share-export-icon" />
@@ -89,7 +94,6 @@ export const ShareExportOverlay = () => {
             dispatch(exportToPDF(objectWithData)).then((response) => {
               let statusCode = response?.payload?.StatusCode
               let fileLength = response?.payload?.fileLength
-              console.log('File ', fileLength)
 
               if (statusCode !== 200 && fileLength === undefined) {
                 toast.error('Document is not exported! Try again!', {

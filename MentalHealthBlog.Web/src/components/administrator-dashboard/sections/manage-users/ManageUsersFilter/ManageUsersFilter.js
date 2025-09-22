@@ -17,7 +17,7 @@ export const ManageUsersFilter = () => {
       <div className="manage-users-filter select-role-filter-main-container">
         {dbRoles?.length > 0 && (
           <div className="manage-users-select-filter">
-            <span className="manage-users-select-filter-title">Role:</span>
+            <span className="manage-users-select-filter-title">Uloga:</span>
             <select
               className="manage-users-select-role-filter"
               name="manage-users-role"
@@ -41,13 +41,15 @@ export const ManageUsersFilter = () => {
                   let statusCode = data?.payload?.StatusCode
                   if (statusCode !== 200) {
                     if (statusCode === 400) {
-                      toast.error("Couldn't fetch users!", {
+                      toast.error('Nije moguće dobaviti korisnike!', {
+                        autoClose: 3000,
                         position: 'bottom-right',
                       })
                       return
                     }
                     if (statusCode === 404) {
-                      toast.error('Users not fetched properly!', {
+                      toast.error('Korisnici nisu dohvaćeni!', {
+                        autoClose: 3000,
                         position: 'bottom-right',
                       })
                       return
@@ -55,16 +57,17 @@ export const ManageUsersFilter = () => {
 
                     if (
                       data?.payload?.statusCode === 200 &&
-                      data?.payload?.serviceResponseObject.length === 0
+                      data?.payload?.serviceResponseObject?.length === 0
                     ) {
-                      toast.warning('No users registered!', {
+                      toast.warning('Nema registrovanih korisnika!', {
+                        autoClose: 1500,
                         position: 'bottom-right',
                       })
                       return
                     }
 
                     if (data?.payload?.statusCode === 200) {
-                      toast.success('Successfully filtered users!', {
+                      toast.success('Korisnici uspješno isfiltrirani!', {
                         autoClose: 1500,
                         position: 'bottom-right',
                       })
@@ -87,11 +90,11 @@ export const ManageUsersFilter = () => {
                 inputFilterMainContainer.style.display = 'none'
               }}
             >
-              <option value={0}>Choose option</option>
+              <option value={0}>Odaberite ulogu iz liste</option>
               {dbRoles?.map((role) => {
                 return (
-                  <option key={role.id} value={role.id}>
-                    {role.name}
+                  <option key={role?.id} value={role?.id}>
+                    {role?.name}
                   </option>
                 )
               })}
@@ -101,13 +104,13 @@ export const ManageUsersFilter = () => {
       </div>
       <div className="manage-users-filter input-filter-main-container">
         <span className="manage-users-filter-condition-title">
-          Name/surname/organization:{' '}
+          Ime/prezime/organizacija:
         </span>
         <input
           name="manage-users-name-input-filter"
           className="manage-users-name-input-filter"
           type="text"
-          placeholder="Enter search condition"
+          placeholder="Unesite filter..."
           onKeyUp={(e) => {
             if (e.code === 'Enter') {
               let selectedRoleId = document.getElementById(
@@ -127,13 +130,15 @@ export const ManageUsersFilter = () => {
                 let statusCode = data?.payload?.StatusCode
                 if (statusCode !== 200) {
                   if (statusCode === 400) {
-                    toast.error("Couldn't fetch experts!", {
+                    toast.error('Nije moguće dobaviti stručnjake!', {
+                      autoClose: 3000,
                       position: 'bottom-right',
                     })
                     return
                   }
                   if (statusCode === 404) {
-                    toast.error('Experts not fetched properly!', {
+                    toast.error('Stručnjaci nisu uspješno dobavljeni!', {
+                      autoClose: 3000,
                       position: 'bottom-right',
                     })
                     return
@@ -143,14 +148,15 @@ export const ManageUsersFilter = () => {
                     data?.payload?.statusCode === 200 &&
                     data?.payload?.serviceResponseObject.length === 0
                   ) {
-                    toast.warning('No such expert registered!', {
+                    toast.warning('Nijedan stručnjak ne odgovara opisu!', {
+                      autoClose: 1500,
                       position: 'bottom-right',
                     })
                     return
                   }
 
                   if (data?.payload?.statusCode === 200) {
-                    toast.success('Successfully filtered experts!', {
+                    toast.success('Stručnjaci uspješno isfiltrirani!', {
                       autoClose: 1500,
                       position: 'bottom-right',
                     })
@@ -184,13 +190,14 @@ export const ManageUsersFilter = () => {
               let statusCode = data?.payload?.StatusCode
               if (statusCode !== 200) {
                 if (statusCode === 400) {
-                  toast.error("Couldn't fetch experts!", {
+                  toast.error('Nije moguće dobaviti stručnjake!', {
                     position: 'bottom-right',
                   })
                   return
                 }
                 if (statusCode === 404) {
-                  toast.error('Experts not fetched properly!', {
+                  toast.error('Stručnjaci nisu uspješno dobavljeni!', {
+                    autoClose: 3000,
                     position: 'bottom-right',
                   })
                   return
@@ -200,14 +207,15 @@ export const ManageUsersFilter = () => {
                   data?.payload?.statusCode === 200 &&
                   data?.payload?.serviceResponseObject.length === 0
                 ) {
-                  toast.warning('No such expert registered!', {
+                  toast.warning('Nijedan stručnjak ne odgovara opisu!', {
+                    autoClose: 3000,
                     position: 'bottom-right',
                   })
                   return
                 }
 
                 if (data?.payload?.statusCode === 200) {
-                  toast.success('Successfully filtered experts!', {
+                  toast.success('Stručnjaci uspješno isfiltrirani!', {
                     autoClose: 1500,
                     position: 'bottom-right',
                   })
@@ -216,7 +224,7 @@ export const ManageUsersFilter = () => {
             })
           }}
         >
-          Search
+          Traži
         </button>
       </div>
     </div>

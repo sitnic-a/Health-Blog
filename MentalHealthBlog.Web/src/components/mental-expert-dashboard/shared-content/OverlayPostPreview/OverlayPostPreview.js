@@ -13,7 +13,7 @@ export const OverlayPostPreview = (props) => {
 
   let createdAt
   if (contentPost !== null || contentPost !== undefined) {
-    createdAt = moment(contentPost?.createdAt, 'YYYYMMDDHHmmss').fromNow()
+    createdAt = moment(contentPost?.createdAt).fromNow()
   }
 
   return (
@@ -45,13 +45,13 @@ export const OverlayPostPreview = (props) => {
             <div className="overlay-post-content">
               <pre>{contentPost?.content}</pre>
             </div>
-            <p className="overlay-post-tags-subtitle">Tags: </p>
+            <p className="overlay-post-tags-subtitle">Tagovi: </p>
             <div className="overlay-post-tags-container">
               <PostTags post={contentPost} />
             </div>
 
             <div className="overlay-post-emotions-container">
-              <p className="overlay-post-emotions-subtitle">Emotions: </p>
+              <p className="overlay-post-emotions-subtitle">Emocije: </p>
               <PostEmotions post={contentPost} />
             </div>
 

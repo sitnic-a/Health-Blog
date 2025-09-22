@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import moment from 'moment'
 import {
   setIsSharingExporting,
@@ -20,8 +22,6 @@ import { PostEmotions } from '../PostEmotions/PostEmotions'
 import { MdOutlineModeEditOutline, MdOutlineDelete } from 'react-icons/md'
 import { TiArrowSortedDown } from 'react-icons/ti'
 import { GoCircleSlash } from 'react-icons/go'
-import { toast } from 'react-toastify'
-import { useState } from 'react'
 
 import PostCSS from './Post.css'
 
@@ -39,8 +39,8 @@ export const Post = (props) => {
 
   //Helpers
   let createdAt = post?.createdAt
-  let createdAtFormatted = moment(post?.createdAt, 'YYYYMMDDhhmmss').fromNow()
-  let sharedAt = moment(post?.sharedAt, 'YYYYMMDDHHmmss').fromNow()
+  let createdAtFormatted = moment(post?.createdAt).fromNow()
+  let sharedAt = moment(post?.sharedAt).fromNow()
 
   return (
     <div
@@ -69,15 +69,15 @@ export const Post = (props) => {
           </div>
           <div className="post-date">
             <p>
-              Created at: <span>{createdAtFormatted}</span>
+              Kreirano: <span>{createdAtFormatted}</span>
             </p>
 
             <p className="post-date-value">
-              Created at: <span>{createdAt}</span>
+              Kreirano: <span>{createdAt}</span>
             </p>
             {isReviewingSharedPosts && (
               <p>
-                Shared at: <span>{sharedAt}</span>
+                Podijeljeno: <span>{sharedAt}</span>
               </p>
             )}
           </div>
@@ -105,17 +105,24 @@ export const Post = (props) => {
 
                     if (statusCode !== 200) {
                       if (statusCode === 400) {
-                        toast.error("This post doesn't have permission!", {
-                          position: 'bottom-right',
-                        })
+                        toast.error(
+                          'Ne postoji prethodna dozvola za ovaj post!',
+                          {
+                            autoClose: 3000,
+                            position: 'bottom-right',
+                          }
+                        )
                         return
                       }
 
                       if (statusCode === 404) {
-                        toast.error("Can't revoke permission! Try again!", {
-                          autoClose: 1500,
-                          position: 'bottom-right',
-                        })
+                        toast.error(
+                          'Nije moguće zabraniti pregled! Probajte ponovo uz osvježavanje stranice!',
+                          {
+                            autoClose: 3000,
+                            position: 'bottom-right',
+                          }
+                        )
                         return
                       }
                     }
@@ -130,7 +137,7 @@ export const Post = (props) => {
                       }, 250)
 
                       toast.success(
-                        `This content is no longer visible to ${mentalHealthExpert?.firstName} ${mentalHealthExpert?.lastName}`,
+                        `Post više nije vidan ${mentalHealthExpert?.firstName} ${mentalHealthExpert?.lastName}`,
                         {
                           position: 'bottom-right',
                         }
@@ -205,7 +212,7 @@ export const Post = (props) => {
                 : ''
             }`}
           >
-            <p className="post-reveal-option-title">Tags</p>
+            <p className="post-reveal-option-title">Tagovi</p>
             <TiArrowSortedDown
               className="post-reveal-expand-button"
               onClick={(e) => {
@@ -218,7 +225,7 @@ export const Post = (props) => {
 
         <div className="post-emotions-reveal-action-main-container">
           <div className="post-emotions-reveal-action-container">
-            <p className="post-reveal-option-title">Emotions</p>
+            <p className="post-reveal-option-title">Emocije</p>
             <TiArrowSortedDown
               className="post-reveal-expand-button"
               onClick={(e) => {

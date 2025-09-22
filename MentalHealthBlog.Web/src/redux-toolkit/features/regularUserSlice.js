@@ -114,8 +114,6 @@ export const regularUserSlice = createSlice({
       state.isReviewingSharedPosts = action.payload
     },
     resetSharesPerMentalHealthExpert: (state, action) => {
-      console.log('Data 2 ', action)
-
       state.sharesPerMentalHealthExpert =
         action?.payload?.serviceResponseObject?.serviceResponseObject
     },
@@ -124,7 +122,6 @@ export const regularUserSlice = createSlice({
     builder
       //shares-per-mental-health-expert
       .addCase(getSharesPerMentalHealthExpert.pending, (state, action) => {
-        console.log('Shares per mental health expert pending... ')
         state.isLoading = true
       })
       .addCase(getSharesPerMentalHealthExpert.fulfilled, (state, action) => {
@@ -143,14 +140,14 @@ export const regularUserSlice = createSlice({
       .addCase(getSharesPerMentalHealthExpert.rejected, (state, action) => {
         state.isLoading = false
         state.successfullyFetchedSharesPerMentalHealthExpert = false
-        toast.error('Something went wrong!', {
+        toast.error('Radnja nije uspješno izvršena!', {
+          autoClose: 3000,
           position: 'bottom-right',
         })
       })
 
       //recent
       .addCase(getRecentShares.pending, (state, action) => {
-        console.log('Recent shares pending...')
         state.isLoading = true
       })
       .addCase(getRecentShares.fulfilled, (state, action) => {
@@ -170,28 +167,23 @@ export const regularUserSlice = createSlice({
         }
       })
       .addCase(getRecentShares.rejected, (state, action) => {
-        toast.error('Something went wrong', {
+        toast.error('Radnja nije uspješno obavljena', {
+          autoClose: 3000,
           position: 'bottom-right',
         })
         state.isLoading = false
       })
 
       //revoke
-      .addCase(revokeContentPermission.pending, (state, action) => {
-        console.log('Revoke pending...')
-      })
+      .addCase(revokeContentPermission.pending, (state, action) => {})
       .addCase(revokeContentPermission.fulfilled, (state, action) => {
-        console.log('Permission to read deleted!')
-
         if (
           action?.payload?.serviceResponseObject?.serviceResponseObject <= 0
         ) {
           state.hasSharedPosts = false
         }
       })
-      .addCase(revokeContentPermission.rejected, (state, action) => {
-        console.log('Revoke error ', action.payload)
-      })
+      .addCase(revokeContentPermission.rejected, (state, action) => {})
   },
 })
 

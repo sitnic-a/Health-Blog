@@ -52,7 +52,9 @@
 .manage-users-table-row-head-cell {
   position: relative;
   padding-block: 1rem;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
+  font-size: 0.95rem;
+  font-weight: 100;
 }
 
 .manage-users-table-body {
@@ -61,7 +63,9 @@
 
 .manage-users-table-data-cell {
   padding-block: 0.7rem;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
+  font-size: 0.9rem;
+  font-weight: 100;
 }
 
 @media (width<500px) {

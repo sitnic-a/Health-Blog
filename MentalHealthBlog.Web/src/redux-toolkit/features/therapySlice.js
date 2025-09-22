@@ -53,8 +53,6 @@ export const getMyExperts = createAsyncThunk(
 export const changeRequestStatus = createAsyncThunk(
   'change-request-status',
   async (objectWithData) => {
-    console.log('CHANGE ', objectWithData)
-
     let url = `${application.application_url}/therapy/change-request-status`
     let request = await fetch(url, {
       method: 'PUT',
@@ -92,11 +90,8 @@ let therapySlice = createSlice({
   reducers: {
     setSelectedMentalHealthExpertIds: (state, action) => {
       state.selectedMentalHealthExpertIds = action?.payload
-      console.log('Selected Ids ', state.selectedMentalHealthExpertIds)
     },
     setExperts: (state, action) => {
-      console.log('Payload ', action)
-
       state.myApprovedOrPendingMentalHealthExperts =
         action?.payload?.serviceResponseObject
     },
@@ -108,69 +103,42 @@ let therapySlice = createSlice({
     builder
 
       //requests-for-mental-health-expert
-      .addCase(getRequestsForMentalHealthExpert.pending, () => {
-        console.log('Fetching requests pending...')
-      })
+      .addCase(getRequestsForMentalHealthExpert.pending, () => {})
       .addCase(getRequestsForMentalHealthExpert.fulfilled, (state, action) => {
         let statusCode = action?.payload?.statusCode
         if (statusCode === 200) {
           state.requestsForMentalHealthExpert =
-            action.payload.serviceResponseObject
+            action?.payload?.serviceResponseObject
         }
-
-        console.log('Requests ', state.requestsForMentalHealthExpert)
       })
-      .addCase(getRequestsForMentalHealthExpert.rejected, () => {
-        console.log('Requests rejected...')
-      })
+      .addCase(getRequestsForMentalHealthExpert.rejected, () => {})
 
       //my-experts
-      .addCase(getMyExperts.pending, () => {
-        // console.log('My experts pending...')
-      })
+      .addCase(getMyExperts.pending, () => {})
       .addCase(getMyExperts.fulfilled, (state, action) => {
-        // console.log('My experts fulfilled')
         let statusCode = action?.payload?.statusCode
         if (statusCode === 200) {
           state.myApprovedOrPendingMentalHealthExperts =
             action?.payload?.serviceResponseObject
-          console.log(
-            'My experts ',
-            state.myApprovedOrPendingMentalHealthExperts
-          )
         }
       })
-      .addCase(getMyExperts.rejected, () => {
-        console.log('My experts rejected...')
-      })
+      .addCase(getMyExperts.rejected, () => {})
 
       //change-request-status
-      .addCase(changeRequestStatus.pending, () => {
-        // console.log('Request status change pending...')
-      })
+      .addCase(changeRequestStatus.pending, () => {})
       .addCase(changeRequestStatus.fulfilled, (state, action) => {
         let statusCode = action?.payload?.statusCode
         if (statusCode === 200) {
-          // console.log('Successfully changed status')
-
           state.requestsForMentalHealthExpert =
             action?.payload?.serviceResponseObject
         }
       })
-      .addCase(changeRequestStatus.rejected, () => {
-        console.log('Request status change rejected...')
-      })
+      .addCase(changeRequestStatus.rejected, () => {})
 
       //stop-sharing
-      .addCase(stopSharing.pending, () => {
-        console.log('Stop sharing invoked...')
-      })
-      .addCase(stopSharing.fulfilled, (state, action) => {
-        console.log('Stop sharing fulfilled')
-      })
-      .addCase(stopSharing.rejected, () => {
-        console.log('Stop sharing rejected')
-      })
+      .addCase(stopSharing.pending, () => {})
+      .addCase(stopSharing.fulfilled, (state, action) => {})
+      .addCase(stopSharing.rejected, () => {})
   },
 })
 

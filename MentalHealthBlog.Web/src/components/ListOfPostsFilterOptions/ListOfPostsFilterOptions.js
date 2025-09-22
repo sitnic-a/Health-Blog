@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import moment from 'moment'
+import 'moment/locale/bs'
 
 import { getPosts } from '../../redux-toolkit/features/postSlice'
 import {
@@ -19,7 +20,11 @@ export const ListOfPostsFilterOptions = (props) => {
   let searchPostDto = props?.searchPostDto
 
   useEffect(() => {
-    setMonths(moment.months())
+    moment.locale('bs')
+    let bsMonthsWithFirstUppercaseLetter = moment.months().map((month) => {
+      return month.charAt(0).toUpperCase() + month.slice(1)
+    })
+    setMonths(bsMonthsWithFirstUppercaseLetter)
   }, [])
 
   let filterPosts = (e) => {
@@ -36,10 +41,10 @@ export const ListOfPostsFilterOptions = (props) => {
   return (
     isFiltering && (
       <div className="dashboard-filter-container">
-        <h3>Filter:</h3>
+        <h3>Filteri:</h3>
         <div className="dashboard-filter-options">
           <div className="filter-by-month">
-            <p>Month:</p>
+            <p>Mjesec:</p>
             <select
               name="filter-by-month"
               id="filter-by-month"
@@ -47,8 +52,8 @@ export const ListOfPostsFilterOptions = (props) => {
                 filterPosts(e)
               }}
             >
-              <option>Pick a month</option>
-              {months.map((month, index) => {
+              <option>Odaberite mjesec</option>
+              {months?.map((month, index) => {
                 return (
                   <option key={index} value={index + 1}>
                     {month}

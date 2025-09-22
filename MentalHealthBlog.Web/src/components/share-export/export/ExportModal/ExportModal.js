@@ -33,7 +33,7 @@ export const ExportModal = () => {
             <div className="export-modal">
               <div className="export-modal-content">
                 <h4 className="export-modal-content-title">
-                  Exporting posts...
+                  Eksport postova...
                 </h4>
                 <div className="export-modal-files-container">
                   {postsToExport?.map((post) => {
@@ -49,7 +49,7 @@ export const ExportModal = () => {
 
                 {isLoading === true ? (
                   <p className="export-modal-content-title">
-                    Please wait, document is exporting...
+                    Molimo sačekajte, dokument se eksportuje...
                   </p>
                 ) : (
                   <>
@@ -58,7 +58,7 @@ export const ExportModal = () => {
                         <div className="export-modal-successfully-exported-container">
                           <MdOutlineDownloadDone className="export-modal-exported-success-icon" />
                           <p className="export-modal-exported-description">
-                            Successfully exported!
+                            Uspješno eksportovan dokument!
                           </p>
                         </div>
                       </div>
@@ -69,7 +69,9 @@ export const ExportModal = () => {
                         <div className="export-modal-not-exported-container">
                           <BiError className="export-modal-not-exported-error-icon" />
                           <p className="export-modal-not-exported-description">
-                            Document couldn't be exported!
+                            Dokument nije moguće eksportovati! Ukoliko se
+                            problem nastavi, molimo da se obratite se
+                            korisničkoj podršci!
                           </p>
                         </div>
                       </div>

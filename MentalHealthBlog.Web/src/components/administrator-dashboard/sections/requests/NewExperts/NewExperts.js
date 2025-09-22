@@ -28,7 +28,7 @@ export const NewExperts = () => {
       let statusCode = data?.payload?.StatusCode
       if (statusCode !== 200) {
         if (statusCode === 404) {
-          toast.error("Users couldn't be fetced properly!", {
+          toast.error('Korisnici nisu uspješno dohvaćeni!', {
             position: 'bottom-right',
           })
           return
@@ -38,7 +38,7 @@ export const NewExperts = () => {
           data?.payload?.serviceResponseObject.length === 0 &&
           data?.payload?.statusCode === 200
         ) {
-          toast.warning('There are no new requests!', {
+          toast.warning('Nema novih zahtjeva!', {
             autoClose: 1500,
             position: 'bottom-right',
           })
@@ -46,7 +46,7 @@ export const NewExperts = () => {
         }
 
         if (data?.payload?.statusCode === 200) {
-          toast.success('Succesfully fetched requests!', {
+          toast.success('Zahtjevi spremni za procesiranje!', {
             autoClose: 1500,
             position: 'bottom-right',
           })
@@ -59,8 +59,8 @@ export const NewExperts = () => {
     <section id="new-experts-main-container">
       <Navbar />
       <div className="new-experts-header">
-        <h2 className="new-experts-title">Manage new requests</h2>
-        <h3 className="new-experts-subtitle">Pending</h3>
+        <h2 className="new-experts-title">Upravljajte zahtjevima</h2>
+        <h3 className="new-experts-subtitle">Na čekanju</h3>
       </div>
       <div className="new-experts-container">
         <div
@@ -84,10 +84,10 @@ export const NewExperts = () => {
                 dispatch(displayProfilesContainer())
                 dispatch(getNewRegisteredExperts(objectWithData))
                 document.querySelector('.new-experts-subtitle').innerHTML =
-                  'Rejected'
+                  'Odbijeni'
               }}
             >
-              Rejected
+              Odbijeni
             </button>
             <button
               className="new-experts-status-button approved"
@@ -102,10 +102,10 @@ export const NewExperts = () => {
                 dispatch(displayProfilesContainer())
                 dispatch(getNewRegisteredExperts(objectWithData))
                 document.querySelector('.new-experts-subtitle').innerHTML =
-                  'Approved'
+                  'Prihvaćeni'
               }}
             >
-              Approved
+              Prihvaćeni
             </button>
             <button
               className="new-experts-status-button pending"
@@ -117,10 +117,10 @@ export const NewExperts = () => {
                 dispatch(displayProfilesContainer())
                 dispatch(getNewRegisteredExperts(objectWithData))
                 document.querySelector('.new-experts-subtitle').innerHTML =
-                  'Pending'
+                  'Na čekanju'
               }}
             >
-              Pending
+              Na čekanju
             </button>
           </div>
         </div>
@@ -134,7 +134,7 @@ export const NewExperts = () => {
         ) : (
           <div className="new-experts-main-profiles-container">
             <span className="new-experts-main-profiles-container-requests-information">
-              All requests are properly processed!
+              Svi zahtjevi su uspješno procesirani!
             </span>
           </div>
         )}

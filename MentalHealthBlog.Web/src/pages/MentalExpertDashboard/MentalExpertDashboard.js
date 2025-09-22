@@ -31,28 +31,31 @@ export const MentalExpertDashboard = () => {
 
       if (statusCode !== 200) {
         if (statusCode === 400) {
-          toast.error("Fetching shares wasn't possible!", {
+          toast.error('Nije moguće dobaviti sadržaj!', {
+            autoClose: 3000,
             position: 'bottom-right',
           })
           return
         }
         if (statusCode === 404) {
-          toast.error("Couldn't fetch shares properly!", {
+          toast.error('Sadržaj nije uspješno dobavljen!', {
+            autoClose: 3000,
             position: 'bottom-right',
           })
           return
         }
       }
-      console.log('Data ', data.payload)
 
       if (data?.payload.serviceResponseObject?.length === 0) {
-        toast.warning('Nothing shared so far!', {
+        toast.warning('Trenutno nema podijeljenog sadržaja', {
+          autoClose: 3000,
           position: 'bottom-right',
         })
       }
 
       if (data?.payload.serviceResponseObject?.length > 0) {
-        toast.success('Succesfully retrieved content!', {
+        toast.success('Uspješno dobavljen sadržaj!', {
+          autoClose: 1500,
           position: 'bottom-right',
         })
       }
@@ -71,7 +74,7 @@ export const MentalExpertDashboard = () => {
         {usersThatSharedIncludingItsContent?.length === 0 && (
           <div className="sharing-users-main-content-container">
             <div className="sharing-users-main-content-info">
-              <p>Nothing shared</p>
+              <p>Trenutno nema sadržaja podijeljenog sa Vama</p>
             </div>
           </div>
         )}
@@ -81,9 +84,12 @@ export const MentalExpertDashboard = () => {
             <div className="sharing-users-main-content-container">
               <div className="sharing-users-main-content-info">
                 <p>
-                  <span>NOTE: </span>If you want to review users content, pick a
-                  user by clicking arrows icon and then user box or simply user
-                  box!
+                  <span>PODSJETNIK: </span>Ukoliko želite pregledati podijeljeni
+                  sadržaj nekog korisnika kliknite na ime korisnika ili na
+                  strelice u gornjem lijevom uglu kako biste otvorili listu svih
+                  korisnika koji su dijelili sadržaj sa Vama. Strelice se
+                  pojavljuju u slučaju da aplikaciju koristite na uređajima sa
+                  manjim ekranima!
                 </p>
               </div>
             </div>

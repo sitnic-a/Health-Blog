@@ -6,7 +6,7 @@ export const Loader = () => {
       <div className="loader-box-room">
         <div className="loader-box"></div>
         <div className="loading-text-container">
-          <p className="loading-text">Loading...</p>
+          <p className="loading-text">Učitavanje...</p>
         </div>
       </div>
     </div>

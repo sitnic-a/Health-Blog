@@ -18,8 +18,6 @@ export const Requests = () => {
   let { authenticatedUser } = useSelector((store) => store.user)
   let { requestsForMentalHealthExpert } = useSelector((store) => store.therapy)
 
-  console.log('Authenticated user ', authenticatedUser)
-
   useEffect(() => {
     let objectWithData = {
       authenticatedUser,
@@ -35,11 +33,14 @@ export const Requests = () => {
         <div className="therapy-requests-container">
           <div className="therapy-requests-requests-container">
             <div className="therapy-requests-requests-content">
-              {requestsForMentalHealthExpert?.map((request) => {
+              {requestsForMentalHealthExpert?.map((request, index) => {
                 let fullName = `${request?.regularUserFirstName} ${request?.regularUserLastName}`
-                let sentAt = moment(request?.sentAt, 'YYYYMMDDHHmmss').fromNow()
+                let sentAt = moment(request?.sentAt).fromNow()
                 return (
-                  <div className="therapy-requests-requests-content-row">
+                  <div
+                    key={index}
+                    className="therapy-requests-requests-content-row"
+                  >
                     <div className="therapy-requests-requests-content-cell">
                       <span className="therapy-request-request-content-cell-value">
                         {fullName}
@@ -50,7 +51,7 @@ export const Requests = () => {
                       {request?.requestStatus === requestStatuses.DECLINED ? (
                         <div className="therapy-requests-requests-content-actions-main-container">
                           <p className="therapy-requests-requests-content-actions-description-message">
-                            Declined
+                            Odbijen
                           </p>
                         </div>
                       ) : (
@@ -72,23 +73,28 @@ export const Requests = () => {
                                 dispatch(changeRequestStatus(objectWithData))
                               }}
                             >
-                              Approve
+                              Prihvati
                             </button>
                           )}
 
-                          <FaCheck
-                            className="therapy-requests-request-content-action therapy-request-icon-action therapy-request-approve-icon-action"
-                            onClick={() => {
-                              let objectWithData = {
-                                authenticatedUser,
-                                mentalHealthExpertUserId: authenticatedUser?.id,
-                                regularUserId: request?.regularUserId,
-                                newRequestStatus: requestStatuses.APPROVED,
-                                userSendingRequest: false,
-                              }
-                              dispatch(changeRequestStatus(objectWithData))
-                            }}
-                          />
+                          {request?.requestStatus ===
+                            requestStatuses.PENDING && (
+                            <FaCheck
+                              className="therapy-requests-request-content-action therapy-request-icon-action therapy-request-approve-icon-action"
+                              onClick={() => {
+                                let objectWithData = {
+                                  authenticatedUser,
+                                  mentalHealthExpertUserId:
+                                    authenticatedUser?.id,
+                                  regularUserId: request?.regularUserId,
+                                  newRequestStatus: requestStatuses.APPROVED,
+                                  userSendingRequest: false,
+                                }
+                                dispatch(changeRequestStatus(objectWithData))
+                              }}
+                            />
+                          )}
+
                           <button
                             className="therapy-requests-request-content-action therapy-request-decline-action"
                             type="button"
@@ -103,7 +109,7 @@ export const Requests = () => {
                               dispatch(changeRequestStatus(objectWithData))
                             }}
                           >
-                            Decline
+                            Odbij
                           </button>
 
                           {request?.requestStatus ===
@@ -123,23 +129,27 @@ export const Requests = () => {
                                 dispatch(changeRequestStatus(objectWithData))
                               }}
                             >
-                              Stop sharing
+                              Zaustavi dijeljenje
                             </button>
                           )}
 
-                          <HiX
-                            className="therapy-requests-request-content-action therapy-request-icon-action therapy-request-decline-icon-action"
-                            onClick={() => {
-                              let objectWithData = {
-                                authenticatedUser,
-                                mentalHealthExpertUserId: authenticatedUser?.id,
-                                regularUserId: request?.regularUserId,
-                                newRequestStatus: requestStatuses.DECLINED,
-                                userSendingRequest: false,
-                              }
-                              dispatch(changeRequestStatus(objectWithData))
-                            }}
-                          />
+                          {request?.requestStatus ===
+                            requestStatuses.PENDING && (
+                            <HiX
+                              className="therapy-requests-request-content-action therapy-request-icon-action therapy-request-decline-icon-action"
+                              onClick={() => {
+                                let objectWithData = {
+                                  authenticatedUser,
+                                  mentalHealthExpertUserId:
+                                    authenticatedUser?.id,
+                                  regularUserId: request?.regularUserId,
+                                  newRequestStatus: requestStatuses.DECLINED,
+                                  userSendingRequest: false,
+                                }
+                                dispatch(changeRequestStatus(objectWithData))
+                              }}
+                            />
+                          )}
                         </div>
                       )}
                     </div>
@@ -160,7 +170,7 @@ export const Requests = () => {
       {requestsForMentalHealthExpert?.length <= 0 && (
         <div className="therapy-requests-main-error-container">
           <p className="therapy-requests-main-error-description">
-            There are no new requests for you!
+            Nemate novih zahtjeva!
           </p>
         </div>
       )}

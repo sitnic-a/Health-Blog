@@ -9,6 +9,7 @@
 @media (width<=1160px) {
   .shares-per-mental-health-expert-content-posts {
     max-width: 290px;
+    width: 100%;
     justify-content: center;
     transform: translateY(30%);
     overflow-y: scroll;
@@ -72,7 +73,7 @@
   margin: 0;
   margin-block: 0.2rem;
   text-align: center;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 1.2rem;
   font-weight: 700;
 }
@@ -94,5 +95,5 @@
   opacity: 0;
   transition: 600ms;
   text-align: center;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
 }

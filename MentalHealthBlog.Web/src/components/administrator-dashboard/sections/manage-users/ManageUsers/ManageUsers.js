@@ -18,8 +18,8 @@ export const ManageUsers = () => {
       <ManageUsersDeleteUserModal dbUser={dbUser} />
 
       <div className="manage-users-header">
-        <h2 className="manage-users-header-title">Manage users</h2>
-        <h3 className="manage-users-header-subtitle">Filter: </h3>
+        <h2 className="manage-users-header-title">Upravljajte korisnicima</h2>
+        <h3 className="manage-users-header-subtitle">Filtriraj: </h3>
       </div>
 
       <ManageUsersFilter />
@@ -30,7 +30,8 @@ export const ManageUsers = () => {
           <BiError className="manage-users-error-no-data-icon" />
           <div className="manage-users-error-information">
             <p>
-              Users not fetched properly! If this continues contact support!
+              Korisnici nisu uspješno dobavljeni! Ukoliko se ovaj problem
+              nastavi, kontaktirajte podršku!
             </p>
           </div>
         </div>
@@ -39,7 +40,8 @@ export const ManageUsers = () => {
       {!isFailed && dbUsers?.length === 0 && (
         <div className="manage-users-users-list-main-container">
           <p className="manage-users-users-list-info">
-            When someone register you'll see it first! ;)
+            Korisnici tog opisa nisu registrovani na aplikaciju. Probajte novu
+            pretragu
           </p>
         </div>
       )}

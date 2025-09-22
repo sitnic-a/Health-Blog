@@ -6,11 +6,12 @@ import {
   setPickedTags,
   getTags,
 } from '../../redux-toolkit/features/tagSlice'
+import { setTagsValidationData } from '../../redux-toolkit/features/validationSlice'
+import { checkTagsValidity } from '../../utils/helper-methods/methods'
+
 import { AddPostEmotions } from '../AddPostEmotions/AddPostEmotions'
 
 import AddPostTagsCSS from './AddPostTags.css'
-import { checkTagsValidity } from '../../utils/helper-methods/methods'
-import { setTagsValidationData } from '../../redux-toolkit/features/validationSlice'
 
 export const AddPostTags = () => {
   let dispatch = useDispatch()
@@ -64,12 +65,12 @@ export const AddPostTags = () => {
 
   let handleTagRemoval = (tagName) => {
     let tagThatIsNotRecorded
-    if (pickedTags.find((t) => t.id <= 0)) {
-      tagThatIsNotRecorded = pickedTags.find((t) => t.name === tagName)
+    if (pickedTags.find((t) => t?.id <= 0)) {
+      tagThatIsNotRecorded = pickedTags.find((t) => t?.name === tagName)
     }
 
     if (tagThatIsNotRecorded !== undefined || tagThatIsNotRecorded !== null) {
-      let afterRemovePickedTags = pickedTags.filter((t) => t.name !== tagName)
+      let afterRemovePickedTags = pickedTags.filter((t) => t?.name !== tagName)
       dispatch(setPickedTags(afterRemovePickedTags))
       let updatedSuggestedTagsForTagThatIsNotRecorded = [
         ...suggestedTags,
@@ -77,12 +78,13 @@ export const AddPostTags = () => {
       dispatch(setSuggestedTags(updatedSuggestedTagsForTagThatIsNotRecorded))
       let afterDeleteChosenTags = [...chosenTags].filter((t) => t !== tagName)
       dispatch(setChosenTags(afterDeleteChosenTags))
+      return
     }
 
-    if (pickedTags.find((t) => t.id > 0)) {
-      let tag = pickedTags.find((t) => t.name === tagName)
+    if (pickedTags.find((t) => t?.id > 0)) {
+      let tag = pickedTags.find((t) => t?.name === tagName)
       let updatedSuggestedTags = [...suggestedTags, tag]
-      let afterRemovePickedTags = pickedTags.filter((t) => t.id !== tag.id)
+      let afterRemovePickedTags = pickedTags.filter((t) => t?.id !== tag?.id)
       dispatch(setPickedTags(afterRemovePickedTags))
       updatedSuggestedTags = [...updatedSuggestedTags].filter(
         (t) => !afterRemovePickedTags.includes(t)
@@ -133,11 +135,12 @@ export const AddPostTags = () => {
     <>
       <div className="add-post-tags-container">
         <label className="add-post-form-field-label" htmlFor="tag">
-          Tags
+          Tagovi
           <span className="required-field"> *</span>
         </label>
         <p className="add-post-picked-tags-note">
-          NOTE: You can use either , or enter for adding tags to list!
+          PODSJETNIK: Koristite zarez (manji ekrani) ili Enter (veliki ekrani)
+          za dodavanje tagova u listu
         </p>
 
         <div className="add-post-picked-tags-container">
@@ -160,7 +163,7 @@ export const AddPostTags = () => {
           id="tag"
           type="text"
           className="add-post-content-tags-input form-field"
-          placeholder="Either write your own or choose one..."
+          placeholder="Unesite svoje ili odaberite postojeće..."
           onInput={(e) => {
             const key = e.target.value.slice(-1)
             if (key === ',') {
@@ -170,7 +173,7 @@ export const AddPostTags = () => {
                 let afterAddChosenTags = [...chosenTags, tag]
                 let tagToAdd = {
                   id: -1,
-                  name: e.target.value,
+                  name: tag,
                 }
                 let afterEnterPickedTags = [...pickedTags, tagToAdd]
                 dispatch(setPickedTags(afterEnterPickedTags))
@@ -213,19 +216,19 @@ export const AddPostTags = () => {
           </div>
         )}
       </div>
-      {displayedSuggestedTags.length > 0 && (
+      {displayedSuggestedTags?.length > 0 && (
         <div
           id="add-post-suggested-tags-container-id"
           className="add-post-suggested-tags-container"
         >
-          {displayedSuggestedTags.map((tag) => {
+          {displayedSuggestedTags?.map((tag) => {
             return (
               <div
                 className="add-post-suggested-tag"
-                key={tag.id}
+                key={tag?.id}
                 onClick={() => handlePickedTagClick(tag)}
               >
-                {tag.name}
+                {tag?.name}
               </div>
             )
           })}

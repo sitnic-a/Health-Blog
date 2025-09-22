@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { login, setIsFailed } from '../../redux-toolkit/features/userSlice'
@@ -15,7 +16,6 @@ import {
 } from '../../utils/helper-methods/methods'
 
 import LoginCSS from './Login.css'
-import { useEffect } from 'react'
 
 export const Login = () => {
   let dispatch = useDispatch()
@@ -75,8 +75,8 @@ export const Login = () => {
       stringIsNullOrEmpty(user?.password) ||
       !passwordIsValid
     ) {
-      toast.error('Fields are required or not valid!', {
-        autoClose: 1500,
+      toast.error('Molimo slijedite upute prilikom popunjavanja polja!', {
+        autoClose: 3000,
         position: 'bottom-right',
       })
       dispatch(setIsFailed(true))
@@ -87,8 +87,8 @@ export const Login = () => {
       let statusCode = response?.payload?.statusCode
 
       if (statusCode === undefined) {
-        toast.error('Something went wrong', {
-          autoClose: 1500,
+        toast.error('Login nije moguć!', {
+          autoClose: 3000,
           position: 'bottom-right',
         })
       }
@@ -100,7 +100,7 @@ export const Login = () => {
             prevUrl: window.location.href,
           },
         })
-        toast.success('Succesfully logged in', {
+        toast.success('Login uspješan', {
           autoClose: 1500,
           position: 'bottom-right',
         })
@@ -119,10 +119,8 @@ export const Login = () => {
         <section className="login">
           <form onSubmit={loginUser}>
             <div className="login-container">
-              <h1>
-                Welcome to Mental Health Blog. Feel free to write express your
-                emotions!
-              </h1>
+              <h1>Dobrodošli na Psihonet!</h1>
+              <h1> Osjećajte se slobodno da izrazite sve svoje emocije!</h1>
               <div className="form-fields">
                 <div>
                   <label className="form-field-label" htmlFor="username">
@@ -136,6 +134,7 @@ export const Login = () => {
                     type="text"
                     name="username"
                     autoComplete="username"
+                    placeholder="Unesite svoj username..."
                     onBlur={(e) => {
                       let username = e.target.value
                       let [usernameIsValid, usernameValidationMessages] =
@@ -176,6 +175,7 @@ export const Login = () => {
                     id="password"
                     type="password"
                     name="password"
+                    placeholder="Unesite svoj password..."
                     onBlur={(e) => {
                       let password = e.target.value
                       let [passwordIsValid, passwordValidationMessages] =
@@ -211,7 +211,7 @@ export const Login = () => {
                       to={'/register'}
                       state={{ isRegularUser: true }}
                     >
-                      Create an account
+                      Registruj se kao korisnik
                     </Link>
                   </div>
                   <div className="register-mental-health-expert-main-container">
@@ -220,7 +220,7 @@ export const Login = () => {
                       to={'/register'}
                       state={{ isMentalHealthExpert: true }}
                     >
-                      Register as mental health expert
+                      Registruj se kao stručnjak mentalnog zdravlja
                     </Link>
                   </div>
                 </section>

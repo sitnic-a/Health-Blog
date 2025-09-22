@@ -30,7 +30,7 @@ export const ShareModal = () => {
     useSelector((store) => store.shareExport)
 
   return (
-    postsToExport.length > 0 &&
+    postsToExport?.length > 0 &&
     isShareOpen && (
       <section className="share-modal-container-overlay">
         <section id="share-modal-container">
@@ -50,7 +50,7 @@ export const ShareModal = () => {
           </span>
 
           <div className="share-modal-header">
-            <p>Share posts...</p>
+            <p>Podijeli postove...</p>
           </div>
 
           <PostsToShare />
@@ -64,13 +64,13 @@ export const ShareModal = () => {
                   let searchCondition = e.target.value
                   dispatch(filterSuggestedPossibleToShareWith(searchCondition))
                 }}
-                placeholder="Search by name or surname..."
+                placeholder="Pretraga po imenu ili prezimenu..."
               />
               <button
                 className="search-by-name-surname-organization-filter-button"
                 type="button"
               >
-                Search
+                Traži
                 <LiaSearchSolid className="search-by-name-surname-organization-filter-icon" />
               </button>
             </div>
@@ -96,18 +96,18 @@ export const ShareModal = () => {
                     authenticatedUser,
                   }
 
-                  console.log('CTBS ', contentToBeShared)
-
                   dispatch(shareContent(objectWithData)).then((data) => {
                     let statusCode = data?.payload?.StatusCode
                     if (statusCode === 400) {
-                      toast.error("Content couldn't be shared!", {
+                      toast.error('Nije moguće podijeliti sadržaj!', {
+                        autoClose: 3000,
                         position: 'bottom-right',
                       })
                       return
                     }
                     if (statusCode === 404) {
-                      toast.error("Couldn't find the data!", {
+                      toast.error('Dijeljenje nije uspjelo!', {
+                        autoClose: 3000,
                         position: 'bottom-right',
                       })
                     }
@@ -115,7 +115,7 @@ export const ShareModal = () => {
                 }}
                 disabled={disabledShareContentAction}
               >
-                Share Content
+                Podijeli sadržaj
               </button>
               <button
                 className="share-content-to-experts"
@@ -136,13 +136,15 @@ export const ShareModal = () => {
                   dispatch(shareContent(objectWithData)).then((data) => {
                     let statusCode = data?.payload?.StatusCode
                     if (statusCode === 400) {
-                      toast.error("Content couldn't be shared!", {
+                      toast.error('Nije moguće podijeliti sadržaj!', {
+                        autoClose: 3000,
                         position: 'bottom-right',
                       })
                       return
                     }
                     if (statusCode === 404) {
-                      toast.error("Couldn't find the data!", {
+                      toast.error('Dijeljenje nije uspjelo!', {
+                        autoClose: 3000,
                         position: 'bottom-right',
                       })
                     }
@@ -150,7 +152,7 @@ export const ShareModal = () => {
                   dispatch(openShareViaLink(!isShareViaLinkOpen))
                 }}
               >
-                Share via link
+                Podijeli putem linka
               </button>
             </div>
           </div>

@@ -44,7 +44,7 @@ export const ListSharingContentUsers = () => {
                     }
                     dispatch(getSharedContentOfPickedUser(contentAndQuery))
                     dispatch(setOverlayPost(null))
-                    dispatch(getUserById(user.id))
+                    dispatch(getUserById(user?.id))
                   }
                   let contentAndQuery = {
                     userId: user?.id,
@@ -52,7 +52,7 @@ export const ListSharingContentUsers = () => {
                   }
                   dispatch(getSharedContentOfPickedUser(contentAndQuery))
                   dispatch(setOverlayPost(null))
-                  dispatch(getUserById(user.id))
+                  dispatch(getUserById(user?.id))
                 }}
               >
                 <span className="sharing-user-title">{user?.username}</span>

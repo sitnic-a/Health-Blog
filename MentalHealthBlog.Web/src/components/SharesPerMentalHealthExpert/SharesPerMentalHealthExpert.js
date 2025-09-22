@@ -35,14 +35,16 @@ export const SharesPerMentalHealthExpert = () => {
       let statusCode = data?.payload?.StatusCode
       if (statusCode !== 200) {
         if (statusCode === 400) {
-          toast.error("Content doesn't exist!", {
+          toast.error('Postove nije moguće dobaviti!', {
+            autoClose: 3000,
             position: 'bottom-right',
           })
           return
         }
 
         if (statusCode === 404) {
-          toast.error('Posts are not fetched properly!', {
+          toast.error('Postovi nisu ispravno dobavljeni!', {
+            autoClose: 3000,
             position: 'bottom-right',
           })
           return
@@ -55,14 +57,16 @@ export const SharesPerMentalHealthExpert = () => {
       let recentShares = data?.payload?.serviceResponseObject
       if (statusCode !== 200) {
         if (statusCode === 400) {
-          toast.error("Content doesn't exist!", {
+          toast.error('Postove nije moguće dobaviti!', {
+            autoClose: 3000,
             position: 'bottom-right',
           })
           return
         }
 
         if (statusCode === 404) {
-          toast.error('Recent shares not loaded properly!', {
+          toast.error('Postovi nedavno podijeljeni nisu ispravno dobavljeni!', {
+            autoClose: 3000,
             position: 'bottom-right',
           })
           return
@@ -70,7 +74,7 @@ export const SharesPerMentalHealthExpert = () => {
       }
 
       if (recentShares?.length > 0 && successfullyFetchedRecentShares) {
-        toast.success('Succesfully retrieved recent posts!', {
+        toast.success('Uspješno dobavljeni nedavno podijeljeni postovi!', {
           autoClose: 1500,
           position: 'bottom-right',
         })
@@ -78,7 +82,7 @@ export const SharesPerMentalHealthExpert = () => {
       }
 
       if (recentShares?.length === 0) {
-        toast.warning("You didn't share recently!", {
+        toast.warning('Trenutno nema nedavno podijeljenih postova!', {
           autoClose: 1500,
           position: 'bottom-right',
         })
@@ -94,7 +98,7 @@ export const SharesPerMentalHealthExpert = () => {
   return (
     <section className="shares-per-mental-health-expert-main-container">
       <h1 className="shares-per-mental-health-expert-title">
-        Content shared with mental health experts
+        Sadržaj podijeljen sa stručnjacima za mentalno zdravlje
       </h1>
 
       {sharesPerMentalHealthExpert?.length > 0 && (
@@ -107,7 +111,7 @@ export const SharesPerMentalHealthExpert = () => {
       {sharesPerMentalHealthExpert?.length === 0 &&
         successfullyFetchedSharesPerMentalHealthExpert && (
           <section className="shares-per-mental-health-expert-content-main-container">
-            <p>You haven't shared your content with anyone!</p>
+            <p>Ništa od postojećeg sadržaja nije dijeljeno!</p>
           </section>
         )}
 
@@ -117,11 +121,12 @@ export const SharesPerMentalHealthExpert = () => {
             <BiError className="shares-per-mental-health-expert-error-icon" />
             <div className="shares-per-mental-health-expert-error-messages">
               <span className="shares-per-mental-health-expert-error-description">
-                Posts couldn't be loaded!
+                Postove nije moguće učitati!
               </span>
               <br />
               <span className="shares-per-mental-health-expert-error-description">
-                If problem continues to happen, please contact support!
+                Ukoliko se ovaj problem nastavi dešavati, molimo kontaktirajte
+                podršku
               </span>
             </div>
           </div>

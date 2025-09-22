@@ -12,12 +12,13 @@
 }
 
 .manage-users-header-title {
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 1.5rem;
+  font-weight: 100;
 }
 
 .manage-users-header-subtitle {
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 1.2rem;
   font-weight: 400;
 }
@@ -33,7 +34,7 @@
 }
 
 .manage-users-error-information {
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   color: #c93232;
 }
 
@@ -48,6 +49,6 @@
 }
 
 .manage-users-users-list-info {
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   color: #c93232;
 }

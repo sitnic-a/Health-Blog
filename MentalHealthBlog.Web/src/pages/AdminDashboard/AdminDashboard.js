@@ -25,7 +25,8 @@ export const AdminDashboard = () => {
       let statusCode = data?.payload?.StatusCode
       if (statusCode !== 200) {
         if (statusCode === 404) {
-          toast.error("Users couldn't be fetced properly!", {
+          toast.error('Korisnici neuspješno povučeni s baze!', {
+            autoClose: 3000,
             position: 'bottom-right',
           })
           return
@@ -35,7 +36,7 @@ export const AdminDashboard = () => {
           data?.payload?.serviceResponseObject.length === 0 &&
           data?.payload?.statusCode === 200
         ) {
-          toast.warning('There are no new requests!', {
+          toast.warning('Svi zahtjevi su uspješno procesirani!', {
             autoClose: 1500,
             position: 'bottom-right',
           })
@@ -43,7 +44,7 @@ export const AdminDashboard = () => {
         }
 
         if (data?.payload?.statusCode === 200) {
-          toast.success('Succesfully fetched requests!', {
+          toast.success('Novi zahtjevi su spremni za obradu', {
             autoClose: 1500,
             position: 'bottom-right',
           })
@@ -88,14 +89,14 @@ export const AdminDashboard = () => {
 
             <div className="admin-dashboard-link-container">
               <p className="admin-dashboard-request-container-title">
-                Requests
+                Zahtjevi
               </p>
               <p className="admin-dashboard-request-container-subtitle">
-                Mental Health Experts
+                Stručnjaci za mentalno zdravlje
               </p>
               {numberOfNewlyRegisteredMentalHealthExperts > 0 && (
                 <span className="admin-dashboard-request-container-info">
-                  New requests:
+                  Novi zahtjevi:
                   <span className="admin-dashboard-request-container-number-of-registered">
                     {numberOfNewlyRegisteredMentalHealthExperts}
                   </span>
@@ -110,7 +111,7 @@ export const AdminDashboard = () => {
           >
             <div className="admin-dashboard-link-container">
               <FaUser className="admin-link-manage-users-icon" />
-              <p className="admin-link-manage-users-title">Users</p>
+              <p className="admin-link-manage-users-title">Korisnici</p>
             </div>
           </Link>
         </div>
@@ -118,7 +119,10 @@ export const AdminDashboard = () => {
 
       {isFailed && (
         <div className="admin-dashboard-error-container">
-          <p>Wasn't able to fetch request. Something went wrong!</p>
+          <p>
+            Nije moguće dobaviti zahtjeve. Ukoliko se ovo nastavi dešavati,
+            kontaktirajte podršku!
+          </p>
         </div>
       )}
     </section>

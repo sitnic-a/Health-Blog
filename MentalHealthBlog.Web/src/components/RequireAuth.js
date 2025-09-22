@@ -26,5 +26,5 @@ export const RequireAuth = () => {
     return <Loader />
   }
 
-  return authenticatedUser?.jwToken ? <Outlet /> : <Login />
+  return authenticatedUser?.jwToken && refreshToken ? <Outlet /> : <Login />
 }

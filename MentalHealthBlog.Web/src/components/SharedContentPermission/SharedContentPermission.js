@@ -25,17 +25,21 @@ export const SharedContentPermission = () => {
         {mentalHealthExpert && (
           <h2 className="content-shared-with-mental-health-expert-hero-title">
             <span className="content-shared-with-mental-health-expert-hero-username">
-              {mentalHealthExpert?.firstName} {mentalHealthExpert?.lastName}{' '}
+              Lista dozvola za {mentalHealthExpert?.firstName}{' '}
+              {mentalHealthExpert?.lastName}
             </span>
-            read permission list
           </h2>
         )}
-        <p className="content-shared-with-mental-health-expert-title">
-          Everything shared with mental health expert
-        </p>
-        <p className="content-shared-with-mental-health-expert-subtitle">
-          Check the list below:
-        </p>
+        {content?.length > 0 && (
+          <>
+            <p className="content-shared-with-mental-health-expert-title">
+              Podijeljeno sa stručnjakom
+            </p>
+            <p className="content-shared-with-mental-health-expert-subtitle">
+              Pregledaj listu ispod:
+            </p>
+          </>
+        )}
       </div>
       <div className="content-shared-with-mental-health-expert-container">
         <SharedContentPermissionPosts />

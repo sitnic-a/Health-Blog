@@ -11,7 +11,8 @@ export const ListOfSharedPosts = () => {
   let { postsToShare } = useSelector((store) => store.shareExport)
 
   useEffect(() => {
-    toast.success('Content retrieved succesfully!', {
+    toast.success('Sadržaj uspješno dobavljen!', {
+      autoClose: 1500,
       position: 'bottom-right',
     })
 
@@ -38,7 +39,7 @@ export const ListOfSharedPosts = () => {
   return (
     <section id="shared-posts-via-link-main-container">
       {postsToShare?.map((post, index) => {
-        let date = moment(post?.createdAt, 'YYYYMMDDHHmmss').fromNow()
+        let date = moment(post?.createdAt).fromNow()
         let tags = post.tags
         let emotions = post?.emotions
         return (
@@ -54,7 +55,7 @@ export const ListOfSharedPosts = () => {
               <div className="shared-posts-via-link-post-details">
                 <div className="shared-posts-via-link-tags-main-container">
                   <p className="shared-posts-via-link-post-details-subtitle">
-                    Your thoughts about:
+                    Vaše teme razmišljanja:
                   </p>
 
                   {tags?.length > 0 && (
@@ -67,7 +68,7 @@ export const ListOfSharedPosts = () => {
                 {emotions?.length > 0 && (
                   <div className="shared-posts-via-link-emotions-main-container">
                     <p className="shared-posts-via-link-post-details-subtitle">
-                      Emotions recognized:
+                      Prepoznate emocije:
                     </p>
                     <div className="shared-posts-via-link-emotions-container">
                       <PostEmotions post={post} />
@@ -76,7 +77,7 @@ export const ListOfSharedPosts = () => {
                 )}
 
                 <p className="shared-posts-via-link-post-details-date">
-                  Created at: {date}
+                  Kreirano: {date}
                 </p>
               </div>
 

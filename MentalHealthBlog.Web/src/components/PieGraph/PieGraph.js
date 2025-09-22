@@ -53,9 +53,9 @@ export const PieGraph = ({ searchPostDto }) => {
 
   return (
     <section id="pie-graph">
-      {labels.length > 0 && numberOfTags.length > 0 && (
+      {labels?.length > 0 && numberOfTags?.length > 0 && (
         <>
-          <p className="pie-graph-title">Pie Graph Chart</p>
+          <p className="pie-graph-title">Pie grafikon</p>
           <Pie data={data} />
         </>
       )}

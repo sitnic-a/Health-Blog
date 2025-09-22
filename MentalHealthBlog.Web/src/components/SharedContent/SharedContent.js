@@ -28,16 +28,16 @@ export const SharedContent = () => {
           return (
             <div
               className="shares-per-mental-health-expert-expert-main-container"
-              key={mentalHealthExpert.id}
+              key={mentalHealthExpert?.id}
               onMouseEnter={(e) => {
                 let hoveredContainerObj = {
-                  mentalHealthExpertId: mentalHealthExpert.id,
+                  mentalHealthExpertId: mentalHealthExpert?.id,
                 }
                 dispatch(previewHoveredContentCounter(hoveredContainerObj))
               }}
               onMouseLeave={(e) => {
                 let hoveredContainerObj = {
-                  mentalHealthExpertId: mentalHealthExpert.id,
+                  mentalHealthExpertId: mentalHealthExpert?.id,
                 }
                 dispatch(hideHoveredContentCounter(hoveredContainerObj))
               }}
@@ -45,7 +45,7 @@ export const SharedContent = () => {
               <input
                 className="input-container-key"
                 type="hidden"
-                data-expert-id={mentalHealthExpert.id}
+                data-expert-id={mentalHealthExpert?.id}
               />
               <div className="shares-per-mental-health-expert-expert-image-wrapper">
                 <img
@@ -62,7 +62,7 @@ export const SharedContent = () => {
                 {mentalHealthExpert?.firstName} {mentalHealthExpert?.lastName}
               </p>
               <p className="shares-per-mental-health-expert-expert-info-paragraph">
-                {mentalHealthExpert?.roles[0].name}
+                {mentalHealthExpert?.roles[0]?.name}
               </p>
 
               <hr className="shares-per-mental-health-expert-separator-line" />
@@ -79,7 +79,8 @@ export const SharedContent = () => {
                   })
                 }}
               >
-                {contentSharedWithMentalHealthExpert.length} post shared!
+                Podijeljeno postova:{' '}
+                {contentSharedWithMentalHealthExpert?.length}
               </p>
             </div>
           )

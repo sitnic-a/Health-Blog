@@ -32,7 +32,7 @@
 .content-shared-with-mental-health-expert-expert-contact-info {
   margin-top: 1.5rem;
   /* background: powderblue; */
-  margin-inline: 2.5rem;
+  /* margin-inline: 2.5rem; */
 }
 
 .content-shared-with-mental-health-expert-phone-container {
@@ -48,7 +48,7 @@
   max-width: 240px;
   margin: 0;
   word-wrap: break-word;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 1rem;
 }
 
@@ -61,12 +61,16 @@
   margin-bottom: 1rem;
 }
 
+.content-shared-with-mental-health-expert-email-container > hr {
+  margin-inline: 2.5rem;
+}
+
 .content-shared-with-mental-health-expert-email-value {
-  max-width: 240px;
+  max-width: 260px;
   margin: 0;
   margin-top: -0.1rem;
   word-wrap: break-word;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 1rem;
 }
 
@@ -78,7 +82,7 @@
 .content-shared-with-mental-health-expert-organization-value {
   max-width: 240px;
   margin-block: 0.2rem;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 1rem;
   word-wrap: break-word;
 }

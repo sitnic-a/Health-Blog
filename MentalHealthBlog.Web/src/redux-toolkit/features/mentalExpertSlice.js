@@ -111,35 +111,25 @@ export const mentalExpertSlice = createSlice({
     builder
 
       //experts
-      .addCase(getMentalHealthExperts.pending, () => {
-        console.log('Db experts pending...')
-      })
+      .addCase(getMentalHealthExperts.pending, () => {})
       .addCase(getMentalHealthExperts.fulfilled, (state, action) => {
-        state.dbMentalHealthExperts = action.payload.serviceResponseObject
+        state.dbMentalHealthExperts = action?.payload?.serviceResponseObject
         state.suggestedMentalHealthExperts =
-          action.payload.serviceResponseObject
-
-        console.log('Suggested ', state.suggestedMentalHealthExperts)
+          action?.payload?.serviceResponseObject
       })
-      .addCase(getMentalHealthExperts.rejected, (state, action) => {
-        console.log('Db Experts rejected...')
-      })
+      .addCase(getMentalHealthExperts.rejected, (state, action) => {})
 
       //shares-per-user
-      .addCase(getSharesPerUser.pending, () => {
-        console.log('Pending request for shares per user')
-      })
+      .addCase(getSharesPerUser.pending, () => {})
       .addCase(getSharesPerUser.fulfilled, (state, action) => {
         let statusCode = action?.payload?.statusCode
 
         if (statusCode === 200) {
           state.usersThatSharedIncludingItsContent =
-            action.payload.serviceResponseObject
+            action?.payload?.serviceResponseObject
         }
       })
-      .addCase(getSharesPerUser.rejected, (action) => {
-        console.log('Request rejected ', action.payload)
-      })
+      .addCase(getSharesPerUser.rejected, (action) => {})
 
       .addCase(createAssignment.pending, (state, action) => {
         console.log('New assignment creation pending... ')

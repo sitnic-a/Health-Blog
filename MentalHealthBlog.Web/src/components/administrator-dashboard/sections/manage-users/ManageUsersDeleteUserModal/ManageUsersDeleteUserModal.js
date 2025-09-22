@@ -24,7 +24,7 @@ export const ManageUsersDeleteUserModal = ({ dbUser }) => {
       <div className="manage-users-delete-modal-content">
         <div className="manage-users-modal-title-container">
           <h2 className="manage-users-modal-title">
-            Are you sure you want to delete this user?
+            Da li ste sigurni da želite obrisati korisnika?
           </h2>
         </div>
         <div className="manage-users-modal-actions">
@@ -45,13 +45,18 @@ export const ManageUsersDeleteUserModal = ({ dbUser }) => {
                   let statusCode = data?.payload?.StatusCode
                   if (statusCode !== 200) {
                     if (statusCode === 400) {
-                      toast.error("User don't exist! Check parameters!", {
-                        position: 'bottom-right',
-                      })
+                      toast.error(
+                        'Korisnik ne postoji! Provjerite parametre!',
+                        {
+                          autoClose: 3000,
+                          position: 'bottom-right',
+                        }
+                      )
                       return
                     }
                     if (statusCode === 404) {
-                      toast.error('User not deleted! Not found!', {
+                      toast.error('Korisnik nije obrisan! Nije pronađen!', {
+                        autoClose: 3000,
                         position: 'bottom-right',
                       })
                       return
@@ -65,13 +70,15 @@ export const ManageUsersDeleteUserModal = ({ dbUser }) => {
                 let statusCode = data?.payload?.StatusCode
                 if (statusCode !== 200) {
                   if (statusCode === 400) {
-                    toast.error("User don't exist! Check parameters!", {
+                    toast.error('Korisnik ne postoji! Provjerite parametre!', {
+                      autoClose: 3000,
                       position: 'bottom-right',
                     })
                     return
                   }
                   if (statusCode === 404) {
-                    toast.error('User not deleted! Not found!', {
+                    toast.error('Korisnik nije obrisan! Nije pronađen!', {
+                      autoClose: 3000,
                       position: 'bottom-right',
                     })
                     return
@@ -81,14 +88,14 @@ export const ManageUsersDeleteUserModal = ({ dbUser }) => {
               dispatch(openDeleteModal(false))
             }}
           >
-            DELETE
+            Obriši
           </button>
           <button
             type="button"
             className="manage-users-modal-abort-delete-button"
             onClick={() => dispatch(openDeleteModal(false))}
           >
-            LEAVE
+            Odustani
           </button>
         </div>
       </div>

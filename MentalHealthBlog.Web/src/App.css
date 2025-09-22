@@ -7,6 +7,17 @@
   src: url('../public/assets/fonts/Klee_One/KleeOne-Regular.ttf');
 }
 
+//uzi izbor
+@font-face {
+  font-family: 'IndieFlower';
+  src: url('../public/assets/fonts/Indie_Flower/IndieFlower-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'SansDeva';
+  src: url('../public/assets/fonts/Playpen_Sans_Deva/static/PlaypenSansDeva-ExtraLight.ttf');
+}
+
 @font-face {
   font-family: 'Overlock';
   src: url('../public/assets/fonts/Overlock/Overlock-Regular.ttf');

@@ -45,7 +45,7 @@ namespace MentalHealthBlog.API.Methods
                                     ShareGuid = shareGuid.ToString(),
                                     SharedPostId = post,
                                     SharedWithId = mentalHealthExpert.Id,
-                                    SharedAt = contentToBeShared.SharedAt.Value.AddHours(1)
+                                    SharedAt = contentToBeShared.SharedAt.GetValueOrDefault()
                                 };
 
                                 if (newShare == null)

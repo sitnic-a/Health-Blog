@@ -13,12 +13,12 @@
 }
 
 .content-shared-with-mental-health-expert-hero-title {
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
 }
 
 .content-shared-with-mental-health-expert-hero-username {
   margin-right: 10px;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-weight: 700;
   color: #edb572;
 }
@@ -26,13 +26,13 @@
 .content-shared-with-mental-health-expert-title {
   max-width: 300px;
   margin: 0.3rem 0rem;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   /* background: yellow; */
 }
 
 .content-shared-with-mental-health-expert-subtitle {
   margin-bottom: 2rem;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-weight: 600;
 }
 

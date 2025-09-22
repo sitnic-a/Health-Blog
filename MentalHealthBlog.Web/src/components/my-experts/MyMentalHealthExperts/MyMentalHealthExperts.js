@@ -157,7 +157,7 @@ export const MyMentalHealthExperts = () => {
                 }
               }}
             >
-              <span>Choose an expert:</span>
+              <span>Izaberite stručnjaka:</span>
               <TiArrowSortedDown className="my-mental-health-filter-choose-action-icon my-mental-health-filter-choose-action-icon-expand" />
             </button>
 

@@ -22,7 +22,7 @@
 
 .share-via-link-heading > h2 {
   /* margin-block: 0.4rem; */
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 1.18rem;
   text-align: center;
 }
@@ -87,7 +87,7 @@
   margin-inline: 1rem;
   margin-top: 30px;
   padding-inline: 0.3rem;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   font-size: 0.95rem;
   overflow-x: scroll;
   white-space: nowrap;
@@ -126,7 +126,7 @@
   background: #34688f;
   animation: hideShareViaLinkCopyIndicator ease-in-out 1500ms;
   animation-fill-mode: both;
-  font-family: 'Klee One';
+  font-family: 'SansDeva';
   /* transition: 1s; */
 }
 

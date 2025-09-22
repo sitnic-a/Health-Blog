@@ -38,7 +38,7 @@ export const SharedContentPostsViaLink = () => {
     postsToShare !== null &&
     postsToShare?.length > 0 && (
       <section id="user-shared-posts-via-link">
-        <h1 className="user-shared-posts-via-link-title">Content:</h1>
+        <h1 className="user-shared-posts-via-link-title">Sadržaj:</h1>
         <ListOfSharedPosts />
       </section>
     )
