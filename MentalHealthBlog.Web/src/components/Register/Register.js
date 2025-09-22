@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { register, getDbRoles } from '../../redux-toolkit/features/userSlice'
@@ -703,6 +704,13 @@ export const Register = () => {
               </div>
             )}
 
+            <div className="register-terms-and-conditions-container">
+              <p>
+                Klikom na dugme za registraciju prihvatate{' '}
+                <Link to={'/terms-and-conditions'}> uslove korištenja</Link>{' '}
+                aplikacije!
+              </p>
+            </div>
             {/* <div>
               <label className="form-field-label" htmlFor="register-roles">
                 User type:
