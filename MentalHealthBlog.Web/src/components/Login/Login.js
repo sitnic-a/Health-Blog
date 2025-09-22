@@ -119,7 +119,7 @@ export const Login = () => {
         <section className="login">
           <form onSubmit={loginUser}>
             <div className="login-container">
-              <h1>Dobrodošli na Psihonet!</h1>
+              <h1>Dobrodošli na PSIHOnet!</h1>
               <h1> Osjećajte se slobodno da izrazite sve svoje emocije!</h1>
               <div className="form-fields">
                 <div>
