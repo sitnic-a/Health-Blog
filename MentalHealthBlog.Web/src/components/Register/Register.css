@@ -31,41 +31,6 @@
   margin-bottom: 1.5rem;
 }
 
-#register-password {
-  border: none;
-}
-
-.password-container {
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid #e1e1e1;
-}
-
-.password-container-text-type-actions {
-  display: flex;
-  gap: 5px;
-  padding-right: 2rem;
-}
-
-.password-container-text-type-actions * {
-  transform: scale(1.1);
-  cursor: pointer;
-}
-
-.password-type {
-  display: none;
-}
-
-.password-plain-text-type:hover {
-  transform: scale(1.3);
-  transition: 300ms;
-}
-
-.password-type:hover {
-  transform: scale(1.3);
-  transition: 300ms;
-}
-
 .register-info-in-therapy-container {
   display: flex;
   margin-block: 1rem;
