@@ -89,6 +89,10 @@
   transform: rotateZ(-180deg);
 }
 
+.register-terms-and-conditions-container {
+  font-family: 'SansDeva';
+}
+
 .mental-health-expert-register-info-main-container {
   display: flex;
   gap: 150px;

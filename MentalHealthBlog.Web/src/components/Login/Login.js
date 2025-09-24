@@ -1,19 +1,20 @@
 import { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 import { login, setIsFailed } from '../../redux-toolkit/features/userSlice'
 import {
   setUsernameValidationData,
   setPasswordValidationData,
 } from '../../redux-toolkit/features/validationSlice'
-
-import { toast } from 'react-toastify'
-import { Loader } from '../shared/Loader/Loader'
 import {
   checkPasswordValidity,
   checkUsernameValidity,
   stringIsNullOrEmpty,
 } from '../../utils/helper-methods/methods'
+
+import { Loader } from '../shared/Loader/Loader'
+import { Password } from '../shared/Password/Password'
 
 import LoginCSS from './Login.css'
 
@@ -22,9 +23,7 @@ export const Login = () => {
   let navigate = useNavigate()
 
   let { isLogging } = useSelector((store) => store.user)
-  let { usernameValidationData, passwordValidationData } = useSelector(
-    (store) => store.validation
-  )
+  let { usernameValidationData } = useSelector((store) => store.validation)
 
   let resetValidationData = () => {
     dispatch(setUsernameValidationData({}))
@@ -119,7 +118,7 @@ export const Login = () => {
         <section className="login">
           <form onSubmit={loginUser}>
             <div className="login-container">
-              <h1>Dobrodošli na Psihonet!</h1>
+              <h1>Dobrodošli na PSIHOnet!</h1>
               <h1> Osjećajte se slobodno da izrazite sve svoje emocije!</h1>
               <div className="form-fields">
                 <div>
@@ -163,47 +162,7 @@ export const Login = () => {
                   )}
                 </div>
                 <br />
-                <div>
-                  <label className="form-field-label" htmlFor="password">
-                    Password:
-                  </label>
-                  <span className="required-field"> *</span>
-
-                  <br />
-                  <input
-                    className="form-field"
-                    id="password"
-                    type="password"
-                    name="password"
-                    placeholder="Unesite svoj password..."
-                    onBlur={(e) => {
-                      let password = e.target.value
-                      let [passwordIsValid, passwordValidationMessages] =
-                        checkPasswordValidity(password, [])
-
-                      dispatch(
-                        setPasswordValidationData({
-                          passwordIsValid,
-                          passwordValidationMessages,
-                        })
-                      )
-                    }}
-                  />
-
-                  {!passwordValidationData?.passwordIsValid && (
-                    <div className="validation-message-main-container">
-                      {passwordValidationData?.passwordValidationMessages?.map(
-                        (message, index) => {
-                          return (
-                            <p key={index} className="validation-message">
-                              - {message}
-                            </p>
-                          )
-                        }
-                      )}
-                    </div>
-                  )}
-                </div>
+                <Password />
                 <section id="register-main-container">
                   <div className="register-regular-user-main-container">
                     <Link

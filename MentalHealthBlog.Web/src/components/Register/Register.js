@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-
+import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
+
 import { register, getDbRoles } from '../../redux-toolkit/features/userSlice'
 import { getMentalHealthExperts } from '../../redux-toolkit/features/mentalExpertSlice'
 import { setSelectedMentalHealthExpertIds } from '../../redux-toolkit/features/therapySlice'
@@ -16,7 +18,6 @@ import {
   stringIsNullOrEmpty,
 } from '../../utils/helper-methods/methods'
 import { db_roles } from '../../enums/roles'
-import { toast } from 'react-toastify'
 
 import { MentalHealthExpertsDropdown } from '../MentalHealthExpertsDropdown/MentalHealthExpertsDropdown'
 import { TiArrowSortedDown } from 'react-icons/ti'
@@ -33,6 +34,7 @@ import {
   setPhoneNumberValidationData,
   setEmailValidationData,
 } from '../../redux-toolkit/features/validationSlice'
+import { Password } from '../shared/Password/Password'
 
 export const Register = () => {
   let { dbRoles } = useSelector((store) => store.user)
@@ -82,7 +84,7 @@ export const Register = () => {
     let sendData
     let form = new FormData()
     let username = document.getElementById('register-username').value
-    let password = document.getElementById('register-password').value
+    let password = document.getElementById('password').value
 
     if (isMentalHealthExpert === true) {
       let mentalHealthExpertFirstName = document.getElementById(
@@ -427,46 +429,7 @@ export const Register = () => {
             )}
           </div>
 
-          <div>
-            <label className="form-field-label" htmlFor="register-password">
-              Password:
-            </label>
-            <span className="required-field"> *</span>
-
-            <input
-              name="password"
-              id="register-password"
-              className="form-field"
-              type="password"
-              placeholder="Unesite password..."
-              onBlur={(e) => {
-                let password = e.target.value
-                let [isValid, passwordValidationMessages] =
-                  checkPasswordValidity(password, [])
-
-                dispatch(
-                  setPasswordValidationData({
-                    passwordIsValid: isValid,
-                    passwordValidationMessages,
-                  })
-                )
-              }}
-            />
-
-            {!passwordValidationData?.isValid && (
-              <div className="validation-message-main-container">
-                {passwordValidationData?.passwordValidationMessages?.map(
-                  (message, index) => {
-                    return (
-                      <p key={index} className="validation-message">
-                        - {message}
-                      </p>
-                    )
-                  }
-                )}
-              </div>
-            )}
-          </div>
+          <Password />
         </div>
         {isMentalHealthExpert !== true && (
           <div className="register-info-main-container">
@@ -703,6 +666,13 @@ export const Register = () => {
               </div>
             )}
 
+            <div className="register-terms-and-conditions-container">
+              <p>
+                Klikom na dugme za registraciju prihvatate{' '}
+                <Link to={'/terms-and-conditions'}> uslove korištenja</Link>{' '}
+                aplikacije!
+              </p>
+            </div>
             {/* <div>
               <label className="form-field-label" htmlFor="register-roles">
                 User type:

@@ -1,0 +1,45 @@
+#terms-and-conditions-main-container {
+  margin-inline: -2rem;
+  padding: 2rem;
+  background: #cce5f1;
+}
+
+.terms-and-conditions-container {
+  max-width: 900px;
+  margin-inline: auto;
+  padding-top: 4rem;
+  margin-bottom: 8rem;
+  font-family: 'SansDeva';
+  line-height: 1.45rem;
+}
+
+.terms-title {
+  margin-bottom: 2rem;
+}
+
+.terms {
+  max-width: 900px;
+  text-align: justify;
+}
+
+.terms-ordered-list {
+  margin-block: 2rem;
+  list-style: lower-latin;
+}
+
+.terms-ordered-list-item {
+  margin-block: 1rem;
+}
+
+.terms-footer-actions {
+  padding: 1rem;
+  border-radius: 0.6rem;
+  color: #f3f1e3;
+  background: #edb572;
+}
+
+.terms-footer-application-link {
+  width: 100%;
+  display: inline-block;
+  text-align: center;
+}
