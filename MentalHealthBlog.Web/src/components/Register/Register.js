@@ -21,6 +21,7 @@ import { toast } from 'react-toastify'
 
 import { MentalHealthExpertsDropdown } from '../MentalHealthExpertsDropdown/MentalHealthExpertsDropdown'
 import { TiArrowSortedDown } from 'react-icons/ti'
+import { IoMdEye, IoMdEyeOff } from 'react-icons/io'
 
 import RegisterCSS from './Register.css'
 import ValidationCSS from '../shared/Validation/Validation.css'
@@ -434,26 +435,57 @@ export const Register = () => {
             </label>
             <span className="required-field"> *</span>
 
-            <input
-              name="password"
-              id="register-password"
-              className="form-field"
-              type="password"
-              placeholder="Unesite password..."
-              onBlur={(e) => {
-                let password = e.target.value
-                let [isValid, passwordValidationMessages] =
-                  checkPasswordValidity(password, [])
+            <div className="password-container">
+              <input
+                name="password"
+                id="register-password"
+                className="form-field"
+                type="password"
+                placeholder="Unesite password..."
+                onBlur={(e) => {
+                  let password = e.target.value
+                  let [isValid, passwordValidationMessages] =
+                    checkPasswordValidity(password, [])
 
-                dispatch(
-                  setPasswordValidationData({
-                    passwordIsValid: isValid,
-                    passwordValidationMessages,
-                  })
-                )
-              }}
-            />
+                  dispatch(
+                    setPasswordValidationData({
+                      passwordIsValid: isValid,
+                      passwordValidationMessages,
+                    })
+                  )
+                }}
+              />
 
+              <div className="password-container-text-type-actions">
+                <IoMdEye
+                  className="password-plain-text-type"
+                  onClick={(e) => {
+                    let passwordEyeIconOn = e.currentTarget
+                    let passwordEyeIconOff =
+                      document.querySelector('.password-type')
+                    let password = document.querySelector('#register-password')
+                    passwordEyeIconOn.style.display = 'none'
+                    passwordEyeIconOff.style.display = 'initial'
+                    password.type = 'text'
+                    return
+                  }}
+                />
+                <IoMdEyeOff
+                  className="password-type"
+                  onClick={(e) => {
+                    let passwordEyeIconOff = e.currentTarget
+                    let passwordEyeIconOn = document.querySelector(
+                      '.password-plain-text-type'
+                    )
+                    let password = document.querySelector('#register-password')
+                    passwordEyeIconOn.style.display = 'initial'
+                    passwordEyeIconOff.style.display = 'none'
+                    password.type = 'password'
+                    return
+                  }}
+                />
+              </div>
+            </div>
             {!passwordValidationData?.isValid && (
               <div className="validation-message-main-container">
                 {passwordValidationData?.passwordValidationMessages?.map(
