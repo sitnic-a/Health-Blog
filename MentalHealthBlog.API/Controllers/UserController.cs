@@ -1,6 +1,7 @@
 ﻿using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Services;
+using MentalHealthBlog.API.Utils.Email;
 using MentalHealthBlog.API.Utils.SignalR;
 using MentalHealthBlogAPI.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -12,12 +13,14 @@ namespace MentalHealthBlog.API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
         private readonly IHubContext<AdminHub> _adminHubContext;
         private readonly IAdminService _adminService;
 
-        public UserController(IUserService userService, IHubContext<AdminHub> adminHubContext, IAdminService adminService)
+        public UserController(IConfiguration configuration, IUserService userService, IHubContext<AdminHub> adminHubContext, IAdminService adminService)
         {
+            _configuration = configuration;
             _userService = userService;
             _adminHubContext = adminHubContext;
             _adminService = adminService;
@@ -75,6 +78,13 @@ namespace MentalHealthBlog.API.Controllers
         public async Task<Response> Logout([FromBody] LogoutDto logoutRequest)
         {
             return await _userService.Logout(logoutRequest);
+        }
+
+        [HttpPut("password-recovery")]
+        public async Task RequestPasswordChange(string email, string password,string passwordConfirmation)
+        {
+            var emailService = new EmailService(_configuration);
+            await emailService.SendEmail(email, password, passwordConfirmation);
         }
     }
 }
