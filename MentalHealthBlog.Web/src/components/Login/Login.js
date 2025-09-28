@@ -186,6 +186,17 @@ export const Login = () => {
                 <button type="submit" id="login-container-button">
                   Login
                 </button>
+
+                <div className="reset-password-container">
+                  <p>
+                    <a
+                      className="reset-password-link"
+                      href="/request-password-change"
+                    >
+                      Zaboravili ste password?
+                    </a>
+                  </p>
+                </div>
               </div>
             </div>
           </form>

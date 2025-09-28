@@ -62,3 +62,12 @@
   border: 1px solid #edb572;
   color: #edb572;
 }
+
+.reset-password-container {
+  margin-top: 1rem;
+}
+
+.reset-password-link {
+  font-family: 'SansDeva';
+  font-size: 0.87rem;
+}

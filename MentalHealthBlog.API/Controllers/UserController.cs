@@ -80,7 +80,7 @@ namespace MentalHealthBlog.API.Controllers
             return await _userService.Logout(logoutRequest);
         }
 
-        [HttpPut("password-recovery")]
+        [HttpPut("request-password-change")]
         public async Task RequestPasswordChange(string email, string password,string passwordConfirmation)
         {
             var emailService = new EmailService(_configuration);
