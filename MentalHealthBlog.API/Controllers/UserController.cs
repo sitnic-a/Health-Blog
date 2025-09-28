@@ -13,17 +13,17 @@ namespace MentalHealthBlog.API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
         private readonly IHubContext<AdminHub> _adminHubContext;
         private readonly IAdminService _adminService;
+        private readonly IEmailService _emailService;
 
-        public UserController(IConfiguration configuration, IUserService userService, IHubContext<AdminHub> adminHubContext, IAdminService adminService)
+        public UserController(IUserService userService, IHubContext<AdminHub> adminHubContext, IAdminService adminService, IEmailService emailService)
         {
-            _configuration = configuration;
             _userService = userService;
             _adminHubContext = adminHubContext;
             _adminService = adminService;
+            _emailService = emailService;
         }
 
         [HttpGet("{id}")]
@@ -81,10 +81,9 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpPut("request-password-change")]
-        public async Task RequestPasswordChange(string email, string password,string passwordConfirmation)
+        public async Task<Response> RequestPasswordChange([FromBody] string email)
         {
-            var emailService = new EmailService(_configuration);
-            await emailService.SendEmail(email, password, passwordConfirmation);
+            return await _emailService.SendEmail(email);
         }
     }
 }
