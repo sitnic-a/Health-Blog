@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 let initialState = {
   usernameValidationData: { isValid: true, validationMessages: [] },
   passwordValidationData: { isValid: true, validationMessages: [] },
+  confirmationPasswordValidationData: { isValid: true, validationMessages: [] },
   firstNameValidationData: { isValid: true, validationMessages: [] },
   lastNameValidationData: { isValid: true, validationMessages: [] },
   organizationValidationData: { isValid: true, validationMessages: [] },
@@ -23,6 +24,9 @@ const validationSlice = createSlice({
     },
     setPasswordValidationData: (state, action) => {
       state.passwordValidationData = action?.payload
+    },
+    setConfirmationPasswordValidationData: (state, action) => {
+      state.confirmationPasswordValidationData = action?.payload
     },
     setFirstNameValidationData: (state, action) => {
       state.firstNameValidationData = action?.payload
@@ -55,6 +59,7 @@ const validationSlice = createSlice({
 export const {
   setUsernameValidationData,
   setPasswordValidationData,
+  setConfirmationPasswordValidationData,
   setFirstNameValidationData,
   setLastNameValidationData,
   setOrganizationValidationData,

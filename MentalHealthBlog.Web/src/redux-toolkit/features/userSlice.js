@@ -13,7 +13,6 @@ let initialState = {
   statusCode: null,
   dbUser: null,
   dbRoles: [],
-  passwordResetEmail: '',
 }
 
 export const getQuote = createAsyncThunk('quote', async () => {
@@ -99,6 +98,22 @@ export const requestPasswordChange = createAsyncThunk(
     let request = await fetch(url, {
       method: 'PUT',
       body: JSON.stringify(objectWithData?.email),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    let response = await request.json()
+    return response
+  }
+)
+
+export const changePassword = createAsyncThunk(
+  'change-password',
+  async (objectWithData) => {
+    let url = `${application.application_url}/user/change-password`
+    let request = await fetch(url, {
+      method: 'PUT',
+      body: JSON.stringify(objectWithData),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -239,8 +254,6 @@ export const userSlice = createSlice({
           '.request-password-send-request-info-message'
         )
         requestPasswordInfoMessage.style.display = 'flex'
-
-        state.passwordResetEmail = action?.meta?.arg?.email
       })
       .addCase(requestPasswordChange.fulfilled, (state, action) => {
         let requestPasswordInfoMessage = document.querySelector(
@@ -249,7 +262,8 @@ export const userSlice = createSlice({
         requestPasswordInfoMessage.style.display = 'none'
 
         let StatusCode = action?.payload?.StatusCode
-        if (StatusCode !== 200) {
+        let statusCode = action?.payload?.statusCode
+        if (StatusCode !== 200 && statusCode !== 200) {
           toast.error('Email nije moguće poslati', {
             autoClose: 3000,
             position: 'bottom-right',
@@ -261,6 +275,11 @@ export const userSlice = createSlice({
           requestPasswordSendButton.style.display = 'initial'
           return
         }
+
+        let requestPasswordSendButton = document.querySelector(
+          '.request-password-change-send-request-button'
+        )
+        requestPasswordSendButton.style.display = 'initial'
       })
       .addCase(requestPasswordChange.rejected, (state, action) => {
         let requestPasswordInfoMessage = document.querySelector(
@@ -271,7 +290,19 @@ export const userSlice = createSlice({
           autoClose: 3000,
           position: 'bottom-right',
         })
+
+        let requestPasswordSendButton = document.querySelector(
+          '.request-password-change-send-request-button'
+        )
+        requestPasswordSendButton.style.display = 'initial'
       })
+
+      //changePassword
+      .addCase(changePassword.pending, (state, action) => {})
+      .addCase(changePassword.fulfilled, (state, action) => {
+        console.log('Successfully changed pass')
+      })
+      .addCase(changePassword.rejected, (state, action) => {})
   },
 })
 

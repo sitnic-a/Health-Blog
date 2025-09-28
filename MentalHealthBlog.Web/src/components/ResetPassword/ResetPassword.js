@@ -1,11 +1,46 @@
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
+import { changePassword } from '../../redux-toolkit/features/userSlice'
+import { setConfirmationPasswordValidationData } from '../../redux-toolkit/features/validationSlice'
+import { checkPasswordValidity } from '../../utils/helper-methods/methods'
 import { Password } from '../shared/Password/Password'
+import { IoMdEye, IoMdEyeOff } from 'react-icons/io'
 
 import ResetPasswordCSS from './ResetPassword.css'
-export const ResetPassword = () => {
-  let { passwordResetEmail } = useSelector((store) => store.user)
 
-  console.log('Password reset email ', passwordResetEmail)
+export const ResetPassword = () => {
+  let dispatch = useDispatch()
+  let { confirmationPasswordValidationData } = useSelector(
+    (store) => store.validation
+  )
+
+  let query = new URLSearchParams(window.location.search)
+  let email = query.get('email')
+  let safe = query.get('safe')
+
+  let callChangePassword = () => {
+    let password = document.getElementById('password').value
+    let confirmationPassword = document.getElementById(
+      'confirmation-password'
+    ).value
+
+    if (password !== confirmationPassword) {
+      toast.error('Passwordi moraju biti isti!', {
+        autoClose: 3000,
+        position: 'bottom-right',
+      })
+      return
+    }
+
+    let objectWithData = {
+      email: email,
+      blueprint: safe,
+      password: password,
+      confirmationPassword: confirmationPassword,
+    }
+
+    dispatch(changePassword(objectWithData))
+  }
 
   return (
     <section id="reset-password-main-container">
@@ -21,7 +56,85 @@ export const ResetPassword = () => {
             Potvrda passworda: <span className="required-field"> *</span>
           </label>
 
-          <Password />
+          <div className="password-container">
+            <input
+              name="password"
+              id="confirmation-password"
+              className="form-field"
+              type="password"
+              placeholder="Potvrdite password..."
+              onBlur={(e) => {
+                let confirmationPassword = e.target.value
+                let [isValid, passwordValidationMessages] =
+                  checkPasswordValidity(confirmationPassword, [])
+
+                dispatch(
+                  setConfirmationPasswordValidationData({
+                    passwordIsValid: isValid,
+                    passwordValidationMessages,
+                  })
+                )
+              }}
+            />
+
+            <div className="password-container-text-type-actions">
+              <IoMdEye
+                className="confirmation-password-plain-text-type"
+                onClick={(e) => {
+                  let confirmationPasswordEyeIconOn = e.currentTarget
+                  let confirmationPasswordEyeIconOff = document.querySelector(
+                    '.confirmation-password-type'
+                  )
+                  let confirmationPassword = document.querySelector(
+                    '#confirmation-password'
+                  )
+                  confirmationPasswordEyeIconOn.style.display = 'none'
+                  confirmationPasswordEyeIconOff.style.display = 'initial'
+                  confirmationPassword.type = 'text'
+                  return
+                }}
+              />
+              <IoMdEyeOff
+                className="confirmation-password-type"
+                onClick={(e) => {
+                  let confirmationPasswordEyeIconOff = e.currentTarget
+                  let confirmationPasswordEyeIconOn = document.querySelector(
+                    '.confirmation-password-plain-text-type'
+                  )
+                  let confirmationPassword = document.querySelector(
+                    '#confirmation-password'
+                  )
+                  confirmationPasswordEyeIconOn.style.display = 'initial'
+                  confirmationPasswordEyeIconOff.style.display = 'none'
+                  confirmationPassword.type = 'password'
+                  return
+                }}
+              />
+            </div>
+          </div>
+          {!confirmationPasswordValidationData?.isValid && (
+            <div className="validation-message-main-container">
+              {confirmationPasswordValidationData?.passwordValidationMessages?.map(
+                (message, index) => {
+                  return (
+                    <p key={index} className="validation-message">
+                      - {message}
+                    </p>
+                  )
+                }
+              )}
+            </div>
+          )}
+        </div>
+
+        <div className="reset-password-action-container">
+          <button
+            type="button"
+            className="reset-password-save-changes-button"
+            onClick={callChangePassword}
+          >
+            Snimi promjene
+          </button>
         </div>
       </div>
     </section>
