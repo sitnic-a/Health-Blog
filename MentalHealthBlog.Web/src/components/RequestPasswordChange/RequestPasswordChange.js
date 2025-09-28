@@ -1,11 +1,39 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { checkEmailValidity } from '../../utils/helper-methods/methods'
-import RequestPasswordChangeCSS from './RequestPasswordChange.css'
+import { toast } from 'react-toastify'
+import { requestPasswordChange } from '../../redux-toolkit/features/userSlice'
 import { setEmailValidationData } from '../../redux-toolkit/features/validationSlice'
+import { checkEmailValidity } from '../../utils/helper-methods/methods'
+
+import RequestPasswordChangeCSS from './RequestPasswordChange.css'
+import { TailSpin } from 'react-loader-spinner'
 
 export const RequestPasswordChange = () => {
   let dispatch = useDispatch()
   let { emailValidationData } = useSelector((store) => store.validation)
+
+  let callRequestPasswordChange = () => {
+    let email = document.getElementsByTagName('input')[0].value
+    let isMentalHealthExpert = false // should change to be isRequired
+    let [emailIsvalid, emailValidationMessages] = checkEmailValidity(
+      email,
+      [],
+      isMentalHealthExpert
+    )
+    dispatch(setEmailValidationData({ emailIsvalid, emailValidationMessages }))
+
+    if (!emailIsvalid) {
+      toast.error('Molimo slijedite upute prilikom popunjavanja polja!', {
+        autoClose: 3000,
+        position: 'bottom-right',
+      })
+      return
+    }
+
+    let objectWithData = {
+      email: email,
+    }
+    dispatch(requestPasswordChange(objectWithData))
+  }
   return (
     <section id="request-password-change-main-container">
       <div className="request-password-change-email-container">
@@ -55,9 +83,18 @@ export const RequestPasswordChange = () => {
       </div>
 
       <div className="request-password-change-send-request">
-        <button className="request-password-change-send-request-button">
+        <button
+          className="request-password-change-send-request-button"
+          onClick={callRequestPasswordChange}
+        >
           Pošalji zahtjev
         </button>
+        <span className="request-password-send-request-info-message">
+          Slanje u toku...
+          <span>
+            <TailSpin height="30" width="30" />
+          </span>
+        </span>
       </div>
     </section>
   )

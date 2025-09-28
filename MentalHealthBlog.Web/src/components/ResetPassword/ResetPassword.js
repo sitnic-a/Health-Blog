@@ -1,7 +1,12 @@
+import { useSelector } from 'react-redux'
 import { Password } from '../shared/Password/Password'
 
 import ResetPasswordCSS from './ResetPassword.css'
 export const ResetPassword = () => {
+  let { passwordResetEmail } = useSelector((store) => store.user)
+
+  console.log('Password reset email ', passwordResetEmail)
+
   return (
     <section id="reset-password-main-container">
       <div className="reset-password-header">
