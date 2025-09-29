@@ -6,9 +6,12 @@ import { checkEmailValidity } from '../../utils/helper-methods/methods'
 
 import RequestPasswordChangeCSS from './RequestPasswordChange.css'
 import { TailSpin } from 'react-loader-spinner'
+import { ReceivedEmailPopup } from '../ReceivedEmailPopup/ReceivedEmailPopup'
+import { openEmailSuccessfullySentOpen } from '../../redux-toolkit/features/modalSlice'
 
 export const RequestPasswordChange = () => {
   let dispatch = useDispatch()
+  let { emailSentSuccesfullyOpen } = useSelector((store) => store.modal)
   let { emailValidationData } = useSelector((store) => store.validation)
 
   let callRequestPasswordChange = () => {
@@ -32,10 +35,17 @@ export const RequestPasswordChange = () => {
     let objectWithData = {
       email: email,
     }
-    dispatch(requestPasswordChange(objectWithData))
+    dispatch(requestPasswordChange(objectWithData)).then((data) => {
+      let statusCode = data?.payload?.statusCode
+      if (statusCode === 200) {
+        dispatch(openEmailSuccessfullySentOpen(!emailSentSuccesfullyOpen))
+      }
+    })
   }
   return (
     <section id="request-password-change-main-container">
+      <ReceivedEmailPopup />
+
       <div className="request-password-change-email-container">
         <label className="form-field-label">
           Unesite svoju email adresu: <span className="required-field"> *</span>

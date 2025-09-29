@@ -280,6 +280,11 @@ export const userSlice = createSlice({
           '.request-password-change-send-request-button'
         )
         requestPasswordSendButton.style.display = 'initial'
+        toast.success('Email uspješno poslan', {
+          autoClose: 3000,
+          position: 'bottom-right',
+        })
+        return
       })
       .addCase(requestPasswordChange.rejected, (state, action) => {
         let requestPasswordInfoMessage = document.querySelector(
