@@ -85,5 +85,11 @@ namespace MentalHealthBlog.API.Controllers
         {
             return await _emailService.SendEmail(email);
         }
+
+        [HttpPut("change-password")]
+        public async Task<Response> ChangePassword(ChangePasswordDto request)
+        {
+            return await _userService.ChangePassword(request);
+        }
     }
 }

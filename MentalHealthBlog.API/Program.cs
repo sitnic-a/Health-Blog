@@ -11,7 +11,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Npgsql;
-using System.Configuration;
 using System.Text;
 
 #pragma warning disable 8604
@@ -28,6 +27,9 @@ builder.Services.AddControllers();
 var config = new ConfigurationBuilder()
     .AddUserSecrets<Program>()
     .Build();
+
+//Add MemoryCache
+builder.Services.AddMemoryCache();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -145,9 +147,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-
 var app = builder.Build();
-
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<DataContext>();

@@ -10,6 +10,7 @@ using MentalHealthBlog.API.Utils;
 using MentalHealthBlogAPI.Data;
 using MentalHealthBlogAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
@@ -32,7 +33,8 @@ namespace MentalHealthBlog.API.Services
         TOKEN_SUCCESSFULLY_CREATED,
         TOKEN_NOT_FOUND,
         TOKEN_ERROR,
-        LOGOUT_ERROR
+        LOGOUT_ERROR,
+        PASSWORD_SUCCESSFULLY_CHANGED,
     }
     public class UserService : IUserService
     {
@@ -41,6 +43,7 @@ namespace MentalHealthBlog.API.Services
         private readonly IOptions<AppSettings> _options;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
+        private readonly IMemoryCache _memoryCache;
         private readonly DataContext _context;
         private const int __KEYSIZE__ = 128;
         private const int __ITERATIONS = 350000;
@@ -51,13 +54,14 @@ namespace MentalHealthBlog.API.Services
         private User user = new();
 
 
-        public UserService(DataContext context, IOptions<AppSettings> options, IConfiguration configuration, IMapper mapper, ILogger<UserService> userLoggerService)
+        public UserService(DataContext context, IOptions<AppSettings> options, IConfiguration configuration, IMapper mapper, IMemoryCache memoryCache, ILogger<UserService> userLoggerService)
         {
             _context = context;
             _optionsAppSettings = options.Value;
             _options = options;
             _configuration = configuration;
             _mapper = mapper;
+            _memoryCache = memoryCache;
             _userLoggerService = userLoggerService;
         }
 
@@ -166,8 +170,8 @@ namespace MentalHealthBlog.API.Services
                         if (RegularUserExtension.IsValid(newRegularUserRequest))
                         {
                             var mentalHealthExpertsToConnectWithId = newRegularUserRequest?.MentalHealthExpertsToConnectWithIds;
-                            var hasSelectedMentalHealthExperts = mentalHealthExpertsToConnectWithId.Any() && 
-                                !mentalHealthExpertsToConnectWithId.Any(e => e == null );
+                            var hasSelectedMentalHealthExperts = mentalHealthExpertsToConnectWithId.Any() &&
+                                !mentalHealthExpertsToConnectWithId.Any(e => e == null);
                             if (hasSelectedMentalHealthExperts)
                             {
                                 mentalHealthExpertsId = mentalHealthExpertsToConnectWithId[0]
@@ -370,6 +374,52 @@ namespace MentalHealthBlog.API.Services
                 _userLoggerService.LogError($"LOGOUT: {e.Message}");
                 throw;
             }
+        }
+
+        public async Task<Response> ChangePassword(ChangePasswordDto changePasswordRequest)
+        {
+            try
+            {
+                var blueprint = _memoryCache.Get("blueprint");
+
+                var isTheSame = blueprint.ToString() == changePasswordRequest.Blueprint.ToString();
+                if (string.IsNullOrEmpty(changePasswordRequest.Blueprint) || !isTheSame)
+                {
+                    throw new ArgumentException("Blueprint is not found!");
+                }
+
+                var userHelper = new UserHelper(_context);
+
+                var combinedUsers = await userHelper.GetCombinedDataFromMentalHealthExpertsAndRegularUsersAsync();
+
+                var userThatRequestedChange = combinedUsers.FirstOrDefault(u => u.Email == changePasswordRequest.Email);
+                if (userThatRequestedChange == null)
+                {
+                    throw new RecordNotFoundException("User with this email, doesn't exist");
+                }
+
+                var dbUserThatRequestedPasswordChange = await _context.Users.FindAsync(userThatRequestedChange.Id);
+
+                if (dbUserThatRequestedPasswordChange == null)
+                {
+                    throw new RecordNotFoundException("User with this email not found!");
+                }
+
+                var passwordSalt = user.GenerateSalt(__KEYSIZE__);
+                var passwordHash = user.HashPassword(changePasswordRequest.Password, passwordSalt, __ITERATIONS, __HASHALGORITHM__, __KEYSIZE__);
+
+                dbUserThatRequestedPasswordChange.PasswordSalt = passwordSalt;
+                dbUserThatRequestedPasswordChange.PasswordHash = passwordHash;
+                _context.Update(dbUserThatRequestedPasswordChange);
+                await _context.SaveChangesAsync();
+                _memoryCache.Remove("blueprint");
+                return new Response(new SignedUserDto(dbUserThatRequestedPasswordChange.Id, dbUserThatRequestedPasswordChange.Username), StatusCodes.Status200OK, UserServiceLogTypes.PASSWORD_SUCCESSFULLY_CHANGED.ToString());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            throw new NotImplementedException();
         }
     }
 }

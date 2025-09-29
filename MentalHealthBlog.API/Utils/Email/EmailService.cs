@@ -1,9 +1,10 @@
 ﻿using MailKit.Net.Smtp;
 using MailKit.Security;
 using MentalHealthBlog.API.Exceptions;
+using MentalHealthBlog.API.Methods;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using MimeKit;
 
 namespace MentalHealthBlog.API.Utils.Email
@@ -19,47 +20,34 @@ namespace MentalHealthBlog.API.Utils.Email
     {
         private readonly DataContext _context;
         private readonly IConfiguration _configuration;
-        private Guid _safetyChangeMeasure; 
-        public EmailService(DataContext context,IConfiguration configuration)
+        private readonly IMemoryCache _memoryCache;
+        private Guid _safetyChangeMeasure;
+
+        public EmailService(DataContext context, IConfiguration configuration, IMemoryCache memoryCache)
         {
             _context = context;
             _configuration = configuration;
+            _memoryCache = memoryCache;
         }
         public async Task<Response> SendEmail(string email)
         {
             try
             {
                 _safetyChangeMeasure = Guid.NewGuid();
+                _memoryCache.Set("blueprint", _safetyChangeMeasure, new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30)
+                });
+                
                 var smtpHost = _configuration.GetValue<string>("SMTP_HOST");
                 var smtpPort = _configuration.GetValue<int>("SMTP_PORT");
                 var smtpHostAddress = _configuration.GetValue<string>("SMTP_HOST_ADDRESS");
                 var smtpPassword = _configuration.GetValue<string>("SMTP_PASSWORD");
 
-                var allRegularUserEmails = await _context.MentalHealthExperts
-                    .Where(mhe => !string.IsNullOrEmpty(mhe.Email))
-                    .Join(_context.Users,
-                          (mhe) => mhe.UserId,
-                          (u) => u.Id,
-                          (mhe,u) => new
-                          {
-                              Email = mhe.Email
-                          })
-                    .ToListAsync();
+                var userHelper = new UserHelper(_context);
+                var combinedUsers = await userHelper.GetCombinedDataFromMentalHealthExpertsAndRegularUsersAsync();
 
-                var allMentalHealthExpertEmails = await _context.RegularUsers
-                    .Where(ru => !string.IsNullOrEmpty(ru.Email))
-                    .Join(_context.Users,
-                          (ru) => ru.UserId,
-                          (u) => u.Id,
-                          (ru,u) => new
-                          {
-                              Email = ru.Email
-                          })
-                    .ToListAsync();
-
-                var combinedEmails = allMentalHealthExpertEmails.Union(allRegularUserEmails);
-
-                var emailExists = combinedEmails.Any(e => e.Email == email);
+                var emailExists = combinedUsers.Any(e => e.Email == email);
 
                 if (emailExists)
                 {
@@ -94,7 +82,5 @@ namespace MentalHealthBlog.API.Utils.Email
             }
             
         }
-
-
     }
 }
