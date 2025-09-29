@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { changePassword } from '../../redux-toolkit/features/userSlice'
 import { setConfirmationPasswordValidationData } from '../../redux-toolkit/features/validationSlice'
@@ -10,6 +11,7 @@ import ResetPasswordCSS from './ResetPassword.css'
 
 export const ResetPassword = () => {
   let dispatch = useDispatch()
+  let navigate = useNavigate()
   let { confirmationPasswordValidationData } = useSelector(
     (store) => store.validation
   )
@@ -39,7 +41,23 @@ export const ResetPassword = () => {
       confirmationPassword: confirmationPassword,
     }
 
-    dispatch(changePassword(objectWithData))
+    dispatch(changePassword(objectWithData)).then((data) => {
+      let statusCode = data?.payload?.statusCode
+      if (statusCode === 200) {
+        toast.success('Uspješno ste promijenili svoj password', {
+          autoClose: 3000,
+          position: 'bottom-right',
+        })
+        navigate('/')
+        return
+      }
+
+      toast.error('Password nije promijenjen.Probajte ponovo!', {
+        autoClose: 5000,
+        position: 'bottom-right',
+      })
+      return
+    })
   }
 
   return (
