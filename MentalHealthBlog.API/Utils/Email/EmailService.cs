@@ -33,6 +33,9 @@ namespace MentalHealthBlog.API.Utils.Email
         {
             try
             {
+                var applicationUrl = "http://localhost:3000";
+                //var applicationUrl = "https://mapp-terapija.com";
+
                 _safetyChangeMeasure = Guid.NewGuid();
                 _memoryCache.Set("blueprint", _safetyChangeMeasure, new MemoryCacheEntryOptions
                 {
@@ -60,8 +63,8 @@ namespace MentalHealthBlog.API.Utils.Email
                         Text = $@"<p>Klikom na link moći ćete unijeti novu šifru.</p>" +
                         $"" +
                         $"<p>Link za promjenu passworda </p>" +
-                        $"<a href='http://localhost:3000/reset-password?safe={_safetyChangeMeasure}&email={email}'>" +
-                        $"http://localhost:3000/reset-password?safe={_safetyChangeMeasure}&email={email}" +
+                        $"<a href='{applicationUrl}/reset-password?safe={_safetyChangeMeasure}&email={email}'>" +
+                        $"{applicationUrl}/reset-password?safe={_safetyChangeMeasure}&email={email}" +
                         $"</a>"
                     };
 
