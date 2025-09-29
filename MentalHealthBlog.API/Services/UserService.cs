@@ -382,6 +382,11 @@ namespace MentalHealthBlog.API.Services
             {
                 var blueprint = _memoryCache.Get("blueprint");
 
+                if (blueprint == null)
+                {
+                    throw new ArgumentException("Blueprint is not found!");
+                }
+
                 var isTheSame = blueprint.ToString() == changePasswordRequest.Blueprint.ToString();
                 if (string.IsNullOrEmpty(changePasswordRequest.Blueprint) || !isTheSame)
                 {
