@@ -35,6 +35,7 @@ namespace MentalHealthBlog.API.Services
         TOKEN_ERROR,
         LOGOUT_ERROR,
         PASSWORD_SUCCESSFULLY_CHANGED,
+        BLUEPRINT_INVALID
     }
     public class UserService : IUserService
     {
@@ -384,12 +385,14 @@ namespace MentalHealthBlog.API.Services
 
                 if (blueprint == null)
                 {
+                    _userLoggerService.LogWarning($"CHANGE-PASSWORD: {UserServiceLogTypes.BLUEPRINT_INVALID.ToString()}");
                     throw new ArgumentException("Blueprint is not found!");
                 }
 
                 var isTheSame = blueprint.ToString() == changePasswordRequest.Blueprint.ToString();
                 if (string.IsNullOrEmpty(changePasswordRequest.Blueprint) || !isTheSame)
                 {
+                    _userLoggerService.LogWarning($"CHANGE-PASSWORD: {UserServiceLogTypes.BLUEPRINT_INVALID.ToString()}");
                     throw new ArgumentException("Blueprint is not found!");
                 }
 
@@ -400,6 +403,7 @@ namespace MentalHealthBlog.API.Services
                 var userThatRequestedChange = combinedUsers.FirstOrDefault(u => u.Email == changePasswordRequest.Email);
                 if (userThatRequestedChange == null)
                 {
+                    _userLoggerService.LogWarning($"CHANGE-PASSWORD: {UserServiceLogTypes.USER_NOT_FOUND_OR_NULL.ToString()}");
                     throw new RecordNotFoundException("User with this email, doesn't exist");
                 }
 
@@ -407,6 +411,7 @@ namespace MentalHealthBlog.API.Services
 
                 if (dbUserThatRequestedPasswordChange == null)
                 {
+                    _userLoggerService.LogWarning($"CHANGE-PASSWORD: {UserServiceLogTypes.USER_NOT_FOUND_OR_NULL.ToString()}");
                     throw new RecordNotFoundException("User with this email not found!");
                 }
 
@@ -418,13 +423,14 @@ namespace MentalHealthBlog.API.Services
                 _context.Update(dbUserThatRequestedPasswordChange);
                 await _context.SaveChangesAsync();
                 _memoryCache.Remove("blueprint");
+                _userLoggerService.LogWarning($"CHANGE-PASSWORD: {UserServiceLogTypes.PASSWORD_SUCCESSFULLY_CHANGED.ToString()}");
                 return new Response(new SignedUserDto(dbUserThatRequestedPasswordChange.Id, dbUserThatRequestedPasswordChange.Username), StatusCodes.Status200OK, UserServiceLogTypes.PASSWORD_SUCCESSFULLY_CHANGED.ToString());
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                _userLoggerService.LogError($"CHANGE-PASSWORD: {e.Message}");
                 throw;
             }
-            throw new NotImplementedException();
         }
     }
 }
