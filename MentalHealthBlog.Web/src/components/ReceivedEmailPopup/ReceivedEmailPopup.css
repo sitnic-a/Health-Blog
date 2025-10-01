@@ -1,0 +1,42 @@
+#received-email-popup-main-container {
+  max-width: 500px;
+  margin-inline: auto;
+  position: relative;
+}
+
+.received-email-popup-icons {
+  margin-top: -1rem;
+  text-align: center;
+}
+
+.received-email-popup-success-icon {
+  font-size: 4rem;
+  color: #5eba69;
+}
+
+.received-email-popup-content {
+  max-width: 500px;
+  margin-block: 0.3rem;
+  font-family: 'SansDeva';
+  font-size: 1.1rem;
+  line-height: 1.4;
+  text-align: center;
+  color: #5eba69;
+}
+
+@media (width<=420px) {
+  .received-email-popup-content {
+    font-size: 0.9rem;
+  }
+}
+
+.received-email-popup-content-note {
+  max-width: 400px;
+  margin-inline: auto;
+  margin-block: 0.1rem;
+  font-family: 'SansDeva';
+  font-size: 0.8rem;
+  line-height: 1.4;
+  text-align: center;
+  color: #34688f;
+}

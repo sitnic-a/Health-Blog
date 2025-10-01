@@ -9,6 +9,7 @@ let modalSlice = createSlice({
     isShareOpen: false,
     isShareViaLinkOpen: false,
     isStopSharingOpen: false,
+    emailSuccessfullySentOpen: false,
   },
   reducers: {
     openAddModal: (state, action) => {
@@ -29,6 +30,9 @@ let modalSlice = createSlice({
     openStopSharing: (state, action) => {
       state.isStopSharingOpen = action?.payload
     },
+    openEmailSuccessfullySentOpen: (state, action) => {
+      state.emailSuccessfullySentOpen = action?.payload
+    },
   },
 })
 
@@ -39,6 +43,7 @@ export const {
   openShareModal,
   openShareViaLink,
   openStopSharing,
+  openEmailSuccessfullySentOpen,
 } = modalSlice.actions
 
 export default modalSlice.reducer

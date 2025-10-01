@@ -12,5 +12,6 @@ namespace MentalHealthBlog.API.Services
         Task<Response> RefreshAccessToken(string refreshToken);
         Task<Response> GetRoles();
         Task<Response> Logout(LogoutDto logoutRequest);
+        Task<Response> ChangePassword(ChangePasswordDto changePasswordRequest);
     }
 }

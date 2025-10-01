@@ -10,6 +10,10 @@ services:
       Tokens__JWTKEY: ${Tokens__JWTKEY}
       ADMINPASS: ${ADMINPASS}
       PROD_IP_ADDRESS: ${PROD_IP_ADDRESS}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_HOST_ADDRESS: ${SMTP_HOST_ADDRESS}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
     networks:
       - mappnetwork
     restart: unless-stopped

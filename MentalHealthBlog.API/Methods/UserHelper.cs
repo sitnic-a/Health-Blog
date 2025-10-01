@@ -31,5 +31,37 @@ namespace MentalHealthBlog.API.Methods
             var roles = useRoles.Select(r => new Role(r.RoleId, r.RoleName)).ToList();
             return roles;
         }
+
+        public async Task<List<_PartialCombinedUserDto>> GetCombinedDataFromMentalHealthExpertsAndRegularUsersAsync()
+        {
+            var allRegularUserEmails = await _context.MentalHealthExperts
+                    .Where(mhe => !string.IsNullOrEmpty(mhe.Email))
+                    .Join(_context.Users,
+                          (mhe) => mhe.UserId,
+                          (u) => u.Id,
+                          (mhe, u) => new _PartialCombinedUserDto
+                          {
+                              Id = u.Id,
+                              Email = mhe.Email,
+                              IsMentalHealthExpert = true,
+                          })
+                    .ToListAsync();
+
+            var allMentalHealthExpertEmails = await _context.RegularUsers
+                .Where(ru => !string.IsNullOrEmpty(ru.Email))
+                .Join(_context.Users,
+                      (ru) => ru.UserId,
+                      (u) => u.Id,
+                      (ru, u) => new _PartialCombinedUserDto
+                      {
+                          Id = u.Id,
+                          Email = ru.Email,
+                          IsMentalHealthExpert = false,
+                      })
+                .ToListAsync();
+
+            var combinedUsers = allMentalHealthExpertEmails.Union(allRegularUserEmails);
+            return combinedUsers.ToList();
+        }
     }
 }

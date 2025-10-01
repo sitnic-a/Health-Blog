@@ -2,6 +2,7 @@ using MentalHealthBlog.API.Middlewares;
 using MentalHealthBlog.API.Services;
 using MentalHealthBlog.API.Services.Therapy;
 using MentalHealthBlog.API.Utils;
+using MentalHealthBlog.API.Utils.Email;
 using MentalHealthBlog.API.Utils.SignalR;
 using MentalHealthBlogAPI.Data;
 using MentalHealthBlogAPI.Services;
@@ -10,7 +11,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Npgsql;
-using System.Configuration;
 using System.Text;
 
 #pragma warning disable 8604
@@ -27,6 +27,9 @@ builder.Services.AddControllers();
 var config = new ConfigurationBuilder()
     .AddUserSecrets<Program>()
     .Build();
+
+//Add MemoryCache
+builder.Services.AddMemoryCache();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -98,6 +101,8 @@ builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IRegularUserService, RegularUserService>();
 builder.Services.AddScoped<IEmotionService, EmotionService>();
 builder.Services.AddScoped<ITherapyRequestService, TherapyRequestService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+
 
 builder.Services.AddDbContext<DataContext>(options =>
 {
@@ -142,9 +147,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-
 var app = builder.Build();
-
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<DataContext>();

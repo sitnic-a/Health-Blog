@@ -27,6 +27,8 @@ import { NotFound } from './pages/exceptions/NotFound/NotFound'
 import { Requests } from './components/mental-expert-dashboard/therapy/requests/Requests'
 import { MyMentalHealthExperts } from './components/my-experts/MyMentalHealthExperts/MyMentalHealthExperts'
 import { TermsAndConditions } from './pages/TermsAndConditions'
+import { ResetPassword } from './components/ResetPassword/ResetPassword'
+import { RequestPasswordChange } from './components/RequestPasswordChange/RequestPasswordChange'
 
 function App() {
   windowResize(application.layouts.min_screen_single_col_width)
@@ -38,6 +40,11 @@ function App() {
           <Routes>
             <Route exact path="/login" element={<Login />} />
             <Route path="/register" element={<Register />}></Route>
+            <Route
+              path="/request-password-change"
+              element={<RequestPasswordChange />}
+            ></Route>
+            <Route path="/reset-password" element={<ResetPassword />}></Route>
             <Route
               path="/share/link/:shareGuid"
               element={<SharedContentPostsViaLink />}

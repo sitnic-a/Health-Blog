@@ -91,6 +91,38 @@ export const logout = createAsyncThunk('user/logout', async (logoutRequest) => {
   return response
 })
 
+export const requestPasswordChange = createAsyncThunk(
+  'request-password-change',
+  async (objectWithData) => {
+    let url = `${application.application_url}/user/request-password-change`
+    let request = await fetch(url, {
+      method: 'PUT',
+      body: JSON.stringify(objectWithData?.email),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    let response = await request.json()
+    return response
+  }
+)
+
+export const changePassword = createAsyncThunk(
+  'change-password',
+  async (objectWithData) => {
+    let url = `${application.application_url}/user/change-password`
+    let request = await fetch(url, {
+      method: 'PUT',
+      body: JSON.stringify(objectWithData),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    let response = await request.json()
+    return response
+  }
+)
+
 export const userSlice = createSlice({
   name: 'userSlice',
   initialState,
@@ -201,6 +233,7 @@ export const userSlice = createSlice({
         state.dbRoles = action.payload.serviceResponseObject
       })
 
+      //logout
       .addCase(logout.pending, (state, action) => {})
       .addCase(logout.fulfilled, (state, action) => {
         toast.success('Uspješno ste se odjavili!', {
@@ -209,6 +242,72 @@ export const userSlice = createSlice({
         })
       })
       .addCase(logout.rejected, (state, action) => {})
+
+      //requestPasswordChange
+      .addCase(requestPasswordChange.pending, (state, action) => {
+        let requestPasswordSendButton = document.querySelector(
+          '.request-password-change-send-request-button'
+        )
+        requestPasswordSendButton.style.display = 'none'
+
+        let requestPasswordInfoMessage = document.querySelector(
+          '.request-password-send-request-info-message'
+        )
+        requestPasswordInfoMessage.style.display = 'flex'
+      })
+      .addCase(requestPasswordChange.fulfilled, (state, action) => {
+        let requestPasswordInfoMessage = document.querySelector(
+          '.request-password-send-request-info-message'
+        )
+        requestPasswordInfoMessage.style.display = 'none'
+
+        let StatusCode = action?.payload?.StatusCode
+        let statusCode = action?.payload?.statusCode
+        if (StatusCode !== 200 && statusCode !== 200) {
+          toast.error('Email nije moguće poslati', {
+            autoClose: 3000,
+            position: 'bottom-right',
+          })
+
+          let requestPasswordSendButton = document.querySelector(
+            '.request-password-change-send-request-button'
+          )
+          requestPasswordSendButton.style.display = 'initial'
+          return
+        }
+
+        let requestPasswordSendButton = document.querySelector(
+          '.request-password-change-send-request-button'
+        )
+        requestPasswordSendButton.style.display = 'initial'
+        toast.success('Email uspješno poslan', {
+          autoClose: 3000,
+          position: 'bottom-right',
+        })
+        return
+      })
+      .addCase(requestPasswordChange.rejected, (state, action) => {
+        let requestPasswordInfoMessage = document.querySelector(
+          '.request-password-send-request-info-message'
+        )
+        requestPasswordInfoMessage.style.display = 'none'
+        toast.error('Email nije moguće poslati', {
+          autoClose: 3000,
+          position: 'bottom-right',
+        })
+
+        let requestPasswordSendButton = document.querySelector(
+          '.request-password-change-send-request-button'
+        )
+        requestPasswordSendButton.style.display = 'initial'
+      })
+
+      //changePassword
+      .addCase(changePassword.pending, (state, action) => {})
+      .addCase(changePassword.fulfilled, (state, action) => {
+        console.log('Successfully changed pass')
+      })
+      .addCase(changePassword.rejected, (state, action) => {})
   },
 })
 
