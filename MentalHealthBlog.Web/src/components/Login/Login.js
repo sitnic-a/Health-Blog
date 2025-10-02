@@ -162,7 +162,6 @@ export const Login = () => {
                     </div>
                   )}
                 </div>
-                <br />
                 <Password />
                 <section id="register-main-container">
                   <div className="register-regular-user-main-container">

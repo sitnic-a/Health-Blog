@@ -23,18 +23,25 @@
   color: #edb572;
 }
 
+@media (width<=520px) {
+  .login-container > h1 {
+    max-width: 670px;
+    margin-inline: -2rem;
+    font-family: 'SansDeva';
+    font-size: 1.4rem;
+    line-height: 1.3;
+  }
+}
+
 .login-container > h1:first-of-type {
   margin-bottom: 0.8rem;
   font-size: 2.2rem;
   font-weight: 600;
 }
 
-@media (width<=480px) {
-  .login-container > h1 {
-    max-width: 670px;
-    font-family: 'SansDeva';
-    font-size: 1.7rem;
-    line-height: 2.7rem;
+@media (width<=520px) {
+  .login-container > h1:first-of-type {
+    font-size: 1.8rem;
   }
 }
 
@@ -45,6 +52,7 @@
 .register-link {
   font-family: 'SansDeva';
   font-size: 0.9rem;
+  line-height: 1;
 }
 
 #login-container-button {
@@ -66,4 +74,11 @@
   background: none;
   border: 1px solid #edb572;
   color: #edb572;
+}
+
+@media (width<=520px) {
+  #login-container-button {
+    margin-top: 10px;
+    font-size: 0.8rem;
+  }
 }

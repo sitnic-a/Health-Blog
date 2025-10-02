@@ -16,6 +16,12 @@
   font-family: 'SansDeva';
 }
 
+@media (width<=460px) {
+  .form-field {
+    font-size: 0.8rem;
+  }
+}
+
 @keyframes blink {
   0% {
     border: 2px solid #edb572;
@@ -47,6 +53,12 @@
 .form-field-label {
   font-family: 'SansDeva';
   font-size: 0.95rem;
+}
+
+@media (width<=460px) {
+  .form-field-label {
+    font-size: 0.8rem;
+  }
 }
 
 .required-field {
