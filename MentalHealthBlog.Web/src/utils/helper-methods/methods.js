@@ -503,3 +503,15 @@ export const checkTagsValidity = (tags, validationMessages) => {
     return [isValid, validationMessages]
   }
 }
+
+export const switchActiveTab = (element) => {
+  element.forEach((tab) => {
+    if (tab.pathname === window.location.pathname) {
+      if (tab.pathname === '/') {
+        return
+      }
+      tab.classList.add('active-tab')
+      return
+    }
+  })
+}

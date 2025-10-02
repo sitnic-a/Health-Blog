@@ -53,3 +53,14 @@
   font-family: 'SansDeva';
   color: #c93232;
 }
+
+.active-tab {
+  padding: 0.3rem;
+  border-radius: 0.5rem;
+  color: #f3f1e3 !important;
+  background: #edb572;
+}
+
+.active-tab:hover {
+  color: #f3f1e3;
+}
