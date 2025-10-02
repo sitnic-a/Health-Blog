@@ -15,6 +15,7 @@ import {
 
 import { Loader } from '../shared/Loader/Loader'
 import { Password } from '../shared/Password/Password'
+import { LoginFooterBankAccount } from '../LoginFooterBankAccount/LoginFooterBankAccount'
 
 import LoginCSS from './Login.css'
 
@@ -200,6 +201,8 @@ export const Login = () => {
               </div>
             </div>
           </form>
+
+          <LoginFooterBankAccount />
         </section>
       )}
     </>

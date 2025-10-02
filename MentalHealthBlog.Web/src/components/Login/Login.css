@@ -1,13 +1,13 @@
 .login {
   /* width: 50%; */
-  margin: 2rem auto;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
+  margin: 1rem auto;
+  /* display: flex; */
   /* background: #f00; */
 }
 
 .login-container {
+  max-width: 550px;
+  margin-inline: auto;
   padding: 1rem 1.5rem;
 }
 
@@ -38,8 +38,13 @@
   }
 }
 
+.login-container .form-fields {
+  margin-top: 1rem;
+}
+
 .register-link {
   font-family: 'SansDeva';
+  font-size: 0.9rem;
 }
 
 #login-container-button {
@@ -61,13 +66,4 @@
   background: none;
   border: 1px solid #edb572;
   color: #edb572;
-}
-
-.reset-password-container {
-  margin-top: 1rem;
-}
-
-.reset-password-link {
-  font-family: 'SansDeva';
-  font-size: 0.87rem;
 }
