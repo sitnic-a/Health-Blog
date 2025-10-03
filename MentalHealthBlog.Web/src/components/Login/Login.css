@@ -1,6 +1,6 @@
 .login {
   /* width: 50%; */
-  margin: 1rem auto;
+  margin: 2rem auto 0rem auto;
   /* display: flex; */
   /* background: #f00; */
 }
@@ -74,11 +74,4 @@
   background: none;
   border: 1px solid #edb572;
   color: #edb572;
-}
-
-@media (width<=520px) {
-  #login-container-button {
-    margin-top: 10px;
-    font-size: 0.8rem;
-  }
 }
