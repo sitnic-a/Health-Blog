@@ -1,0 +1,37 @@
+#mental-health-experts-assignments-for-users-main-container {
+  min-height: 100vh;
+  margin-inline: -2rem;
+  padding-inline: 2rem;
+  background: #cce5f1;
+}
+
+.mental-health-experts-assignments-for-users-header-title {
+  font-family: 'SansDeva';
+}
+
+.mental-health-experts-assignments-for-users-container {
+  display: flex;
+  margin-inline: -2rem;
+}
+
+.mental-health-experts-assignments-users-main-container {
+  max-width: 200px;
+  width: 100%;
+  /* margin-inline: -2rem; */
+  padding-inline: 0.5rem;
+  background: #edb572;
+}
+
+.mental-health-experts-assignments-users-main-container-title {
+  text-align: center;
+}
+
+.mental-health-experts-assignments-for-users-list-of-assignements-main-container {
+  max-width: 400px;
+  width: 100%;
+  background: aquamarine;
+}
+
+.mental-health-experts-assignments-for-users-list-of-assignments-container-header-title {
+  text-align: center;
+}

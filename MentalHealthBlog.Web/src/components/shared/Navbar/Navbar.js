@@ -79,14 +79,12 @@ export const Navbar = () => {
               Zahtjevi
             </Link>
 
-            {/*
             <Link
               to={`/assignments/user/${authenticatedUser?.id}`}
               className="navigation-bar-action"
             >
-              Assignments
+              Zadaće
             </Link>
-             */}
           </div>
 
           <Logout />
