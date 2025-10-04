@@ -1,14 +1,16 @@
 .login {
+  min-height: 100vh;
+  position: relative;
   /* width: 50%; */
-  margin: 2rem auto;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
+  margin: 2rem auto 0 auto;
+  /* display: flex; */
   /* background: #f00; */
 }
 
 .login-container {
-  padding: 1rem 1.5rem;
+  max-width: 550px;
+  margin-inline: auto;
+  padding: 1rem 1.5rem 0 1.5rem;
 }
 
 .login-container > h1 {
@@ -23,23 +25,36 @@
   color: #edb572;
 }
 
+@media (width<=520px) {
+  .login-container > h1 {
+    max-width: 670px;
+    margin-inline: -2rem;
+    font-family: 'SansDeva';
+    font-size: 1.4rem;
+    line-height: 1.3;
+  }
+}
+
 .login-container > h1:first-of-type {
   margin-bottom: 0.8rem;
   font-size: 2.2rem;
   font-weight: 600;
 }
 
-@media (width<=480px) {
-  .login-container > h1 {
-    max-width: 670px;
-    font-family: 'SansDeva';
-    font-size: 1.7rem;
-    line-height: 2.7rem;
+@media (width<=520px) {
+  .login-container > h1:first-of-type {
+    font-size: 1.8rem;
   }
+}
+
+.login-container .form-fields {
+  margin-top: 1rem;
 }
 
 .register-link {
   font-family: 'SansDeva';
+  font-size: 0.9rem;
+  line-height: 1;
 }
 
 #login-container-button {
@@ -61,13 +76,4 @@
   background: none;
   border: 1px solid #edb572;
   color: #edb572;
-}
-
-.reset-password-container {
-  margin-top: 1rem;
-}
-
-.reset-password-link {
-  font-family: 'SansDeva';
-  font-size: 0.87rem;
 }

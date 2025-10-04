@@ -1,0 +1,17 @@
+.footer-back-account-main-container {
+  max-width: 100vw;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  margin-inline: -2rem;
+  padding-block: 2rem;
+  padding-inline: 2rem;
+  background: #f3f1e3;
+}
+
+.footer-bank-account-header-text {
+  font-family: 'SansDeva';
+  font-size: 0.7rem;
+  line-height: 1.4;
+  text-align: center;
+}

@@ -1,11 +1,20 @@
+import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { switchActiveTab } from '../../../utils/helper-methods/methods'
 
 import { Logout } from '../Logout/Logout'
+import appLogo from '../../../images/Brain.png'
 
 import NavbarCSS from '../Navbar/Navbar.css'
+import SharedCSS from '../shared.css'
 
 export const Navbar = () => {
+  useEffect(() => {
+    let tabs = document.querySelectorAll('.navigation-bar-action')
+    switchActiveTab(tabs)
+  }, [])
+
   let { authenticatedUser } = useSelector((store) => store.user)
 
   let __ADMIN_ROLE_ID = 1
@@ -31,12 +40,16 @@ export const Navbar = () => {
       ) && (
         <div className="navigation-bar-container">
           <div className="navigation-bar-features">
+            <Link to={'/'} className="navigation-bar-action">
+              <img className="navbar-app-logo" src={appLogo} alt="App" />
+            </Link>
+
             <Link to={'/shared-posts'} className="navigation-bar-action">
-              Podijeljeni sadržaj
+              Podijeljeno
             </Link>
 
             <Link to={'/my-experts'} className="navigation-bar-action">
-              Moji stručnjaci
+              Stručnjaci
             </Link>
 
             {/* <Link
@@ -58,6 +71,10 @@ export const Navbar = () => {
       ) && (
         <div className="navigation-bar-container">
           <div className="navigation-bar-features">
+            <Link to={'/'} className="navigation-bar-action">
+              <img className="navbar-app-logo" src={appLogo} alt="App" />
+            </Link>
+
             <Link to={`/therapy/requests`} className="navigation-bar-action">
               Zahtjevi
             </Link>

@@ -16,7 +16,19 @@
   cursor: pointer;
 }
 
+@media (width<=460px) {
+  .logout-icon {
+    font-size: 1.6rem;
+  }
+}
+
 .logout-title {
   font-family: 'SansDeva';
   font-size: 0.9rem;
+}
+
+@media (width<=460px) {
+  .logout-title {
+    display: none;
+  }
 }

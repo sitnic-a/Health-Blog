@@ -152,10 +152,6 @@ export const AddPost = () => {
           }
         }}
       >
-        <div className="add-post-modal-header">
-          <h2>Post</h2>
-        </div>
-
         <span className="required-field">Polja obavezna za unos *</span>
 
         <div className="add-post-modal-content">

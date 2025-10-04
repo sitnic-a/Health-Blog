@@ -5,7 +5,7 @@
 }
 
 .navigation-bar-container {
-  padding-inline: 2.5rem;
+  padding-inline: 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -29,4 +29,11 @@
   font-weight: 500;
   transform: scale(1.1);
   transition: 80ms;
+}
+
+.navbar-app-logo {
+  max-width: 50px;
+  max-height: 30px;
+  margin-left: 10px;
+  margin-right: 20px;
 }
