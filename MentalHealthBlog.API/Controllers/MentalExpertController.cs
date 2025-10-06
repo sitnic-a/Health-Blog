@@ -32,6 +32,12 @@ namespace MentalHealthBlog.API.Controllers
             return await _mentalExpertService.GetSharesPerUser(query);
         }
 
+        [HttpGet("users-with-set-assignments")]
+        public async Task<Response> GetUsersWithSetAssignments([FromQuery] ExpertSearchContentDto query)
+        {
+            return await _mentalExpertService.GetUsersWithSetAssignments(query);
+        }
+
         [HttpPost("give-assignment")]
         [Authorize(Roles= "Psychologist / Psychotherapist")]
         public async Task<Response> CreateAssignment([FromBody] CreateAssignmentDto request)
