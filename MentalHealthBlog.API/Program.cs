@@ -102,6 +102,7 @@ builder.Services.AddScoped<IRegularUserService, RegularUserService>();
 builder.Services.AddScoped<IEmotionService, EmotionService>();
 builder.Services.AddScoped<ITherapyRequestService, TherapyRequestService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IAssignmentService,AssignmentService>();
 
 
 builder.Services.AddDbContext<DataContext>(options =>
