@@ -16,6 +16,12 @@ namespace MentalHealthBlog.API.Controllers
             _assignmentService = assignmentService;
         }
 
+        [HttpGet("assignment-responses/{assignmentId}")]
+        public async Task<Response> GetAssignmentResponses(int assignmentId)
+        {
+            return await _assignmentService.GetAssignmentResponses(assignmentId);
+        }
+
         [HttpPost("users-assignments")]
         public async Task<Response> GetUsersAssignments([FromBody] SearchAssignmentDto request)
         {

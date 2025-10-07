@@ -6,5 +6,6 @@ namespace MentalHealthBlog.API.Services
     public interface IAssignmentService
     {
         public Task<Response> GetUsersAssignments(SearchAssignmentDto request);
+        public Task<Response> GetAssignmentResponses(int assignmentId);
     }
 }

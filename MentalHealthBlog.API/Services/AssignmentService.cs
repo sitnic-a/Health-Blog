@@ -26,6 +26,40 @@ namespace MentalHealthBlog.API.Services
             _context = context;
             _assignmentLoggerService = assignmentLoggerService;
         }
+
+        public async Task<Response> GetAssignmentResponses(int assignmentId)
+        {
+            try
+            {
+                if (assignmentId <= 0)
+                {
+                    _assignmentLoggerService.LogWarning($"ASSIGNMENT-RESPONSES/[id]: {AssignmentLogTypes.INVALID_DATA.ToString()}");
+                    throw new ArgumentException("Bad request!");
+                }
+
+                var dbAssignmentResponses = await _context.AssignmentResponses
+                    .Where(ar => ar.AssignmentId == assignmentId)
+                    .OrderByDescending(ar => ar.WrittenAt)
+                    .ToListAsync();
+
+                if (!dbAssignmentResponses.Any())
+                {
+                    _assignmentLoggerService.LogWarning($"ASSIGNMENT-RESPONSES/[id]: {AssignmentLogTypes.EMPTY.ToString()}");
+                    throw new EmptyListException("No data found!");
+                }
+
+                _assignmentLoggerService.LogInformation($"ASSIGNMENT-RESPONSES/[id]: {AssignmentLogTypes.SUCCESS.ToString()}");
+                return new Response(dbAssignmentResponses, StatusCodes.Status200OK, $"ASSIGNMENT-RESPONSES/[id]: {AssignmentLogTypes.SUCCESS.ToString()}");
+            }
+            catch (Exception e)
+            {
+                _assignmentLoggerService.LogError($"ASSIGNMENT-RESPONSES/[id]: {e.Message}");
+                throw;
+            }
+            
+
+        }
+
         public async Task<Response> GetUsersAssignments(SearchAssignmentDto request)
         {
             try
