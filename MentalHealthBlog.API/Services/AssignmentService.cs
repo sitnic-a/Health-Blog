@@ -15,6 +15,7 @@ namespace MentalHealthBlog.API.Services
         SUCCESS,
         EMPTY,
         NOT_FOUND,
+        NOT_IN_THERAPY
     }
     public class AssignmentService : IAssignmentService
     {
@@ -35,7 +36,19 @@ namespace MentalHealthBlog.API.Services
                     throw new ArgumentException("Bad request!");
                 }
 
-                var dbAssignmentsByUser = await _context.Assignments
+                if (!_context.TherapyRequests.Any(tr => tr.RegularUserId == request.GivenToId && 
+                                                 tr.MentalHealthExpertId == request.GivenById && 
+                                                 tr.RequestStatus == RequestStatusEnum.Approved))
+                {
+                    _assignmentLoggerService.LogWarning($"USERS-ASSIGNMENT: {AssignmentLogTypes.NOT_IN_THERAPY.ToString()}");
+                    throw new RecordNotFoundException("Couldn't review such assignments!");
+                }
+
+                List<AssignmentsGroup> dbAssignmentsByUser = new List<AssignmentsGroup>();
+
+                if (request.IsMentalHealthExpert == true)
+                {
+                    dbAssignmentsByUser = await _context.Assignments
                     .Where(a => a.AssignmentGivenById == request.GivenById)
                     .GroupBy(a => a.AssignmentGivenToId)
                     .Select(assignmentPerUser => new AssignmentsGroup
@@ -46,24 +59,59 @@ namespace MentalHealthBlog.API.Services
                         .ToList()
                     })
                     .ToListAsync();
+                }
+
+                if (request.IsMentalHealthExpert == false)
+                {
+                    dbAssignmentsByUser = await _context.Assignments
+                    .Where(a => a.AssignmentGivenToId == request.GivenToId)
+                    .GroupBy(a => a.AssignmentGivenById)
+                    .Select(assignmentPerUser => new AssignmentsGroup
+                    {
+                        Key = assignmentPerUser.Key,
+                        Assignments = assignmentPerUser
+                        .OrderByDescending(a => a.CreatedAt)
+                        .ToList()
+                    })
+                    .ToListAsync();
+                }
 
                 var usersAssignments = new List<Assignment>();
 
                 foreach (var assignmentByUser in dbAssignmentsByUser)
                 {
-                    if (assignmentByUser.Key == request.GivenToId)
+                    if (request.IsMentalHealthExpert == true)
                     {
-                        if (assignmentByUser.Key > 0)
+                        if (assignmentByUser.Key == request.GivenToId)
                         {
+                            if (assignmentByUser.Key > 0)
+                            {
 
-                            usersAssignments = assignmentByUser.Assignments;
-                            break;
+                                usersAssignments = assignmentByUser.Assignments;
+                                break;
+                            }
+
+                            _assignmentLoggerService.LogWarning($"USERS-ASSIGNMENTS: {AssignmentLogTypes.NOT_FOUND.ToString()}");
+                            throw new ArgumentOutOfRangeException("Impossible to have elements with such id");
                         }
-
-                        _assignmentLoggerService.LogWarning($"USERS-ASSIGNMENTS: {AssignmentLogTypes.NOT_FOUND.ToString()}");
-                        throw new ArgumentOutOfRangeException("Impossible to have elements with such id");
+                        continue;
                     }
-                    continue;
+
+                    if (request.IsMentalHealthExpert == false)
+                    {
+                        if (assignmentByUser.Key == request.GivenById)
+                        {
+                            if (assignmentByUser.Key > 0)
+                            {
+                                usersAssignments = assignmentByUser.Assignments;
+                                break;
+                            }
+
+                            _assignmentLoggerService.LogWarning($"USERS-ASSIGNMENTS: {AssignmentLogTypes.NOT_FOUND.ToString()}");
+                            throw new ArgumentOutOfRangeException("Impossible to have elements with such id");
+                        }
+                        continue;
+                    }
                 }
 
                 if (usersAssignments.IsNullOrEmpty())
