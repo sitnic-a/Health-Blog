@@ -10,6 +10,8 @@ import { getUsersAssignments } from '../../../redux-toolkit/features/assignmentS
 
 import { LiaReadme } from 'react-icons/lia'
 import { SlPencil } from 'react-icons/sl'
+import { FaUserFriends } from 'react-icons/fa'
+
 import moment from 'moment'
 
 export const Assignments = () => {
@@ -51,6 +53,28 @@ export const Assignments = () => {
                   className="mental-health-experts-assignments-users-user"
                   key={user?.id}
                   onClick={() => {
+                    let mentalHealthExpertsAssignmentsUsersMainContainer =
+                      document.querySelector(
+                        '.mental-health-experts-assignments-users-main-container'
+                      )
+                    let mentalHealthExpertsAssignmentsForUsersListOfAssignmentsMainContainer =
+                      document.querySelector(
+                        '.mental-health-experts-assignments-for-users-list-of-assignements-main-container'
+                      )
+                    let mentalHealthExpertsAssignmentsForUsersContainer =
+                      document.querySelector(
+                        '.mental-health-experts-assignments-for-users-container'
+                      )
+                    mentalHealthExpertsAssignmentsUsersMainContainer.classList.remove(
+                      'mental-health-experts-assignments-users-main-container-expanded'
+                    )
+                    mentalHealthExpertsAssignmentsForUsersListOfAssignmentsMainContainer.classList.remove(
+                      'mental-health-experts-assignments-for-users-list-of-assignements-main-container-shrinked'
+                    )
+                    mentalHealthExpertsAssignmentsForUsersContainer.classList.remove(
+                      'mental-health-experts-assignments-for-users-container-expanded'
+                    )
+
                     let request = {
                       givenById: authenticatedUser?.id,
                       givenToId: user?.id,
@@ -75,7 +99,37 @@ export const Assignments = () => {
           <div className="mental-health-experts-assignments-for-users-list-of-assignments-container">
             <div className="mental-health-experts-assignments-for-users-list-of-assignments-container-header">
               <p className="mental-health-experts-assignments-for-users-list-of-assignments-container-header-title">
-                Zadaci
+                <FaUserFriends
+                  className="mental-health-experts-assignments-for-users-list-of-assignments-container-header-icon"
+                  onClick={() => {
+                    let mentalHealthExpertsAssignmentsForUsersContainer =
+                      document.querySelector(
+                        '.mental-health-experts-assignments-for-users-container'
+                      )
+                    let mentalHealthExpertsAssignmentsForUsersListOfAssignmentsMainContainer =
+                      document.querySelector(
+                        '.mental-health-experts-assignments-for-users-list-of-assignements-main-container'
+                      )
+
+                    let mentalHealthExpertsAssignmentsUsersMainContainer =
+                      document.querySelector(
+                        '.mental-health-experts-assignments-users-main-container'
+                      )
+
+                    mentalHealthExpertsAssignmentsForUsersContainer.classList.add(
+                      'mental-health-experts-assignments-for-users-container-expanded'
+                    )
+
+                    mentalHealthExpertsAssignmentsForUsersListOfAssignmentsMainContainer.classList.add(
+                      'mental-health-experts-assignments-for-users-list-of-assignements-main-container-shrinked'
+                    )
+
+                    mentalHealthExpertsAssignmentsUsersMainContainer.classList.add(
+                      'mental-health-experts-assignments-users-main-container-expanded'
+                    )
+                  }}
+                />
+                <span>Zadaci</span>
               </p>
             </div>
             <div className="mental-health-experts-assignments-for-users-assignments-container">

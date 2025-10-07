@@ -16,6 +16,11 @@
   margin-inline: -2rem;
 }
 
+.mental-health-experts-assignments-for-users-container-expanded {
+  display: initial;
+  margin-inline: 0.5rem;
+}
+
 .mental-health-experts-assignments-users-main-container {
   max-width: 200px;
   width: 100%;
@@ -24,6 +29,16 @@
   margin-right: 0.5rem;
   padding-inline: 0.5rem;
   border-right: 1px solid #f3f1e3;
+}
+
+@media (width<550px) {
+  .mental-health-experts-assignments-users-main-container {
+    display: none;
+  }
+}
+
+.mental-health-experts-assignments-users-main-container-expanded {
+  display: initial;
 }
 
 .mental-health-experts-assignments-users-main-container-title {
@@ -63,13 +78,48 @@
   /* background: aquamarine; */
 }
 
+.mental-health-experts-assignments-for-users-list-of-assignements-main-container-shrinked {
+  display: none;
+}
+
 .mental-health-experts-assignments-for-users-list-of-assignments-container-header-title {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
   margin-block: 0 1rem;
   font-family: 'SansDeva';
   font-size: 1.15rem;
   line-height: 1.8;
   text-align: center;
   /* border: 1px solid red; */
+}
+
+.mental-health-experts-assignments-for-users-list-of-assignments-container-header-icon {
+  display: none;
+  margin-left: 20px;
+  font-size: 2rem;
+  transition: 150ms;
+  cursor: pointer;
+  color: #edb572;
+}
+
+.mental-health-experts-assignments-for-users-list-of-assignments-container-header-icon:hover {
+  font-size: 2.7rem;
+  color: #cab587;
+}
+
+@media (width<550px) {
+  .mental-health-experts-assignments-for-users-list-of-assignments-container-header-icon {
+    display: initial;
+  }
+}
+
+.mental-health-experts-assignments-for-users-list-of-assignments-container-header-title
+  > span {
+  width: 100%;
+  display: inline-block;
+  line-height: 1.5;
+  text-align: center;
 }
 
 .mental-health-experts-assignments-for-users-assignments-container {
