@@ -5,6 +5,7 @@ let initialState = {
   dbMentalHealthExperts: [],
   suggestedMentalHealthExperts: [],
   usersThatSharedContent: [],
+  usersWithSetAssignments: [],
   sharedContent: [],
   usersThatSharedIncludingItsContent: {},
   overlayPost: null,
@@ -60,6 +61,21 @@ export const createAssignment = createAsyncThunk(
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${objectWithData.authenticatedUser.jwToken}`,
+      },
+    })
+    let response = await request.json()
+    return response
+  }
+)
+
+export const getUsersWithSetAssignments = createAsyncThunk(
+  'users-with-set-assignments',
+  async (objectWithData) => {
+    let url = `${application.application_url}/mentalExpert/users-with-set-assignments?LoggedExpertId=${objectWithData?.query?.loggedExpertId}`
+    let request = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
       },
     })
     let response = await request.json()
@@ -131,6 +147,7 @@ export const mentalExpertSlice = createSlice({
       })
       .addCase(getSharesPerUser.rejected, (action) => {})
 
+      //give-assignment
       .addCase(createAssignment.pending, (state, action) => {
         console.log('New assignment creation pending... ')
       })
@@ -139,6 +156,23 @@ export const mentalExpertSlice = createSlice({
       })
       .addCase(createAssignment.rejected, (state, action) => {
         console.log('New assignment creation rejected!')
+      })
+
+      //users-with-set-assignments
+      .addCase(getUsersWithSetAssignments.pending, (state, action) => {
+        console.log('Users with set assignments pending...')
+      })
+      .addCase(getUsersWithSetAssignments.fulfilled, (state, action) => {
+        let statusCode = action?.payload?.statusCode
+        let usersWithAssignments = action?.payload?.serviceResponseObject
+
+        if (statusCode === 200 && usersWithAssignments?.length > 0) {
+          state.usersWithSetAssignments = usersWithAssignments
+        }
+        console.log('Users with assignments ', state.usersWithSetAssignments)
+      })
+      .addCase(getUsersWithSetAssignments.rejected, (state, action) => {
+        console.log('Error ', action.payload)
       })
   },
 })

@@ -17,13 +17,40 @@
 .mental-health-experts-assignments-users-main-container {
   max-width: 200px;
   width: 100%;
+  min-height: 100vh;
   /* margin-inline: -2rem; */
+  margin-right: 0.5rem;
   padding-inline: 0.5rem;
-  background: #edb572;
+  border-right: 1px solid #f3f1e3;
 }
 
 .mental-health-experts-assignments-users-main-container-title {
+  margin-block: 0 1rem;
+  font-family: 'SansDeva';
+  line-height: 1.8;
   text-align: center;
+}
+
+.mental-health-experts-assignments-users-container {
+  /* background: yellow; */
+}
+
+.mental-health-experts-assignments-users-user {
+  margin-block: 0.3rem;
+  padding-block: 0.3rem;
+  border-radius: 0.7rem;
+  text-align: center;
+  cursor: pointer;
+  color: #f3f1e3;
+  background: #edb572;
+}
+
+.mental-health-experts-assignments-users-user:hover {
+  background: #f1e0c4;
+}
+
+.mental-health-experts-assignments-users-user-title {
+  font-family: 'SansDeva';
 }
 
 .mental-health-experts-assignments-for-users-list-of-assignements-main-container {
