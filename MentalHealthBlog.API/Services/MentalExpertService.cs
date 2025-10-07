@@ -274,7 +274,7 @@ namespace MentalHealthBlog.API.Services
                     throw new RecordNotFoundException("Couldn't create an assignment!");
                 }
 
-                var newAssignment = new Assignment(request.AssignmentGivenToId, dbMentalHealthExpert.Id, request.Content, DateTime.UtcNow);
+                var newAssignment = new Assignment(request.AssignmentGivenToId, dbMentalHealthExpert.UserId, request.Content, DateTime.UtcNow);
 
                 if (newAssignment == null)
                 {
