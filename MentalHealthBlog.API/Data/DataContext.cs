@@ -25,6 +25,7 @@ namespace MentalHealthBlogAPI.Data
         public DbSet<PostEmotion> PostsEmotions { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
+        public DbSet<AssignmentResponse> AssignmentResponses { get; set; }
         public DbSet<RegularUser> RegularUsers { get; set; }
         public DbSet<TherapyRequest> TherapyRequests { get; set; }
 
