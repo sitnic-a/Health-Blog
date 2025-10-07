@@ -7,6 +7,8 @@
 
 .mental-health-experts-assignments-for-users-header-title {
   font-family: 'SansDeva';
+  /* font-size: 1rem; */
+  /* border: 1px solid red; */
 }
 
 .mental-health-experts-assignments-for-users-container {
@@ -27,8 +29,10 @@
 .mental-health-experts-assignments-users-main-container-title {
   margin-block: 0 1rem;
   font-family: 'SansDeva';
+  font-size: 1.15rem;
   line-height: 1.8;
   text-align: center;
+  /* border: 1px solid red; */
 }
 
 .mental-health-experts-assignments-users-container {
@@ -54,11 +58,73 @@
 }
 
 .mental-health-experts-assignments-for-users-list-of-assignements-main-container {
-  max-width: 400px;
+  max-width: 700px;
   width: 100%;
-  background: aquamarine;
+  /* background: aquamarine; */
 }
 
 .mental-health-experts-assignments-for-users-list-of-assignments-container-header-title {
+  margin-block: 0 1rem;
+  font-family: 'SansDeva';
+  font-size: 1.15rem;
+  line-height: 1.8;
   text-align: center;
+  /* border: 1px solid red; */
+}
+
+.mental-health-experts-assignments-for-users-assignments-container {
+  margin-inline: 1rem;
+  /* border: 1px solid red; */
+}
+
+.mental-health-experts-assignments-for-users-assignments-assignment-container-header {
+  display: flex;
+  column-gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mental-health-experts-assignments-for-users-assignments-assignment-main-container {
+  margin-block: 0 1rem;
+  padding: 0.5rem;
+  border-radius: 0.8rem;
+  transition: 300ms;
+  cursor: pointer;
+  background: #f3f1e3;
+}
+
+.mental-health-experts-assignments-for-users-assignments-assignment-main-container:hover {
+  /* box-shadow: 1px 1px 20px #e1e1e1; */
+  background: #bcd0e0;
+}
+
+.mental-health-experts-assignments-for-users-assignments-assignment-content {
+  margin-block: 0;
+  font-family: 'SansDeva';
+  font-size: 1.5rem;
+  line-height: 1.8rem;
+}
+
+.mental-health-experts-assignments-for-users-assignments-assignment-actions-icon {
+  margin-right: 0.3rem;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+.mental-health-experts-assignments-for-users-assignments-assignment-actions-icon:hover {
+  padding: 0.2rem;
+  border-radius: 360px;
+  background: #f3f1e3;
+}
+
+.mental-health-experts-assignments-for-users-assignments-assignment-actions-icon:nth-of-type(
+    2
+  ) {
+  font-size: 1rem;
+}
+
+.mental-health-experts-assignments-for-users-assignments-assignment-date {
+  margin-block: 0.8rem;
+  font-family: 'SansDeva';
+  font-size: 0.85rem;
 }

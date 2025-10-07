@@ -70,27 +70,30 @@ export const Assignments = () => {
             })}
           </div>
         </div>
+
         <div className="mental-health-experts-assignments-for-users-list-of-assignements-main-container">
           <div className="mental-health-experts-assignments-for-users-list-of-assignments-container">
             <div className="mental-health-experts-assignments-for-users-list-of-assignments-container-header">
               <p className="mental-health-experts-assignments-for-users-list-of-assignments-container-header-title">
                 Zadaci
               </p>
-              <div className="mental-health-experts-assignments-for-users-assignments-container">
-                {dbAssignments.map((assignment) => {
-                  let charactersCountInContent = assignment?.content?.length
-                  let contentCut = assignment?.content
-                    ?.substr(0, 35)
-                    ?.concat('...')
-                  let writtenAt = moment(assignment?.writtenAt).format(
-                    'DD/MM/yyyy'
-                  )
-                  return (
-                    <div
-                      key={assignment?.id}
-                      className="mental-health-experts-assignments-for-users-assignments-assignment-main-container"
-                    >
-                      <div className="mental-health-experts-assignments-for-users-assignments-assignment-container">
+            </div>
+            <div className="mental-health-experts-assignments-for-users-assignments-container">
+              {dbAssignments.map((assignment) => {
+                let charactersCountInContent = assignment?.content?.length
+                let contentCut = assignment?.content
+                  ?.substr(0, 35)
+                  ?.concat('...')
+                let writtenAt = moment(assignment?.writtenAt).format(
+                  'DD/MM/yyyy'
+                )
+                return (
+                  <div
+                    key={assignment?.id}
+                    className="mental-health-experts-assignments-for-users-assignments-assignment-main-container"
+                  >
+                    <div className="mental-health-experts-assignments-for-users-assignments-assignment-container">
+                      <div className="mental-health-experts-assignments-for-users-assignments-assignment-container-header">
                         <p
                           className="mental-health-experts-assignments-for-users-assignments-assignment-content"
                           title={assignment?.content}
@@ -103,14 +106,17 @@ export const Assignments = () => {
                           <LiaReadme className="mental-health-experts-assignments-for-users-assignments-assignment-actions-icon" />
                           <SlPencil className="mental-health-experts-assignments-for-users-assignments-assignment-actions-icon" />
                         </div>
-                        <div className="mental-health-experts-assignments-for-users-assignments-assignment-date">
-                          <p>{writtenAt}</p>
-                        </div>
+                      </div>
+
+                      <div className="mental-health-experts-assignments-for-users-assignments-assignment-date-container">
+                        <p className="mental-health-experts-assignments-for-users-assignments-assignment-date">
+                          {writtenAt}
+                        </p>
                       </div>
                     </div>
-                  )
-                })}
-              </div>
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>
