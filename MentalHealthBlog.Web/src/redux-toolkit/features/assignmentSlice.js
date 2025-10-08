@@ -46,6 +46,9 @@ export const assignmentSlice = createSlice({
       state.pickedAssignment = action?.payload
       return state
     },
+    resetData: (state, action) => {
+      state.dbAssignmentResponses = action?.payload
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -76,5 +79,5 @@ export const assignmentSlice = createSlice({
   },
 })
 
-export const { setChosenAssignment } = assignmentSlice.actions
+export const { setChosenAssignment, resetData } = assignmentSlice.actions
 export default assignmentSlice.reducer

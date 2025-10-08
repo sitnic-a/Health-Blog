@@ -1,7 +1,12 @@
-import Modal from 'react-modal'
 import { useDispatch, useSelector } from 'react-redux'
+import Modal from 'react-modal'
+import moment from 'moment'
 import { openAssignmentResponses } from '../../../../redux-toolkit/features/modalSlice'
-import { getAssignmentResponses } from '../../../../redux-toolkit/features/assignmentSlice'
+import {
+  getAssignmentResponses,
+  resetData,
+  setChosenAssignment,
+} from '../../../../redux-toolkit/features/assignmentSlice'
 import { application } from '../../../../application'
 
 import { IoAddSharp } from 'react-icons/io5'
@@ -10,11 +15,11 @@ import AssignmentResponsesCSS from './AssignmentResponses.css'
 
 export const AssignmentResponses = () => {
   let dispatch = useDispatch()
+  let { authenticatedUser } = useSelector((store) => store.user)
   let { dbAssignmentResponses, pickedAssignment } = useSelector(
     (store) => store.assignment
   )
   let { isAssignmentResponsesOpen } = useSelector((store) => store.modal)
-
   return (
     <Modal
       isOpen={isAssignmentResponsesOpen}
@@ -32,6 +37,8 @@ export const AssignmentResponses = () => {
       }}
       onRequestClose={() => {
         dispatch(openAssignmentResponses(!isAssignmentResponsesOpen))
+        dispatch(setChosenAssignment({}))
+        dispatch(resetData(null))
       }}
     >
       <div className="mental-health-experts-assignment-responses-modal">
@@ -50,13 +57,43 @@ export const AssignmentResponses = () => {
                 Odgovori:
               </p>
               <div className="mental-health-experts-assignments-assignment-responses-container">
-                {dbAssignmentResponses.map((response) => {
-                  return (
-                    <div className="mental-health-experts-assignments-assignment-responses-response-main-container">
-                      <p>{response?.content}</p>
-                      <span>{response?.writtenAt}</span>
-                    </div>
+                {dbAssignmentResponses?.map((response) => {
+                  let writtenAt = moment(response?.writtenAt).format(
+                    'DD/MM HH:mm'
                   )
+                  if (response?.responseById !== authenticatedUser?.id) {
+                    return (
+                      <div
+                        key={response?.id}
+                        className="mental-health-experts-assignments-assignment-responses-response-main-container"
+                      >
+                        <div className="assignment-responses-other-person">
+                          <p className="mental-health-experts-assignments-assignment-responses-response-container-content-text">
+                            {response?.content}
+                          </p>
+                          <p className="mental-health-experts-assignments-assignment-responses-response-container-content-date">
+                            {writtenAt}
+                          </p>
+                        </div>
+                      </div>
+                    )
+                  } else {
+                    return (
+                      <div
+                        key={response?.id}
+                        className="mental-health-experts-assignments-assignment-responses-response-main-container"
+                      >
+                        <div className="mental-health-experts-assignments-assignment-responses-response-container">
+                          <p className="mental-health-experts-assignments-assignment-responses-response-container-content-text">
+                            {response?.content}
+                          </p>
+                          <p className="mental-health-experts-assignments-assignment-responses-response-container-content-date">
+                            {writtenAt}
+                          </p>
+                        </div>
+                      </div>
+                    )
+                  }
                 })}
               </div>
             </div>
