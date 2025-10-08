@@ -15,7 +15,8 @@ namespace MentalHealthBlog.API.Services
         SUCCESS,
         EMPTY,
         NOT_FOUND,
-        NOT_IN_THERAPY
+        NOT_IN_THERAPY,
+        NOT_RESPONDED
     }
     public class AssignmentService : IAssignmentService
     {
@@ -56,7 +57,7 @@ namespace MentalHealthBlog.API.Services
                 _assignmentLoggerService.LogError($"ASSIGNMENT-RESPONSES/[id]: {e.Message}");
                 throw;
             }
-            
+
 
         }
 
@@ -70,8 +71,8 @@ namespace MentalHealthBlog.API.Services
                     throw new ArgumentException("Bad request!");
                 }
 
-                if (!_context.TherapyRequests.Any(tr => tr.RegularUserId == request.GivenToId && 
-                                                 tr.MentalHealthExpertId == request.GivenById && 
+                if (!_context.TherapyRequests.Any(tr => tr.RegularUserId == request.GivenToId &&
+                                                 tr.MentalHealthExpertId == request.GivenById &&
                                                  tr.RequestStatus == RequestStatusEnum.Approved))
                 {
                     _assignmentLoggerService.LogWarning($"USERS-ASSIGNMENT: {AssignmentLogTypes.NOT_IN_THERAPY.ToString()}");
@@ -162,6 +163,58 @@ namespace MentalHealthBlog.API.Services
                 _assignmentLoggerService.LogError($"USERS-ASSIGNMENTS: {e.Message}");
                 throw;
             }
+        }
+
+        public async Task<Response> RespondToAssignment(CreateAssignmentResponseDto request)
+        {
+            try
+            {
+                if (request == null ||
+                request.AssignmentId <= 0 ||
+                request.ResponseById <= 0 ||
+                string.IsNullOrEmpty(request.Content) ||
+                string.IsNullOrWhiteSpace(request.Content))
+                {
+                    _assignmentLoggerService.LogWarning($"RESPOND: {AssignmentLogTypes.INVALID_DATA.ToString()}");
+                    throw new ArgumentException("Bad request!");
+                }
+
+                var dbAssignment = await _context.Assignments.FindAsync(request.AssignmentId);
+
+                if(dbAssignment == null)
+                {
+                    _assignmentLoggerService.LogWarning($"RESPOND: {AssignmentLogTypes.NOT_FOUND.ToString()}");
+                    throw new RecordNotFoundException("Not found!");
+                }
+
+                if (dbAssignment.AssignmentGivenById != request.ResponseById || 
+                    dbAssignment.AssignmentGivenToId != request.ResponseById)
+                {
+                    _assignmentLoggerService.LogWarning($"RESPOND: {AssignmentLogTypes.NOT_IN_THERAPY.ToString()}");
+                    throw new RecordNotFoundException("Impossible to review data!");
+                }
+
+                var assignmentResponse = new AssignmentResponse(request.AssignmentId, request.ResponseById, request.Content, DateTime.UtcNow);
+
+                if (assignmentResponse != null)
+                {
+                    _context.AssignmentResponses.Add(assignmentResponse);
+                    await _context.SaveChangesAsync();
+                    var assignmentResponsesServiceResponseObject = await GetAssignmentResponses(request.AssignmentId);
+                    var dbAssignmentResponses = assignmentResponsesServiceResponseObject.ServiceResponseObject;
+                    _assignmentLoggerService.LogInformation($"RESPOND: {AssignmentLogTypes.SUCCESS.ToString()}");
+                    return new Response(dbAssignmentResponses, StatusCodes.Status201Created, $"RESPOND: {AssignmentLogTypes.SUCCESS.ToString()}");
+                }
+
+                _assignmentLoggerService.LogWarning($"RESPOND: {AssignmentLogTypes.NOT_RESPONDED.ToString()}");
+                throw new CreateRecordException("Response cannot be created!");
+            }
+            catch (Exception e)
+            {
+                _assignmentLoggerService.LogError($"RESPOND: {e.Message}");
+                throw;
+            }
+            
         }
     }
 }

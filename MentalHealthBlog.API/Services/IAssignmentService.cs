@@ -7,5 +7,6 @@ namespace MentalHealthBlog.API.Services
     {
         public Task<Response> GetUsersAssignments(SearchAssignmentDto request);
         public Task<Response> GetAssignmentResponses(int assignmentId);
+        public Task<Response> RespondToAssignment(CreateAssignmentResponseDto request);
     }
 }

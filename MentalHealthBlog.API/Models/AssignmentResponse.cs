@@ -17,5 +17,13 @@
             AssignmentId = assignmentId;
             Content = content;
         }
+
+        public AssignmentResponse(int assignmentId, int responseById, string content, DateTime writtenAt)
+        {
+            AssignmentId = assignmentId;
+            ResponseById = responseById;
+            Content = content;
+            WrittenAt = writtenAt;
+        }
     }
 }
