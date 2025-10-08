@@ -8,10 +8,13 @@ import {
 import { Login } from './Login/Login'
 import Cookies from 'js-cookie'
 import { Loader } from './shared/Loader/Loader'
+import { LandingNotConfirmedMentalHealthExpert } from './LandingNotConfirmedMentalHealthExpert/LandingNotConfirmedMentalHealthExpert'
 
 export const RequireAuth = () => {
   let dispatch = useDispatch()
+
   let { isLoading, authenticatedUser } = useSelector((store) => store.user)
+  let isPending = localStorage.getItem('isPending')
   let refreshToken = Cookies.get('refreshToken')
 
   useEffect(() => {
@@ -22,6 +25,9 @@ export const RequireAuth = () => {
     }
   }, [])
 
+  if (isPending) {
+    return <LandingNotConfirmedMentalHealthExpert />
+  }
   if (isLoading === true) {
     return <Loader />
   }

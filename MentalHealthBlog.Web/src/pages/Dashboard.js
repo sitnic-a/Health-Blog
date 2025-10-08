@@ -8,8 +8,7 @@ import { LandingNotConfirmedMentalHealthExpert } from '../components/LandingNotC
 
 export const Dashboard = () => {
   let { authenticatedUser } = useSelector((store) => store.user)
-  var isPending = Cookies.get('isPending')
-  console.log('Cookie value ', isPending)
+  var isPending = localStorage.getItem('isPending')
 
   if (isPending == false || isPending == null || isPending == undefined) {
     if (authenticatedUser?.userRoles?.some((ur) => ur.name === 'User')) {
