@@ -4,6 +4,7 @@
 
 .mental-health-experts-assignment-responses-main-container {
   min-height: 400px;
+  margin-bottom: 4rem;
   position: relative;
 }
 
@@ -19,6 +20,10 @@
   border: 1px solid #34688f;
   border-top: none;
   background: #bcd0e0;
+}
+
+.mental-health-experts-assignments-assignment-responses-main-container {
+  margin-bottom: 6rem;
 }
 
 .mental-health-experts-assignments-assignment-responses-title {
@@ -39,7 +44,7 @@
 .mental-health-experts-assignments-assignment-responses-response-container {
   max-width: 350px;
   width: 100%;
-  margin-top: 0.5rem;
+  margin-top: 0.2rem;
   float: left;
   border-start-start-radius: 0.4rem;
   border-end-end-radius: 0.4rem;

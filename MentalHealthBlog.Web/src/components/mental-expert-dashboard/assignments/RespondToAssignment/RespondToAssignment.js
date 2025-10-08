@@ -16,6 +16,7 @@ export const RespondToAssignment = () => {
     <Modal
       isOpen={isRespondingToAssignment}
       style={application.add_post_modal_style}
+      appElement={document.getElementById('root')}
       onRequestClose={() => {
         dispatch(openRespondToAssignment(!isRespondingToAssignment))
       }}

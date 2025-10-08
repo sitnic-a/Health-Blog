@@ -26,7 +26,8 @@ export const CreateAssignment = () => {
     }
 
     if (!checkNewAssignmentValidity(objectWithData?.addAssignmentObj)) {
-      toast.error('All form data are required!', {
+      toast.error('Molimo slijedite upute prilikom popunjavanja polja!', {
+        autoClose: 3000,
         position: 'bottom-right',
       })
       return
@@ -36,14 +37,16 @@ export const CreateAssignment = () => {
       let statusCode = data?.payload?.StatusCode
       if (statusCode !== 201) {
         if (statusCode === 400) {
-          toast.error('Check out data from form!', {
+          toast.error('Molimo pregledajte Vaš unos!', {
+            autoClose: 3000,
             position: 'bottom-right',
           })
           return
         }
 
         if (statusCode === 404) {
-          toast.error("Assignment couldn't be created!", {
+          toast.error('Nije moguće dodijeliti zadatak!', {
+            autoClose: 3000,
             position: 'bottom-right',
           })
           return
@@ -51,7 +54,7 @@ export const CreateAssignment = () => {
       }
 
       if (data?.payload?.statusCode === 201) {
-        toast.success(`Assignment succesfully given to ${dbUser.username}`, {
+        toast.success(`Zadatak uspješno dodijeljen ${dbUser.username}`, {
           autoClose: 1500,
           position: 'bottom-right',
         })
@@ -65,14 +68,13 @@ export const CreateAssignment = () => {
       <div className="create-assignment-wrapper">
         <div className="create-assignment-container">
           <div className="create-assignment-header">
-            <h1 className="create-assignment-main-title">
-              Give new assignment
-            </h1>
+            <h1 className="create-assignment-main-title">Kreiraj zadatak</h1>
             <p className="create-assignment-description">
-              This is the place for doctor to give an assignment to user. It's
-              provided as additional way to help user during the therapy.
+              Ovo je mjesto za stručnjake gdje mogu dodijeliti zadaću
+              korisnicima na terapiji. Zamišljeno je kao dodatni način pomoći
+              korisniku tokom terapijskog procesa!
             </p>
-            <p className="required-field">Required fields *</p>
+            <p className="required-field">Polja obavezna za unos *</p>
           </div>
           <form id="create-assignment-form" onSubmit={giveAssignment}>
             <div className="create-assignment-assignment-container">
@@ -81,7 +83,7 @@ export const CreateAssignment = () => {
                   className="create-assignment-label"
                   htmlFor="create-assignment-content"
                 >
-                  Assignment:
+                  Zadatak:
                 </label>
                 <span className="required-field"> *</span>
                 <br />
@@ -89,7 +91,8 @@ export const CreateAssignment = () => {
                   className="form-field create-assignment-content-textarea"
                   rows={12}
                   name="create-assignment-content"
-                  placeholder="Assignment text..."
+                  placeholder="Unesite ovdje zadatak..."
+                  spellCheck={false}
                 ></textarea>
               </div>
 
@@ -98,8 +101,8 @@ export const CreateAssignment = () => {
                   className="create-assignment-label"
                   htmlFor="user-to-accomplish-task"
                 >
-                  Assignment for user:
-                </label>{' '}
+                  Zadaću dodjeljujete:
+                </label>
                 <span className="required-field"> *</span>
                 <p className="create-assignment-user-to-accomplish-task">
                   {dbUser?.username}
@@ -110,7 +113,7 @@ export const CreateAssignment = () => {
               className="create-assignment-give-assignment-button"
               type="submit"
             >
-              Give assignment
+              Dodijeli zadatak
             </button>
           </form>
         </div>
