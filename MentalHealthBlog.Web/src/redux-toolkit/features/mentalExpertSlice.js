@@ -5,6 +5,7 @@ let initialState = {
   dbMentalHealthExperts: [],
   suggestedMentalHealthExperts: [],
   usersThatSharedContent: [],
+  usersWithSetAssignments: [],
   sharedContent: [],
   usersThatSharedIncludingItsContent: {},
   overlayPost: null,
@@ -67,20 +68,36 @@ export const createAssignment = createAsyncThunk(
   }
 )
 
+export const getUsersWithSetAssignments = createAsyncThunk(
+  'users-with-set-assignments',
+  async (objectWithData) => {
+    let url = `${application.application_url}/mentalExpert/users-with-set-assignments?LoggedExpertId=${objectWithData?.query?.loggedExpertId}`
+    let request = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
+      },
+    })
+    let response = await request.json()
+    return response
+  }
+)
+
 export const mentalExpertSlice = createSlice({
   name: 'mentalExpert',
   initialState,
   reducers: {
     getOnlyUsersThatSharedContent: (state, action) => {
-      let response = action.payload.payload.serviceResponseObject
+      let response = action.payload?.payload?.serviceResponseObject
       let usersThatSharedContent = []
 
-      if (response.length > 0) {
-        response.map((obj) => {
-          let responseUser = obj.userThatSharedContent
+      if (response?.length > 0) {
+        response?.map((obj) => {
+          let responseUser = obj?.userThatSharedContent
           let userThatShared = {
-            id: responseUser.id,
-            username: responseUser.username,
+            id: responseUser?.id,
+            username: responseUser?.username,
           }
           usersThatSharedContent.push(userThatShared)
         })
@@ -88,15 +105,15 @@ export const mentalExpertSlice = createSlice({
       }
     },
     getSharedContentOfPickedUser: (state, action) => {
-      let userId = action.payload.userId
-      let response = action.payload.usersThatSharedIncludingItsContent
+      let userId = action?.payload?.userId
+      let response = action?.payload?.usersThatSharedIncludingItsContent
       let pickedObj = response.find(
-        (u) => u.userThatSharedContent.id === userId
+        (u) => u?.userThatSharedContent?.id === userId
       )
       state.sharedContent = [...pickedObj.sharedContent]
     },
     setOverlayPost: (state, action) => {
-      let contentPost = action.payload
+      let contentPost = action?.payload
       if (contentPost !== null || contentPost !== undefined) {
         state.overlayPost = contentPost
       }
@@ -131,15 +148,22 @@ export const mentalExpertSlice = createSlice({
       })
       .addCase(getSharesPerUser.rejected, (action) => {})
 
-      .addCase(createAssignment.pending, (state, action) => {
-        console.log('New assignment creation pending... ')
+      //give-assignment
+      .addCase(createAssignment.pending, (state, action) => {})
+      .addCase(createAssignment.fulfilled, (state, action) => {})
+      .addCase(createAssignment.rejected, (state, action) => {})
+
+      //users-with-set-assignments
+      .addCase(getUsersWithSetAssignments.pending, (state, action) => {})
+      .addCase(getUsersWithSetAssignments.fulfilled, (state, action) => {
+        let statusCode = action?.payload?.statusCode
+        let usersWithAssignments = action?.payload?.serviceResponseObject
+
+        if (statusCode === 200 && usersWithAssignments?.length > 0) {
+          state.usersWithSetAssignments = usersWithAssignments
+        }
       })
-      .addCase(createAssignment.fulfilled, (state, action) => {
-        console.log('New assignment creation fulfilled ', action.payload)
-      })
-      .addCase(createAssignment.rejected, (state, action) => {
-        console.log('New assignment creation rejected!')
-      })
+      .addCase(getUsersWithSetAssignments.rejected, (state, action) => {})
   },
 })
 

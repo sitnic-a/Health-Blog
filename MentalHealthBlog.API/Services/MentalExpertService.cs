@@ -199,6 +199,62 @@ namespace MentalHealthBlog.API.Services
                 throw;
             }
         }
+        public async Task<Response> GetUsersWithSetAssignments(ExpertSearchContentDto query)
+        {
+            try
+            {
+                if (query == null || query.LoggedExpertId <= 0)
+                {
+                    _mentalExpertLoggerService.LogError($"USERS-WITH-SET-ASSIGNMENTS: {MentalExpertServiceLogTypes.ERROR.ToString()} - QUERY NULL OR WRONG", query);
+                    throw new ArgumentException("Bad request!");
+                }
+
+                var dbAssignments = await _context.Assignments
+                    .Where(a => a.AssignmentGivenById == query.LoggedExpertId)
+                    .ToListAsync();
+
+                if (!dbAssignments.Any())
+                {
+                    _mentalExpertLoggerService.LogWarning($"USERS-WITH-SET-ASSIGNMENTS: {MentalExpertServiceLogTypes.EMPTY.ToString()}");
+                    return new Response(dbAssignments, StatusCodes.Status200OK, $"USERS-WITH-SET-ASSIGNMENTS: {MentalExpertServiceLogTypes.EMPTY.ToString()}");
+                }
+
+                var groupedUsersWithAssignments = dbAssignments
+                    .GroupBy(a => a.AssignmentGivenToId);
+
+                var usersWithAssignments = new List<UserDto>();
+                foreach (var user in groupedUsersWithAssignments)
+                {
+                    var dbUser = await _context.Users.FindAsync(user.Key);
+                    var dbRegularUser = await _context.RegularUsers.FindAsync(user.Key);
+                    var userDto = new UserDto
+                    {
+                        Id = dbUser.Id,
+                        Username = dbUser.Username,
+                        FirstName = dbRegularUser.FirstName,
+                        LastName = dbRegularUser.LastName,
+                        Email = dbRegularUser.Email
+                    };
+
+                    usersWithAssignments.Add(userDto);
+                }
+
+                if (groupedUsersWithAssignments.Any() && !usersWithAssignments.Any())
+                {
+                    _mentalExpertLoggerService.LogWarning($"USERS-WITH-SET-ASSIGNMENTS:{MentalExpertServiceLogTypes.NOT_FOUND.ToString()}");
+                    throw new RecordNotFoundException("Users with assignments are not properly filled!");
+                }
+
+                _mentalExpertLoggerService.LogInformation($"USERS-WITH-SET-ASSIGNMENTS: {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
+                return new Response(usersWithAssignments, StatusCodes.Status200OK, $"USERS-WITH-SET-ASSIGNMENTS: {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
+            }
+            catch (Exception e)
+            {
+                _mentalExpertLoggerService.LogError($"USERS-WITH-SET-ASSIGNMENTS: {e.Message}");
+                throw;
+            }
+            
+        }
         public async Task<Response> CreateAssignment(CreateAssignmentDto request)
         {
             try
@@ -218,7 +274,7 @@ namespace MentalHealthBlog.API.Services
                     throw new RecordNotFoundException("Couldn't create an assignment!");
                 }
 
-                var newAssignment = new Assignment(request.AssignmentGivenToId, dbMentalHealthExpert.Id, request.Content, DateTime.UtcNow);
+                var newAssignment = new Assignment(request.AssignmentGivenToId, dbMentalHealthExpert.UserId, request.Content, DateTime.UtcNow);
 
                 if (newAssignment == null)
                 {
@@ -284,6 +340,7 @@ namespace MentalHealthBlog.API.Services
                 throw;
             }
         }
+
 
     }
 }

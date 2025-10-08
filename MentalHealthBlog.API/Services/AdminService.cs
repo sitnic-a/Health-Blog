@@ -227,6 +227,7 @@ namespace MentalHealthBlog.API.Services
                     {
                         var removedMentalHealthExpert = _context.MentalHealthExperts.Remove(mentalHealthExpert);
                         var removedMentalHealthExpertAsUser = _context.Users.Remove(dbUser);
+                        //Razmisliti da li je potrebno brisati zadane zadatke u slucaju da se obrise mental health user
                         await _context.SaveChangesAsync();
                         _adminLoggerService.LogInformation($"DELETE/id: {AdminServiceLogTypes.SUCCESS.ToString()}", mentalHealthExpert);
                         return new Response(mentalHealthExpert, StatusCodes.Status200OK, AdminServiceLogTypes.SUCCESS.ToString());

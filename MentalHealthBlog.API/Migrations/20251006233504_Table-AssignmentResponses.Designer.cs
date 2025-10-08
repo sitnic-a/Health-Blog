@@ -3,6 +3,7 @@ using System;
 using MentalHealthBlogAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MentalHealthBlog.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20251006233504_Table-AssignmentResponses")]
+    partial class TableAssignmentResponses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,6 +48,8 @@ namespace MentalHealthBlog.API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AssignmentGivenById");
+
                     b.HasIndex("AssignmentGivenToId");
 
                     b.ToTable("Assignments");
@@ -64,9 +69,6 @@ namespace MentalHealthBlog.API.Migrations
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int>("ResponseById")
-                        .HasColumnType("integer");
 
                     b.Property<DateTime>("WrittenAt")
                         .HasColumnType("timestamp with time zone");
@@ -857,11 +859,19 @@ namespace MentalHealthBlog.API.Migrations
 
             modelBuilder.Entity("MentalHealthBlog.API.Models.Assignment", b =>
                 {
+                    b.HasOne("MentalHealthBlog.API.Models.MentalHealthExpert", "AssignmentGivenBy")
+                        .WithMany()
+                        .HasForeignKey("AssignmentGivenById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("MentalHealthBlogAPI.Models.User", "AssignmentGivenTo")
                         .WithMany()
                         .HasForeignKey("AssignmentGivenToId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("AssignmentGivenBy");
 
                     b.Navigation("AssignmentGivenTo");
                 });

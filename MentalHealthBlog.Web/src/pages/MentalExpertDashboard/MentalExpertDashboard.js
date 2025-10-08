@@ -46,14 +46,14 @@ export const MentalExpertDashboard = () => {
         }
       }
 
-      if (data?.payload.serviceResponseObject?.length === 0) {
+      if (data?.payload?.serviceResponseObject?.length === 0) {
         toast.warning('Trenutno nema podijeljenog sadržaja', {
           autoClose: 3000,
           position: 'bottom-right',
         })
       }
 
-      if (data?.payload.serviceResponseObject?.length > 0) {
+      if (data?.payload?.serviceResponseObject?.length > 0) {
         toast.success('Uspješno dobavljen sadržaj!', {
           autoClose: 1500,
           position: 'bottom-right',
