@@ -29,7 +29,7 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpPost("respond")]
-        public async Task<Response> RespondToAssignment(CreateAssignmentResponseDto request)
+        public async Task<Response> RespondToAssignment([FromBody] CreateAssignmentResponseDto request)
         {
             return await _assignmentService.RespondToAssignment(request);
         }

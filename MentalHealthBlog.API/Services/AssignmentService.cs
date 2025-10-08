@@ -187,7 +187,7 @@ namespace MentalHealthBlog.API.Services
                     throw new RecordNotFoundException("Not found!");
                 }
 
-                if (dbAssignment.AssignmentGivenById != request.ResponseById || 
+                if (dbAssignment.AssignmentGivenById != request.ResponseById && 
                     dbAssignment.AssignmentGivenToId != request.ResponseById)
                 {
                     _assignmentLoggerService.LogWarning($"RESPOND: {AssignmentLogTypes.NOT_IN_THERAPY.ToString()}");
