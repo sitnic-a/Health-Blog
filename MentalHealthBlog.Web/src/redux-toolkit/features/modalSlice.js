@@ -11,6 +11,7 @@ let modalSlice = createSlice({
     isStopSharingOpen: false,
     emailSuccessfullySentOpen: false,
     isAssignmentResponsesOpen: false,
+    isRespondingToAssignment: false,
   },
   reducers: {
     openAddModal: (state, action) => {
@@ -37,6 +38,9 @@ let modalSlice = createSlice({
     openAssignmentResponses: (state, action) => {
       state.isAssignmentResponsesOpen = action?.payload
     },
+    openRespondToAssignment: (state, action) => {
+      state.isRespondingToAssignment = action?.payload
+    },
   },
 })
 
@@ -49,6 +53,7 @@ export const {
   openStopSharing,
   openEmailSuccessfullySentOpen,
   openAssignmentResponses,
+  openRespondToAssignment,
 } = modalSlice.actions
 
 export default modalSlice.reducer

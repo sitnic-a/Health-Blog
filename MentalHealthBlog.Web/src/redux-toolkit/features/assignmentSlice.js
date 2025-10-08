@@ -38,6 +38,22 @@ export const getAssignmentResponses = createAsyncThunk(
   }
 )
 
+export const respondToAssignment = createAsyncThunk(
+  'respond',
+  async (objectWithData) => {
+    let url = `${application.application_url}/assignment/respond`
+    let request = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(objectWithData?.request),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    let response = await request.json()
+    return response
+  }
+)
+
 export const assignmentSlice = createSlice({
   initialState,
   name: 'assignmentSlice',
@@ -76,6 +92,17 @@ export const assignmentSlice = createSlice({
         }
       })
       .addCase(getAssignmentResponses.rejected, (state, action) => {})
+
+      //respond
+      .addCase(respondToAssignment.pending, (state, action) => {})
+      .addCase(respondToAssignment.fulfilled, (state, action) => {
+        let statusCode = action?.payload?.statusCode
+        let assignmentResponses = action?.payload?.serviceResponseObject
+        if (statusCode === 201 && assignmentResponses?.length > 0) {
+          state.dbAssignmentResponses = assignmentResponses
+        }
+      })
+      .addCase(respondToAssignment.rejected, (state, action) => {})
   },
 })
 

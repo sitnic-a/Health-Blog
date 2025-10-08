@@ -11,6 +11,7 @@ import { openAssignmentResponses } from '../../../redux-toolkit/features/modalSl
 
 import { Navbar } from '../../shared/Navbar/Navbar'
 import { AssignmentResponses } from './AssignmentResponses/AssignmentResponses'
+import { RespondToAssignment } from './RespondToAssignment/RespondToAssignment'
 import { LiaReadme } from 'react-icons/lia'
 import { SlPencil } from 'react-icons/sl'
 import { FaUserFriends } from 'react-icons/fa'
@@ -38,6 +39,7 @@ export const Assignments = () => {
     <section id="mental-health-experts-assignments-for-users-main-container">
       <Navbar />
       <AssignmentResponses />
+      <RespondToAssignment />
       <div className="mental-health-experts-assignments-for-users-header">
         <h3 className="mental-health-experts-assignments-for-users-header-title">
           Zadaci za korisnika user

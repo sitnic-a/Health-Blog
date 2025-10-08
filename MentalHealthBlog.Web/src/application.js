@@ -28,6 +28,7 @@ export const application = {
       background: '#82a3bc60',
     },
     content: {
+      zIndex: 2,
       background: '#f3f1e3',
       borderRadius: '0.7rem',
       top: '50%',

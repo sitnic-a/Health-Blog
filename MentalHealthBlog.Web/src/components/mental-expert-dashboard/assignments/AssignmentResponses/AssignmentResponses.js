@@ -1,7 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux'
 import Modal from 'react-modal'
 import moment from 'moment'
-import { openAssignmentResponses } from '../../../../redux-toolkit/features/modalSlice'
+import {
+  openAssignmentResponses,
+  openRespondToAssignment,
+} from '../../../../redux-toolkit/features/modalSlice'
 import {
   getAssignmentResponses,
   resetData,
@@ -19,7 +22,9 @@ export const AssignmentResponses = () => {
   let { dbAssignmentResponses, pickedAssignment } = useSelector(
     (store) => store.assignment
   )
-  let { isAssignmentResponsesOpen } = useSelector((store) => store.modal)
+  let { isAssignmentResponsesOpen, isRespondingToAssignment } = useSelector(
+    (store) => store.modal
+  )
   return (
     <Modal
       isOpen={isAssignmentResponsesOpen}
@@ -44,7 +49,12 @@ export const AssignmentResponses = () => {
       <div className="mental-health-experts-assignment-responses-modal">
         <div className="mental-health-experts-assignment-responses-modal-content">
           <div className="mental-health-experts-assignments-assignment-responses-actions-container">
-            <IoAddSharp className="mental-health-experts-assignments-assignment-responses-action-add-response-icon" />
+            <IoAddSharp
+              className="mental-health-experts-assignments-assignment-responses-action-add-response-icon"
+              onClick={() => {
+                dispatch(openRespondToAssignment(!isRespondingToAssignment))
+              }}
+            />
           </div>
           <div className="mental-health-experts-assignment-responses-main-container">
             <div className="mental-health-experts-assignment-responses-assignment-content">
