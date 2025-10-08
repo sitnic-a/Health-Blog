@@ -28,6 +28,7 @@ export const Assignments = () => {
 
   useEffect(() => {
     let objectWithData = {
+      authenticatedUser,
       query: {
         loggedExpertId: parseInt(id),
       },
@@ -85,6 +86,7 @@ export const Assignments = () => {
                       isMentalHealthExpert: true,
                     }
                     let objectWithData = {
+                      authenticatedUser,
                       request,
                     }
                     dispatch(getUsersAssignments(objectWithData))

@@ -16,6 +16,7 @@ export const getUsersAssignments = createAsyncThunk(
       body: JSON.stringify(objectWithData?.request),
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
       },
     })
     let response = await request.json()
@@ -31,6 +32,7 @@ export const getAssignmentResponses = createAsyncThunk(
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
       },
     })
     let response = await request.json()
@@ -47,6 +49,7 @@ export const respondToAssignment = createAsyncThunk(
       body: JSON.stringify(objectWithData?.request),
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
       },
     })
     let response = await request.json()

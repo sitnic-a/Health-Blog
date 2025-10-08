@@ -35,6 +35,7 @@ export const AssignmentResponses = () => {
           id: pickedAssignment?.id,
         }
         let objectWithData = {
+          authenticatedUser,
           assignmentObj,
         }
 

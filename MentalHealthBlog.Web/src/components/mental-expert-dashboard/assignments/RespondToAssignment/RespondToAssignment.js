@@ -43,6 +43,7 @@ export const RespondToAssignment = () => {
                   content: content,
                 }
                 let objectWithData = {
+                  authenticatedUser,
                   request,
                 }
                 dispatch(respondToAssignment(objectWithData)).then((data) => {
