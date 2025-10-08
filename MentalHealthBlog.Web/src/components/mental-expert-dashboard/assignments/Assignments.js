@@ -1,26 +1,29 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import moment from 'moment'
 import { getUsersWithSetAssignments } from '../../../redux-toolkit/features/mentalExpertSlice'
+import {
+  getUsersAssignments,
+  setChosenAssignment,
+} from '../../../redux-toolkit/features/assignmentSlice'
+import { openAssignmentResponses } from '../../../redux-toolkit/features/modalSlice'
 
 import { Navbar } from '../../shared/Navbar/Navbar'
-
-import AssignmentsCSS from './Assignments.css'
-import { getUsersAssignments } from '../../../redux-toolkit/features/assignmentSlice'
-
+import { AssignmentResponses } from './AssignmentResponses/AssignmentResponses'
 import { LiaReadme } from 'react-icons/lia'
 import { SlPencil } from 'react-icons/sl'
 import { FaUserFriends } from 'react-icons/fa'
 
-import moment from 'moment'
+import AssignmentsCSS from './Assignments.css'
 
 export const Assignments = () => {
   let dispatch = useDispatch()
   let { usersWithSetAssignments } = useSelector((store) => store.mentalExpert)
   let { dbAssignments } = useSelector((store) => store.assignment)
   let { authenticatedUser } = useSelector((store) => store.user)
+  let { isAssignmentResponsesOpen } = useSelector((store) => store.modal)
   let { id } = useParams()
-  console.log('Id ', id)
 
   useEffect(() => {
     let objectWithData = {
@@ -28,14 +31,13 @@ export const Assignments = () => {
         loggedExpertId: parseInt(id),
       },
     }
-    console.log('Object with data ', objectWithData)
-
     dispatch(getUsersWithSetAssignments(objectWithData))
   }, [])
 
   return (
     <section id="mental-health-experts-assignments-for-users-main-container">
       <Navbar />
+      <AssignmentResponses />
       <div className="mental-health-experts-assignments-for-users-header">
         <h3 className="mental-health-experts-assignments-for-users-header-title">
           Zadaci za korisnika user
@@ -145,6 +147,12 @@ export const Assignments = () => {
                   <div
                     key={assignment?.id}
                     className="mental-health-experts-assignments-for-users-assignments-assignment-main-container"
+                    onClick={() => {
+                      dispatch(
+                        openAssignmentResponses(!isAssignmentResponsesOpen)
+                      )
+                      dispatch(setChosenAssignment(assignment))
+                    }}
                   >
                     <div className="mental-health-experts-assignments-for-users-assignments-assignment-container">
                       <div className="mental-health-experts-assignments-for-users-assignments-assignment-container-header">

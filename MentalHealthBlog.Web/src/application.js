@@ -41,6 +41,30 @@ export const application = {
       paddingInline: '1.5rem',
     },
   },
+  assignments_modal_style: {
+    overlay: {
+      background: '#82a3bc60',
+    },
+    content: {
+      background: '#f0eae1',
+      borderRadius: '0.7rem',
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      transform: 'translate(-50%, -50%)',
+      maxWidth: '700px',
+      height: '400px',
+      width: '80%',
+      padding: '2rem',
+      scrollbarWidth: 'none',
+    },
+    matchMedia: {
+      'width<550px': {
+        marginInline: '2rem',
+      },
+    },
+  },
   layouts: {
     min_screen_single_col_width: 680,
   },

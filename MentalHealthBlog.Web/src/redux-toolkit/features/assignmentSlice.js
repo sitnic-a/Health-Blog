@@ -3,6 +3,8 @@ import { application } from '../../application'
 
 let initialState = {
   dbAssignments: [],
+  dbAssignmentResponses: [],
+  pickedAssignment: null,
 }
 
 export const getUsersAssignments = createAsyncThunk(
@@ -21,10 +23,30 @@ export const getUsersAssignments = createAsyncThunk(
   }
 )
 
+export const getAssignmentResponses = createAsyncThunk(
+  'assignment-responses/{id}',
+  async (objectWithData) => {
+    let url = `${application.application_url}/assignment/assignment-responses/${objectWithData?.assignmentObj?.id}`
+    let request = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    let response = await request.json()
+    return response
+  }
+)
+
 export const assignmentSlice = createSlice({
   initialState,
   name: 'assignmentSlice',
-  reducers: {},
+  reducers: {
+    setChosenAssignment: (state, action) => {
+      state.pickedAssignment = action?.payload
+      return state
+    },
+  },
   extraReducers: (builder) => {
     builder
 
@@ -36,11 +58,23 @@ export const assignmentSlice = createSlice({
         if (statusCode === 200 && usersAssignments?.length > 0) {
           state.dbAssignments = usersAssignments
         }
-        console.log('Ass ', state.dbAssignments)
       })
       .addCase(getUsersAssignments.rejected, (state, action) => {})
+
+      //assignment-responses/{id}
+      .addCase(getAssignmentResponses.pending, (state, action) => {})
+      .addCase(getAssignmentResponses.fulfilled, (state, action) => {
+        // console.log('Assignment responses fulfilled ', action?.payload)
+        let statusCode = action?.payload?.statusCode
+        let assignmentResponses = action?.payload?.serviceResponseObject
+
+        if (statusCode === 200 && assignmentResponses?.length > 0) {
+          state.dbAssignmentResponses = assignmentResponses
+        }
+      })
+      .addCase(getAssignmentResponses.rejected, (state, action) => {})
   },
 })
 
-export const {} = assignmentSlice.actions
+export const { setChosenAssignment } = assignmentSlice.actions
 export default assignmentSlice.reducer
