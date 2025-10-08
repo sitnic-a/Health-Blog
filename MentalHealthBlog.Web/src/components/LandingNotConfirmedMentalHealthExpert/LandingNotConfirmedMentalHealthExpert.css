@@ -1,0 +1,24 @@
+.landing-not-confirmed-mental-health-expert-main-container {
+  max-width: 600px;
+  min-height: 300px;
+  transform: translateY(60%);
+  margin: auto;
+}
+
+@media (width<=400px) {
+  .landing-not-confirmed-mental-health-expert-main-container {
+    transform: translateY(40%);
+  }
+}
+
+.landing-not-confirmed-mental-health-expert-title {
+  font-family: 'SansDeva';
+  font-size: 1.3rem;
+  line-height: 1.4;
+}
+
+.landing-not-confirmed-mental-health-expert-description {
+  font-family: 'SansDeva';
+  font-size: 1rem;
+  line-height: 1.4;
+}

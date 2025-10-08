@@ -10,6 +10,7 @@ namespace MentalHealthBlog.API.Models.ResourceResponse
         public string JWToken { get; set; } = string.Empty;
         [JsonIgnore]
         public string RefreshToken { get; set; }
+        public bool? IsPending { get; set; }
 
         public SignedUserDto(){}
         public SignedUserDto(int id, string username)
@@ -24,6 +25,16 @@ namespace MentalHealthBlog.API.Models.ResourceResponse
             JWToken = jwtoken;
             RefreshToken = refreshToken;
             UserRoles = roles;
+        }
+
+        public SignedUserDto(int id, string username, string jwtoken, string refreshToken, List<Role> roles, bool? isPending=null)
+        {
+            Id = id;
+            Username = username;
+            JWToken = jwtoken;
+            RefreshToken = refreshToken;
+            UserRoles = roles;
+            IsPending = isPending;
         }
     }
 }

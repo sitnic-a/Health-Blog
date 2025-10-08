@@ -247,12 +247,21 @@ namespace MentalHealthBlog.API.Services
                     _userLoggerService.LogError($"REGISTER: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", loginCredentials);
                     throw new CreateRecordException("Credentials not valid!");
                 }
+                bool? isPending = null;
+                var __PSYCHOLOGIST_ROLE_ID__ = 4;
                 var jwtMiddleware = new JWTService(_options, _context, _configuration);
                 var authenticated = await VerifyCredentials(loginCredentials);
                 var dbUser = await _context.Users.SingleOrDefaultAsync(u => u.Username == loginCredentials.Username);
                 if (authenticated && dbUser is not null)
                 {
                     var dbUserRoles = jwtMiddleware.GetRoles(dbUser);
+
+                    if (dbUserRoles.Any(r => r.Id == __PSYCHOLOGIST_ROLE_ID__))
+                    {
+                        var mentalHealthExpert = await _context.MentalHealthExperts.SingleOrDefaultAsync(mhe => mhe.UserId == dbUser.Id);
+                        isPending = mentalHealthExpert.IsApproved == false && mentalHealthExpert.IsRejected == false;
+                    }
+
                     var token = jwtMiddleware.GenerateToken(dbUser);
                     var refreshToken = jwtMiddleware.GenerateRefreshToken();
 
@@ -272,7 +281,7 @@ namespace MentalHealthBlog.API.Services
                         throw new InvalidTokenException("Token not created");
                     }
 
-                    var responseUser = new SignedUserDto(dbUser.Id, dbUser.Username, token, refreshToken.Token, dbUserRoles);
+                    var responseUser = new SignedUserDto(dbUser.Id, dbUser.Username, token, refreshToken.Token, dbUserRoles, isPending);
                     _userLoggerService.LogInformation($"LOGIN: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", responseUser);
                     return new Response(responseUser, StatusCodes.Status200OK, UserServiceLogTypes.USER_SUCCESFULL.ToString());
                 }

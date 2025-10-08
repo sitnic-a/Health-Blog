@@ -2,6 +2,8 @@ import { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
+import Cookies from 'js-cookie'
+
 import { login, setIsFailed } from '../../redux-toolkit/features/userSlice'
 import {
   setUsernameValidationData,
@@ -33,6 +35,7 @@ export const Login = () => {
 
   useEffect(() => {
     resetValidationData()
+    Cookies.remove('isPending')
   }, [])
 
   let loginUser = async (e) => {
@@ -100,6 +103,12 @@ export const Login = () => {
             prevUrl: window.location.href,
           },
         })
+
+        if (response?.payload?.serviceResponseObject?.isPending) {
+          Cookies.set('isPending', true)
+          return
+        }
+
         toast.success('Login uspješan', {
           autoClose: 1500,
           position: 'bottom-right',
