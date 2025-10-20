@@ -52,12 +52,12 @@ export const Navbar = () => {
               Stručnjaci
             </Link>
 
-            {/* <Link
+            <Link
               to={`/assignments/user/${authenticatedUser.id}`}
               className="navigation-bar-action"
             >
-              Assignments
-            </Link> */}
+              Zadaće
+            </Link>
           </div>
 
           <div className="logout-main-container">
