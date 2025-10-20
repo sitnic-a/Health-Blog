@@ -16,9 +16,9 @@ import { LiaReadme } from 'react-icons/lia'
 import { SlPencil } from 'react-icons/sl'
 import { FaUserFriends } from 'react-icons/fa'
 
-import AssignmentsCSS from './Assignments.css'
+import MentalHealthExpertAssignmentsCSS from './MentalHealthExpertAssignments.css'
 
-export const Assignments = () => {
+export const MentalHealthExpertAssignments = () => {
   let dispatch = useDispatch()
   let { usersWithSetAssignments } = useSelector((store) => store.mentalExpert)
   let { dbAssignments } = useSelector((store) => store.assignment)
