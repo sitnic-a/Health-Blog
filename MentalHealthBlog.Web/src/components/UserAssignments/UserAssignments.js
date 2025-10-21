@@ -7,8 +7,14 @@ import { stringIsNullOrEmpty } from '../../utils/helper-methods/methods'
 import defaultAvatar from '../../images/default-avatar.png'
 
 import UserAssignmentsCSS from './UserAssignments.css'
-import { getUsersAssignments } from '../../redux-toolkit/features/assignmentSlice'
+import {
+  getUsersAssignments,
+  setChosenAssignment,
+} from '../../redux-toolkit/features/assignmentSlice'
 import moment from 'moment'
+import { openAssignmentResponses } from '../../redux-toolkit/features/modalSlice'
+import { AssignmentResponses } from '../AssignmentResponses/AssignmentResponses'
+import { RespondToAssignment } from '../RespondToAssignment/RespondToAssignment'
 
 export const UserAssignments = () => {
   let dispatch = useDispatch()
@@ -17,6 +23,7 @@ export const UserAssignments = () => {
     (store) => store.regularUser
   )
   let { dbAssignments } = useSelector((store) => store.assignment)
+  let { isAssignmentResponsesOpen } = useSelector((store) => store.modal)
 
   useEffect(() => {
     let query = {
@@ -33,6 +40,8 @@ export const UserAssignments = () => {
   return (
     <section id="user-assignments-main-container">
       <Navbar />
+      <AssignmentResponses />
+      <RespondToAssignment />
 
       <div className="user-assignments-container">
         <div className="user-assignments-assignments-from-main-container">
@@ -101,6 +110,12 @@ export const UserAssignments = () => {
                 <div
                   key={assignment?.id}
                   className="user-assignments-given-assignment-main-container"
+                  onClick={() => {
+                    dispatch(
+                      openAssignmentResponses(!isAssignmentResponsesOpen)
+                    )
+                    dispatch(setChosenAssignment(assignment))
+                  }}
                 >
                   <div className="user-assignments-given-assignment-container">
                     <p className="user-assignments-given-assignment-content">

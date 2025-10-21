@@ -10,8 +10,8 @@ import {
 import { openAssignmentResponses } from '../../../redux-toolkit/features/modalSlice'
 
 import { Navbar } from '../../shared/Navbar/Navbar'
-import { AssignmentResponses } from './AssignmentResponses/AssignmentResponses'
-import { RespondToAssignment } from './RespondToAssignment/RespondToAssignment'
+import { AssignmentResponses } from '../../AssignmentResponses/AssignmentResponses'
+import { RespondToAssignment } from '../../RespondToAssignment/RespondToAssignment'
 import { LiaReadme } from 'react-icons/lia'
 import { SlPencil } from 'react-icons/sl'
 import { FaUserFriends } from 'react-icons/fa'

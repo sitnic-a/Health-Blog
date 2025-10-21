@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux'
 import Modal from 'react-modal'
-import { application } from '../../../../application'
-import { respondToAssignment } from '../../../../redux-toolkit/features/assignmentSlice'
-import { openRespondToAssignment } from '../../../../redux-toolkit/features/modalSlice'
+import { application } from '../../application'
+import { respondToAssignment } from '../../redux-toolkit/features/assignmentSlice'
+import { openRespondToAssignment } from '../../redux-toolkit/features/modalSlice'
 
 import RespondToAssignmentCSS from './RespondToAssignment.css'
 
@@ -27,6 +27,7 @@ export const RespondToAssignment = () => {
             <textarea
               className="respond-to-assignment-assignment-text form-field"
               placeholder="Unesite svoj odgovor ovdje"
+              spellCheck={false}
             ></textarea>
           </div>
 
