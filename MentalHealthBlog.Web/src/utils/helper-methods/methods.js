@@ -457,6 +457,7 @@ export const checkInputDataValidity = (
     }
 
     validationMessages.push('Sadržaj posta je obavezan!')
+    validationMessages.push('Ne smijete koristiti specijalne znakove: <>`')
     return [!isValid, validationMessages]
   }
 }

@@ -1,20 +1,21 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import moment from 'moment'
 import { getExpertsThatGaveAssignmentsToUser } from '../../redux-toolkit/features/regularUserSlice'
-import { Navbar } from '../../components/shared/Navbar/Navbar'
-import { stringIsNullOrEmpty } from '../../utils/helper-methods/methods'
-
-import defaultAvatar from '../../images/default-avatar.png'
-
-import UserAssignmentsCSS from './UserAssignments.css'
 import {
   getUsersAssignments,
   setChosenAssignment,
 } from '../../redux-toolkit/features/assignmentSlice'
-import moment from 'moment'
 import { openAssignmentResponses } from '../../redux-toolkit/features/modalSlice'
+import { stringIsNullOrEmpty } from '../../utils/helper-methods/methods'
+
+import defaultAvatar from '../../images/default-avatar.png'
 import { AssignmentResponses } from '../AssignmentResponses/AssignmentResponses'
 import { RespondToAssignment } from '../RespondToAssignment/RespondToAssignment'
+import { Navbar } from '../../components/shared/Navbar/Navbar'
+import { FaUserFriends } from 'react-icons/fa'
+
+import UserAssignmentsCSS from './UserAssignments.css'
 
 export const UserAssignments = () => {
   let dispatch = useDispatch()
@@ -56,6 +57,22 @@ export const UserAssignments = () => {
                   key={expert?.userId}
                   className="user-assignments-user-that-gave-assignment-main-container"
                   onClick={() => {
+                    let usersAssignmentsAssignementsFromMainContainer =
+                      document.querySelector(
+                        '.user-assignments-assignments-from-main-container'
+                      )
+                    let usersAssignmentsAssignmentsMainContainer =
+                      document.querySelector(
+                        '.user-assignments-assignments-main-container'
+                      )
+
+                    usersAssignmentsAssignementsFromMainContainer.classList.remove(
+                      'user-assignments-assignments-from-main-container-expanded'
+                    )
+                    usersAssignmentsAssignmentsMainContainer.classList.remove(
+                      'user-assignments-assignments-main-container-shrinked'
+                    )
+
                     let request = {
                       givenById: expert?.userId,
                       givenToId: authenticatedUser?.id,
@@ -96,11 +113,32 @@ export const UserAssignments = () => {
           </div>
         </div>
 
-        {/* Zadaca koju je dobio korisnik otvara se samo ako se klikne na korisnika */}
         <div className="user-assignments-assignments-main-container">
-          <p className="user-assignments-assignment-main-container-title">
-            Zadaća
-          </p>
+          <div className="user-assignments-assignments-header">
+            <FaUserFriends
+              className="user-assignments-assignments-header-experts-icon"
+              onClick={() => {
+                let usersAssignmentsAssignementsFromMainContainer =
+                  document.querySelector(
+                    '.user-assignments-assignments-from-main-container'
+                  )
+                let usersAssignmentsAssignmentsMainContainer =
+                  document.querySelector(
+                    '.user-assignments-assignments-main-container'
+                  )
+
+                usersAssignmentsAssignementsFromMainContainer.classList.add(
+                  'user-assignments-assignments-from-main-container-expanded'
+                )
+                usersAssignmentsAssignmentsMainContainer.classList.add(
+                  'user-assignments-assignments-main-container-shrinked'
+                )
+              }}
+            />
+            <p className="user-assignments-assignment-main-container-title">
+              Zadaća
+            </p>
+          </div>
           <div className="user-assignments-assignments-container">
             {dbAssignments?.map((assignment) => {
               let charactersCountInContent = assignment?.content?.length

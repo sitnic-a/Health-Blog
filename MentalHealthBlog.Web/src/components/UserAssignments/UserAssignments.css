@@ -20,11 +20,28 @@
   border-right: 1px solid #f3f1e3;
 }
 
+@media (width<=600px) {
+  .user-assignments-assignments-from-main-container {
+    display: none;
+  }
+}
+
+.user-assignments-assignments-from-main-container-expanded {
+  max-width: 800px;
+  display: initial;
+  border: none;
+}
+
 .user-assignments-assignments-from-main-container-title {
+  margin: 0;
   padding-top: 1.5rem;
   font-family: 'SansDeva';
   font-size: 1rem;
   line-height: 1.4;
+}
+
+.user-assignments-assignments-from-container {
+  margin-top: 1rem;
 }
 
 .user-assignments-user-that-gave-assignment-main-container {
@@ -95,7 +112,31 @@
   margin-inline: 1rem;
 }
 
+.user-assignments-assignments-main-container-shrinked {
+  display: none;
+}
+
+.user-assignments-assignments-header {
+  display: flex;
+  align-items: end;
+  gap: 20px;
+  margin-bottom: 1rem;
+}
+
+.user-assignments-assignments-header-experts-icon {
+  display: none;
+  font-size: 2rem;
+  color: #edb572;
+}
+
+@media (width<=600px) {
+  .user-assignments-assignments-header-experts-icon {
+    display: initial;
+  }
+}
+
 .user-assignments-assignment-main-container-title {
+  margin: 0;
   padding-top: 1.5rem;
   font-family: 'SansDeva';
   font-size: 1rem;

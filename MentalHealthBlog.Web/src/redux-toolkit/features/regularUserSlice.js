@@ -209,7 +209,6 @@ export const regularUserSlice = createSlice({
         (state, action) => {
           let statusCode = action?.payload?.statusCode
           let serviceResponseObject = action?.payload?.serviceResponseObject
-          console.log('SRO ', serviceResponseObject)
           if (statusCode === 200 && serviceResponseObject?.length > 0) {
             state.expertsThatGaveAssignmentsToUser = serviceResponseObject
           }
