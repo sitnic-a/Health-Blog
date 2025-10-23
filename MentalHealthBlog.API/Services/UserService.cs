@@ -409,11 +409,12 @@ namespace MentalHealthBlog.API.Services
 
                 var combinedUsers = await userHelper.GetCombinedDataFromMentalHealthExpertsAndRegularUsersAsync();
 
-                var userThatRequestedChange = combinedUsers.FirstOrDefault(u => u.Email == changePasswordRequest.Email);
+                var userThatRequestedChange = combinedUsers.FirstOrDefault(u => u.Username == changePasswordRequest.Username &&
+                                                                                u.Email == changePasswordRequest.Email);
                 if (userThatRequestedChange == null)
                 {
                     _userLoggerService.LogWarning($"CHANGE-PASSWORD: {UserServiceLogTypes.USER_NOT_FOUND_OR_NULL.ToString()}");
-                    throw new RecordNotFoundException("User with this email, doesn't exist");
+                    throw new RecordNotFoundException("User doesn't exist!");
                 }
 
                 var dbUserThatRequestedPasswordChange = await _context.Users.FindAsync(userThatRequestedChange.Id);
@@ -421,7 +422,7 @@ namespace MentalHealthBlog.API.Services
                 if (dbUserThatRequestedPasswordChange == null)
                 {
                     _userLoggerService.LogWarning($"CHANGE-PASSWORD: {UserServiceLogTypes.USER_NOT_FOUND_OR_NULL.ToString()}");
-                    throw new RecordNotFoundException("User with this email not found!");
+                    throw new RecordNotFoundException("User not found!");
                 }
 
                 var passwordSalt = user.GenerateSalt(__KEYSIZE__);
