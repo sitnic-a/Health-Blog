@@ -13,9 +13,7 @@ export const AssignmentButton = () => {
         navigate('/create-assignment')
       }}
     >
-      <span className="sharing-users-give-assignment-span">
-        Give Assignment
-      </span>
+      <span className="sharing-users-give-assignment-span">Kreiraj zadaću</span>
       <FaTasks className="sharing-users-give-assignment-icon" />
     </div>
   )
