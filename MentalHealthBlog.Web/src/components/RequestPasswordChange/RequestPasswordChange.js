@@ -118,7 +118,6 @@ export const RequestPasswordChange = () => {
           type="text"
           className="form-field"
           placeholder="Unesite Vašu email adresu..."
-          autoFocus
           onBlur={(e) => {
             let email = e.target.value
             let isMentalHealthExpert = false // should change to be isRequired

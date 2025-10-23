@@ -17,6 +17,7 @@ export const ResetPassword = () => {
   )
 
   let query = new URLSearchParams(window.location.search)
+  let username = query.get('username')
   let email = query.get('email')
   let safe = query.get('safe')
 
@@ -35,6 +36,7 @@ export const ResetPassword = () => {
     }
 
     let objectWithData = {
+      username: username,
       email: email,
       blueprint: safe,
       password: password,
@@ -63,7 +65,22 @@ export const ResetPassword = () => {
   return (
     <section id="reset-password-main-container">
       <div className="reset-password-header">
-        <h1>Promjena passworda</h1>
+        <h1>Promjena passworda za {username}</h1>
+      </div>
+
+      <div className="reset-password-username">
+        <label htmlFor="password" className="form-field-label">
+          Username (vrijednost fiksna):
+        </label>
+
+        <input
+          name="username"
+          id="username"
+          className="form-field"
+          type="text"
+          disabled={true}
+          value={username}
+        />
       </div>
 
       <div className="reset-password-content">
