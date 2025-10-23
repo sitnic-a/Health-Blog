@@ -8,6 +8,7 @@ namespace MentalHealthBlog.API.Services
         public Task<Response> GetSharesPerMentalHealthExpert(RegularUserSearchContentDto query);
         public Task<Response> GetRecentSharesPerMentalHealthExpert(RegularUserSearchContentDto query);
         public Task<Response> RevokeContentPermission(RegularUserPermissionDto request);
+        public Task<Response> GetExpertsThatGaveAssignmentsToUser(RegularUserSearchContentDto query);
 
     }
 }

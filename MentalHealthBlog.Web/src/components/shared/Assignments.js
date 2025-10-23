@@ -1,8 +1,8 @@
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { db_roles } from '../../enums/roles'
-import { Assignments as UserAssignments } from '../Assignments'
-import { Assignments as MentalHealthExpertAssignments } from '../mental-expert-dashboard/assignments/Assignments'
+import { UserAssignments as UserAssignments } from '../UserAssignments/UserAssignments'
+import { MentalHealthExpertAssignments as MentalHealthExpertAssignments } from '../mental-expert-dashboard/assignments/MentalHealthExpertAssignments'
 
 export const Assignments = () => {
   let { id } = useParams()

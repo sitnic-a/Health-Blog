@@ -4,13 +4,13 @@ import moment from 'moment'
 import {
   openAssignmentResponses,
   openRespondToAssignment,
-} from '../../../../redux-toolkit/features/modalSlice'
+} from '../../redux-toolkit/features/modalSlice'
 import {
   getAssignmentResponses,
   resetData,
   setChosenAssignment,
-} from '../../../../redux-toolkit/features/assignmentSlice'
-import { application } from '../../../../application'
+} from '../../redux-toolkit/features/assignmentSlice'
+import { application } from '../../application'
 
 import { IoAddSharp } from 'react-icons/io5'
 

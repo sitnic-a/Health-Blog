@@ -1,15 +1,25 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { createAssignment } from '../../../../redux-toolkit/features/mentalExpertSlice'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { checkNewAssignmentValidity } from '../../../../utils/helper-methods/methods'
+import { createAssignment } from '../../../../redux-toolkit/features/mentalExpertSlice'
+import { setContentValidationData } from '../../../../redux-toolkit/features/validationSlice'
+import {
+  checkInputDataValidity,
+  checkNewAssignmentValidity,
+} from '../../../../utils/helper-methods/methods'
 
 import CreateAssignmentCSS from './CreateAssignment.css'
+import { useEffect } from 'react'
 
 export const CreateAssignment = () => {
   let dispatch = useDispatch()
   let navigate = useNavigate()
   let { authenticatedUser, dbUser } = useSelector((store) => store.user)
+  let { contentValidationData } = useSelector((store) => store.validation)
+
+  useEffect(() => {
+    dispatch(setContentValidationData({}))
+  }, [])
 
   let giveAssignment = (e) => {
     e.preventDefault()
@@ -25,7 +35,24 @@ export const CreateAssignment = () => {
       authenticatedUser,
     }
 
-    if (!checkNewAssignmentValidity(objectWithData?.addAssignmentObj)) {
+    let content = objectWithData?.addAssignmentObj?.content
+    let isTitle = false
+    let isContent = true
+    let [isValid, validationMessages] = checkInputDataValidity(
+      content,
+      [],
+      isTitle,
+      isContent
+    )
+
+    dispatch(
+      setContentValidationData({
+        contentIsValid: isValid,
+        contentValidationMessages: validationMessages,
+      })
+    )
+
+    if (!contentValidationData?.contentIsValid) {
       toast.error('Molimo slijedite upute prilikom popunjavanja polja!', {
         autoClose: 3000,
         position: 'bottom-right',
@@ -37,7 +64,7 @@ export const CreateAssignment = () => {
       let statusCode = data?.payload?.StatusCode
       if (statusCode !== 201) {
         if (statusCode === 400) {
-          toast.error('Molimo pregledajte Vaš unos!', {
+          toast.error('Sva polja moraju imati vrijednost', {
             autoClose: 3000,
             position: 'bottom-right',
           })
@@ -93,8 +120,40 @@ export const CreateAssignment = () => {
                   name="create-assignment-content"
                   placeholder="Unesite ovdje zadatak..."
                   spellCheck={false}
+                  onBlur={(e) => {
+                    let content = e.target.value
+                    let isTitle = false
+                    let isContent = true
+                    let [isValid, validationMessages] = checkInputDataValidity(
+                      content,
+                      [],
+                      isTitle,
+                      isContent
+                    )
+
+                    dispatch(
+                      setContentValidationData({
+                        contentIsValid: isValid,
+                        contentValidationMessages: validationMessages,
+                      })
+                    )
+                  }}
                 ></textarea>
               </div>
+
+              {!contentValidationData?.contentIsValid && (
+                <div className="validation-message-main-container">
+                  {contentValidationData?.contentValidationMessages?.map(
+                    (message, index) => {
+                      return (
+                        <p key={index} className="validation-message">
+                          - {message}
+                        </p>
+                      )
+                    }
+                  )}
+                </div>
+              )}
 
               <div className="create-assignment-user-to-accomplish">
                 <label

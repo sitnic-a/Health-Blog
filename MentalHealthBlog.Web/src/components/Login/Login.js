@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
+
 import { login, setIsFailed } from '../../redux-toolkit/features/userSlice'
 import {
   setUsernameValidationData,
@@ -37,6 +38,7 @@ export const Login = () => {
 
   let loginUser = async (e) => {
     e.preventDefault()
+    localStorage.removeItem('isPending')
     let form = new FormData(e.target)
     let formData = form.entries()
     let data = Object.fromEntries([...formData])
@@ -100,6 +102,12 @@ export const Login = () => {
             prevUrl: window.location.href,
           },
         })
+
+        if (response?.payload?.serviceResponseObject?.isPending) {
+          localStorage.setItem('isPending', true)
+          return
+        }
+
         toast.success('Login uspješan', {
           autoClose: 1500,
           position: 'bottom-right',

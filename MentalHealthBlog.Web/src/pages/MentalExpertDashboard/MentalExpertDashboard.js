@@ -9,10 +9,13 @@ import { ListSharingContentUsers } from '../../components/mental-expert-dashboar
 import { ListSharedContent } from '../../components/mental-expert-dashboard/shared-content/ListSharedContent/ListSharedContent'
 import { Navbar } from '../../components/shared/Navbar/Navbar'
 
+import { LandingNotConfirmedMentalHealthExpert } from '../../components/LandingNotConfirmedMentalHealthExpert/LandingNotConfirmedMentalHealthExpert'
+
 import MentalExpertDashboardCSS from './MentalExpertDashboard.css'
 
 export const MentalExpertDashboard = () => {
   let dispatch = useDispatch()
+  let isPending = localStorage.getItem('isPending')
   let { sharedContent, usersThatSharedIncludingItsContent } = useSelector(
     (store) => store.mentalExpert
   )
@@ -65,40 +68,46 @@ export const MentalExpertDashboard = () => {
   }, [])
 
   return (
-    <section className="mental-expert-dashboard">
-      <Navbar />
+    <>
+      {isPending ? (
+        <LandingNotConfirmedMentalHealthExpert />
+      ) : (
+        <section className="mental-expert-dashboard">
+          <Navbar />
 
-      <section id="sharing-users-main-container">
-        <ListSharingContentUsers />
+          <section id="sharing-users-main-container">
+            <ListSharingContentUsers />
 
-        {usersThatSharedIncludingItsContent?.length === 0 && (
-          <div className="sharing-users-main-content-container">
-            <div className="sharing-users-main-content-info">
-              <p>Trenutno nema sadržaja podijeljenog sa Vama</p>
-            </div>
-          </div>
-        )}
-
-        {usersThatSharedIncludingItsContent?.length > 0 &&
-          sharedContent?.length === 0 && (
-            <div className="sharing-users-main-content-container">
-              <div className="sharing-users-main-content-info">
-                <p>
-                  <span>PODSJETNIK: </span>Ukoliko želite pregledati podijeljeni
-                  sadržaj nekog korisnika kliknite na ime korisnika ili na
-                  strelice u gornjem lijevom uglu kako biste otvorili listu svih
-                  korisnika koji su dijelili sadržaj sa Vama. Strelice se
-                  pojavljuju u slučaju da aplikaciju koristite na uređajima sa
-                  manjim ekranima!
-                </p>
+            {usersThatSharedIncludingItsContent?.length === 0 && (
+              <div className="sharing-users-main-content-container">
+                <div className="sharing-users-main-content-info">
+                  <p>Trenutno nema sadržaja podijeljenog sa Vama</p>
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-        {sharedContent?.length > 0 && (
-          <ListSharedContent sharedContent={[...sharedContent]} />
-        )}
-      </section>
-    </section>
+            {usersThatSharedIncludingItsContent?.length > 0 &&
+              sharedContent?.length === 0 && (
+                <div className="sharing-users-main-content-container">
+                  <div className="sharing-users-main-content-info">
+                    <p>
+                      <span>PODSJETNIK: </span>Ukoliko želite pregledati
+                      podijeljeni sadržaj nekog korisnika kliknite na ime
+                      korisnika ili na strelice u gornjem lijevom uglu kako
+                      biste otvorili listu svih korisnika koji su dijelili
+                      sadržaj sa Vama. Strelice se pojavljuju u slučaju da
+                      aplikaciju koristite na uređajima sa manjim ekranima!
+                    </p>
+                  </div>
+                </div>
+              )}
+
+            {sharedContent?.length > 0 && (
+              <ListSharedContent sharedContent={[...sharedContent]} />
+            )}
+          </section>
+        </section>
+      )}
+    </>
   )
 }

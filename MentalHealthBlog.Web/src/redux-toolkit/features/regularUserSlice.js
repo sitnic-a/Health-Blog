@@ -10,6 +10,7 @@ let initialState = {
   successfullyFetchedSharesPerMentalHealthExpert: null,
   hasSharedPosts: true,
   isReviewingSharedPosts: false,
+  expertsThatGaveAssignmentsToUser: [],
 }
 
 export const getSharesPerMentalHealthExpert = createAsyncThunk(
@@ -57,6 +58,22 @@ export const revokeContentPermission = createAsyncThunk(
       },
     })
 
+    let response = await request.json()
+    return response
+  }
+)
+
+export const getExpertsThatGaveAssignmentsToUser = createAsyncThunk(
+  'experts-that-gave-assignments-to-user',
+  async (objectWithData) => {
+    let url = `${application.application_url}/regularUser/experts-that-gave-assignments-to-user?LoggedUserId=${objectWithData?.query?.loggedUserId}`
+    let request = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
+      },
+    })
     let response = await request.json()
     return response
   }
@@ -184,6 +201,20 @@ export const regularUserSlice = createSlice({
         }
       })
       .addCase(revokeContentPermission.rejected, (state, action) => {})
+
+      //experts-that-gave-assignments-to-user
+      .addCase(getExpertsThatGaveAssignmentsToUser.pending, () => {})
+      .addCase(
+        getExpertsThatGaveAssignmentsToUser.fulfilled,
+        (state, action) => {
+          let statusCode = action?.payload?.statusCode
+          let serviceResponseObject = action?.payload?.serviceResponseObject
+          if (statusCode === 200 && serviceResponseObject?.length > 0) {
+            state.expertsThatGaveAssignmentsToUser = serviceResponseObject
+          }
+        }
+      )
+      .addCase(getExpertsThatGaveAssignmentsToUser.rejected, () => {})
   },
 })
 

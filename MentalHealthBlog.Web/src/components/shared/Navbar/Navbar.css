@@ -17,6 +17,12 @@
   gap: 8px;
 }
 
+@media (width<=460px) {
+  .navigation-bar-features {
+    gap: 4px;
+  }
+}
+
 .navigation-bar-action {
   font-size: 0.9rem;
   font-family: 'SansDeva';
@@ -36,4 +42,10 @@
   max-height: 30px;
   margin-left: 10px;
   margin-right: 20px;
+}
+
+@media (width<=460px) {
+  .navbar-app-logo {
+    margin-inline: 0;
+  }
 }

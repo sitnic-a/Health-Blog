@@ -10,15 +10,15 @@ import {
 import { openAssignmentResponses } from '../../../redux-toolkit/features/modalSlice'
 
 import { Navbar } from '../../shared/Navbar/Navbar'
-import { AssignmentResponses } from './AssignmentResponses/AssignmentResponses'
-import { RespondToAssignment } from './RespondToAssignment/RespondToAssignment'
+import { AssignmentResponses } from '../../AssignmentResponses/AssignmentResponses'
+import { RespondToAssignment } from '../../RespondToAssignment/RespondToAssignment'
 import { LiaReadme } from 'react-icons/lia'
 import { SlPencil } from 'react-icons/sl'
 import { FaUserFriends } from 'react-icons/fa'
 
-import AssignmentsCSS from './Assignments.css'
+import MentalHealthExpertAssignmentsCSS from './MentalHealthExpertAssignments.css'
 
-export const Assignments = () => {
+export const MentalHealthExpertAssignments = () => {
   let dispatch = useDispatch()
   let { usersWithSetAssignments } = useSelector((store) => store.mentalExpert)
   let { dbAssignments } = useSelector((store) => store.assignment)
@@ -168,10 +168,10 @@ export const Assignments = () => {
                             ? contentCut
                             : assignment?.content}
                         </p>
-                        <div className="mental-health-experts-assignments-for-users-assignments-assignment-actions-container">
+                        {/* <div className="mental-health-experts-assignments-for-users-assignments-assignment-actions-container">
                           <LiaReadme className="mental-health-experts-assignments-for-users-assignments-assignment-actions-icon" />
                           <SlPencil className="mental-health-experts-assignments-for-users-assignments-assignment-actions-icon" />
-                        </div>
+                        </div> */}
                       </div>
 
                       <div className="mental-health-experts-assignments-for-users-assignments-assignment-date-container">

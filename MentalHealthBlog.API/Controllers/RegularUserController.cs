@@ -38,5 +38,12 @@ namespace MentalHealthBlog.API.Controllers
         {
             return await _regularUserService.RevokeContentPermission(request);
         }
+
+        [HttpGet("experts-that-gave-assignments-to-user")]
+        [Authorize(Roles = "User")]
+        public async Task<Response> GetExpertsThatGaveAssignmentsToUser([FromQuery] RegularUserSearchContentDto query)
+        {
+            return await _regularUserService.GetExpertsThatGaveAssignmentsToUser(query);
+        }
     }
 }

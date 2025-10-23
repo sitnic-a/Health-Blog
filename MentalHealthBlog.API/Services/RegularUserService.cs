@@ -13,6 +13,7 @@ namespace MentalHealthBlog.API.Services
 {
     enum RegularUserServiceLogTypes
     {
+        INVALID_DATA,
         EMPTY,
         NULL,
         NOT_FOUND,
@@ -283,6 +284,91 @@ namespace MentalHealthBlog.API.Services
             }
         }
 
+        public async Task<Response> GetExpertsThatGaveAssignmentsToUser(RegularUserSearchContentDto query)
+        {
+            try
+            {
+                if (query == null || query.LoggedUserId <= 0)
+                {
+                    _regularUserLoggerService.LogWarning($"EXPERTS-THAT-GAVE-ASSIGNMENTS-TO-USER: {RegularUserServiceLogTypes.INVALID_DATA.ToString()}");
+                    throw new ArgumentException("Bad request!");
+                }
 
+                var usersCurrentMentalHealthExperts = await _context.TherapyRequests
+                    .Where(tr => tr.RegularUserId == query.LoggedUserId &&
+                                 tr.RequestStatus == RequestStatusEnum.Approved)
+                    .ToListAsync();
+
+                var dbAssignmentsFromCurrentMentalHealthExperts = new List<Assignment>();
+
+                foreach (var currentMentalHealthExpert in usersCurrentMentalHealthExperts)
+                {
+                    var assignmentByMentalHealthExpert = await _context.Assignments
+                        .Where(a => a.AssignmentGivenToId == query.LoggedUserId &&
+                                    a.AssignmentGivenById == currentMentalHealthExpert.MentalHealthExpertId)
+                        .ToListAsync();
+
+                    dbAssignmentsFromCurrentMentalHealthExperts.AddRange(assignmentByMentalHealthExpert);
+                }
+
+
+                if (!dbAssignmentsFromCurrentMentalHealthExperts.Any())
+                {
+                    _regularUserLoggerService.LogWarning($"EXPERTS-THAT-GAVE-ASSIGNMENTS-TO-USER: {RegularUserServiceLogTypes.EMPTY.ToString()}");
+                    throw new EmptyListException("User doesn't have set assignments!");
+                }
+
+                var groupedMentalHealthExpertsThatSetAssignments = dbAssignmentsFromCurrentMentalHealthExperts
+                    .GroupBy(mhe => mhe.AssignmentGivenById);
+
+                var mentalHealthExpertsThatGaveAssignments = new List<UserDto>();
+                var userHelper = new UserHelper(_context);
+
+                foreach (var item in groupedMentalHealthExpertsThatSetAssignments)
+                {
+                    var dbMentalHealthExpertAsUser = await _context.Users.FindAsync(item.Key);
+                    var dbMentalHealthExpert = await _context.MentalHealthExperts
+                        .SingleOrDefaultAsync(mhe => mhe.UserId == item.Key);
+
+                    var userRoles = await userHelper.GetUserRolesAsync(new UserDto(dbMentalHealthExpertAsUser.Id, dbMentalHealthExpertAsUser.Username));
+
+                    var mentalHealthExpertDto = new UserDto
+                    {
+                        Id = dbMentalHealthExpert.Id,
+                        UserId = dbMentalHealthExpert.UserId,
+                        FirstName = dbMentalHealthExpert.FirstName,
+                        LastName = dbMentalHealthExpert.LastName,
+                        Organization = dbMentalHealthExpert.Organization,
+                        PhoneNumber = dbMentalHealthExpert.PhoneNumber,
+                        Email = dbMentalHealthExpert.Email,
+                        PhotoAsFile = dbMentalHealthExpert.PhotoAsFile,
+                        PhotoAsPath = dbMentalHealthExpert.PhotoAsPath,
+                        Username = dbMentalHealthExpertAsUser.Username,
+                        Roles = userRoles
+                    };
+
+                    if (mentalHealthExpertDto == null)
+                    {
+                        continue;
+                    }
+
+                    mentalHealthExpertsThatGaveAssignments.Add(mentalHealthExpertDto);
+                }
+
+                if (groupedMentalHealthExpertsThatSetAssignments.Any() && !mentalHealthExpertsThatGaveAssignments.Any())
+                {
+                    _regularUserLoggerService.LogWarning($"EXPERTS-THAT-GAVE-ASSIGNMENTS-TO-USER: {RegularUserServiceLogTypes.NOT_FOUND.ToString()}");
+                    throw new RecordNotFoundException("Data not found!");
+                }
+
+                _regularUserLoggerService.LogInformation($"EXPERTS-THAT-GAVE-ASSIGNMENTS-TO-USER: {RegularUserServiceLogTypes.SUCCESS.ToString()}");
+                return new Response(mentalHealthExpertsThatGaveAssignments, StatusCodes.Status200OK, $"EXPERTS-THAT-GAVE-ASSIGNMENTS-TO-USER: {RegularUserServiceLogTypes.SUCCESS.ToString()}");
+            }
+            catch (Exception e)
+            {
+                _regularUserLoggerService.LogError($"EXPERTS-THAT-GAVE-ASSIGNMENTS-TO-USER: {e.Message}");
+                throw;
+            }
+        }
     }
 }
