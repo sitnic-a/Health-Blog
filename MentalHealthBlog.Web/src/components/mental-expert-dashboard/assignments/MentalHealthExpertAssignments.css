@@ -151,11 +151,11 @@
 .mental-health-experts-assignments-for-users-assignments-assignment-content {
   margin-block: 0;
   font-family: 'SansDeva';
-  font-size: 1.5rem;
+  font-size: 1rem;
   line-height: 1.8rem;
 }
 
-.mental-health-experts-assignments-for-users-assignments-assignment-actions-icon {
+/* .mental-health-experts-assignments-for-users-assignments-assignment-actions-icon {
   margin-right: 0.3rem;
   font-size: 1.5rem;
   cursor: pointer;
@@ -171,10 +171,10 @@
     2
   ) {
   font-size: 1.3rem;
-}
+} */
 
 .mental-health-experts-assignments-for-users-assignments-assignment-date {
   margin-block: 0.8rem;
   font-family: 'SansDeva';
-  font-size: 0.85rem;
+  font-size: 0.75rem;
 }

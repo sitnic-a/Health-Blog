@@ -168,10 +168,10 @@ export const MentalHealthExpertAssignments = () => {
                             ? contentCut
                             : assignment?.content}
                         </p>
-                        <div className="mental-health-experts-assignments-for-users-assignments-assignment-actions-container">
+                        {/* <div className="mental-health-experts-assignments-for-users-assignments-assignment-actions-container">
                           <LiaReadme className="mental-health-experts-assignments-for-users-assignments-assignment-actions-icon" />
                           <SlPencil className="mental-health-experts-assignments-for-users-assignments-assignment-actions-icon" />
-                        </div>
+                        </div> */}
                       </div>
 
                       <div className="mental-health-experts-assignments-for-users-assignments-assignment-date-container">
