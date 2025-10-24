@@ -475,6 +475,25 @@ export const checkPhoneNumberValidity = (phoneNumber, validationMessages) => {
   return [!isValid, validationMessages]
 }
 
+export const checkPhotoValidity = (photo, validationMessages) => {
+  //Photo limiting to 10MB since the web server is configured to 10MB
+  let photoSizeLimit = 10 * 1024 * 1024
+  let actualSizeInBytes = photo?.size
+  let actualSizeInMegaBytes = actualSizeInBytes / 1024 / 1024
+  let actualPhotoSize = actualSizeInMegaBytes.toFixed(2)
+  let isValid = true
+
+  if (photo?.size > photoSizeLimit) {
+    validationMessages.push('Fotografija ne smije biti veća od 10MB')
+    validationMessages.push(
+      'Veličina Vaše fotografije iznosi ' + actualPhotoSize + 'MB'
+    )
+    return [!isValid, validationMessages]
+  }
+
+  return [isValid, validationMessages]
+}
+
 export const checkTagsValidity = (tags, validationMessages) => {
   let isValid = true
   let regexPattern =

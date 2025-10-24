@@ -13,6 +13,7 @@ import {
   checkPasswordValidity,
   checkPersonalInformationValidity,
   checkPhoneNumberValidity,
+  checkPhotoValidity,
   checkUsernameValidity,
   previewImage,
   stringIsNullOrEmpty,
@@ -33,11 +34,13 @@ import {
   setOrganizationValidationData,
   setPhoneNumberValidationData,
   setEmailValidationData,
+  setPhotoValidationData,
 } from '../../redux-toolkit/features/validationSlice'
 import { Password } from '../shared/Password/Password'
 
 export const Register = () => {
   let { dbRoles } = useSelector((store) => store.user)
+  let [photoFile, setPhotoFile] = useState({})
   let { suggestedMentalHealthExperts } = useSelector(
     (store) => store.mentalExpert
   )
@@ -53,6 +56,7 @@ export const Register = () => {
     organizationValidationData,
     phoneNumberValidationData,
     emailValidationData,
+    photoValidationData,
   } = useSelector((store) => store.validation)
 
   let resetValidationData = () => {
@@ -190,6 +194,17 @@ export const Register = () => {
         setEmailValidationData({ emailIsValid, emailValidationMessages })
       )
 
+      let [photoIsValid, photoValidationMessages] = checkPhotoValidity(
+        photoFile,
+        []
+      )
+      dispatch(
+        setPhotoValidationData({
+          photoIsValid,
+          photoValidationMessages,
+        })
+      )
+
       if (
         stringIsNullOrEmpty(username) ||
         !usernameIsValid ||
@@ -205,7 +220,8 @@ export const Register = () => {
         stringIsNullOrEmpty(mentalHealthExpertPhoneNumber) ||
         !phoneNumberIsValid ||
         // stringIsNullOrEmpty(mentalHealthExpertEmail) ||
-        !emailIsValid
+        !emailIsValid ||
+        !photoIsValid
       ) {
         toast.error('Molimo slijedite upute prilikom popunjavanja polja!', {
           autoClose: 3000,
@@ -951,7 +967,28 @@ export const Register = () => {
                 </label>
                 <input
                   onChange={(e) => {
-                    previewImage(e.target.files[0])
+                    let photo = e.target.files[0]
+                    setPhotoFile(photo)
+                    let [isValid, validationMessages] = checkPhotoValidity(
+                      photo,
+                      []
+                    )
+                    dispatch(
+                      setPhotoValidationData({
+                        photoIsValid: isValid,
+                        photoValidationMessages: validationMessages,
+                      })
+                    )
+
+                    if (!isValid) {
+                      let displayPhotoContainer = document.getElementById(
+                        'mental-health-expert-register-photo-main-container'
+                      )
+                      displayPhotoContainer.innerHTML = ''
+                      return
+                    }
+
+                    previewImage(photo)
                   }}
                   accept="image/*"
                   multiple
@@ -963,6 +1000,20 @@ export const Register = () => {
                 id="mental-health-expert-register-photo-main-container"
                 className="mental-health-expert-register-photo-main-container"
               ></div>
+
+              {!photoValidationData?.photoIsValid && (
+                <div className="validation-message-main-container">
+                  {photoValidationData?.photoValidationMessages?.map(
+                    (message, index) => {
+                      return (
+                        <p key={index} className="validation-message">
+                          - {message}
+                        </p>
+                      )
+                    }
+                  )}
+                </div>
+              )}
             </div>
           </div>
         )}
