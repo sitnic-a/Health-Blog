@@ -269,7 +269,6 @@ namespace MentalHealthBlog.API.Services
                 throw;
             }
         }
-
         public async Task<Response> SendApprovedEmail(string email)
         {
             try
@@ -279,6 +278,9 @@ namespace MentalHealthBlog.API.Services
                     _adminLoggerService.LogWarning($"APPROVAL(EMAIL NOTIFICATION): {AdminServiceLogTypes.INVALID_DATA.ToString()}");
                     throw new ArgumentException("Bad request!");
                 }
+
+                var applicationUrl = "http://localhost:3000";
+                //var applicationUrl = "https://mapp-terapija.com";
 
                 var smtpHost = _configuration.GetValue<string>("SMTP_HOST");
                 var smtpPort = _configuration.GetValue<int>("SMTP_PORT");
@@ -318,7 +320,7 @@ namespace MentalHealthBlog.API.Services
                     <div>
                         <p>Direktni pristup aplikaciji možete ostvariti klikom na link ispod: 
                           <br />
-                          <a href=""https://mapp-terapija.com"">https://mapp-terapija.com</a>
+                          <a href={applicationUrl}>{applicationUrl}</a>
                         </p>
 
                         <p>Za sva dodatna pitanja, sugestije ili primjedbe možete nas
