@@ -188,17 +188,18 @@ namespace MentalHealthBlog.API.Services
                 {
                     MentalHealthExpertName = dbMentalHealthExpert.FirstName;
                     dbMentalHealthExpert.IsApproved = patchDto.IsApproved;
-                    if (dbMentalHealthExpert.IsApproved == true)
-                    {
-                        await SendApprovedEmail(dbMentalHealthExpert.Email);
-                    }
+                    
+                    //if (dbMentalHealthExpert.IsApproved == true)
+                    //{
+                    //    await SendApprovedEmail(dbMentalHealthExpert.Email);
+                    //}
 
                     dbMentalHealthExpert.IsRejected = patchDto.IsRejected;
 
-                    if (dbMentalHealthExpert.IsRejected == true)
-                    {
-                        await SendRejectedEmail(dbMentalHealthExpert.Email);
-                    }
+                    //if (dbMentalHealthExpert.IsRejected == true)
+                    //{
+                    //    await SendRejectedEmail(dbMentalHealthExpert.Email);
+                    //}
 
                     await _context.SaveChangesAsync();
                     var dbMentalHealthExperts = await GetNewRegisteredExperts();
@@ -279,8 +280,8 @@ namespace MentalHealthBlog.API.Services
                     throw new ArgumentException("Bad request!");
                 }
 
-                var applicationUrl = "http://localhost:3000";
-                //var applicationUrl = "https://mapp-terapija.com";
+                //var applicationUrl = "http://localhost:3000";
+                var applicationUrl = "https://mapp-terapija.com";
 
                 var smtpHost = _configuration.GetValue<string>("SMTP_HOST");
                 var smtpPort = _configuration.GetValue<int>("SMTP_PORT");
