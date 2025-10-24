@@ -42,6 +42,7 @@ namespace MentalHealthBlog.API.Methods
                           (mhe, u) => new _PartialCombinedUserDto
                           {
                               Id = u.Id,
+                              Username = u.Username,
                               Email = mhe.Email,
                               IsMentalHealthExpert = true,
                           })
@@ -55,6 +56,7 @@ namespace MentalHealthBlog.API.Methods
                       (ru, u) => new _PartialCombinedUserDto
                       {
                           Id = u.Id,
+                          Username = u.Username,
                           Email = ru.Email,
                           IsMentalHealthExpert = false,
                       })

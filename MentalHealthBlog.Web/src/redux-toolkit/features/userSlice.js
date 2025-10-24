@@ -97,7 +97,7 @@ export const requestPasswordChange = createAsyncThunk(
     let url = `${application.application_url}/user/request-password-change`
     let request = await fetch(url, {
       method: 'PUT',
-      body: JSON.stringify(objectWithData?.email),
+      body: JSON.stringify(objectWithData?.request),
       headers: {
         'Content-Type': 'application/json',
       },

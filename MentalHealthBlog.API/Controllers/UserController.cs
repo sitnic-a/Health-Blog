@@ -81,9 +81,9 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpPut("request-password-change")]
-        public async Task<Response> RequestPasswordChange([FromBody] string email)
+        public async Task<Response> RequestPasswordChange([FromBody] RequestChangePasswordDto request)
         {
-            return await _emailService.SendEmail(email);
+            return await _emailService.SendEmail(request);
         }
 
         [HttpPut("change-password")]
