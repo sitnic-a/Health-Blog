@@ -123,7 +123,7 @@ export const Requests = () => {
                                   mentalHealthExpertUserId:
                                     authenticatedUser?.id,
                                   regularUserId: request?.regularUserId,
-                                  newRequestStatus: requestStatuses.PENDING,
+                                  newRequestStatus: requestStatuses.DECLINED,
                                   userSendingRequest: false,
                                 }
                                 dispatch(changeRequestStatus(objectWithData))
