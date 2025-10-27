@@ -209,9 +209,21 @@ namespace MentalHealthBlog.API.Services
                     throw new ArgumentException("Bad request!");
                 }
 
-                var dbAssignments = await _context.Assignments
-                    .Where(a => a.AssignmentGivenById == query.LoggedExpertId)
+                var usersInTherapy = await _context.TherapyRequests
+                    .Where(tr => tr.MentalHealthExpertId == query.LoggedExpertId &&
+                                 tr.RequestStatus == RequestStatusEnum.Approved)
                     .ToListAsync();
+
+                var dbAssignments = new List<Assignment>();
+
+                foreach (var userInTherapy in usersInTherapy)
+                {
+                    var usersAssignments = await _context.Assignments
+                         .Where(a => a.AssignmentGivenToId == userInTherapy.RegularUserId)
+                         .ToListAsync();
+
+                    dbAssignments.AddRange(usersAssignments);
+                }         
 
                 if (!dbAssignments.Any())
                 {
