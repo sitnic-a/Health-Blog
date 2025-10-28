@@ -19,7 +19,11 @@ import UserAssignmentsCSS from './UserAssignments.css'
 
 export const UserAssignments = () => {
   let dispatch = useDispatch()
-  let { authenticatedUser } = useSelector((store) => store.user)
+  // let { authenticatedUser } = useSelector((store) => store.user)
+
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
   let { expertsThatGaveAssignmentsToUser } = useSelector(
     (store) => store.regularUser
   )

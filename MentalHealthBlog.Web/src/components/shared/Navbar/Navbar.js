@@ -15,7 +15,9 @@ export const Navbar = () => {
     switchActiveTab(tabs)
   }, [])
 
-  let { authenticatedUser } = useSelector((store) => store.user)
+  // let { authenticatedUser } = useSelector((store) => store.user)
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
 
   let __ADMIN_ROLE_ID = 1
   let __USER_ROLE_ID = 2

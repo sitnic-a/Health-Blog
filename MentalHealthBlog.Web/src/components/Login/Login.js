@@ -3,7 +3,11 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 
-import { login, setIsFailed } from '../../redux-toolkit/features/userSlice'
+import {
+  login,
+  setAuthenticatedUser,
+  setIsFailed,
+} from '../../redux-toolkit/features/userSlice'
 import {
   setUsernameValidationData,
   setPasswordValidationData,
@@ -19,6 +23,7 @@ import { Password } from '../shared/Password/Password'
 import { LoginFooterBankAccount } from '../LoginFooterBankAccount/LoginFooterBankAccount'
 
 import LoginCSS from './Login.css'
+import { checkIfTokenIsExpired } from '../../utils/helper-methods/jwt'
 
 export const Login = () => {
   let dispatch = useDispatch()
@@ -87,7 +92,6 @@ export const Login = () => {
 
     dispatch(login(user)).then((response) => {
       let statusCode = response?.payload?.statusCode
-
       if (statusCode === undefined) {
         toast.error('Login nije moguć!', {
           autoClose: 3000,
@@ -96,6 +100,17 @@ export const Login = () => {
       }
 
       if (statusCode === 200 || statusCode === 201 || statusCode === 204) {
+        let serviceResponseObject = response?.payload?.serviceResponseObject
+
+        dispatch(setAuthenticatedUser(response?.payload))
+        localStorage.setItem('jwToken', serviceResponseObject?.jwToken)
+        localStorage.setItem(
+          'authenticatedUser',
+          JSON.stringify(serviceResponseObject)
+        )
+        let jwToken = localStorage.getItem('jwToken')
+        let tokenShouldBeRenewed = checkIfTokenIsExpired(jwToken)
+
         navigate('/', {
           replace: true,
           state: {

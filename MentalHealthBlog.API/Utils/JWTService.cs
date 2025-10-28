@@ -59,7 +59,7 @@ namespace MentalHealthBlog.API.Utils
                 Subject = new ClaimsIdentity(claims),
                 Issuer = "http://localhost:3000",
                 IssuedAt = DateTime.UtcNow,
-                Expires = DateTime.UtcNow.AddMinutes(15),
+                Expires = DateTime.UtcNow.AddMinutes(2),
 
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
