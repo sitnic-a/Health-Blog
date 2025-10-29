@@ -1,7 +1,13 @@
 import moment from 'moment'
 
 export function stringIsNullOrEmpty(variable) {
-  return variable === null || variable === undefined || variable === ''
+  return (
+    variable === null ||
+    variable === undefined ||
+    variable === '' ||
+    variable === 'undefined' ||
+    variable === 'undefined'
+  )
 }
 
 export function formatDateToString(date) {

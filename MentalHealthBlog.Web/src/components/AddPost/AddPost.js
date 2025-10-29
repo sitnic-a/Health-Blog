@@ -30,7 +30,11 @@ import AddPostCSS from './AddPost.css'
 
 export const AddPost = () => {
   let dispatch = useDispatch()
-  let { authenticatedUser } = useSelector((store) => store.user)
+  // let { authenticatedUser } = useSelector((store) => store.user)
+
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
   let { isAddOpen } = useSelector((store) => store.modal)
   let { chosenTags } = useSelector((store) => store.tag)
   let { pickedEmotions } = useSelector((store) => store.emotion)
@@ -167,6 +171,7 @@ export const AddPost = () => {
               id="title"
               name="title"
               placeholder="Unesite naziv posta..."
+              autoSave={true}
               onBlur={(e) => {
                 let title = e.target.value
                 let isTitle = true
@@ -214,6 +219,7 @@ export const AddPost = () => {
               rows="10"
               spellCheck={false}
               placeholder="Unesite sadržaj posta..."
+              autoSave={true}
               onBlur={(e) => {
                 let content = e.target.value
                 let isTitle = false

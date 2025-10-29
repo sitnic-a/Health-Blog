@@ -29,6 +29,7 @@ import { MyMentalHealthExperts } from './components/my-experts/MyMentalHealthExp
 import { TermsAndConditions } from './pages/TermsAndConditions'
 import { ResetPassword } from './components/ResetPassword/ResetPassword'
 import { RequestPasswordChange } from './components/RequestPasswordChange/RequestPasswordChange'
+import { TokenRefresher } from './components/TokenRefresher'
 
 function App() {
   windowResize(application.layouts.min_screen_single_col_width)
@@ -73,7 +74,7 @@ function App() {
               element={<TermsAndConditions />}
             ></Route>
 
-            <Route element={<RequireAuth />}>
+            <Route element={<TokenRefresher />}>
               <Route path="/" element={<Dashboard />} />
               <Route path="/post/:id" element={<PostById />}></Route>
 

@@ -108,8 +108,6 @@ export const Login = () => {
           'authenticatedUser',
           JSON.stringify(serviceResponseObject)
         )
-        let jwToken = localStorage.getItem('jwToken')
-        let tokenShouldBeRenewed = checkIfTokenIsExpired(jwToken)
 
         navigate('/', {
           replace: true,
