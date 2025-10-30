@@ -14,7 +14,10 @@ import { useEffect } from 'react'
 export const CreateAssignment = () => {
   let dispatch = useDispatch()
   let navigate = useNavigate()
-  let { authenticatedUser, dbUser } = useSelector((store) => store.user)
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
+  let { dbUser } = useSelector((store) => store.user)
   let { contentValidationData } = useSelector((store) => store.validation)
 
   useEffect(() => {

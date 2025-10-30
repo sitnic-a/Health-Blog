@@ -1,7 +1,13 @@
 import moment from 'moment'
 
 export function stringIsNullOrEmpty(variable) {
-  return variable === null || variable === undefined || variable === ''
+  return (
+    variable === null ||
+    variable === undefined ||
+    variable === '' ||
+    variable === 'undefined' ||
+    variable === 'undefined'
+  )
 }
 
 export function formatDateToString(date) {
@@ -58,8 +64,8 @@ export function getSelectedPosts(loggedUser) {
       '.post-container > .post-container-content'
     )
 
-    let id = postContainerContent.querySelector('input[data-post-id]').dataset
-      .postId
+    let id = postContainerContent.querySelector('input[data-post-id]')?.dataset
+      ?.postId
 
     let postTitle =
       postContainerContent.querySelector('.post-header > h1').innerHTML
@@ -101,7 +107,7 @@ export function getSelectedPosts(loggedUser) {
 
     let post = {
       id: parseInt(id),
-      userId: loggedUser.id,
+      userId: loggedUser?.id,
       title: postTitle,
       user: author,
       content: postContent,
@@ -440,13 +446,16 @@ export const checkInputDataValidity = (
   let isValid = true
   if (isTitle) {
     let regexPattern =
-      /^(?!.*[ \-_.:,!?'"()]{2})(?!^[\s\-_.:,!?'"()])(?!.*[\-_.:,!?'"()]\s?$)[\p{L}\p{N} \-_.:,!?'"()]{1,150}$/u
+      /^(?!^[\s\-_.:,!?'"()])(?!.*[\-_,:'"()]\s?$)[\p{L}\p{N}\s\-_.:,!?'"()]{1,150}[.!?]?$/u
+
     if (regexPattern.test(data)) {
       return [isValid, validationMessages]
     }
     validationMessages.push('Može imati slova, brojeve i specijalne karaktere')
-    validationMessages.push('Ne smije imati više specijalnih znakova u nizu')
-    validationMessages.push('Dozvoljeni karakteri: - _ . , : ! ? \' /" ()')
+    validationMessages.push('Dozvoljeni karakteri: - _ , : \' /" ()')
+    validationMessages.push(
+      'Ako završava znakom mora završiti tačkom, upitnikom ili uzvičnikom'
+    )
     return [!isValid, validationMessages]
   }
 
@@ -473,6 +482,25 @@ export const checkPhoneNumberValidity = (phoneNumber, validationMessages) => {
   validationMessages.push('Mogu se koristiti zbog bolje čitljivosti')
   validationMessages.push('Dozvoljeni karakteri: + - / and space')
   return [!isValid, validationMessages]
+}
+
+export const checkPhotoValidity = (photo, validationMessages) => {
+  //Photo limiting to 10MB since the web server is configured to 10MB
+  let photoSizeLimit = 10 * 1024 * 1024
+  let actualSizeInBytes = photo?.size
+  let actualSizeInMegaBytes = actualSizeInBytes / 1024 / 1024
+  let actualPhotoSize = actualSizeInMegaBytes.toFixed(2)
+  let isValid = true
+
+  if (photo?.size > photoSizeLimit) {
+    validationMessages.push('Fotografija ne smije biti veća od 10MB')
+    validationMessages.push(
+      'Veličina Vaše fotografije iznosi ' + actualPhotoSize + 'MB'
+    )
+    return [!isValid, validationMessages]
+  }
+
+  return [isValid, validationMessages]
 }
 
 export const checkTagsValidity = (tags, validationMessages) => {

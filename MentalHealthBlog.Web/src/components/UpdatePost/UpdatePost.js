@@ -21,11 +21,15 @@ export const UpdatePost = () => {
   let dispatch = useDispatch()
   let navigate = useNavigate()
 
-  let { authenticatedUser } = useSelector((store) => store.user)
+  // let { authenticatedUser } = useSelector((store) => store.user)
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
   let { titleValidationData, contentValidationData } = useSelector(
     (store) => store.validation
   )
   let { post } = useSelector((store) => store.post)
+
   let [title, setTitle] = useState(post?.title)
   let [content, setContent] = useState(post?.content)
 
@@ -57,23 +61,42 @@ export const UpdatePost = () => {
       authenticatedUser,
     }
 
-    let form = new FormData(updatePostObj.e.target)
-    let formEntries = [...form.entries()]
-    let formObject = Object.fromEntries(formEntries)
-
     let objectWithData = {
-      title: formObject?.title,
-      content: formObject?.content,
+      title: title,
+      content: content,
       userId: updatePostObj?.post?.userId,
       authenticatedUser,
       post,
     }
 
+    let isTitle = true
+    let isContent = false
+    let [titleIsValid, titleValidationMessages] = checkInputDataValidity(
+      objectWithData?.title,
+      [],
+      isTitle,
+      isContent
+    )
+    dispatch(setTitleValidationData({ titleIsValid, titleValidationMessages }))
+
+    isTitle = false
+    isContent = true
+    let [contentIsValid, contentValidationMessages] = checkInputDataValidity(
+      objectWithData?.content,
+      [],
+      isTitle,
+      isContent
+    )
+
+    dispatch(
+      setContentValidationData({ contentIsValid, contentValidationMessages })
+    )
+
     if (
       stringIsNullOrEmpty(objectWithData?.title) ||
-      !titleValidationData?.titleIsValid ||
+      !titleIsValid ||
       stringIsNullOrEmpty(objectWithData?.content) ||
-      !contentValidationData?.contentIsValid ||
+      !contentIsValid ||
       objectWithData?.userId <= 0
     ) {
       toast.error('Molimo slijedite upute prilikom popunjavanja polja!', {

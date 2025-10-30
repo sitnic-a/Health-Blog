@@ -59,6 +59,12 @@
   font-weight: 700;
 }
 
+@media (width<=920px) {
+  .es-gmail-container {
+    display: none;
+  }
+}
+
 .es-gmail-container > span > svg:hover {
   fill: url('#es-gmail-container-gradient');
 }

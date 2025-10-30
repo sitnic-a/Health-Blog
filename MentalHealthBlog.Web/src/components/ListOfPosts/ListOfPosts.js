@@ -21,7 +21,9 @@ import ListOfPostsCSS from './ListOfPosts.css'
 export const ListOfPosts = () => {
   let dispatch = useDispatch()
   let { isLoading, posts } = useSelector((store) => store.post)
-  let { authenticatedUser, isLogging } = useSelector((store) => store.user)
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+  let { isLogging } = useSelector((store) => store.user)
   let { statisticsLoading } = useSelector((store) => store.pie)
   let { isDeleteOpen } = useSelector((store) => store.modal)
   let searchPostDto = {

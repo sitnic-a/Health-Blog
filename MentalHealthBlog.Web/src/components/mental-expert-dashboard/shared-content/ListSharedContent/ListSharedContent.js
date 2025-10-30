@@ -39,7 +39,15 @@ export const ListSharedContent = (props) => {
               <div
                 className="sharing-users-main-post-container"
                 key={content?.id}
-                onClick={() => dispatch(setOverlayPost(content))}
+                onClick={() => {
+                  dispatch(setOverlayPost(content))
+                  let sharingUsersContentContainer = document.querySelector(
+                    '.sharing-users-content-container'
+                  )
+                  sharingUsersContentContainer.classList.toggle(
+                    'sharing-users-content-container-clipped'
+                  )
+                }}
               >
                 <SharedContent content={content} />
               </div>

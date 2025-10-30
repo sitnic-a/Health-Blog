@@ -9,7 +9,10 @@ import DeletePostConfirmationCSS from './DeletePostConfirmation.css'
 
 export const DeletePostConfirmation = () => {
   let dispatch = useDispatch()
-  let { authenticatedUser } = useSelector((store) => store.user)
+  // let { authenticatedUser } = useSelector((store) => store.user)
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
   let { isDeleteOpen } = useSelector((store) => store.modal)
   let { post } = useSelector((store) => store.post)
 

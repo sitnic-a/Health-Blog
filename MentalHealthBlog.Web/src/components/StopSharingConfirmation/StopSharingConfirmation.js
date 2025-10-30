@@ -13,7 +13,11 @@ import StopSharingConfirmationCSS from './StopSharingConfirmation.css'
 
 export const StopSharingConfirmation = () => {
   let dispatch = useDispatch()
-  let { authenticatedUser } = useSelector((store) => store.user)
+  // let { authenticatedUser } = useSelector((store) => store.user)
+
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
   let { stopSharingObject } = useSelector((store) => store.therapy)
   let { isStopSharingOpen } = useSelector((store) => store.modal)
 
@@ -40,6 +44,9 @@ export const StopSharingConfirmation = () => {
               type="button"
               className="stop-sharing-modal-content-action stop-sharing-modal-action-remove"
               onClick={() => {
+                authenticatedUserLocalStorage =
+                  localStorage.getItem('authenticatedUser')
+                authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
                 dispatch(changeRequestStatus(stopSharingObject)).then(
                   (data) => {
                     let statusCode = data?.payload?.statusCode
@@ -69,6 +76,9 @@ export const StopSharingConfirmation = () => {
               type="button"
               className="stop-sharing-modal-content-action stop-sharing-modal-action-keep-content"
               onClick={() => {
+                authenticatedUserLocalStorage =
+                  localStorage.getItem('authenticatedUser')
+                authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
                 dispatch(changeRequestStatus(stopSharingObject)).then(
                   (data) => {
                     let statusCode = data?.payload?.statusCode

@@ -26,6 +26,12 @@ export const OverlayPostPreview = (props) => {
             return
           } else {
             dispatch(setOverlayPost(null))
+            let sharingUsersContentContainer = document.querySelector(
+              '.sharing-users-content-container'
+            )
+            sharingUsersContentContainer.classList.toggle(
+              'sharing-users-content-container-clipped'
+            )
           }
         }}
       >
@@ -34,6 +40,12 @@ export const OverlayPostPreview = (props) => {
             className="overlay-post-actions"
             onClick={() => {
               dispatch(setOverlayPost(null))
+              let sharingUsersContentContainer = document.querySelector(
+                '.sharing-users-content-container'
+              )
+              sharingUsersContentContainer.classList.toggle(
+                'sharing-users-content-container-clipped'
+              )
             }}
           >
             <span className="overlay-post-actions-close-modal">X</span>

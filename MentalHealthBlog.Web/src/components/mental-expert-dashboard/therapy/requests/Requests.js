@@ -15,7 +15,10 @@ import RequestsCSS from './Requests.css'
 
 export const Requests = () => {
   let dispatch = useDispatch()
-  let { authenticatedUser } = useSelector((store) => store.user)
+  // let { authenticatedUser } = useSelector((store) => store.user)
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
   let { requestsForMentalHealthExpert } = useSelector((store) => store.therapy)
 
   useEffect(() => {
@@ -62,6 +65,12 @@ export const Requests = () => {
                               className="therapy-requests-request-content-action therapy-request-approve-action"
                               type="button"
                               onClick={() => {
+                                authenticatedUserLocalStorage =
+                                  localStorage.getItem('authenticatedUser')
+                                authenticatedUser = JSON.parse(
+                                  authenticatedUserLocalStorage
+                                )
+
                                 let objectWithData = {
                                   authenticatedUser,
                                   mentalHealthExpertUserId:
@@ -82,6 +91,12 @@ export const Requests = () => {
                             <FaCheck
                               className="therapy-requests-request-content-action therapy-request-icon-action therapy-request-approve-icon-action"
                               onClick={() => {
+                                authenticatedUserLocalStorage =
+                                  localStorage.getItem('authenticatedUser')
+                                authenticatedUser = JSON.parse(
+                                  authenticatedUserLocalStorage
+                                )
+
                                 let objectWithData = {
                                   authenticatedUser,
                                   mentalHealthExpertUserId:
@@ -99,6 +114,12 @@ export const Requests = () => {
                             className="therapy-requests-request-content-action therapy-request-decline-action"
                             type="button"
                             onClick={() => {
+                              authenticatedUserLocalStorage =
+                                localStorage.getItem('authenticatedUser')
+                              authenticatedUser = JSON.parse(
+                                authenticatedUserLocalStorage
+                              )
+
                               let objectWithData = {
                                 authenticatedUser,
                                 mentalHealthExpertUserId: authenticatedUser?.id,
@@ -118,12 +139,18 @@ export const Requests = () => {
                               className="therapy-requests-request-content-action therapy-request-stop-sharing-action"
                               type="button"
                               onClick={() => {
+                                authenticatedUserLocalStorage =
+                                  localStorage.getItem('authenticatedUser')
+                                authenticatedUser = JSON.parse(
+                                  authenticatedUserLocalStorage
+                                )
+
                                 let objectWithData = {
                                   authenticatedUser,
                                   mentalHealthExpertUserId:
                                     authenticatedUser?.id,
                                   regularUserId: request?.regularUserId,
-                                  newRequestStatus: requestStatuses.PENDING,
+                                  newRequestStatus: requestStatuses.DECLINED,
                                   userSendingRequest: false,
                                 }
                                 dispatch(changeRequestStatus(objectWithData))
@@ -138,6 +165,12 @@ export const Requests = () => {
                             <HiX
                               className="therapy-requests-request-content-action therapy-request-icon-action therapy-request-decline-icon-action"
                               onClick={() => {
+                                authenticatedUserLocalStorage =
+                                  localStorage.getItem('authenticatedUser')
+                                authenticatedUser = JSON.parse(
+                                  authenticatedUserLocalStorage
+                                )
+
                                 let objectWithData = {
                                   authenticatedUser,
                                   mentalHealthExpertUserId:

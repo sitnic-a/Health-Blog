@@ -11,7 +11,9 @@ import { toast } from 'react-toastify'
 
 export const RespondToAssignment = () => {
   let dispatch = useDispatch()
-  let { authenticatedUser } = useSelector((store) => store.user)
+  // let { authenticatedUser } = useSelector((store) => store.user)
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
 
   let { pickedAssignment } = useSelector((store) => store.assignment)
   let { isRespondingToAssignment } = useSelector((store) => store.modal)

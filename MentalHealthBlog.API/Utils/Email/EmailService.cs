@@ -43,8 +43,8 @@ namespace MentalHealthBlog.API.Utils.Email
                         throw new ArgumentException("Bad request!");
                     }
 
-                    var applicationUrl = "http://localhost:3000";
-                    //var applicationUrl = "https://mapp-terapija.com";
+                    //var applicationUrl = "http://localhost:3000";
+                    var applicationUrl = "https://mapp-terapija.com";
 
                     _safetyChangeMeasure = Guid.NewGuid();
                     _memoryCache.Set("blueprint", _safetyChangeMeasure, new MemoryCacheEntryOptions

@@ -11,7 +11,10 @@ import LogoutCSS from '../Logout/Logout.css'
 export const Logout = () => {
   let dispatch = useDispatch()
   let navigate = useNavigate()
-  let { authenticatedUser } = useSelector((store) => store.user)
+  // let { authenticatedUser } = useSelector((store) => store.user)
+
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
 
   let refreshToken = Cookies.get('refreshToken')
 
@@ -29,6 +32,8 @@ export const Logout = () => {
         }
         dispatch(logout(logoutRequest)).then(() => {
           Cookies.remove('refreshToken')
+          localStorage.removeItem('authenticatedUser')
+          localStorage.removeItem('jwToken')
           navigate('/login')
         })
       }}

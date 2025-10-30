@@ -17,9 +17,6 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Configure services
-builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
-
 // Add services to the container.
 builder.Services.AddControllers();
 

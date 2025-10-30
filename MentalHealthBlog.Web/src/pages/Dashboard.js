@@ -7,7 +7,9 @@ import Cookies from 'js-cookie'
 import { LandingNotConfirmedMentalHealthExpert } from '../components/LandingNotConfirmedMentalHealthExpert/LandingNotConfirmedMentalHealthExpert'
 
 export const Dashboard = () => {
-  let { authenticatedUser } = useSelector((store) => store.user)
+  // let { authenticatedUser } = useSelector((store) => store.user)
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
   var isPending = localStorage.getItem('isPending')
 
   if (isPending == false || isPending == null || isPending == undefined) {

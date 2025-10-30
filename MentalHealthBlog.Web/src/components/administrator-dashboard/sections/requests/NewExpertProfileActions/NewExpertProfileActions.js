@@ -11,13 +11,21 @@ import NewExpertProfileActionsCSS from './NewExpertProfileActions.css'
 
 export const NewExpertProfileActions = (props) => {
   let dispatch = useDispatch()
-  let { authenticatedUser } = useSelector((store) => store.user)
+  // let { authenticatedUser } = useSelector((store) => store.user)
+
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
   let expert = props.expert
   return (
     <div className="new-expert-profile-bio-actions">
       <div className="new-expert-profile-action">
         <button
           onClick={() => {
+            authenticatedUserLocalStorage =
+              localStorage.getItem('authenticatedUser')
+            authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
             let objectWithData = {
               patchDto: {
                 mentalHealthExpertId: expert.userId,
@@ -69,6 +77,10 @@ export const NewExpertProfileActions = (props) => {
       <div className="new-expert-profile-action">
         <button
           onClick={() => {
+            authenticatedUserLocalStorage =
+              localStorage.getItem('authenticatedUser')
+            authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
             let objectWithData = {
               patchDto: {
                 mentalHealthExpertId: expert.userId,

@@ -6,11 +6,17 @@ import { MentalHealthExpertAssignments as MentalHealthExpertAssignments } from '
 
 export const Assignments = () => {
   let { id } = useParams()
-  let { authenticatedUser } = useSelector((store) => store.user)
-  if (authenticatedUser.userRoles.some((r) => r.id === db_roles.USER)) {
+  // let { authenticatedUser } = useSelector((store) => store.user)
+
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
+  if (authenticatedUser?.userRoles.some((r) => r.id === db_roles.USER)) {
     return <UserAssignments />
   }
-  if (authenticatedUser.userRoles.some((r) => r.id === db_roles.PSYCHOLOGIST)) {
+  if (
+    authenticatedUser?.userRoles.some((r) => r.id === db_roles.PSYCHOLOGIST)
+  ) {
     return <MentalHealthExpertAssignments />
   }
 }

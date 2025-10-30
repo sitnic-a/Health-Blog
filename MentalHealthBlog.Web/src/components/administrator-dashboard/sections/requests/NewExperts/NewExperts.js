@@ -14,7 +14,10 @@ import NewExpertsCSS from './NewExperts.css'
 
 export const NewExperts = () => {
   let dispatch = useDispatch()
-  let { authenticatedUser } = useSelector((store) => store.user)
+  // let { authenticatedUser } = useSelector((store) => store.user)
+
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
 
   let { newlyRegisteredMentalHealthExperts } = useSelector(
     (store) => store.admin
@@ -75,6 +78,10 @@ export const NewExperts = () => {
               className="new-experts-status-button rejected"
               type="button"
               onClick={() => {
+                authenticatedUserLocalStorage =
+                  localStorage.getItem('authenticatedUser')
+                authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
                 let objectWithData = {
                   query: {
                     status: false,
@@ -93,6 +100,10 @@ export const NewExperts = () => {
               className="new-experts-status-button approved"
               type="button"
               onClick={() => {
+                authenticatedUserLocalStorage =
+                  localStorage.getItem('authenticatedUser')
+                authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
                 let objectWithData = {
                   query: {
                     status: true,
@@ -111,6 +122,10 @@ export const NewExperts = () => {
               className="new-experts-status-button pending"
               type="button"
               onClick={() => {
+                authenticatedUserLocalStorage =
+                  localStorage.getItem('authenticatedUser')
+                authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
                 let objectWithData = {
                   authenticatedUser,
                 }

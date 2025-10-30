@@ -24,7 +24,10 @@ import ShareModalCSS from './ShareModal.css'
 export const ShareModal = () => {
   let dispatch = useDispatch()
 
-  let { authenticatedUser } = useSelector((store) => store.user)
+  // let { authenticatedUser } = useSelector((store) => store.user)
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
   let { isShareOpen, isShareViaLinkOpen } = useSelector((store) => store.modal)
   let { postsToExport, disabledShareContentAction, isSharingLink } =
     useSelector((store) => store.shareExport)

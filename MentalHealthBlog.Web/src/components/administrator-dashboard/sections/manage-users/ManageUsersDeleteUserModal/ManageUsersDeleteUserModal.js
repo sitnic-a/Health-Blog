@@ -9,7 +9,11 @@ import ManageUsersDeleteUserModalCSS from './ManageUsersDeleteUserModal.css'
 
 export const ManageUsersDeleteUserModal = ({ dbUser }) => {
   let dispatch = useDispatch()
-  let { authenticatedUser } = useSelector((store) => store.user)
+  // let { authenticatedUser } = useSelector((store) => store.user)
+
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
   let { isDeleteOpen } = useSelector((store) => store.modal)
 
   return (
@@ -32,6 +36,10 @@ export const ManageUsersDeleteUserModal = ({ dbUser }) => {
             type="button"
             className="manage-users-modal-confirm-delete-button"
             onClick={() => {
+              authenticatedUserLocalStorage =
+                localStorage.getItem('authenticatedUser')
+              authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
               let objectWithData = {
                 dbUser,
                 authenticatedUser,

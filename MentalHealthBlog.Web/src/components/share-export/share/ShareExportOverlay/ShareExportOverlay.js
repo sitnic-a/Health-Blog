@@ -21,7 +21,10 @@ import { requestStatuses } from '../../../../enums/requestStatuses'
 
 export const ShareExportOverlay = () => {
   let dispatch = useDispatch()
-  let { authenticatedUser } = useSelector((store) => store.user)
+  // let { authenticatedUser } = useSelector((store) => store.user)
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
   let { isShareOpen, isExportOpen } = useSelector((store) => store.modal)
   let { postsToExport } = useSelector((store) => store.shareExport)
 

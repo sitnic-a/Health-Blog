@@ -13,7 +13,11 @@ import ManageUsersTableCSS from './ManageUsersTable.css'
 
 export const ManageUsersTable = () => {
   let dispatch = useDispatch()
-  let { authenticatedUser } = useSelector((store) => store.user)
+  // let { authenticatedUser } = useSelector((store) => store.user)
+
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
   let { dbUsers, selectedRole, isFailed } = useSelector((store) => store.admin)
 
   useEffect(() => {

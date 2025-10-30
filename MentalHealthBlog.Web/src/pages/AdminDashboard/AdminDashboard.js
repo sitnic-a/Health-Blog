@@ -12,7 +12,11 @@ import AdminDashboardCSS from './AdminDashboard.css'
 
 export const AdminDashboard = () => {
   let dispatch = useDispatch()
-  let { authenticatedUser } = useSelector((store) => store.user)
+  // let { authenticatedUser } = useSelector((store) => store.user)
+
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
   let { isFailed, numberOfNewlyRegisteredMentalHealthExperts } = useSelector(
     (store) => store.admin
   )

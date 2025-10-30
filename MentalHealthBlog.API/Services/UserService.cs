@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using MailKit.Net.Smtp;
+using MailKit.Security;
 using MentalHealthBlog.API.Exceptions;
 using MentalHealthBlog.API.ExtensionMethods.ExtensionRegularUserClass;
 using MentalHealthBlog.API.ExtensionMethods.ExtensionUserClass;
@@ -7,12 +9,14 @@ using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Utils;
+using MentalHealthBlog.API.Utils.Email;
 using MentalHealthBlogAPI.Data;
 using MentalHealthBlogAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using MimeKit;
 using System.Security.Cryptography;
 
 #pragma warning disable CS8602,CS8604
@@ -40,8 +44,6 @@ namespace MentalHealthBlog.API.Services
     public class UserService : IUserService
     {
         private readonly ILogger<UserService> _userLoggerService;
-        private readonly AppSettings _optionsAppSettings;
-        private readonly IOptions<AppSettings> _options;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         private readonly IMemoryCache _memoryCache;
@@ -55,11 +57,9 @@ namespace MentalHealthBlog.API.Services
         private User user = new();
 
 
-        public UserService(DataContext context, IOptions<AppSettings> options, IConfiguration configuration, IMapper mapper, IMemoryCache memoryCache, ILogger<UserService> userLoggerService)
+        public UserService(DataContext context, IConfiguration configuration, IMapper mapper, IMemoryCache memoryCache, ILogger<UserService> userLoggerService)
         {
             _context = context;
-            _optionsAppSettings = options.Value;
-            _options = options;
             _configuration = configuration;
             _mapper = mapper;
             _memoryCache = memoryCache;
@@ -226,8 +226,11 @@ namespace MentalHealthBlog.API.Services
                     }
                     newMentalHealthExpert.UserId = user.Id;
                     await _context.MentalHealthExperts.AddAsync(newMentalHealthExpert);
+
+
                 }
                 await _context.SaveChangesAsync();
+                await SendNewProfileRequestEmail();
                 _userLoggerService.LogInformation($"REGISTER: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", user);
                 return new Response(new SignedUserDto(user.Id, user.Username), StatusCodes.Status201Created, UserServiceLogTypes.USER_SUCCESFULL.ToString());
 
@@ -249,7 +252,7 @@ namespace MentalHealthBlog.API.Services
                 }
                 bool? isPending = null;
                 var __PSYCHOLOGIST_ROLE_ID__ = 4;
-                var jwtMiddleware = new JWTService(_options, _context, _configuration);
+                var jwtMiddleware = new JWTService(_context, _configuration);
                 var authenticated = await VerifyCredentials(loginCredentials);
                 var dbUser = await _context.Users.SingleOrDefaultAsync(u => u.Username == loginCredentials.Username);
                 if (authenticated && dbUser is not null)
@@ -329,7 +332,7 @@ namespace MentalHealthBlog.API.Services
         {
             try
             {
-                var jwtMiddleware = new JWTService(_options, _context, _configuration);
+                var jwtMiddleware = new JWTService(_context, _configuration);
                 var accessToken = await jwtMiddleware.RefreshAccessToken(refreshToken);
                 if (accessToken.StatusCode == 200 || accessToken.StatusCode == 201)
                 {
@@ -439,6 +442,57 @@ namespace MentalHealthBlog.API.Services
             catch (Exception e)
             {
                 _userLoggerService.LogError($"CHANGE-PASSWORD: {e.Message}");
+                throw;
+            }
+        }
+        public async Task<Response> SendNewProfileRequestEmail()
+        {
+            try
+            {
+                //var applicationUrl = "http://localhost:3000";
+                var applicationUrl = "https://mapp-terapija.com";
+
+                var smtpHost = _configuration.GetValue<string>("SMTP_HOST");
+                var smtpPort = _configuration.GetValue<int>("SMTP_PORT");
+                var applicationInfoEmail = _configuration.GetValue<string>("APPLICATION_INFO_EMAIL");
+                var smtpHostAddress = _configuration.GetValue<string>("SMTP_HOST_ADDRESS");
+                var smtpPassword = _configuration.GetValue<string>("SMTP_PASSWORD");
+
+                    var message = new MimeMessage();
+                    message.From.Add(new MailboxAddress("Info, Mapp Terapija", applicationInfoEmail));
+                    message.To.Add(new MailboxAddress("Recipient", smtpHostAddress));
+                    message.Subject = "New experts registered!";
+                    message.Body = new TextPart("html")
+                    {
+                        Text = $@"
+                <div>
+                    <p> Poštovani PSIHOnet tim, 
+                        <br />
+                        <br />
+                        Upravo se registrovala nova osoba na sistem. 
+                      </p>
+
+                    <div>
+                        <p>Klikom na link ispod možete odmah pristupiti aplikaciji: 
+                          <br />
+                          <a href={applicationUrl}>{applicationUrl}</a>
+                        </p>
+                    </div>
+                </div>"
+                    };
+
+                    using var client = new SmtpClient();
+                    client.Connect(smtpHost, smtpPort, SecureSocketOptions.StartTls);
+                    await client.AuthenticateAsync(smtpHostAddress, smtpPassword);
+                    await client.SendAsync(message);
+                    await client.DisconnectAsync(true);
+
+                    _userLoggerService.LogInformation($"REGISTER(EMAIL-NOTIFICATION): {UserServiceLogTypes.USER_SUCCESFULL.ToString()}");
+                    return new Response(new object(), StatusCodes.Status200OK, EmailLogTypes.SUCCESS.ToString());
+            }
+            catch (Exception e)
+            {
+                _userLoggerService.LogError($"REGISTER(EMAIL-NOTIFICATION): {e.Message}");
                 throw;
             }
         }

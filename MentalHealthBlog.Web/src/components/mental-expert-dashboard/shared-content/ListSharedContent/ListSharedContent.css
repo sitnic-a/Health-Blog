@@ -14,6 +14,10 @@
   max-width: 0;
 }
 
+.sharing-users-content-container-clipped {
+  overflow-y: clip;
+}
+
 .sharing-users-content-header {
   display: flex;
   justify-content: space-between;
@@ -42,7 +46,6 @@
 
 .sharing-users-posts {
   max-width: 950px;
-  min-height: 750px;
   display: flex;
   flex-wrap: wrap;
   margin-inline: 0.5rem;
