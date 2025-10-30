@@ -446,13 +446,17 @@ export const checkInputDataValidity = (
   let isValid = true
   if (isTitle) {
     let regexPattern =
-      /^(?!.*[ \-_.:,!?'"()]{2})(?!^[\s\-_.:,!?'"()])(?!.*[\-_.:,!?'"()]\s?$)[\p{L}\p{N} \-_.:,!?'"()]{1,150}$/u
+      /^(?!^[\s\-_.:,!?'"()])(?!.*[\-_,:'"()]\s?$)[\p{L}\p{N}\s\-_.:,!?'"()]{1,150}[.!?]?$/u
+
     if (regexPattern.test(data)) {
       return [isValid, validationMessages]
     }
     validationMessages.push('Može imati slova, brojeve i specijalne karaktere')
     validationMessages.push('Ne smije imati više specijalnih znakova u nizu')
-    validationMessages.push('Dozvoljeni karakteri: - _ . , : ! ? \' /" ()')
+    validationMessages.push('Dozvoljeni karakteri: - _ , : \' /" ()')
+    validationMessages.push(
+      'Ako završava znakom mora završiti tačkom, upitnikom ili uzvičnikom'
+    )
     return [!isValid, validationMessages]
   }
 
