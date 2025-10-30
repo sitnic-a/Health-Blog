@@ -21,7 +21,10 @@ export const UpdatePost = () => {
   let dispatch = useDispatch()
   let navigate = useNavigate()
 
-  let { authenticatedUser } = useSelector((store) => store.user)
+  // let { authenticatedUser } = useSelector((store) => store.user)
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
   let { titleValidationData, contentValidationData } = useSelector(
     (store) => store.validation
   )
@@ -57,13 +60,13 @@ export const UpdatePost = () => {
       authenticatedUser,
     }
 
-    let form = new FormData(updatePostObj.e.target)
-    let formEntries = [...form.entries()]
-    let formObject = Object.fromEntries(formEntries)
+    // let form = new FormData(updatePostObj.e.target)
+    // let formEntries = [...form.entries()]
+    // let formObject = Object.fromEntries(formEntries)
 
     let objectWithData = {
-      title: formObject?.title,
-      content: formObject?.content,
+      title: title,
+      content: content,
       userId: updatePostObj?.post?.userId,
       authenticatedUser,
       post,
