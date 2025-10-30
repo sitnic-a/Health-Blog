@@ -15,7 +15,10 @@ import { stringIsNullOrEmpty } from '../../utils/helper-methods/methods'
 
 export const MentalHealthExpertsDropdown = () => {
   let dispatch = useDispatch()
-  let { authenticatedUser } = useSelector((store) => store.user)
+  // let { authenticatedUser } = useSelector((store) => store.user)
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
   let { suggestedMentalHealthExperts } = useSelector(
     (store) => store.mentalExpert
   )

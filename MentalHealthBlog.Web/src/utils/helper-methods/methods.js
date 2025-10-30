@@ -64,8 +64,8 @@ export function getSelectedPosts(loggedUser) {
       '.post-container > .post-container-content'
     )
 
-    let id = postContainerContent.querySelector('input[data-post-id]').dataset
-      .postId
+    let id = postContainerContent.querySelector('input[data-post-id]')?.dataset
+      ?.postId
 
     let postTitle =
       postContainerContent.querySelector('.post-header > h1').innerHTML
@@ -107,7 +107,7 @@ export function getSelectedPosts(loggedUser) {
 
     let post = {
       id: parseInt(id),
-      userId: loggedUser.id,
+      userId: loggedUser?.id,
       title: postTitle,
       user: author,
       content: postContent,
@@ -452,7 +452,6 @@ export const checkInputDataValidity = (
       return [isValid, validationMessages]
     }
     validationMessages.push('Može imati slova, brojeve i specijalne karaktere')
-    validationMessages.push('Ne smije imati više specijalnih znakova u nizu')
     validationMessages.push('Dozvoljeni karakteri: - _ , : \' /" ()')
     validationMessages.push(
       'Ako završava znakom mora završiti tačkom, upitnikom ili uzvičnikom'

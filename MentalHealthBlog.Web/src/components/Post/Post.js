@@ -28,6 +28,10 @@ import PostCSS from './Post.css'
 export const Post = (props) => {
   let dispatch = useDispatch()
   let navigate = useNavigate()
+  // let { authenticatedUser } = useSelector((store) => store.user)
+
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
 
   let [isZoomingOut, setIsZoomingOut] = useState(false)
   let post = props?.post
@@ -35,7 +39,6 @@ export const Post = (props) => {
 
   let { isSharingExporting } = useSelector((store) => store.post)
   let { isReviewingSharedPosts } = useSelector((store) => store.regularUser)
-  let { authenticatedUser } = useSelector((store) => store.user)
 
   //Helpers
   let createdAt = post?.createdAt

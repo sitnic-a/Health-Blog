@@ -18,7 +18,10 @@ import AssignmentResponsesCSS from './AssignmentResponses.css'
 
 export const AssignmentResponses = () => {
   let dispatch = useDispatch()
-  let { authenticatedUser } = useSelector((store) => store.user)
+  // let { authenticatedUser } = useSelector((store) => store.user)
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
   let { dbAssignmentResponses, pickedAssignment } = useSelector(
     (store) => store.assignment
   )

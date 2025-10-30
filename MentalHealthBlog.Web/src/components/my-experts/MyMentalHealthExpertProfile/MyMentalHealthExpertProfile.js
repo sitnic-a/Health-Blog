@@ -18,8 +18,11 @@ import { stringIsNullOrEmpty } from '../../../utils/helper-methods/methods'
 
 export const MyMentalHealthExpertProfile = (props) => {
   let dispatch = useDispatch()
+  // let { authenticatedUser } = useSelector((store) => store.user)
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
   let { isStopSharingOpen } = useSelector((store) => store.modal)
-  let { authenticatedUser } = useSelector((store) => store.user)
   let expert = props?.expert
 
   let expertPhoto = `data:image/png;base64,${expert?.mentalHealthExpertPhotoAsFile}`

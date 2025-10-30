@@ -15,7 +15,10 @@ import { setActiveMyMentalHealthExpertFilterActionTab } from '../../../utils/hel
 
 export const MyMentalHealthExperts = () => {
   let dispatch = useDispatch()
-  let { authenticatedUser } = useSelector((store) => store.user)
+  // let { authenticatedUser } = useSelector((store) => store.user)
+
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
   let { myApprovedOrPendingMentalHealthExperts } = useSelector(
     (store) => store.therapy
   )

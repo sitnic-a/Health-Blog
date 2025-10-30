@@ -13,7 +13,11 @@ import StopSharingConfirmationCSS from './StopSharingConfirmation.css'
 
 export const StopSharingConfirmation = () => {
   let dispatch = useDispatch()
-  let { authenticatedUser } = useSelector((store) => store.user)
+  // let { authenticatedUser } = useSelector((store) => store.user)
+
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
   let { stopSharingObject } = useSelector((store) => store.therapy)
   let { isStopSharingOpen } = useSelector((store) => store.modal)
 

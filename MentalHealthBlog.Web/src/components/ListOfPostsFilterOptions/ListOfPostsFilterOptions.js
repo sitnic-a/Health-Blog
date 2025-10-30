@@ -14,7 +14,11 @@ import ListOfPostsFilterOptionsCSS from './ListOfPostsFilterOptions.css'
 export const ListOfPostsFilterOptions = (props) => {
   let dispatch = useDispatch()
   let { isFiltering } = useSelector((store) => store.filter)
-  let { authenticatedUser } = useSelector((store) => store.user)
+  // let { authenticatedUser } = useSelector((store) => store.user)
+
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
   let [months, setMonths] = useState([])
 
   let searchPostDto = props?.searchPostDto

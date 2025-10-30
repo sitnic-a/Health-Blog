@@ -12,7 +12,11 @@ import SharedContentPermissionPostsCSS from './SharedContentPermissionPosts.css'
 
 export const SharedContentPermissionPosts = () => {
   let dispatch = useDispatch()
-  let { authenticatedUser } = useSelector((store) => store.user)
+  // let { authenticatedUser } = useSelector((store) => store.user)
+
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
   let { sharesPerMentalHealthExpert } = useSelector(
     (store) => store.regularUser
   )
