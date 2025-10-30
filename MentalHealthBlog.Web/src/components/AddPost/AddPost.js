@@ -48,6 +48,9 @@ export const AddPost = () => {
 
   let submitForm = (e) => {
     e.preventDefault()
+    authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+    authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
     let chosenEmotions = pickedEmotions?.map((emotion) => emotion.id)
 
     let form = new FormData(e.target)

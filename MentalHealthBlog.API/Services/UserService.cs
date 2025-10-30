@@ -44,8 +44,6 @@ namespace MentalHealthBlog.API.Services
     public class UserService : IUserService
     {
         private readonly ILogger<UserService> _userLoggerService;
-        private readonly AppSettings _optionsAppSettings;
-        private readonly IOptions<AppSettings> _options;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         private readonly IMemoryCache _memoryCache;
@@ -59,11 +57,9 @@ namespace MentalHealthBlog.API.Services
         private User user = new();
 
 
-        public UserService(DataContext context, IOptions<AppSettings> options, IConfiguration configuration, IMapper mapper, IMemoryCache memoryCache, ILogger<UserService> userLoggerService)
+        public UserService(DataContext context, IConfiguration configuration, IMapper mapper, IMemoryCache memoryCache, ILogger<UserService> userLoggerService)
         {
             _context = context;
-            _optionsAppSettings = options.Value;
-            _options = options;
             _configuration = configuration;
             _mapper = mapper;
             _memoryCache = memoryCache;
@@ -256,7 +252,7 @@ namespace MentalHealthBlog.API.Services
                 }
                 bool? isPending = null;
                 var __PSYCHOLOGIST_ROLE_ID__ = 4;
-                var jwtMiddleware = new JWTService(_options, _context, _configuration);
+                var jwtMiddleware = new JWTService(_context, _configuration);
                 var authenticated = await VerifyCredentials(loginCredentials);
                 var dbUser = await _context.Users.SingleOrDefaultAsync(u => u.Username == loginCredentials.Username);
                 if (authenticated && dbUser is not null)
@@ -336,7 +332,7 @@ namespace MentalHealthBlog.API.Services
         {
             try
             {
-                var jwtMiddleware = new JWTService(_options, _context, _configuration);
+                var jwtMiddleware = new JWTService(_context, _configuration);
                 var accessToken = await jwtMiddleware.RefreshAccessToken(refreshToken);
                 if (accessToken.StatusCode == 200 || accessToken.StatusCode == 201)
                 {
@@ -453,8 +449,8 @@ namespace MentalHealthBlog.API.Services
         {
             try
             {
-                var applicationUrl = "http://localhost:3000";
-                //var applicationUrl = "https://mapp-terapija.com";
+                //var applicationUrl = "http://localhost:3000";
+                var applicationUrl = "https://mapp-terapija.com";
 
                 var smtpHost = _configuration.GetValue<string>("SMTP_HOST");
                 var smtpPort = _configuration.GetValue<int>("SMTP_PORT");

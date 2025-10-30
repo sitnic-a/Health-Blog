@@ -4,7 +4,6 @@ using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
 using MentalHealthBlogAPI.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -24,7 +23,6 @@ namespace MentalHealthBlog.API.Utils
     }
     public class JWTService
     {
-        private readonly AppSettings _options;
         private readonly DataContext _context;
         private IConfiguration _configuration;
 
@@ -40,9 +38,9 @@ namespace MentalHealthBlog.API.Utils
         }
 
 
-        public JWTService(IOptions<AppSettings> options, DataContext context, IConfiguration configuration)
+        public JWTService(DataContext context, IConfiguration configuration)
         {
-            _options = options.Value;
+            //_options = options.Value;
             _context = context;
             _configuration = configuration;
         }
@@ -129,7 +127,7 @@ namespace MentalHealthBlog.API.Utils
             {
                 Token = CreateUniqueRefreshToken(),
                 CreatedAt = DateTime.UtcNow,
-                ExpiresAt = DateTime.UtcNow.AddDays(_options.RefreshTokenTTL),
+                ExpiresAt = DateTime.UtcNow.AddDays(2),
             };
             return refreshToken;
         }
