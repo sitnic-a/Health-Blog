@@ -22,7 +22,10 @@ export const MentalHealthExpertAssignments = () => {
   let dispatch = useDispatch()
   let { usersWithSetAssignments } = useSelector((store) => store.mentalExpert)
   let { dbAssignments } = useSelector((store) => store.assignment)
-  let { authenticatedUser } = useSelector((store) => store.user)
+  // let { authenticatedUser } = useSelector((store) => store.user)
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
   let { isAssignmentResponsesOpen } = useSelector((store) => store.modal)
   let { id } = useParams()
 

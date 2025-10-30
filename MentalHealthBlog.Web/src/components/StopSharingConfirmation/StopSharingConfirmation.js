@@ -44,6 +44,9 @@ export const StopSharingConfirmation = () => {
               type="button"
               className="stop-sharing-modal-content-action stop-sharing-modal-action-remove"
               onClick={() => {
+                authenticatedUserLocalStorage =
+                  localStorage.getItem('authenticatedUser')
+                authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
                 dispatch(changeRequestStatus(stopSharingObject)).then(
                   (data) => {
                     let statusCode = data?.payload?.statusCode
@@ -73,6 +76,9 @@ export const StopSharingConfirmation = () => {
               type="button"
               className="stop-sharing-modal-content-action stop-sharing-modal-action-keep-content"
               onClick={() => {
+                authenticatedUserLocalStorage =
+                  localStorage.getItem('authenticatedUser')
+                authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
                 dispatch(changeRequestStatus(stopSharingObject)).then(
                   (data) => {
                     let statusCode = data?.payload?.statusCode

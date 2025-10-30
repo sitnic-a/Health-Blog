@@ -19,11 +19,14 @@ export const MentalExpertDashboard = () => {
   let { sharedContent, usersThatSharedIncludingItsContent } = useSelector(
     (store) => store.mentalExpert
   )
-  let { authenticatedUser } = useSelector((store) => store.user)
+  // let { authenticatedUser } = useSelector((store) => store.user)
+
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
 
   let objectWithData = {
     query: {
-      loggedExpertId: authenticatedUser.id,
+      loggedExpertId: authenticatedUser?.id,
     },
     authenticatedUser,
   }
