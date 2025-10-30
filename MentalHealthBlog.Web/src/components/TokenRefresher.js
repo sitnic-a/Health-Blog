@@ -34,7 +34,7 @@ export const TokenRefresher = () => {
       let expireAtEpoch = new Date(decodedToken.exp * 1000).getTime()
       let currentEpoch = new Date().getTime()
       difference = ((expireAtEpoch - currentEpoch) / 1000).toFixed(0)
-      // console.log('Difference ', difference)
+      console.log('Difference ', difference)
 
       if (difference <= TEN_SECONDS) {
         refreshToken = Cookies.get('refreshToken')

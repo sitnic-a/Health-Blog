@@ -10,7 +10,9 @@ import ManageUsersFilterCSS from './ManageUsersFilter.css'
 
 export const ManageUsersFilter = () => {
   let dispatch = useDispatch()
-  let { dbRoles, authenticatedUser } = useSelector((store) => store.user)
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+  let { dbRoles } = useSelector((store) => store.user)
 
   return (
     <div className="manage-users-filter-container">
@@ -23,6 +25,10 @@ export const ManageUsersFilter = () => {
               name="manage-users-role"
               id="manage-users-select-role-filter"
               onChange={(e) => {
+                authenticatedUserLocalStorage =
+                  localStorage.getItem('authenticatedUser')
+                authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
                 let selectedRoleId = document.getElementById(
                   'manage-users-select-role-filter'
                 ).value
@@ -113,6 +119,10 @@ export const ManageUsersFilter = () => {
           placeholder="Unesite filter..."
           onKeyUp={(e) => {
             if (e.code === 'Enter') {
+              authenticatedUserLocalStorage =
+                localStorage.getItem('authenticatedUser')
+              authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
               let selectedRoleId = document.getElementById(
                 'manage-users-select-role-filter'
               ).value
@@ -172,6 +182,10 @@ export const ManageUsersFilter = () => {
           className="manage-users-search-filter-button"
           type="button"
           onClick={() => {
+            authenticatedUserLocalStorage =
+              localStorage.getItem('authenticatedUser')
+            authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
             let selectedRoleId = document.getElementById(
               'manage-users-select-role-filter'
             ).value
