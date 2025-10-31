@@ -22,6 +22,27 @@ export const application = {
       padding: '2rem',
     },
   },
+
+  trial_period_style: {
+    overlay: {
+      background: '#82a3bc98',
+    },
+    content: {
+      background: '#f0eae1',
+      borderRadius: '0.7rem',
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      transform: 'translate(-50%, -50%)',
+      maxWidth: '450px',
+      height: '350px',
+      width: '80%',
+      padding: '2rem',
+      scrollbarWidth: '0',
+    },
+  },
+
   add_post_modal_style: {
     overlay: {
       overflowY: 'scroll',

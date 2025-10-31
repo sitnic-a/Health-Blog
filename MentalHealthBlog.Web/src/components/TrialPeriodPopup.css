@@ -1,0 +1,61 @@
+#trial-period-main-container {
+  position: relative;
+}
+
+#trial-period-modal::-webkit-scrollbar {
+  display: none;
+}
+
+.trial-period-action-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.3rem 0.5rem;
+  font-family: 'SansDeva';
+  font-size: 1.3rem;
+  line-height: 1.4;
+  cursor: pointer;
+  color: #f3f1e3;
+  background: #c93232;
+}
+
+.trial-period-action-close:hover {
+  background: #a02929;
+}
+
+.trial-period-content-header-title {
+  margin-block: -1rem 0.3rem;
+  font-family: 'Overlock';
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.trial-period-content-description {
+  max-width: 450px;
+  font-family: 'Overlock';
+  font-size: 1.05rem;
+  text-align: justify;
+}
+
+.trial-period-content-link {
+  font-weight: 600;
+  color: #82a3bc;
+}
+
+.trial-period-continue-button {
+  padding: 1rem;
+  font-family: 'SansDeva';
+  font-size: 0.9rem;
+  line-height: 1.4;
+  outline: none;
+  border: none;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  transition: 150ms;
+  color: #f3f1e3;
+  background: #a0bbcf;
+}
+
+.trial-period-continue-button:hover {
+  background: #82a3bc;
+}

@@ -544,3 +544,7 @@ export const switchActiveTab = (element) => {
     }
   })
 }
+
+export const checkSubscription = (dbUser) => {
+  console.log('Db user ', dbUser)
+}
