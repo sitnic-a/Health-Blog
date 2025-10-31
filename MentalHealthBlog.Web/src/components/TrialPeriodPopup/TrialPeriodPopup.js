@@ -84,8 +84,8 @@ export const TrialPeriodPopup = ({ authenticatedUser }) => {
             onClick={() => {
               //Change on database state for usingForTheFirstTime flag
               //Set timer for trial subscription on
-
               dispatch(openTrialPeriodPopup(!isTrialPeriodPopupOpen))
+              dispatch()
             }}
           >
             Nastavi korištenje aplikacije

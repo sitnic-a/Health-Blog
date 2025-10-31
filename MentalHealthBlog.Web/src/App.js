@@ -30,6 +30,7 @@ import { TermsAndConditions } from './pages/TermsAndConditions'
 import { ResetPassword } from './components/ResetPassword/ResetPassword'
 import { RequestPasswordChange } from './components/RequestPasswordChange/RequestPasswordChange'
 import { TokenRefresher } from './components/TokenRefresher'
+import { SubscriptionChecker } from './components/SubscriptionChecker'
 
 function App() {
   windowResize(application.layouts.min_screen_single_col_width)
@@ -98,6 +99,8 @@ function App() {
             <Route path="*" element={<NotFound />} />
             <Route path="/not-found" element={<NotFound />} />
           </Routes>
+
+          <SubscriptionChecker />
           <ToastContainer />
         </main>
       </Router>
