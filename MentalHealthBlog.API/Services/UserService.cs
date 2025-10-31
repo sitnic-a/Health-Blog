@@ -284,7 +284,7 @@ namespace MentalHealthBlog.API.Services
                         throw new InvalidTokenException("Token not created");
                     }
 
-                    var responseUser = new SignedUserDto(dbUser.Id, dbUser.Username, token, refreshToken.Token, dbUserRoles, isPending);
+                    var responseUser = new SignedUserDto(dbUser.Id, dbUser.Username, token, refreshToken.Token, dbUserRoles,dbUser.IsUsingForTheFirstTime, isPending);
                     _userLoggerService.LogInformation($"LOGIN: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", responseUser);
                     return new Response(responseUser, StatusCodes.Status200OK, UserServiceLogTypes.USER_SUCCESFULL.ToString());
                 }

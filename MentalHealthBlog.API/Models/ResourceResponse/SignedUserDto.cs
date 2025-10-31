@@ -11,14 +11,15 @@ namespace MentalHealthBlog.API.Models.ResourceResponse
         [JsonIgnore]
         public string RefreshToken { get; set; }
         public bool? IsPending { get; set; }
+        public bool IsUsingForTheFirstTime { get; set; } = false;
 
-        public SignedUserDto(){}
+        public SignedUserDto() { }
         public SignedUserDto(int id, string username)
         {
             Id = id;
             Username = username;
         }
-        public SignedUserDto(int id, string username, string jwtoken,string refreshToken, List<Role> roles)
+        public SignedUserDto(int id, string username, string jwtoken, string refreshToken, List<Role> roles)
         {
             Id = id;
             Username = username;
@@ -27,13 +28,14 @@ namespace MentalHealthBlog.API.Models.ResourceResponse
             UserRoles = roles;
         }
 
-        public SignedUserDto(int id, string username, string jwtoken, string refreshToken, List<Role> roles, bool? isPending=null)
+        public SignedUserDto(int id, string username, string jwtoken, string refreshToken, List<Role> roles,bool isUsingForTheFirstTime, bool? isPending = null)
         {
             Id = id;
             Username = username;
             JWToken = jwtoken;
             RefreshToken = refreshToken;
             UserRoles = roles;
+            IsUsingForTheFirstTime = isUsingForTheFirstTime;
             IsPending = isPending;
         }
     }
