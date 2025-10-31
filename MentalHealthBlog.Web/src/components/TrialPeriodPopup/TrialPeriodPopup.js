@@ -1,17 +1,20 @@
-import Modal from 'react-modal'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { openTrialPeriodPopup } from '../redux-toolkit/features/modalSlice'
-import { application } from '../application'
+import Modal from 'react-modal'
+import { getUsersTrialPeriod } from '../../redux-toolkit/features/subscriptionSlice'
+import { openTrialPeriodPopup } from '../../redux-toolkit/features/modalSlice'
+import { checkSubscription } from '../../utils/helper-methods/methods'
+import { application } from '../../application'
 
 import TrialPeriodPopupCSS from './TrialPeriodPopup.css'
-import { getUserById } from '../redux-toolkit/features/userSlice'
-import { checkSubscription } from '../utils/helper-methods/methods'
 
 export const TrialPeriodPopup = ({ authenticatedUser }) => {
   let dispatch = useDispatch()
-  let { dbUser } = useSelector((store) => store.user)
-
   let { isTrialPeriodPopupOpen } = useSelector((store) => store.modal)
+
+  useEffect(() => {
+    dispatch(openTrialPeriodPopup(authenticatedUser?.isUsingForTheFirstTime))
+  }, [])
 
   return (
     <div id="trial-period-main-container">
@@ -21,13 +24,18 @@ export const TrialPeriodPopup = ({ authenticatedUser }) => {
         isOpen={isTrialPeriodPopupOpen}
         style={application.trial_period_style}
         onAfterClose={() => {
-          //Change on database state
+          //Change on database state for usingForTheFirstTime flag
+          //Set timer for trial subscription on
         }}
         onAfterOpen={() => {
-          dispatch(getUserById(authenticatedUser?.id))
+          let objectWithData = {
+            authenticatedUser,
+          }
+          dispatch(getUsersTrialPeriod(objectWithData))
         }}
         onRequestClose={() => {
-          //Change on database state
+          //Change on database state for usingForTheFirstTime flag
+          //Set timer for trial subscription on
           dispatch(openTrialPeriodPopup(!isTrialPeriodPopupOpen))
         }}
       >
@@ -74,8 +82,10 @@ export const TrialPeriodPopup = ({ authenticatedUser }) => {
             type="button"
             className="trial-period-continue-button"
             onClick={() => {
+              //Change on database state for usingForTheFirstTime flag
+              //Set timer for trial subscription on
+
               dispatch(openTrialPeriodPopup(!isTrialPeriodPopupOpen))
-              checkSubscription(dbUser)
             }}
           >
             Nastavi korištenje aplikacije

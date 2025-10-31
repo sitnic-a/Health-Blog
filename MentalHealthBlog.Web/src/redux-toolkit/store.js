@@ -13,6 +13,7 @@ import emotionReducer from './features/emotionSlice'
 import therapyReducer from './features/therapySlice'
 import validationReducer from './features/validationSlice'
 import assignmentReducer from './features/assignmentSlice'
+import subscriptionReducer from './features/subscriptionSlice'
 
 export const store = configureStore({
   reducer: {
@@ -30,6 +31,7 @@ export const store = configureStore({
     therapy: therapyReducer,
     validation: validationReducer,
     assignment: assignmentReducer,
+    subscription: subscriptionReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

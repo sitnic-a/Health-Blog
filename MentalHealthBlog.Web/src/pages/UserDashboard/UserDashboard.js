@@ -1,10 +1,10 @@
 import { useDispatch } from 'react-redux'
+import { openTrialPeriodPopup } from '../../redux-toolkit/features/modalSlice'
 import { ListOfPosts } from '../../components/ListOfPosts/ListOfPosts'
 import { Navbar } from '../../components/shared/Navbar/Navbar'
-import { TrialPeriodPopup } from '../../components/TrialPeriodPopup'
+import { TrialPeriodPopup } from '../../components/TrialPeriodPopup/TrialPeriodPopup'
 
 import UserDashboardCSS from './UserDashboard.css'
-import { openTrialPeriodPopup } from '../../redux-toolkit/features/modalSlice'
 
 export const UserDashboard = () => {
   let dispatch = useDispatch()
