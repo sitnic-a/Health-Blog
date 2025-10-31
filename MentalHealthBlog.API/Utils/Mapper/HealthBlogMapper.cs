@@ -18,6 +18,8 @@ namespace MentalHealthBlog.API.Utils.Mapper
             CreateMap<UserDto,MentalHealthExpert>().ReverseMap();
             CreateMap<UserDto, User>().ReverseMap();
             CreateMap<CreateAssignmentDto, Assignment>().ReverseMap();
+            CreateMap<MentalHealthExpert,TrialPeriodDto>().ReverseMap();
+            CreateMap<RegularUser,TrialPeriodDto>().ReverseMap();
         }
     }
 }

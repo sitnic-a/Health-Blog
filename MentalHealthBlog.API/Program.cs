@@ -1,5 +1,6 @@
 using MentalHealthBlog.API.Middlewares;
 using MentalHealthBlog.API.Services;
+using MentalHealthBlog.API.Services.Subscription;
 using MentalHealthBlog.API.Services.Therapy;
 using MentalHealthBlog.API.Utils;
 using MentalHealthBlog.API.Utils.Email;
@@ -100,7 +101,7 @@ builder.Services.AddScoped<IEmotionService, EmotionService>();
 builder.Services.AddScoped<ITherapyRequestService, TherapyRequestService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IAssignmentService,AssignmentService>();
-
+builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
 
 builder.Services.AddDbContext<DataContext>(options =>
 {
