@@ -12,9 +12,9 @@ using MentalHealthBlog.API.Utils;
 using MentalHealthBlog.API.Utils.Email;
 using MentalHealthBlogAPI.Data;
 using MentalHealthBlogAPI.Models;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MimeKit;
 using System.Security.Cryptography;
@@ -493,6 +493,36 @@ namespace MentalHealthBlog.API.Services
             catch (Exception e)
             {
                 _userLoggerService.LogError($"REGISTER(EMAIL-NOTIFICATION): {e.Message}");
+                throw;
+            }
+        }
+
+        public async Task<Response> ChangeIsUsingForTheFirstTime(int id, JsonPatchDocument<User> patchDocument)
+        {
+            try
+            {
+                if (patchDocument == null)
+                {
+                    _userLoggerService.LogWarning($"FIRST-TIME-LOGGING/[id]: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}");
+                    throw new ArgumentException("Bad request!");
+                }
+
+                var dbUser = await _context.Users.FindAsync(id);
+
+                if (dbUser == null)
+                {
+                    _userLoggerService.LogWarning($"FIRST-TIME-LOGGING/[id]: {UserServiceLogTypes.USER_NOT_FOUND_OR_NULL.ToString()}");
+                    throw new RecordNotFoundException("User doesn't exist!");
+                }
+
+                patchDocument.ApplyTo(dbUser);
+                await _context.SaveChangesAsync();
+                _userLoggerService.LogInformation($"FIRST-TIME-LOGGING/[id]: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}");
+                return new Response(dbUser, StatusCodes.Status200OK, $"FIRST-TIME-LOGGING/[id]: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}");
+            }
+            catch (Exception e)
+            {
+                _userLoggerService.LogError($"FIRST-TIME-LOGGING/[id]: {e.Message}");
                 throw;
             }
         }

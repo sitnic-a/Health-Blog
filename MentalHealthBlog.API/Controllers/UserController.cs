@@ -4,6 +4,7 @@ using MentalHealthBlog.API.Services;
 using MentalHealthBlog.API.Utils.Email;
 using MentalHealthBlog.API.Utils.SignalR;
 using MentalHealthBlogAPI.Models;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 
@@ -90,6 +91,12 @@ namespace MentalHealthBlog.API.Controllers
         public async Task<Response> ChangePassword(ChangePasswordDto request)
         {
             return await _userService.ChangePassword(request);
+        }
+
+        [HttpPatch("first-time-logging/{id}")]
+        public async Task<Response> ChangeFirstTimeLoggingState(int id, [FromBody] JsonPatchDocument<User> patchDocument)
+        {
+            return await _userService.ChangeIsUsingForTheFirstTime(id, patchDocument);  
         }
     }
 }
