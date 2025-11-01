@@ -1,16 +1,55 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Modal from 'react-modal'
+import {
+  changeIsUsingForTheFirstTime,
+  refreshAccessToken,
+} from '../../redux-toolkit/features/userSlice'
 import { getUsersTrialPeriod } from '../../redux-toolkit/features/subscriptionSlice'
 import { openTrialPeriodPopup } from '../../redux-toolkit/features/modalSlice'
 import { checkSubscription } from '../../utils/helper-methods/methods'
 import { application } from '../../application'
 
+import Cookies from 'js-cookie'
+
 import TrialPeriodPopupCSS from './TrialPeriodPopup.css'
 
-export const TrialPeriodPopup = ({ authenticatedUser }) => {
+export const TrialPeriodPopup = () => {
   let dispatch = useDispatch()
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
   let { isTrialPeriodPopupOpen } = useSelector((store) => store.modal)
+
+  const onCloseStartTimerAndChangeIsUsingForTheFirstTime = () => {
+    let refreshToken = Cookies.get('refreshToken')
+    dispatch(refreshAccessToken(refreshToken)).then((data) => {
+      let statusCode = data?.payload?.statusCode
+      if (statusCode === 201) {
+        let serviceResponseObject =
+          data?.payload?.serviceResponseObject?.serviceResponseObject
+
+        localStorage.setItem(
+          'authenticatedUser',
+          JSON.stringify(serviceResponseObject)
+        )
+
+        authenticatedUserLocalStorage =
+          localStorage.getItem('authenticatedUser')
+        authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
+        dispatch(
+          openTrialPeriodPopup(authenticatedUser?.isUsingForTheFirstTime)
+        )
+      }
+    })
+    let objectWithData = {
+      authenticatedUser,
+    }
+    //Set timer for trial subscription on
+    dispatch(getUsersTrialPeriod(objectWithData))
+    console.log('On close counter started....')
+  }
 
   useEffect(() => {
     dispatch(openTrialPeriodPopup(authenticatedUser?.isUsingForTheFirstTime))
@@ -23,27 +62,40 @@ export const TrialPeriodPopup = ({ authenticatedUser }) => {
         appElement={document.getElementById('root')}
         isOpen={isTrialPeriodPopupOpen}
         style={application.trial_period_style}
-        onAfterClose={() => {
-          //Change on database state for usingForTheFirstTime flag
-          //Set timer for trial subscription on
-        }}
-        onAfterOpen={() => {
-          let objectWithData = {
-            authenticatedUser,
-          }
-          dispatch(getUsersTrialPeriod(objectWithData))
-        }}
         onRequestClose={() => {
           //Change on database state for usingForTheFirstTime flag
-          //Set timer for trial subscription on
-          dispatch(openTrialPeriodPopup(!isTrialPeriodPopupOpen))
+          let patchDocument = [
+            {
+              op: 'replace',
+              path: '/IsUsingForTheFirstTime',
+              value: false,
+            },
+          ]
+          let objectWithData = {
+            authenticatedUser,
+            patchDocument,
+          }
+          dispatch(changeIsUsingForTheFirstTime(objectWithData))
+          onCloseStartTimerAndChangeIsUsingForTheFirstTime()
         }}
       >
         <div className="trial-period-actions-container">
           <span
             className="trial-period-action-close"
             onClick={() => {
-              dispatch(openTrialPeriodPopup(!isTrialPeriodPopupOpen))
+              let patchDocument = [
+                {
+                  op: 'replace',
+                  path: '/IsUsingForTheFirstTime',
+                  value: false,
+                },
+              ]
+              let objectWithData = {
+                authenticatedUser,
+                patchDocument,
+              }
+              dispatch(changeIsUsingForTheFirstTime(objectWithData))
+              onCloseStartTimerAndChangeIsUsingForTheFirstTime()
             }}
           >
             X
@@ -82,10 +134,19 @@ export const TrialPeriodPopup = ({ authenticatedUser }) => {
             type="button"
             className="trial-period-continue-button"
             onClick={() => {
-              //Change on database state for usingForTheFirstTime flag
-              //Set timer for trial subscription on
-              dispatch(openTrialPeriodPopup(!isTrialPeriodPopupOpen))
-              dispatch()
+              let patchDocument = [
+                {
+                  op: 'replace',
+                  path: '/IsUsingForTheFirstTime',
+                  value: false,
+                },
+              ]
+              let objectWithData = {
+                authenticatedUser,
+                patchDocument,
+              }
+              dispatch(changeIsUsingForTheFirstTime(objectWithData))
+              onCloseStartTimerAndChangeIsUsingForTheFirstTime()
             }}
           >
             Nastavi korištenje aplikacije

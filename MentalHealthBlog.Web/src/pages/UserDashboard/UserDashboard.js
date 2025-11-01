@@ -12,18 +12,20 @@ export const UserDashboard = () => {
   let dispatch = useDispatch()
   let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
   let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
-  dispatch(openTrialPeriodPopup(authenticatedUser?.isUsingForTheFirstTime))
 
   useEffect(() => {
-    let objectWithData = {
-      authenticatedUser,
+    if (!authenticatedUser?.isUsingForTheFirstTime) {
+      let objectWithData = {
+        authenticatedUser,
+      }
+      dispatch(getUsersTrialPeriod(objectWithData))
+      console.log('Counting....')
     }
-    dispatch(getUsersTrialPeriod(objectWithData))
   }, [])
 
   return (
     <section className="user-dashboard">
-      <TrialPeriodPopup authenticatedUser={authenticatedUser} />
+      <TrialPeriodPopup />
 
       <Navbar />
       <ListOfPosts />

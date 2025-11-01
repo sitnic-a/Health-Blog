@@ -123,6 +123,22 @@ export const changePassword = createAsyncThunk(
   }
 )
 
+export const changeIsUsingForTheFirstTime = createAsyncThunk(
+  'first-time-logging/[id]',
+  async (objectWithData) => {
+    let url = `${application.application_url}/user/first-time-logging/${objectWithData?.authenticatedUser?.id}`
+    let request = await fetch(url, {
+      method: 'PATCH',
+      body: JSON.stringify(objectWithData?.patchDocument),
+      headers: {
+        'Content-Type': 'application/json-patch+json',
+      },
+    })
+    let response = await request.json()
+    return response
+  }
+)
+
 export const userSlice = createSlice({
   name: 'userSlice',
   initialState,
@@ -137,7 +153,7 @@ export const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
 
-      //--- getUserById
+      //getUserById
       .addCase(getUserById.pending, (state, action) => {})
       .addCase(getUserById.fulfilled, (state, action) => {
         let userById = action.payload.serviceResponseObject
@@ -145,7 +161,7 @@ export const userSlice = createSlice({
       })
       .addCase(getUserById.rejected, (state, action) => {})
 
-      //--- login
+      //login
       .addCase(login.pending, (state) => {
         state.isLogging = true
         state.isLoading = true
@@ -193,7 +209,7 @@ export const userSlice = createSlice({
         state.isLoading = false
       })
 
-      //--- register
+      //register
       .addCase(register.pending, (state) => {
         state.isLoading = true
         state.isRegistered = false
@@ -308,6 +324,11 @@ export const userSlice = createSlice({
         console.log('Successfully changed pass')
       })
       .addCase(changePassword.rejected, (state, action) => {})
+
+      //changeIsUsingForTheFirstTime
+      .addCase(changeIsUsingForTheFirstTime.pending, (state, action) => {})
+      .addCase(changeIsUsingForTheFirstTime.fulfilled, (state, action) => {})
+      .addCase(changeIsUsingForTheFirstTime.rejected, (state, action) => {})
   },
 })
 
