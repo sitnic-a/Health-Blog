@@ -14,6 +14,22 @@ export const getUsersTrialPeriod = createAsyncThunk(
   }
 )
 
+export const setTrialToExpired = createAsyncThunk(
+  'trial-expired',
+  async (objectWithData) => {
+    let url = `${application.application_url}/subscription/trial-expired`
+    let request = await fetch(url, {
+      method: 'PUT',
+      body: JSON.stringify(objectWithData?.requestObj),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    let response = await request.json()
+    return response
+  }
+)
+
 let subscriptionSlice = createSlice({
   name: 'subscriptionSlice',
   initialState,
@@ -21,7 +37,7 @@ let subscriptionSlice = createSlice({
   extraReducers: (builder) => {
     builder
 
-      //
+      //getUsersTrialPeriod
       .addCase(getUsersTrialPeriod.pending, (state, action) => {})
       .addCase(getUsersTrialPeriod.fulfilled, (state, action) => {
         let statusCode = action?.payload?.statusCode
@@ -32,6 +48,13 @@ let subscriptionSlice = createSlice({
       .addCase(getUsersTrialPeriod.rejected, (state, action) => {
         console.log('Error ', action?.payload)
       })
+
+      //setTrialToExpired
+      .addCase(setTrialToExpired.pending, (state, action) => {})
+      .addCase(setTrialToExpired.fulfilled, (state, action) => {
+        console.log('Action trial ', action)
+      })
+      .addCase(setTrialToExpired.rejected, (state, action) => {})
   },
 })
 

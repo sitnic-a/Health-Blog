@@ -1,8 +1,13 @@
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { stringIsNullOrEmpty } from '../utils/helper-methods/methods'
+import { setTrialToExpired } from '../redux-toolkit/features/subscriptionSlice'
+import { FaSlideshare } from 'react-icons/fa'
+import { db_roles } from '../enums/roles'
 
 export const SubscriptionChecker = () => {
+  let dispatch = useDispatch()
   let { usersTrialPeriod } = useSelector((store) => store.subscription)
+
   let subscriptionTimerId
   const ONE__DAY = 86400
   const ONE__HOUR = 3600
@@ -38,10 +43,29 @@ export const SubscriptionChecker = () => {
           console.log('Ostalo ', timeLeftInMinutes, ' minuta ')
 
           if (timeLeftInMilliseconds <= 0) {
+            clearInterval(subscriptionTimerId)
+            let authenticatedUserLocalStorage =
+              localStorage.getItem('authenticatedUser')
+            let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+            console.log('AuthenticatedUser ', authenticatedUser)
+            let isMentalHealthExpert = authenticatedUser?.userRoles?.some(
+              (r) => r.id === db_roles.PSYCHOLOGIST
+            )
+            console.log('Is expert ', isMentalHealthExpert)
+
             console.log(
               'Aplikacija se zaključava! Uplatite da nastavite koristiti!'
             )
-            clearInterval(subscriptionTimerId)
+            let requestObj = {
+              userId: authenticatedUser?.id,
+              isInTrialPeriod: false,
+              isMentalHealthExpert: isMentalHealthExpert,
+            }
+            let objectWithData = {
+              authenticatedUser,
+              requestObj,
+            }
+            dispatch(setTrialToExpired(objectWithData))
           }
         }, ONE__HOUR)
       }
