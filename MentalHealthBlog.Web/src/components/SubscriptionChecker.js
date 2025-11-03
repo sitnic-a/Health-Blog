@@ -1,17 +1,19 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { stringIsNullOrEmpty } from '../utils/helper-methods/methods'
+import {
+  getTimeLeftToExpire,
+  stringIsNullOrEmpty,
+} from '../utils/helper-methods/methods'
 import { setTrialToExpired } from '../redux-toolkit/features/subscriptionSlice'
 import { db_roles } from '../enums/roles'
 import { useEffect, useState } from 'react'
 
 export const SubscriptionChecker = () => {
   let dispatch = useDispatch()
-  let [shouldStopTheTimer, setShouldStopTheTimer] = useState(false)
   let { usersTrialPeriod } = useSelector((store) => store.subscription)
 
   let subscriptionTimerId
-  const ONE__DAY = 86400
-  const ONE__HOUR = 3600
+  const __DAY_IN_MILLISECONDS__ = 86400000
+  const __THIRTY_SECONDS_IN_MILLISECONDS__ = 30000
 
   useEffect(() => {
     if (!stringIsNullOrEmpty(usersTrialPeriod)) {
@@ -26,59 +28,70 @@ export const SubscriptionChecker = () => {
           ).getTime()
 
           let timeLeftInMilliseconds = subscriptionExpires - currentDate
-          let timeLeftInSeconds = Math.floor(
-            (timeLeftInMilliseconds / 1000).toFixed(0)
-          )
 
-          if (timeLeftInSeconds <= ONE__DAY) {
+          if (timeLeftInMilliseconds <= __DAY_IN_MILLISECONDS__) {
             clearInterval(subscriptionTimerId)
             subscriptionTimerId = setInterval(() => {
               let currentDate = new Date().getTime()
+              let subscriptionExpires = new Date(
+                usersTrialPeriod?.trialEndsAt
+              ).getTime()
+
               let timeLeftInMilliseconds = subscriptionExpires - currentDate
-              let timeLeftInSeconds = Math.floor(
-                (timeLeftInMilliseconds / 1000).toFixed(0)
-              )
-              let timeLeftInMinutes = Math.floor(
-                (timeLeftInSeconds / 60).toFixed(0)
-              )
-              let timeLeftInHours = Math.floor(
-                (timeLeftInMinutes / ONE__HOUR).toFixed(0)
+              console.log(
+                'Left ',
+                (timeLeftInMilliseconds / 1000).toFixed(0),
+                ' sekundi '
               )
 
-              let timeLeftInDays = Math.floor((timeLeftInHours / 24).toFixed(0))
-              console.log('Ostalo ', timeLeftInMinutes, ' minuta ')
-
-              if (timeLeftInMilliseconds <= 0) {
-                let authenticatedUserLocalStorage =
-                  localStorage.getItem('authenticatedUser')
-                let authenticatedUser = JSON.parse(
-                  authenticatedUserLocalStorage
-                )
-                let isMentalHealthExpert = authenticatedUser?.userRoles?.some(
-                  (r) => r.id === db_roles.PSYCHOLOGIST
-                )
-
-                console.log(
-                  'Aplikacija se zaključava! Uplatite da nastavite koristiti!'
-                )
+              if (
+                timeLeftInMilliseconds <= __THIRTY_SECONDS_IN_MILLISECONDS__
+              ) {
                 clearInterval(subscriptionTimerId)
+                subscriptionTimerId = setInterval(() => {
+                  let currentDate = new Date().getTime()
+                  let subscriptionExpires = new Date(
+                    usersTrialPeriod?.trialEndsAt
+                  ).getTime()
 
-                let requestObj = {
-                  userId: authenticatedUser?.id,
-                  isInTrialPeriod: false,
-                  isMentalHealthExpert: isMentalHealthExpert,
-                }
-                let objectWithData = {
-                  authenticatedUser,
-                  requestObj,
-                }
-                dispatch(setTrialToExpired(objectWithData))
+                  let timeLeftInMilliseconds = subscriptionExpires - currentDate
+                  console.log(
+                    'Left ',
+                    (timeLeftInMilliseconds / 1000).toFixed(0),
+                    ' sekundi '
+                  )
+                  if (timeLeftInMilliseconds <= 1000) {
+                    let authenticatedUserLocalStorage =
+                      localStorage.getItem('authenticatedUser')
+                    let authenticatedUser = JSON.parse(
+                      authenticatedUserLocalStorage
+                    )
+                    let isMentalHealthExpert =
+                      authenticatedUser?.userRoles?.some(
+                        (r) => r.id === db_roles.PSYCHOLOGIST
+                      )
+
+                    console.log(
+                      'Aplikacija se zaključava! Uplatite da nastavite koristiti!'
+                    )
+                    clearInterval(subscriptionTimerId)
+
+                    let requestObj = {
+                      userId: authenticatedUser?.id,
+                      isInTrialPeriod: false,
+                      isMentalHealthExpert: isMentalHealthExpert,
+                    }
+                    let objectWithData = {
+                      authenticatedUser,
+                      requestObj,
+                    }
+                    dispatch(setTrialToExpired(objectWithData))
+                  }
+                }, 1000)
               }
-            }, ONE__HOUR)
+            }, 3000)
           }
-
-          console.log('Expires in ', timeLeftInSeconds, ' seconds')
-        }, 1000)
+        }, 5000)
       }
     }
   }, [usersTrialPeriod?.isInTrialPeriod])

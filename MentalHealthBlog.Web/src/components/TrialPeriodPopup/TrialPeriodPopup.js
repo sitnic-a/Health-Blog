@@ -7,7 +7,6 @@ import {
 } from '../../redux-toolkit/features/userSlice'
 import { getUsersTrialPeriod } from '../../redux-toolkit/features/subscriptionSlice'
 import { openTrialPeriodPopup } from '../../redux-toolkit/features/modalSlice'
-import { checkSubscription } from '../../utils/helper-methods/methods'
 import { application } from '../../application'
 
 import Cookies from 'js-cookie'

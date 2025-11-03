@@ -8,6 +8,7 @@ export const PaidChecker = () => {
 
   let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
   let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+  let isAdmin = authenticatedUser?.userRoles?.some((r) => r.id === 1)
   let { usersTrialPeriod } = useSelector((store) => store.subscription)
 
   useEffect(() => {
@@ -18,7 +19,8 @@ export const PaidChecker = () => {
   }, [usersTrialPeriod?.isInTrialPeriod])
 
   return usersTrialPeriod?.isInTrialPeriod ||
-    usersTrialPeriod?.havePaidForSubscription ? (
+    usersTrialPeriod?.havePaidForSubscription ||
+    isAdmin ? (
     <Outlet />
   ) : (
     <p>Nije platio</p>

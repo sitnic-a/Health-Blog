@@ -544,7 +544,3 @@ export const switchActiveTab = (element) => {
     }
   })
 }
-
-export const checkSubscription = (usersSubscription) => {
-  console.log('Subscription ', usersSubscription)
-}
