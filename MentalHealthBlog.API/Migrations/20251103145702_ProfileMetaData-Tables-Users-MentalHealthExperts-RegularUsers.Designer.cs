@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MentalHealthBlog.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20251031104053_ProfileMetaData-Tables-Users-MentalHealthExperts-RegularUsers")]
+    [Migration("20251103145702_ProfileMetaData-Tables-Users-MentalHealthExperts-RegularUsers")]
     partial class ProfileMetaDataTablesUsersMentalHealthExpertsRegularUsers
     {
         /// <inheritdoc />
@@ -539,7 +539,7 @@ namespace MentalHealthBlog.API.Migrations
                     b.Property<bool>("IsInTrialPeriod")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(true);
 
                     b.Property<bool>("IsRejected")
                         .HasColumnType("boolean");
@@ -565,12 +565,12 @@ namespace MentalHealthBlog.API.Migrations
                     b.Property<DateTime>("RegisteredAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2025, 10, 31, 10, 40, 53, 142, DateTimeKind.Utc).AddTicks(1308));
+                        .HasDefaultValue(new DateTime(2025, 11, 3, 14, 57, 2, 335, DateTimeKind.Utc).AddTicks(141));
 
                     b.Property<DateTime>("TrialEndsAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2025, 11, 7, 10, 40, 53, 142, DateTimeKind.Utc).AddTicks(1308));
+                        .HasDefaultValue(new DateTime(2025, 11, 10, 14, 57, 2, 335, DateTimeKind.Utc).AddTicks(141));
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
@@ -675,12 +675,12 @@ namespace MentalHealthBlog.API.Migrations
                     b.Property<DateTime>("RegisteredAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2025, 10, 31, 10, 40, 53, 142, DateTimeKind.Utc).AddTicks(1308));
+                        .HasDefaultValue(new DateTime(2025, 11, 3, 14, 57, 2, 335, DateTimeKind.Utc).AddTicks(141));
 
                     b.Property<DateTime>("TrialEndsAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2025, 11, 7, 10, 40, 53, 142, DateTimeKind.Utc).AddTicks(1308));
+                        .HasDefaultValue(new DateTime(2025, 11, 10, 14, 57, 2, 335, DateTimeKind.Utc).AddTicks(141));
 
                     b.HasKey("UserId");
 

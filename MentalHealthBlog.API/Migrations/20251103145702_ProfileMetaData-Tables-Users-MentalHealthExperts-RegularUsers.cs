@@ -37,14 +37,14 @@ namespace MentalHealthBlog.API.Migrations
                 table: "RegularUsers",
                 type: "timestamp with time zone",
                 nullable: false,
-                defaultValue: new DateTime(2025, 10, 31, 10, 40, 53, 142, DateTimeKind.Utc).AddTicks(1308));
+                defaultValue: new DateTime(2025, 11, 3, 14, 57, 2, 335, DateTimeKind.Utc).AddTicks(141));
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "TrialEndsAt",
                 table: "RegularUsers",
                 type: "timestamp with time zone",
                 nullable: false,
-                defaultValue: new DateTime(2025, 11, 7, 10, 40, 53, 142, DateTimeKind.Utc).AddTicks(1308));
+                defaultValue: new DateTime(2025, 11, 10, 14, 57, 2, 335, DateTimeKind.Utc).AddTicks(141));
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "ApprovedAt",
@@ -64,21 +64,21 @@ namespace MentalHealthBlog.API.Migrations
                 table: "MentalHealthExperts",
                 type: "boolean",
                 nullable: false,
-                defaultValue: false);
+                defaultValue: true);
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "RegisteredAt",
                 table: "MentalHealthExperts",
                 type: "timestamp with time zone",
                 nullable: false,
-                defaultValue: new DateTime(2025, 10, 31, 10, 40, 53, 142, DateTimeKind.Utc).AddTicks(1308));
+                defaultValue: new DateTime(2025, 11, 3, 14, 57, 2, 335, DateTimeKind.Utc).AddTicks(141));
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "TrialEndsAt",
                 table: "MentalHealthExperts",
                 type: "timestamp with time zone",
                 nullable: false,
-                defaultValue: new DateTime(2025, 11, 7, 10, 40, 53, 142, DateTimeKind.Utc).AddTicks(1308));
+                defaultValue: new DateTime(2025, 11, 10, 14, 57, 2, 335, DateTimeKind.Utc).AddTicks(141));
         }
 
         /// <inheritdoc />
