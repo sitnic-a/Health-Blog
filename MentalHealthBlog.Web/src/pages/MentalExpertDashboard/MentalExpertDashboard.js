@@ -12,6 +12,7 @@ import { Navbar } from '../../components/shared/Navbar/Navbar'
 import { LandingNotConfirmedMentalHealthExpert } from '../../components/LandingNotConfirmedMentalHealthExpert/LandingNotConfirmedMentalHealthExpert'
 
 import MentalExpertDashboardCSS from './MentalExpertDashboard.css'
+import { getUsersTrialPeriod } from '../../redux-toolkit/features/subscriptionSlice'
 
 export const MentalExpertDashboard = () => {
   let dispatch = useDispatch()
@@ -32,6 +33,14 @@ export const MentalExpertDashboard = () => {
   }
 
   useEffect(() => {
+    if (!authenticatedUser?.isUsingForTheFirstTime) {
+      let objectWithData = {
+        authenticatedUser,
+      }
+      dispatch(getUsersTrialPeriod(objectWithData))
+      console.log('Counting....')
+    }
+
     dispatch(getSharesPerUser(objectWithData)).then((data) => {
       let statusCode = data?.payload?.StatusCode
 

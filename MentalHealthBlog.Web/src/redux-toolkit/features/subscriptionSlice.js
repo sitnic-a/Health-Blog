@@ -43,7 +43,7 @@ let subscriptionSlice = createSlice({
         let statusCode = action?.payload?.statusCode
         let serviceResponseObject = action?.payload?.serviceResponseObject
         state.usersTrialPeriod = serviceResponseObject
-        console.log('Action payload', state.usersTrialPeriod)
+        // console.log('Action payload', state.usersTrialPeriod)
       })
       .addCase(getUsersTrialPeriod.rejected, (state, action) => {
         console.log('Error ', action?.payload)
@@ -52,7 +52,10 @@ let subscriptionSlice = createSlice({
       //setTrialToExpired
       .addCase(setTrialToExpired.pending, (state, action) => {})
       .addCase(setTrialToExpired.fulfilled, (state, action) => {
-        console.log('Action trial ', action)
+        let statusCode = action?.payload?.statusCode
+        if (statusCode === 200) {
+          state.usersTrialPeriod = action?.payload?.serviceResponseObject
+        }
       })
       .addCase(setTrialToExpired.rejected, (state, action) => {})
   },
