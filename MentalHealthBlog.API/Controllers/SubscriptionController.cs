@@ -1,4 +1,5 @@
-﻿using MentalHealthBlog.API.Models.ResourceResponse;
+﻿using MentalHealthBlog.API.Models.ResourceRequest;
+using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Services.Subscription;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,12 @@ namespace MentalHealthBlog.API.Controllers
         public async Task<Response> GetUsersTrialPeriod(int userId)
         {
             return await _subscriptionService.GetUsersTrialPeriod(userId);    
+        }
+
+        [HttpPut("trial-expired")]
+        public async Task<Response> SetTrialToExpired(SubscriptionTrialRequestDto request)
+        {
+            return await _subscriptionService.SetTrialToExpired(request);
         }
     }
 }

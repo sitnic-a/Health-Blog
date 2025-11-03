@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MentalHealthBlog.API.Exceptions;
 using MentalHealthBlog.API.Methods;
+using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
 using Microsoft.EntityFrameworkCore;
@@ -74,6 +75,52 @@ namespace MentalHealthBlog.API.Services.Subscription
                 throw;
             }
             
+        }
+
+        public async Task<Response> SetTrialToExpired(SubscriptionTrialRequestDto request)
+        {
+            try
+            {
+                if (request.UserId <= 0 || request?.IsInTrialPeriod == null || request?.IsMentalHealthExpert == null)
+                {
+                    _subscriptionLoggerService.LogWarning($"TRIAL-EXPIRED: {SubscriptionLogTypes.INVALID_DATA.ToString()}");
+                    throw new ArgumentException("Bad request!");
+                }
+
+                var userTrialSubscriptionDto = new UserTrialSubscriptionDto();
+                if (request.IsMentalHealthExpert)
+                {
+                    var dbMentalHealthExpert = await _context.MentalHealthExperts.FirstOrDefaultAsync(mhe => mhe.UserId == request.UserId);
+                    if (dbMentalHealthExpert == null)
+                    {
+                        _subscriptionLoggerService.LogWarning($"TRIAL-EXPIRED: {SubscriptionLogTypes.NOT_FOUND.ToString()}");
+                        throw new RecordNotFoundException("Expert is not found!");
+                    }
+                    dbMentalHealthExpert.IsInTrialPeriod = request.IsInTrialPeriod;
+                    await _context.SaveChangesAsync();
+                    userTrialSubscriptionDto = _mapper.Map<UserTrialSubscriptionDto>(dbMentalHealthExpert);
+                    _subscriptionLoggerService.LogInformation($"TRIAL-EXPIRED: {SubscriptionLogTypes.SUCCCESS.ToString()}");
+                    return new Response(userTrialSubscriptionDto, StatusCodes.Status200OK, $"TRIAL-EXPIRED: {SubscriptionLogTypes.SUCCCESS.ToString()}");
+                }
+
+                var dbRegularUser = await _context.RegularUsers.FirstOrDefaultAsync(re => re.UserId == request.UserId);
+                if (dbRegularUser == null)
+                {
+                    _subscriptionLoggerService.LogWarning($"TRIAL-EXPIRED: {SubscriptionLogTypes.NOT_FOUND.ToString()}");
+                    throw new RecordNotFoundException("User is not found");
+                }
+
+                dbRegularUser.IsInTrialPeriod = request.IsInTrialPeriod;
+                await _context.SaveChangesAsync();
+                userTrialSubscriptionDto = _mapper.Map<UserTrialSubscriptionDto>(dbRegularUser);
+                _subscriptionLoggerService.LogInformation($"TRIAL-EXPIRED: {SubscriptionLogTypes.SUCCCESS.ToString()}");
+                return new Response(userTrialSubscriptionDto, StatusCodes.Status200OK, $"TRIAL-EXPIRED: {SubscriptionLogTypes.SUCCCESS.ToString()}");
+            }
+            catch (Exception e)
+            {
+                _subscriptionLoggerService.LogError($"TRIAL-EXPIRED: {e.Message}");
+                throw;
+            }
         }
     }
 }
