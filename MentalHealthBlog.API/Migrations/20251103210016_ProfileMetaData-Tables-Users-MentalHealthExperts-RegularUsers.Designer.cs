@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MentalHealthBlog.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20251103145702_ProfileMetaData-Tables-Users-MentalHealthExperts-RegularUsers")]
+    [Migration("20251103210016_ProfileMetaData-Tables-Users-MentalHealthExperts-RegularUsers")]
     partial class ProfileMetaDataTablesUsersMentalHealthExpertsRegularUsers
     {
         /// <inheritdoc />
@@ -524,6 +524,9 @@ namespace MentalHealthBlog.API.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("text");
 
+                    b.Property<DateTime?>("FirstLoggedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text");
@@ -565,12 +568,10 @@ namespace MentalHealthBlog.API.Migrations
                     b.Property<DateTime>("RegisteredAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2025, 11, 3, 14, 57, 2, 335, DateTimeKind.Utc).AddTicks(141));
+                        .HasDefaultValue(new DateTime(2025, 11, 3, 21, 0, 16, 151, DateTimeKind.Utc).AddTicks(3981));
 
-                    b.Property<DateTime>("TrialEndsAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2025, 11, 10, 14, 57, 2, 335, DateTimeKind.Utc).AddTicks(141));
+                    b.Property<DateTime?>("TrialEndsAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
@@ -654,6 +655,9 @@ namespace MentalHealthBlog.API.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime?>("FirstLoggedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text");
@@ -675,12 +679,10 @@ namespace MentalHealthBlog.API.Migrations
                     b.Property<DateTime>("RegisteredAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2025, 11, 3, 14, 57, 2, 335, DateTimeKind.Utc).AddTicks(141));
+                        .HasDefaultValue(new DateTime(2025, 11, 3, 21, 0, 16, 151, DateTimeKind.Utc).AddTicks(3981));
 
-                    b.Property<DateTime>("TrialEndsAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2025, 11, 10, 14, 57, 2, 335, DateTimeKind.Utc).AddTicks(141));
+                    b.Property<DateTime?>("TrialEndsAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("UserId");
 

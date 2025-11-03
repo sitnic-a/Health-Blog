@@ -252,6 +252,7 @@ namespace MentalHealthBlog.API.Services
                 }
                 bool? isPending = null;
                 var __PSYCHOLOGIST_ROLE_ID__ = 4;
+                var __TRIAL_PERIOD__ = 7;
                 var jwtMiddleware = new JWTService(_context, _configuration);
                 var authenticated = await VerifyCredentials(loginCredentials);
                 var dbUser = await _context.Users.SingleOrDefaultAsync(u => u.Username == loginCredentials.Username);
@@ -263,11 +264,24 @@ namespace MentalHealthBlog.API.Services
                     {
                         var mentalHealthExpert = await _context.MentalHealthExperts.SingleOrDefaultAsync(mhe => mhe.UserId == dbUser.Id);
                         isPending = mentalHealthExpert.IsApproved == false && mentalHealthExpert.IsRejected == false;
+                        if (dbUser.IsUsingForTheFirstTime == true)
+                        {
+                            mentalHealthExpert.FirstLoggedAt = DateTime.UtcNow;
+                            mentalHealthExpert.TrialEndsAt = DateTime.UtcNow.AddDays(__TRIAL_PERIOD__);
+                        }
+                    }
+                    else if (dbUserRoles.Any(r => r.Id == __USER_ROLE__))
+                    {
+                        var dbRegularUser = await _context.RegularUsers.FirstOrDefaultAsync(ru => ru.UserId == dbUser.Id);
+                        if (dbUser.IsUsingForTheFirstTime == true)
+                        {
+                            dbRegularUser.FirstLoggedAt = DateTime.UtcNow;
+                            dbRegularUser.TrialEndsAt = DateTime.UtcNow.AddDays(__TRIAL_PERIOD__);
+                        }
                     }
 
                     var token = jwtMiddleware.GenerateToken(dbUser);
                     var refreshToken = jwtMiddleware.GenerateRefreshToken();
-
                     if (refreshToken is null)
                     {
                         _userLoggerService.LogError($"LOGIN: {UserServiceLogTypes.USER_TOKEN_NOT_CREATED.ToString()}", token);
@@ -284,7 +298,7 @@ namespace MentalHealthBlog.API.Services
                         throw new InvalidTokenException("Token not created");
                     }
 
-                    var responseUser = new SignedUserDto(dbUser.Id, dbUser.Username, token, refreshToken.Token, dbUserRoles,dbUser.IsUsingForTheFirstTime, isPending);
+                    var responseUser = new SignedUserDto(dbUser.Id, dbUser.Username, token, refreshToken.Token, dbUserRoles, dbUser.IsUsingForTheFirstTime, isPending);
                     _userLoggerService.LogInformation($"LOGIN: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", responseUser);
                     return new Response(responseUser, StatusCodes.Status200OK, UserServiceLogTypes.USER_SUCCESFULL.ToString());
                 }
@@ -458,13 +472,13 @@ namespace MentalHealthBlog.API.Services
                 var smtpHostAddress = _configuration.GetValue<string>("SMTP_HOST_ADDRESS");
                 var smtpPassword = _configuration.GetValue<string>("SMTP_PASSWORD");
 
-                    var message = new MimeMessage();
-                    message.From.Add(new MailboxAddress("Info, Mapp Terapija", applicationInfoEmail));
-                    message.To.Add(new MailboxAddress("Recipient", smtpHostAddress));
-                    message.Subject = "New experts registered!";
-                    message.Body = new TextPart("html")
-                    {
-                        Text = $@"
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("Info, Mapp Terapija", applicationInfoEmail));
+                message.To.Add(new MailboxAddress("Recipient", smtpHostAddress));
+                message.Subject = "New experts registered!";
+                message.Body = new TextPart("html")
+                {
+                    Text = $@"
                 <div>
                     <p> Poštovani PSIHOnet tim, 
                         <br />
@@ -479,16 +493,16 @@ namespace MentalHealthBlog.API.Services
                         </p>
                     </div>
                 </div>"
-                    };
+                };
 
-                    using var client = new SmtpClient();
-                    client.Connect(smtpHost, smtpPort, SecureSocketOptions.StartTls);
-                    await client.AuthenticateAsync(smtpHostAddress, smtpPassword);
-                    await client.SendAsync(message);
-                    await client.DisconnectAsync(true);
+                using var client = new SmtpClient();
+                client.Connect(smtpHost, smtpPort, SecureSocketOptions.StartTls);
+                await client.AuthenticateAsync(smtpHostAddress, smtpPassword);
+                await client.SendAsync(message);
+                await client.DisconnectAsync(true);
 
-                    _userLoggerService.LogInformation($"REGISTER(EMAIL-NOTIFICATION): {UserServiceLogTypes.USER_SUCCESFULL.ToString()}");
-                    return new Response(new object(), StatusCodes.Status200OK, EmailLogTypes.SUCCESS.ToString());
+                _userLoggerService.LogInformation($"REGISTER(EMAIL-NOTIFICATION): {UserServiceLogTypes.USER_SUCCESFULL.ToString()}");
+                return new Response(new object(), StatusCodes.Status200OK, EmailLogTypes.SUCCESS.ToString());
             }
             catch (Exception e)
             {

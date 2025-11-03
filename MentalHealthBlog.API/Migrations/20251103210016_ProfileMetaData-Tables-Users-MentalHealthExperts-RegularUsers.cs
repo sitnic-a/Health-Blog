@@ -18,6 +18,12 @@ namespace MentalHealthBlog.API.Migrations
                 nullable: false,
                 defaultValue: true);
 
+            migrationBuilder.AddColumn<DateTime>(
+                name: "FirstLoggedAt",
+                table: "RegularUsers",
+                type: "timestamp with time zone",
+                nullable: true);
+
             migrationBuilder.AddColumn<bool>(
                 name: "HavePaidForSubscription",
                 table: "RegularUsers",
@@ -37,17 +43,22 @@ namespace MentalHealthBlog.API.Migrations
                 table: "RegularUsers",
                 type: "timestamp with time zone",
                 nullable: false,
-                defaultValue: new DateTime(2025, 11, 3, 14, 57, 2, 335, DateTimeKind.Utc).AddTicks(141));
+                defaultValue: new DateTime(2025, 11, 3, 21, 0, 16, 151, DateTimeKind.Utc).AddTicks(3981));
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "TrialEndsAt",
                 table: "RegularUsers",
                 type: "timestamp with time zone",
-                nullable: false,
-                defaultValue: new DateTime(2025, 11, 10, 14, 57, 2, 335, DateTimeKind.Utc).AddTicks(141));
+                nullable: true);
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "ApprovedAt",
+                table: "MentalHealthExperts",
+                type: "timestamp with time zone",
+                nullable: true);
+
+            migrationBuilder.AddColumn<DateTime>(
+                name: "FirstLoggedAt",
                 table: "MentalHealthExperts",
                 type: "timestamp with time zone",
                 nullable: true);
@@ -71,14 +82,13 @@ namespace MentalHealthBlog.API.Migrations
                 table: "MentalHealthExperts",
                 type: "timestamp with time zone",
                 nullable: false,
-                defaultValue: new DateTime(2025, 11, 3, 14, 57, 2, 335, DateTimeKind.Utc).AddTicks(141));
+                defaultValue: new DateTime(2025, 11, 3, 21, 0, 16, 151, DateTimeKind.Utc).AddTicks(3981));
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "TrialEndsAt",
                 table: "MentalHealthExperts",
                 type: "timestamp with time zone",
-                nullable: false,
-                defaultValue: new DateTime(2025, 11, 10, 14, 57, 2, 335, DateTimeKind.Utc).AddTicks(141));
+                nullable: true);
         }
 
         /// <inheritdoc />
@@ -87,6 +97,10 @@ namespace MentalHealthBlog.API.Migrations
             migrationBuilder.DropColumn(
                 name: "IsUsingForTheFirstTime",
                 table: "Users");
+
+            migrationBuilder.DropColumn(
+                name: "FirstLoggedAt",
+                table: "RegularUsers");
 
             migrationBuilder.DropColumn(
                 name: "HavePaidForSubscription",
@@ -106,6 +120,10 @@ namespace MentalHealthBlog.API.Migrations
 
             migrationBuilder.DropColumn(
                 name: "ApprovedAt",
+                table: "MentalHealthExperts");
+
+            migrationBuilder.DropColumn(
+                name: "FirstLoggedAt",
                 table: "MentalHealthExperts");
 
             migrationBuilder.DropColumn(

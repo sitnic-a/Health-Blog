@@ -112,14 +112,16 @@ namespace MentalHealthBlogAPI.Data
 
             DateTime registeredAt = DateTime.UtcNow;
             modelBuilder.Entity<RegularUser>().Property(ru => ru.RegisteredAt).HasDefaultValue(registeredAt);
+            modelBuilder.Entity<RegularUser>().Property(ru => ru.FirstLoggedAt).HasDefaultValue(null);
             modelBuilder.Entity<RegularUser>().Property(ru => ru.IsInTrialPeriod).HasDefaultValue(true);
-            modelBuilder.Entity<RegularUser>().Property(ru => ru.TrialEndsAt).HasDefaultValue(registeredAt.AddDays(trialPeriod));
+            modelBuilder.Entity<RegularUser>().Property(ru => ru.TrialEndsAt).HasDefaultValue(null);
             modelBuilder.Entity<RegularUser>().Property(ru => ru.HavePaidForSubscription).HasDefaultValue(false);
 
             modelBuilder.Entity<MentalHealthExpert>().Property(ru => ru.RegisteredAt).HasDefaultValue(registeredAt);
             modelBuilder.Entity<MentalHealthExpert>().Property(ru => ru.ApprovedAt).HasDefaultValue(null);
+            modelBuilder.Entity<MentalHealthExpert>().Property(ru => ru.FirstLoggedAt).HasDefaultValue(null);
             modelBuilder.Entity<MentalHealthExpert>().Property(ru => ru.IsInTrialPeriod).HasDefaultValue(true);
-            modelBuilder.Entity<MentalHealthExpert>().Property(ru => ru.TrialEndsAt).HasDefaultValue(registeredAt.AddDays(trialPeriod));
+            modelBuilder.Entity<MentalHealthExpert>().Property(ru => ru.TrialEndsAt).HasDefaultValue(null);
             modelBuilder.Entity<MentalHealthExpert>().Property(ru => ru.HavePaidForSubscription).HasDefaultValue(false);
 
             modelBuilder.Entity<TherapyRequest>().HasKey(tr =>
