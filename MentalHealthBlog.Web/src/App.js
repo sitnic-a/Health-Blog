@@ -31,6 +31,7 @@ import { ResetPassword } from './components/ResetPassword/ResetPassword'
 import { RequestPasswordChange } from './components/RequestPasswordChange/RequestPasswordChange'
 import { TokenRefresher } from './components/TokenRefresher'
 import { SubscriptionChecker } from './components/SubscriptionChecker'
+import { PaidChecker } from './components/PaidChecker'
 
 function App() {
   windowResize(application.layouts.min_screen_single_col_width)
@@ -76,24 +77,32 @@ function App() {
             ></Route>
 
             <Route element={<TokenRefresher />}>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/post/:id" element={<PostById />}></Route>
+              <Route element={<PaidChecker />}>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/post/:id" element={<PostById />}></Route>
 
-              <Route path="/shared-posts" element={<SharedPosts />}></Route>
-              <Route
-                path="shared-content-permission"
-                element={<SharedContentPermission />}
-              ></Route>
+                <Route path="/shared-posts" element={<SharedPosts />}></Route>
+                <Route
+                  path="shared-content-permission"
+                  element={<SharedContentPermission />}
+                ></Route>
 
-              <Route path="/manage-users" element={<ManageUsers />}></Route>
-              <Route
-                path="/requests/new-experts"
-                element={<NewExperts />}
-              ></Route>
-              <Route path="/create-assignment" element={<CreateAssignment />} />
-              <Route path="/assignments/user/:id" element={<Assignments />} />
-              <Route path="/my-experts/" element={<MyMentalHealthExperts />} />
-              <Route path="/therapy/requests" element={<Requests />} />
+                <Route path="/manage-users" element={<ManageUsers />}></Route>
+                <Route
+                  path="/requests/new-experts"
+                  element={<NewExperts />}
+                ></Route>
+                <Route
+                  path="/create-assignment"
+                  element={<CreateAssignment />}
+                />
+                <Route path="/assignments/user/:id" element={<Assignments />} />
+                <Route
+                  path="/my-experts/"
+                  element={<MyMentalHealthExperts />}
+                />
+                <Route path="/therapy/requests" element={<Requests />} />
+              </Route>
             </Route>
 
             <Route path="*" element={<NotFound />} />
