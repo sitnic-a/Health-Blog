@@ -1,11 +1,8 @@
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  getTimeLeftToExpire,
-  stringIsNullOrEmpty,
-} from '../utils/helper-methods/methods'
 import { setTrialToExpired } from '../redux-toolkit/features/subscriptionSlice'
+import { stringIsNullOrEmpty } from '../utils/helper-methods/methods'
 import { db_roles } from '../enums/roles'
-import { useEffect, useState } from 'react'
 
 export const SubscriptionChecker = () => {
   let dispatch = useDispatch()
@@ -28,6 +25,11 @@ export const SubscriptionChecker = () => {
           ).getTime()
 
           let timeLeftInMilliseconds = subscriptionExpires - currentDate
+          console.log(
+            'Left ',
+            (timeLeftInMilliseconds / 1000).toFixed(0),
+            ' sekundi '
+          )
 
           if (timeLeftInMilliseconds <= __DAY_IN_MILLISECONDS__) {
             clearInterval(subscriptionTimerId)
