@@ -131,7 +131,7 @@ namespace MentalHealthBlog.API.Services.Subscription
         {
             try
             {
-                if (request == null || string.IsNullOrEmpty(request.Email) || request.UserId <= 0 || request?.UserRoles.Count <= 0)
+                if (request == null || request.UserId <= 0 || request?.UserRoles.Count <= 0)
                 {
                     _subscriptionLoggerService.LogWarning($"TRIAL-EXPIRING(EMAIL NOTIFICATION): {AdminServiceLogTypes.INVALID_DATA.ToString()}");
                     throw new ArgumentException("Bad request!");
@@ -147,14 +147,12 @@ namespace MentalHealthBlog.API.Services.Subscription
 
                 if (request.UserRoles.Any(r => r.Id == __PSYCHOLOGIST_PSYCHOTHERAPIST_ROLE_ID__))
                 {
-                    dbMentalHealthExpert = await _context.MentalHealthExperts
-                        .FirstOrDefaultAsync(mhe => mhe.Id == request.UserId && mhe.Email == request.Email);
+                    dbMentalHealthExpert = await _context.MentalHealthExperts.FirstOrDefaultAsync(mhe => mhe.Id == request.UserId);
                     userDto = _mapper.Map<UserDto>(dbMentalHealthExpert);
                 }
                 else if (request.UserRoles.Any(r => r.Id == __USER_ROLE_ID__))
                 {
-                    dbRegularUser = await _context.RegularUsers
-                        .FirstOrDefaultAsync(ru => ru.UserId == request.UserId && ru.Email == request.Email);
+                    dbRegularUser = await _context.RegularUsers.FirstOrDefaultAsync(ru => ru.UserId == request.UserId);
                     userDto = _mapper.Map<UserDto>(dbRegularUser);
                 }
 

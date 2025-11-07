@@ -10,18 +10,11 @@ import { db_roles } from '../enums/roles'
 
 export const SubscriptionChecker = () => {
   let dispatch = useDispatch()
-  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
-  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
   let { usersTrialPeriod } = useSelector((store) => store.subscription)
 
   let subscriptionTimerId
   const __DAY_IN_MILLISECONDS__ = 86400000
   const __THIRTY_SECONDS_IN_MILLISECONDS__ = 30000
-
-  let requestObj = {
-    userId: authenticatedUser?.id,
-    userRoles: authenticatedUser?.userRoles,
-  }
 
   useEffect(() => {
     if (!stringIsNullOrEmpty(usersTrialPeriod)) {
@@ -45,6 +38,14 @@ export const SubscriptionChecker = () => {
           if (timeLeftInMilliseconds <= __DAY_IN_MILLISECONDS__) {
             //send email that subscription is expiring in a day
             clearInterval(subscriptionTimerId)
+            let authenticatedUserLocalStorage =
+              localStorage.getItem('authenticatedUser')
+            let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+            let requestObj = {
+              userId: authenticatedUser?.id,
+              userRoles: authenticatedUser?.userRoles,
+            }
+
             let objectWithData = {
               authenticatedUser,
               requestObj,
