@@ -102,6 +102,7 @@ namespace MentalHealthBlog.API.Services.Subscription
                         throw new RecordNotFoundException("Expert is not found!");
                     }
                     dbMentalHealthExpert.IsInTrialPeriod = request.IsInTrialPeriod;
+                    dbMentalHealthExpert.IsInformedAboutSubscriptionExpiration = false;
                     await _context.SaveChangesAsync();
                     userTrialSubscriptionDto = _mapper.Map<UserTrialSubscriptionDto>(dbMentalHealthExpert);
                     _subscriptionLoggerService.LogInformation($"TRIAL-EXPIRED: {SubscriptionLogTypes.SUCCCESS.ToString()}");
@@ -116,6 +117,7 @@ namespace MentalHealthBlog.API.Services.Subscription
                 }
 
                 dbRegularUser.IsInTrialPeriod = request.IsInTrialPeriod;
+                dbRegularUser.IsInformedAboutSubscriptionExpiration = false;
                 await _context.SaveChangesAsync();
                 userTrialSubscriptionDto = _mapper.Map<UserTrialSubscriptionDto>(dbRegularUser);
                 _subscriptionLoggerService.LogInformation($"TRIAL-EXPIRED: {SubscriptionLogTypes.SUCCCESS.ToString()}");

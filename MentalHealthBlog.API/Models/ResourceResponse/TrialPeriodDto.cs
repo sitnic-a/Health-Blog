@@ -8,6 +8,7 @@
         public bool IsInTrialPeriod { get; set; }
         public DateTime TrialEndsAt { get; set; }
         public bool HavePaidForSubscription { get; set; }
+        public bool IsInformedAboutSubscriptionExpiration { get; set; }
        
         public TrialPeriodDto(){}
         public TrialPeriodDto(int userId, DateTime registeredAt, bool isInTrialPeriod, DateTime trialEndsAt, bool havePaidForSubscription)
