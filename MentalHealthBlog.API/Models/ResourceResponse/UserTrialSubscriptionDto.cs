@@ -11,6 +11,7 @@
         public bool IsInTrialPeriod { get; set; } = true;
         public DateTime TrialEndsAt { get; set; }
         public bool HavePaidForSubscription { get; set; } = false;
+        public bool IsInformedAboutSubscriptionExpiration { get; set; }
 
     }
 }

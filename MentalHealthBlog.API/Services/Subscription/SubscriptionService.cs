@@ -80,7 +80,7 @@ namespace MentalHealthBlog.API.Services.Subscription
                 _subscriptionLoggerService.LogError($"TRIAL/[userId]: ${e.Message}");
                 throw;
             }
-            
+
         }
         public async Task<Response> SetTrialToExpired(SubscriptionTrialRequestDto request)
         {
@@ -148,12 +148,24 @@ namespace MentalHealthBlog.API.Services.Subscription
                 if (request.UserRoles.Any(r => r.Id == __PSYCHOLOGIST_PSYCHOTHERAPIST_ROLE_ID__))
                 {
                     dbMentalHealthExpert = await _context.MentalHealthExperts.FirstOrDefaultAsync(mhe => mhe.Id == request.UserId);
-                    userDto = _mapper.Map<UserDto>(dbMentalHealthExpert);
+                    if (dbMentalHealthExpert != null)
+                        userDto = _mapper.Map<UserDto>(dbMentalHealthExpert);
+                    else
+                    {
+                        _subscriptionLoggerService.LogWarning($"TRIAL-EXPIRING(EMAIL NOTIFICATION): {SubscriptionLogTypes.NOT_FOUND.ToString()}");
+                        throw new RecordNotFoundException("Data coudln't be properly retrieved !");
+                    }
                 }
                 else if (request.UserRoles.Any(r => r.Id == __USER_ROLE_ID__))
                 {
                     dbRegularUser = await _context.RegularUsers.FirstOrDefaultAsync(ru => ru.UserId == request.UserId);
-                    userDto = _mapper.Map<UserDto>(dbRegularUser);
+                    if (dbRegularUser != null)
+                        userDto = _mapper.Map<UserDto>(dbRegularUser);
+                    else
+                    {
+                        _subscriptionLoggerService.LogWarning($"TRIAL-EXPIRING(EMAIL NOTIFICATION): {SubscriptionLogTypes.NOT_FOUND.ToString()}");
+                        throw new RecordNotFoundException("Data coudln't be properly retrieved !");
+                    }
                 }
 
                 if (userDto != null)
@@ -195,6 +207,14 @@ namespace MentalHealthBlog.API.Services.Subscription
                     await client.AuthenticateAsync(smtpHostAddress, smtpPassword);
                     await client.SendAsync(message);
                     await client.DisconnectAsync(true);
+
+                    if (dbMentalHealthExpert != null)
+                        dbMentalHealthExpert.IsInformedAboutSubscriptionExpiration = true;
+
+                    if (dbRegularUser != null)
+                        dbRegularUser.IsInformedAboutSubscriptionExpiration = true;
+
+                    await _context.SaveChangesAsync();
 
                     _subscriptionLoggerService.LogInformation($"TRIAL-EXPIRING(EMAIL NOTIFICATION): {SubscriptionLogTypes.SUCCCESS.ToString()}");
                     return new Response(userDto, StatusCodes.Status200OK, $"TRIAL-EXPIRING(EMAIL NOTIFICATION): {SubscriptionLogTypes.SUCCCESS.ToString()}");
