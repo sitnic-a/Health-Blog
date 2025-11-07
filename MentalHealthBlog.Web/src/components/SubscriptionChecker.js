@@ -1,17 +1,27 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Cookies from 'js-cookie'
-import { setTrialToExpired } from '../redux-toolkit/features/subscriptionSlice'
+import {
+  sendTrialExpiringnEmail,
+  setTrialToExpired,
+} from '../redux-toolkit/features/subscriptionSlice'
 import { stringIsNullOrEmpty } from '../utils/helper-methods/methods'
 import { db_roles } from '../enums/roles'
 
 export const SubscriptionChecker = () => {
   let dispatch = useDispatch()
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
   let { usersTrialPeriod } = useSelector((store) => store.subscription)
 
   let subscriptionTimerId
   const __DAY_IN_MILLISECONDS__ = 86400000
   const __THIRTY_SECONDS_IN_MILLISECONDS__ = 30000
+
+  let requestObj = {
+    userId: authenticatedUser?.id,
+    userRoles: authenticatedUser?.userRoles,
+  }
 
   useEffect(() => {
     if (!stringIsNullOrEmpty(usersTrialPeriod)) {
@@ -35,6 +45,11 @@ export const SubscriptionChecker = () => {
           if (timeLeftInMilliseconds <= __DAY_IN_MILLISECONDS__) {
             //send email that subscription is expiring in a day
             clearInterval(subscriptionTimerId)
+            let objectWithData = {
+              authenticatedUser,
+              requestObj,
+            }
+            dispatch(sendTrialExpiringnEmail(objectWithData))
             subscriptionTimerId = setInterval(() => {
               let currentDate = new Date().getTime()
               let subscriptionExpires = new Date(

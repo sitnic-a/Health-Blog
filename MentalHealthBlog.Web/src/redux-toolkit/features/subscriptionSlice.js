@@ -30,6 +30,22 @@ export const setTrialToExpired = createAsyncThunk(
   }
 )
 
+export const sendTrialExpiringnEmail = createAsyncThunk(
+  'trial-expiring-email-notification',
+  async (objectWithData) => {
+    let url = `${application.application_url}/subscription/trial-expiring-email-notification`
+    let request = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(objectWithData?.requestObj),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    let response = await request.json()
+    return response
+  }
+)
+
 let subscriptionSlice = createSlice({
   name: 'subscriptionSlice',
   initialState,
@@ -58,6 +74,11 @@ let subscriptionSlice = createSlice({
         }
       })
       .addCase(setTrialToExpired.rejected, (state, action) => {})
+
+      //sendTrialExpiringnEmail
+      .addCase(sendTrialExpiringnEmail.pending, (state, action) => {})
+      .addCase(sendTrialExpiringnEmail.fulfilled, (state, action) => {})
+      .addCase(sendTrialExpiringnEmail.rejected, (state, action) => {})
   },
 })
 
