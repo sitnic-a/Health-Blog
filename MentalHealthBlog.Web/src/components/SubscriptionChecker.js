@@ -38,19 +38,23 @@ export const SubscriptionChecker = () => {
           if (timeLeftInMilliseconds <= __DAY_IN_MILLISECONDS__) {
             //send email that subscription is expiring in a day
             clearInterval(subscriptionTimerId)
-            let authenticatedUserLocalStorage =
-              localStorage.getItem('authenticatedUser')
-            let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
-            let requestObj = {
-              userId: authenticatedUser?.id,
-              userRoles: authenticatedUser?.userRoles,
-            }
+            console.log('users ', usersTrialPeriod)
 
-            let objectWithData = {
-              authenticatedUser,
-              requestObj,
+            if (!usersTrialPeriod?.isInformedAboutSubscriptionExpiration) {
+              let authenticatedUserLocalStorage =
+                localStorage.getItem('authenticatedUser')
+              let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+              let requestObj = {
+                userId: authenticatedUser?.id,
+                userRoles: authenticatedUser?.userRoles,
+              }
+
+              let objectWithData = {
+                authenticatedUser,
+                requestObj,
+              }
+              dispatch(sendTrialExpiringnEmail(objectWithData))
             }
-            dispatch(sendTrialExpiringnEmail(objectWithData))
             subscriptionTimerId = setInterval(() => {
               let currentDate = new Date().getTime()
               let subscriptionExpires = new Date(
