@@ -1,10 +1,12 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUsersTrialPeriod } from '../redux-toolkit/features/subscriptionSlice'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
+import { TrialPeriodExpired } from './TrialPeriodExpired/TrialPeriodExpired'
 
 export const PaidChecker = () => {
   let dispatch = useDispatch()
+  let navigate = useNavigate()
 
   let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
   let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
@@ -23,6 +25,6 @@ export const PaidChecker = () => {
     isAdmin ? (
     <Outlet />
   ) : (
-    <p>Nije platio</p>
+    navigate('/expired')
   )
 }

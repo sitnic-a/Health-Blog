@@ -32,6 +32,7 @@ import { RequestPasswordChange } from './components/RequestPasswordChange/Reques
 import { TokenRefresher } from './components/TokenRefresher'
 import { SubscriptionChecker } from './components/SubscriptionChecker'
 import { PaidChecker } from './components/PaidChecker'
+import { TrialPeriodExpired } from './components/TrialPeriodExpired/TrialPeriodExpired'
 
 function App() {
   windowResize(application.layouts.min_screen_single_col_width)
@@ -107,6 +108,7 @@ function App() {
 
             <Route path="*" element={<NotFound />} />
             <Route path="/not-found" element={<NotFound />} />
+            <Route path="/expired" element={<TrialPeriodExpired />} />
           </Routes>
 
           <SubscriptionChecker />
