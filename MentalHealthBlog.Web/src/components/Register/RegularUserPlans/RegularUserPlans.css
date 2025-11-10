@@ -1,0 +1,48 @@
+#register-regular-plans-main-container {
+  max-width: 800px;
+  margin-inline: auto;
+  display: flex;
+  gap: 20px;
+}
+
+@media (width<=800px) {
+  #register-regular-plans-main-container {
+    margin-inline: 0.5rem;
+    flex-wrap: wrap;
+  }
+}
+
+.register-regular-plan-main-container {
+  max-width: 400px;
+  margin-inline: auto;
+  padding: 1rem;
+  border-radius: 0.6rem;
+  background: #f3f1e3;
+}
+
+.register-regular-plan-main-container-header-title {
+  margin-block: 0.5rem 1rem;
+  font-family: 'Overlock';
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.register-regular-plan-main-container-header-subtitle {
+  font-family: 'Overlock';
+  font-size: 1.8rem;
+}
+
+.register-regular-plan-accommodations-main-container {
+}
+
+.register-regular-plan-accommodation-container {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.register-regular-plan-accommodation-container-value {
+  margin-block: 0.3rem;
+  font-family: 'SansDeva';
+  font-size: 0.85rem;
+}

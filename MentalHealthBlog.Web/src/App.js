@@ -33,7 +33,7 @@ import { TokenRefresher } from './components/TokenRefresher'
 import { SubscriptionChecker } from './components/SubscriptionChecker'
 import { PaidChecker } from './components/PaidChecker'
 import { TrialPeriodExpired } from './components/TrialPeriodExpired/TrialPeriodExpired'
-import { SubscriptionPlans } from './components/SubscriptionPlans/SubscriptionPlans'
+import { SubscriptionPlans } from './components/Register/SubscriptionPlans/SubscriptionPlans'
 
 function App() {
   windowResize(application.layouts.min_screen_single_col_width)
