@@ -3,6 +3,7 @@ using System;
 using MentalHealthBlogAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MentalHealthBlog.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20251103210016_ProfileMetaData-Tables-Users-MentalHealthExperts-RegularUsers")]
+    partial class ProfileMetaDataTablesUsersMentalHealthExpertsRegularUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -541,9 +544,6 @@ namespace MentalHealthBlog.API.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(true);
 
-                    b.Property<bool>("IsInformedAboutSubscriptionExpiration")
-                        .HasColumnType("boolean");
-
                     b.Property<bool>("IsRejected")
                         .HasColumnType("boolean");
 
@@ -568,7 +568,7 @@ namespace MentalHealthBlog.API.Migrations
                     b.Property<DateTime>("RegisteredAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2025, 11, 7, 15, 52, 2, 119, DateTimeKind.Utc).AddTicks(6164));
+                        .HasDefaultValue(new DateTime(2025, 11, 3, 21, 0, 16, 151, DateTimeKind.Utc).AddTicks(3981));
 
                     b.Property<DateTime?>("TrialEndsAt")
                         .HasColumnType("timestamp with time zone");
@@ -672,9 +672,6 @@ namespace MentalHealthBlog.API.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(true);
 
-                    b.Property<bool>("IsInformedAboutSubscriptionExpiration")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("text");
@@ -682,7 +679,7 @@ namespace MentalHealthBlog.API.Migrations
                     b.Property<DateTime>("RegisteredAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2025, 11, 7, 15, 52, 2, 119, DateTimeKind.Utc).AddTicks(6164));
+                        .HasDefaultValue(new DateTime(2025, 11, 3, 21, 0, 16, 151, DateTimeKind.Utc).AddTicks(3981));
 
                     b.Property<DateTime?>("TrialEndsAt")
                         .HasColumnType("timestamp with time zone");

@@ -3,7 +3,7 @@
 
 namespace MentalHealthBlog.API.Models
 {
-    public class MentalHealthExpert 
+    public class MentalHealthExpert : Base
     {
         public int Id { get; set; }
         public int UserId { get; set; }
@@ -15,6 +15,7 @@ namespace MentalHealthBlog.API.Models
         public byte[]? PhotoAsFile { get; set; }
         public string? PhotoAsPath { get; set; } = string.Empty;
         public bool IsApproved { get; set; }
+        public DateTime? ApprovedAt { get; set; }
         public bool IsRejected { get; set; }
 
         public MentalHealthExpert(){}

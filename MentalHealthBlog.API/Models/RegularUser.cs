@@ -1,11 +1,10 @@
 ﻿using MentalHealthBlogAPI.Models;
-using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MentalHealthBlog.API.Models
 {
-    public class RegularUser
+    public class RegularUser : Base
     {
         [Key]
         [ForeignKey("User")]

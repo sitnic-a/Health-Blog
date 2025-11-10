@@ -12,7 +12,7 @@ namespace MentalHealthBlogAPI.Data
 {
     public class DataContext : DbContext
     {
-        public DataContext(DbContextOptions<DataContext> options) : base(options){}
+        public DataContext(DbContextOptions<DataContext> options) : base(options) { }
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
@@ -73,6 +73,8 @@ namespace MentalHealthBlogAPI.Data
             ExcelHandler excelHandler = new ExcelHandler();
             List<Emotion> emotions = excelHandler.CallGetAllEmotionsFromEmotionWheelFile();
 
+            modelBuilder.Entity<User>().Property(u => u.IsUsingForTheFirstTime).HasDefaultValue(true);
+
             modelBuilder.Entity<Role>().HasData(
                     new { Id = 1, Name = "Administrator" },
                     new { Id = 2, Name = "User" },
@@ -103,7 +105,25 @@ namespace MentalHealthBlogAPI.Data
                 pe.EmotionId
             });
 
-            modelBuilder.Entity<RegularUser>().HasKey(u => u.UserId);
+            int trialPeriod = 7;
+
+            modelBuilder.Entity<RegularUser>()
+                .HasKey(u => u.UserId);
+
+            DateTime registeredAt = DateTime.UtcNow;
+            modelBuilder.Entity<RegularUser>().Property(ru => ru.RegisteredAt).HasDefaultValue(registeredAt);
+            modelBuilder.Entity<RegularUser>().Property(ru => ru.FirstLoggedAt).HasDefaultValue(null);
+            modelBuilder.Entity<RegularUser>().Property(ru => ru.IsInTrialPeriod).HasDefaultValue(true);
+            modelBuilder.Entity<RegularUser>().Property(ru => ru.TrialEndsAt).HasDefaultValue(null);
+            modelBuilder.Entity<RegularUser>().Property(ru => ru.HavePaidForSubscription).HasDefaultValue(false);
+
+            modelBuilder.Entity<MentalHealthExpert>().Property(ru => ru.RegisteredAt).HasDefaultValue(registeredAt);
+            modelBuilder.Entity<MentalHealthExpert>().Property(ru => ru.ApprovedAt).HasDefaultValue(null);
+            modelBuilder.Entity<MentalHealthExpert>().Property(ru => ru.FirstLoggedAt).HasDefaultValue(null);
+            modelBuilder.Entity<MentalHealthExpert>().Property(ru => ru.IsInTrialPeriod).HasDefaultValue(true);
+            modelBuilder.Entity<MentalHealthExpert>().Property(ru => ru.TrialEndsAt).HasDefaultValue(null);
+            modelBuilder.Entity<MentalHealthExpert>().Property(ru => ru.HavePaidForSubscription).HasDefaultValue(false);
+
             modelBuilder.Entity<TherapyRequest>().HasKey(tr =>
             new
             {

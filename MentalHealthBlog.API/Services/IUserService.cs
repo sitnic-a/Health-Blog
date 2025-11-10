@@ -1,6 +1,7 @@
 ﻿using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Models;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace MentalHealthBlog.API.Services
 {
@@ -13,5 +14,6 @@ namespace MentalHealthBlog.API.Services
         Task<Response> GetRoles();
         Task<Response> Logout(LogoutDto logoutRequest);
         Task<Response> ChangePassword(ChangePasswordDto changePasswordRequest);
+        Task<Response> ChangeIsUsingForTheFirstTime(int id, JsonPatchDocument<User> patchDocument);
     }
 }

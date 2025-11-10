@@ -12,6 +12,7 @@ let modalSlice = createSlice({
     emailSuccessfullySentOpen: false,
     isAssignmentResponsesOpen: false,
     isRespondingToAssignment: false,
+    isTrialPeriodPopupOpen: false,
   },
   reducers: {
     openAddModal: (state, action) => {
@@ -41,6 +42,9 @@ let modalSlice = createSlice({
     openRespondToAssignment: (state, action) => {
       state.isRespondingToAssignment = action?.payload
     },
+    openTrialPeriodPopup: (state, action) => {
+      state.isTrialPeriodPopupOpen = action?.payload
+    },
   },
 })
 
@@ -54,6 +58,7 @@ export const {
   openEmailSuccessfullySentOpen,
   openAssignmentResponses,
   openRespondToAssignment,
+  openTrialPeriodPopup,
 } = modalSlice.actions
 
 export default modalSlice.reducer

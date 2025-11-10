@@ -13,6 +13,7 @@ namespace MentalHealthBlogAPI.Models
         public List<Post> Posts { get; set; }
         [JsonIgnore]
         public List<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
+        public bool IsUsingForTheFirstTime { get; set; }
 
         public User()
         {
