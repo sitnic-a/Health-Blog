@@ -1,0 +1,50 @@
+{
+  "plans": {
+    "regular_user_plans": [
+      {
+        "plan_type": "Mjesečna uplata",
+        "plan_price": 20,
+        "accommodation_list": [
+          "Kreiraj profil",
+          "Poveži se sa stručnjacima za mentalno zdravlje",
+          "Dijeli svoje objave sa stručnjacima",
+          "Uči kroz zadatke od stručnjaka"
+        ]
+      },
+      {
+        "plan_type": "Godišnja uplata",
+        "plan_price": 200,
+        "isPerYear": true,
+        "accommodation_list": [
+          "Kreiraj profil",
+          "Poveži se sa stručnjacima za mentalno zdravlje",
+          "Dijeli svoje objave sa stručnjacima",
+          "Uči kroz zadatke od stručnjaka"
+        ]
+      }
+    ],
+    "mental_health_expert_plans": [
+      {
+        "plan_type": "Mjesečna uplata",
+        "plan_price": 50,
+        "accommodation_list": [
+          "Kreiraj profil",
+          "Pristupi mreži klijenata",
+          "Primaj postove od klijenata",
+          "Podijeli svoj osvrt i zadatke sa klijentima"
+        ]
+      },
+      {
+        "plan_type": "Godišnja uplata",
+        "plan_price": 500,
+        "isPerYear": true,
+        "accommodation_list": [
+          "Kreiraj profil",
+          "Pristupi mreži klijenata",
+          "Primaj postove od klijenata",
+          "Podijeli svoj osvrt i zadatke sa klijentima"
+        ]
+      }
+    ]
+  }
+}

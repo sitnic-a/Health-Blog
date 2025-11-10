@@ -386,10 +386,12 @@ export const Register = () => {
     }
 
     dispatch(register(form)).then((response) => {
-      let statusCode = response.payload.statusCode
+      let statusCode = response?.payload?.statusCode
       if (statusCode === 201) {
+        let serviceResponseObject = response?.payload?.serviceResponseObject
         dispatch(setSelectedMentalHealthExpertIds([]))
-        navigate('/login')
+        localStorage.setItem('justRegisteredUser', serviceResponseObject)
+        navigate('/subscription-plans')
       }
     })
 
