@@ -17,7 +17,55 @@
   margin-inline: auto;
   padding: 1rem;
   border-radius: 0.6rem;
+  transition: 150ms;
   background: #f3f1e3;
+}
+
+@media (width<=800px) {
+  .register-regular-plan-main-container {
+    margin-top: 1.5rem;
+  }
+}
+
+.register-regular-plan-main-container-selected {
+  transform: scale(1.1);
+  background: #34688f;
+}
+
+@media (width<=800px) {
+  .register-regular-plan-main-container-selected {
+    transform: scale(1.03);
+  }
+}
+
+.register-regular-plan-main-container:hover {
+  background: #34688f;
+
+  .register-regular-plan-main-container-header-title {
+    color: #f3f1e3;
+  }
+
+  .register-regular-plan-main-container-header-subtitle {
+    color: #f3f1e3;
+  }
+
+  .register-regular-plan-accommodation-icon {
+    fill: #f3f1e3;
+    padding: 0.1rem;
+    border-radius: 360px;
+    transition: 150ms;
+    background: #82a3bc;
+  }
+
+  .register-regular-plan-accommodation-container-value {
+    color: #f3f1e3;
+  }
+
+  .register-regular-plan-choose-plan-button {
+    transform: scale(1);
+    transition: 150ms;
+    background: #edb572;
+  }
 }
 
 .register-regular-plan-main-container-header-title {
@@ -27,9 +75,17 @@
   font-weight: 500;
 }
 
+.register-regular-plan-main-container-header-title-selected {
+  color: #f3f1e3;
+}
+
 .register-regular-plan-main-container-header-subtitle {
   font-family: 'Overlock';
   font-size: 1.8rem;
+}
+
+.register-regular-plan-main-container-header-subtitle-selected {
+  color: #f3f1e3;
 }
 
 .register-regular-plan-accommodations-main-container {
@@ -41,8 +97,55 @@
   align-items: center;
 }
 
+.register-regular-plan-accommodation-icon {
+  fill: #f3f1e3;
+  transform: scale(0.8);
+  padding: 0.1rem;
+  border-radius: 360px;
+  background: #edb572;
+}
+
+.register-regular-plan-accommodation-icon-selected {
+  fill: #f3f1e3;
+  padding: 0.1rem;
+  border-radius: 360px;
+  transition: 150ms;
+  background: #82a3bc;
+}
+
 .register-regular-plan-accommodation-container-value {
   margin-block: 0.3rem;
   font-family: 'SansDeva';
   font-size: 0.85rem;
+}
+
+.register-regular-plan-accommodation-container-value-selected {
+  color: #f3f1e3;
+}
+
+.register-regular-plan-choose-plan-button-container {
+  max-width: 400px;
+  margin-top: 0.5rem;
+  /* background: red; */
+}
+
+.register-regular-plan-choose-plan-button {
+  max-width: 400px;
+  width: 100%;
+  padding-block: 0.7rem;
+  font-family: 'SansDeva';
+  font-size: 0.9rem;
+  line-height: 1.4;
+  outline: none;
+  border: none;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  color: #f3f1e3;
+  background: #34688f;
+}
+
+.register-regular-plan-choose-plan-button-selected {
+  transform: scale(1);
+  transition: 150ms;
+  background: #edb572;
 }

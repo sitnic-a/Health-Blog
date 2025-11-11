@@ -544,3 +544,84 @@ export const switchActiveTab = (element) => {
     }
   })
 }
+
+export const toggleChosenPlan = (planMainContainer) => {
+  deselectPlans()
+  // console.log('Plan ', planMainContainer)
+
+  let planMainContainerHeaderTitle = planMainContainer.querySelector(
+    '.register-regular-plan-main-container-header-title'
+  )
+  let planMainContainerHeaderSubtitle = planMainContainer.querySelector(
+    '.register-regular-plan-main-container-header-subtitle'
+  )
+  let planAccommodationIcon = planMainContainer.querySelectorAll(
+    '.register-regular-plan-accommodation-icon'
+  )
+  let planAccommodationValue = planMainContainer.querySelectorAll(
+    '.register-regular-plan-accommodation-container-value'
+  )
+  let planChoosePlanButton = planMainContainer.querySelector(
+    '.register-regular-plan-choose-plan-button'
+  )
+
+  planMainContainer.classList.add(
+    'register-regular-plan-main-container-selected'
+  )
+  planMainContainerHeaderTitle.classList.add(
+    'register-regular-plan-main-container-header-title-selected'
+  )
+  planMainContainerHeaderSubtitle.classList.add(
+    'register-regular-plan-main-container-header-subtitle-selected'
+  )
+  planAccommodationIcon.forEach((icon) => {
+    icon.classList.add('register-regular-plan-accommodation-icon-selected')
+  })
+
+  planAccommodationValue.forEach((accommodation) => {
+    accommodation.classList.add(
+      'register-regular-plan-accommodation-container-value-selected'
+    )
+  })
+  planChoosePlanButton.classList.add(
+    'register-regular-plan-choose-plan-button-selected'
+  )
+}
+
+export const deselectPlans = () => {
+  let plansMainContainer = document.querySelectorAll(
+    '.register-regular-plan-main-container'
+  )
+  plansMainContainer.forEach((plan) => {
+    console.log('Plan ', plan)
+
+    plan.classList.remove('register-regular-plan-main-container-selected')
+    plan
+      .querySelector('.register-regular-plan-main-container-header-title')
+      .classList.remove(
+        'register-regular-plan-main-container-header-title-selected'
+      )
+    plan
+      .querySelector('.register-regular-plan-main-container-header-subtitle')
+      .classList.remove(
+        'register-regular-plan-main-container-header-subtitle-selected'
+      )
+    plan
+      .querySelectorAll('.register-regular-plan-accommodation-icon')
+      .forEach((icon) => {
+        icon.classList.remove(
+          'register-regular-plan-accommodation-icon-selected'
+        )
+      })
+    plan
+      .querySelectorAll('.register-regular-plan-accommodation-container-value')
+      .forEach((accommodation) => {
+        accommodation.classList.remove(
+          'register-regular-plan-accommodation-container-value-selected'
+        )
+      })
+    plan
+      .querySelector('.register-regular-plan-choose-plan-button')
+      .classList.remove('register-regular-plan-choose-plan-button-selected')
+  })
+}

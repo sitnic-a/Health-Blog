@@ -1,11 +1,15 @@
-import { IoIosCheckmarkCircleOutline } from 'react-icons/io'
+import { IoMdCheckmark } from 'react-icons/io'
 
 import RegularUserPlansCSS from './RegularUserPlans.css'
+import { toggleChosenPlan } from '../../../utils/helper-methods/methods'
 
 export const RegularUserPlans = () => {
   let { plans } = require('../../subscriptionPlans.json')
   return (
-    <section id="register-regular-plans-main-container">
+    <section
+      className="register-regular-plans-main-container"
+      id="register-regular-plans-main-container"
+    >
       {plans.regular_user_plans.map((plan, index) => {
         return (
           <div key={index} className="register-regular-plan-main-container">
@@ -17,7 +21,7 @@ export const RegularUserPlans = () => {
                 {plan.plan_price} KM
               </h1>
             </div>
-            <hr />
+            <hr className="register-regular-plan-main-container-separator" />
             <div className="register-regular-plan-accommodations-main-container">
               {plan.accommodation_list.map((accommodation, index) => {
                 return (
@@ -26,7 +30,7 @@ export const RegularUserPlans = () => {
                     className="register-regular-plan-accommodation-main-container"
                   >
                     <div className="register-regular-plan-accommodation-container">
-                      <IoIosCheckmarkCircleOutline className="register-regular-plan-accommodation-icon" />
+                      <IoMdCheckmark className="register-regular-plan-accommodation-icon" />
                       <p className="register-regular-plan-accommodation-container-value">
                         {accommodation}
                       </p>
@@ -34,6 +38,20 @@ export const RegularUserPlans = () => {
                   </div>
                 )
               })}
+            </div>
+
+            <div className="register-regular-plan-choose-plan-button-container">
+              <button
+                className="register-regular-plan-choose-plan-button"
+                type="button"
+                onClick={(e) => {
+                  let planMainContainer = e.currentTarget.parentNode.parentNode
+
+                  toggleChosenPlan(planMainContainer)
+                }}
+              >
+                Odaberi plan
+              </button>
             </div>
           </div>
         )
