@@ -550,78 +550,70 @@ export const toggleChosenPlan = (planMainContainer) => {
   // console.log('Plan ', planMainContainer)
 
   let planMainContainerHeaderTitle = planMainContainer.querySelector(
-    '.register-regular-plan-main-container-header-title'
+    '.register-plan-main-container-header-title'
   )
   let planMainContainerHeaderSubtitle = planMainContainer.querySelector(
-    '.register-regular-plan-main-container-header-subtitle'
+    '.register-plan-main-container-header-subtitle'
   )
   let planAccommodationIcon = planMainContainer.querySelectorAll(
-    '.register-regular-plan-accommodation-icon'
+    '.register-plan-accommodation-icon'
   )
   let planAccommodationValue = planMainContainer.querySelectorAll(
-    '.register-regular-plan-accommodation-container-value'
+    '.register-plan-accommodation-container-value'
   )
   let planChoosePlanButton = planMainContainer.querySelector(
-    '.register-regular-plan-choose-plan-button'
+    '.register-plan-choose-plan-button'
   )
 
-  planMainContainer.classList.add(
-    'register-regular-plan-main-container-selected'
-  )
+  planMainContainer.classList.add('register-plan-main-container-selected')
   planMainContainerHeaderTitle.classList.add(
-    'register-regular-plan-main-container-header-title-selected'
+    'register-plan-main-container-header-title-selected'
   )
   planMainContainerHeaderSubtitle.classList.add(
-    'register-regular-plan-main-container-header-subtitle-selected'
+    'register-plan-main-container-header-subtitle-selected'
   )
   planAccommodationIcon.forEach((icon) => {
-    icon.classList.add('register-regular-plan-accommodation-icon-selected')
+    icon.classList.add('register-plan-accommodation-icon-selected')
   })
 
   planAccommodationValue.forEach((accommodation) => {
     accommodation.classList.add(
-      'register-regular-plan-accommodation-container-value-selected'
+      'register-plan-accommodation-container-value-selected'
     )
   })
   planChoosePlanButton.classList.add(
-    'register-regular-plan-choose-plan-button-selected'
+    'register-plan-choose-plan-button-selected'
   )
 }
 
 export const deselectPlans = () => {
   let plansMainContainer = document.querySelectorAll(
-    '.register-regular-plan-main-container'
+    '.register-plan-main-container'
   )
   plansMainContainer.forEach((plan) => {
     console.log('Plan ', plan)
 
-    plan.classList.remove('register-regular-plan-main-container-selected')
+    plan.classList.remove('register-plan-main-container-selected')
     plan
-      .querySelector('.register-regular-plan-main-container-header-title')
-      .classList.remove(
-        'register-regular-plan-main-container-header-title-selected'
-      )
+      .querySelector('.register-plan-main-container-header-title')
+      .classList.remove('register-plan-main-container-header-title-selected')
     plan
-      .querySelector('.register-regular-plan-main-container-header-subtitle')
-      .classList.remove(
-        'register-regular-plan-main-container-header-subtitle-selected'
-      )
+      .querySelector('.register-plan-main-container-header-subtitle')
+      .classList.remove('register-plan-main-container-header-subtitle-selected')
     plan
-      .querySelectorAll('.register-regular-plan-accommodation-icon')
+      .querySelectorAll('.register-plan-accommodation-icon')
       .forEach((icon) => {
-        icon.classList.remove(
-          'register-regular-plan-accommodation-icon-selected'
-        )
+        icon.classList.remove('register-plan-accommodation-icon-selected')
       })
     plan
-      .querySelectorAll('.register-regular-plan-accommodation-container-value')
+      .querySelectorAll('.register-plan-accommodation-container-value')
       .forEach((accommodation) => {
         accommodation.classList.remove(
-          'register-regular-plan-accommodation-container-value-selected'
+          'register-plan-accommodation-container-value-selected'
         )
       })
     plan
-      .querySelector('.register-regular-plan-choose-plan-button')
-      .classList.remove('register-regular-plan-choose-plan-button-selected')
+      .querySelector('.register-plan-choose-plan-button')
+      .classList.remove('register-plan-choose-plan-button-selected')
   })
 }

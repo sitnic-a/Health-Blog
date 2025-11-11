@@ -7,7 +7,8 @@ import SubscriptionPlansCSS from './SubscriptionPlans.css'
 export const SubscriptionPlans = () => {
   let { plans } = require('../../subscriptionPlans.json')
   let justRegisteredUser = localStorage.getItem('justRegisteredUser')
-  let isMentalHealthExpert = false
+  let isMentalHealthExpert = true
+  // let isMentalHealthExpert = false
 
   return (
     <section id="register-choose-subscription-plan-main-container">
@@ -18,6 +19,10 @@ export const SubscriptionPlans = () => {
           </h1>
           <p className="register-choose-subscription-plan-header-subtitle">
             Molimo Vas da odaberete željeni plan
+          </p>
+          <p className="register-choose-subscription-plan-header-subtitle">
+            Neovisno o odabranom planu, dobijate{' '}
+            <strong>7 dana besplatnog korištenja aplikacije</strong>
           </p>
         </div>
         <div className="register-choose-subscription-plan-plans-container">

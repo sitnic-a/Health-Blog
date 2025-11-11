@@ -75,6 +75,12 @@
   }
 }
 
+@media (width<=420px) {
+  .register-choose-subscription-plan-actions-container {
+    margin-inline: 0.5rem;
+  }
+}
+
 .register-choose-subscription-plan-action-register {
   /* max-width: 200px; */
   max-width: 200px;

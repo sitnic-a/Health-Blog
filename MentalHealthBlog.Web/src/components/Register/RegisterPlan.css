@@ -1,19 +1,20 @@
-#register-regular-plans-main-container {
+#register-plans-main-container {
   max-width: 800px;
   margin-inline: auto;
   display: flex;
-  gap: 20px;
+  gap: 40px;
 }
 
 @media (width<=800px) {
-  #register-regular-plans-main-container {
+  #register-plans-main-container {
     margin-inline: 0.5rem;
     flex-wrap: wrap;
   }
 }
 
-.register-regular-plan-main-container {
+.register-plan-main-container {
   max-width: 400px;
+  width: 100%;
   margin-inline: auto;
   padding: 1rem;
   border-radius: 0.6rem;
@@ -22,34 +23,34 @@
 }
 
 @media (width<=800px) {
-  .register-regular-plan-main-container {
+  .register-plan-main-container {
     margin-top: 1.5rem;
   }
 }
 
-.register-regular-plan-main-container-selected {
+.register-plan-main-container-selected {
   transform: scale(1.1);
   background: #34688f;
 }
 
 @media (width<=800px) {
-  .register-regular-plan-main-container-selected {
+  .register-plan-main-container-selected {
     transform: scale(1.03);
   }
 }
 
-.register-regular-plan-main-container:hover {
+.register-plan-main-container:hover {
   background: #34688f;
 
-  .register-regular-plan-main-container-header-title {
+  .register-plan-main-container-header-title {
     color: #f3f1e3;
   }
 
-  .register-regular-plan-main-container-header-subtitle {
+  .register-plan-main-container-header-subtitle {
     color: #f3f1e3;
   }
 
-  .register-regular-plan-accommodation-icon {
+  .register-plan-accommodation-icon {
     fill: #f3f1e3;
     padding: 0.1rem;
     border-radius: 360px;
@@ -57,47 +58,47 @@
     background: #82a3bc;
   }
 
-  .register-regular-plan-accommodation-container-value {
+  .register-plan-accommodation-container-value {
     color: #f3f1e3;
   }
 
-  .register-regular-plan-choose-plan-button {
+  .register-plan-choose-plan-button {
     transform: scale(1);
     transition: 150ms;
     background: #edb572;
   }
 }
 
-.register-regular-plan-main-container-header-title {
+.register-plan-main-container-header-title {
   margin-block: 0.5rem 1rem;
   font-family: 'Overlock';
   font-size: 1.4rem;
   font-weight: 500;
 }
 
-.register-regular-plan-main-container-header-title-selected {
+.register-plan-main-container-header-title-selected {
   color: #f3f1e3;
 }
 
-.register-regular-plan-main-container-header-subtitle {
+.register-plan-main-container-header-subtitle {
   font-family: 'Overlock';
   font-size: 1.8rem;
 }
 
-.register-regular-plan-main-container-header-subtitle-selected {
+.register-plan-main-container-header-subtitle-selected {
   color: #f3f1e3;
 }
 
-.register-regular-plan-accommodations-main-container {
+.register-plan-accommodations-main-container {
 }
 
-.register-regular-plan-accommodation-container {
+.register-plan-accommodation-container {
   display: flex;
   gap: 5px;
   align-items: center;
 }
 
-.register-regular-plan-accommodation-icon {
+.register-plan-accommodation-icon {
   fill: #f3f1e3;
   transform: scale(0.8);
   padding: 0.1rem;
@@ -105,7 +106,7 @@
   background: #edb572;
 }
 
-.register-regular-plan-accommodation-icon-selected {
+.register-plan-accommodation-icon-selected {
   fill: #f3f1e3;
   padding: 0.1rem;
   border-radius: 360px;
@@ -113,23 +114,23 @@
   background: #82a3bc;
 }
 
-.register-regular-plan-accommodation-container-value {
+.register-plan-accommodation-container-value {
   margin-block: 0.3rem;
   font-family: 'SansDeva';
   font-size: 0.85rem;
 }
 
-.register-regular-plan-accommodation-container-value-selected {
+.register-plan-accommodation-container-value-selected {
   color: #f3f1e3;
 }
 
-.register-regular-plan-choose-plan-button-container {
+.register-plan-choose-plan-button-container {
   max-width: 400px;
   margin-top: 0.5rem;
   /* background: red; */
 }
 
-.register-regular-plan-choose-plan-button {
+.register-plan-choose-plan-button {
   max-width: 400px;
   width: 100%;
   padding-block: 0.7rem;
@@ -144,7 +145,7 @@
   background: #34688f;
 }
 
-.register-regular-plan-choose-plan-button-selected {
+.register-plan-choose-plan-button-selected {
   transform: scale(1);
   transition: 150ms;
   background: #edb572;
