@@ -547,7 +547,7 @@ export const switchActiveTab = (element) => {
 
 export const toggleChosenPlan = (planMainContainer) => {
   deselectPlans()
-  // console.log('Plan ', planMainContainer)
+  console.log('Plan ', planMainContainer)
 
   let planMainContainerHeaderTitle = planMainContainer.querySelector(
     '.register-plan-main-container-header-title'
@@ -590,9 +590,8 @@ export const deselectPlans = () => {
   let plansMainContainer = document.querySelectorAll(
     '.register-plan-main-container'
   )
-  plansMainContainer.forEach((plan) => {
-    console.log('Plan ', plan)
 
+  plansMainContainer.forEach((plan) => {
     plan.classList.remove('register-plan-main-container-selected')
     plan
       .querySelector('.register-plan-main-container-header-title')
