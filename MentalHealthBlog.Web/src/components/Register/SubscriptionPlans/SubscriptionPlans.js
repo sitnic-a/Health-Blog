@@ -7,8 +7,8 @@ import SubscriptionPlansCSS from './SubscriptionPlans.css'
 export const SubscriptionPlans = () => {
   let { plans } = require('../../subscriptionPlans.json')
   let justRegisteredUser = localStorage.getItem('justRegisteredUser')
-  let isMentalHealthExpert = true
-  // let isMentalHealthExpert = false
+  // let isMentalHealthExpert = true
+  let isMentalHealthExpert = false
 
   return (
     <section id="register-choose-subscription-plan-main-container">

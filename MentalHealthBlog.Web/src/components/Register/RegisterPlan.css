@@ -69,11 +69,27 @@
   }
 }
 
+.register-plan-main-container-header-title-container {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
 .register-plan-main-container-header-title {
-  margin-block: 0.5rem 1rem;
+  margin-block: 0.5rem 0rem;
   font-family: 'Overlock';
   font-size: 1.4rem;
   font-weight: 500;
+}
+
+.register-plan-main-container-header-title-discount {
+  padding: 0.3rem;
+  font-family: 'SansDeva';
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.6;
+  border-radius: 0.5rem;
+  background: #edb572;
 }
 
 .register-plan-main-container-header-title-selected {

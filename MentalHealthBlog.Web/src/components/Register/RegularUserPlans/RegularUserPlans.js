@@ -14,9 +14,16 @@ export const RegularUserPlans = () => {
         return (
           <div key={index} className="register-plan-main-container">
             <div className="register-plan-main-container-header">
-              <h3 className="register-plan-main-container-header-title">
-                {plan.plan_type}
-              </h3>
+              <div className="register-plan-main-container-header-title-container">
+                <h3 className="register-plan-main-container-header-title">
+                  {plan.plan_type}
+                </h3>
+                {plan?.discount && (
+                  <span className="register-plan-main-container-header-title-discount">
+                    Uštedite {plan.discount} KM
+                  </span>
+                )}
+              </div>
               <h1 className="register-plan-main-container-header-subtitle">
                 {plan.plan_price} KM
               </h1>

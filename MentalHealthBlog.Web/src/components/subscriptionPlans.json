@@ -14,6 +14,7 @@
       {
         "plan_type": "Godišnja uplata",
         "plan_price": 200,
+        "discount": 40,
         "isPerYear": true,
         "accommodation_list": [
           "Kreiraj profil",
@@ -37,6 +38,7 @@
       {
         "plan_type": "Godišnja uplata",
         "plan_price": 500,
+        "discount": 100,
         "isPerYear": true,
         "accommodation_list": [
           "Kreiraj profil",
