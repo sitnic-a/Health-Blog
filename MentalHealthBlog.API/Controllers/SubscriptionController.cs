@@ -33,5 +33,11 @@ namespace MentalHealthBlog.API.Controllers
         {
             return await _subscriptionService.SendTrialExpiringnEmail(request);
         }
+
+        [HttpPost("create-subscription")]
+        public async Task<Response> MakeSubscription([FromBody] CreateSubscriptionDto request)
+        {
+            return await _subscriptionService.CreateSubscription(request);
+        }
     }
 }

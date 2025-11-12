@@ -3,12 +3,13 @@ using MailKit.Net.Smtp;
 using MailKit.Security;
 using MentalHealthBlog.API.Exceptions;
 using MentalHealthBlog.API.Methods;
-using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using MimeKit;
+
+#pragma warning disable CS8604, CS8602
 
 namespace MentalHealthBlog.API.Services.Subscription
 {
@@ -16,7 +17,9 @@ namespace MentalHealthBlog.API.Services.Subscription
     {
         INVALID_DATA,
         SUCCCESS,
-        NOT_FOUND
+        NOT_FOUND,
+        SUBSCRIPTION_CREATION_FAILED,
+        SUBSCRIPTION_CREATION_SUCCESSFULL
     }
     public class SubscriptionService : ISubscriptionService
     {
@@ -143,8 +146,8 @@ namespace MentalHealthBlog.API.Services.Subscription
                 var smtpPort = _configuration.GetValue<int>("SMTP_PORT");
                 var smtpHostAddress = _configuration.GetValue<string>("SMTP_HOST_ADDRESS");
                 var smtpPassword = _configuration.GetValue<string>("SMTP_PASSWORD");
-                var dbMentalHealthExpert = new MentalHealthExpert();
-                var dbRegularUser = new RegularUser();
+                var dbMentalHealthExpert = new Models.MentalHealthExpert();
+                var dbRegularUser = new Models.RegularUser();
                 UserDto userDto = new UserDto();
 
                 if (request.UserRoles.Any(r => r.Id == __PSYCHOLOGIST_PSYCHOTHERAPIST_ROLE_ID__))
@@ -229,6 +232,48 @@ namespace MentalHealthBlog.API.Services.Subscription
             catch (Exception e)
             {
                 _subscriptionLoggerService.LogError($"TRIAL-EXPIRING(EMAIL NOTIFICATION): {e.Message}");
+                throw;
+            }
+        }
+
+        public async Task<Response> CreateSubscription(CreateSubscriptionDto request)
+        {
+            try
+            {
+                if (request.IsCreatingAnAccount == true)
+                {
+                    if (request.UserId <= 0 || request.SubscriptionPlanId <= 0)
+                    {
+                        _subscriptionLoggerService.LogWarning($"CREATE-SUBSCRIPTION: {SubscriptionLogTypes.INVALID_DATA.ToString()}");
+                        throw new ArgumentException("Bad request!");
+                    }
+
+                    var newSubscription = _mapper.Map<Models.Subscription>(request);
+                    if (newSubscription != null)
+                    {
+                        var newEntity = await _context.Subscriptions.AddAsync(newSubscription);
+                        await _context.SaveChangesAsync();
+
+                        if (newEntity.Entity.Id <= 0)
+                        {
+                            _subscriptionLoggerService.LogWarning($"CREATE-SUBSCRIPTION: {SubscriptionLogTypes.SUBSCRIPTION_CREATION_FAILED.ToString()}");
+                            throw new CreateRecordException("Subscription is not created!");
+                        }
+
+                        _subscriptionLoggerService.LogInformation($"CREATE-SUBSCRIPTION: {SubscriptionLogTypes.SUBSCRIPTION_CREATION_SUCCESSFULL.ToString()}");
+                        return new Response(newEntity, StatusCodes.Status201Created, $"CREATE-SUBSCRIPTION: {SubscriptionLogTypes.SUBSCRIPTION_CREATION_SUCCESSFULL.ToString()}");
+                    }
+
+                    _subscriptionLoggerService.LogWarning($"CREATE-SUBSCRIPTION: {SubscriptionLogTypes.SUBSCRIPTION_CREATION_FAILED.ToString()}");
+                    throw new CreateRecordException("Subscription couldn't be created!");
+                }
+
+                return new Response(new object(), StatusCodes.Status200OK, $"CREATE-SUBSCRIPTION: {SubscriptionLogTypes.SUBSCRIPTION_CREATION_SUCCESSFULL.ToString()}");
+                // Create subscription when administrator click paid button
+            }
+            catch (Exception e)
+            {
+                _subscriptionLoggerService.LogError($"CREATE-SUBSCRIPTION: {e.Message}");
                 throw;
             }
         }
