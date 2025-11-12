@@ -12,12 +12,14 @@ namespace MentalHealthBlog.API.Models.ResourceResponse
         public string RefreshToken { get; set; }
         public bool? IsPending { get; set; }
         public bool IsUsingForTheFirstTime { get; set; } = false;
+        public bool? IsMentalHealthExpert { get; set; }
 
         public SignedUserDto() { }
-        public SignedUserDto(int id, string username)
+        public SignedUserDto(int id, string username, bool? isMentalHealthExpert=null)
         {
             Id = id;
             Username = username;
+            IsMentalHealthExpert = isMentalHealthExpert;
         }
         public SignedUserDto(int id, string username, string jwtoken, string refreshToken, List<Role> roles)
         {

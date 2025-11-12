@@ -195,10 +195,10 @@ namespace MentalHealthBlog.API.Services
                                 }
                                 await _context.SaveChangesAsync();
                                 _userLoggerService.LogInformation($"REGISTER: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", user);
-                                return new Response(new SignedUserDto(user.Id, user.Username), StatusCodes.Status201Created, UserServiceLogTypes.USER_SUCCESFULL.ToString());
+                                return new Response(new SignedUserDto(user.Id, user.Username, newUserRequest.IsMentalHealthExpert), StatusCodes.Status201Created, UserServiceLogTypes.USER_SUCCESFULL.ToString());
                             }
                             _userLoggerService.LogInformation($"REGISTER: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", user);
-                            return new Response(new SignedUserDto(user.Id, user.Username), StatusCodes.Status201Created, UserServiceLogTypes.USER_SUCCESFULL.ToString());
+                            return new Response(new SignedUserDto(user.Id, user.Username, newUserRequest.IsMentalHealthExpert), StatusCodes.Status201Created, UserServiceLogTypes.USER_SUCCESFULL.ToString());
                         }
                         _userLoggerService.LogError($"REGISTER: {UserServiceLogTypes.USER_INVALID_DATA_OR_SOMETHING_ELSE.ToString()}", new { RegularUser = newRegularUserRequest });
                         throw new CreateRecordException("New user couldn't be created!");
@@ -232,7 +232,7 @@ namespace MentalHealthBlog.API.Services
                 await _context.SaveChangesAsync();
                 await SendNewProfileRequestEmail();
                 _userLoggerService.LogInformation($"REGISTER: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", user);
-                return new Response(new SignedUserDto(user.Id, user.Username), StatusCodes.Status201Created, UserServiceLogTypes.USER_SUCCESFULL.ToString());
+                return new Response(new SignedUserDto(user.Id, user.Username, newUserRequest.IsMentalHealthExpert), StatusCodes.Status201Created, UserServiceLogTypes.USER_SUCCESFULL.ToString());
 
             }
             catch (Exception e)
