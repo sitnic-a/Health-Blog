@@ -28,6 +28,8 @@ namespace MentalHealthBlogAPI.Data
         public DbSet<AssignmentResponse> AssignmentResponses { get; set; }
         public DbSet<RegularUser> RegularUsers { get; set; }
         public DbSet<TherapyRequest> TherapyRequests { get; set; }
+        public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
+        public DbSet<Subscription> Subscriptions { get; set; }
 
         public void SeedRegularUsers(string adminPass)
         {
@@ -129,6 +131,15 @@ namespace MentalHealthBlogAPI.Data
             {
                 tr.RegularUserId,
                 tr.MentalHealthExpertId
+            });
+
+            modelBuilder.Entity<SubscriptionPlan>().HasData(new List<SubscriptionPlan>()
+            {
+                new (1,"Korisnik(Mjesečna)", "Mjesečna pretplata za običnog korisnika",20.0f),
+                new (2,"Korisnik(Godišnja)", "Godišnja pretplata za običnog korisnika", 200.0f),
+                new (3,"Stručnjaci(Mjesečna)", "Mjesečna pretplata za stručnjaka na polju mentalnog zdravlja",50.0f),
+                new (4,"Stručnjaci(Godišnja)", "Godišnja pretplata za stručnjaka na polju mentalnog zdravlja",500.0f),
+                new (5,"Neodređena", "Uplata koju je izvršio korisnik aplikacije, a da nije predefinisana"),
             });
         }
     }
