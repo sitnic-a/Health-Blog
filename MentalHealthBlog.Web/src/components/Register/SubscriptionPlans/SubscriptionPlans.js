@@ -1,3 +1,7 @@
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { createSubscription } from '../../../redux-toolkit/features/subscriptionSlice'
 import { IoIosCheckmarkCircleOutline } from 'react-icons/io'
 import { RegularUserPlans } from '../RegularUserPlans/RegularUserPlans'
 import { MentalHealthExpertPlans } from '../MentalHealthExpertPlans/MentalHealthExpertPlans'
@@ -5,10 +9,21 @@ import { MentalHealthExpertPlans } from '../MentalHealthExpertPlans/MentalHealth
 import SubscriptionPlansCSS from './SubscriptionPlans.css'
 
 export const SubscriptionPlans = () => {
+  let dispatch = useDispatch()
+  let navigate = useNavigate()
   let { plans } = require('../../subscriptionPlans.json')
-  let justRegisteredUser = localStorage.getItem('justRegisteredUser')
-  // let isMentalHealthExpert = true
-  let isMentalHealthExpert = false
+
+  let { subscriptionPlanId } = useSelector((store) => store.subscription)
+  let justRegisteredUserLocalStorage =
+    localStorage.getItem('justRegisteredUser')
+  let justRegisteredUser
+
+  if (
+    justRegisteredUserLocalStorage !== null ||
+    justRegisteredUserLocalStorage !== undefined
+  ) {
+    justRegisteredUser = JSON.parse(justRegisteredUserLocalStorage)
+  }
 
   return (
     <section id="register-choose-subscription-plan-main-container">
@@ -26,7 +41,7 @@ export const SubscriptionPlans = () => {
           </p>
         </div>
         <div className="register-choose-subscription-plan-plans-container">
-          {isMentalHealthExpert ? (
+          {justRegisteredUser?.isMentalHealthExpert ? (
             <MentalHealthExpertPlans />
           ) : (
             <RegularUserPlans />
@@ -37,6 +52,28 @@ export const SubscriptionPlans = () => {
           <button
             className="register-choose-subscription-plan-action-register"
             type="button"
+            onClick={() => {
+              let requestObj = {
+                userId: justRegisteredUser?.id,
+                subscriptionPlanId: subscriptionPlanId,
+                paidAt: null,
+                isCreatingAnAccount: true,
+              }
+              let objectWithData = {
+                requestObj,
+              }
+              dispatch(createSubscription(objectWithData)).then((data) => {
+                let statusCode = data?.payload?.statusCode
+                if (statusCode === 201) {
+                  localStorage.removeItem('justRegisteredUser')
+                  navigate('/login')
+                  toast.success('Uspješno ste se registrovali na aplikaciju', {
+                    autoClose: 3000,
+                    position: 'bottom-right',
+                  })
+                }
+              })
+            }}
           >
             Register
           </button>

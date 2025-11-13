@@ -2,6 +2,7 @@
   "plans": {
     "regular_user_plans": [
       {
+        "id": 1,
         "plan_type": "Mjesečna uplata",
         "plan_price": 20,
         "accommodation_list": [
@@ -12,6 +13,7 @@
         ]
       },
       {
+        "id": 2,
         "plan_type": "Godišnja uplata",
         "plan_price": 200,
         "discount": 40,
@@ -26,6 +28,7 @@
     ],
     "mental_health_expert_plans": [
       {
+        "id": 3,
         "plan_type": "Mjesečna uplata",
         "plan_price": 50,
         "accommodation_list": [
@@ -36,6 +39,7 @@
         ]
       },
       {
+        "id": 4,
         "plan_type": "Godišnja uplata",
         "plan_price": 500,
         "discount": 100,

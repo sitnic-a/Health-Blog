@@ -1,7 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { application } from '../../application'
+
 let initialState = {
   usersTrialPeriod: null,
+  subscriptionPlanId: 0,
+  newSubscription: null,
 }
 
 export const getUsersTrialPeriod = createAsyncThunk(
@@ -46,10 +49,32 @@ export const sendTrialExpiringnEmail = createAsyncThunk(
   }
 )
 
+export const createSubscription = createAsyncThunk(
+  'create-subscription',
+  async (objectWithData) => {
+    console.log('Object ', objectWithData)
+
+    let url = `${application.application_url}/subscription/create-subscription`
+    let request = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(objectWithData?.requestObj),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    let response = await request.json()
+    return response
+  }
+)
+
 let subscriptionSlice = createSlice({
   name: 'subscriptionSlice',
   initialState,
-  reducers: {},
+  reducers: {
+    setSubscriptionPlanId: (state, action) => {
+      state.subscriptionPlanId = action?.payload
+    },
+  },
   extraReducers: (builder) => {
     builder
 
@@ -79,8 +104,20 @@ let subscriptionSlice = createSlice({
       .addCase(sendTrialExpiringnEmail.pending, (state, action) => {})
       .addCase(sendTrialExpiringnEmail.fulfilled, (state, action) => {})
       .addCase(sendTrialExpiringnEmail.rejected, (state, action) => {})
+
+      //createSubscription
+      .addCase(createSubscription.pending, (state, action) => {})
+      .addCase(createSubscription.fulfilled, (state, action) => {
+        let statusCode = action?.payload?.statusCode
+        if (statusCode === 201) {
+          console.log('Create action ', action?.payload)
+          state.newSubscription = action?.payload?.serviceResponseObject
+          console.log('New subscription ', state.newSubscription)
+        }
+      })
+      .addCase(createSubscription.rejected, (state, action) => {})
   },
 })
 
-export const {} = subscriptionSlice.actions
+export const { setSubscriptionPlanId } = subscriptionSlice.actions
 export default subscriptionSlice.reducer

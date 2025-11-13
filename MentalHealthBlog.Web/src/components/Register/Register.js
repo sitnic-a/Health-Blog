@@ -1025,7 +1025,7 @@ export const Register = () => {
           </div>
         )}
         <button type="submit" id="register-container-button">
-          Register
+          Sljedeći korak
         </button>
       </form>
     </section>

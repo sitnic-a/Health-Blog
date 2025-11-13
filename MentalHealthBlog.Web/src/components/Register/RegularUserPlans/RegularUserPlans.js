@@ -1,9 +1,13 @@
-import { IoMdCheckmark } from 'react-icons/io'
+import { useDispatch } from 'react-redux'
+import { setSubscriptionPlanId } from '../../../redux-toolkit/features/subscriptionSlice'
 import { toggleChosenPlan } from '../../../utils/helper-methods/methods'
+
+import { IoMdCheckmark } from 'react-icons/io'
 
 import RegisterPlanCSS from '../RegisterPlan.css'
 
 export const RegularUserPlans = () => {
+  let dispatch = useDispatch()
   let { plans } = require('../../subscriptionPlans.json')
   return (
     <section
@@ -13,6 +17,11 @@ export const RegularUserPlans = () => {
       {plans.regular_user_plans.map((plan, index) => {
         return (
           <div key={index} className="register-plan-main-container">
+            <input
+              className="register-plan-main-container-id"
+              type="hidden"
+              value={plan.id}
+            />
             <div className="register-plan-main-container-header">
               <div className="register-plan-main-container-header-title-container">
                 <h3 className="register-plan-main-container-header-title">
@@ -53,7 +62,10 @@ export const RegularUserPlans = () => {
                 type="button"
                 onClick={(e) => {
                   let planMainContainer = e.currentTarget.parentNode.parentNode
-
+                  let subscriptionPlanId = planMainContainer.querySelector(
+                    '.register-plan-main-container-id'
+                  ).value
+                  dispatch(setSubscriptionPlanId(parseInt(subscriptionPlanId)))
                   toggleChosenPlan(planMainContainer)
                 }}
               >
