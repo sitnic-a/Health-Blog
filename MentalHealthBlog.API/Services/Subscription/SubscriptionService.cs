@@ -254,14 +254,14 @@ namespace MentalHealthBlog.API.Services.Subscription
                         var newEntity = await _context.Subscriptions.AddAsync(newSubscription);
                         await _context.SaveChangesAsync();
 
-                        if (newEntity.Entity.Id <= 0)
+                        if (newSubscription is null)
                         {
                             _subscriptionLoggerService.LogWarning($"CREATE-SUBSCRIPTION: {SubscriptionLogTypes.SUBSCRIPTION_CREATION_FAILED.ToString()}");
                             throw new CreateRecordException("Subscription is not created!");
                         }
 
                         _subscriptionLoggerService.LogInformation($"CREATE-SUBSCRIPTION: {SubscriptionLogTypes.SUBSCRIPTION_CREATION_SUCCESSFULL.ToString()}");
-                        return new Response(newEntity, StatusCodes.Status201Created, $"CREATE-SUBSCRIPTION: {SubscriptionLogTypes.SUBSCRIPTION_CREATION_SUCCESSFULL.ToString()}");
+                        return new Response(newSubscription, StatusCodes.Status201Created, $"CREATE-SUBSCRIPTION: {SubscriptionLogTypes.SUBSCRIPTION_CREATION_SUCCESSFULL.ToString()}");
                     }
 
                     _subscriptionLoggerService.LogWarning($"CREATE-SUBSCRIPTION: {SubscriptionLogTypes.SUBSCRIPTION_CREATION_FAILED.ToString()}");

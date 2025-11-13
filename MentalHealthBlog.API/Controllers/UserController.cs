@@ -37,8 +37,11 @@ namespace MentalHealthBlog.API.Controllers
         public async Task<Response> Register([FromForm] CreateUserDto newUserRequest)
         {
             var registeredUser = await _userService.Register(newUserRequest);
-            var newlyRegisteredMentalHealthExperts = await _adminService.GetNewRegisteredExperts();
-            var hubResult = _adminHubContext.Clients.All.SendAsync("GetNewRegisteredMentalHealthExperts", newlyRegisteredMentalHealthExperts);
+            if (newUserRequest.IsMentalHealthExpert == true)
+            {
+                var newlyRegisteredMentalHealthExperts = await _adminService.GetNewRegisteredExperts();
+                var hubResult = _adminHubContext.Clients.All.SendAsync("GetNewRegisteredMentalHealthExperts", newlyRegisteredMentalHealthExperts);
+            }
             return registeredUser;
         }
 
@@ -96,7 +99,7 @@ namespace MentalHealthBlog.API.Controllers
         [HttpPatch("first-time-logging/{id}")]
         public async Task<Response> ChangeFirstTimeLoggingState(int id, [FromBody] JsonPatchDocument<User> patchDocument)
         {
-            return await _userService.ChangeIsUsingForTheFirstTime(id, patchDocument);  
+            return await _userService.ChangeIsUsingForTheFirstTime(id, patchDocument);
         }
     }
 }

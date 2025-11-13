@@ -230,7 +230,9 @@ namespace MentalHealthBlog.API.Services
 
                 }
                 await _context.SaveChangesAsync();
-                await SendNewProfileRequestEmail();
+
+                //await SendNewProfileRequestEmail();
+                
                 _userLoggerService.LogInformation($"REGISTER: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", user);
                 return new Response(new SignedUserDto(user.Id, user.Username, newUserRequest.IsMentalHealthExpert), StatusCodes.Status201Created, UserServiceLogTypes.USER_SUCCESFULL.ToString());
 

@@ -117,7 +117,9 @@ namespace MentalHealthBlog.API.Services
             {
                 var dbMentalHealthExperts = await _context.MentalHealthExperts
                     .Where(mhe => mhe.IsApproved == false && mhe.IsRejected == false)
+                    .OrderByDescending(mhe => mhe.RegisteredAt)
                     .ToListAsync();
+
                 var registeredNewMentalHealthExperts = dbMentalHealthExperts.Any();
 
                 if (query is not null)
@@ -126,12 +128,14 @@ namespace MentalHealthBlog.API.Services
                     {
                         dbMentalHealthExperts = await _context.MentalHealthExperts
                             .Where(mhe => mhe.IsApproved == true)
+                            .OrderByDescending(mhe => mhe.RegisteredAt)
                             .ToListAsync();
                     }
                     else if (query.Status == false)
                     {
                         dbMentalHealthExperts = await _context.MentalHealthExperts
                             .Where(mhe => mhe.IsRejected == true)
+                            .OrderByDescending(mhe => mhe.RegisteredAt)
                             .ToListAsync();
                     }
                 }
@@ -188,7 +192,7 @@ namespace MentalHealthBlog.API.Services
                 {
                     MentalHealthExpertName = dbMentalHealthExpert.FirstName;
                     dbMentalHealthExpert.IsApproved = patchDto.IsApproved;
-                    
+
                     //if (dbMentalHealthExpert.IsApproved == true)
                     //{
                     //    await SendApprovedEmail(dbMentalHealthExpert.Email);
