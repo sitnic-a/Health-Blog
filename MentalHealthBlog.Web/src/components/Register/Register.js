@@ -924,7 +924,7 @@ export const Register = () => {
                 >
                   Email:
                 </label>
-
+                <span className="required-field">*</span>
                 <input
                   className="form-field"
                   id="register-mental-health-expert-email"

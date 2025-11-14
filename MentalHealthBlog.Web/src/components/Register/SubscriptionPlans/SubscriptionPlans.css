@@ -33,7 +33,7 @@
 }
 
 .register-choose-subscription-plan-header {
-  padding-block: 4rem;
+  padding-block: 4rem 2rem;
 }
 
 @media (width<=590px) {

@@ -1,3 +1,5 @@
+import Cookies from 'js-cookie'
+
 import TrialPeriodExpiredCSS from './TrialPeriodExpired.css'
 
 export const TrialPeriodExpired = () => {
@@ -13,13 +15,32 @@ export const TrialPeriodExpired = () => {
             uplatite dogovoreni iznos na broj žiro računa. Aplikacija će ubrzo
             nakon uplate biti ponovo dostupna i spremna za korištenje.
           </p>
+
+          <p className="trial-period-expired-description">
+            Ukoliko ste uplatili i naša administracija je potvrdila uplatu,
+            koristite dugme ispod
+          </p>
+
+          <div className="trail-period-expired-actions-container">
+            <a
+              className="trail-period-expired-action-go-to-login-button"
+              href="/login"
+              onClick={() => {
+                localStorage.removeItem('authenticatedUser')
+                localStorage.removeItem('jwToken')
+                Cookies.remove('refreshToken')
+              }}
+            >
+              Login
+            </a>
+          </div>
         </div>
 
         <div className="trial-period-expired-provider-info">
           <p className="trial-period-expired-provider-info-value">
             Broj žiro računa:{' '}
             <span className="trial-period-expired-bank-account-info-value">
-              000000000000000000
+              1540012024363683
             </span>
           </p>
           <p className="trial-period-expired-provider-info-value">

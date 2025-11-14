@@ -132,7 +132,7 @@ namespace MentalHealthBlog.API.Services.Subscription
                 throw;
             }
         }
-        public async Task<Response> SendTrialExpiringnEmail(TrialPeriodExpiringRequestDto request)
+        public async Task<Response> SendTrialExpiringEmail(TrialPeriodExpiringRequestDto request)
         {
             try
             {
@@ -152,7 +152,7 @@ namespace MentalHealthBlog.API.Services.Subscription
 
                 if (request.UserRoles.Any(r => r.Id == __PSYCHOLOGIST_PSYCHOTHERAPIST_ROLE_ID__))
                 {
-                    dbMentalHealthExpert = await _context.MentalHealthExperts.FirstOrDefaultAsync(mhe => mhe.Id == request.UserId);
+                    dbMentalHealthExpert = await _context.MentalHealthExperts.SingleOrDefaultAsync(mhe => mhe.UserId == request.UserId);
                     if (dbMentalHealthExpert != null)
                         userDto = _mapper.Map<UserDto>(dbMentalHealthExpert);
                     else
@@ -213,10 +213,9 @@ namespace MentalHealthBlog.API.Services.Subscription
                     await client.SendAsync(message);
                     await client.DisconnectAsync(true);
 
-                    if (dbMentalHealthExpert != null)
+                    if (dbMentalHealthExpert.UserId > 0)
                         dbMentalHealthExpert.IsInformedAboutSubscriptionExpiration = true;
-
-                    if (dbRegularUser != null)
+                    else if (dbRegularUser.UserId > 0 != null)
                         dbRegularUser.IsInformedAboutSubscriptionExpiration = true;
 
                     await _context.SaveChangesAsync();

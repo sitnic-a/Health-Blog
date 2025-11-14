@@ -416,13 +416,13 @@ export const checkEmailValidity = (
 ) => {
   let regexPattern
 
-  if (isMentalHealthExpert) {
-    regexPattern =
-      /^$|^(?!.*[.\-]{2})[\p{L}\p{N}._%+-]+@[a-zA-Z0-9](?!.*[.\-%]{2})[a-zA-Z0-9.-]*\.[a-zA-Z]{2,}$/u
-  } else {
-    regexPattern =
-      /^(?!.*[.\-]{2})[\p{L}\p{N}._%+-]+@[a-zA-Z0-9](?!.*[.\-%]{2})[a-zA-Z0-9.-]*\.[a-zA-Z]{2,}$/u
-  }
+  // if (isMentalHealthExpert) {
+  // regexPattern =
+  // /^$|^(?!.*[.\-]{2})[\p{L}\p{N}._%+-]+@[a-zA-Z0-9](?!.*[.\-%]{2})[a-zA-Z0-9.-]*\.[a-zA-Z]{2,}$/u
+  // } else {
+  regexPattern =
+    /^(?!.*[.\-]{2})[\p{L}\p{N}._%+-]+@[a-zA-Z0-9](?!.*[.\-%]{2})[a-zA-Z0-9.-]*\.[a-zA-Z]{2,}$/u
+  // }
 
   let isValid = true
 
@@ -430,6 +430,7 @@ export const checkEmailValidity = (
     return [isValid, validationMessages]
   }
 
+  validationMessages.push('Unos polja je obavezan')
   validationMessages.push('Unesite korektan email, npr. email_21@email.com')
   validationMessages.push('Ne smije početi specijalnim znakom')
   validationMessages.push('Ne smije imati više specijalnih znakova u nizu')

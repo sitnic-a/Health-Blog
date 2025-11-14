@@ -193,17 +193,18 @@ namespace MentalHealthBlog.API.Services
                     MentalHealthExpertName = dbMentalHealthExpert.FirstName;
                     dbMentalHealthExpert.IsApproved = patchDto.IsApproved;
 
-                    //if (dbMentalHealthExpert.IsApproved == true)
-                    //{
-                    //    await SendApprovedEmail(dbMentalHealthExpert.Email);
-                    //}
+                    if (dbMentalHealthExpert.IsApproved == true)
+                    {
+                        dbMentalHealthExpert.ApprovedAt = DateTime.UtcNow;
+                        await SendApprovedEmail(dbMentalHealthExpert.Email);
+                    }
 
                     dbMentalHealthExpert.IsRejected = patchDto.IsRejected;
 
-                    //if (dbMentalHealthExpert.IsRejected == true)
-                    //{
-                    //    await SendRejectedEmail(dbMentalHealthExpert.Email);
-                    //}
+                    if (dbMentalHealthExpert.IsRejected == true)
+                    {
+                        await SendRejectedEmail(dbMentalHealthExpert.Email);
+                    }
 
                     await _context.SaveChangesAsync();
                     var dbMentalHealthExperts = await GetNewRegisteredExperts();
@@ -318,8 +319,8 @@ namespace MentalHealthBlog.API.Services
                        Uplate se vrše putem žiro računa u nastavku.
                      </p>
 
-                    <p style='margin-block:0.2rem'>Ime organizacije: Udruženje Menssana</p>
-                    <p style='margin-block:0.2rem'>Žiro račun: 1541602004560520</p>
+                    <p style='margin-block:0.2rem'>Ime organizacije: A.R.T Menssana</p>
+                    <p style='margin-block:0.2rem'>Žiro račun: 1540012024363683</p>
                     <p style='margin-block:0.2rem'>Adresa: Branilaca Sarajeva 51, 71000 Sarajevo</p>
 
                     <div>
@@ -391,9 +392,9 @@ namespace MentalHealthBlog.API.Services
 
                     <p>Ovim putem Vas obavještavamo da Vaš profil nažalost nije moguće aktivirati ovaj put.</p>
                     
-                    <p>Ukoliko želite više informacija o razlogu, biti ćemo i više nego sretni da nas kontaktirate putem 
+                    <p>Ukoliko želite više informacija o razlogu, možete nas kontaktirati putem 
                        <strong> support@mapp-terapija.com</strong>{' '} ili da nas posjetite na adresi
-                       <strong>{' '}Branilaca Sarajeva 51, 71000 Sarajevo - Udruženje Menssana</strong>
+                       <strong>{' '}Branilaca Sarajeva 51, 71000 Sarajevo - A.R.T. Menssana</strong>
                     </p>
 
                     <div>

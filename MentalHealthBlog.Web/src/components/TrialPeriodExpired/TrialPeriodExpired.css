@@ -33,19 +33,13 @@
   margin-inline: auto;
   padding-inline: 1rem;
   /* margin-top: 50%; */
-  transform: translateY(100%);
+  transform: translateY(60%);
   /* border: 1px solid red; */
 }
 
 @media (width<= 590px) {
   .trial-period-expired-description-container {
-    transform: translateY(80%);
-  }
-}
-
-@media (width<=335px) {
-  .trial-period-expired-description-container {
-    transform: translateY(50%);
+    transform: translateY(20%);
   }
 }
 
@@ -91,10 +85,32 @@
   }
 }
 
+.trail-period-expired-actions-container {
+  float: right;
+}
+
+.trail-period-expired-action-go-to-login-button {
+  padding: 0.3rem 3rem;
+  border-radius: 0.4rem;
+  font-family: 'SansDeva';
+  font-size: 0.9rem;
+  line-height: 1.4;
+  text-decoration: none;
+  cursor: pointer;
+  transition: 150ms;
+  color: #f3f1e3;
+  background: #edb572;
+}
+
+.trail-period-expired-action-go-to-login-button:hover {
+  background: #d8a668;
+}
+
 .trial-period-expired-provider-info {
   position: absolute;
   bottom: 10px;
   padding-inline: 5rem;
+  clear: both;
 }
 
 @media (width<=590px) {

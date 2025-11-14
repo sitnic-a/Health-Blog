@@ -7,7 +7,7 @@ namespace MentalHealthBlog.API.Services.Subscription
     {
         public Task<Response> GetUsersTrialPeriod(int userId);
         public Task<Response> SetTrialToExpired(SubscriptionTrialRequestDto request);
-        public Task<Response> SendTrialExpiringnEmail(TrialPeriodExpiringRequestDto request);
+        public Task<Response> SendTrialExpiringEmail(TrialPeriodExpiringRequestDto request);
         public Task<Response> CreateSubscription(CreateSubscriptionDto request);
     }
 }
