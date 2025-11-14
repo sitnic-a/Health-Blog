@@ -33,6 +33,7 @@ import { TokenRefresher } from './components/TokenRefresher'
 import { SubscriptionChecker } from './components/SubscriptionChecker'
 import { PaidChecker } from './components/PaidChecker'
 import { TrialPeriodExpired } from './components/TrialPeriodExpired/TrialPeriodExpired'
+import { SubscriptionPlans } from './components/Register/SubscriptionPlans/SubscriptionPlans'
 
 function App() {
   windowResize(application.layouts.min_screen_single_col_width)
@@ -63,6 +64,11 @@ function App() {
           <Routes>
             <Route exact path="/login" element={<Login />} />
             <Route path="/register" element={<Register />}></Route>
+            <Route
+              path="/subscription-plans"
+              element={<SubscriptionPlans />}
+            ></Route>
+
             <Route
               path="/request-password-change"
               element={<RequestPasswordChange />}

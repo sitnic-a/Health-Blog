@@ -17,7 +17,7 @@ namespace MentalHealthBlog.API.Models
         public Base()
         {
             RegisteredAt = DateTime.UtcNow;
-            TrialEndsAt = RegisteredAt.AddDays(__TRIAL_PERIOD__);
+            TrialEndsAt = null;
         }
 
     }

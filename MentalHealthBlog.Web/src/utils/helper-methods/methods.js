@@ -416,13 +416,13 @@ export const checkEmailValidity = (
 ) => {
   let regexPattern
 
-  if (isMentalHealthExpert) {
-    regexPattern =
-      /^$|^(?!.*[.\-]{2})[\p{L}\p{N}._%+-]+@[a-zA-Z0-9](?!.*[.\-%]{2})[a-zA-Z0-9.-]*\.[a-zA-Z]{2,}$/u
-  } else {
-    regexPattern =
-      /^(?!.*[.\-]{2})[\p{L}\p{N}._%+-]+@[a-zA-Z0-9](?!.*[.\-%]{2})[a-zA-Z0-9.-]*\.[a-zA-Z]{2,}$/u
-  }
+  // if (isMentalHealthExpert) {
+  // regexPattern =
+  // /^$|^(?!.*[.\-]{2})[\p{L}\p{N}._%+-]+@[a-zA-Z0-9](?!.*[.\-%]{2})[a-zA-Z0-9.-]*\.[a-zA-Z]{2,}$/u
+  // } else {
+  regexPattern =
+    /^(?!.*[.\-]{2})[\p{L}\p{N}._%+-]+@[a-zA-Z0-9](?!.*[.\-%]{2})[a-zA-Z0-9.-]*\.[a-zA-Z]{2,}$/u
+  // }
 
   let isValid = true
 
@@ -430,6 +430,7 @@ export const checkEmailValidity = (
     return [isValid, validationMessages]
   }
 
+  validationMessages.push('Unos polja je obavezan')
   validationMessages.push('Unesite korektan email, npr. email_21@email.com')
   validationMessages.push('Ne smije početi specijalnim znakom')
   validationMessages.push('Ne smije imati više specijalnih znakova u nizu')
@@ -542,5 +543,77 @@ export const switchActiveTab = (element) => {
       tab.classList.add('active-tab')
       return
     }
+  })
+}
+
+export const toggleChosenPlan = (planMainContainer) => {
+  deselectPlans()
+  console.log('Plan ', planMainContainer)
+
+  let planMainContainerHeaderTitle = planMainContainer.querySelector(
+    '.register-plan-main-container-header-title'
+  )
+  let planMainContainerHeaderSubtitle = planMainContainer.querySelector(
+    '.register-plan-main-container-header-subtitle'
+  )
+  let planAccommodationIcon = planMainContainer.querySelectorAll(
+    '.register-plan-accommodation-icon'
+  )
+  let planAccommodationValue = planMainContainer.querySelectorAll(
+    '.register-plan-accommodation-container-value'
+  )
+  let planChoosePlanButton = planMainContainer.querySelector(
+    '.register-plan-choose-plan-button'
+  )
+
+  planMainContainer.classList.add('register-plan-main-container-selected')
+  planMainContainerHeaderTitle.classList.add(
+    'register-plan-main-container-header-title-selected'
+  )
+  planMainContainerHeaderSubtitle.classList.add(
+    'register-plan-main-container-header-subtitle-selected'
+  )
+  planAccommodationIcon.forEach((icon) => {
+    icon.classList.add('register-plan-accommodation-icon-selected')
+  })
+
+  planAccommodationValue.forEach((accommodation) => {
+    accommodation.classList.add(
+      'register-plan-accommodation-container-value-selected'
+    )
+  })
+  planChoosePlanButton.classList.add(
+    'register-plan-choose-plan-button-selected'
+  )
+}
+
+export const deselectPlans = () => {
+  let plansMainContainer = document.querySelectorAll(
+    '.register-plan-main-container'
+  )
+
+  plansMainContainer.forEach((plan) => {
+    plan.classList.remove('register-plan-main-container-selected')
+    plan
+      .querySelector('.register-plan-main-container-header-title')
+      .classList.remove('register-plan-main-container-header-title-selected')
+    plan
+      .querySelector('.register-plan-main-container-header-subtitle')
+      .classList.remove('register-plan-main-container-header-subtitle-selected')
+    plan
+      .querySelectorAll('.register-plan-accommodation-icon')
+      .forEach((icon) => {
+        icon.classList.remove('register-plan-accommodation-icon-selected')
+      })
+    plan
+      .querySelectorAll('.register-plan-accommodation-container-value')
+      .forEach((accommodation) => {
+        accommodation.classList.remove(
+          'register-plan-accommodation-container-value-selected'
+        )
+      })
+    plan
+      .querySelector('.register-plan-choose-plan-button')
+      .classList.remove('register-plan-choose-plan-button-selected')
   })
 }

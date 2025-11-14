@@ -7,9 +7,8 @@ export const LandingNotConfirmedMentalHealthExpert = () => {
         Vaš zahtjev je trenutno na obradi. Molimo Vas za strpljenje!
       </p>
       <p className="landing-not-confirmed-mental-health-expert-description">
-        Zahtjevi će se početi obrađivati krajem mjeseca oktobra. Ukoliko zahtjev
-        bude uspješan moći ćete pristupiti aplikaciji, a o svemu ćete biti
-        obavješteni putem email adrese koju ste unijeli.
+        Ukoliko zahtjev bude uspješan moći ćete pristupiti aplikaciji, a o svemu
+        ćete biti obavješteni putem email adrese koju ste unijeli.
       </p>
 
       <p className="landing-not-confirmed-mental-health-expert-description">

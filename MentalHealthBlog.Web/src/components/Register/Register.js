@@ -386,10 +386,17 @@ export const Register = () => {
     }
 
     dispatch(register(form)).then((response) => {
-      let statusCode = response.payload.statusCode
+      let statusCode = response?.payload?.statusCode
       if (statusCode === 201) {
+        let serviceResponseObject = response?.payload?.serviceResponseObject
         dispatch(setSelectedMentalHealthExpertIds([]))
-        navigate('/login')
+        console.log('Service response ', serviceResponseObject)
+
+        localStorage.setItem(
+          'justRegisteredUser',
+          JSON.stringify(serviceResponseObject)
+        )
+        navigate('/subscription-plans')
       }
     })
 
@@ -917,7 +924,7 @@ export const Register = () => {
                 >
                   Email:
                 </label>
-
+                <span className="required-field">*</span>
                 <input
                   className="form-field"
                   id="register-mental-health-expert-email"
@@ -1018,7 +1025,7 @@ export const Register = () => {
           </div>
         )}
         <button type="submit" id="register-container-button">
-          Register
+          Sljedeći korak
         </button>
       </form>
     </section>

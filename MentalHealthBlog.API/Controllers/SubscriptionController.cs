@@ -31,7 +31,13 @@ namespace MentalHealthBlog.API.Controllers
         [HttpPost("trial-expiring-email-notification")]
         public async Task<Response> SendTrialExpiringnEmail(TrialPeriodExpiringRequestDto request)
         {
-            return await _subscriptionService.SendTrialExpiringnEmail(request);
+            return await _subscriptionService.SendTrialExpiringEmail(request);
+        }
+
+        [HttpPost("create-subscription")]
+        public async Task<Response> MakeSubscription([FromBody] CreateSubscriptionDto request)
+        {
+            return await _subscriptionService.CreateSubscription(request);
         }
     }
 }
