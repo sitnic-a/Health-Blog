@@ -18,6 +18,8 @@ namespace MentalHealthBlog.API.Services.Subscription
         INVALID_DATA,
         SUCCCESS,
         NOT_FOUND,
+        EMPTY,
+        IS_IN_TRIAL_PERIOD,
         SUBSCRIPTION_CREATION_FAILED,
         SUBSCRIPTION_CREATION_SUCCESSFULL
     }
@@ -84,6 +86,116 @@ namespace MentalHealthBlog.API.Services.Subscription
                 throw;
             }
 
+        }
+        public async Task<Response> GetUsersCurrentSubscription(int userId)
+        {
+            try
+            {
+                if (userId <= 0)
+                {
+                    _subscriptionLoggerService.LogWarning($"USER-[id]-PAYMENT: {SubscriptionLogTypes.INVALID_DATA.ToString()}");
+                    throw new ArgumentException("Bad request!");
+                }
+
+                var isDbUserInTrial = false;
+                var dbUserSubscriptions = await _context.Subscriptions
+                    .Where(s => s.UserId == userId && s.PaidAt != null && s.ExpiresAt != null)
+                    .ToListAsync();
+
+                var usersSubscriptions = new List<CurrentSubscriptionDto>();
+                var dbUser = await _context.Users.FindAsync(userId);
+                if (dbUser == null)
+                {
+                    _subscriptionLoggerService.LogWarning($"USER-[id]-PAYMENT: {SubscriptionLogTypes.NOT_FOUND.ToString()}");
+                    throw new RecordNotFoundException("User doesn't exist");
+                }
+
+                var userHelper = new UserHelper(_context);
+                var userDto = new UserDto(dbUser.Id, dbUser.Username);
+                var userRoles = await userHelper.GetUserRolesAsync(userDto);
+
+                if (userRoles.Any(r => r.Id == __USER_ROLE_ID__))
+                {
+                    var dbRegularUser = await _context.RegularUsers.SingleOrDefaultAsync(ru => ru.UserId == userId);
+                    if (dbRegularUser == null)
+                    {
+                        _subscriptionLoggerService.LogWarning($"USER-[id]-PAYMENT: {SubscriptionLogTypes.NOT_FOUND.ToString()}");
+                        throw new RecordNotFoundException("User not found!");
+                    }
+                    isDbUserInTrial = dbRegularUser.IsInTrialPeriod;
+                    usersSubscriptions = await _context.Subscriptions
+                        .Join(_context.RegularUsers,
+                              (s) => s.UserId,
+                              (ru) => ru.UserId,
+                              (s, ru) => new CurrentSubscriptionDto
+                              {
+                                  UserId = ru.UserId,
+                                  PaidAt = s.PaidAt.Value,
+                                  ExpiresAt = s.ExpiresAt.Value,
+                                  IsInTrialPeriod = ru.IsInTrialPeriod,
+                                  HavePaidForSubscription = ru.HavePaidForSubscription
+                              })
+                        .Where(s => s.IsInTrialPeriod == false && s.UserId == userId)
+                        .OrderByDescending(s => s.PaidAt.Value)
+                        .ToListAsync();
+                }
+
+                if (userRoles.Any(r => r.Id == __PSYCHOLOGIST_PSYCHOTHERAPIST_ROLE_ID__))
+                {
+                    var dbMentalHealthExpert = await _context.MentalHealthExperts.SingleOrDefaultAsync(mhe => mhe.UserId == userId);
+                    if (dbMentalHealthExpert == null)
+                    {
+                        _subscriptionLoggerService.LogWarning($"USER-[id]-PAYMENT: {SubscriptionLogTypes.NOT_FOUND.ToString()}");
+                        throw new RecordNotFoundException("User not found!");
+                    }
+                    isDbUserInTrial = dbMentalHealthExpert.IsInTrialPeriod;
+                    usersSubscriptions = await _context.Subscriptions
+                        .Join( _context.MentalHealthExperts,
+                              (s) => s.UserId,
+                              (mhe) => mhe.UserId,
+                              (s, mhe) => new CurrentSubscriptionDto
+                              {
+                                  UserId = mhe.UserId,
+                                  PaidAt = s.PaidAt.Value,
+                                  ExpiresAt = s.ExpiresAt.Value,
+                                  IsInTrialPeriod = mhe.IsInTrialPeriod,
+                                  HavePaidForSubscription = mhe.HavePaidForSubscription
+                              })
+                        .Where(s => s.IsInTrialPeriod == false && s.UserId == userId)
+                        .OrderByDescending(s => s.PaidAt.Value)
+                        .ToListAsync();
+                }
+
+                if (isDbUserInTrial)
+                {
+                    _subscriptionLoggerService.LogWarning($"USER-[id]-PAYMENT: {SubscriptionLogTypes.IS_IN_TRIAL_PERIOD.ToString()}");
+                    return new Response(new List<CurrentSubscriptionDto>(), StatusCodes.Status200OK, $"USER-[id]-PAYMENT: {SubscriptionLogTypes.IS_IN_TRIAL_PERIOD.ToString()}");
+                }
+
+                if (!isDbUserInTrial)
+                {
+                    if (!dbUserSubscriptions.Any())
+                    {
+                        _subscriptionLoggerService.LogWarning($"USER-[id]-PAYMENT: {SubscriptionLogTypes.EMPTY.ToString()}");
+                        return new Response(new List<CurrentSubscriptionDto>(), StatusCodes.Status200OK, $"USER-[id]-PAYMENT: {SubscriptionLogTypes.EMPTY.ToString()}");
+                    }
+
+                    if (dbUserSubscriptions.Any() && !usersSubscriptions.Any())
+                    {
+                        _subscriptionLoggerService.LogWarning($"USER-[id]-PAYMENT: {SubscriptionLogTypes.NOT_FOUND.ToString()}");
+                        throw new EmptyListException("Subscription not available!");
+                    }
+                }
+
+                var currentSubscription = usersSubscriptions[0];
+                _subscriptionLoggerService.LogInformation($"USER-[id]-PAYMENT: {SubscriptionLogTypes.SUCCCESS.ToString()}");
+                return new Response(currentSubscription, StatusCodes.Status200OK, $"USER-[id]-PAYMENT: {SubscriptionLogTypes.SUCCCESS.ToString()}");
+            }
+            catch (Exception e)
+            {
+                _subscriptionLoggerService.LogError($"USER-[id]-PAYMENT: {e.Message}");
+                throw;
+            }
         }
         public async Task<Response> SetTrialToExpired(SubscriptionTrialRequestDto request)
         {
@@ -234,7 +346,6 @@ namespace MentalHealthBlog.API.Services.Subscription
                 throw;
             }
         }
-
         public async Task<Response> CreateSubscription(CreateSubscriptionDto request)
         {
             try
