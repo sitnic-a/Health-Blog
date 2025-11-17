@@ -10,7 +10,9 @@ import { db_roles } from '../enums/roles'
 
 export const SubscriptionChecker = () => {
   let dispatch = useDispatch()
-  let { usersTrialPeriod } = useSelector((store) => store.subscription)
+  let { usersTrialPeriod, currentSubscription } = useSelector(
+    (store) => store.subscription
+  )
 
   let subscriptionTimerId
   const __DAY_IN_MILLISECONDS__ = 86400000
@@ -18,10 +20,7 @@ export const SubscriptionChecker = () => {
 
   useEffect(() => {
     if (!stringIsNullOrEmpty(usersTrialPeriod)) {
-      if (
-        usersTrialPeriod?.isInTrialPeriod ||
-        usersTrialPeriod?.havePaidForSubscription
-      ) {
+      if (usersTrialPeriod?.isInTrialPeriod) {
         subscriptionTimerId = setInterval(() => {
           let currentDate = new Date().getTime()
           let subscriptionExpires = new Date(
@@ -116,9 +115,29 @@ export const SubscriptionChecker = () => {
             }, 3000)
           }
         }, 5000)
+      } else if (currentSubscription?.havePaidForSubscription === true) {
+        console.log('We in')
+        subscriptionTimerId = setInterval(() => {
+          let currentDate = new Date().getTime()
+          let expiresAt = new Date(currentSubscription?.expiresAt).getTime()
+          let timeLeftInMilliseconds = expiresAt - currentDate
+          console.log(
+            'Left ',
+            (timeLeftInMilliseconds / 1000).toFixed(0),
+            ' sekundi '
+          )
+          if (timeLeftInMilliseconds <= 1) {
+            clearInterval(subscriptionTimerId)
+            console.log('Zakljucaj aplikaciju')
+            return
+          }
+        }, 1000)
       }
     }
-  }, [usersTrialPeriod?.isInTrialPeriod])
+  }, [
+    usersTrialPeriod?.isInTrialPeriod,
+    currentSubscription?.havePaidForSubscription,
+  ])
 
   return <div></div>
 }

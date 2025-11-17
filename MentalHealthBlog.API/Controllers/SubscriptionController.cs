@@ -23,7 +23,7 @@ namespace MentalHealthBlog.API.Controllers
             return await _subscriptionService.GetUsersTrialPeriod(userId);    
         }
 
-        [HttpGet("/user/{userId}/current-subscription")]
+        [HttpGet("user/{userId}/current-subscription")]
         [Authorize]
         public async Task<Response> GetUsersCurrentSubscription(int userId)
         {

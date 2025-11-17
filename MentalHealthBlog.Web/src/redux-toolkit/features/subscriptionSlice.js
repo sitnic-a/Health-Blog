@@ -3,6 +3,7 @@ import { application } from '../../application'
 
 let initialState = {
   usersTrialPeriod: null,
+  currentSubscription: null,
   subscriptionPlanId: 0,
   newSubscription: null,
 }
@@ -13,6 +14,22 @@ export const getUsersTrialPeriod = createAsyncThunk(
     let url = `${application.application_url}/subscription/trial/${objectWithData?.authenticatedUser?.id}`
     let request = await fetch(url)
     let response = await request.json()
+    return response
+  }
+)
+
+export const getUsersCurrentSubscription = createAsyncThunk(
+  'user/[userid]/current-subscription',
+  async (objectWithData) => {
+    let url = `${application.application_url}/subscription/user/${objectWithData?.authenticatedUser?.id}/current-subscription`
+    let request = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
+      },
+    })
+    let response = request.json()
     return response
   }
 )
@@ -116,6 +133,17 @@ let subscriptionSlice = createSlice({
         }
       })
       .addCase(createSubscription.rejected, (state, action) => {})
+
+      //getUsersCurrentSubscription
+      .addCase(getUsersCurrentSubscription.pending, (state, action) => {})
+      .addCase(getUsersCurrentSubscription.fulfilled, (state, action) => {
+        let statusCode = action?.payload?.statusCode
+        let serviceResponseObject = action?.payload?.serviceResponseObject
+        if (statusCode === 200 && serviceResponseObject !== null) {
+          state.currentSubscription = serviceResponseObject
+        }
+      })
+      .addCase(getUsersCurrentSubscription.rejected, (state, action) => {})
   },
 })
 
