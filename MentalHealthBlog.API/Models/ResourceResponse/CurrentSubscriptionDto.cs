@@ -7,5 +7,6 @@
         public DateTime? ExpiresAt { get; set; } = DateTime.UtcNow;
         public bool IsInTrialPeriod { get; set; }
         public bool HavePaidForSubscription { get; set; }
+        public bool IsInformedAboutSubscriptionExpiration { get; set; }
     }
 }

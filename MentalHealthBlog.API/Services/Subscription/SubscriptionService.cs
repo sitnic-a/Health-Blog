@@ -135,6 +135,7 @@ namespace MentalHealthBlog.API.Services.Subscription
                                   PaidAt = s.PaidAt.Value,
                                   ExpiresAt = s.ExpiresAt.Value,
                                   IsInTrialPeriod = ru.IsInTrialPeriod,
+                                  IsInformedAboutSubscriptionExpiration = ru.IsInformedAboutSubscriptionExpiration,
                                   HavePaidForSubscription = ru.HavePaidForSubscription
                               })
                         .Where(s => s.IsInTrialPeriod == false && s.UserId == userId)
@@ -161,6 +162,7 @@ namespace MentalHealthBlog.API.Services.Subscription
                                   PaidAt = s.PaidAt.Value,
                                   ExpiresAt = s.ExpiresAt.Value,
                                   IsInTrialPeriod = mhe.IsInTrialPeriod,
+                                  IsInformedAboutSubscriptionExpiration = mhe.IsInformedAboutSubscriptionExpiration,
                                   HavePaidForSubscription = mhe.HavePaidForSubscription
                               })
                         .Where(s => s.IsInTrialPeriod == false && s.UserId == userId)
@@ -209,18 +211,8 @@ namespace MentalHealthBlog.API.Services.Subscription
                     throw new ArgumentException("Bad request!");
                 }
 
-                var dbUser = await _context.Users.FindAsync(request.UserId);
-                if (dbUser == null)
-                {
-                    _subscriptionLoggerService.LogWarning($"SET-SUBSCRIPTION-PAID-STATUS: {SubscriptionLogTypes.NOT_FOUND.ToString()}");
-                    throw new RecordNotFoundException("User doesn't exist");
-                }
-
-                var userHelper = new UserHelper(_context);
-                var userDto = new UserDto(dbUser.Id, dbUser.Username);
-                var userRoles = await userHelper.GetUserRolesAsync(userDto);
-
-                if (userRoles.Any(r => r.Id == __USER_ROLE_ID__))
+                
+                if (request.IsMentalHealthExpert == false)
                 {
                     var dbRegularUser = await _context.RegularUsers.SingleOrDefaultAsync(ru => ru.UserId == request.UserId);
                     if (dbRegularUser == null)
@@ -229,10 +221,11 @@ namespace MentalHealthBlog.API.Services.Subscription
                         throw new RecordNotFoundException("User not found!");
                     }
                     dbRegularUser.HavePaidForSubscription = request.HavePaidForSubscription;
+                    dbRegularUser.IsInformedAboutSubscriptionExpiration = request.IsInformedAboutSubscriptionExpiration;
                     await _context.SaveChangesAsync();
                 }
 
-                if (userRoles.Any(r => r.Id == __PSYCHOLOGIST_PSYCHOTHERAPIST_ROLE_ID__))
+                if (request.IsMentalHealthExpert == true)
                 {
                     var dbMentalHealthExpert = await _context.MentalHealthExperts.SingleOrDefaultAsync(mhe => mhe.UserId == request.UserId);
                     if (dbMentalHealthExpert == null)
@@ -241,6 +234,7 @@ namespace MentalHealthBlog.API.Services.Subscription
                         throw new RecordNotFoundException("User not found!");
                     }
                     dbMentalHealthExpert.HavePaidForSubscription = request.HavePaidForSubscription;
+                    dbMentalHealthExpert.IsInformedAboutSubscriptionExpiration = request.IsInformedAboutSubscriptionExpiration;
                     await _context.SaveChangesAsync();
                 }
 
