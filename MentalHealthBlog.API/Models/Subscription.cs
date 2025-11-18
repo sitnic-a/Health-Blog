@@ -1,4 +1,5 @@
 ﻿using MentalHealthBlogAPI.Models;
+using System.Text.Json.Serialization;
 
 namespace MentalHealthBlog.API.Models
 {

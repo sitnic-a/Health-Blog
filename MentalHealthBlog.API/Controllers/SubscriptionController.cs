@@ -1,8 +1,10 @@
 ﻿using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Services.Subscription;
+using MentalHealthBlogAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MentalHealthBlog.API.Controllers
@@ -28,6 +30,13 @@ namespace MentalHealthBlog.API.Controllers
         public async Task<Response> GetUsersCurrentSubscription(int userId)
         {
             return await _subscriptionService.GetUsersCurrentSubscription(userId);
+        }
+
+        [HttpPut("set-subscription-paid-status")]
+        [Authorize]
+        public async Task<Response> SetSubscriptionPaidStatus([FromBody] SubscriptionStatusRequestDto request)
+        {
+            return await _subscriptionService.SetSubscriptionPaidStatus(request);
         }
  
         [HttpPut("trial-expired")]

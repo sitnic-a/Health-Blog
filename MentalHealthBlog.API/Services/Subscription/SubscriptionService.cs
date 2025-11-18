@@ -6,6 +6,8 @@ using MentalHealthBlog.API.Methods;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
+using MentalHealthBlogAPI.Models;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using MimeKit;
 
@@ -197,6 +199,68 @@ namespace MentalHealthBlog.API.Services.Subscription
                 throw;
             }
         }
+        public async Task<Response> SetSubscriptionPaidStatus(SubscriptionStatusRequestDto request)
+        {
+            try
+            {
+                if (request == null || request.UserId <= 0 || request?.HavePaidForSubscription == null)
+                {
+                    _subscriptionLoggerService.LogWarning($"SET-SUBSCRIPTION-PAID-STATUS: {SubscriptionLogTypes.INVALID_DATA.ToString()}");
+                    throw new ArgumentException("Bad request!");
+                }
+
+                var dbUser = await _context.Users.FindAsync(request.UserId);
+                if (dbUser == null)
+                {
+                    _subscriptionLoggerService.LogWarning($"SET-SUBSCRIPTION-PAID-STATUS: {SubscriptionLogTypes.NOT_FOUND.ToString()}");
+                    throw new RecordNotFoundException("User doesn't exist");
+                }
+
+                var userHelper = new UserHelper(_context);
+                var userDto = new UserDto(dbUser.Id, dbUser.Username);
+                var userRoles = await userHelper.GetUserRolesAsync(userDto);
+
+                if (userRoles.Any(r => r.Id == __USER_ROLE_ID__))
+                {
+                    var dbRegularUser = await _context.RegularUsers.SingleOrDefaultAsync(ru => ru.UserId == request.UserId);
+                    if (dbRegularUser == null)
+                    {
+                        _subscriptionLoggerService.LogWarning($"SET-SUBSCRIPTION-PAID-STATUS: {SubscriptionLogTypes.NOT_FOUND.ToString()}");
+                        throw new RecordNotFoundException("User not found!");
+                    }
+                    dbRegularUser.HavePaidForSubscription = request.HavePaidForSubscription;
+                    await _context.SaveChangesAsync();
+                }
+
+                if (userRoles.Any(r => r.Id == __PSYCHOLOGIST_PSYCHOTHERAPIST_ROLE_ID__))
+                {
+                    var dbMentalHealthExpert = await _context.MentalHealthExperts.SingleOrDefaultAsync(mhe => mhe.UserId == request.UserId);
+                    if (dbMentalHealthExpert == null)
+                    {
+                        _subscriptionLoggerService.LogWarning($"SET-SUBSCRIPTION-PAID-STATUS: {SubscriptionLogTypes.NOT_FOUND.ToString()}");
+                        throw new RecordNotFoundException("User not found!");
+                    }
+                    dbMentalHealthExpert.HavePaidForSubscription = request.HavePaidForSubscription;
+                    await _context.SaveChangesAsync();
+                }
+
+                var currentSubscriptionResult = await GetUsersCurrentSubscription(request.UserId);
+                if (currentSubscriptionResult == null)
+                {
+                    _subscriptionLoggerService.LogWarning($"SET-SUBSCRIPTION-PAID-STATUS: {SubscriptionLogTypes.NOT_FOUND.ToString()}");
+                    throw new RecordNotFoundException("Subscription not found!");
+                }
+
+                var currentSubscriptionServiceResponseObject = currentSubscriptionResult.ServiceResponseObject as CurrentSubscriptionDto;
+                _subscriptionLoggerService.LogInformation($"SET-SUBSCRIPTION-PAID-STATUS: {SubscriptionLogTypes.SUCCCESS.ToString()}");
+                return new Response(currentSubscriptionServiceResponseObject, StatusCodes.Status200OK, $"SET-SUBSCRIPTION-PAID-STATUS: {SubscriptionLogTypes.SUCCCESS.ToString()}");
+            }
+            catch (Exception e)
+            {
+                _subscriptionLoggerService.LogError($"SET-SUBSCRIPTION-PAID-STATUS: {e.Message}");
+                throw;
+            }
+        }
         public async Task<Response> SetTrialToExpired(SubscriptionTrialRequestDto request)
         {
             try
@@ -300,7 +364,7 @@ namespace MentalHealthBlog.API.Services.Subscription
                     <br />
                     </p>
 
-                    <p>Ovim putem Vas obavještavamo da Vaša besplatna pretplata ističe za jedan dan.</p>
+                    <p>Ovim putem Vas obavještavamo da Vaša (besplatna) pretplata ističe za jedan dan.</p>
                     
                     <p>Kada pretplata istekne Vaš profil će se automatski zaključati i nećete biti u mogućnosti pristupiti mu. 
                        Ukoliko želite nastaviti koristiti aplikaciju PSIHOnet i njene pogodnosti, 
@@ -327,7 +391,7 @@ namespace MentalHealthBlog.API.Services.Subscription
 
                     if (dbMentalHealthExpert.UserId > 0)
                         dbMentalHealthExpert.IsInformedAboutSubscriptionExpiration = true;
-                    else if (dbRegularUser.UserId > 0 != null)
+                    else if (dbRegularUser.UserId > 0)
                         dbRegularUser.IsInformedAboutSubscriptionExpiration = true;
 
                     await _context.SaveChangesAsync();
