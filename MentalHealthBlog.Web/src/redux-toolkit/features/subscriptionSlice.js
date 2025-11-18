@@ -50,6 +50,23 @@ export const setTrialToExpired = createAsyncThunk(
   }
 )
 
+export const setSubscriptionPaidStatus = createAsyncThunk(
+  'set-subscription-paid-status',
+  async (objectWithData) => {
+    let url = `${application.application_url}/subscription/set-subscription-paid-status`
+    let request = await fetch(url, {
+      method: 'PUT',
+      body: JSON.stringify(objectWithData?.requestObj),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
+      },
+    })
+    let response = request.json()
+    return response
+  }
+)
+
 export const sendTrialExpiringnEmail = createAsyncThunk(
   'trial-expiring-email-notification',
   async (objectWithData) => {
@@ -144,6 +161,17 @@ let subscriptionSlice = createSlice({
         }
       })
       .addCase(getUsersCurrentSubscription.rejected, (state, action) => {})
+
+      //setSubscriptionPaidStatus
+      .addCase(setSubscriptionPaidStatus.pending, (state, action) => {})
+      .addCase(setSubscriptionPaidStatus.fulfilled, (state, action) => {
+        let statusCode = action?.payload?.statusCode
+        let serviceResponseObject = action?.payload?.serviceResponseObject
+        if (statusCode === 200) {
+          state.currentSubscription = serviceResponseObject
+        }
+      })
+      .addCase(setSubscriptionPaidStatus.rejected, (state, action) => {})
   },
 })
 

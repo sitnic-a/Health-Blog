@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Cookies from 'js-cookie'
 import {
   sendTrialExpiringnEmail,
+  setSubscriptionPaidStatus,
   setTrialToExpired,
 } from '../redux-toolkit/features/subscriptionSlice'
 import { stringIsNullOrEmpty } from '../utils/helper-methods/methods'
@@ -129,6 +130,18 @@ export const SubscriptionChecker = () => {
           if (timeLeftInMilliseconds <= 1) {
             clearInterval(subscriptionTimerId)
             console.log('Zakljucaj aplikaciju')
+            let authenticatedUserLocalStorage =
+              localStorage.getItem('authenticatedUser')
+            let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+            let requestObj = {
+              userId: authenticatedUser?.id,
+              havePaidForSubscription: false,
+            }
+            let objectWithData = {
+              authenticatedUser,
+              requestObj,
+            }
+            dispatch(setSubscriptionPaidStatus(objectWithData))
             return
           }
         }, 1000)
