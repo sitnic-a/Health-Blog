@@ -308,13 +308,13 @@ namespace MentalHealthBlog.API.Services.Subscription
                 throw;
             }
         }
-        public async Task<Response> SendTrialExpiringEmail(TrialPeriodExpiringRequestDto request)
+        public async Task<Response> SendExpiringEmail(SubscriptionExpiringRequestDto request)
         {
             try
             {
-                if (request == null || request.UserId <= 0 || request?.UserRoles.Count <= 0)
+                if (request == null || request.UserId <= 0)
                 {
-                    _subscriptionLoggerService.LogWarning($"TRIAL-EXPIRING(EMAIL NOTIFICATION): {AdminServiceLogTypes.INVALID_DATA.ToString()}");
+                    _subscriptionLoggerService.LogWarning($"EXPIRING(EMAIL NOTIFICATION): {AdminServiceLogTypes.INVALID_DATA.ToString()}");
                     throw new ArgumentException("Bad request!");
                 }
 
@@ -326,25 +326,25 @@ namespace MentalHealthBlog.API.Services.Subscription
                 var dbRegularUser = new Models.RegularUser();
                 UserDto userDto = new UserDto();
 
-                if (request.UserRoles.Any(r => r.Id == __PSYCHOLOGIST_PSYCHOTHERAPIST_ROLE_ID__))
+                if (request.IsMentalHealthExpert == true)
                 {
                     dbMentalHealthExpert = await _context.MentalHealthExperts.SingleOrDefaultAsync(mhe => mhe.UserId == request.UserId);
                     if (dbMentalHealthExpert != null)
                         userDto = _mapper.Map<UserDto>(dbMentalHealthExpert);
                     else
                     {
-                        _subscriptionLoggerService.LogWarning($"TRIAL-EXPIRING(EMAIL NOTIFICATION): {SubscriptionLogTypes.NOT_FOUND.ToString()}");
+                        _subscriptionLoggerService.LogWarning($"EXPIRING(EMAIL NOTIFICATION): {SubscriptionLogTypes.NOT_FOUND.ToString()}");
                         throw new RecordNotFoundException("Data coudln't be properly retrieved !");
                     }
                 }
-                else if (request.UserRoles.Any(r => r.Id == __USER_ROLE_ID__))
+                else if (request.IsMentalHealthExpert == false)
                 {
                     dbRegularUser = await _context.RegularUsers.FirstOrDefaultAsync(ru => ru.UserId == request.UserId);
                     if (dbRegularUser != null)
                         userDto = _mapper.Map<UserDto>(dbRegularUser);
                     else
                     {
-                        _subscriptionLoggerService.LogWarning($"TRIAL-EXPIRING(EMAIL NOTIFICATION): {SubscriptionLogTypes.NOT_FOUND.ToString()}");
+                        _subscriptionLoggerService.LogWarning($"EXPIRING(EMAIL NOTIFICATION): {SubscriptionLogTypes.NOT_FOUND.ToString()}");
                         throw new RecordNotFoundException("Data coudln't be properly retrieved !");
                     }
                 }
@@ -396,17 +396,17 @@ namespace MentalHealthBlog.API.Services.Subscription
 
                     await _context.SaveChangesAsync();
 
-                    _subscriptionLoggerService.LogInformation($"TRIAL-EXPIRING(EMAIL NOTIFICATION): {SubscriptionLogTypes.SUCCCESS.ToString()}");
+                    _subscriptionLoggerService.LogInformation($"EXPIRING(EMAIL NOTIFICATION): {SubscriptionLogTypes.SUCCCESS.ToString()}");
                     return new Response(userDto, StatusCodes.Status200OK, $"TRIAL-EXPIRING(EMAIL NOTIFICATION): {SubscriptionLogTypes.SUCCCESS.ToString()}");
                 }
 
-                _subscriptionLoggerService.LogWarning($"TRIAL-EXPIRING(EMAIL NOTIFICATION): ${SubscriptionLogTypes.NOT_FOUND.ToString()}");
+                _subscriptionLoggerService.LogWarning($"EXPIRING(EMAIL NOTIFICATION): ${SubscriptionLogTypes.NOT_FOUND.ToString()}");
                 throw new RecordNotFoundException("User doesn't exist!");
 
             }
             catch (Exception e)
             {
-                _subscriptionLoggerService.LogError($"TRIAL-EXPIRING(EMAIL NOTIFICATION): {e.Message}");
+                _subscriptionLoggerService.LogError($"EXPIRING(EMAIL NOTIFICATION): {e.Message}");
                 throw;
             }
         }
