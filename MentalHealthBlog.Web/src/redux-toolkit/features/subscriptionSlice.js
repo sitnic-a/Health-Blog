@@ -67,10 +67,10 @@ export const setSubscriptionPaidStatus = createAsyncThunk(
   }
 )
 
-export const sendTrialExpiringnEmail = createAsyncThunk(
+export const sendExpiringEmail = createAsyncThunk(
   'trial-expiring-email-notification',
   async (objectWithData) => {
-    let url = `${application.application_url}/subscription/trial-expiring-email-notification`
+    let url = `${application.application_url}/subscription/expiring-email-notification`
     let request = await fetch(url, {
       method: 'POST',
       body: JSON.stringify(objectWithData?.requestObj),
@@ -135,9 +135,9 @@ let subscriptionSlice = createSlice({
       .addCase(setTrialToExpired.rejected, (state, action) => {})
 
       //sendTrialExpiringnEmail
-      .addCase(sendTrialExpiringnEmail.pending, (state, action) => {})
-      .addCase(sendTrialExpiringnEmail.fulfilled, (state, action) => {})
-      .addCase(sendTrialExpiringnEmail.rejected, (state, action) => {})
+      .addCase(sendExpiringEmail.pending, (state, action) => {})
+      .addCase(sendExpiringEmail.fulfilled, (state, action) => {})
+      .addCase(sendExpiringEmail.rejected, (state, action) => {})
 
       //createSubscription
       .addCase(createSubscription.pending, (state, action) => {})

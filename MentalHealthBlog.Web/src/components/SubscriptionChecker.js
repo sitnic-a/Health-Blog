@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Cookies from 'js-cookie'
 import {
-  sendTrialExpiringnEmail,
+  sendExpiringEmail,
   setSubscriptionPaidStatus,
   setTrialToExpired,
 } from '../redux-toolkit/features/subscriptionSlice'
@@ -41,16 +41,19 @@ export const SubscriptionChecker = () => {
               let authenticatedUserLocalStorage =
                 localStorage.getItem('authenticatedUser')
               let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+              let isMentalHealthExpert = authenticatedUser?.userRoles?.some(
+                (r) => r.id === db_roles.PSYCHOLOGIST
+              )
               let requestObj = {
                 userId: authenticatedUser?.id,
-                userRoles: authenticatedUser?.userRoles,
+                isMentalHealthExpert: isMentalHealthExpert,
               }
 
               let objectWithData = {
                 authenticatedUser,
                 requestObj,
               }
-              dispatch(sendTrialExpiringnEmail(objectWithData))
+              dispatch(sendExpiringEmail(objectWithData))
             }
             subscriptionTimerId = setInterval(() => {
               let currentDate = new Date().getTime()
@@ -120,31 +123,102 @@ export const SubscriptionChecker = () => {
         console.log('We in')
         subscriptionTimerId = setInterval(() => {
           let currentDate = new Date().getTime()
-          let expiresAt = new Date(currentSubscription?.expiresAt).getTime()
-          let timeLeftInMilliseconds = expiresAt - currentDate
+          let subscriptionExpires = new Date(
+            currentSubscription?.expiresAt
+          ).getTime()
+
+          let timeLeftInMilliseconds = subscriptionExpires - currentDate
           console.log(
             'Left ',
             (timeLeftInMilliseconds / 1000).toFixed(0),
             ' sekundi '
           )
-          if (timeLeftInMilliseconds <= 1) {
+
+          if (timeLeftInMilliseconds <= __DAY_IN_MILLISECONDS__) {
             clearInterval(subscriptionTimerId)
-            console.log('Zakljucaj aplikaciju')
-            let authenticatedUserLocalStorage =
-              localStorage.getItem('authenticatedUser')
-            let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
-            let requestObj = {
-              userId: authenticatedUser?.id,
-              havePaidForSubscription: false,
+            if (!currentSubscription?.isInformedAboutSubscriptionExpiration) {
+              let authenticatedUserLocalStorage =
+                localStorage.getItem('authenticatedUser')
+              let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+              let isMentalHealthExpert = authenticatedUser?.userRoles?.some(
+                (r) => r.id === db_roles.PSYCHOLOGIST
+              )
+              let requestObj = {
+                userId: authenticatedUser?.id,
+                isMentalHealthExpert: isMentalHealthExpert,
+              }
+
+              let objectWithData = {
+                authenticatedUser,
+                requestObj,
+              }
+              dispatch(sendExpiringEmail(objectWithData))
             }
-            let objectWithData = {
-              authenticatedUser,
-              requestObj,
-            }
-            dispatch(setSubscriptionPaidStatus(objectWithData))
-            return
+            subscriptionTimerId = setInterval(() => {
+              let currentDate = new Date().getTime()
+              let subscriptionExpires = new Date(
+                currentSubscription?.expiresAt
+              ).getTime()
+
+              let timeLeftInMilliseconds = subscriptionExpires - currentDate
+              console.log(
+                'Left ',
+                (timeLeftInMilliseconds / 1000).toFixed(0),
+                ' sekundi '
+              )
+
+              if (
+                timeLeftInMilliseconds <= __THIRTY_SECONDS_IN_MILLISECONDS__
+              ) {
+                clearInterval(subscriptionTimerId)
+                subscriptionTimerId = setInterval(() => {
+                  let currentDate = new Date().getTime()
+                  let subscriptionExpires = new Date(
+                    currentSubscription?.expiresAt
+                  ).getTime()
+
+                  let timeLeftInMilliseconds = subscriptionExpires - currentDate
+                  console.log(
+                    'Left ',
+                    (timeLeftInMilliseconds / 1000).toFixed(0),
+                    ' sekundi '
+                  )
+                  if (timeLeftInMilliseconds <= 1000) {
+                    let authenticatedUserLocalStorage =
+                      localStorage.getItem('authenticatedUser')
+                    let authenticatedUser = JSON.parse(
+                      authenticatedUserLocalStorage
+                    )
+                    let isMentalHealthExpert =
+                      authenticatedUser?.userRoles?.some(
+                        (r) => r.id === db_roles.PSYCHOLOGIST
+                      )
+
+                    console.log(
+                      'Aplikacija se zaključava! Uplatite da nastavite koristiti!'
+                    )
+                    clearInterval(subscriptionTimerId)
+
+                    let requestObj = {
+                      userId: authenticatedUser?.id,
+                      isMentalHealthExpert: isMentalHealthExpert,
+                      havePaidForSubscription: false,
+                    }
+                    let objectWithData = {
+                      authenticatedUser,
+                      requestObj,
+                    }
+                    dispatch(setSubscriptionPaidStatus(objectWithData))
+                    localStorage.removeItem('authenticatedUser')
+                    localStorage.removeItem('jwToken')
+                    Cookies.remove('refreshToken')
+                    return
+                  }
+                }, 1000)
+              }
+            }, 3000)
           }
-        }, 1000)
+        }, 5000)
       }
     }
   }, [
