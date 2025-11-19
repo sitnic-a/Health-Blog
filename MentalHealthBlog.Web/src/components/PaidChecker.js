@@ -25,7 +25,6 @@ export const PaidChecker = () => {
 
     dispatch(getUsersTrialPeriod(objectWithData))
     dispatch(getUsersCurrentSubscription(objectWithData))
-    console.log('Current ', currentSubscription)
   }, [
     usersTrialPeriod?.isInTrialPeriod,
     currentSubscription?.havePaidForSubscription,

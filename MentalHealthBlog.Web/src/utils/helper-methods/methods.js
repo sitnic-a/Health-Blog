@@ -548,8 +548,6 @@ export const switchActiveTab = (element) => {
 
 export const toggleChosenPlan = (planMainContainer) => {
   deselectPlans()
-  console.log('Plan ', planMainContainer)
-
   let planMainContainerHeaderTitle = planMainContainer.querySelector(
     '.register-plan-main-container-header-title'
   )

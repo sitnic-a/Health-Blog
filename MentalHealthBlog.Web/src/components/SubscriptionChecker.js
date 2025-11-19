@@ -24,8 +24,6 @@ export const SubscriptionChecker = () => {
   useEffect(() => {
     if (!stringIsNullOrEmpty(usersTrialPeriod)) {
       if (usersTrialPeriod?.isInTrialPeriod) {
-        console.log('Is trial!')
-
         subscriptionTimerId = setInterval(() => {
           let currentDate = new Date().getTime()
           let subscriptionExpires = new Date(
@@ -134,7 +132,6 @@ export const SubscriptionChecker = () => {
           }
         }, 5000)
       } else if (currentSubscription?.havePaidForSubscription === true) {
-        console.log('We in')
         subscriptionTimerId = setInterval(() => {
           let currentDate = new Date().getTime()
           let subscriptionExpires = new Date(

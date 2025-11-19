@@ -86,7 +86,6 @@ export const assignmentSlice = createSlice({
       //assignment-responses/{id}
       .addCase(getAssignmentResponses.pending, (state, action) => {})
       .addCase(getAssignmentResponses.fulfilled, (state, action) => {
-        // console.log('Assignment responses fulfilled ', action?.payload)
         let statusCode = action?.payload?.statusCode
         let assignmentResponses = action?.payload?.serviceResponseObject
 
