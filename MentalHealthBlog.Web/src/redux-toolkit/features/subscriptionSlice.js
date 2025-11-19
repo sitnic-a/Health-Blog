@@ -3,6 +3,7 @@ import { application } from '../../application'
 
 let initialState = {
   usersTrialPeriod: null,
+  currentSubscription: null,
   subscriptionPlanId: 0,
   newSubscription: null,
 }
@@ -13,6 +14,22 @@ export const getUsersTrialPeriod = createAsyncThunk(
     let url = `${application.application_url}/subscription/trial/${objectWithData?.authenticatedUser?.id}`
     let request = await fetch(url)
     let response = await request.json()
+    return response
+  }
+)
+
+export const getUsersCurrentSubscription = createAsyncThunk(
+  'user/[userid]/current-subscription',
+  async (objectWithData) => {
+    let url = `${application.application_url}/subscription/user/${objectWithData?.authenticatedUser?.id}/current-subscription`
+    let request = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
+      },
+    })
+    let response = request.json()
     return response
   }
 )
@@ -33,10 +50,27 @@ export const setTrialToExpired = createAsyncThunk(
   }
 )
 
-export const sendTrialExpiringnEmail = createAsyncThunk(
+export const setSubscriptionPaidStatus = createAsyncThunk(
+  'set-subscription-paid-status',
+  async (objectWithData) => {
+    let url = `${application.application_url}/subscription/set-subscription-paid-status`
+    let request = await fetch(url, {
+      method: 'PUT',
+      body: JSON.stringify(objectWithData?.requestObj),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
+      },
+    })
+    let response = request.json()
+    return response
+  }
+)
+
+export const sendExpiringEmail = createAsyncThunk(
   'trial-expiring-email-notification',
   async (objectWithData) => {
-    let url = `${application.application_url}/subscription/trial-expiring-email-notification`
+    let url = `${application.application_url}/subscription/expiring-email-notification`
     let request = await fetch(url, {
       method: 'POST',
       body: JSON.stringify(objectWithData?.requestObj),
@@ -52,8 +86,6 @@ export const sendTrialExpiringnEmail = createAsyncThunk(
 export const createSubscription = createAsyncThunk(
   'create-subscription',
   async (objectWithData) => {
-    console.log('Object ', objectWithData)
-
     let url = `${application.application_url}/subscription/create-subscription`
     let request = await fetch(url, {
       method: 'POST',
@@ -84,11 +116,8 @@ let subscriptionSlice = createSlice({
         let statusCode = action?.payload?.statusCode
         let serviceResponseObject = action?.payload?.serviceResponseObject
         state.usersTrialPeriod = serviceResponseObject
-        // console.log('Action payload', state.usersTrialPeriod)
       })
-      .addCase(getUsersTrialPeriod.rejected, (state, action) => {
-        console.log('Error ', action?.payload)
-      })
+      .addCase(getUsersTrialPeriod.rejected, (state, action) => {})
 
       //setTrialToExpired
       .addCase(setTrialToExpired.pending, (state, action) => {})
@@ -101,21 +130,41 @@ let subscriptionSlice = createSlice({
       .addCase(setTrialToExpired.rejected, (state, action) => {})
 
       //sendTrialExpiringnEmail
-      .addCase(sendTrialExpiringnEmail.pending, (state, action) => {})
-      .addCase(sendTrialExpiringnEmail.fulfilled, (state, action) => {})
-      .addCase(sendTrialExpiringnEmail.rejected, (state, action) => {})
+      .addCase(sendExpiringEmail.pending, (state, action) => {})
+      .addCase(sendExpiringEmail.fulfilled, (state, action) => {})
+      .addCase(sendExpiringEmail.rejected, (state, action) => {})
 
       //createSubscription
       .addCase(createSubscription.pending, (state, action) => {})
       .addCase(createSubscription.fulfilled, (state, action) => {
         let statusCode = action?.payload?.statusCode
         if (statusCode === 201) {
-          console.log('Create action ', action?.payload)
           state.newSubscription = action?.payload?.serviceResponseObject
-          console.log('New subscription ', state.newSubscription)
         }
       })
       .addCase(createSubscription.rejected, (state, action) => {})
+
+      //getUsersCurrentSubscription
+      .addCase(getUsersCurrentSubscription.pending, (state, action) => {})
+      .addCase(getUsersCurrentSubscription.fulfilled, (state, action) => {
+        let statusCode = action?.payload?.statusCode
+        let serviceResponseObject = action?.payload?.serviceResponseObject
+        if (statusCode === 200 && serviceResponseObject !== null) {
+          state.currentSubscription = serviceResponseObject
+        }
+      })
+      .addCase(getUsersCurrentSubscription.rejected, (state, action) => {})
+
+      //setSubscriptionPaidStatus
+      .addCase(setSubscriptionPaidStatus.pending, (state, action) => {})
+      .addCase(setSubscriptionPaidStatus.fulfilled, (state, action) => {
+        let statusCode = action?.payload?.statusCode
+        let serviceResponseObject = action?.payload?.serviceResponseObject
+        if (statusCode === 200) {
+          state.currentSubscription = serviceResponseObject
+        }
+      })
+      .addCase(setSubscriptionPaidStatus.rejected, (state, action) => {})
   },
 })
 

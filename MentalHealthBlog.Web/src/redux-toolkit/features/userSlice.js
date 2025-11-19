@@ -320,9 +320,7 @@ export const userSlice = createSlice({
 
       //changePassword
       .addCase(changePassword.pending, (state, action) => {})
-      .addCase(changePassword.fulfilled, (state, action) => {
-        console.log('Successfully changed pass')
-      })
+      .addCase(changePassword.fulfilled, (state, action) => {})
       .addCase(changePassword.rejected, (state, action) => {})
 
       //changeIsUsingForTheFirstTime

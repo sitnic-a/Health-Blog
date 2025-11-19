@@ -1,7 +1,10 @@
 ﻿using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Services.Subscription;
+using MentalHealthBlogAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MentalHealthBlog.API.Controllers
@@ -22,20 +25,35 @@ namespace MentalHealthBlog.API.Controllers
             return await _subscriptionService.GetUsersTrialPeriod(userId);    
         }
 
+        [HttpGet("user/{userId}/current-subscription")]
+        [Authorize]
+        public async Task<Response> GetUsersCurrentSubscription(int userId)
+        {
+            return await _subscriptionService.GetUsersCurrentSubscription(userId);
+        }
+
+        [HttpPut("set-subscription-paid-status")]
+        [Authorize]
+        public async Task<Response> SetSubscriptionPaidStatus([FromBody] SubscriptionStatusRequestDto request)
+        {
+            return await _subscriptionService.SetSubscriptionPaidStatus(request);
+        }
+ 
         [HttpPut("trial-expired")]
         public async Task<Response> SetTrialToExpired(SubscriptionTrialRequestDto request)
         {
             return await _subscriptionService.SetTrialToExpired(request);
         }
 
-        [HttpPost("trial-expiring-email-notification")]
-        public async Task<Response> SendTrialExpiringnEmail(TrialPeriodExpiringRequestDto request)
+        [HttpPost("expiring-email-notification")]
+        public async Task<Response> SendTrialExpiringnEmail(SubscriptionExpiringRequestDto request)
         {
-            return await _subscriptionService.SendTrialExpiringEmail(request);
+            return await _subscriptionService.SendExpiringEmail(request);
         }
 
+
         [HttpPost("create-subscription")]
-        public async Task<Response> MakeSubscription([FromBody] CreateSubscriptionDto request)
+        public async Task<Response> CreateSubscription([FromBody] CreateSubscriptionDto request)
         {
             return await _subscriptionService.CreateSubscription(request);
         }

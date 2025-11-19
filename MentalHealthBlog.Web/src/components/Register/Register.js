@@ -390,8 +390,6 @@ export const Register = () => {
       if (statusCode === 201) {
         let serviceResponseObject = response?.payload?.serviceResponseObject
         dispatch(setSelectedMentalHealthExpertIds([]))
-        console.log('Service response ', serviceResponseObject)
-
         localStorage.setItem(
           'justRegisteredUser',
           JSON.stringify(serviceResponseObject)
