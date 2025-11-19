@@ -6,8 +6,6 @@ using MentalHealthBlog.API.Methods;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
-using MentalHealthBlogAPI.Models;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using MimeKit;
 
