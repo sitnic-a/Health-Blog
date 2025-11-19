@@ -18,6 +18,8 @@ export const SubscriptionChecker = () => {
   let subscriptionTimerId
   const __DAY_IN_MILLISECONDS__ = 86400000
   const __THIRTY_SECONDS_IN_MILLISECONDS__ = 30000
+  let timerContainer
+  let timerContainerSpan
 
   useEffect(() => {
     if (!stringIsNullOrEmpty(usersTrialPeriod)) {
@@ -74,6 +76,13 @@ export const SubscriptionChecker = () => {
                 timeLeftInMilliseconds <= __THIRTY_SECONDS_IN_MILLISECONDS__
               ) {
                 clearInterval(subscriptionTimerId)
+                timerContainer = document.querySelector('#timer-container')
+
+                timerContainerSpan =
+                  timerContainer.querySelector('.timer-seconds')
+                timerContainer.classList.remove('timer-container-hidden')
+                timerContainer.classList.add('timer-container-visible')
+
                 subscriptionTimerId = setInterval(() => {
                   let currentDate = new Date().getTime()
                   let subscriptionExpires = new Date(
@@ -81,11 +90,12 @@ export const SubscriptionChecker = () => {
                   ).getTime()
 
                   let timeLeftInMilliseconds = subscriptionExpires - currentDate
-                  console.log(
-                    'Left ',
-                    (timeLeftInMilliseconds / 1000).toFixed(0),
-                    ' sekundi '
-                  )
+                  let timeLeftInSeconds = (
+                    timeLeftInMilliseconds / 1000
+                  ).toFixed(0)
+                  console.log('Left ', timeLeftInSeconds, ' sekundi ')
+                  timerContainerSpan.innerHTML = ` ${timeLeftInSeconds}`
+
                   if (timeLeftInMilliseconds <= 1000) {
                     let authenticatedUserLocalStorage =
                       localStorage.getItem('authenticatedUser')
@@ -111,6 +121,8 @@ export const SubscriptionChecker = () => {
                       authenticatedUser,
                       requestObj,
                     }
+                    timerContainer.classList.remove('timer-container-visible')
+                    timerContainer.classList.add('timer-container-hidden')
                     dispatch(setTrialToExpired(objectWithData))
                     localStorage.removeItem('authenticatedUser')
                     localStorage.removeItem('jwToken')
@@ -173,6 +185,13 @@ export const SubscriptionChecker = () => {
                 timeLeftInMilliseconds <= __THIRTY_SECONDS_IN_MILLISECONDS__
               ) {
                 clearInterval(subscriptionTimerId)
+                timerContainer = document.querySelector('#timer-container')
+
+                timerContainerSpan =
+                  timerContainer.querySelector('.timer-seconds')
+                timerContainer.classList.remove('timer-container-hidden')
+                timerContainer.classList.add('timer-container-visible')
+
                 subscriptionTimerId = setInterval(() => {
                   let currentDate = new Date().getTime()
                   let subscriptionExpires = new Date(
@@ -180,11 +199,13 @@ export const SubscriptionChecker = () => {
                   ).getTime()
 
                   let timeLeftInMilliseconds = subscriptionExpires - currentDate
-                  console.log(
-                    'Left ',
-                    (timeLeftInMilliseconds / 1000).toFixed(0),
-                    ' sekundi '
-                  )
+                  let timeLeftInSeconds = (
+                    timeLeftInMilliseconds / 1000
+                  ).toFixed(0)
+                  console.log('Left ', timeLeftInSeconds, ' sekundi ')
+
+                  timerContainerSpan.innerHTML = ` ${timeLeftInSeconds}`
+
                   if (timeLeftInMilliseconds <= 1000) {
                     let authenticatedUserLocalStorage =
                       localStorage.getItem('authenticatedUser')
@@ -211,11 +232,12 @@ export const SubscriptionChecker = () => {
                       authenticatedUser,
                       requestObj,
                     }
+                    timerContainer.classList.remove('timer-container-visible')
+                    timerContainer.classList.add('timer-container-hidden')
                     dispatch(setSubscriptionPaidStatus(objectWithData))
                     localStorage.removeItem('authenticatedUser')
                     localStorage.removeItem('jwToken')
                     Cookies.remove('refreshToken')
-                    return
                   }
                 }, 1000)
               }

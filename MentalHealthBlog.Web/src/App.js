@@ -34,6 +34,7 @@ import { SubscriptionChecker } from './components/SubscriptionChecker'
 import { PaidChecker } from './components/PaidChecker'
 import { TrialPeriodExpired } from './components/TrialPeriodExpired/TrialPeriodExpired'
 import { SubscriptionPlans } from './components/Register/SubscriptionPlans/SubscriptionPlans'
+import { TimeRemainingNotifier } from './components/TimeRemainingNotifier/TimeRemainingNotifier'
 
 function App() {
   windowResize(application.layouts.min_screen_single_col_width)
@@ -41,25 +42,6 @@ function App() {
   return (
     <Provider store={store}>
       <Router>
-        <div id="auth-container" className="auth-container-hidden">
-          <p className="auth-box-title">
-            Da li želite produžiti token? Ostalo još{' '}
-            <span className="auth-timer"></span> sekundi!
-          </p>
-          <div className="auth-timer-actions-container">
-            <button className="auth-timer-action auth-timer-ok" type="button">
-              Produži
-            </button>
-
-            <button
-              className="auth-timer-action auth-timer-cancel"
-              type="button"
-            >
-              Odustani
-            </button>
-          </div>
-        </div>
-
         <main>
           <Routes>
             <Route exact path="/login" element={<Login />} />
@@ -119,6 +101,7 @@ function App() {
 
           <SubscriptionChecker />
           <ToastContainer />
+          <TimeRemainingNotifier />
         </main>
       </Router>
     </Provider>
