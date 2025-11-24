@@ -114,3 +114,22 @@
   font-family: 'SansDeva';
   font-size: 1.8rem;
 }
+
+.admin-link-subscriptions {
+  transition: 200ms;
+  color: #f3f1e3;
+  background: #82a3bc;
+}
+
+.admin-link-subscriptions:hover {
+  border: 1px solid #82a3bc;
+  color: #82a3bc;
+  background: none;
+}
+
+.admin-link-subscriptions-title {
+  margin: auto;
+  font-family: 'SansDeva';
+  font-size: 1.8rem;
+  transform: translateY(6rem);
+}

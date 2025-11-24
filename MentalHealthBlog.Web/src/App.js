@@ -35,6 +35,7 @@ import { PaidChecker } from './components/PaidChecker'
 import { TrialPeriodExpired } from './components/TrialPeriodExpired/TrialPeriodExpired'
 import { SubscriptionPlans } from './components/Register/SubscriptionPlans/SubscriptionPlans'
 import { TimeRemainingNotifier } from './components/TimeRemainingNotifier/TimeRemainingNotifier'
+import { AdminSubscriptions } from './components/administrator-dashboard/sections/admin-subscriptions/AdminSubscriptions'
 
 function App() {
   windowResize(application.layouts.min_screen_single_col_width)
@@ -92,6 +93,10 @@ function App() {
                 />
                 <Route path="/therapy/requests" element={<Requests />} />
               </Route>
+              <Route
+                path="admin-subscriptions"
+                element={<AdminSubscriptions />}
+              />
             </Route>
 
             <Route path="*" element={<NotFound />} />
