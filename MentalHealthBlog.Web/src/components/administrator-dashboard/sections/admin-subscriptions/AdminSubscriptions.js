@@ -42,23 +42,33 @@ export const AdminSubscriptions = () => {
       <Navbar />
       <div className="admin-subscriptions-container">
         <div className="admin-subscriptions-header">
-          <h2>Filtrirajte uplate:</h2>
+          <h2 className="admin-subscriptions-header-title">
+            Filtrirajte uplate:
+          </h2>
           <div className="admin-subscriptions-header-filter-container">
             <div className="admin-subscriptions-header-filter-row">
               <div className="admin-subscriptions-header-filter-col">
-                <p className="admin-subscriptions-header-filter-condition-label">
+                <p className="admin-subscriptions-header-filter-condition-small-device-label admin-subscriptions-header-filter-condition-label">
                   Godina:{' '}
                 </p>
-                <input type="text" placeholder="Unesite godinu..." />
+                <input
+                  className="admin-subscriptions-header-filter-year-value"
+                  type="text"
+                  placeholder="Unesite godinu..."
+                />
               </div>
               <div className="admin-subscriptions-header-filter-col">
-                <p className="admin-subscriptions-header-filter-condition-label">
+                <p className="admin-subscriptions-header-filter-condition-small-device-label admin-subscriptions-header-filter-condition-label">
                   Mjesec:{' '}
                 </p>
-                <select>
+                <select className="admin-subscriptions-filter-months-picker">
                   {months.map((month, index) => {
                     return (
-                      <option key={index + 1} value={index + 1}>
+                      <option
+                        className="admin-subscriptions-header-filter-month-value"
+                        key={index + 1}
+                        value={index + 1}
+                      >
                         {month}
                       </option>
                     )
@@ -66,10 +76,10 @@ export const AdminSubscriptions = () => {
                 </select>
               </div>
               <div className="admin-subscriptions-header-filter-col">
-                <p className="admin-subscriptions-header-filter-condition-label">
+                <p className="admin-subscriptions-header-filter-condition-small-device-label admin-subscriptions-header-filter-condition-label">
                   Tip korisnika:{' '}
                 </p>
-                <select>
+                <select className="admin-subscriptions-header-filter-user-types-picker">
                   {userTypes?.map((type) => {
                     return (
                       <option key={type?.id} value={type?.id}>
@@ -83,16 +93,20 @@ export const AdminSubscriptions = () => {
 
             <div className="admin-subscriptions-header-filter-row">
               <div className="admin-subscriptions-header-filter-col">
-                <p>Ime/prezime/username: </p>
+                <p className="admin-subscriptions-header-filter-condition-small-device-label admin-subscriptions-header-filter-condition-label">
+                  Ime/prezime/username:{' '}
+                </p>
                 <input
+                  className="admin-subscriptions-header-filter-name-surname-username-value"
                   type="text"
                   placeholder="Unesite ime, prezime ili username"
                 />
               </div>
 
               <div className="admin-subscriptions-header-filter-col">
-                <button>
-                  Tražite <LiaSearchSolid />
+                <button className="admin-subscriptions-header-filter-search-button">
+                  Tražite{' '}
+                  <LiaSearchSolid className="admin-subscriptions-header-filter-search-button-icon" />
                 </button>
               </div>
             </div>
