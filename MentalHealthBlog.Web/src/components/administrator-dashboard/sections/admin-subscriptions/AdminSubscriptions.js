@@ -112,6 +112,29 @@ export const AdminSubscriptions = () => {
             </div>
           </div>
         </div>
+
+        <table className="admin-subscriptions-subscription-table">
+          <thead className="admin-subscriptions-subscription-table-header">
+            <tr>
+              <td className="admin-subscriptions-subscription-table-header-cell">
+                Ime
+              </td>
+              <td className="admin-subscriptions-subscription-table-header-cell">
+                Prezime
+              </td>
+              <td className="admin-subscriptions-subscription-table-header-cell">
+                Role
+              </td>
+              <td className="admin-subscriptions-subscription-table-header-cell">
+                Akcija
+              </td>
+            </tr>
+          </thead>
+
+          <tbody className="admin-subscriptions-subscription-table-body">
+            {/* users list */}
+          </tbody>
+        </table>
       </div>
     </section>
   )

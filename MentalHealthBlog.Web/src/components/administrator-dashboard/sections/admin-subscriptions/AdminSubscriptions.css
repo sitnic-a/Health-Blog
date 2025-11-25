@@ -11,14 +11,20 @@
 
 @media (width<=450px) {
   .admin-subscriptions-container {
-    margin-inline: -2rem;
+    margin-inline: -1.5rem;
   }
 }
 
 .admin-subscriptions-header {
-  margin-top: 3rem;
-  padding-inline: 1rem;
+  margin-top: 1rem;
+  /* padding-inline: 1rem; */
   padding-bottom: 1.5rem;
+}
+
+@media (width<420px) {
+  .admin-subscriptions-header {
+    padding-inline: 1rem;
+  }
 }
 
 .admin-subscriptions-header-title {
@@ -122,6 +128,7 @@
 
 @media (width<=777px) {
   .admin-subscriptions-header-filter-year-value {
+    padding: 0.7rem 0.3rem;
     font-size: 0.78rem;
   }
 }
@@ -215,6 +222,7 @@
   .admin-subscriptions-header-filter-name-surname-username-value {
     max-width: 230px;
     width: 100%;
+    padding: 0.7rem 0.3rem;
     font-size: 0.78rem;
   }
 }
@@ -266,4 +274,37 @@
   width: 18px;
   height: 18px;
   padding-left: 0.5rem;
+}
+
+.admin-subscriptions-subscription-table {
+  max-width: 100vw;
+  min-height: 400px;
+  width: 100%;
+  border: 1px solid red;
+}
+
+.admin-subscriptions-subscription-table-header {
+  background: #f3f1e3;
+}
+
+.admin-subscriptions-subscription-table-header-cell {
+  padding-block: 0.4rem;
+  text-align: center;
+  font-family: 'SansDeva';
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.admin-subscriptions-subscription-table-header-cell {
+  width: 20%;
+}
+
+.admin-subscriptions-subscription-table-header-cell:nth-child(3) {
+  width: 17%;
+  /* background: yellow; */
+}
+
+.admin-subscriptions-subscription-table-header-cell:nth-child(4) {
+  width: 15%;
+  /* background: yellow; */
 }

@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { application } from '../../application'
 
 let initialState = {
+  subscriptionUsers: [],
   usersTrialPeriod: null,
   currentSubscription: null,
   subscriptionPlanId: 0,
