@@ -17,6 +17,7 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpPost("subscription-users")]
+        //[Authorize(Roles ="Administrator")]
         public async Task<Response> GetSubscriptionUsers(SearchSubscriptionUsersRequestDto? query = null)
         {
             return await _subscriptionService.GetSubscriptionUsers(query);

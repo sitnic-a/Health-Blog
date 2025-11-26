@@ -34,14 +34,15 @@ namespace MentalHealthBlog.API.Methods
                           FirstName = ru.FirstName,
                           LastName = ru.LastName,
                           Roles = new List<Models.Role>(),
-                          PaidAt = s.PaidAt,
-                          ExpiresAt = s.ExpiresAt,
-                          ExpiringSoon = s.ExpiresAt.Value.Millisecond - DateTime.UtcNow.Millisecond < __MIN_DAYS_UNTIL_EXPIRATION__REMINDER__,
+                          PaidAt = s.PaidAt.GetValueOrDefault(),
+                          ExpiresAt = s.ExpiresAt.GetValueOrDefault(),
+                          ExpiringSoon = s.ExpiresAt.GetValueOrDefault().Day - DateTime.UtcNow.Day < __MIN_DAYS_UNTIL_EXPIRATION__REMINDER__ &&
+                                         s.ExpiresAt.GetValueOrDefault() > DateTime.MinValue,
                           PaidAmount = s.PaidAmount,
-                          SubscriptionPlanId = s.SubscriptionPlanId.Value,
+                          SubscriptionPlanId = s.SubscriptionPlanId.GetValueOrDefault(),
                           HavePaidForSubscription = ru.HavePaidForSubscription,
                           IsInTrialPeriod = ru.IsInTrialPeriod,
-                          TrialEndsAt = ru.TrialEndsAt.Value,
+                          TrialEndsAt = ru.TrialEndsAt.GetValueOrDefault(),
                       })
                 .ToListAsync();
 
@@ -55,14 +56,15 @@ namespace MentalHealthBlog.API.Methods
                           FirstName = mhe.FirstName,
                           LastName = mhe.LastName,
                           Roles = new List<Models.Role>(),
-                          PaidAt = s.PaidAt,
-                          ExpiresAt = s.ExpiresAt,
-                          ExpiringSoon = s.ExpiresAt.Value.Millisecond - DateTime.UtcNow.Millisecond < __MIN_DAYS_UNTIL_EXPIRATION__REMINDER__,
+                          PaidAt = s.PaidAt.GetValueOrDefault(),
+                          ExpiresAt = s.ExpiresAt.GetValueOrDefault(),
+                          ExpiringSoon = s.ExpiresAt.GetValueOrDefault().Day - DateTime.UtcNow.Day < __MIN_DAYS_UNTIL_EXPIRATION__REMINDER__ &&
+                                         s.ExpiresAt.GetValueOrDefault() > DateTime.MinValue,
                           PaidAmount = s.PaidAmount,
-                          SubscriptionPlanId = s.SubscriptionPlanId.Value,
+                          SubscriptionPlanId = s.SubscriptionPlanId.GetValueOrDefault(),
                           HavePaidForSubscription = mhe.HavePaidForSubscription,
                           IsInTrialPeriod = mhe.IsInTrialPeriod,
-                          TrialEndsAt = mhe.TrialEndsAt.Value
+                          TrialEndsAt = mhe.TrialEndsAt.GetValueOrDefault()
                       })
                 .ToListAsync();
 
@@ -70,13 +72,19 @@ namespace MentalHealthBlog.API.Methods
 
             foreach (var userFromList in combinedSubscriptionUsers)
             {
+                if (userFromList.PaidAt.Value == DateTime.MinValue)
+                {
+                    userFromList.PaidAt = null;
+                    userFromList.ExpiresAt = null;
+                    userFromList.ExpiringSoon = false;
+                }
+
                 var dbUser = await _context.Users.FindAsync(userFromList.UserId);
                 if (dbUser == null)
                 {
                     _subscriptionLoggerService.LogWarning($"SUBSCRIPTION-USERS: {SubscriptionLogTypes.NOT_FOUND.ToString()}");
                     throw new RecordNotFoundException("User doesn't exist");
                 }
-
                 var userDto = new UserDto(dbUser.Id, dbUser.Username);
                 var userRoles = await userHelper.GetUserRolesAsync(userDto);
 
@@ -86,25 +94,28 @@ namespace MentalHealthBlog.API.Methods
 
             return combinedSubscriptionUsers;
         }
-        public async Task<List<SubscriptionUsersDto>> FilterSubscriptions(IEnumerable<SubscriptionUsersDto> subscriptions, SearchSubscriptionUsersRequestDto query)
+        public async Task<List<SubscriptionUsersDto>> FilterSubscriptions(List<SubscriptionUsersDto> subscriptions, SearchSubscriptionUsersRequestDto query)
         {
             IQueryable<SubscriptionUsersDto> filteredSubscriptions = subscriptions.AsQueryable();
 
             if (query.SubscriptionYear > 0)
             {
                 filteredSubscriptions = filteredSubscriptions
-                    .Where(s => s.PaidAt.Value.Year == query.SubscriptionYear);
+                    .Where(s => s.PaidAt.GetValueOrDefault().Year == query.SubscriptionYear);
             }
+
             if (query.SubscriptionMonth > 0)
             {
                 filteredSubscriptions = filteredSubscriptions
-                    .Where(s => s.PaidAt.Value.Month == query.SubscriptionMonth);
+                    .Where(s => s.PaidAt.GetValueOrDefault().Month == query.SubscriptionMonth);
             }
+
             if (query.UserTypeId > 0)
             {
                 filteredSubscriptions = filteredSubscriptions
                     .Where(s => s.Roles.Any(r => r.Id == query.UserTypeId));
             }
+
             if (!string.IsNullOrEmpty(query.FirstNameLastNameUsername))
             {
                 filteredSubscriptions = filteredSubscriptions
@@ -113,9 +124,9 @@ namespace MentalHealthBlog.API.Methods
                               s.Username.Contains(query.FirstNameLastNameUsername));
             }
 
-            return await filteredSubscriptions
-                .OrderByDescending(s => s.PaidAt.Value.Millisecond)
-                .ToListAsync();
+            return filteredSubscriptions
+                .OrderBy(s => s.FirstName)
+                .ToList();
         }
     }
 }

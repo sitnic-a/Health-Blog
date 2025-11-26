@@ -65,8 +65,8 @@ namespace MentalHealthBlog.API.Services.Subscription
                             _subscriptionLoggerService.LogInformation($"SUBSCRIPTION-USERS: {SubscriptionLogTypes.SUCCCESS.ToString()}");
                             return new Response(filteredSubscriptions, StatusCodes.Status200OK, SubscriptionLogTypes.SUCCCESS.ToString());
                         }
-                        _subscriptionLoggerService.LogWarning($"SUBSCRIPTION-USERS: {SubscriptionLogTypes.NOT_FOUND.ToString()}");
-                        throw new RecordNotFoundException("Subscription not filtered properly or doesn't exist!");
+                        _subscriptionLoggerService.LogWarning($"SUBSCRIPTION-USERS: {SubscriptionLogTypes.EMPTY.ToString()}");
+                        return new Response(filteredSubscriptions, StatusCodes.Status200OK, SubscriptionLogTypes.EMPTY.ToString());
                     }
                     // return data without filtering
                     _subscriptionLoggerService.LogInformation($"SUBSCRIPTION-USERS: {SubscriptionLogTypes.SUCCCESS.ToString()}");
