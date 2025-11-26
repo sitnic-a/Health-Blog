@@ -1,10 +1,7 @@
 ﻿using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Services.Subscription;
-using MentalHealthBlogAPI.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MentalHealthBlog.API.Controllers
@@ -17,6 +14,12 @@ namespace MentalHealthBlog.API.Controllers
         public SubscriptionController(ISubscriptionService subscriptionService)
         {
             _subscriptionService = subscriptionService;
+        }
+
+        [HttpPost("subscription-users")]
+        public async Task<Response> GetSubscriptionUsers(SearchSubscriptionUsersRequestDto? query = null)
+        {
+            return await _subscriptionService.GetSubscriptionUsers(query);
         }
 
         [HttpGet("trial/{userId}")]

@@ -9,7 +9,7 @@ using MentalHealthBlogAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using MimeKit;
 
-#pragma warning disable CS8604, CS8602
+#pragma warning disable CS8602, CS8604, CS8629
 
 namespace MentalHealthBlog.API.Services.Subscription
 {
@@ -37,6 +37,49 @@ namespace MentalHealthBlog.API.Services.Subscription
             _configuration = configuration;
             _mapper = mapper;
             _subscriptionLoggerService = subscriptionLoggerService;
+        }
+
+        public async Task<Response> GetSubscriptionUsers(SearchSubscriptionUsersRequestDto? query = null)
+        {
+            try
+            {
+                var subscriptionHelper = new SubscriptionHelper(_context, _subscriptionLoggerService);
+                var registeredSubscriptions = await _context.Subscriptions.AnyAsync();
+                var combinedSubscription = await subscriptionHelper.MergeMentalHealthExpertsAndRegularUsersSubscription();
+
+                if (registeredSubscriptions && !combinedSubscription.Any() || combinedSubscription == null)
+                {
+                    _subscriptionLoggerService.LogWarning($"SUBSCRIPTION-USERS: {SubscriptionLogTypes.NOT_FOUND.ToString()}");
+                    throw new RecordNotFoundException("Subscriptions not filled properly!");
+                }
+
+                if (registeredSubscriptions && combinedSubscription.Any() && combinedSubscription != null)
+                {
+                    // check query if is not null
+                    if (query != null)
+                    {
+                        // create separate filter function for filtering data
+                        var filteredSubscriptions = await subscriptionHelper.FilterSubscriptions(combinedSubscription, query);
+                        if (filteredSubscriptions.Any())
+                        {
+                            _subscriptionLoggerService.LogInformation($"SUBSCRIPTION-USERS: {SubscriptionLogTypes.SUCCCESS.ToString()}");
+                            return new Response(filteredSubscriptions, StatusCodes.Status200OK, SubscriptionLogTypes.SUCCCESS.ToString());
+                        }
+                        _subscriptionLoggerService.LogWarning($"SUBSCRIPTION-USERS: {SubscriptionLogTypes.NOT_FOUND.ToString()}");
+                        throw new RecordNotFoundException("Subscription not filtered properly or doesn't exist!");
+                    }
+                    // return data without filtering
+                    _subscriptionLoggerService.LogInformation($"SUBSCRIPTION-USERS: {SubscriptionLogTypes.SUCCCESS.ToString()}");
+                    return new Response(combinedSubscription, StatusCodes.Status200OK, SubscriptionLogTypes.SUCCCESS.ToString());
+                }
+                _subscriptionLoggerService.LogWarning($"SUBSCRIPTION-USERS: {SubscriptionLogTypes.EMPTY.ToString()}");
+                return new Response(new List<SubscriptionUsersDto>(), StatusCodes.Status200OK, SubscriptionLogTypes.EMPTY.ToString());
+            }
+            catch (Exception e)
+            {
+                _subscriptionLoggerService.LogError($"SUBSCRIPTION-USERS: {e.Message}");
+                throw;
+            }
         }
 
         public async Task<Response> GetUsersTrialPeriod(int userId)
@@ -151,7 +194,7 @@ namespace MentalHealthBlog.API.Services.Subscription
                     }
                     isDbUserInTrial = dbMentalHealthExpert.IsInTrialPeriod;
                     usersSubscriptions = await _context.Subscriptions
-                        .Join( _context.MentalHealthExperts,
+                        .Join(_context.MentalHealthExperts,
                               (s) => s.UserId,
                               (mhe) => mhe.UserId,
                               (s, mhe) => new CurrentSubscriptionDto
@@ -209,7 +252,7 @@ namespace MentalHealthBlog.API.Services.Subscription
                     throw new ArgumentException("Bad request!");
                 }
 
-                
+
                 if (request.IsMentalHealthExpert == false)
                 {
                     var dbRegularUser = await _context.RegularUsers.SingleOrDefaultAsync(ru => ru.UserId == request.UserId);

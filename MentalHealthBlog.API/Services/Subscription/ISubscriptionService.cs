@@ -7,6 +7,7 @@ namespace MentalHealthBlog.API.Services.Subscription
 {
     public interface ISubscriptionService
     {
+        public Task<Response> GetSubscriptionUsers(SearchSubscriptionUsersRequestDto? query = null);
         public Task<Response> GetUsersTrialPeriod(int userId);
         public Task<Response> GetUsersCurrentSubscription(int userId);
         public Task<Response> SetSubscriptionPaidStatus(SubscriptionStatusRequestDto request);
