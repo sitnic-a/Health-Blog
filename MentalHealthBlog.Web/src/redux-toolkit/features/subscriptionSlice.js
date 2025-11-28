@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { application } from '../../application'
+import { toast } from 'react-toastify'
 
 let initialState = {
   subscriptionUsers: [],
@@ -8,6 +9,23 @@ let initialState = {
   subscriptionPlanId: 0,
   newSubscription: null,
 }
+
+export const getSubscriptionUsers = createAsyncThunk(
+  'subscription-users',
+  async (objectWithData) => {
+    let url = `${application.application_url}/subscription/subscription-users`
+    let request = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(objectWithData?.query),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
+      },
+    })
+    let response = request.json()
+    return response
+  }
+)
 
 export const getUsersTrialPeriod = createAsyncThunk(
   'trial/[userId]',
@@ -110,6 +128,34 @@ let subscriptionSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+
+      //getSubscriptionUsers
+      .addCase(getSubscriptionUsers.pending, (state, action) => {})
+      .addCase(getSubscriptionUsers.fulfilled, (state, action) => {
+        let statusCode = action?.payload?.statusCode
+        let serviceResponseObject = action?.payload?.serviceResponseObject
+        console.log('Retrieval successfull ', serviceResponseObject)
+
+        if (statusCode === 200 && serviceResponseObject?.length > 0) {
+          toast.success(
+            'Uspješno ste dobavili sve korisnike i njihove uplate',
+            {
+              autoClose: 3500,
+              position: 'bottom-right',
+            }
+          )
+          state.subscriptionUsers = serviceResponseObject
+        } else if (statusCode === 200 && serviceResponseObject?.length === 0) {
+          toast.warning('Trenutno nema registrovanih korisnika!', {
+            autoClose: 3500,
+            position: 'bottom-right',
+          })
+          state.subscriptionUsers = serviceResponseObject
+        }
+
+        console.log('Subscription users ', state.subscriptionUsers)
+      })
+      .addCase(getSubscriptionUsers.rejected, (state, action) => {})
 
       //getUsersTrialPeriod
       .addCase(getUsersTrialPeriod.pending, (state, action) => {})

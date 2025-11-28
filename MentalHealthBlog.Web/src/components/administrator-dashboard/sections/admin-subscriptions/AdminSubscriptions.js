@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import moment from 'moment'
 import { getDbRoles } from '../../../../redux-toolkit/features/userSlice'
 import { db_roles } from '../../../../enums/roles'
@@ -8,13 +8,16 @@ import { Navbar } from '../../../shared/Navbar/Navbar'
 import { LiaSearchSolid } from 'react-icons/lia'
 
 import AdminSubscriptionsCSS from './AdminSubscriptions.css'
+import { getSubscriptionUsers } from '../../../../redux-toolkit/features/subscriptionSlice'
 
 export const AdminSubscriptions = () => {
   let dispatch = useDispatch()
+  let { subscriptionUsers } = useSelector((store) => store.subscription)
   let [userTypes, setUserTypes] = useState([])
   let [months, setMonths] = useState([])
 
   useEffect(() => {
+    dispatch(getSubscriptionUsers())
     moment.locale('bs')
     let bsMonthsWithFirstUppercaseLetter = moment.months().map((month) => {
       return month.charAt(0).toUpperCase() + month.slice(1)
@@ -113,28 +116,51 @@ export const AdminSubscriptions = () => {
           </div>
         </div>
 
-        <table className="admin-subscriptions-subscription-table">
-          <thead className="admin-subscriptions-subscription-table-header">
-            <tr>
-              <td className="admin-subscriptions-subscription-table-header-cell">
-                Ime
-              </td>
-              <td className="admin-subscriptions-subscription-table-header-cell">
-                Prezime
-              </td>
-              <td className="admin-subscriptions-subscription-table-header-cell">
-                Role
-              </td>
-              <td className="admin-subscriptions-subscription-table-header-cell">
-                Akcija
-              </td>
-            </tr>
-          </thead>
+        <div className="admin-subscription-subscription-table-container">
+          <table className="admin-subscriptions-subscription-table">
+            <thead className="admin-subscriptions-subscription-table-header">
+              <tr>
+                <td className="admin-subscriptions-subscription-table-header-cell">
+                  Ime
+                </td>
+                <td className="admin-subscriptions-subscription-table-header-cell">
+                  Prezime
+                </td>
+                <td className="admin-subscriptions-subscription-table-header-cell">
+                  Username
+                </td>
+                <td className="admin-subscriptions-subscription-table-header-cell">
+                  Akcija
+                </td>
+              </tr>
+            </thead>
 
-          <tbody className="admin-subscriptions-subscription-table-body">
-            {/* users list */}
-          </tbody>
-        </table>
+            <tbody className="admin-subscriptions-subscription-table-body">
+              {/* users list */}
+              {subscriptionUsers?.map((subscriptionUser) => {
+                return (
+                  <tr className="admin-subscription-subscription-table-body-row">
+                    <td className="admin-subscription-subscription-table-body-cell">
+                      {subscriptionUser?.firstName}
+                    </td>
+                    <td className="admin-subscription-subscription-table-body-cell">
+                      {subscriptionUser?.lastName}
+                    </td>
+                    <td className="admin-subscription-subscription-table-body-cell">
+                      {subscriptionUser?.username}
+                    </td>
+                    <td className="admin-subscription-subscription-table-body-cell">
+                      <span>manje od 2 dana</span>
+                      <input type="text" placeholder="Unesite iznos uplate" />
+                      <button type="button">Uplatite</button>
+                      <button type="button">Zabrana</button>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
   )
