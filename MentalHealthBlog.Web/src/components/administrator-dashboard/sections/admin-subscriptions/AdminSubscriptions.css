@@ -314,6 +314,12 @@
   /* background: yellow; */
 }
 
+@media (width<=780px) {
+  .admin-subscriptions-subscription-table-header-cell:nth-child(3) {
+    display: none;
+  }
+}
+
 .admin-subscriptions-subscription-table-header-cell:nth-child(4) {
   width: 6%;
   /* background: yellow; */
@@ -324,22 +330,95 @@
   background: #f0eae1;
 }
 
-.admin-subscription-subscription-table-body-row {
+.admin-subscriptions-subscription-table-body-row {
   height: auto;
   border-bottom: 1px solid red;
   /* background: yellow; */
 }
 
-.admin-subscription-subscription-table-body-row:hover {
+.admin-subscriptions-subscription-table-body-row:hover {
   border-radius: 0.4rem;
   cursor: pointer;
   background: #e1e1e1;
 }
 
-.admin-subscription-subscription-table-body-cell {
+.admin-subscriptions-subscription-table-body-cell {
+  margin-bottom: 2px;
   padding-block: 0.6rem;
   padding-inline: 0.3rem;
-  margin-bottom: 2px;
-
+  font-family: 'SansDeva';
+  font-size: 0.9rem;
+  line-height: 1.4;
   /* background: red; */
+}
+
+@media (width<=780px) {
+  .admin-subscriptions-subscription-table-body-cell:nth-child(3) {
+    display: none;
+  }
+}
+
+.admin-subscriptions-subscription-table-body-cell:nth-child(4) {
+  text-align: center;
+}
+
+.admin-subscriptions-subscription-table-body-cell-remaining-days-reminder {
+  display: none;
+  margin-right: 0.5rem;
+  font-size: 0.7rem;
+  line-height: 1.4;
+  color: #f00;
+}
+
+.admin-subscriptions-subscription-table-body-cell-payment-value {
+  max-width: 110px;
+  margin-right: 0.5rem;
+  padding: 0.5rem;
+  border: 1px solid #34688f;
+  border-radius: 0.5rem;
+  font-family: 'SansDeva';
+  font-size: 0.7rem;
+  line-height: 1.4;
+  outline: none;
+  color: #000;
+  background: transparent;
+}
+
+.admin-subscriptions-subscription-table-body-cell-action {
+  margin-right: 0.5rem;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-family: 'SansDeva';
+  font-size: 0.8rem;
+  line-height: 1.4;
+  outline: none;
+  transition: 150ms;
+  cursor: pointer;
+}
+
+@media (width<=720px) {
+  .admin-subscriptions-subscription-table-body-cell-action {
+    margin-top: 0.5rem;
+  }
+}
+
+.admin-subscription-subscription-enable {
+  color: #f3f1e3;
+  background: #34688f;
+}
+
+.admin-subscription-subscription-enable:hover {
+  background: #82a3bc;
+}
+
+.admin-subscription-subscription-disable {
+  color: #f3f1e3;
+  background: #c93232;
+}
+
+.admin-subscription-subscription-disable:hover {
+  border: 1px solid #c93232;
+  color: #c93232;
+  background: none;
 }
