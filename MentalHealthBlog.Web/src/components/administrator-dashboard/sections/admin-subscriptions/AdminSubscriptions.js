@@ -8,7 +8,10 @@ import { Navbar } from '../../../shared/Navbar/Navbar'
 import { LiaSearchSolid } from 'react-icons/lia'
 
 import AdminSubscriptionsCSS from './AdminSubscriptions.css'
-import { getSubscriptionUsers } from '../../../../redux-toolkit/features/subscriptionSlice'
+import {
+  createSubscription,
+  getSubscriptionUsers,
+} from '../../../../redux-toolkit/features/subscriptionSlice'
 import { stringIsNullOrEmpty } from '../../../../utils/helper-methods/methods'
 
 export const AdminSubscriptions = () => {
@@ -215,6 +218,17 @@ export const AdminSubscriptions = () => {
                       <button
                         className="admin-subscriptions-subscription-table-body-cell-action admin-subscription-subscription-enable"
                         type="button"
+                        onClick={() => {
+                          let requestObj = {
+                            userId: subscriptionUser?.userId,
+                            isCreatingAnAccount: false,
+                          }
+                          let objectWithData = {
+                            requestObj,
+                            authenticatedUser,
+                          }
+                          dispatch(createSubscription(objectWithData))
+                        }}
                       >
                         Uplatite
                       </button>

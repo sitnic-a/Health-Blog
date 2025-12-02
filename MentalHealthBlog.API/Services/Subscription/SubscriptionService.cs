@@ -3,6 +3,7 @@ using MailKit.Net.Smtp;
 using MailKit.Security;
 using MentalHealthBlog.API.Exceptions;
 using MentalHealthBlog.API.Methods;
+using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
@@ -16,10 +17,12 @@ namespace MentalHealthBlog.API.Services.Subscription
     enum SubscriptionLogTypes
     {
         INVALID_DATA,
+
         SUCCCESS,
         NOT_FOUND,
         EMPTY,
         IS_IN_TRIAL_PERIOD,
+        SUBSCRIPTION_AMOUNT_INVALID,
         SUBSCRIPTION_CREATION_FAILED,
         SUBSCRIPTION_CREATION_SUCCESSFULL
     }
@@ -81,7 +84,6 @@ namespace MentalHealthBlog.API.Services.Subscription
                 throw;
             }
         }
-
         public async Task<Response> GetUsersTrialPeriod(int userId)
         {
             try
@@ -477,8 +479,57 @@ namespace MentalHealthBlog.API.Services.Subscription
                     throw new CreateRecordException("Subscription couldn't be created!");
                 }
 
+                var usersFirstSubscription = await _context.Subscriptions
+                    .Where(s => s.UserId == request.UserId)
+                    .FirstAsync();
+
+                var subscriptionHelper = new SubscriptionHelper(_context, _subscriptionLoggerService);
+                var userHelper = new UserHelper(_context);
+                int subscriptionInDays = -1;
+                int subscriptionPlanId = -1;
+
+                MentalHealthExpert dbMentalHealthExpert = new MentalHealthExpert();
+                RegularUser dbRegularUser = new RegularUser();
+
+                Tuple<object, bool> tuple = await userHelper.ReturnUserAndInfoIsItMentalHealthExpert(request.UserId);
+                bool isMentalHealthExpert = tuple.Item2;
+
+                if (usersFirstSubscription != null)
+                {
+                    if (usersFirstSubscription?.SubscriptionPlanId <= 0 && !request.PaidAmount.HasValue)
+                    {
+                        _subscriptionLoggerService.LogWarning($"CREATE-SUBSCRIPTION: {SubscriptionLogTypes.SUBSCRIPTION_AMOUNT_INVALID.ToString()}");
+                        throw new CreateRecordException("Subscription amount is not valid!");
+                    }
+
+                    if (usersFirstSubscription?.PaidAt == null)
+                    {
+                        if (request.PaidAmount.HasValue)
+                        {
+                            subscriptionInDays = subscriptionHelper.CalcucateExpirationDaysFromSubscriptionAmount(request.PaidAmount.Value);
+                            subscriptionPlanId = await subscriptionHelper.GetSubscriptionPlanFromPaidAmount(request.PaidAmount.Value);
+                            usersFirstSubscription.PaidAt = DateTime.UtcNow;
+                            usersFirstSubscription.ExpiresAt = DateTime.UtcNow.AddDays(subscriptionInDays);
+                            usersFirstSubscription.PaidAmount = request.PaidAmount.Value;
+                            usersFirstSubscription.SubscriptionPlanId = subscriptionPlanId;
+                            subscriptionHelper.ChangeIsPaidForSubscriptionAttributeDependingOnUserType(tuple);
+                            //await _context.SaveChangesAsync();
+                        }
+
+                        float subscriptionUserPlanAmount = await subscriptionHelper.ReturnTheSubscriptionPlanAmount(usersFirstSubscription.UserId);
+                        subscriptionInDays = subscriptionHelper.CalcucateExpirationDaysFromSubscriptionAmount(subscriptionUserPlanAmount);
+                        subscriptionPlanId = await subscriptionHelper.GetSubscriptionPlanFromPaidAmount(subscriptionUserPlanAmount);
+                        usersFirstSubscription.PaidAt = DateTime.UtcNow;
+                        usersFirstSubscription.ExpiresAt = DateTime.UtcNow.AddDays(subscriptionInDays);
+                        usersFirstSubscription.PaidAmount = subscriptionUserPlanAmount;
+                        usersFirstSubscription.SubscriptionPlanId = subscriptionPlanId;
+                        subscriptionHelper.ChangeIsPaidForSubscriptionAttributeDependingOnUserType(tuple);
+                        //await _context.SaveChangesAsync();
+                    }
+                }
+
                 return new Response(new object(), StatusCodes.Status200OK, $"CREATE-SUBSCRIPTION: {SubscriptionLogTypes.SUBSCRIPTION_CREATION_SUCCESSFULL.ToString()}");
-                // Create subscription when administrator click paid button
+                // Create subscription when administrator click paid button or automatically reading the csv file payment listing
             }
             catch (Exception e)
             {

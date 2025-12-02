@@ -1,4 +1,5 @@
 ﻿using MentalHealthBlog.API.Exceptions;
+using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Services.Subscription;
@@ -127,6 +128,93 @@ namespace MentalHealthBlog.API.Methods
             return filteredSubscriptions
                 .OrderBy(s => s.FirstName)
                 .ToList();
+        }
+        public int CalcucateExpirationDaysFromSubscriptionAmount(float paidAmount)
+        {
+            int daysInMonth = 0;
+            double subscriptionInDays = 0;
+            int[] longerMonths = { 1, 3, 5, 7, 8, 10, 12 };
+            int[] shorterMonths = { 2, 4, 6, 9, 11 };
+            bool isLeapYear = DateTime.IsLeapYear(DateTime.UtcNow.Year);
+
+            if (longerMonths.Any(m => m == DateTime.UtcNow.Month))
+            {
+                daysInMonth = 31;
+                subscriptionInDays = Math.Ceiling(paidAmount / daysInMonth);
+            }
+            else
+            {
+                if (shorterMonths.Any(m => m == DateTime.UtcNow.Month))
+                {
+                    if (DateTime.UtcNow.Month == 2)
+                    {
+                        if (isLeapYear)
+                        {
+                            daysInMonth = 29;
+                            subscriptionInDays = Math.Ceiling(paidAmount / daysInMonth);
+                        }
+                        else
+                        {
+                            daysInMonth = 28;
+                            subscriptionInDays = Math.Ceiling(paidAmount / daysInMonth);
+                        }
+                    }
+                    daysInMonth = 30;
+                    subscriptionInDays = Math.Ceiling(paidAmount / daysInMonth);
+                }
+            }
+            return (int)subscriptionInDays;
+        }
+        public async Task<float> ReturnTheSubscriptionPlanAmount(int userId)
+        {
+            var subscriptionUser = await _context.Subscriptions
+                .Where(s => s.UserId == userId)
+                .Include(sp => sp.SubscriptionPlan)
+                .FirstAsync();
+
+            if (subscriptionUser != null)
+            {
+                return subscriptionUser.SubscriptionPlan.Price.Value;
+            }
+
+            return -1;
+        }
+        public async Task<int> GetSubscriptionPlanFromPaidAmount(float paidAmount)
+        {
+            var subscriptionPlans = await _context.SubscriptionPlans.ToListAsync();
+            int __NOT_PREDEFINED_SUBSCRIPTION_PLAN_ID__ = 5;
+            foreach (var subscriptionPlan in subscriptionPlans)
+            {
+                if (subscriptionPlan.Price == paidAmount)
+                {
+                    return subscriptionPlan.Id;
+                }
+            }
+            return __NOT_PREDEFINED_SUBSCRIPTION_PLAN_ID__;
+        }
+        public void ChangeIsPaidForSubscriptionAttributeDependingOnUserType(Tuple<object, bool> tuple)
+        {
+            MentalHealthExpert dbMentalHealthExpert = new MentalHealthExpert();
+            RegularUser dbRegularUser = new RegularUser();
+            bool isMentalHealthExpert = tuple.Item2;
+
+            if (isMentalHealthExpert == true)
+            {
+                dbMentalHealthExpert = tuple.Item1 as MentalHealthExpert;
+                if (dbMentalHealthExpert != null)
+                {
+                    dbMentalHealthExpert.HavePaidForSubscription = true;
+                }
+            }
+
+            if (isMentalHealthExpert == false)
+            {
+                dbRegularUser = tuple.Item1 as RegularUser;
+                if (dbRegularUser != null)
+                {
+                    dbRegularUser.HavePaidForSubscription = true;
+                }
+            }
         }
     }
 }
