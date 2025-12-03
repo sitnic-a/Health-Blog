@@ -533,7 +533,17 @@ namespace MentalHealthBlog.API.Services.Subscription
 
                         if (request.PaidAmount.HasValue == false)
                         {
-                            
+                            if (usersFirstSubscription.SubscriptionPlanId != null && 
+                                usersFirstSubscription.SubscriptionPlanId != __NOT_PREDEFINED_SUBSCRIPTION_PLAN_ID__)
+                            {
+                                subscriptionUserPlanAmount = await subscriptionHelper.ReturnTheSubscriptionPlanAmount(request.UserId, isMentalHealthExpert);
+                                monthsToExtend = await subscriptionHelper.CalculateSubscriptionInMonths(subscriptionUserPlanAmount, request.UserId, isMentalHealthExpert, usersFirstSubscription.SubscriptionPlanId);
+                                usersFirstSubscription.PaidAt = DateTime.UtcNow;
+                                usersFirstSubscription.ExpiresAt = DateTime.UtcNow.AddMonths(monthsToExtend);
+                                usersFirstSubscription.PaidAmount = subscriptionUserPlanAmount;
+                                usersFirstSubscription.SubscriptionPlanId = usersFirstSubscription.SubscriptionPlanId;
+                                return new Response(usersFirstSubscription, StatusCodes.Status201Created, "");
+                            }
                         }
                     }
                 }
