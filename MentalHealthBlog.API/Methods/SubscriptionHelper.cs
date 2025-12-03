@@ -130,13 +130,14 @@ namespace MentalHealthBlog.API.Methods
                 .OrderBy(s => s.FirstName)
                 .ToList();
         }
-        public async Task<int> CalcucateExpirationDaysFromSubscriptionAmount(float paidAmount,int userId, bool isMentalHealthExpert, int? subscriptionPlanId =null)
+        public async Task<int> CalcucateExpirationDaysFromSubscriptionAmount(float paidAmount, int userId, bool isMentalHealthExpert, int? subscriptionPlanId = null)
         {
             int monthsToExtend = 0;
+            int __NOT_PREDEFINED_SUBSCRIPTION_PLAN_ID__ = 5;
             const float monthlyPriceForRegularUsers = 20f;
             const float monthlyPriceForMentalHealthExperts = 50f;
 
-            if (subscriptionPlanId == null)
+            if (subscriptionPlanId == null || subscriptionPlanId == __NOT_PREDEFINED_SUBSCRIPTION_PLAN_ID__)
             {
                 if (isMentalHealthExpert == true)
                 {
@@ -147,16 +148,20 @@ namespace MentalHealthBlog.API.Methods
                     monthsToExtend = (int)(paidAmount / monthlyPriceForRegularUsers);
                 }
             }
-            if (subscriptionPlanId != null && subscriptionPlanId > 0)
+            if (subscriptionPlanId != null && subscriptionPlanId > 0 && subscriptionPlanId != __NOT_PREDEFINED_SUBSCRIPTION_PLAN_ID__)
             {
                 var subscriptionPlanAmount = await ReturnTheSubscriptionPlanAmount(userId);
-                monthsToExtend = (int) (paidAmount / subscriptionPlanAmount);
+                monthsToExtend = (int)(paidAmount / subscriptionPlanAmount);
             }
 
             return monthsToExtend;
         }
-        public async Task<float> ReturnTheSubscriptionPlanAmount(int userId)
+        public async Task<float> ReturnTheSubscriptionPlanAmount(int userId, bool isMentalHealthExpert)
         {
+            int __NOT_PREDEFINED_SUBSCRIPTION_PLAN_ID__ = 5;
+            const float monthlyPriceForRegularUsers = 20f;
+            const float monthlyPriceForMentalHealthExperts = 50f;
+
             var subscriptionUser = await _context.Subscriptions
                 .Where(s => s.UserId == userId)
                 .Include(sp => sp.SubscriptionPlan)
@@ -164,6 +169,15 @@ namespace MentalHealthBlog.API.Methods
 
             if (subscriptionUser != null)
             {
+                if (subscriptionUser.SubscriptionPlanId == __NOT_PREDEFINED_SUBSCRIPTION_PLAN_ID__)
+                {
+                    if (isMentalHealthExpert)
+                    {
+                        return monthlyPriceForMentalHealthExperts;
+                    }
+                    return monthlyPriceForRegularUsers;
+                }
+
                 return subscriptionUser.SubscriptionPlan.Price.Value;
             }
 

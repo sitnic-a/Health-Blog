@@ -487,7 +487,8 @@ namespace MentalHealthBlog.API.Services.Subscription
                 var userHelper = new UserHelper(_context);
                 int monthsToExtend = 0;
                 int subscriptionPlanId = -1;
-
+                float subscriptionUserPlanAmount = 0f;
+                int __NOT_PREDEFINED_SUBSCRIPTION_PLAN_ID__ = 5;
                 MentalHealthExpert dbMentalHealthExpert = new MentalHealthExpert();
                 RegularUser dbRegularUser = new RegularUser();
 
@@ -504,27 +505,45 @@ namespace MentalHealthBlog.API.Services.Subscription
 
                     if (usersFirstSubscription?.PaidAt == null)
                     {
-                        if (request.PaidAmount.HasValue)
+                        if (request.PaidAmount.HasValue && usersFirstSubscription.SubscriptionPlanId > 0)
                         {
+                            monthsToExtend = await subscriptionHelper.CalcucateExpirationDaysFromSubscriptionAmount(request.PaidAmount.Value, request.UserId, isMentalHealthExpert, usersFirstSubscription.SubscriptionPlanId);
+                            usersFirstSubscription.PaidAt = DateTime.UtcNow;
+                            usersFirstSubscription.ExpiresAt = DateTime.UtcNow.AddMonths(monthsToExtend);
+                            usersFirstSubscription.PaidAmount = request.PaidAmount.Value;
+                            subscriptionHelper.ChangeIsPaidForSubscriptionAttributeDependingOnUserType(tuple);
+                            await _context.SaveChangesAsync();
+                            return new Response(usersFirstSubscription, StatusCodes.Status201Created, "");
+                        }
+
+                        if (request.PaidAmount.HasValue &&
+                            usersFirstSubscription.SubscriptionPlanId <= 0 ||
+                            usersFirstSubscription.SubscriptionPlanId == null ||
+                            usersFirstSubscription.SubscriptionPlanId == __NOT_PREDEFINED_SUBSCRIPTION_PLAN_ID__)
+                        {
+                            //subscriptionUserPlanAmount= await subscriptionHelper.ReturnTheSubscriptionPlanAmount(usersFirstSubscription.UserId, isMentalHealthExpert);
+                            monthsToExtend = await subscriptionHelper.CalcucateExpirationDaysFromSubscriptionAmount(request.PaidAmount.Value, request.UserId, isMentalHealthExpert);
                             subscriptionPlanId = await subscriptionHelper.GetSubscriptionPlanFromPaidAmount(request.PaidAmount.Value);
-                            monthsToExtend = await subscriptionHelper.CalcucateExpirationDaysFromSubscriptionAmount(request.PaidAmount.Value, request.UserId,isMentalHealthExpert, subscriptionPlanId);
                             usersFirstSubscription.PaidAt = DateTime.UtcNow;
                             usersFirstSubscription.ExpiresAt = DateTime.UtcNow.AddMonths(monthsToExtend);
                             usersFirstSubscription.PaidAmount = request.PaidAmount.Value;
                             usersFirstSubscription.SubscriptionPlanId = subscriptionPlanId;
                             subscriptionHelper.ChangeIsPaidForSubscriptionAttributeDependingOnUserType(tuple);
-                            //await _context.SaveChangesAsync();
-                        }
+                            await _context.SaveChangesAsync();
+                            return new Response(usersFirstSubscription, StatusCodes.Status201Created, "");
 
-                        float subscriptionUserPlanAmount = await subscriptionHelper.ReturnTheSubscriptionPlanAmount(usersFirstSubscription.UserId);
+                        }
+                        subscriptionUserPlanAmount = await subscriptionHelper.ReturnTheSubscriptionPlanAmount(usersFirstSubscription.UserId, isMentalHealthExpert);
                         subscriptionPlanId = await subscriptionHelper.GetSubscriptionPlanFromPaidAmount(subscriptionUserPlanAmount);
-                        monthsToExtend = await subscriptionHelper.CalcucateExpirationDaysFromSubscriptionAmount(subscriptionUserPlanAmount, request.UserId,isMentalHealthExpert, subscriptionPlanId);
+                        monthsToExtend = await subscriptionHelper.CalcucateExpirationDaysFromSubscriptionAmount(subscriptionUserPlanAmount, request.UserId, isMentalHealthExpert, subscriptionPlanId);
                         usersFirstSubscription.PaidAt = DateTime.UtcNow;
                         usersFirstSubscription.ExpiresAt = DateTime.UtcNow.AddMonths(monthsToExtend);
                         usersFirstSubscription.PaidAmount = subscriptionUserPlanAmount;
                         usersFirstSubscription.SubscriptionPlanId = subscriptionPlanId;
                         subscriptionHelper.ChangeIsPaidForSubscriptionAttributeDependingOnUserType(tuple);
-                        //await _context.SaveChangesAsync();
+                        await _context.SaveChangesAsync();
+                        return new Response(usersFirstSubscription, StatusCodes.Status201Created, "");
+
                     }
                 }
 
