@@ -130,7 +130,7 @@ namespace MentalHealthBlog.API.Methods
                 .OrderBy(s => s.FirstName)
                 .ToList();
         }
-        public async Task<int> CalcucateExpirationDaysFromSubscriptionAmount(float paidAmount, int userId, bool isMentalHealthExpert, int? subscriptionPlanId = null)
+        public async Task<int> CalculateSubscriptionInMonths(float paidAmount, int userId, bool isMentalHealthExpert, int? subscriptionPlanId = null)
         {
             int monthsToExtend = 0;
             int __NOT_PREDEFINED_SUBSCRIPTION_PLAN_ID__ = 5;

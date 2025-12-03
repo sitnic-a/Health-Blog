@@ -505,45 +505,36 @@ namespace MentalHealthBlog.API.Services.Subscription
 
                     if (usersFirstSubscription?.PaidAt == null)
                     {
-                        if (request.PaidAmount.HasValue && usersFirstSubscription.SubscriptionPlanId > 0)
+                        if (request.PaidAmount.HasValue == true)
                         {
-                            monthsToExtend = await subscriptionHelper.CalcucateExpirationDaysFromSubscriptionAmount(request.PaidAmount.Value, request.UserId, isMentalHealthExpert, usersFirstSubscription.SubscriptionPlanId);
-                            usersFirstSubscription.PaidAt = DateTime.UtcNow;
-                            usersFirstSubscription.ExpiresAt = DateTime.UtcNow.AddMonths(monthsToExtend);
-                            usersFirstSubscription.PaidAmount = request.PaidAmount.Value;
-                            subscriptionHelper.ChangeIsPaidForSubscriptionAttributeDependingOnUserType(tuple);
-                            await _context.SaveChangesAsync();
-                            return new Response(usersFirstSubscription, StatusCodes.Status201Created, "");
+                            if (usersFirstSubscription.SubscriptionPlanId != null &&
+                                usersFirstSubscription.SubscriptionPlanId != __NOT_PREDEFINED_SUBSCRIPTION_PLAN_ID__)
+                            {
+                                monthsToExtend = await subscriptionHelper.CalculateSubscriptionInMonths(request.PaidAmount.Value, request.UserId, isMentalHealthExpert, usersFirstSubscription.SubscriptionPlanId);
+                                subscriptionPlanId = await subscriptionHelper.GetSubscriptionPlanFromPaidAmount(request.PaidAmount.Value);
+                                usersFirstSubscription.PaidAt = DateTime.UtcNow;
+                                usersFirstSubscription.ExpiresAt = DateTime.UtcNow.AddMonths(monthsToExtend);
+                                usersFirstSubscription.PaidAmount = request.PaidAmount.Value;
+                                usersFirstSubscription.SubscriptionPlanId = subscriptionPlanId;
+                                return new Response(usersFirstSubscription, StatusCodes.Status201Created, "");
+                            }
+                            if (usersFirstSubscription.SubscriptionPlanId == null || 
+                                usersFirstSubscription.SubscriptionPlanId == __NOT_PREDEFINED_SUBSCRIPTION_PLAN_ID__)
+                            {
+                                monthsToExtend = await subscriptionHelper.CalculateSubscriptionInMonths(request.PaidAmount.Value, request.UserId, isMentalHealthExpert);
+                                subscriptionPlanId = await subscriptionHelper.GetSubscriptionPlanFromPaidAmount(request.PaidAmount.Value);
+                                usersFirstSubscription.PaidAt = DateTime.UtcNow;
+                                usersFirstSubscription.ExpiresAt = DateTime.UtcNow.AddMonths(monthsToExtend);
+                                usersFirstSubscription.PaidAmount = request.PaidAmount.Value;
+                                usersFirstSubscription.SubscriptionPlanId = subscriptionPlanId;
+                                return new Response(usersFirstSubscription, StatusCodes.Status201Created, "");
+                            }
                         }
 
-                        if (request.PaidAmount.HasValue &&
-                            usersFirstSubscription.SubscriptionPlanId <= 0 ||
-                            usersFirstSubscription.SubscriptionPlanId == null ||
-                            usersFirstSubscription.SubscriptionPlanId == __NOT_PREDEFINED_SUBSCRIPTION_PLAN_ID__)
+                        if (request.PaidAmount.HasValue == false)
                         {
-                            //subscriptionUserPlanAmount= await subscriptionHelper.ReturnTheSubscriptionPlanAmount(usersFirstSubscription.UserId, isMentalHealthExpert);
-                            monthsToExtend = await subscriptionHelper.CalcucateExpirationDaysFromSubscriptionAmount(request.PaidAmount.Value, request.UserId, isMentalHealthExpert);
-                            subscriptionPlanId = await subscriptionHelper.GetSubscriptionPlanFromPaidAmount(request.PaidAmount.Value);
-                            usersFirstSubscription.PaidAt = DateTime.UtcNow;
-                            usersFirstSubscription.ExpiresAt = DateTime.UtcNow.AddMonths(monthsToExtend);
-                            usersFirstSubscription.PaidAmount = request.PaidAmount.Value;
-                            usersFirstSubscription.SubscriptionPlanId = subscriptionPlanId;
-                            subscriptionHelper.ChangeIsPaidForSubscriptionAttributeDependingOnUserType(tuple);
-                            await _context.SaveChangesAsync();
-                            return new Response(usersFirstSubscription, StatusCodes.Status201Created, "");
-
+                            
                         }
-                        subscriptionUserPlanAmount = await subscriptionHelper.ReturnTheSubscriptionPlanAmount(usersFirstSubscription.UserId, isMentalHealthExpert);
-                        subscriptionPlanId = await subscriptionHelper.GetSubscriptionPlanFromPaidAmount(subscriptionUserPlanAmount);
-                        monthsToExtend = await subscriptionHelper.CalcucateExpirationDaysFromSubscriptionAmount(subscriptionUserPlanAmount, request.UserId, isMentalHealthExpert, subscriptionPlanId);
-                        usersFirstSubscription.PaidAt = DateTime.UtcNow;
-                        usersFirstSubscription.ExpiresAt = DateTime.UtcNow.AddMonths(monthsToExtend);
-                        usersFirstSubscription.PaidAmount = subscriptionUserPlanAmount;
-                        usersFirstSubscription.SubscriptionPlanId = subscriptionPlanId;
-                        subscriptionHelper.ChangeIsPaidForSubscriptionAttributeDependingOnUserType(tuple);
-                        await _context.SaveChangesAsync();
-                        return new Response(usersFirstSubscription, StatusCodes.Status201Created, "");
-
                     }
                 }
 
