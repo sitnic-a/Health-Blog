@@ -5,6 +5,7 @@ using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Services.Subscription;
 using MentalHealthBlogAPI.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 #pragma warning disable CS8629
 
@@ -129,41 +130,30 @@ namespace MentalHealthBlog.API.Methods
                 .OrderBy(s => s.FirstName)
                 .ToList();
         }
-        public int CalcucateExpirationDaysFromSubscriptionAmount(float paidAmount)
+        public async Task<int> CalcucateExpirationDaysFromSubscriptionAmount(float paidAmount,int userId, bool isMentalHealthExpert, int? subscriptionPlanId =null)
         {
-            int daysInMonth = 0;
-            double subscriptionInDays = 0;
-            int[] longerMonths = { 1, 3, 5, 7, 8, 10, 12 };
-            int[] shorterMonths = { 2, 4, 6, 9, 11 };
-            bool isLeapYear = DateTime.IsLeapYear(DateTime.UtcNow.Year);
+            int monthsToExtend = 0;
+            const float monthlyPriceForRegularUsers = 20f;
+            const float monthlyPriceForMentalHealthExperts = 50f;
 
-            if (longerMonths.Any(m => m == DateTime.UtcNow.Month))
+            if (subscriptionPlanId == null)
             {
-                daysInMonth = 31;
-                subscriptionInDays = Math.Ceiling(paidAmount / daysInMonth);
-            }
-            else
-            {
-                if (shorterMonths.Any(m => m == DateTime.UtcNow.Month))
+                if (isMentalHealthExpert == true)
                 {
-                    if (DateTime.UtcNow.Month == 2)
-                    {
-                        if (isLeapYear)
-                        {
-                            daysInMonth = 29;
-                            subscriptionInDays = Math.Ceiling(paidAmount / daysInMonth);
-                        }
-                        else
-                        {
-                            daysInMonth = 28;
-                            subscriptionInDays = Math.Ceiling(paidAmount / daysInMonth);
-                        }
-                    }
-                    daysInMonth = 30;
-                    subscriptionInDays = Math.Ceiling(paidAmount / daysInMonth);
+                    monthsToExtend = (int)(paidAmount / monthlyPriceForMentalHealthExperts);
+                }
+                if (isMentalHealthExpert == false)
+                {
+                    monthsToExtend = (int)(paidAmount / monthlyPriceForRegularUsers);
                 }
             }
-            return (int)subscriptionInDays;
+            if (subscriptionPlanId != null && subscriptionPlanId > 0)
+            {
+                var subscriptionPlanAmount = await ReturnTheSubscriptionPlanAmount(userId);
+                monthsToExtend = (int) (paidAmount / subscriptionPlanAmount);
+            }
+
+            return monthsToExtend;
         }
         public async Task<float> ReturnTheSubscriptionPlanAmount(int userId)
         {

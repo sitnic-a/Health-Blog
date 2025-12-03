@@ -218,9 +218,19 @@ export const AdminSubscriptions = () => {
                       <button
                         className="admin-subscriptions-subscription-table-body-cell-action admin-subscription-subscription-enable"
                         type="button"
-                        onClick={() => {
+                        onClick={(e) => {
+                          let currentBodyCell = e.currentTarget.parentNode
+                          console.log('Body cell ', currentBodyCell)
+
+                          let paidAmount = currentBodyCell.querySelector(
+                            '.admin-subscriptions-subscription-table-body-cell-payment-value'
+                          ).value
+
+                          console.log('Paid amount ', paidAmount)
+
                           let requestObj = {
                             userId: subscriptionUser?.userId,
+                            paidAmount: parseFloat(paidAmount),
                             isCreatingAnAccount: false,
                           }
                           let objectWithData = {
