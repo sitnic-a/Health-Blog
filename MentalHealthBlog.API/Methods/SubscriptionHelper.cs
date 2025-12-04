@@ -126,9 +126,9 @@ namespace MentalHealthBlog.API.Methods
                               s.Username.Contains(query.FirstNameLastNameUsername));
             }
 
-            return filteredSubscriptions
+            return await filteredSubscriptions
                 .OrderBy(s => s.FirstName)
-                .ToList();
+                .ToListAsync();
         }
         public async Task<int> CalculateSubscriptionInMonths(float paidAmount, int userId, bool isMentalHealthExpert, int? subscriptionPlanId = null)
         {
@@ -150,7 +150,7 @@ namespace MentalHealthBlog.API.Methods
             }
             if (subscriptionPlanId != null && subscriptionPlanId > 0 && subscriptionPlanId != __NOT_PREDEFINED_SUBSCRIPTION_PLAN_ID__)
             {
-                var subscriptionPlanAmount = await ReturnTheSubscriptionPlanAmount(userId);
+                var subscriptionPlanAmount = await ReturnTheSubscriptionPlanAmount(userId,isMentalHealthExpert);
                 monthsToExtend = (int)(paidAmount / subscriptionPlanAmount);
             }
 

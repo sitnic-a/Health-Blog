@@ -487,6 +487,10 @@ namespace MentalHealthBlog.API.Services.Subscription
                 var userHelper = new UserHelper(_context);
                 int monthsToExtend = 0;
                 int subscriptionPlanId = -1;
+                int __MONTHLY_REGULAR_USER_SUBSCRIPTION_PLAN_ID__ = 1;
+                int __MONTHLY_MENTAL_HEALTH_EXPERT_SUBSCRIPTION_PLAN_ID__ = 3;
+                float[] regularUserSubsciptionPlanPrices = { 20f, 200f };
+                float[] mentalHealthExpertSubsciptionPlanPrices = { 50f, 500f };
                 float subscriptionUserPlanAmount = 0f;
                 int __NOT_PREDEFINED_SUBSCRIPTION_PLAN_ID__ = 5;
                 MentalHealthExpert dbMentalHealthExpert = new MentalHealthExpert();
@@ -511,29 +515,59 @@ namespace MentalHealthBlog.API.Services.Subscription
                                 usersFirstSubscription.SubscriptionPlanId != __NOT_PREDEFINED_SUBSCRIPTION_PLAN_ID__)
                             {
                                 monthsToExtend = await subscriptionHelper.CalculateSubscriptionInMonths(request.PaidAmount.Value, request.UserId, isMentalHealthExpert, usersFirstSubscription.SubscriptionPlanId);
-                                subscriptionPlanId = await subscriptionHelper.GetSubscriptionPlanFromPaidAmount(request.PaidAmount.Value);
+                                if (isMentalHealthExpert == false &&
+                                    mentalHealthExpertSubsciptionPlanPrices.Any(p => p == request.PaidAmount.Value))
+
+                                {
+                                    subscriptionPlanId = __MONTHLY_REGULAR_USER_SUBSCRIPTION_PLAN_ID__;
+                                }
+                                else if (isMentalHealthExpert == true &&
+                                    regularUserSubsciptionPlanPrices.Any(p => p == request.PaidAmount.Value))
+                                {
+                                    subscriptionPlanId = __MONTHLY_MENTAL_HEALTH_EXPERT_SUBSCRIPTION_PLAN_ID__;
+                                }
+                                else
+                                {
+                                    subscriptionPlanId = await subscriptionHelper.GetSubscriptionPlanFromPaidAmount(request.PaidAmount.Value);
+                                }
                                 usersFirstSubscription.PaidAt = DateTime.UtcNow;
                                 usersFirstSubscription.ExpiresAt = DateTime.UtcNow.AddMonths(monthsToExtend);
                                 usersFirstSubscription.PaidAmount = request.PaidAmount.Value;
                                 usersFirstSubscription.SubscriptionPlanId = subscriptionPlanId;
+                                await _context.SaveChangesAsync();
                                 return new Response(usersFirstSubscription, StatusCodes.Status201Created, "");
                             }
-                            if (usersFirstSubscription.SubscriptionPlanId == null || 
+                            if (usersFirstSubscription.SubscriptionPlanId == null ||
                                 usersFirstSubscription.SubscriptionPlanId == __NOT_PREDEFINED_SUBSCRIPTION_PLAN_ID__)
                             {
                                 monthsToExtend = await subscriptionHelper.CalculateSubscriptionInMonths(request.PaidAmount.Value, request.UserId, isMentalHealthExpert);
-                                subscriptionPlanId = await subscriptionHelper.GetSubscriptionPlanFromPaidAmount(request.PaidAmount.Value);
+                                if (isMentalHealthExpert == false &&
+                                    mentalHealthExpertSubsciptionPlanPrices.Any(p => p == request.PaidAmount.Value))
+
+                                {
+                                    subscriptionPlanId = __MONTHLY_REGULAR_USER_SUBSCRIPTION_PLAN_ID__;
+                                }
+                                else if (isMentalHealthExpert == true &&
+                                    regularUserSubsciptionPlanPrices.Any(p => p == request.PaidAmount.Value))
+                                {
+                                    subscriptionPlanId = __MONTHLY_MENTAL_HEALTH_EXPERT_SUBSCRIPTION_PLAN_ID__;
+                                }
+                                else
+                                {
+                                    subscriptionPlanId = await subscriptionHelper.GetSubscriptionPlanFromPaidAmount(request.PaidAmount.Value);
+                                }
                                 usersFirstSubscription.PaidAt = DateTime.UtcNow;
                                 usersFirstSubscription.ExpiresAt = DateTime.UtcNow.AddMonths(monthsToExtend);
                                 usersFirstSubscription.PaidAmount = request.PaidAmount.Value;
                                 usersFirstSubscription.SubscriptionPlanId = subscriptionPlanId;
+                                await _context.SaveChangesAsync();
                                 return new Response(usersFirstSubscription, StatusCodes.Status201Created, "");
                             }
                         }
 
                         if (request.PaidAmount.HasValue == false)
                         {
-                            if (usersFirstSubscription.SubscriptionPlanId != null && 
+                            if (usersFirstSubscription.SubscriptionPlanId != null &&
                                 usersFirstSubscription.SubscriptionPlanId != __NOT_PREDEFINED_SUBSCRIPTION_PLAN_ID__)
                             {
                                 subscriptionUserPlanAmount = await subscriptionHelper.ReturnTheSubscriptionPlanAmount(request.UserId, isMentalHealthExpert);
@@ -542,6 +576,28 @@ namespace MentalHealthBlog.API.Services.Subscription
                                 usersFirstSubscription.ExpiresAt = DateTime.UtcNow.AddMonths(monthsToExtend);
                                 usersFirstSubscription.PaidAmount = subscriptionUserPlanAmount;
                                 usersFirstSubscription.SubscriptionPlanId = usersFirstSubscription.SubscriptionPlanId;
+                                await _context.SaveChangesAsync();
+                                return new Response(usersFirstSubscription, StatusCodes.Status201Created, "");
+                            }
+
+                            if (usersFirstSubscription.SubscriptionPlanId != null &&
+                                usersFirstSubscription.SubscriptionPlanId == __NOT_PREDEFINED_SUBSCRIPTION_PLAN_ID__)
+                            {
+                                subscriptionUserPlanAmount = await subscriptionHelper.ReturnTheSubscriptionPlanAmount(request.UserId, isMentalHealthExpert);
+                                monthsToExtend = await subscriptionHelper.CalculateSubscriptionInMonths(subscriptionUserPlanAmount, request.UserId, isMentalHealthExpert, usersFirstSubscription.SubscriptionPlanId);
+                                if (isMentalHealthExpert == false)
+                                {
+                                    subscriptionPlanId = __MONTHLY_REGULAR_USER_SUBSCRIPTION_PLAN_ID__;
+                                }
+                                else if (isMentalHealthExpert == true)
+                                {
+                                    subscriptionPlanId = __MONTHLY_MENTAL_HEALTH_EXPERT_SUBSCRIPTION_PLAN_ID__;
+                                }
+                                usersFirstSubscription.PaidAt = DateTime.UtcNow;
+                                usersFirstSubscription.ExpiresAt = DateTime.UtcNow.AddMonths(monthsToExtend);
+                                usersFirstSubscription.PaidAmount = subscriptionUserPlanAmount;
+                                usersFirstSubscription.SubscriptionPlanId = subscriptionPlanId;
+                                await _context.SaveChangesAsync();
                                 return new Response(usersFirstSubscription, StatusCodes.Status201Created, "");
                             }
                         }
