@@ -117,6 +117,7 @@ namespace MentalHealthBlog.API.Services
             {
                 var dbMentalHealthExperts = await _context.MentalHealthExperts
                     .Where(mhe => mhe.IsApproved == false && mhe.IsRejected == false)
+                    .DistinctBy(mhe => new { mhe.Email })
                     .OrderByDescending(mhe => mhe.RegisteredAt)
                     .ToListAsync();
 
@@ -128,6 +129,7 @@ namespace MentalHealthBlog.API.Services
                     {
                         dbMentalHealthExperts = await _context.MentalHealthExperts
                             .Where(mhe => mhe.IsApproved == true)
+                            .DistinctBy(mhe => new { mhe.Email })
                             .OrderByDescending(mhe => mhe.RegisteredAt)
                             .ToListAsync();
                     }
@@ -135,6 +137,7 @@ namespace MentalHealthBlog.API.Services
                     {
                         dbMentalHealthExperts = await _context.MentalHealthExperts
                             .Where(mhe => mhe.IsRejected == true)
+                            .DistinctBy(mhe => new { mhe.Email })
                             .OrderByDescending(mhe => mhe.RegisteredAt)
                             .ToListAsync();
                     }
