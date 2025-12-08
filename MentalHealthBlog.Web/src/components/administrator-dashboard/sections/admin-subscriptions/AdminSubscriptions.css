@@ -363,7 +363,7 @@
 }
 
 .admin-subscriptions-subscription-table-body-cell-remaining-days-reminder {
-  display: none;
+  /* display: none; */
   margin-right: 0.5rem;
   font-size: 0.7rem;
   line-height: 1.4;

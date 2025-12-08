@@ -121,6 +121,12 @@ export const AdminSubscriptions = () => {
                 <button
                   className="admin-subscriptions-header-filter-search-button"
                   onClick={() => {
+                    authenticatedUserLocalStorage =
+                      localStorage.getItem('authenticatedUser')
+
+                    authenticatedUser = JSON.parse(
+                      authenticatedUserLocalStorage
+                    )
                     let subscriptionYearValue = document.querySelector(
                       '.admin-subscriptions-header-filter-year-value'
                     ).value
@@ -192,6 +198,8 @@ export const AdminSubscriptions = () => {
             <tbody className="admin-subscriptions-subscription-table-body">
               {/* users list */}
               {subscriptionUsers?.map((subscriptionUser, index) => {
+                console.log('Subs user ', subscriptionUser)
+
                 return (
                   <tr
                     key={index + 1}
@@ -207,9 +215,11 @@ export const AdminSubscriptions = () => {
                       {subscriptionUser?.username}
                     </td>
                     <td className="admin-subscriptions-subscription-table-body-cell">
-                      <span className="admin-subscriptions-subscription-table-body-cell-remaining-days-reminder">
-                        manje od 2 dana
-                      </span>
+                      {subscriptionUser?.expiringSoon && (
+                        <span className="admin-subscriptions-subscription-table-body-cell-remaining-days-reminder">
+                          manje od 2 dana
+                        </span>
+                      )}
                       <input
                         className="admin-subscriptions-subscription-table-body-cell-payment-value"
                         type="text"
