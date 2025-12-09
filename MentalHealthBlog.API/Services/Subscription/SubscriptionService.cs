@@ -24,7 +24,8 @@ namespace MentalHealthBlog.API.Services.Subscription
         IS_IN_TRIAL_PERIOD,
         SUBSCRIPTION_AMOUNT_INVALID,
         SUBSCRIPTION_CREATION_FAILED,
-        SUBSCRIPTION_CREATION_SUCCESSFULL
+        SUBSCRIPTION_CREATION_SUCCESSFULL,
+        SUBSCRIPTION_INSUFICIENT_FUNDS
     }
     public class SubscriptionService : ISubscriptionService
     {
@@ -513,8 +514,17 @@ namespace MentalHealthBlog.API.Services.Subscription
                              .RecordSubscription(usersFirstSubscription, request, isMentalHealthExpert, isAddingNewOne: false);
                     }
 
+                    try
+                    {
                     return await subscriptionHelper
                         .RecordSubscription(usersFirstSubscription, request, isMentalHealthExpert, isAddingNewOne: true);
+
+                    }
+                    catch (Exception e)
+                    {
+                        _subscriptionLoggerService.LogError($"CREATE-SUBSCRIPTION: {e.Message}");
+                        throw;
+                    }
                 }
 
                 return new Response(new object(), StatusCodes.Status200OK, $"CREATE-SUBSCRIPTION: {SubscriptionLogTypes.SUBSCRIPTION_CREATION_SUCCESSFULL.ToString()}");

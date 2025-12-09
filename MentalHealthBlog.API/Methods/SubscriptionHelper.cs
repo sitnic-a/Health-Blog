@@ -28,7 +28,7 @@ namespace MentalHealthBlog.API.Methods
             var userHelper = new UserHelper(_context);
             var __MIN_DAYS_UNTIL_EXPIRATION__REMINDER__ = new TimeSpan(2, 0, 0, 0);
             var mostRecentSubscriptions = await _context.Subscriptions
-                .OrderBy(s => s.PaidAt)
+                .OrderByDescending(s => s.PaidAt)
                 .ToListAsync();
 
             mostRecentSubscriptions = mostRecentSubscriptions
@@ -79,7 +79,9 @@ namespace MentalHealthBlog.API.Methods
                       })
                 .ToList();
 
-            var combinedSubscriptionUsers = dbRegularUsersSubscriptions.Union(dbMentalHealthExperts).ToList();
+            var combinedSubscriptionUsers = dbRegularUsersSubscriptions.Union(dbMentalHealthExperts)
+                .OrderByDescending(s => s.PaidAt)
+                .ToList();
 
             foreach (var userFromList in combinedSubscriptionUsers)
             {
@@ -136,7 +138,6 @@ namespace MentalHealthBlog.API.Methods
             }
 
             return filteredSubscriptions
-                .OrderBy(s => s.FirstName)
                 .ToList();
         }
         public async Task<int> CalculateSubscriptionInMonths(float paidAmount, int userId, bool isMentalHealthExpert, int? subscriptionPlanId = null)
@@ -255,20 +256,73 @@ namespace MentalHealthBlog.API.Methods
                             mentalHealthExpertSubsciptionPlanPrices.Any(p => p == request.PaidAmount.Value))
 
                         {
+                            if (regularUserSubsciptionPlanPrices[0] > request.PaidAmount.Value)
+                            {
+                                _subscriptionLoggerService.LogWarning($"CREATE-SUBSCRIPTION: {SubscriptionLogTypes.SUBSCRIPTION_INSUFICIENT_FUNDS.ToString()}");
+                                throw new CreateRecordException("Impossible to create, insufficient funds!");
+                            }
+
                             subscriptionPlanId = __MONTHLY_REGULAR_USER_SUBSCRIPTION_PLAN_ID__;
+
                         }
                         else if (isMentalHealthExpert == true &&
                             regularUserSubsciptionPlanPrices.Any(p => p == request.PaidAmount.Value))
                         {
+                            if (mentalHealthExpertSubsciptionPlanPrices[0] > request.PaidAmount.Value)
+                            {
+                                _subscriptionLoggerService.LogWarning($"CREATE-SUBSCRIPTION: {SubscriptionLogTypes.SUBSCRIPTION_INSUFICIENT_FUNDS.ToString()}");
+                                throw new CreateRecordException("Impossible to create, insufficient funds!");
+                            }
+
                             subscriptionPlanId = __MONTHLY_MENTAL_HEALTH_EXPERT_SUBSCRIPTION_PLAN_ID__;
                         }
                         else
                         {
+                            if (isMentalHealthExpert == false)
+
+                            {
+                                if (regularUserSubsciptionPlanPrices[0] > request.PaidAmount.Value)
+                                {
+                                    _subscriptionLoggerService.LogWarning($"CREATE-SUBSCRIPTION: {SubscriptionLogTypes.SUBSCRIPTION_INSUFICIENT_FUNDS.ToString()}");
+                                    throw new CreateRecordException("Impossible to create, insufficient funds!");
+                                }
+
+                                subscriptionPlanId = __MONTHLY_REGULAR_USER_SUBSCRIPTION_PLAN_ID__;
+                            }
+                            else if (isMentalHealthExpert == true)
+                            {
+                                if (mentalHealthExpertSubsciptionPlanPrices[0] > request.PaidAmount.Value)
+                                {
+                                    _subscriptionLoggerService.LogWarning($"CREATE-SUBSCRIPTION: {SubscriptionLogTypes.SUBSCRIPTION_INSUFICIENT_FUNDS.ToString()}");
+                                    throw new CreateRecordException("Impossible to create, insufficient funds!");
+                                }
+
+                                subscriptionPlanId = __MONTHLY_MENTAL_HEALTH_EXPERT_SUBSCRIPTION_PLAN_ID__;
+                            }
+
                             subscriptionPlanId = await subscriptionHelper.GetSubscriptionPlanFromPaidAmount(request.PaidAmount.Value);
                         }
 
                         if (isAddingNewOne == true)
                         {
+                            if (isMentalHealthExpert == false)
+
+                            {
+                                if (regularUserSubsciptionPlanPrices[0] > request.PaidAmount.Value)
+                                {
+                                    _subscriptionLoggerService.LogWarning($"CREATE-SUBSCRIPTION: {SubscriptionLogTypes.SUBSCRIPTION_INSUFICIENT_FUNDS.ToString()}");
+                                    throw new CreateRecordException("Impossible to create, insufficient funds!");
+                                }
+                            }
+                            else if (isMentalHealthExpert == true)
+                            {
+                                if (mentalHealthExpertSubsciptionPlanPrices[0] > request.PaidAmount.Value)
+                                {
+                                    _subscriptionLoggerService.LogWarning($"CREATE-SUBSCRIPTION: {SubscriptionLogTypes.SUBSCRIPTION_INSUFICIENT_FUNDS.ToString()}");
+                                    throw new CreateRecordException("Impossible to create, insufficient funds!");
+                                }
+                            }
+
                             var newSubscription = new Subscription
                             {
                                 UserId = request.UserId,
@@ -300,20 +354,73 @@ namespace MentalHealthBlog.API.Methods
                             mentalHealthExpertSubsciptionPlanPrices.Any(p => p == request.PaidAmount.Value))
 
                         {
+                            if (regularUserSubsciptionPlanPrices[0] > request.PaidAmount.Value)
+                            {
+                                _subscriptionLoggerService.LogWarning($"CREATE-SUBSCRIPTION: {SubscriptionLogTypes.SUBSCRIPTION_INSUFICIENT_FUNDS.ToString()}");
+                                throw new CreateRecordException("Impossible to create, insufficient funds!");
+                            }
+
                             subscriptionPlanId = __MONTHLY_REGULAR_USER_SUBSCRIPTION_PLAN_ID__;
                         }
                         else if (isMentalHealthExpert == true &&
                             regularUserSubsciptionPlanPrices.Any(p => p == request.PaidAmount.Value))
                         {
+                            if (mentalHealthExpertSubsciptionPlanPrices[0] > request.PaidAmount.Value)
+                            {
+                                _subscriptionLoggerService.LogWarning($"CREATE-SUBSCRIPTION: {SubscriptionLogTypes.SUBSCRIPTION_INSUFICIENT_FUNDS.ToString()}");
+                                throw new CreateRecordException("Impossible to create, insufficient funds!");
+                            }
+
                             subscriptionPlanId = __MONTHLY_MENTAL_HEALTH_EXPERT_SUBSCRIPTION_PLAN_ID__;
                         }
                         else
                         {
+                            if (isMentalHealthExpert == false)
+
+                            {
+                                if (regularUserSubsciptionPlanPrices[0] > request.PaidAmount.Value)
+                                {
+                                    _subscriptionLoggerService.LogWarning($"CREATE-SUBSCRIPTION: {SubscriptionLogTypes.SUBSCRIPTION_INSUFICIENT_FUNDS.ToString()}");
+                                    throw new CreateRecordException("Impossible to create, insufficient funds!");
+                                }
+
+                                subscriptionPlanId = __MONTHLY_REGULAR_USER_SUBSCRIPTION_PLAN_ID__;
+                            }
+                            else if (isMentalHealthExpert == true)
+                            {
+                                if (mentalHealthExpertSubsciptionPlanPrices[0] > request.PaidAmount.Value)
+                                {
+                                    _subscriptionLoggerService.LogWarning($"CREATE-SUBSCRIPTION: {SubscriptionLogTypes.SUBSCRIPTION_INSUFICIENT_FUNDS.ToString()}");
+                                    throw new CreateRecordException("Impossible to create, insufficient funds!");
+                                }
+
+                                subscriptionPlanId = __MONTHLY_MENTAL_HEALTH_EXPERT_SUBSCRIPTION_PLAN_ID__;
+                            }
+
                             subscriptionPlanId = await subscriptionHelper.GetSubscriptionPlanFromPaidAmount(request.PaidAmount.Value);
                         }
 
                         if (isAddingNewOne == true)
                         {
+
+                            if (isMentalHealthExpert == false)
+
+                            {
+                                if (regularUserSubsciptionPlanPrices[0] > request.PaidAmount.Value)
+                                {
+                                    _subscriptionLoggerService.LogWarning($"CREATE-SUBSCRIPTION: {SubscriptionLogTypes.SUBSCRIPTION_INSUFICIENT_FUNDS.ToString()}");
+                                    throw new CreateRecordException("Impossible to create, insufficient funds!");
+                                }
+                            }
+                            else if (isMentalHealthExpert == true)
+                            {
+                                if (mentalHealthExpertSubsciptionPlanPrices[0] > request.PaidAmount.Value)
+                                {
+                                    _subscriptionLoggerService.LogWarning($"CREATE-SUBSCRIPTION: {SubscriptionLogTypes.SUBSCRIPTION_INSUFICIENT_FUNDS.ToString()}");
+                                    throw new CreateRecordException("Impossible to create, insufficient funds!");
+                                }
+                            }
+
                             var newSubscription = new Subscription
                             {
                                 UserId = request.UserId,
