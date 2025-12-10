@@ -15,5 +15,6 @@
         public bool HavePaidForSubscription { get; set; }
         public bool IsInTrialPeriod { get; set; }
         public DateTime TrialEndsAt { get; set; }
+        public bool IsSuspended { get; set; }
     }
 }

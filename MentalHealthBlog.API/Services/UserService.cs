@@ -269,6 +269,7 @@ namespace MentalHealthBlog.API.Services
                             mentalHealthExpert.FirstLoggedAt = DateTime.UtcNow;
                             mentalHealthExpert.TrialEndsAt = DateTime.UtcNow.AddDays(__TRIAL_PERIOD__);
                         }
+                        mentalHealthExpert.LastLoggedAt = DateTime.UtcNow;
                     }
                     else if (dbUserRoles.Any(r => r.Id == __USER_ROLE__))
                     {
@@ -278,6 +279,7 @@ namespace MentalHealthBlog.API.Services
                             dbRegularUser.FirstLoggedAt = DateTime.UtcNow;
                             dbRegularUser.TrialEndsAt = DateTime.UtcNow.AddDays(__TRIAL_PERIOD__);
                         }
+                        dbRegularUser.LastLoggedAt = DateTime.UtcNow;
                     }
 
                     var token = jwtMiddleware.GenerateToken(dbUser);

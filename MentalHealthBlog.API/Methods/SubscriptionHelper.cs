@@ -54,6 +54,7 @@ namespace MentalHealthBlog.API.Methods
                           HavePaidForSubscription = ru.HavePaidForSubscription,
                           IsInTrialPeriod = ru.IsInTrialPeriod,
                           TrialEndsAt = ru.TrialEndsAt.GetValueOrDefault(),
+                          IsSuspended = ru.IsSuspended,
                       })
                 .ToList();
 
@@ -75,7 +76,8 @@ namespace MentalHealthBlog.API.Methods
                           SubscriptionPlanId = s.SubscriptionPlanId.GetValueOrDefault(),
                           HavePaidForSubscription = mhe.HavePaidForSubscription,
                           IsInTrialPeriod = mhe.IsInTrialPeriod,
-                          TrialEndsAt = mhe.TrialEndsAt.GetValueOrDefault()
+                          TrialEndsAt = mhe.TrialEndsAt.GetValueOrDefault(),
+                          IsSuspended = mhe.IsSuspended,
                       })
                 .ToList();
 
