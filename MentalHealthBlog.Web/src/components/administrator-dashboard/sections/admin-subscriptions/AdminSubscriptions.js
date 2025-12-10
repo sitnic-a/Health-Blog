@@ -17,6 +17,7 @@ import {
   stringIsNullOrEmpty,
 } from '../../../../utils/helper-methods/methods'
 import { setSubscriptionAmountValidationData } from '../../../../redux-toolkit/features/validationSlice'
+import { toast } from 'react-toastify'
 
 export const AdminSubscriptions = () => {
   let dispatch = useDispatch()
@@ -73,7 +74,7 @@ export const AdminSubscriptions = () => {
                   Godina:{' '}
                 </p>
                 <input
-                  className="admin-subscriptions-header-filter-year-value"
+                  className="form-field admin-subscriptions-header-filter-year-value"
                   type="text"
                   placeholder="Unesite godinu..."
                 />
@@ -118,7 +119,7 @@ export const AdminSubscriptions = () => {
                   Ime/prezime/username:{' '}
                 </p>
                 <input
-                  className="admin-subscriptions-header-filter-name-surname-username-value"
+                  className="form-field admin-subscriptions-header-filter-name-surname-username-value"
                   type="text"
                   placeholder="Unesite ime, prezime ili username"
                 />
@@ -231,7 +232,7 @@ export const AdminSubscriptions = () => {
                       {!subscriptionUser?.expiringSoon || (
                         <>
                           <input
-                            className="admin-subscriptions-subscription-table-body-cell-payment-value"
+                            className="form-field admin-subscriptions-subscription-table-body-cell-payment-value"
                             type="text"
                             placeholder="Unesite iznos uplate"
                             onChange={(e) => {
@@ -277,11 +278,38 @@ export const AdminSubscriptions = () => {
                             type="button"
                             onClick={(e) => {
                               let currentBodyCell = e.currentTarget.parentNode
+                              authenticatedUserLocalStorage =
+                                localStorage.getItem('authenticatedUser')
+                              authenticatedUser = JSON.parse(
+                                authenticatedUserLocalStorage
+                              )
                               console.log('Body cell ', currentBodyCell)
 
                               let paidAmount = currentBodyCell.querySelector(
                                 '.admin-subscriptions-subscription-table-body-cell-payment-value'
                               ).value
+
+                              let [isValid, validationMessages] =
+                                checkSubscriptionAmountValidity(paidAmount, [])
+
+                              dispatch(
+                                setSubscriptionAmountValidationData({
+                                  subscriptionAmountIsValid: isValid,
+                                  subscriptionAmountValidationMessages:
+                                    validationMessages,
+                                })
+                              )
+
+                              if (!isValid) {
+                                toast.error(
+                                  'Molimo Vas slijedi upute za popunjavanje polja',
+                                  {
+                                    autoClose: 3000,
+                                    position: 'bottom-right',
+                                  }
+                                )
+                                return
+                              }
 
                               console.log('Paid amount ', paidAmount)
 
@@ -294,7 +322,53 @@ export const AdminSubscriptions = () => {
                                 requestObj,
                                 authenticatedUser,
                               }
-                              dispatch(createSubscription(objectWithData))
+                              dispatch(createSubscription(objectWithData)).then(
+                                (data) => {
+                                  console.log('Data ', data)
+                                  let statusCode = data?.payload?.statusCode
+                                  let StatusCode = data?.payload?.StatusCode
+
+                                  if (statusCode !== 200) {
+                                    if (StatusCode === 400) {
+                                      toast.error(
+                                        'Unešeni iznos nije dovoljan!',
+                                        {
+                                          autoClose: 3000,
+                                          position: 'bottom-right',
+                                        }
+                                      )
+                                      return
+                                    }
+                                  }
+
+                                  if (statusCode === 201) {
+                                    if (
+                                      !stringIsNullOrEmpty(
+                                        requestObj?.paidAmount
+                                      ) &&
+                                      requestObj?.paidAmount > 0
+                                    ) {
+                                      paidAmount = ''
+                                      toast.success(
+                                        `Uplata za ${subscriptionUser?.firstName} ${subscriptionUser?.lastName} u iznosu od ${requestObj?.paidAmount}KM uspješno unešena!`,
+                                        {
+                                          autoClose: 5000,
+                                          position: 'bottom-right',
+                                        }
+                                      )
+                                    } else {
+                                      toast.success(
+                                        `Uplata za ${subscriptionUser?.firstName} ${subscriptionUser?.lastName} uspješno unešena!`,
+                                        {
+                                          autoClose: 5000,
+                                          position: 'bottom-right',
+                                        }
+                                      )
+                                    }
+                                  }
+                                  dispatch(getSubscriptionUsers(objectWithData))
+                                }
+                              )
                             }}
                           >
                             Uplatite
@@ -302,19 +376,23 @@ export const AdminSubscriptions = () => {
                         </>
                       )}
 
-                      <button
-                        className="admin-subscriptions-subscription-table-body-cell-action admin-subscription-subscription-disable"
-                        type="button"
-                      >
-                        Zabrani
-                      </button>
+                      {!subscriptionUser?.isSuspended && (
+                        <button
+                          className="admin-subscriptions-subscription-table-body-cell-action admin-subscription-subscription-disable"
+                          type="button"
+                        >
+                          Zabrani
+                        </button>
+                      )}
 
-                      <button
-                        className="admin-subscriptions-subscription-table-body-cell-action admin-subscription-subscription-enable"
-                        type="button"
-                      >
-                        Dozvoli
-                      </button>
+                      {subscriptionUser?.isSuspended && (
+                        <button
+                          className="admin-subscriptions-subscription-table-body-cell-action admin-subscription-subscription-enable"
+                          type="button"
+                        >
+                          Dozvoli
+                        </button>
+                      )}
                     </td>
                   </tr>
                 )

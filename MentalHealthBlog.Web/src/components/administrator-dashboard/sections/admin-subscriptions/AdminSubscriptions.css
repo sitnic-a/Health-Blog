@@ -389,6 +389,13 @@
   display: none;
 }
 
+.admin-subscriptions-subscription-table-body-cell
+  .validation-message-main-container
+  .validation-message {
+  margin-block: 0.3rem;
+  font-size: 0.75rem;
+}
+
 .admin-subscriptions-subscription-table-body-cell-validation-data-visible {
   display: initial;
 }
