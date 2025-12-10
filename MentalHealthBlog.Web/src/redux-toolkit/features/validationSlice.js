@@ -14,6 +14,8 @@ let initialState = {
   titleValidationData: { isValid: true, validationMessages: [] },
   contentValidationData: { isValid: true, validationMessages: [] },
   tagsValidationData: { isValid: true, validationMessages: [] },
+
+  subscriptionAmountValidationData: { isValid: true, validationMessages: [] },
 }
 
 const validationSlice = createSlice({
@@ -57,6 +59,10 @@ const validationSlice = createSlice({
     setTagsValidationData: (state, action) => {
       state.tagsValidationData = action?.payload
     },
+
+    setSubscriptionAmountValidationData: (state, action) => {
+      state.subscriptionAmountValidationData = action?.payload
+    },
   },
 })
 
@@ -74,5 +80,7 @@ export const {
   setTitleValidationData,
   setContentValidationData,
   setTagsValidationData,
+
+  setSubscriptionAmountValidationData,
 } = validationSlice.actions
 export default validationSlice.reducer

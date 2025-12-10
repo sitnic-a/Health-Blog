@@ -12,7 +12,11 @@ import {
   createSubscription,
   getSubscriptionUsers,
 } from '../../../../redux-toolkit/features/subscriptionSlice'
-import { stringIsNullOrEmpty } from '../../../../utils/helper-methods/methods'
+import {
+  checkSubscriptionAmountValidity,
+  stringIsNullOrEmpty,
+} from '../../../../utils/helper-methods/methods'
+import { setSubscriptionAmountValidationData } from '../../../../redux-toolkit/features/validationSlice'
 
 export const AdminSubscriptions = () => {
   let dispatch = useDispatch()
@@ -20,6 +24,9 @@ export const AdminSubscriptions = () => {
   let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
 
   let { subscriptionUsers } = useSelector((store) => store.subscription)
+  let { subscriptionAmountValidationData } = useSelector(
+    (store) => store.validation
+  )
   let [userTypes, setUserTypes] = useState([])
   let [months, setMonths] = useState([])
 
@@ -198,7 +205,7 @@ export const AdminSubscriptions = () => {
             <tbody className="admin-subscriptions-subscription-table-body">
               {/* users list */}
               {subscriptionUsers?.map((subscriptionUser, index) => {
-                console.log('Subs user ', subscriptionUser)
+                // console.log('Subs user ', subscriptionUser)
 
                 return (
                   <tr
@@ -220,43 +227,93 @@ export const AdminSubscriptions = () => {
                           manje od 2 dana
                         </span>
                       )}
-                      <input
-                        className="admin-subscriptions-subscription-table-body-cell-payment-value"
-                        type="text"
-                        placeholder="Unesite iznos uplate"
-                      />
-                      <button
-                        className="admin-subscriptions-subscription-table-body-cell-action admin-subscription-subscription-enable"
-                        type="button"
-                        onClick={(e) => {
-                          let currentBodyCell = e.currentTarget.parentNode
-                          console.log('Body cell ', currentBodyCell)
 
-                          let paidAmount = currentBodyCell.querySelector(
-                            '.admin-subscriptions-subscription-table-body-cell-payment-value'
-                          ).value
+                      {!subscriptionUser?.expiringSoon || (
+                        <>
+                          <input
+                            className="admin-subscriptions-subscription-table-body-cell-payment-value"
+                            type="text"
+                            placeholder="Unesite iznos uplate"
+                            onChange={(e) => {
+                              let paidAmount = e.target.value
+                              let [isValid, validationMessages] =
+                                checkSubscriptionAmountValidity(paidAmount, [])
 
-                          console.log('Paid amount ', paidAmount)
+                              dispatch(
+                                setSubscriptionAmountValidationData({
+                                  subscriptionAmountIsValid: isValid,
+                                  subscriptionAmountValidationMessages:
+                                    validationMessages,
+                                })
+                              )
 
-                          let requestObj = {
-                            userId: subscriptionUser?.userId,
-                            paidAmount: parseFloat(paidAmount),
-                            isCreatingAnAccount: false,
-                          }
-                          let objectWithData = {
-                            requestObj,
-                            authenticatedUser,
-                          }
-                          dispatch(createSubscription(objectWithData))
-                        }}
-                      >
-                        Uplatite
-                      </button>
+                              let validationContainer =
+                                e.currentTarget.parentNode.querySelector(
+                                  '.validation-message-main-container'
+                                )
+
+                              if (!isValid) {
+                                validationContainer.style.display = 'initial'
+                              } else {
+                                validationContainer.style.display = 'none'
+                              }
+                            }}
+                          />
+
+                          <div className="validation-message-main-container">
+                            {subscriptionAmountValidationData?.subscriptionAmountValidationMessages?.map(
+                              (message, index) => {
+                                return (
+                                  <p key={index} className="validation-message">
+                                    - {message}
+                                  </p>
+                                )
+                              }
+                            )}
+                          </div>
+
+                          <button
+                            className="admin-subscriptions-subscription-table-body-cell-action admin-subscription-subscription-record-payment-button"
+                            type="button"
+                            onClick={(e) => {
+                              let currentBodyCell = e.currentTarget.parentNode
+                              console.log('Body cell ', currentBodyCell)
+
+                              let paidAmount = currentBodyCell.querySelector(
+                                '.admin-subscriptions-subscription-table-body-cell-payment-value'
+                              ).value
+
+                              console.log('Paid amount ', paidAmount)
+
+                              let requestObj = {
+                                userId: subscriptionUser?.userId,
+                                paidAmount: parseFloat(paidAmount),
+                                isCreatingAnAccount: false,
+                              }
+                              let objectWithData = {
+                                requestObj,
+                                authenticatedUser,
+                              }
+                              dispatch(createSubscription(objectWithData))
+                            }}
+                          >
+                            Uplatite
+                          </button>
+                        </>
+                      )}
+
                       <button
                         className="admin-subscriptions-subscription-table-body-cell-action admin-subscription-subscription-disable"
                         type="button"
                       >
-                        Zabrana
+                        Zabrani
+                      </button>
+
+                      <button
+                        className="admin-subscriptions-subscription-table-body-cell-action admin-subscription-subscription-enable"
+                        type="button"
+                      >
+                        Dozvoli
                       </button>
                     </td>
                   </tr>

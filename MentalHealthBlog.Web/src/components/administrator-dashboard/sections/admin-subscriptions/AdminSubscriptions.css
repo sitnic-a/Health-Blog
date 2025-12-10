@@ -384,6 +384,15 @@
   background: transparent;
 }
 
+.admin-subscriptions-subscription-table-body-cell
+  .validation-message-main-container {
+  display: none;
+}
+
+.admin-subscriptions-subscription-table-body-cell-validation-data-visible {
+  display: initial;
+}
+
 .admin-subscriptions-subscription-table-body-cell-action {
   margin-right: 0.5rem;
   padding: 0.5rem;
@@ -403,12 +412,12 @@
   }
 }
 
-.admin-subscription-subscription-enable {
+.admin-subscription-subscription-record-payment-button {
   color: #f3f1e3;
   background: #34688f;
 }
 
-.admin-subscription-subscription-enable:hover {
+.admin-subscription-subscription-record-payment-button:hover {
   background: #82a3bc;
 }
 
@@ -421,4 +430,9 @@
   border: 1px solid #c93232;
   color: #c93232;
   background: none;
+}
+
+.admin-subscription-subscription-enable {
+  color: #f3f1e3;
+  background: #5eba69;
 }
