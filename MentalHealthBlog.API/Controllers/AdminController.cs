@@ -44,5 +44,11 @@ namespace MentalHealthBlog.API.Controllers
         {
             return await _adminService.RemoveUserById(userId);
         }
+
+        [HttpPut("suspend/{userId}")]
+        public async Task<Response> SuspendUser(int userId)
+        {
+            return await _adminService.SuspendUser(userId);
+        }
     }
 }

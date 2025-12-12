@@ -3,6 +3,7 @@ using MailKit.Net.Smtp;
 using MailKit.Security;
 using MentalHealthBlog.API.Exceptions;
 using MentalHealthBlog.API.Methods;
+using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Utils.Email;
@@ -426,6 +427,45 @@ namespace MentalHealthBlog.API.Services
                 _adminLoggerService.LogError($"APPROVAL(EMAIL-NOTIFICATION): {e.Message}");
                 throw;
             }
+        }
+        public async Task<Response> SuspendUser(int userId)
+        {
+            try
+            {
+
+                if (userId <= 0)
+                {
+                    _adminLoggerService.LogWarning($"SUSPEND/[userId]: {AdminServiceLogTypes.INVALID_DATA.ToString()}");
+                    throw new ArgumentException("Bad request!");
+                }
+
+                var userHelper = new UserHelper(_context);
+                var userInformationAndIsUserMentalHealthExpertTuple = await userHelper.ReturnUserAndInfoIsItMentalHealthExpert(userId);
+                var dbRegularUser = new RegularUser();
+                var dbMentalHealthExpert = new MentalHealthExpert();
+
+                var userInfo = userInformationAndIsUserMentalHealthExpertTuple.Item1;
+                var isMentalHealthExpert = userInformationAndIsUserMentalHealthExpertTuple.Item2;
+
+                if (isMentalHealthExpert)
+                {
+                    dbMentalHealthExpert = (MentalHealthExpert)userInfo;
+                    dbMentalHealthExpert.IsSuspended = true;
+                    await _context.SaveChangesAsync();
+                    return new Response(dbMentalHealthExpert, StatusCodes.Status200OK, $"SUSPEND/[userId]: {AdminServiceLogTypes.SUCCESS.ToString()}");
+                }
+
+                dbRegularUser = (RegularUser)userInfo;
+                dbRegularUser.IsSuspended = true;
+                await _context.SaveChangesAsync();
+                return new Response(dbRegularUser, StatusCodes.Status200OK, $"SUSPEND/[userId]: {AdminServiceLogTypes.SUCCESS.ToString()}");
+            }
+            catch (Exception e)
+            {
+                _adminLoggerService.LogError($"SUSPEND/[userId]: {e.Message}");
+                throw;
+            }
+
         }
     }
 }
