@@ -1,30 +1,34 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 import moment from 'moment'
 import { getDbRoles } from '../../../../redux-toolkit/features/userSlice'
-import { db_roles } from '../../../../enums/roles'
-import { Navbar } from '../../../shared/Navbar/Navbar'
-
-import { LiaSearchSolid } from 'react-icons/lia'
-
-import AdminSubscriptionsCSS from './AdminSubscriptions.css'
 import {
   createSubscription,
   getSubscriptionUsers,
 } from '../../../../redux-toolkit/features/subscriptionSlice'
+import { suspendUser } from '../../../../redux-toolkit/features/adminSlice'
+import { setSubscriptionAmountValidationData } from '../../../../redux-toolkit/features/validationSlice'
 import {
   checkSubscriptionAmountValidity,
   stringIsNullOrEmpty,
 } from '../../../../utils/helper-methods/methods'
-import { setSubscriptionAmountValidationData } from '../../../../redux-toolkit/features/validationSlice'
-import { toast } from 'react-toastify'
+import { db_roles } from '../../../../enums/roles'
+import { Navbar } from '../../../shared/Navbar/Navbar'
+import { Loader } from '../../../shared/Loader/Loader'
+
+import { LiaSearchSolid } from 'react-icons/lia'
+
+import AdminSubscriptionsCSS from './AdminSubscriptions.css'
 
 export const AdminSubscriptions = () => {
   let dispatch = useDispatch()
   let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
   let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
 
-  let { subscriptionUsers } = useSelector((store) => store.subscription)
+  let { subscriptionUsers, isLoading } = useSelector(
+    (store) => store.subscription
+  )
   let { subscriptionAmountValidationData } = useSelector(
     (store) => store.validation
   )
@@ -59,7 +63,9 @@ export const AdminSubscriptions = () => {
     })
   }, [])
 
-  return (
+  return isLoading === true ? (
+    <Loader />
+  ) : (
     <section id="admin-subscriptions-main-container">
       <Navbar />
       <div className="admin-subscriptions-container">
@@ -366,6 +372,7 @@ export const AdminSubscriptions = () => {
                                       )
                                     }
                                   }
+
                                   dispatch(getSubscriptionUsers(objectWithData))
                                 }
                               )
@@ -380,6 +387,39 @@ export const AdminSubscriptions = () => {
                         <button
                           className="admin-subscriptions-subscription-table-body-cell-action admin-subscription-subscription-disable"
                           type="button"
+                          onClick={() => {
+                            authenticatedUserLocalStorage =
+                              localStorage.getItem('authenticatedUser')
+                            authenticatedUser = JSON.parse(
+                              authenticatedUserLocalStorage
+                            )
+
+                            let requestObj = {
+                              userId: subscriptionUser?.userId,
+                            }
+
+                            let objectWithData = {
+                              requestObj,
+                              authenticatedUser,
+                            }
+                            dispatch(suspendUser(objectWithData)).then(
+                              (data) => {
+                                let statusCode = data?.payload?.statusCode
+                                if (statusCode === 200) {
+                                  authenticatedUserLocalStorage =
+                                    localStorage.getItem('authenticatedUser')
+                                  authenticatedUser = JSON.parse(
+                                    authenticatedUserLocalStorage
+                                  )
+
+                                  let objectWithData = {
+                                    authenticatedUser,
+                                  }
+                                  dispatch(getSubscriptionUsers(objectWithData))
+                                }
+                              }
+                            )
+                          }}
                         >
                           Zabrani
                         </button>

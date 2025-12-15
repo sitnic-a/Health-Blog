@@ -8,6 +8,7 @@ let initialState = {
   currentSubscription: null,
   subscriptionPlanId: 0,
   newSubscription: null,
+  isLoading: false,
 }
 
 export const getSubscriptionUsers = createAsyncThunk(
@@ -130,8 +131,11 @@ let subscriptionSlice = createSlice({
     builder
 
       //getSubscriptionUsers
-      .addCase(getSubscriptionUsers.pending, (state, action) => {})
+      .addCase(getSubscriptionUsers.pending, (state, action) => {
+        state.isLoading = true
+      })
       .addCase(getSubscriptionUsers.fulfilled, (state, action) => {
+        state.isLoading = false
         let statusCode = action?.payload?.statusCode
         let serviceResponseObject = action?.payload?.serviceResponseObject
         console.log('Retrieval successfull ', serviceResponseObject)
@@ -155,7 +159,9 @@ let subscriptionSlice = createSlice({
 
         console.log('Subscription users ', state.subscriptionUsers)
       })
-      .addCase(getSubscriptionUsers.rejected, (state, action) => {})
+      .addCase(getSubscriptionUsers.rejected, (state, action) => {
+        state.isLoading = false
+      })
 
       //getUsersTrialPeriod
       .addCase(getUsersTrialPeriod.pending, (state, action) => {})
@@ -182,14 +188,20 @@ let subscriptionSlice = createSlice({
       .addCase(sendExpiringEmail.rejected, (state, action) => {})
 
       //createSubscription
-      .addCase(createSubscription.pending, (state, action) => {})
+      .addCase(createSubscription.pending, (state, action) => {
+        state.isLoading = true
+      })
       .addCase(createSubscription.fulfilled, (state, action) => {
+        state.isLoading = true
+
         let statusCode = action?.payload?.statusCode
         if (statusCode === 201) {
           state.newSubscription = action?.payload?.serviceResponseObject
         }
       })
-      .addCase(createSubscription.rejected, (state, action) => {})
+      .addCase(createSubscription.rejected, (state, action) => {
+        state.isLoading = true
+      })
 
       //getUsersCurrentSubscription
       .addCase(getUsersCurrentSubscription.pending, (state, action) => {})
