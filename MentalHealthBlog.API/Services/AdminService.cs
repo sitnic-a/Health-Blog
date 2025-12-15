@@ -428,7 +428,7 @@ namespace MentalHealthBlog.API.Services
                 throw;
             }
         }
-        public async Task<Response> SuspendUser(int userId)
+        public async Task<Response> SuspendUser(int userId, bool? isEnablingUsage=null)
         {
             try
             {
@@ -446,6 +446,22 @@ namespace MentalHealthBlog.API.Services
 
                 var userInfo = userInformationAndIsUserMentalHealthExpertTuple.Item1;
                 var isMentalHealthExpert = userInformationAndIsUserMentalHealthExpertTuple.Item2;
+
+                if (isEnablingUsage.HasValue)
+                {
+                    if (isMentalHealthExpert)
+                    {
+                        dbMentalHealthExpert = (MentalHealthExpert)userInfo;
+                        dbMentalHealthExpert.IsSuspended = false;
+                        await _context.SaveChangesAsync();
+                        return new Response(dbMentalHealthExpert, StatusCodes.Status200OK, $"SUSPEND/[userId]: {AdminServiceLogTypes.SUCCESS.ToString()}");
+                    }
+
+                    dbRegularUser = (RegularUser)userInfo;
+                    dbRegularUser.IsSuspended = false;
+                    await _context.SaveChangesAsync();
+                    return new Response(dbRegularUser, StatusCodes.Status200OK, $"SUSPEND/[userId]: {AdminServiceLogTypes.SUCCESS.ToString()}");
+                }
 
                 if (isMentalHealthExpert)
                 {
