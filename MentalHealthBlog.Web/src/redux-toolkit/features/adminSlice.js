@@ -96,6 +96,7 @@ export const suspendUser = createAsyncThunk(
     let url = `${application.application_url}/admin/suspend/${objectWithData?.requestObj?.userId}`
     let request = await fetch(url, {
       method: 'PUT',
+      body: JSON.stringify(objectWithData?.requestObj?.isEnablingUsage),
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,

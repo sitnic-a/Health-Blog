@@ -429,6 +429,40 @@ export const AdminSubscriptions = () => {
                         <button
                           className="admin-subscriptions-subscription-table-body-cell-action admin-subscription-subscription-enable"
                           type="button"
+                          onClick={() => {
+                            authenticatedUserLocalStorage =
+                              localStorage.getItem('authenticatedUser')
+                            authenticatedUser = JSON.parse(
+                              authenticatedUserLocalStorage
+                            )
+
+                            let requestObj = {
+                              userId: subscriptionUser?.userId,
+                              isEnablingUsage: true,
+                            }
+
+                            let objectWithData = {
+                              requestObj,
+                              authenticatedUser,
+                            }
+                            dispatch(suspendUser(objectWithData)).then(
+                              (data) => {
+                                let statusCode = data?.payload?.statusCode
+                                if (statusCode === 200) {
+                                  authenticatedUserLocalStorage =
+                                    localStorage.getItem('authenticatedUser')
+                                  authenticatedUser = JSON.parse(
+                                    authenticatedUserLocalStorage
+                                  )
+
+                                  let objectWithData = {
+                                    authenticatedUser,
+                                  }
+                                  dispatch(getSubscriptionUsers(objectWithData))
+                                }
+                              }
+                            )
+                          }}
                         >
                           Dozvoli
                         </button>

@@ -46,6 +46,7 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpPut("suspend/{userId}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<Response> SuspendUser(int userId,[FromBody] bool? isEnablingUsage=null)
         {
             return await _adminService.SuspendUser(userId, isEnablingUsage);
