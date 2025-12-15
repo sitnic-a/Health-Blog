@@ -143,10 +143,10 @@ let adminSlice = createSlice({
         state.isLoading = true
       })
       .addCase(getDbUsers.fulfilled, (state, action) => {
+        state.isLoading = false
         let statusCode = action?.payload?.statusCode
         if (statusCode === 200) {
           let serviceResponseObject = action?.payload
-          state.isLoading = false
           state.dbUsers = serviceResponseObject?.serviceResponseObject
           state.isFailed = false
           return
