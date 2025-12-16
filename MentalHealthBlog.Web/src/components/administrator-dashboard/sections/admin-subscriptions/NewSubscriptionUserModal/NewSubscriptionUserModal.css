@@ -82,6 +82,18 @@
   line-height: 1.4;
 }
 
+/* Chrome, Safari, Edge, Opera */
+.new-subscription-user-non-subscribed-user-amount::-webkit-outer-spin-button,
+.new-subscription-user-non-subscribed-user-amount::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.new-subscription-user-non-subscribed-user-amount[type='number'] {
+  -moz-appearance: textfield;
+}
+
 .new-subscription-user-non-subscribed-users-save-button {
   padding: 0.5rem 1rem;
   border: none;
