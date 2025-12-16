@@ -14,6 +14,7 @@ import {
   stringIsNullOrEmpty,
 } from '../../../../utils/helper-methods/methods'
 import { db_roles } from '../../../../enums/roles'
+import { NewSubscriptionUserModal } from './NewSubscriptionUserModal/NewSubscriptionUserModal'
 import { Navbar } from '../../../shared/Navbar/Navbar'
 import { Loader } from '../../../shared/Loader/Loader'
 
@@ -222,7 +223,15 @@ export const AdminSubscriptions = () => {
           </div>
         </div>
 
-        <div className="admin-subscription-subscription-table-container">
+        <div className="admin-subscriptions-create-new-subscribed-user-main-container">
+          <button className="admin-subscriptions-create-new-subscribed-user-create-button">
+            Nova pretplata
+          </button>
+
+          <NewSubscriptionUserModal />
+        </div>
+
+        <div className="admin-subscriptions-subscription-table-container">
           <table className="admin-subscriptions-subscription-table">
             <thead className="admin-subscriptions-subscription-table-header">
               <tr>
