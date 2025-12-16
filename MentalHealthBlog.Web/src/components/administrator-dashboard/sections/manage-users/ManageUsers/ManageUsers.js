@@ -10,7 +10,9 @@ import { BiError } from 'react-icons/bi'
 import ManageUsersCSS from './ManageUsers.css'
 
 export const ManageUsers = () => {
-  let { dbUsers, dbUser, isFailed } = useSelector((store) => store.admin)
+  let { dbUsers, dbUser, isFailed, isLoading } = useSelector(
+    (store) => store.admin
+  )
 
   return (
     <div className="main-manage-users-container">
@@ -25,7 +27,7 @@ export const ManageUsers = () => {
       <ManageUsersFilter />
       <ManageUsersTable />
 
-      {isFailed && (
+      {isFailed === false && isLoading === false && (
         <div className="manage-users-error-container">
           <BiError className="manage-users-error-no-data-icon" />
           <div className="manage-users-error-information">
@@ -37,7 +39,7 @@ export const ManageUsers = () => {
         </div>
       )}
 
-      {!isFailed && dbUsers?.length === 0 && (
+      {!isFailed && isLoading === false && dbUsers?.length === 0 && (
         <div className="manage-users-users-list-main-container">
           <p className="manage-users-users-list-info">
             Korisnici tog opisa nisu registrovani na aplikaciju. Probajte novu
