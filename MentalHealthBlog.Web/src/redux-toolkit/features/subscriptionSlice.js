@@ -138,7 +138,6 @@ let subscriptionSlice = createSlice({
         state.isLoading = false
         let statusCode = action?.payload?.statusCode
         let serviceResponseObject = action?.payload?.serviceResponseObject
-        console.log('Retrieval successfull ', serviceResponseObject)
 
         if (statusCode === 200 && serviceResponseObject?.length > 0) {
           toast.success(
@@ -156,8 +155,6 @@ let subscriptionSlice = createSlice({
           })
           state.subscriptionUsers = serviceResponseObject
         }
-
-        console.log('Subscription users ', state.subscriptionUsers)
       })
       .addCase(getSubscriptionUsers.rejected, (state, action) => {
         state.isLoading = false

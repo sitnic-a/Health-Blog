@@ -128,6 +128,48 @@ export const AdminSubscriptions = () => {
                   className="form-field admin-subscriptions-header-filter-name-surname-username-value"
                   type="text"
                   placeholder="Unesite ime, prezime ili username"
+                  onKeyUp={(e) => {
+                    if (e.key === 'Enter') {
+                      authenticatedUserLocalStorage =
+                        localStorage.getItem('authenticatedUser')
+
+                      authenticatedUser = JSON.parse(
+                        authenticatedUserLocalStorage
+                      )
+
+                      let subscriptionYearValue = document.querySelector(
+                        '.admin-subscriptions-header-filter-year-value'
+                      ).value
+                      let subscriptionYear = 0
+                      let subscriptionMonth = document.querySelector(
+                        '.admin-subscriptions-filter-months-picker'
+                      ).value
+                      let userTypeId = document.querySelector(
+                        '.admin-subscriptions-header-filter-user-types-picker'
+                      ).value
+                      let firstNameLastNameUsername = document.querySelector(
+                        '.admin-subscriptions-header-filter-name-surname-username-value'
+                      ).value
+
+                      if (!stringIsNullOrEmpty(subscriptionYearValue)) {
+                        subscriptionYear = parseInt(subscriptionYearValue)
+                      }
+
+                      let query = {
+                        subscriptionYear: subscriptionYear,
+                        subscriptionMonth: parseInt(subscriptionMonth),
+                        userTypeId: parseInt(userTypeId),
+                        firstNameLastNameUsername: firstNameLastNameUsername,
+                      }
+
+                      let objectWithData = {
+                        query,
+                        authenticatedUser,
+                      }
+                      dispatch(getSubscriptionUsers(objectWithData))
+                      dispatch(getSubscriptionUsers())
+                    }
+                  }}
                 />
               </div>
 
@@ -158,16 +200,6 @@ export const AdminSubscriptions = () => {
                     if (!stringIsNullOrEmpty(subscriptionYearValue)) {
                       subscriptionYear = parseInt(subscriptionYearValue)
                     }
-                    console.log(
-                      'SubYear ',
-                      subscriptionYear,
-                      ' SubMonth ',
-                      subscriptionMonth,
-                      ' UserId ',
-                      userTypeId,
-                      ' NameUser ',
-                      firstNameLastNameUsername
-                    )
 
                     let query = {
                       subscriptionYear: subscriptionYear,
@@ -210,10 +242,7 @@ export const AdminSubscriptions = () => {
             </thead>
 
             <tbody className="admin-subscriptions-subscription-table-body">
-              {/* users list */}
               {subscriptionUsers?.map((subscriptionUser, index) => {
-                // console.log('Subs user ', subscriptionUser)
-
                 return (
                   <tr
                     key={index + 1}
@@ -289,7 +318,6 @@ export const AdminSubscriptions = () => {
                               authenticatedUser = JSON.parse(
                                 authenticatedUserLocalStorage
                               )
-                              console.log('Body cell ', currentBodyCell)
 
                               let paidAmount = currentBodyCell.querySelector(
                                 '.admin-subscriptions-subscription-table-body-cell-payment-value'
@@ -317,8 +345,6 @@ export const AdminSubscriptions = () => {
                                 return
                               }
 
-                              console.log('Paid amount ', paidAmount)
-
                               let requestObj = {
                                 userId: subscriptionUser?.userId,
                                 paidAmount: parseFloat(paidAmount),
@@ -330,7 +356,6 @@ export const AdminSubscriptions = () => {
                               }
                               dispatch(createSubscription(objectWithData)).then(
                                 (data) => {
-                                  console.log('Data ', data)
                                   let statusCode = data?.payload?.statusCode
                                   let StatusCode = data?.payload?.StatusCode
 
