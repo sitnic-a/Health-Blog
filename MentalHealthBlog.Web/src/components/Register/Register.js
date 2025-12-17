@@ -7,6 +7,16 @@ import { toast } from 'react-toastify'
 import { register, getDbRoles } from '../../redux-toolkit/features/userSlice'
 import { getMentalHealthExperts } from '../../redux-toolkit/features/mentalExpertSlice'
 import { setSelectedMentalHealthExpertIds } from '../../redux-toolkit/features/therapySlice'
+import {
+  setPasswordValidationData,
+  setUsernameValidationData,
+  setFirstNameValidationData,
+  setLastNameValidationData,
+  setOrganizationValidationData,
+  setPhoneNumberValidationData,
+  setEmailValidationData,
+  setPhotoValidationData,
+} from '../../redux-toolkit/features/validationSlice'
 import useFetchLocationState from '../../custom/hooks/useFetchLocationState'
 import {
   checkEmailValidity,
@@ -21,29 +31,18 @@ import {
 import { db_roles } from '../../enums/roles'
 
 import { MentalHealthExpertsDropdown } from '../MentalHealthExpertsDropdown/MentalHealthExpertsDropdown'
+import { Password } from '../shared/Password/Password'
+import { Loader } from '../shared/Loader/Loader'
 import { TiArrowSortedDown } from 'react-icons/ti'
 
 import RegisterCSS from './Register.css'
 import ValidationCSS from '../shared/Validation/Validation.css'
-
-import {
-  setPasswordValidationData,
-  setUsernameValidationData,
-  setFirstNameValidationData,
-  setLastNameValidationData,
-  setOrganizationValidationData,
-  setPhoneNumberValidationData,
-  setEmailValidationData,
-  setPhotoValidationData,
-} from '../../redux-toolkit/features/validationSlice'
-import { Password } from '../shared/Password/Password'
-
-import { Loader } from '../shared/Loader/Loader'
+import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner'
 
 export const Register = () => {
   let { dbRoles, isLoading } = useSelector((store) => store.user)
   let [photoFile, setPhotoFile] = useState({})
-  let { suggestedMentalHealthExperts } = useSelector(
+  let { suggestedMentalHealthExperts, isLoadingExperts } = useSelector(
     (store) => store.mentalExpert
   )
   let { selectedMentalHealthExpertIds } = useSelector((store) => store.therapy)
@@ -604,23 +603,27 @@ export const Register = () => {
               </div>
             </div>
 
-            {suggestedMentalHealthExperts?.length > 0 && (
-              <div className="register-info-in-therapy-container">
-                <label
-                  htmlFor="register-in-therapy"
-                  className="form-field-label"
-                >
-                  Da li idete na terapiju?
-                </label>
-                <input
-                  className="register-in-therapy-checkbox"
-                  type="checkbox"
-                  checked={isInTherapy}
-                  onChange={() => {
-                    setIsInTherapy(!isInTherapy)
-                  }}
-                />
-              </div>
+            {isLoadingExperts ? (
+              <LoadingSpinner />
+            ) : (
+              suggestedMentalHealthExperts?.length > 0 && (
+                <div className="register-info-in-therapy-container">
+                  <label
+                    htmlFor="register-in-therapy"
+                    className="form-field-label"
+                  >
+                    Da li idete na terapiju?
+                  </label>
+                  <input
+                    className="register-in-therapy-checkbox"
+                    type="checkbox"
+                    checked={isInTherapy}
+                    onChange={() => {
+                      setIsInTherapy(!isInTherapy)
+                    }}
+                  />
+                </div>
+              )
             )}
 
             {isInTherapy && (

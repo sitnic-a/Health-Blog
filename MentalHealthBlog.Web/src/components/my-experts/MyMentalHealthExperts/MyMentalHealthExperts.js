@@ -1,20 +1,22 @@
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Navbar } from '../../shared/Navbar/Navbar'
+import { getMentalHealthExperts } from '../../../redux-toolkit/features/mentalExpertSlice'
+import { getMyExperts } from '../../../redux-toolkit/features/therapySlice'
+import { setActiveMyMentalHealthExpertFilterActionTab } from '../../../utils/helper-methods/methods'
 import { MyMentalHealthExpertPocket } from '../MyMentalHealthExpertPocket/MyMentalHealthExpertPocket'
 import { MentalHealthExpertsDropdown } from '../../MentalHealthExpertsDropdown/MentalHealthExpertsDropdown'
+import { MyMentalHealthExpertProfile } from '../MyMentalHealthExpertProfile/MyMentalHealthExpertProfile'
+import { Navbar } from '../../shared/Navbar/Navbar'
+import { requestStatuses } from '../../../enums/requestStatuses'
+import { LoadingSpinner } from '../../LoadingSpinner/LoadingSpinner'
 
 import { TiArrowSortedDown } from 'react-icons/ti'
 
 import MyMentalHealthExpertsCSS from './MyMentalHealthExperts.css'
-import { useEffect } from 'react'
-import { getMyExperts } from '../../../redux-toolkit/features/therapySlice'
-import { MyMentalHealthExpertProfile } from '../MyMentalHealthExpertProfile/MyMentalHealthExpertProfile'
-import { getMentalHealthExperts } from '../../../redux-toolkit/features/mentalExpertSlice'
-import { requestStatuses } from '../../../enums/requestStatuses'
-import { setActiveMyMentalHealthExpertFilterActionTab } from '../../../utils/helper-methods/methods'
 
 export const MyMentalHealthExperts = () => {
   let dispatch = useDispatch()
+  let { isLoadingExperts } = useSelector((store) => store.mentalExpert)
   // let { authenticatedUser } = useSelector((store) => store.user)
 
   let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
@@ -106,65 +108,71 @@ export const MyMentalHealthExperts = () => {
             mhe.requestStatus === requestStatuses.PENDING
         )?.length >= 2 || (
           <div className="my-mental-health-filter-choose-action-main-container">
-            <button
-              className="my-mental-health-experts-filter-action my-mental-health-filter-choose-action"
-              type="button"
-              onClick={() => {
-                let mainMentalHealthExpertPicker = document.getElementById(
-                  'main-mental-health-expert-picker'
-                )
+            {isLoadingExperts ? (
+              <LoadingSpinner />
+            ) : (
+              <>
+                <button
+                  className="my-mental-health-experts-filter-action my-mental-health-filter-choose-action"
+                  type="button"
+                  onClick={() => {
+                    let mainMentalHealthExpertPicker = document.getElementById(
+                      'main-mental-health-expert-picker'
+                    )
 
-                let expandIcon = document.querySelector(
-                  '.my-mental-health-filter-choose-action-icon'
-                )
+                    let expandIcon = document.querySelector(
+                      '.my-mental-health-filter-choose-action-icon'
+                    )
 
-                if (
-                  mainMentalHealthExpertPicker.classList.contains(
-                    'main-mental-health-expert-picker-shrinked'
-                  )
-                ) {
-                  mainMentalHealthExpertPicker.classList.remove(
-                    'main-mental-health-expert-picker-shrinked'
-                  )
-                  mainMentalHealthExpertPicker.classList.add(
-                    'main-mental-health-expert-picker-expanded'
-                  )
+                    if (
+                      mainMentalHealthExpertPicker.classList.contains(
+                        'main-mental-health-expert-picker-shrinked'
+                      )
+                    ) {
+                      mainMentalHealthExpertPicker.classList.remove(
+                        'main-mental-health-expert-picker-shrinked'
+                      )
+                      mainMentalHealthExpertPicker.classList.add(
+                        'main-mental-health-expert-picker-expanded'
+                      )
 
-                  expandIcon.classList.remove(
-                    'my-mental-health-filter-choose-action-icon-expand'
-                  )
-                  expandIcon.classList.add(
-                    'my-mental-health-filter-choose-action-icon-shrink'
-                  )
-                  return
-                }
+                      expandIcon.classList.remove(
+                        'my-mental-health-filter-choose-action-icon-expand'
+                      )
+                      expandIcon.classList.add(
+                        'my-mental-health-filter-choose-action-icon-shrink'
+                      )
+                      return
+                    }
 
-                if (
-                  mainMentalHealthExpertPicker.classList.contains(
-                    'main-mental-health-expert-picker-expanded'
-                  )
-                ) {
-                  mainMentalHealthExpertPicker.classList.remove(
-                    'main-mental-health-expert-picker-expanded'
-                  )
-                  mainMentalHealthExpertPicker.classList.add(
-                    'main-mental-health-expert-picker-shrinked'
-                  )
+                    if (
+                      mainMentalHealthExpertPicker.classList.contains(
+                        'main-mental-health-expert-picker-expanded'
+                      )
+                    ) {
+                      mainMentalHealthExpertPicker.classList.remove(
+                        'main-mental-health-expert-picker-expanded'
+                      )
+                      mainMentalHealthExpertPicker.classList.add(
+                        'main-mental-health-expert-picker-shrinked'
+                      )
 
-                  expandIcon.classList.remove(
-                    'my-mental-health-filter-choose-action-icon-shrink'
-                  )
-                  expandIcon.classList.add(
-                    'my-mental-health-filter-choose-action-icon-expand'
-                  )
-                }
-              }}
-            >
-              <span>Izaberite stručnjaka:</span>
-              <TiArrowSortedDown className="my-mental-health-filter-choose-action-icon my-mental-health-filter-choose-action-icon-expand" />
-            </button>
+                      expandIcon.classList.remove(
+                        'my-mental-health-filter-choose-action-icon-shrink'
+                      )
+                      expandIcon.classList.add(
+                        'my-mental-health-filter-choose-action-icon-expand'
+                      )
+                    }
+                  }}
+                >
+                  <span>Izaberite stručnjaka:</span>
+                  <TiArrowSortedDown className="my-mental-health-filter-choose-action-icon my-mental-health-filter-choose-action-icon-expand" />
+                </button>
 
-            <MentalHealthExpertsDropdown />
+                <MentalHealthExpertsDropdown />
+              </>
+            )}
           </div>
         )}
       </div>

@@ -1,17 +1,17 @@
 import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 
+import { getMentalHealthExperts } from '../../redux-toolkit/features/mentalExpertSlice'
 import {
   changeRequestStatus,
   getMyExperts,
   setExperts,
   setSelectedMentalHealthExpertIds,
 } from '../../redux-toolkit/features/therapySlice'
+import { stringIsNullOrEmpty } from '../../utils/helper-methods/methods'
 import { requestStatuses } from '../../enums/requestStatuses'
 
 import MentalHealthExpertsDropdownCSS from './MentalHealthExpertsDropdown.css'
-import { getMentalHealthExperts } from '../../redux-toolkit/features/mentalExpertSlice'
-import { toast } from 'react-toastify'
-import { stringIsNullOrEmpty } from '../../utils/helper-methods/methods'
 
 export const MentalHealthExpertsDropdown = () => {
   let dispatch = useDispatch()
