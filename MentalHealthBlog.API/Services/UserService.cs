@@ -188,10 +188,17 @@ namespace MentalHealthBlog.API.Services
 
                             if (newRegularUserRequest.IsInTherapy == true && hasSelectedMentalHealthExperts)
                             {
+                                var therapyRequestHelper = new TherapyRequestHelper(_configuration);
+                                var userHelper = new UserHelper(_context);
+                                var dbMentalHealthExpert = new MentalHealthExpert();
+
                                 foreach (var mentalHealthExpertToConnectWith in mentalHealthExpertsId)
                                 {
                                     int MentalHealthExpertId = int.Parse(mentalHealthExpertToConnectWith);
+                                    var dbMentalHealthExpertInfoTuple = await userHelper.ReturnUserAndInfoIsItMentalHealthExpert(MentalHealthExpertId);
+                                    dbMentalHealthExpert = (MentalHealthExpert)dbMentalHealthExpertInfoTuple.Item1;
                                     await _context.TherapyRequests.AddAsync(new TherapyRequest(regularUser.UserId, MentalHealthExpertId));
+                                    await therapyRequestHelper.SendEmailToInformAboutConnectionRequest(dbMentalHealthExpert, regularUser);
                                 }
                                 await _context.SaveChangesAsync();
                                 _userLoggerService.LogInformation($"REGISTER: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", user);

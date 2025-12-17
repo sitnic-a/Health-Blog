@@ -62,6 +62,12 @@ export const MentalHealthExpertsDropdown = () => {
                         className="main-mental-health-expert-picker-option-action picker-option-send-request-action"
                         type="button"
                         onClick={() => {
+                          authenticatedUserLocalStorage =
+                            localStorage.getItem('authenticatedUser')
+                          authenticatedUser = JSON.parse(
+                            authenticatedUserLocalStorage
+                          )
+
                           let objectWithData = {
                             mentalHealthExpertUserId:
                               expert?.mentalHealthExpertUserId,

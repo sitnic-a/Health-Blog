@@ -1,4 +1,5 @@
 ﻿using MentalHealthBlog.API.Exceptions;
+using MentalHealthBlog.API.Methods;
 using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
@@ -18,12 +19,15 @@ namespace MentalHealthBlog.API.Services.Therapy
     }
     public class TherapyRequestService : ITherapyRequestService
     {
+        private readonly IConfiguration _configuration;
         private readonly DataContext _context;
         private readonly IMentalExpertService _mentalExpertService;
         private readonly ILogger<ITherapyRequestService> _therapyRequestLoggerService;
 
-        public TherapyRequestService(DataContext context, IMentalExpertService mentalExpertService, ILogger<ITherapyRequestService> therapyRequestLoggerService)
+        public TherapyRequestService(IConfiguration configuration, DataContext context,
+            IMentalExpertService mentalExpertService, ILogger<ITherapyRequestService> therapyRequestLoggerService)
         {
+            _configuration = configuration;
             _context = context;
             _mentalExpertService = mentalExpertService;
             _therapyRequestLoggerService = therapyRequestLoggerService;
@@ -214,6 +218,14 @@ namespace MentalHealthBlog.API.Services.Therapy
                 var requestToModify = await _context.TherapyRequests
                     .SingleOrDefaultAsync(tr => tr.MentalHealthExpertId == request.MentalHealthExpertUserId &&
                                          tr.RegularUserId == request.RegularUserId);
+                var userHelper = new UserHelper(_context);
+                var therapyRequestHelper = new TherapyRequestHelper(_configuration);
+                var dbMentalHealthExpert = new MentalHealthExpert();
+                var dbRegularUser = new RegularUser();
+                var dbMentalHealthExpertsInfoTuple = await userHelper.ReturnUserAndInfoIsItMentalHealthExpert(request.MentalHealthExpertUserId);
+                var dbRegularUsersInfoTuple = await userHelper.ReturnUserAndInfoIsItMentalHealthExpert(request.RegularUserId);
+                dbMentalHealthExpert = (MentalHealthExpert)dbMentalHealthExpertsInfoTuple.Item1;
+                dbRegularUser = (RegularUser)dbRegularUsersInfoTuple.Item1;
 
                 if (requestToModify is null)
                 {
@@ -224,6 +236,7 @@ namespace MentalHealthBlog.API.Services.Therapy
                         {
                             await _context.TherapyRequests.AddAsync(userTherapyRequest);
                             await _context.SaveChangesAsync();
+                            await therapyRequestHelper.SendEmailToInformAboutConnectionRequest(dbMentalHealthExpert, dbRegularUser);
 
                             var searchQuery = new SearchExpertDto
                             {
@@ -259,6 +272,8 @@ namespace MentalHealthBlog.API.Services.Therapy
                 {
                     requestToModify.RequestStatus = (RequestStatusEnum)request.NewRequestStatus;
                     await _context.SaveChangesAsync();
+                    await therapyRequestHelper.SendEmailToInformAboutConnectionRequest(dbMentalHealthExpert, dbRegularUser);
+                    
                     var searchQuery = new SearchExpertDto
                     {
                         LoggedUserId = request.MentalHealthExpertUserId
