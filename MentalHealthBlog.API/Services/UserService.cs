@@ -260,16 +260,20 @@ namespace MentalHealthBlog.API.Services
                 {
                     var dbUserRoles = jwtMiddleware.GetRoles(dbUser);
 
-                    if (dbUserRoles.Any(r => r.Id == __PSYCHOLOGIST_ROLE_ID__))
+                     if (dbUserRoles.Any(r => r.Id == __PSYCHOLOGIST_ROLE_ID__))
                     {
                         var mentalHealthExpert = await _context.MentalHealthExperts.SingleOrDefaultAsync(mhe => mhe.UserId == dbUser.Id);
                         isPending = mentalHealthExpert.IsApproved == false && mentalHealthExpert.IsRejected == false;
-                        if (dbUser.IsUsingForTheFirstTime == true)
+                        if (dbUser.IsUsingForTheFirstTime == true && isPending == false)
                         {
                             mentalHealthExpert.FirstLoggedAt = DateTime.UtcNow;
                             mentalHealthExpert.TrialEndsAt = DateTime.UtcNow.AddDays(__TRIAL_PERIOD__);
                         }
-                        mentalHealthExpert.LastLoggedAt = DateTime.UtcNow;
+
+                        if (dbUser.IsUsingForTheFirstTime == false && isPending == false)
+                        {
+                            mentalHealthExpert.LastLoggedAt = DateTime.UtcNow;
+                        }
                     }
                     else if (dbUserRoles.Any(r => r.Id == __USER_ROLE__))
                     {
@@ -279,7 +283,11 @@ namespace MentalHealthBlog.API.Services
                             dbRegularUser.FirstLoggedAt = DateTime.UtcNow;
                             dbRegularUser.TrialEndsAt = DateTime.UtcNow.AddDays(__TRIAL_PERIOD__);
                         }
-                        dbRegularUser.LastLoggedAt = DateTime.UtcNow;
+
+                        if (dbUser.IsUsingForTheFirstTime == false)
+                        {
+                            dbRegularUser.LastLoggedAt = DateTime.UtcNow;
+                        }
                     }
 
                     var token = jwtMiddleware.GenerateToken(dbUser);
