@@ -45,7 +45,6 @@ export const Register = () => {
     (store) => store.mentalExpert
   )
   let { selectedMentalHealthExpertIds } = useSelector((store) => store.therapy)
-
   let { isMentalHealthExpert, isRegularUser } = useFetchLocationState()
   let [isInTherapy, setIsInTherapy] = useState(false)
   let {
@@ -80,6 +79,7 @@ export const Register = () => {
 
   let registerUser = async (e) => {
     e.preventDefault()
+
     let roles = []
     let selectedRoles = document.querySelectorAll(
       'input[type="checkbox"]:checked'
@@ -395,6 +395,12 @@ export const Register = () => {
           JSON.stringify(serviceResponseObject)
         )
         navigate('/subscription-plans')
+      } else {
+        toast.error('Registracija korisnika nije moguća!', {
+          autoClose: 3000,
+          position: 'bottom-right',
+        })
+        return
       }
     })
 

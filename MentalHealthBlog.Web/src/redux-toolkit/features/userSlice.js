@@ -219,28 +219,8 @@ export const userSlice = createSlice({
         state.isRegistered = false
       })
       .addCase(register.fulfilled, (state, action) => {
+        state.isLoading = false
         state.statusCode = action.payload.statusCode
-        if (state.statusCode === 201) {
-          toast.success('Uspješno ste kreirali profil', {
-            autoClose: 1500,
-            position: 'bottom-right',
-          })
-          state.isRegistered = true
-          state.isLoading = false
-          return
-        }
-        if (
-          state.statusCode !== 200 ||
-          state.statusCode !== 201 ||
-          state.statusCode !== 204
-        ) {
-          toast.error('Registracija korisnika nije moguća!', {
-            autoClose: 3000,
-            position: 'bottom-right',
-          })
-          state.isLoading = false
-          return
-        }
       })
 
       //getDbRoles
