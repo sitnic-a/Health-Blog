@@ -38,8 +38,10 @@ import {
 } from '../../redux-toolkit/features/validationSlice'
 import { Password } from '../shared/Password/Password'
 
+import { Loader } from '../shared/Loader/Loader'
+
 export const Register = () => {
-  let { dbRoles } = useSelector((store) => store.user)
+  let { dbRoles, isLoading } = useSelector((store) => store.user)
   let [photoFile, setPhotoFile] = useState({})
   let { suggestedMentalHealthExperts } = useSelector(
     (store) => store.mentalExpert
@@ -409,7 +411,9 @@ export const Register = () => {
     // })
   }
 
-  return (
+  return isLoading ? (
+    <Loader />
+  ) : (
     <section id="register-container">
       <h1>Registracija novog korisnika</h1>
       <p className="required-field">Polja obavezna za unos *</p>

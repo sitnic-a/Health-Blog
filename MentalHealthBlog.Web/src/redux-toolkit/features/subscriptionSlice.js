@@ -189,7 +189,7 @@ let subscriptionSlice = createSlice({
         state.isLoading = true
       })
       .addCase(createSubscription.fulfilled, (state, action) => {
-        state.isLoading = true
+        state.isLoading = false
 
         let statusCode = action?.payload?.statusCode
         if (statusCode === 201) {
@@ -197,7 +197,7 @@ let subscriptionSlice = createSlice({
         }
       })
       .addCase(createSubscription.rejected, (state, action) => {
-        state.isLoading = true
+        state.isLoading = false
       })
 
       //getUsersCurrentSubscription
