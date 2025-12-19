@@ -25,8 +25,8 @@ namespace MentalHealthBlog.API.Methods
             var mentalHealthExpertFullName = string.Concat(dbMentalHealthExpert.FirstName, " ", dbMentalHealthExpert.LastName);
             var regularUserFullName = string.Concat(dbRegularUser.FirstName, " ", dbRegularUser.LastName);
 
-            var applicationUrl = "https://localhost:3000/";
-            //var applicationUrl = "https://mapp-terapija.com/";
+            //var applicationUrl = "https://localhost:3000/";
+            var applicationUrl = "https://mapp-terapija.com/";
 
             var smtpHost = _configuration.GetValue<string>("SMTP_HOST");
             var smtpPort = _configuration.GetValue<int>("SMTP_PORT");
