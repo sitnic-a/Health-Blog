@@ -90,6 +90,23 @@ export const removeUserById = createAsyncThunk('id', async (objectWithData) => {
   return response
 })
 
+export const suspendUser = createAsyncThunk(
+  'suspend/[userId]',
+  async (objectWithData) => {
+    let url = `${application.application_url}/admin/suspend/${objectWithData?.requestObj?.userId}`
+    let request = await fetch(url, {
+      method: 'PUT',
+      body: JSON.stringify(objectWithData?.requestObj?.isEnablingUsage),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
+      },
+    })
+    let response = request.json()
+    return response
+  }
+)
+
 let adminSlice = createSlice({
   initialState,
   name: 'adminSlice',
@@ -127,10 +144,10 @@ let adminSlice = createSlice({
         state.isLoading = true
       })
       .addCase(getDbUsers.fulfilled, (state, action) => {
+        state.isLoading = false
         let statusCode = action?.payload?.statusCode
         if (statusCode === 200) {
           let serviceResponseObject = action?.payload
-          state.isLoading = false
           state.dbUsers = serviceResponseObject?.serviceResponseObject
           state.isFailed = false
           return
@@ -205,6 +222,19 @@ let adminSlice = createSlice({
           position: 'bottom-right',
         })
       })
+
+      //Suspend user
+      .addCase(suspendUser.pending, () => {})
+      .addCase(suspendUser.fulfilled, (state, action) => {
+        let statusCode = action?.payload?.statusCode
+        if (statusCode === 200) {
+          toast.success('User uspješno suspendovan!', {
+            autoClose: 3000,
+            position: 'bottom-right',
+          })
+        }
+      })
+      .addCase(suspendUser.rejected, (state, action) => {})
   },
 })
 

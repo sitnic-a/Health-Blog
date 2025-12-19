@@ -1,5 +1,6 @@
 ﻿using MentalHealthBlogAPI.Models;
-using System.Text.Json.Serialization;
+
+#pragma warning disable CS8618
 
 namespace MentalHealthBlog.API.Models
 {

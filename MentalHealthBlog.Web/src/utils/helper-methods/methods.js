@@ -534,6 +534,21 @@ export const checkTagsValidity = (tags, validationMessages) => {
   }
 }
 
+export const checkSubscriptionAmountValidity = (
+  paidAmount,
+  validationMessages
+) => {
+  let isValid = true
+  let regexPattern = /^([1-9][0-9]*)?$/
+
+  if (!regexPattern.test(paidAmount)) {
+    validationMessages.push('Molimo Vas da unosite isključivo brojeve [0-9]')
+    return [!isValid, validationMessages]
+  }
+
+  return [isValid, validationMessages]
+}
+
 export const switchActiveTab = (element) => {
   element.forEach((tab) => {
     if (tab.pathname === window.location.pathname) {

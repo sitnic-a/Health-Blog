@@ -118,6 +118,13 @@ export const AdminDashboard = () => {
               <p className="admin-link-manage-users-title">Korisnici</p>
             </div>
           </Link>
+
+          <Link
+            className="admin-dashboard-link-request admin-link-subscriptions"
+            to={'admin-subscriptions'}
+          >
+            <p className="admin-link-subscriptions-title">Uplate</p>
+          </Link>
         </div>
       </div>
 

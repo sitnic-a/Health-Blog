@@ -3,25 +3,29 @@ using MailKit.Net.Smtp;
 using MailKit.Security;
 using MentalHealthBlog.API.Exceptions;
 using MentalHealthBlog.API.Methods;
+using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using MimeKit;
 
-#pragma warning disable CS8604, CS8602
+#pragma warning disable CS8602, CS8604, CS8629
 
 namespace MentalHealthBlog.API.Services.Subscription
 {
     enum SubscriptionLogTypes
     {
         INVALID_DATA,
+
         SUCCCESS,
         NOT_FOUND,
         EMPTY,
         IS_IN_TRIAL_PERIOD,
+        SUBSCRIPTION_AMOUNT_INVALID,
         SUBSCRIPTION_CREATION_FAILED,
-        SUBSCRIPTION_CREATION_SUCCESSFULL
+        SUBSCRIPTION_CREATION_SUCCESSFULL,
+        SUBSCRIPTION_INSUFICIENT_FUNDS
     }
     public class SubscriptionService : ISubscriptionService
     {
@@ -39,6 +43,48 @@ namespace MentalHealthBlog.API.Services.Subscription
             _subscriptionLoggerService = subscriptionLoggerService;
         }
 
+        public async Task<Response> GetSubscriptionUsers(SearchSubscriptionUsersRequestDto? query = null)
+        {
+            try
+            {
+                var subscriptionHelper = new SubscriptionHelper(_context, _mapper, _subscriptionLoggerService);
+                var registeredSubscriptions = await _context.Subscriptions.AnyAsync();
+                var combinedSubscription = await subscriptionHelper.MergeMentalHealthExpertsAndRegularUsersSubscription();
+
+                if (registeredSubscriptions && !combinedSubscription.Any() || combinedSubscription == null)
+                {
+                    _subscriptionLoggerService.LogWarning($"SUBSCRIPTION-USERS: {SubscriptionLogTypes.NOT_FOUND.ToString()}");
+                    throw new RecordNotFoundException("Subscriptions not filled properly!");
+                }
+
+                if (registeredSubscriptions && combinedSubscription.Any() && combinedSubscription != null)
+                {
+                    // check query if is not null
+                    if (query != null)
+                    {
+                        // create separate filter function for filtering data
+                        var filteredSubscriptions = await subscriptionHelper.FilterSubscriptions(combinedSubscription, query);
+                        if (filteredSubscriptions.Any())
+                        {
+                            _subscriptionLoggerService.LogInformation($"SUBSCRIPTION-USERS: {SubscriptionLogTypes.SUCCCESS.ToString()}");
+                            return new Response(filteredSubscriptions, StatusCodes.Status200OK, SubscriptionLogTypes.SUCCCESS.ToString());
+                        }
+                        _subscriptionLoggerService.LogWarning($"SUBSCRIPTION-USERS: {SubscriptionLogTypes.EMPTY.ToString()}");
+                        return new Response(filteredSubscriptions, StatusCodes.Status200OK, SubscriptionLogTypes.EMPTY.ToString());
+                    }
+                    // return data without filtering
+                    _subscriptionLoggerService.LogInformation($"SUBSCRIPTION-USERS: {SubscriptionLogTypes.SUCCCESS.ToString()}");
+                    return new Response(combinedSubscription, StatusCodes.Status200OK, SubscriptionLogTypes.SUCCCESS.ToString());
+                }
+                _subscriptionLoggerService.LogWarning($"SUBSCRIPTION-USERS: {SubscriptionLogTypes.EMPTY.ToString()}");
+                return new Response(new List<SubscriptionUsersDto>(), StatusCodes.Status200OK, SubscriptionLogTypes.EMPTY.ToString());
+            }
+            catch (Exception e)
+            {
+                _subscriptionLoggerService.LogError($"SUBSCRIPTION-USERS: {e.Message}");
+                throw;
+            }
+        }
         public async Task<Response> GetUsersTrialPeriod(int userId)
         {
             try
@@ -151,7 +197,7 @@ namespace MentalHealthBlog.API.Services.Subscription
                     }
                     isDbUserInTrial = dbMentalHealthExpert.IsInTrialPeriod;
                     usersSubscriptions = await _context.Subscriptions
-                        .Join( _context.MentalHealthExperts,
+                        .Join(_context.MentalHealthExperts,
                               (s) => s.UserId,
                               (mhe) => mhe.UserId,
                               (s, mhe) => new CurrentSubscriptionDto
@@ -209,7 +255,7 @@ namespace MentalHealthBlog.API.Services.Subscription
                     throw new ArgumentException("Bad request!");
                 }
 
-                
+
                 if (request.IsMentalHealthExpert == false)
                 {
                     var dbRegularUser = await _context.RegularUsers.SingleOrDefaultAsync(ru => ru.UserId == request.UserId);
@@ -434,8 +480,54 @@ namespace MentalHealthBlog.API.Services.Subscription
                     throw new CreateRecordException("Subscription couldn't be created!");
                 }
 
+                var usersFirstSubscription = await _context.Subscriptions
+                    .Where(s => s.UserId == request.UserId)
+                    .FirstAsync();
+
+                var subscriptionHelper = new SubscriptionHelper(_context, _mapper, _subscriptionLoggerService);
+                var userHelper = new UserHelper(_context);
+                int monthsToExtend = 0;
+                int subscriptionPlanId = -1;
+                int __MONTHLY_REGULAR_USER_SUBSCRIPTION_PLAN_ID__ = 1;
+                int __MONTHLY_MENTAL_HEALTH_EXPERT_SUBSCRIPTION_PLAN_ID__ = 3;
+                float[] regularUserSubsciptionPlanPrices = { 20f, 200f };
+                float[] mentalHealthExpertSubsciptionPlanPrices = { 50f, 500f };
+                float subscriptionUserPlanAmount = 0f;
+                int __NOT_PREDEFINED_SUBSCRIPTION_PLAN_ID__ = 5;
+                MentalHealthExpert dbMentalHealthExpert = new MentalHealthExpert();
+                RegularUser dbRegularUser = new RegularUser();
+
+                Tuple<object, bool> tuple = await userHelper.ReturnUserAndInfoIsItMentalHealthExpert(request.UserId);
+                bool isMentalHealthExpert = tuple.Item2;
+
+                if (usersFirstSubscription != null)
+                {
+                    if (usersFirstSubscription?.SubscriptionPlanId <= 0 && !request.PaidAmount.HasValue)
+                    {
+                        _subscriptionLoggerService.LogWarning($"CREATE-SUBSCRIPTION: {SubscriptionLogTypes.SUBSCRIPTION_AMOUNT_INVALID.ToString()}");
+                        throw new CreateRecordException("Subscription amount is not valid!");
+                    }
+
+                    if (usersFirstSubscription?.PaidAt == null)
+                    {
+                        return await subscriptionHelper
+                             .RecordSubscription(usersFirstSubscription, request, isMentalHealthExpert, isAddingNewOne: false);
+                    }
+
+                    try
+                    {
+                    return await subscriptionHelper
+                        .RecordSubscription(usersFirstSubscription, request, isMentalHealthExpert, isAddingNewOne: true);
+
+                    }
+                    catch (Exception e)
+                    {
+                        _subscriptionLoggerService.LogError($"CREATE-SUBSCRIPTION: {e.Message}");
+                        throw;
+                    }
+                }
+
                 return new Response(new object(), StatusCodes.Status200OK, $"CREATE-SUBSCRIPTION: {SubscriptionLogTypes.SUBSCRIPTION_CREATION_SUCCESSFULL.ToString()}");
-                // Create subscription when administrator click paid button
             }
             catch (Exception e)
             {

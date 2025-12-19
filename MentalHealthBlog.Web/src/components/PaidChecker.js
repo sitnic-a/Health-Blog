@@ -17,6 +17,7 @@ export const PaidChecker = () => {
   let { usersTrialPeriod, currentSubscription } = useSelector(
     (store) => store.subscription
   )
+  let isPending = localStorage.getItem('isPending')
 
   useEffect(() => {
     let objectWithData = {
@@ -27,10 +28,11 @@ export const PaidChecker = () => {
     dispatch(getUsersCurrentSubscription(objectWithData))
   }, [
     usersTrialPeriod?.isInTrialPeriod,
-    currentSubscription?.havePaidForSubscription,
+    usersTrialPeriod?.havePaidForSubscription,
   ])
 
-  return usersTrialPeriod?.isInTrialPeriod ||
+  return isPending === true ||
+    usersTrialPeriod?.isInTrialPeriod ||
     usersTrialPeriod?.havePaidForSubscription ||
     isAdmin ? (
     <Outlet />

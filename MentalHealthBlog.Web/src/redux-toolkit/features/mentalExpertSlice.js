@@ -9,6 +9,7 @@ let initialState = {
   sharedContent: [],
   usersThatSharedIncludingItsContent: {},
   overlayPost: null,
+  isLoadingExperts: false,
 }
 
 export const getMentalHealthExperts = createAsyncThunk(
@@ -128,13 +129,18 @@ export const mentalExpertSlice = createSlice({
     builder
 
       //experts
-      .addCase(getMentalHealthExperts.pending, () => {})
+      .addCase(getMentalHealthExperts.pending, (state) => {
+        state.isLoadingExperts = true
+      })
       .addCase(getMentalHealthExperts.fulfilled, (state, action) => {
+        state.isLoadingExperts = false
         state.dbMentalHealthExperts = action?.payload?.serviceResponseObject
         state.suggestedMentalHealthExperts =
           action?.payload?.serviceResponseObject
       })
-      .addCase(getMentalHealthExperts.rejected, (state, action) => {})
+      .addCase(getMentalHealthExperts.rejected, (state, action) => {
+        state.isLoadingExperts = false
+      })
 
       //shares-per-user
       .addCase(getSharesPerUser.pending, () => {})

@@ -1,12 +1,33 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { application } from '../../application'
+import { toast } from 'react-toastify'
 
 let initialState = {
+  subscriptionUsers: [],
   usersTrialPeriod: null,
   currentSubscription: null,
   subscriptionPlanId: 0,
   newSubscription: null,
+  userToProhibitUsage: null,
+  isLoading: false,
 }
+
+export const getSubscriptionUsers = createAsyncThunk(
+  'subscription-users',
+  async (objectWithData) => {
+    let url = `${application.application_url}/subscription/subscription-users`
+    let request = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(objectWithData?.query),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
+      },
+    })
+    let response = request.json()
+    return response
+  }
+)
 
 export const getUsersTrialPeriod = createAsyncThunk(
   'trial/[userId]',
@@ -106,9 +127,42 @@ let subscriptionSlice = createSlice({
     setSubscriptionPlanId: (state, action) => {
       state.subscriptionPlanId = action?.payload
     },
+    setUserToProhibitUsage: (state, action) => {
+      state.userToProhibitUsage = action?.payload
+    },
   },
   extraReducers: (builder) => {
     builder
+
+      //getSubscriptionUsers
+      .addCase(getSubscriptionUsers.pending, (state, action) => {
+        state.isLoading = true
+      })
+      .addCase(getSubscriptionUsers.fulfilled, (state, action) => {
+        state.isLoading = false
+        let statusCode = action?.payload?.statusCode
+        let serviceResponseObject = action?.payload?.serviceResponseObject
+
+        if (statusCode === 200 && serviceResponseObject?.length > 0) {
+          toast.success(
+            'Uspješno ste dobavili sve korisnike i njihove uplate',
+            {
+              autoClose: 3500,
+              position: 'bottom-right',
+            }
+          )
+          state.subscriptionUsers = serviceResponseObject
+        } else if (statusCode === 200 && serviceResponseObject?.length === 0) {
+          toast.warning('Trenutno nema registrovanih korisnika!', {
+            autoClose: 3500,
+            position: 'bottom-right',
+          })
+          state.subscriptionUsers = serviceResponseObject
+        }
+      })
+      .addCase(getSubscriptionUsers.rejected, (state, action) => {
+        state.isLoading = false
+      })
 
       //getUsersTrialPeriod
       .addCase(getUsersTrialPeriod.pending, (state, action) => {})
@@ -135,14 +189,20 @@ let subscriptionSlice = createSlice({
       .addCase(sendExpiringEmail.rejected, (state, action) => {})
 
       //createSubscription
-      .addCase(createSubscription.pending, (state, action) => {})
+      .addCase(createSubscription.pending, (state, action) => {
+        state.isLoading = true
+      })
       .addCase(createSubscription.fulfilled, (state, action) => {
+        state.isLoading = false
+
         let statusCode = action?.payload?.statusCode
         if (statusCode === 201) {
           state.newSubscription = action?.payload?.serviceResponseObject
         }
       })
-      .addCase(createSubscription.rejected, (state, action) => {})
+      .addCase(createSubscription.rejected, (state, action) => {
+        state.isLoading = false
+      })
 
       //getUsersCurrentSubscription
       .addCase(getUsersCurrentSubscription.pending, (state, action) => {})
@@ -168,5 +228,6 @@ let subscriptionSlice = createSlice({
   },
 })
 
-export const { setSubscriptionPlanId } = subscriptionSlice.actions
+export const { setSubscriptionPlanId, setUserToProhibitUsage } =
+  subscriptionSlice.actions
 export default subscriptionSlice.reducer

@@ -31,6 +31,11 @@
   margin-bottom: 1.5rem;
 }
 
+.register-info-main-container .loading-spinner-container {
+  margin-block: 0.5rem;
+  padding-block: 0.5rem;
+}
+
 .register-info-in-therapy-container {
   display: flex;
   margin-block: 1rem;

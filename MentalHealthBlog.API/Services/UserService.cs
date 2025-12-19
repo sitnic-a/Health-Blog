@@ -188,10 +188,17 @@ namespace MentalHealthBlog.API.Services
 
                             if (newRegularUserRequest.IsInTherapy == true && hasSelectedMentalHealthExperts)
                             {
+                                var therapyRequestHelper = new TherapyRequestHelper(_configuration);
+                                var userHelper = new UserHelper(_context);
+                                var dbMentalHealthExpert = new MentalHealthExpert();
+
                                 foreach (var mentalHealthExpertToConnectWith in mentalHealthExpertsId)
                                 {
                                     int MentalHealthExpertId = int.Parse(mentalHealthExpertToConnectWith);
+                                    var dbMentalHealthExpertInfoTuple = await userHelper.ReturnUserAndInfoIsItMentalHealthExpert(MentalHealthExpertId);
+                                    dbMentalHealthExpert = (MentalHealthExpert)dbMentalHealthExpertInfoTuple.Item1;
                                     await _context.TherapyRequests.AddAsync(new TherapyRequest(regularUser.UserId, MentalHealthExpertId));
+                                    await therapyRequestHelper.SendEmailToInformAboutConnectionRequest(dbMentalHealthExpert, regularUser);
                                 }
                                 await _context.SaveChangesAsync();
                                 _userLoggerService.LogInformation($"REGISTER: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", user);
@@ -260,14 +267,19 @@ namespace MentalHealthBlog.API.Services
                 {
                     var dbUserRoles = jwtMiddleware.GetRoles(dbUser);
 
-                    if (dbUserRoles.Any(r => r.Id == __PSYCHOLOGIST_ROLE_ID__))
+                     if (dbUserRoles.Any(r => r.Id == __PSYCHOLOGIST_ROLE_ID__))
                     {
                         var mentalHealthExpert = await _context.MentalHealthExperts.SingleOrDefaultAsync(mhe => mhe.UserId == dbUser.Id);
                         isPending = mentalHealthExpert.IsApproved == false && mentalHealthExpert.IsRejected == false;
-                        if (dbUser.IsUsingForTheFirstTime == true)
+                        if (dbUser.IsUsingForTheFirstTime == true && isPending == false)
                         {
                             mentalHealthExpert.FirstLoggedAt = DateTime.UtcNow;
                             mentalHealthExpert.TrialEndsAt = DateTime.UtcNow.AddDays(__TRIAL_PERIOD__);
+                        }
+
+                        if (dbUser.IsUsingForTheFirstTime == false && isPending == false)
+                        {
+                            mentalHealthExpert.LastLoggedAt = DateTime.UtcNow;
                         }
                     }
                     else if (dbUserRoles.Any(r => r.Id == __USER_ROLE__))
@@ -277,6 +289,11 @@ namespace MentalHealthBlog.API.Services
                         {
                             dbRegularUser.FirstLoggedAt = DateTime.UtcNow;
                             dbRegularUser.TrialEndsAt = DateTime.UtcNow.AddDays(__TRIAL_PERIOD__);
+                        }
+
+                        if (dbUser.IsUsingForTheFirstTime == false)
+                        {
+                            dbRegularUser.LastLoggedAt = DateTime.UtcNow;
                         }
                     }
 

@@ -6,8 +6,9 @@ import {
 } from '../../../../../redux-toolkit/features/adminSlice'
 import { getDbRoles } from '../../../../../redux-toolkit/features/userSlice'
 import { openDeleteModal } from '../../../../../redux-toolkit/features/modalSlice'
-import { CiTrash } from 'react-icons/ci'
 import { toast } from 'react-toastify'
+import { CiTrash } from 'react-icons/ci'
+import { Loader } from '../../../../shared/Loader/Loader'
 
 import ManageUsersTableCSS from './ManageUsersTable.css'
 
@@ -18,7 +19,9 @@ export const ManageUsersTable = () => {
   let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
   let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
 
-  let { dbUsers, selectedRole, isFailed } = useSelector((store) => store.admin)
+  let { dbUsers, selectedRole, isFailed, isLoading } = useSelector(
+    (store) => store.admin
+  )
 
   useEffect(() => {
     let objectWithData = {
@@ -67,9 +70,10 @@ export const ManageUsersTable = () => {
     })
   }, [])
 
-  return (
-    !isFailed &&
-    dbUsers?.length > 0 && (
+  return isLoading === true ? (
+    <Loader />
+  ) : (
+    !isFailed && dbUsers?.length > 0 && (
       <div className="manage-users-users-list-main-container">
         <table className="manage-users-table">
           <thead>

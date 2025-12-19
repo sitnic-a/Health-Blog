@@ -7,13 +7,15 @@ import { RegularUserPlans } from '../RegularUserPlans/RegularUserPlans'
 import { MentalHealthExpertPlans } from '../MentalHealthExpertPlans/MentalHealthExpertPlans'
 
 import SubscriptionPlansCSS from './SubscriptionPlans.css'
+import { Loader } from '../../shared/Loader/Loader'
 
 export const SubscriptionPlans = () => {
   let dispatch = useDispatch()
   let navigate = useNavigate()
   let { plans } = require('../../subscriptionPlans.json')
-
-  let { subscriptionPlanId } = useSelector((store) => store.subscription)
+  let { subscriptionPlanId, isLoading } = useSelector(
+    (store) => store.subscription
+  )
   let justRegisteredUserLocalStorage =
     localStorage.getItem('justRegisteredUser')
   let justRegisteredUser
@@ -25,7 +27,9 @@ export const SubscriptionPlans = () => {
     justRegisteredUser = JSON.parse(justRegisteredUserLocalStorage)
   }
 
-  return (
+  return isLoading ? (
+    <Loader />
+  ) : (
     <section id="register-choose-subscription-plan-main-container">
       <div className="register-choose-subscription-plan-container">
         <div className="register-choose-subscription-plan-header">
