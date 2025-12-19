@@ -6,14 +6,17 @@ import { getDbRoles } from '../../../../redux-toolkit/features/userSlice'
 import {
   createSubscription,
   getSubscriptionUsers,
+  setUserToProhibitUsage,
 } from '../../../../redux-toolkit/features/subscriptionSlice'
 import { suspendUser } from '../../../../redux-toolkit/features/adminSlice'
 import { setSubscriptionAmountValidationData } from '../../../../redux-toolkit/features/validationSlice'
+import { openProhibitUserUsageModal } from '../../../../redux-toolkit/features/modalSlice'
 import {
   checkSubscriptionAmountValidity,
   stringIsNullOrEmpty,
 } from '../../../../utils/helper-methods/methods'
 import { db_roles } from '../../../../enums/roles'
+import { ProhibitUserUsageModal } from './ProhibitUserUsageModal/ProhibitUserUsageModal'
 import { NewSubscriptionUserModal } from './NewSubscriptionUserModal/NewSubscriptionUserModal'
 import { Navbar } from '../../../shared/Navbar/Navbar'
 import { Loader } from '../../../shared/Loader/Loader'
@@ -21,8 +24,6 @@ import { Loader } from '../../../shared/Loader/Loader'
 import { LiaSearchSolid } from 'react-icons/lia'
 
 import AdminSubscriptionsCSS from './AdminSubscriptions.css'
-import { ProhibitUserUsageModal } from './ProhibitUserUsageModal/ProhibitUserUsageModal'
-import { openProhibitUserUsageModal } from '../../../../redux-toolkit/features/modalSlice'
 
 export const AdminSubscriptions = () => {
   let dispatch = useDispatch()
@@ -427,42 +428,12 @@ export const AdminSubscriptions = () => {
                           className="admin-subscriptions-subscription-table-body-cell-action admin-subscription-subscription-disable"
                           type="button"
                           onClick={() => {
+                            dispatch(setUserToProhibitUsage(subscriptionUser))
                             dispatch(
                               openProhibitUserUsageModal(
                                 !isProhibitUserUsageModalOpen
                               )
                             )
-                            // authenticatedUserLocalStorage =
-                            //   localStorage.getItem('authenticatedUser')
-                            // authenticatedUser = JSON.parse(
-                            //   authenticatedUserLocalStorage
-                            // )
-
-                            // let requestObj = {
-                            //   userId: subscriptionUser?.userId,
-                            // }
-
-                            // let objectWithData = {
-                            //   requestObj,
-                            //   authenticatedUser,
-                            // }
-                            // dispatch(suspendUser(objectWithData)).then(
-                            //   (data) => {
-                            //     let statusCode = data?.payload?.statusCode
-                            //     if (statusCode === 200) {
-                            //       authenticatedUserLocalStorage =
-                            //         localStorage.getItem('authenticatedUser')
-                            //       authenticatedUser = JSON.parse(
-                            //         authenticatedUserLocalStorage
-                            //       )
-
-                            //       let objectWithData = {
-                            //         authenticatedUser,
-                            //       }
-                            //       dispatch(getSubscriptionUsers(objectWithData))
-                            //     }
-                            //   }
-                            // )
                           }}
                         >
                           Zabrani

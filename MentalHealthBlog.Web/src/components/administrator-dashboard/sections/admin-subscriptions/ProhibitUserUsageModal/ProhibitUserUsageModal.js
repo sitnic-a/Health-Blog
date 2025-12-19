@@ -1,12 +1,15 @@
+import { useDispatch, useSelector } from 'react-redux'
+import { getSubscriptionUsers } from '../../../../../redux-toolkit/features/subscriptionSlice'
+import { suspendUser } from '../../../../../redux-toolkit/features/adminSlice'
+import { openProhibitUserUsageModal } from '../../../../../redux-toolkit/features/modalSlice'
 import Modal from 'react-modal'
 import { application } from '../../../../../application'
 
 import ProhibitUserUsageModalCSS from './ProhibitUserUsageModal.css'
-import { useDispatch, useSelector } from 'react-redux'
-import { openProhibitUserUsageModal } from '../../../../../redux-toolkit/features/modalSlice'
 
 export const ProhibitUserUsageModal = () => {
   let dispatch = useDispatch()
+  let { userToProhibitUsage } = useSelector((store) => store.subscription)
   let { isProhibitUserUsageModalOpen } = useSelector((store) => store.modal)
 
   return (
@@ -29,6 +32,40 @@ export const ProhibitUserUsageModal = () => {
             <button
               className="admin-subscriptions-prohibit-user-usage-action admin-subscriptions-prohibit-user-usage-action-prohibit"
               type="button"
+              onClick={() => {
+                let authenticatedUserLocalStorage =
+                  localStorage.getItem('authenticatedUser')
+                let authenticatedUser = JSON.parse(
+                  authenticatedUserLocalStorage
+                )
+
+                let requestObj = {
+                  userId: userToProhibitUsage?.userId,
+                }
+
+                let objectWithData = {
+                  requestObj,
+                  authenticatedUser,
+                }
+                dispatch(suspendUser(objectWithData)).then((data) => {
+                  let statusCode = data?.payload?.statusCode
+                  if (statusCode === 200) {
+                    authenticatedUserLocalStorage =
+                      localStorage.getItem('authenticatedUser')
+                    authenticatedUser = JSON.parse(
+                      authenticatedUserLocalStorage
+                    )
+
+                    let objectWithData = {
+                      authenticatedUser,
+                    }
+                    dispatch(
+                      openProhibitUserUsageModal(!isProhibitUserUsageModalOpen)
+                    )
+                    dispatch(getSubscriptionUsers(objectWithData))
+                  }
+                })
+              }}
             >
               Zabrani
             </button>

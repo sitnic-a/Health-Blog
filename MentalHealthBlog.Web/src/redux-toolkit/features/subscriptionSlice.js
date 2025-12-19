@@ -8,6 +8,7 @@ let initialState = {
   currentSubscription: null,
   subscriptionPlanId: 0,
   newSubscription: null,
+  userToProhibitUsage: null,
   isLoading: false,
 }
 
@@ -126,6 +127,9 @@ let subscriptionSlice = createSlice({
     setSubscriptionPlanId: (state, action) => {
       state.subscriptionPlanId = action?.payload
     },
+    setUserToProhibitUsage: (state, action) => {
+      state.userToProhibitUsage = action?.payload
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -224,5 +228,6 @@ let subscriptionSlice = createSlice({
   },
 })
 
-export const { setSubscriptionPlanId } = subscriptionSlice.actions
+export const { setSubscriptionPlanId, setUserToProhibitUsage } =
+  subscriptionSlice.actions
 export default subscriptionSlice.reducer
