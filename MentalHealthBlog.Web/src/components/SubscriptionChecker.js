@@ -28,6 +28,16 @@ export const SubscriptionChecker = () => {
   useEffect(() => {
     if (!stringIsNullOrEmpty(usersTrialPeriod)) {
       if (isPending === false || isPending === null) {
+        if (
+          usersTrialPeriod?.isInTrialPeriod === false &&
+          currentSubscription?.havePaidForSubscription === false
+        ) {
+          localStorage.removeItem('authenticatedUser')
+          localStorage.removeItem('jwToken')
+          Cookies.remove('refreshToken')
+          navigate('/expired')
+        }
+
         if (usersTrialPeriod?.isInTrialPeriod === true) {
           subscriptionTimerId = setInterval(() => {
             let currentDate = new Date().getTime()
@@ -140,10 +150,7 @@ export const SubscriptionChecker = () => {
               }, 3000)
             }
           }, 5000)
-        } else if (
-          usersTrialPeriod?.havePaidForSubscription === true ||
-          currentSubscription?.havePaidForSubscription === true
-        ) {
+        } else if (currentSubscription?.havePaidForSubscription === true) {
           let currentDate = new Date().getTime()
           let subscriptionExpires = new Date(
             currentSubscription?.expiresAt
@@ -179,6 +186,13 @@ export const SubscriptionChecker = () => {
             })
           } else {
             subscriptionTimerId = setInterval(() => {
+              let currentDate = new Date().getTime()
+              let subscriptionExpires = new Date(
+                currentSubscription?.expiresAt
+              ).getTime()
+
+              let timeLeftInMilliseconds = subscriptionExpires - currentDate
+
               console.log(
                 'Left ',
                 (timeLeftInMilliseconds / 1000).toFixed(0),
