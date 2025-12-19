@@ -13,6 +13,7 @@ let modalSlice = createSlice({
     isAssignmentResponsesOpen: false,
     isRespondingToAssignment: false,
     isTrialPeriodPopupOpen: false,
+    isProhibitUserUsageModalOpen: false,
   },
   reducers: {
     openAddModal: (state, action) => {
@@ -45,6 +46,9 @@ let modalSlice = createSlice({
     openTrialPeriodPopup: (state, action) => {
       state.isTrialPeriodPopupOpen = action?.payload
     },
+    openProhibitUserUsageModal: (state, action) => {
+      state.isProhibitUserUsageModalOpen = action?.payload
+    },
   },
 })
 
@@ -59,6 +63,7 @@ export const {
   openAssignmentResponses,
   openRespondToAssignment,
   openTrialPeriodPopup,
+  openProhibitUserUsageModal,
 } = modalSlice.actions
 
 export default modalSlice.reducer

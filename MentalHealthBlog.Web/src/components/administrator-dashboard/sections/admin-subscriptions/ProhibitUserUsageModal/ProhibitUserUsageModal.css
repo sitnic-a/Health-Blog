@@ -1,0 +1,62 @@
+.admin-subscriptions-prohibit-user-usage-modal {
+  max-width: 700px;
+  margin-top: -1rem;
+  /* background: yellow; */
+}
+
+.admin-subcriptions-prohibit-user-usage-header-title {
+  font-family: 'SansDeva';
+  font-size: 1.6rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+@media (width<490px) {
+  .admin-subcriptions-prohibit-user-usage-header-title {
+    font-size: 1.3rem;
+  }
+}
+
+.admin-subscriptions-prohibit-user-usage-modal-content-actions {
+  margin-top: 0rem;
+  display: flex;
+  column-gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-subscriptions-prohibit-user-usage-action {
+  /* margin-inline: 0rem 2rem; */
+  max-width: 150px;
+  width: 100%;
+  padding-block: 1rem;
+  border: none;
+  border-radius: 0.4rem;
+  font-family: 'SansDeva';
+  font-size: 0.9rem;
+  line-height: 1.4;
+  outline: none;
+  transition: 150ms;
+  cursor: pointer;
+  color: #f3f1e3;
+}
+
+.admin-subscriptions-prohibit-user-usage-action-prohibit {
+  background: #c92323;
+}
+
+.admin-subscriptions-prohibit-user-usage-action-prohibit:hover {
+  border: 1px solid #c92323;
+  color: #c92323;
+  background: none;
+}
+
+.admin-subscriptions-prohibit-user-usage-action-cancel {
+  background: #82a3bc;
+}
+
+.admin-subscriptions-prohibit-user-usage-action-cancel:hover {
+  border: 1px solid #82a3bc;
+  color: #82a3bc;
+  background: none;
+}

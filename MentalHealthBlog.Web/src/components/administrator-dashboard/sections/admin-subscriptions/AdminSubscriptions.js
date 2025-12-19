@@ -21,6 +21,8 @@ import { Loader } from '../../../shared/Loader/Loader'
 import { LiaSearchSolid } from 'react-icons/lia'
 
 import AdminSubscriptionsCSS from './AdminSubscriptions.css'
+import { ProhibitUserUsageModal } from './ProhibitUserUsageModal/ProhibitUserUsageModal'
+import { openProhibitUserUsageModal } from '../../../../redux-toolkit/features/modalSlice'
 
 export const AdminSubscriptions = () => {
   let dispatch = useDispatch()
@@ -33,6 +35,8 @@ export const AdminSubscriptions = () => {
   let { subscriptionAmountValidationData } = useSelector(
     (store) => store.validation
   )
+  let { isProhibitUserUsageModalOpen } = useSelector((store) => store.modal)
+
   let [userTypes, setUserTypes] = useState([])
   let [months, setMonths] = useState([])
 
@@ -68,6 +72,7 @@ export const AdminSubscriptions = () => {
     <Loader />
   ) : (
     <section id="admin-subscriptions-main-container">
+      <ProhibitUserUsageModal />
       <Navbar />
       <div className="admin-subscriptions-container">
         <div className="admin-subscriptions-header">
@@ -228,7 +233,7 @@ export const AdminSubscriptions = () => {
             Nova pretplata
           </button>
 
-          <NewSubscriptionUserModal />
+          {/* <NewSubscriptionUserModal /> */}
         </div>
 
         <div className="admin-subscriptions-subscription-table-container">
@@ -422,37 +427,42 @@ export const AdminSubscriptions = () => {
                           className="admin-subscriptions-subscription-table-body-cell-action admin-subscription-subscription-disable"
                           type="button"
                           onClick={() => {
-                            authenticatedUserLocalStorage =
-                              localStorage.getItem('authenticatedUser')
-                            authenticatedUser = JSON.parse(
-                              authenticatedUserLocalStorage
+                            dispatch(
+                              openProhibitUserUsageModal(
+                                !isProhibitUserUsageModalOpen
+                              )
                             )
+                            // authenticatedUserLocalStorage =
+                            //   localStorage.getItem('authenticatedUser')
+                            // authenticatedUser = JSON.parse(
+                            //   authenticatedUserLocalStorage
+                            // )
 
-                            let requestObj = {
-                              userId: subscriptionUser?.userId,
-                            }
+                            // let requestObj = {
+                            //   userId: subscriptionUser?.userId,
+                            // }
 
-                            let objectWithData = {
-                              requestObj,
-                              authenticatedUser,
-                            }
-                            dispatch(suspendUser(objectWithData)).then(
-                              (data) => {
-                                let statusCode = data?.payload?.statusCode
-                                if (statusCode === 200) {
-                                  authenticatedUserLocalStorage =
-                                    localStorage.getItem('authenticatedUser')
-                                  authenticatedUser = JSON.parse(
-                                    authenticatedUserLocalStorage
-                                  )
+                            // let objectWithData = {
+                            //   requestObj,
+                            //   authenticatedUser,
+                            // }
+                            // dispatch(suspendUser(objectWithData)).then(
+                            //   (data) => {
+                            //     let statusCode = data?.payload?.statusCode
+                            //     if (statusCode === 200) {
+                            //       authenticatedUserLocalStorage =
+                            //         localStorage.getItem('authenticatedUser')
+                            //       authenticatedUser = JSON.parse(
+                            //         authenticatedUserLocalStorage
+                            //       )
 
-                                  let objectWithData = {
-                                    authenticatedUser,
-                                  }
-                                  dispatch(getSubscriptionUsers(objectWithData))
-                                }
-                              }
-                            )
+                            //       let objectWithData = {
+                            //         authenticatedUser,
+                            //       }
+                            //       dispatch(getSubscriptionUsers(objectWithData))
+                            //     }
+                            //   }
+                            // )
                           }}
                         >
                           Zabrani
