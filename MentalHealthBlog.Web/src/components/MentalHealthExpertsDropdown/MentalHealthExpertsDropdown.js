@@ -16,8 +16,16 @@ import MentalHealthExpertsDropdownCSS from './MentalHealthExpertsDropdown.css'
 export const MentalHealthExpertsDropdown = () => {
   let dispatch = useDispatch()
   // let { authenticatedUser } = useSelector((store) => store.user)
-  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
-  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+  let authenticatedUserLocalStorage
+  let authenticatedUser
+
+  if (
+    localStorage.getItem('authenticatedUser') !== null &&
+    localStorage.getItem('authenticatedUser') !== undefined
+  ) {
+    authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+    authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+  }
 
   let { suggestedMentalHealthExperts } = useSelector(
     (store) => store.mentalExpert
