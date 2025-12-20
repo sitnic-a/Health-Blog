@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 import {
   displayProfilesContainer,
   displayStatusActionsContainer,
@@ -8,7 +9,7 @@ import {
 
 import { NewExpertProfile } from '../NewExpertProfile/NewExpertProfile'
 import { Navbar } from '../../../../shared/Navbar/Navbar'
-import { toast } from 'react-toastify'
+import { Loader } from '../../../../shared/Loader/Loader'
 
 import NewExpertsCSS from './NewExperts.css'
 
@@ -19,7 +20,7 @@ export const NewExperts = () => {
   let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
   let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
 
-  let { newlyRegisteredMentalHealthExperts } = useSelector(
+  let { newlyRegisteredMentalHealthExperts, isLoading } = useSelector(
     (store) => store.admin
   )
 
@@ -58,7 +59,9 @@ export const NewExperts = () => {
     })
   }, [])
 
-  return (
+  return isLoading ? (
+    <Loader />
+  ) : (
     <section id="new-experts-main-container">
       <Navbar />
       <div className="new-experts-header">
