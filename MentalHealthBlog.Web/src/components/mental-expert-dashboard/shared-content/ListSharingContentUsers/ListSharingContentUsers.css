@@ -22,7 +22,7 @@
 }
 
 .sharing-users-main-users-container-expanded {
-  max-width: 500px;
+  max-width: 550px;
   width: 100%;
   /* background: red; */
 }
@@ -45,6 +45,10 @@
   .sharing-users-expander-action {
     opacity: 1;
   }
+}
+
+.sharing-users-expander-icon {
+  cursor: pointer;
 }
 
 .sharing-users-users-container {
@@ -84,6 +88,7 @@
 
 .sharing-user-title {
   font-family: 'SansDeva';
+  font-size: 0.87rem;
   font-weight: 500;
   color: #f3f1e3;
 }

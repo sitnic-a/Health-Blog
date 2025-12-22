@@ -178,6 +178,9 @@ export function previewImage(photo) {
 }
 
 export function expandShrinkSidebar() {
+  let sharingUsersMainContentInfo = document.querySelector(
+    '.sharing-users-main-content-info'
+  )
   let mainUsersContainer = document.querySelector(
     '.sharing-users-main-users-container'
   )
@@ -190,6 +193,21 @@ export function expandShrinkSidebar() {
   mainUsersContainer.classList.toggle(
     'sharing-users-main-users-container-expanded'
   )
+
+  if (
+    mainUsersContainer?.classList.contains(
+      'sharing-users-main-users-container-expanded'
+    )
+  ) {
+    sharingUsersMainContentInfo?.classList?.add(
+      'sharing-users-main-content-info-shrinked'
+    )
+  } else {
+    sharingUsersMainContentInfo?.classList?.remove(
+      'sharing-users-main-content-info-shrinked'
+    )
+  }
+
   usersContainer.forEach((user) => {
     user.classList.toggle('sharing-user-user-container-expanded')
   })
