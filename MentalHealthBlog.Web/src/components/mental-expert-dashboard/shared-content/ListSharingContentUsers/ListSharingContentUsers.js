@@ -3,7 +3,10 @@ import {
   getSharedContentOfPickedUser,
   setOverlayPost,
 } from '../../../../redux-toolkit/features/mentalExpertSlice'
-import { expandShrinkSidebar } from '../../../../utils/helper-methods/methods'
+import {
+  expandShrinkSidebar,
+  setSharingUserActiveTab,
+} from '../../../../utils/helper-methods/methods'
 
 import { BiExpandAlt } from 'react-icons/bi'
 import { getUserById } from '../../../../redux-toolkit/features/userSlice'
@@ -35,7 +38,8 @@ export const ListSharingContentUsers = () => {
               <div
                 className="sharing-user-user-container"
                 key={user?.id}
-                onClick={() => {
+                onClick={(e) => {
+                  setSharingUserActiveTab(e?.currentTarget)
                   if (window.screen.width <= 550) {
                     expandShrinkSidebar()
                     let contentAndQuery = {

@@ -222,6 +222,19 @@ export function expandShrinkSidebar() {
   }
 }
 
+export const setSharingUserActiveTab = (currentElement) => {
+  let sharingUsers = document.querySelectorAll('.sharing-user-user-container')
+  sharingUsers.forEach((sharingUser) => {
+    sharingUser.classList.remove('sharing-user-user-container-active')
+    let sharingUserTitle = sharingUser.querySelector('.sharing-user-title')
+    sharingUserTitle.classList.remove('sharing-user-title-active')
+  })
+
+  currentElement.classList.add('sharing-user-user-container-active')
+  let sharingUserTitle = currentElement.querySelector('.sharing-user-title')
+  sharingUserTitle.classList.add('sharing-user-title-active')
+}
+
 export const manipulateSidebarAndAdminStatusActions = () => {
   let statusActionsContainer = document.querySelector(
     '.new-experts-status-actions-container'

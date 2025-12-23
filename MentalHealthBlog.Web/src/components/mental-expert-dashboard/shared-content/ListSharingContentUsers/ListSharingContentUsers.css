@@ -73,6 +73,10 @@
   }
 }
 
+.sharing-user-user-container-active {
+  background: #f1e0c4;
+}
+
 .sharing-user-user-container:hover {
   background: #f1e0c4;
 
@@ -91,6 +95,10 @@
   font-size: 0.87rem;
   font-weight: 500;
   color: #f3f1e3;
+}
+
+.sharing-user-title-active {
+  color: #000;
 }
 
 @media (width<=550px) {
