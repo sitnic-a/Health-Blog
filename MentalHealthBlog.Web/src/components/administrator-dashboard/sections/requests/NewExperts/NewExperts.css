@@ -46,8 +46,9 @@
   background: #34688f;
 }
 
-@media (width<=420px) {
+@media (width<=500px) {
   .new-experts-status-hamburger {
+    display: initial;
     margin-left: 0.5rem;
   }
 }
@@ -68,6 +69,7 @@
 
 @media (width<=500px) {
   .new-experts-status-actions-container {
+    display: none;
     max-width: 1440px;
     margin-right: 0rem;
   }
@@ -116,6 +118,11 @@
   background: #82a3bc;
 }
 
+.new-experts-status-button-active {
+  color: #f3f1e3;
+  background: #edb572;
+}
+
 .new-experts-main-profiles-container {
   max-width: 1440px;
   width: 100%;
@@ -132,7 +139,7 @@
 
 @media (width<=500px) {
   .new-experts-main-profiles-container {
-    display: none;
+    /* display: none; */
     /* margin-inline: 1rem; */
   }
 }
