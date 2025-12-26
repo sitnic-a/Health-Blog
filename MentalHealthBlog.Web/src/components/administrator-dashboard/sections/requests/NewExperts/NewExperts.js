@@ -92,9 +92,12 @@ export const NewExperts = () => {
                   authenticatedUser,
                 }
                 dispatch(displayProfilesContainer())
-                dispatch(getNewRegisteredExperts(objectWithData))
-                document.querySelector('.new-experts-subtitle').innerHTML =
-                  'Odbijeni'
+                dispatch(getNewRegisteredExperts(objectWithData)).then(
+                  (data) => {
+                    document.querySelector('.new-experts-subtitle').innerHTML =
+                      'Odbijeni'
+                  }
+                )
               }}
             >
               Odbijeni
@@ -114,9 +117,12 @@ export const NewExperts = () => {
                   authenticatedUser,
                 }
                 dispatch(displayProfilesContainer())
-                dispatch(getNewRegisteredExperts(objectWithData))
-                document.querySelector('.new-experts-subtitle').innerHTML =
-                  'Prihvaćeni'
+                dispatch(getNewRegisteredExperts(objectWithData)).then(
+                  (data) => {
+                    document.querySelector('.new-experts-subtitle').innerHTML =
+                      'Prihvaćeni'
+                  }
+                )
               }}
             >
               Prihvaćeni
@@ -133,9 +139,12 @@ export const NewExperts = () => {
                   authenticatedUser,
                 }
                 dispatch(displayProfilesContainer())
-                dispatch(getNewRegisteredExperts(objectWithData))
-                document.querySelector('.new-experts-subtitle').innerHTML =
-                  'Na čekanju'
+                dispatch(getNewRegisteredExperts(objectWithData)).then(
+                  (data) => {
+                    document.querySelector('.new-experts-subtitle').innerHTML =
+                      'Na čekanju'
+                  }
+                )
               }}
             >
               Na čekanju
