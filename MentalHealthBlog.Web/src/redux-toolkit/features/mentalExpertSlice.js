@@ -10,6 +10,7 @@ let initialState = {
   usersThatSharedIncludingItsContent: {},
   overlayPost: null,
   isLoadingExperts: false,
+  isLoading: false,
 }
 
 export const getMentalHealthExperts = createAsyncThunk(
@@ -81,6 +82,23 @@ export const getUsersWithSetAssignments = createAsyncThunk(
       },
     })
     let response = await request.json()
+    return response
+  }
+)
+
+export const sendInviteToRegularUser = createAsyncThunk(
+  'invite/user',
+  async (objectWithData) => {
+    let url = `${application.application_url}/mentalExpert/invite/user`
+    let request = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(objectWithData?.requestObj),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
+      },
+    })
+    let response = request.json()
     return response
   }
 )
@@ -170,6 +188,17 @@ export const mentalExpertSlice = createSlice({
         }
       })
       .addCase(getUsersWithSetAssignments.rejected, (state, action) => {})
+
+      //invite/user
+      .addCase(sendInviteToRegularUser.pending, (state, action) => {
+        state.isLoading = true
+      })
+      .addCase(sendInviteToRegularUser.fulfilled, (state, action) => {
+        state.isLoading = false
+      })
+      .addCase(sendInviteToRegularUser.rejected, (state, action) => {
+        state.isLoading = false
+      })
   },
 })
 

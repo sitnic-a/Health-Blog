@@ -87,3 +87,30 @@
 .invite-regular-user-action:hover {
   background: #cd9d63;
 }
+
+.invite-regular-user-processing-request-container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2.5rem;
+  text-align: center;
+}
+
+@media (width<=380px) {
+  .invite-regular-user-processing-request-container {
+    gap: 3px;
+  }
+}
+
+.invite-regular-user-processing-request-text {
+  font-family: 'SansDeva';
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+@media (width<=380px) {
+  .invite-regular-user-processing-request-text {
+    font-size: 0.9rem;
+  }
+}

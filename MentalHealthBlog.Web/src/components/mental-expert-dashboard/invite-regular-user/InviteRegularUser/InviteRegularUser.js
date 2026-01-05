@@ -1,8 +1,17 @@
+import { useDispatch, useSelector } from 'react-redux'
+import { sendInviteToRegularUser } from '../../../../redux-toolkit/features/mentalExpertSlice'
 import { Navbar } from '../../../shared/Navbar/Navbar'
+import { LoadingSpinner } from '../../../LoadingSpinner/LoadingSpinner'
 
 import InviteRegularUserCSS from './InviteRegularUser.css'
+import { TailSpin } from 'react-loader-spinner'
 
 export const InviteRegularUser = () => {
+  let dispatch = useDispatch()
+  let { isLoading } = useSelector((store) => store.mentalExpert)
+  let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+  let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
   return (
     <section id="invite-regular-user-main-container">
       <Navbar />
@@ -27,27 +36,62 @@ export const InviteRegularUser = () => {
         </div>
 
         <div className="invite-regular-user-call-container">
-          <div className="invite-regular-user-call-email-container">
-            <p className="invite-regular-user-call-email-title">Email adresa</p>
-            <input
-              className="invite-regular-user-call-email-value form-field"
-              type="text"
-              placeholder="Unesite email adresu..."
-            />
-          </div>
-          {/* Invite validation data below */}
+          {isLoading === true || (
+            <>
+              <div className="invite-regular-user-call-email-container">
+                <p className="invite-regular-user-call-email-title">
+                  Email adresa
+                </p>
+                <input
+                  className="invite-regular-user-call-email-value form-field"
+                  type="text"
+                  placeholder="Unesite email adresu..."
+                />
+              </div>
+              {/* Invite validation data below */}
 
-          <div className="invite-regular-user-call-actions-container">
-            <button
-              className="invite-regular-user-action invite-regular-user-invite-action"
-              type="button"
-              onClick={() => {
-                alert('Sending invitation')
-              }}
-            >
-              Pošalji
-            </button>
-          </div>
+              <div className="invite-regular-user-call-actions-container">
+                <button
+                  className="invite-regular-user-action invite-regular-user-invite-action"
+                  type="button"
+                  onClick={() => {
+                    authenticatedUserLocalStorage =
+                      localStorage.getItem('authenticatedUser')
+                    authenticatedUser = JSON.parse(
+                      authenticatedUserLocalStorage
+                    )
+                    let sendEmailTo = document.querySelector(
+                      '.invite-regular-user-call-email-value'
+                    ).value
+
+                    let requestObj = {
+                      mentalHealthExpertId: authenticatedUser?.id,
+                      sendEmailTo: sendEmailTo,
+                    }
+                    let objectWithData = {
+                      authenticatedUser,
+                      requestObj,
+                    }
+
+                    console.log('Object with data IRU ', objectWithData)
+
+                    dispatch(sendInviteToRegularUser(objectWithData))
+                  }}
+                >
+                  Pošalji
+                </button>
+              </div>
+            </>
+          )}
+
+          {isLoading === true && (
+            <div className="invite-regular-user-processing-request-container">
+              <span className="invite-regular-user-processing-request-text">
+                Pozivnica se šalje, molimo sačekajte...{' '}
+              </span>
+              <TailSpin width={40} height={40} />
+            </div>
+          )}
         </div>
       </div>
     </section>
