@@ -159,8 +159,11 @@ let adminSlice = createSlice({
       })
 
       //New registered experts
-      .addCase(getNewRegisteredExperts.pending, (state, action) => {})
+      .addCase(getNewRegisteredExperts.pending, (state, action) => {
+        state.isLoading = true
+      })
       .addCase(getNewRegisteredExperts.fulfilled, (state, action) => {
+        state.isLoading = false
         let statusCode = action?.payload?.statusCode
         let serviceResponseObject = action?.payload?.serviceResponseObject
 
@@ -175,6 +178,7 @@ let adminSlice = createSlice({
         state.isFailed = true
       })
       .addCase(getNewRegisteredExperts.rejected, (state, action) => {
+        state.isLoading = false
         toast.error('Radnja nije uspješno završena!', {
           autoClose: 3000,
           position: 'bottom-right',

@@ -72,7 +72,7 @@ export const Register = () => {
   useEffect(() => {
     resetValidationData()
     dispatch(getDbRoles())
-    dispatch(getMentalHealthExperts(null))
+    dispatch(getMentalHealthExperts())
   }, [])
 
   let navigate = useNavigate()
@@ -323,8 +323,8 @@ export const Register = () => {
       } else {
         if (
           isInTherapy &&
-          suggestedMentalHealthExperts?.length > 0 &&
-          selectedMentalHealthExpertIds?.length <= 0
+          (selectedMentalHealthExpertIds?.length <= 0 ||
+            selectedMentalHealthExpertIds?.length > 2)
         ) {
           toast.error('Molimo označite maksimalno dva stručnjaka!', {
             autoClose: 3000,

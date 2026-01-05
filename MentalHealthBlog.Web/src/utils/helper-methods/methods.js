@@ -178,6 +178,9 @@ export function previewImage(photo) {
 }
 
 export function expandShrinkSidebar() {
+  let sharingUsersMainContentInfo = document.querySelector(
+    '.sharing-users-main-content-info'
+  )
   let mainUsersContainer = document.querySelector(
     '.sharing-users-main-users-container'
   )
@@ -190,6 +193,21 @@ export function expandShrinkSidebar() {
   mainUsersContainer.classList.toggle(
     'sharing-users-main-users-container-expanded'
   )
+
+  if (
+    mainUsersContainer?.classList.contains(
+      'sharing-users-main-users-container-expanded'
+    )
+  ) {
+    sharingUsersMainContentInfo?.classList?.add(
+      'sharing-users-main-content-info-shrinked'
+    )
+  } else {
+    sharingUsersMainContentInfo?.classList?.remove(
+      'sharing-users-main-content-info-shrinked'
+    )
+  }
+
   usersContainer.forEach((user) => {
     user.classList.toggle('sharing-user-user-container-expanded')
   })
@@ -202,6 +220,19 @@ export function expandShrinkSidebar() {
       'sharing-users-content-container-shrinked'
     )
   }
+}
+
+export const setSharingUserActiveTab = (currentElement) => {
+  let sharingUsers = document.querySelectorAll('.sharing-user-user-container')
+  sharingUsers.forEach((sharingUser) => {
+    sharingUser.classList.remove('sharing-user-user-container-active')
+    let sharingUserTitle = sharingUser.querySelector('.sharing-user-title')
+    sharingUserTitle.classList.remove('sharing-user-title-active')
+  })
+
+  currentElement.classList.add('sharing-user-user-container-active')
+  let sharingUserTitle = currentElement.querySelector('.sharing-user-title')
+  sharingUserTitle.classList.add('sharing-user-title-active')
 }
 
 export const manipulateSidebarAndAdminStatusActions = () => {

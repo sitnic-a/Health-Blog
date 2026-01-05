@@ -24,6 +24,7 @@ export const Password = () => {
           className="form-field"
           type="password"
           placeholder="Unesite password..."
+          autoComplete="false"
           onBlur={(e) => {
             let password = e.target.value
             let [isValid, passwordValidationMessages] = checkPasswordValidity(

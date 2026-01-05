@@ -169,7 +169,7 @@ namespace MentalHealthBlog.API.Services.Subscription
                         throw new RecordNotFoundException("User not found!");
                     }
                     isDbUserInTrial = dbRegularUser.IsInTrialPeriod;
-                    usersSubscriptions = await _context.Subscriptions
+                    usersSubscriptions = dbUserSubscriptions
                         .Join(_context.RegularUsers,
                               (s) => s.UserId,
                               (ru) => ru.UserId,
@@ -183,8 +183,8 @@ namespace MentalHealthBlog.API.Services.Subscription
                                   HavePaidForSubscription = ru.HavePaidForSubscription
                               })
                         .Where(s => s.IsInTrialPeriod == false && s.UserId == userId)
-                        .OrderByDescending(s => s.PaidAt.Value)
-                        .ToListAsync();
+                        .OrderByDescending(s => s.ExpiresAt.Value)
+                        .ToList();
                 }
 
                 if (userRoles.Any(r => r.Id == __PSYCHOLOGIST_PSYCHOTHERAPIST_ROLE_ID__))
@@ -196,7 +196,7 @@ namespace MentalHealthBlog.API.Services.Subscription
                         throw new RecordNotFoundException("User not found!");
                     }
                     isDbUserInTrial = dbMentalHealthExpert.IsInTrialPeriod;
-                    usersSubscriptions = await _context.Subscriptions
+                    usersSubscriptions = dbUserSubscriptions
                         .Join(_context.MentalHealthExperts,
                               (s) => s.UserId,
                               (mhe) => mhe.UserId,
@@ -210,8 +210,8 @@ namespace MentalHealthBlog.API.Services.Subscription
                                   HavePaidForSubscription = mhe.HavePaidForSubscription
                               })
                         .Where(s => s.IsInTrialPeriod == false && s.UserId == userId)
-                        .OrderByDescending(s => s.PaidAt.Value)
-                        .ToListAsync();
+                        .OrderByDescending(s => s.ExpiresAt.Value)
+                        .ToList();
                 }
 
                 if (isDbUserInTrial)

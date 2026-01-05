@@ -27,7 +27,7 @@ export const ManageUsers = () => {
       <ManageUsersFilter />
       <ManageUsersTable />
 
-      {isFailed === false && isLoading === false && (
+      {isFailed === true && isLoading === false && (
         <div className="manage-users-error-container">
           <BiError className="manage-users-error-no-data-icon" />
           <div className="manage-users-error-information">

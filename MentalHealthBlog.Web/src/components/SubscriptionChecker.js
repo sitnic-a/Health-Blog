@@ -28,7 +28,55 @@ export const SubscriptionChecker = () => {
   useEffect(() => {
     if (!stringIsNullOrEmpty(usersTrialPeriod)) {
       if (isPending === false || isPending === null) {
+        if (
+          usersTrialPeriod?.isInTrialPeriod === false &&
+          currentSubscription?.havePaidForSubscription === false
+        ) {
+          localStorage.removeItem('authenticatedUser')
+          localStorage.removeItem('jwToken')
+          Cookies.remove('refreshToken')
+          navigate('/expired')
+        }
+
         if (usersTrialPeriod?.isInTrialPeriod === true) {
+          let currentDate = new Date().getTime()
+          let subscriptionExpires = new Date(
+            usersTrialPeriod?.trialEndsAt
+          ).getTime()
+
+          let timeLeftInMilliseconds = subscriptionExpires - currentDate
+          console.log(
+            'Left ',
+            (timeLeftInMilliseconds / 1000).toFixed(0),
+            ' sekundi '
+          )
+
+          let daysLeft = (
+            timeLeftInMilliseconds / __DAY_IN_MILLISECONDS__
+          ).toFixed(0)
+
+          if (
+            daysLeft == 1 &&
+            usersTrialPeriod?.isInformedAboutSubscriptionExpiration === false
+          ) {
+            let authenticatedUserLocalStorage =
+              localStorage.getItem('authenticatedUser')
+            let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+            let isMentalHealthExpert = authenticatedUser?.userRoles?.some(
+              (r) => r.id === db_roles.PSYCHOLOGIST
+            )
+            let requestObj = {
+              userId: authenticatedUser?.id,
+              isMentalHealthExpert: isMentalHealthExpert,
+            }
+
+            let objectWithData = {
+              authenticatedUser,
+              requestObj,
+            }
+            dispatch(sendExpiringEmail(objectWithData))
+          }
+
           subscriptionTimerId = setInterval(() => {
             let currentDate = new Date().getTime()
             let subscriptionExpires = new Date(
@@ -44,26 +92,7 @@ export const SubscriptionChecker = () => {
 
             if (timeLeftInMilliseconds <= __DAY_IN_MILLISECONDS__) {
               clearInterval(subscriptionTimerId)
-              if (!usersTrialPeriod?.isInformedAboutSubscriptionExpiration) {
-                let authenticatedUserLocalStorage =
-                  localStorage.getItem('authenticatedUser')
-                let authenticatedUser = JSON.parse(
-                  authenticatedUserLocalStorage
-                )
-                let isMentalHealthExpert = authenticatedUser?.userRoles?.some(
-                  (r) => r.id === db_roles.PSYCHOLOGIST
-                )
-                let requestObj = {
-                  userId: authenticatedUser?.id,
-                  isMentalHealthExpert: isMentalHealthExpert,
-                }
 
-                let objectWithData = {
-                  authenticatedUser,
-                  requestObj,
-                }
-                dispatch(sendExpiringEmail(objectWithData))
-              }
               subscriptionTimerId = setInterval(() => {
                 let currentDate = new Date().getTime()
                 let subscriptionExpires = new Date(
@@ -140,10 +169,7 @@ export const SubscriptionChecker = () => {
               }, 3000)
             }
           }, 5000)
-        } else if (
-          usersTrialPeriod?.havePaidForSubscription === true ||
-          currentSubscription?.havePaidForSubscription === true
-        ) {
+        } else if (currentSubscription?.havePaidForSubscription === true) {
           let currentDate = new Date().getTime()
           let subscriptionExpires = new Date(
             currentSubscription?.expiresAt
@@ -178,7 +204,41 @@ export const SubscriptionChecker = () => {
               return
             })
           } else {
+            let daysLeft = (
+              timeLeftInMilliseconds / __DAY_IN_MILLISECONDS__
+            ).toFixed(0)
+
+            if (
+              daysLeft == 1 &&
+              currentSubscription?.isInformedAboutSubscriptionExpiration ===
+                false
+            ) {
+              let authenticatedUserLocalStorage =
+                localStorage.getItem('authenticatedUser')
+              let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+              let isMentalHealthExpert = authenticatedUser?.userRoles?.some(
+                (r) => r.id === db_roles.PSYCHOLOGIST
+              )
+              let requestObj = {
+                userId: authenticatedUser?.id,
+                isMentalHealthExpert: isMentalHealthExpert,
+              }
+
+              let objectWithData = {
+                authenticatedUser,
+                requestObj,
+              }
+              dispatch(sendExpiringEmail(objectWithData))
+            }
+
             subscriptionTimerId = setInterval(() => {
+              let currentDate = new Date().getTime()
+              let subscriptionExpires = new Date(
+                currentSubscription?.expiresAt
+              ).getTime()
+
+              let timeLeftInMilliseconds = subscriptionExpires - currentDate
+
               console.log(
                 'Left ',
                 (timeLeftInMilliseconds / 1000).toFixed(0),
@@ -187,28 +247,7 @@ export const SubscriptionChecker = () => {
 
               if (timeLeftInMilliseconds <= __DAY_IN_MILLISECONDS__) {
                 clearInterval(subscriptionTimerId)
-                if (
-                  !currentSubscription?.isInformedAboutSubscriptionExpiration
-                ) {
-                  let authenticatedUserLocalStorage =
-                    localStorage.getItem('authenticatedUser')
-                  let authenticatedUser = JSON.parse(
-                    authenticatedUserLocalStorage
-                  )
-                  let isMentalHealthExpert = authenticatedUser?.userRoles?.some(
-                    (r) => r.id === db_roles.PSYCHOLOGIST
-                  )
-                  let requestObj = {
-                    userId: authenticatedUser?.id,
-                    isMentalHealthExpert: isMentalHealthExpert,
-                  }
 
-                  let objectWithData = {
-                    authenticatedUser,
-                    requestObj,
-                  }
-                  dispatch(sendExpiringEmail(objectWithData))
-                }
                 subscriptionTimerId = setInterval(() => {
                   let currentDate = new Date().getTime()
                   let subscriptionExpires = new Date(

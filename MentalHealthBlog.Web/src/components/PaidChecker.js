@@ -20,23 +20,35 @@ export const PaidChecker = () => {
   let isPending = localStorage.getItem('isPending')
 
   useEffect(() => {
+    authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+    authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
     let objectWithData = {
       authenticatedUser,
     }
 
     dispatch(getUsersTrialPeriod(objectWithData))
-    dispatch(getUsersCurrentSubscription(objectWithData))
-  }, [
-    usersTrialPeriod?.isInTrialPeriod,
-    usersTrialPeriod?.havePaidForSubscription,
-  ])
+  }, [usersTrialPeriod?.isInTrialPeriod])
 
-  return isPending === true ||
-    usersTrialPeriod?.isInTrialPeriod ||
-    usersTrialPeriod?.havePaidForSubscription ||
-    isAdmin ? (
-    <Outlet />
-  ) : (
+  useEffect(() => {
+    authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
+    authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
+
+    let objectWithData = {
+      authenticatedUser,
+    }
+    dispatch(getUsersCurrentSubscription(objectWithData))
+  }, [currentSubscription?.havePaidForSubscription])
+
+  if (
+    isAdmin === true ||
+    isPending === false ||
+    isPending === null ||
+    usersTrialPeriod !== null ||
+    currentSubscription !== null
+  ) {
+    return <Outlet />
+  } else {
     navigate('/expired')
-  )
+  }
 }
