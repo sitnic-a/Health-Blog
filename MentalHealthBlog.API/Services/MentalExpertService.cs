@@ -72,10 +72,10 @@ namespace MentalHealthBlog.API.Services
                     foreach (var mentalHealthExpert in dbMentalHealthExpertsCombinedWithTherapies)
                     {
                         var mentalHealthExpertInRequests = dbUsersMentalHealthExperts
-                            .SingleOrDefault(mhe => mhe.MentalHealthExpertId == mentalHealthExpert.MentalHealthExpertUserId && 
+                            .SingleOrDefault(mhe => mhe.MentalHealthExpertId == mentalHealthExpert.MentalHealthExpertUserId &&
                                              mhe.RegularUserId == request.LoggedUserId);
 
-                        
+
                         if (mentalHealthExpertInRequests != null)
                         {
                             mentalHealthExpert.RequestStatus = mentalHealthExpertInRequests.RequestStatus;
@@ -84,8 +84,8 @@ namespace MentalHealthBlog.API.Services
                     }
 
                     dbMentalHealthExpertsCombinedWithTherapies = dbMentalHealthExpertsCombinedWithTherapies
-                        .Where(mhe => mhe.RequestStatus == RequestStatusEnum.Undefined || 
-                               mhe.RequestStatus == RequestStatusEnum.Declined)                        
+                        .Where(mhe => mhe.RequestStatus == RequestStatusEnum.Undefined ||
+                               mhe.RequestStatus == RequestStatusEnum.Declined)
                         .DistinctBy(mhe => mhe.MentalHealthExpertUserId)
                         .ToList();
 
@@ -153,7 +153,7 @@ namespace MentalHealthBlog.API.Services
                     .SingleOrDefaultAsync(mhe => mhe.UserId == query.LoggedExpertId);
 
                 var dbShares = await _context.Shares
-                    .Where(mhe => mhe.SharedWithId == mentalHealthExpert.Id && 
+                    .Where(mhe => mhe.SharedWithId == mentalHealthExpert.Id &&
                                   mhe.IsKeepingContent == null)
                     .Include(p => p.SharedPost)
                     .Include(u => u.SharedPost.User)
@@ -223,7 +223,7 @@ namespace MentalHealthBlog.API.Services
                          .ToListAsync();
 
                     dbAssignments.AddRange(usersAssignments);
-                }         
+                }
 
                 if (!dbAssignments.Any())
                 {
@@ -265,7 +265,7 @@ namespace MentalHealthBlog.API.Services
                 _mentalExpertLoggerService.LogError($"USERS-WITH-SET-ASSIGNMENTS: {e.Message}");
                 throw;
             }
-            
+
         }
         public async Task<Response> CreateAssignment(CreateAssignmentDto request)
         {
@@ -306,6 +306,29 @@ namespace MentalHealthBlog.API.Services
                 throw;
             }
 
+        }
+
+        public async Task<Response> SendInviteToUser(InviteDto request)
+        {
+            if (request == null ||
+                string.IsNullOrEmpty(request.Email) ||
+                string.IsNullOrWhiteSpace(request.Email) ||
+                request.MentalHealthExpertId <= 0)
+            {
+                throw new ArgumentException("Bad request!");
+            }
+
+            await Task.Delay(200);
+            return new Response();
+            /*
+                1) Dodati invite tabelu na bazu
+                2) Pripremiti novokreirani invite kao record i snimiti ga
+                3) Poslati email osobi
+                4) Pripremiti drugu controller rutu na kojoj ce se raditi redirekcija i
+                   slati na frontend odakle ce korisnik dobijati iz cookiea podatke i na taj nacin moci da se registruje
+                5) Po uspjesnoj registraciji ako korisnik nije postojao u aplikaciji snimiti promjenu na rekordu na nacin da se pohrani koji
+                  je korisnik pozvan od strane kojeg strucnjaka kako bi se mogla voditi statistika 
+            */
         }
         private async Task<List<SharesPerUserDto>> FillListGroupedUsersAndTheirShares(IEnumerable<IGrouping<User, Share>> groupedUsersAndTheirShares)
         {
@@ -352,6 +375,8 @@ namespace MentalHealthBlog.API.Services
                 throw;
             }
         }
+
+
 
 
     }

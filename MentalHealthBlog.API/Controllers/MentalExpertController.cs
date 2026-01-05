@@ -46,5 +46,12 @@ namespace MentalHealthBlog.API.Controllers
             return await _mentalExpertService.CreateAssignment(request);
         }
 
+        [HttpPost("invite/user")]
+        [Authorize(Roles= "Psychologist / Psychotherapist")]
+        public async Task<Response> SendInviteToUser([FromBody] InviteDto request)
+        {
+
+        }
+
     }
 }
