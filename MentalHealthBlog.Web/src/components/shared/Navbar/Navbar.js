@@ -87,6 +87,10 @@ export const Navbar = () => {
             >
               Zadaće
             </Link>
+
+            <Link to={'/invite/user'} className="navigation-bar-action">
+              Pozovi u proces
+            </Link>
           </div>
 
           <Logout />

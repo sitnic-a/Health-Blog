@@ -1,0 +1,89 @@
+#invite-regular-user-main-container {
+  min-height: 100vh;
+  margin-inline: -2rem;
+  padding-inline: 2rem;
+  padding-bottom: 2rem;
+  background: #cce5f1;
+}
+
+@media (width<=380px) {
+  #invite-regular-user-main-container {
+    padding-inline: 1rem;
+  }
+}
+
+.invite-regular-user-header {
+  max-width: 930px;
+  margin-inline: auto;
+}
+
+.invite-regular-user-header-title {
+  text-align: center;
+  font-family: 'Overlock';
+}
+
+.invite-regular-user-header-subtitle {
+  text-align: justify;
+  font-family: 'SansDeva';
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+@media (width<=420px) {
+  .invite-regular-user-header-subtitle {
+    font-size: 0.9rem;
+  }
+}
+
+.invite-regular-user-call-container {
+  max-width: 520px;
+  margin-inline: auto;
+}
+
+.invite-regular-user-call-email-title {
+  margin-block: 0.2rem;
+  padding-inline: 0.5rem;
+  font-family: 'SansDeva';
+}
+
+@media (width<=420px) {
+  .invite-regular-user-call-email-title {
+    padding-inline: 0rem;
+    font-size: 0.9rem;
+  }
+}
+
+.invite-regular-user-call-email-value {
+  max-width: 520px;
+  width: -webkit-fill-available;
+  padding: 0.2rem 0.5rem;
+  border: none;
+  outline: none;
+  font-family: 'SansDeva';
+  font-size: 0.9rem;
+}
+
+.invite-regular-user-call-actions-container {
+  max-width: 520px;
+  width: 100%;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+.invite-regular-user-action {
+  margin-top: 5px;
+  padding: 0.2rem 5rem;
+  border: none;
+  border-radius: 0.4rem;
+  outline: none;
+  font-family: 'SansDeva';
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: 150ms;
+  color: #f3f1e3;
+  background: #edb572;
+}
+
+.invite-regular-user-action:hover {
+  background: #cd9d63;
+}
