@@ -26,7 +26,7 @@ namespace MentalHealthBlog.API.Controllers
 
 
         [HttpGet("shares-per-user")]
-        [Authorize(Roles= "Psychologist / Psychotherapist")]
+        [Authorize(Roles = "Psychologist / Psychotherapist")]
         public async Task<Response> GetSharesPerUser([FromQuery] ExpertSearchContentDto query)
         {
             return await _mentalExpertService.GetSharesPerUser(query);
@@ -40,17 +40,17 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpPost("give-assignment")]
-        [Authorize(Roles= "Psychologist / Psychotherapist")]
+        [Authorize(Roles = "Psychologist / Psychotherapist")]
         public async Task<Response> CreateAssignment([FromBody] CreateAssignmentDto request)
         {
             return await _mentalExpertService.CreateAssignment(request);
         }
 
         [HttpPost("invite/user")]
-        [Authorize(Roles= "Psychologist / Psychotherapist")]
-        public async Task<Response> SendInviteToUser([FromBody] InviteDto request)
+        [Authorize(Roles = "Psychologist / Psychotherapist")]
+        public async Task SendInviteToUser([FromBody] InviteDto request)
         {
-
+            await _mentalExpertService.SendInviteToUser(request);
         }
 
     }

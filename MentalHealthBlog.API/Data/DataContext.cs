@@ -30,6 +30,7 @@ namespace MentalHealthBlogAPI.Data
         public DbSet<TherapyRequest> TherapyRequests { get; set; }
         public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
         public DbSet<Subscription> Subscriptions { get; set; }
+        public DbSet<TherapyInvite> TherapyInvites { get; set; }
 
         public void SeedRegularUsers(string adminPass)
         {

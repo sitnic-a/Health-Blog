@@ -305,10 +305,38 @@ namespace MentalHealthBlog.API.Services
                 _mentalExpertLoggerService.LogError($"GIVE-ASSIGNMENT: {e.Message}");
                 throw;
             }
-
         }
 
-        public async Task<Response> SendInviteToUser(InviteDto request)
+        public async Task<Response> CreateInvite(InviteDto request)
+        {
+            var userHelper = new UserHelper(_context);
+            var combinedUsers = await userHelper.GetCombinedDataFromMentalHealthExpertsAndRegularUsersAsync();
+            var userWithAccount = new _PartialCombinedUserDto();
+            bool isRegularUserAlreadyRegistered = false;
+            TherapyInvite newInvite;
+            if (combinedUsers.Any() && combinedUsers != null)
+            {
+                isRegularUserAlreadyRegistered = combinedUsers.Any(e => e.Email == request.Email);
+                if (isRegularUserAlreadyRegistered)
+                {
+                    userWithAccount = combinedUsers.SingleOrDefault(e => e.Email == request.Email);
+                }
+            }
+
+            var newInviteGuid = Guid.NewGuid();
+            if (isRegularUserAlreadyRegistered)
+            {
+                newInvite = new TherapyInvite(newInviteGuid, request.MentalHealthExpertId, isRegularUserAlreadyRegistered, userWithAccount.Id);
+            }
+
+            newInvite = new TherapyInvite(newInviteGuid, request.MentalHealthExpertId, isRegularUserAlreadyRegistered, null);
+            await _context.TherapyInvites.AddAsync(newInvite);
+            await _context.SaveChangesAsync();
+
+            return new Response(newInvite,StatusCodes.Status201Created,MentalExpertServiceLogTypes.SUCCESS.ToString());
+        }
+
+        public async Task SendInviteToUser(InviteDto request)
         {
             if (request == null ||
                 string.IsNullOrEmpty(request.Email) ||
@@ -318,8 +346,6 @@ namespace MentalHealthBlog.API.Services
                 throw new ArgumentException("Bad request!");
             }
 
-            await Task.Delay(200);
-            return new Response();
             /*
                 1) Dodati invite tabelu na bazu
                 2) Pripremiti novokreirani invite kao record i snimiti ga

@@ -9,6 +9,7 @@ namespace MentalHealthBlog.API.Services
         public Task<Response> GetSharesPerUser(ExpertSearchContentDto query);
         public Task<Response> GetUsersWithSetAssignments(ExpertSearchContentDto query);
         public Task<Response> CreateAssignment(CreateAssignmentDto request);
-        public Task<Response> SendInviteToUser(InviteDto request);
+        public Task<Response> CreateInvite(InviteDto request);
+        public Task SendInviteToUser(InviteDto request);
     }
 }
