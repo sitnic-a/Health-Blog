@@ -314,6 +314,33 @@ namespace MentalHealthBlog.API.Services
             }
         }
 
+        public async Task<Response> GetInvitationById(Guid id)
+        {
+            try
+            {
+                if (id == Guid.Empty)
+                {
+                    _mentalExpertLoggerService.LogWarning($"INVITE/[id]: {MentalExpertServiceLogTypes.INVALID_DATA.ToString()}");
+                    throw new ArgumentException("Bad request!");
+                }
+
+                var invitation = await _context.TherapyInvites.FindAsync(id);
+                if (invitation == null)
+                {
+                    _mentalExpertLoggerService.LogWarning($"INVITE/[id]: {MentalExpertServiceLogTypes.NOT_FOUND.ToString()}");
+                    throw new RecordNotFoundException("Invitation not found!");
+                }
+
+                _mentalExpertLoggerService.LogInformation($"INVITE/[id]: {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
+                return new Response(invitation, StatusCodes.Status200OK, MentalExpertServiceLogTypes.SUCCESS.ToString());
+            }
+            catch (Exception e)
+            {
+                _mentalExpertLoggerService.LogError($"INVITE/[id]: {e.Message}");
+                throw;
+            }
+        }
+
         public async Task<Response> CreateInvite(InviteDto request)
         {
             try
@@ -379,7 +406,7 @@ namespace MentalHealthBlog.API.Services
             }
         }
 
-        public async Task SendInviteToUser(InviteDto request)
+        public async Task<Response> SendInviteToUser(InviteDto request)
         {
 
             try
@@ -390,8 +417,12 @@ namespace MentalHealthBlog.API.Services
                 if (newInviteResponse.StatusCode == StatusCodes.Status201Created && 
                     newInviteServiceResponseObject != null)
                 {
-                    await SendInvitationEmailToUser(request, newInviteServiceResponseObject);
+                    _mentalExpertLoggerService.LogInformation($"INVITE/USER: {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
+                    return await SendInvitationEmailToUser(request, newInviteServiceResponseObject);
                 }
+
+                _mentalExpertLoggerService.LogWarning($"INVITE/USER: {MentalExpertServiceLogTypes.NOT_FOUND.ToString()}");
+                throw new RecordNotFoundException("Invitation not found!");
             }
             catch (Exception e)
             {
@@ -410,7 +441,7 @@ namespace MentalHealthBlog.API.Services
             */
         }
 
-        public async Task SendInvitationEmailToUser(InviteDto request, TherapyInvite invite)
+        public async Task<Response> SendInvitationEmailToUser(InviteDto request, TherapyInvite invite)
         {
             try
             {
@@ -475,6 +506,8 @@ namespace MentalHealthBlog.API.Services
                 await client.AuthenticateAsync(smtpHostAddress, smtpPassword);
                 await client.SendAsync(message);
                 await client.DisconnectAsync(true);
+
+                return new Response(request.Email, StatusCodes.Status200OK, $"INVITE/USER: {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
             }
             catch (Exception e)
             {

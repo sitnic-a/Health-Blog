@@ -23,12 +23,10 @@ namespace MentalHealthBlog.API.ExtensionMethods.ExtensionTherapyInviteClass
 
         public static bool IsTherapyInviteValid(this TherapyInvite request)
         {
-            if (request == null || 
-                string.IsNullOrEmpty(request.Id.ToString()) || 
-                string.IsNullOrWhiteSpace(request.Id.ToString()) ||
+            if (request.Id == Guid.Empty ||
                 request.MentalHealthExpertId <= 0)
             {
-                return false;   
+                return false;
             }
             return true;
         }

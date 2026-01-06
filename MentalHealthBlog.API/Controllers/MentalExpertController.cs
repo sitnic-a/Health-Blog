@@ -1,4 +1,5 @@
-﻿using MentalHealthBlog.API.Models;
+﻿using MentalHealthBlog.API.Exceptions;
+using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Services;
@@ -12,10 +13,13 @@ namespace MentalHealthBlog.API.Controllers
     public class MentalExpertController : ControllerBase
     {
         private readonly IMentalExpertService _mentalExpertService;
-
-        public MentalExpertController(IMentalExpertService mentalExpertService)
+        private readonly IHttpContextAccessor _httpContext;
+        ILogger<IMentalExpertService> _mentalExpertLoggerService;
+        public MentalExpertController(IMentalExpertService mentalExpertService, IHttpContextAccessor httpContext, ILogger<IMentalExpertService> mentalExpertLoggerService)
         {
             _mentalExpertService = mentalExpertService;
+            _httpContext = httpContext;
+            _mentalExpertLoggerService = mentalExpertLoggerService;
         }
 
         [HttpPost("experts")]
@@ -51,6 +55,40 @@ namespace MentalHealthBlog.API.Controllers
         public async Task SendInviteToUser([FromBody] InviteDto request)
         {
             await _mentalExpertService.SendInviteToUser(request);
+        }
+
+        [HttpGet("invite/{id}")]
+        public async Task<Response> Invite(Guid id)
+        {
+            try
+            {
+                var invitationResponse = await _mentalExpertService.GetInvitationById(id);
+                var invitation = invitationResponse.ServiceResponseObject as TherapyInvite;
+
+                if (invitation != null)
+                {
+                    Response.Cookies.Append("IsMentalHealthExpert", "false", new CookieOptions()
+                    {
+                        Expires = DateTime.UtcNow.AddDays(2)
+                    });
+
+                    Response.Cookies.Append("MentalHealthExpertId", $"{invitation.MentalHealthExpertId}", new CookieOptions()
+                    {
+                        Expires = DateTime.UtcNow.AddDays(2)
+                    });
+
+                    _mentalExpertLoggerService.LogInformation($"INVITE/[id]: {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
+                    HttpContext.Response.Redirect("register");
+                }
+
+                _mentalExpertLoggerService.LogWarning($"INVITE/[id]: {MentalExpertServiceLogTypes.NOT_FOUND.ToString()}");
+                throw new RecordNotFoundException("Invitation not found!");
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
     }
