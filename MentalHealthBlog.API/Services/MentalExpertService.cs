@@ -314,11 +314,11 @@ namespace MentalHealthBlog.API.Services
             }
         }
 
-        public async Task<Response> GetInvitationById(Guid id)
+        public async Task<Response> GetInvitationById(string id)
         {
             try
             {
-                if (id == Guid.Empty)
+                if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
                 {
                     _mentalExpertLoggerService.LogWarning($"INVITE/[id]: {MentalExpertServiceLogTypes.INVALID_DATA.ToString()}");
                     throw new ArgumentException("Bad request!");
@@ -345,34 +345,25 @@ namespace MentalHealthBlog.API.Services
         {
             try
             {
-                if (request.IsRequestForTherapyValid())
+                if (!request.IsRequestForTherapyValid())
                 {
                     _mentalExpertLoggerService.LogWarning($"Creating regular user invite - {MentalExpertServiceLogTypes.INVALID_DATA.ToString()}");
                     throw new ArgumentException("Bad request!");
                 }
 
                 var userHelper = new UserHelper(_context);
-                var combinedUsers = await userHelper.GetCombinedDataFromMentalHealthExpertsAndRegularUsersAsync();
-                var userWithAccount = new _PartialCombinedUserDto();
-                bool isRegularUserAlreadyRegistered = false;
+                var userWithAccount = await _context.RegularUsers
+                    .FirstOrDefaultAsync(ru => ru.Email == request.SendEmailTo);
+                bool isRegularUserAlreadyRegistered = userWithAccount != null;
                 TherapyInvite newInvite;
-
-                if (!combinedUsers.Any() || combinedUsers == null)
-                {
-                    _mentalExpertLoggerService.LogWarning($"Creating regular user invite - {MentalExpertServiceLogTypes.NOT_FOUND.ToString()}");
-                    throw new RecordNotFoundException("Users not found!");
-                }
-
-                isRegularUserAlreadyRegistered = combinedUsers.Any(e => e.Email == request.Email);
-                if (isRegularUserAlreadyRegistered == true)
-                {
-                    userWithAccount = combinedUsers.SingleOrDefault(e => e.Email == request.Email);
-                }
-
-                var newInviteGuid = Guid.NewGuid();
+                var newInviteGuidAsGuid = Guid.NewGuid();
+                var newInviteGuid = newInviteGuidAsGuid
+                    .ToString("N")
+                    .Substring(0, 9);
+               
                 if (isRegularUserAlreadyRegistered)
                 {
-                    newInvite = new TherapyInvite(newInviteGuid, request.MentalHealthExpertId, isRegularUserAlreadyRegistered, userWithAccount.Id);
+                    newInvite = new TherapyInvite(newInviteGuid, request.MentalHealthExpertId, isRegularUserAlreadyRegistered, userWithAccount.UserId);
                     await _context.TherapyInvites.AddAsync(newInvite);
                     await _context.SaveChangesAsync();
 
@@ -414,7 +405,7 @@ namespace MentalHealthBlog.API.Services
                 var newInviteResponse = await CreateInvite(request);
                 var newInviteServiceResponseObject = newInviteResponse.ServiceResponseObject as TherapyInvite;
 
-                if (newInviteResponse.StatusCode == StatusCodes.Status201Created && 
+                if (newInviteResponse.StatusCode == StatusCodes.Status201Created &&
                     newInviteServiceResponseObject != null)
                 {
                     _mentalExpertLoggerService.LogInformation($"INVITE/USER: {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
@@ -461,7 +452,7 @@ namespace MentalHealthBlog.API.Services
                     throw new RecordNotFoundException("Mental health expert is not found!");
                 }
 
-                var invitationUrl = $"https://localhost:3000/invite/{invite.Id}";
+                var invitationUrl = $"https://localhost:7029/invite/{invite.Id}";
                 //var invitationUrl = $"https://mapp-terapija/invite/{invite.Id}";
 
                 var MentalHealthExpertFullName = string.Concat(dbMentalHealthExpert.FirstName, " ", dbMentalHealthExpert.LastName);
@@ -473,7 +464,7 @@ namespace MentalHealthBlog.API.Services
 
                 var message = new MimeMessage();
                 message.From.Add(new MailboxAddress("Podrška, Mapp Terapija", smtpHostAddress));
-                message.To.Add(new MailboxAddress("Recipient", request.Email));
+                message.To.Add(new MailboxAddress("Recipient", request.SendEmailTo));
                 message.Subject = "Zahtjev za terapijski proces";
                 message.Body = new TextPart("html")
                 {
@@ -481,12 +472,14 @@ namespace MentalHealthBlog.API.Services
                 <div>
                     <p>Poštovani/a,</p>
                     
-                    <h4>Dobili ste novi zahtjev za terapijski proces </h5>
+                    <h3>Dobili ste novi zahtjev za terapijski proces </h3>
                     <p>Doktor <strong>{MentalHealthExpertFullName}</strong> Vam je poslao zahtjev za terapijski proces!</p>
                     
-                    <p>Ukoliko ste već registrovani, zahtjev možete pregledati na Vašem profilu. Ukoliko niste, klikom na link ispod možete
-                        se registrovati na aplikaciju koja će Vas automatski povezati sa doktorom {MentalHealthExpertFullName} s kojim ćete 
-                        ubuduće moći komunicirati do trenutka kada poželite prekinuti Vaš proces. 
+                    <p>Ukoliko ste već registrovani, zahtjev možete pregledati na Vašem profilu.</p>
+                    <br>
+                    <p>Ukoliko niste, klikom na link ispod možete se registrovati na aplikaciju koja će Vas 
+                       automatski povezati sa doktorom {MentalHealthExpertFullName} s kojim ćete ubuduće moći 
+                       komunicirati do trenutka kada poželite prekinuti Vaš proces. 
                     </p>
                     <br>
 
@@ -507,7 +500,7 @@ namespace MentalHealthBlog.API.Services
                 await client.SendAsync(message);
                 await client.DisconnectAsync(true);
 
-                return new Response(request.Email, StatusCodes.Status200OK, $"INVITE/USER: {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
+                return new Response(request.SendEmailTo, StatusCodes.Status200OK, $"INVITE/USER: {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
             }
             catch (Exception e)
             {

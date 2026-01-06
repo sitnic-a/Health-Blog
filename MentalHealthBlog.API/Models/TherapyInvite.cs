@@ -2,7 +2,7 @@
 {
     public class TherapyInvite
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public int MentalHealthExpertId { get; set; }
         public int? RegularUserId { get; set; }
         public bool IsRegularUserAlreadyUsingApplication { get; set; }
@@ -10,7 +10,7 @@
         public bool IsUsed { get; set; }
 
         public TherapyInvite(){}
-        public TherapyInvite(Guid id, int mentalHealthExpertId, bool isRegularUserAlreadyUsingApplication, int? regularUserId = null)
+        public TherapyInvite(string id, int mentalHealthExpertId, bool isRegularUserAlreadyUsingApplication, int? regularUserId = null)
         {
             Id = id;
             MentalHealthExpertId = mentalHealthExpertId;

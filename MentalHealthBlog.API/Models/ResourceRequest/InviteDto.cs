@@ -3,6 +3,6 @@
     public class InviteDto
     {
         public int MentalHealthExpertId { get; set; }
-        public string Email { get; set; } = string.Empty;
+        public string SendEmailTo { get; set; } = string.Empty;
     }
 }

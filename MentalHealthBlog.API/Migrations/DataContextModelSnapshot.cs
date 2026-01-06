@@ -574,7 +574,7 @@ namespace MentalHealthBlog.API.Migrations
                     b.Property<DateTime>("RegisteredAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2026, 1, 6, 12, 28, 9, 813, DateTimeKind.Utc).AddTicks(6049));
+                        .HasDefaultValue(new DateTime(2026, 1, 6, 17, 35, 2, 260, DateTimeKind.Utc).AddTicks(2058));
 
                     b.Property<DateTime?>("TrialEndsAt")
                         .HasColumnType("timestamp with time zone");
@@ -694,7 +694,7 @@ namespace MentalHealthBlog.API.Migrations
                     b.Property<DateTime>("RegisteredAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2026, 1, 6, 12, 28, 9, 813, DateTimeKind.Utc).AddTicks(6049));
+                        .HasDefaultValue(new DateTime(2026, 1, 6, 17, 35, 2, 260, DateTimeKind.Utc).AddTicks(2058));
 
                     b.Property<DateTime?>("TrialEndsAt")
                         .HasColumnType("timestamp with time zone");
@@ -927,9 +927,8 @@ namespace MentalHealthBlog.API.Migrations
 
             modelBuilder.Entity("MentalHealthBlog.API.Models.TherapyInvite", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("InvitedAt")
                         .HasColumnType("timestamp with time zone");

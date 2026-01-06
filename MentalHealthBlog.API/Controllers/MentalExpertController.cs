@@ -52,13 +52,13 @@ namespace MentalHealthBlog.API.Controllers
 
         [HttpPost("invite/user")]
         [Authorize(Roles = "Psychologist / Psychotherapist")]
-        public async Task SendInviteToUser([FromBody] InviteDto request)
+        public async Task<Response> SendInviteToUser([FromBody] InviteDto request)
         {
-            await _mentalExpertService.SendInviteToUser(request);
+            return await _mentalExpertService.SendInviteToUser(request);
         }
 
-        [HttpGet("invite/{id}")]
-        public async Task<Response> Invite(Guid id)
+        [HttpGet("/invite/{id}")]
+        public async Task<Response> Invite(string id)
         {
             try
             {
@@ -78,15 +78,16 @@ namespace MentalHealthBlog.API.Controllers
                     });
 
                     _mentalExpertLoggerService.LogInformation($"INVITE/[id]: {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
-                    HttpContext.Response.Redirect("register");
+                    HttpContext.Response.Redirect("http://localhost:3000/register");
+                    return new Response(invitation, StatusCodes.Status200OK, MentalExpertServiceLogTypes.SUCCESS.ToString());
                 }
 
                 _mentalExpertLoggerService.LogWarning($"INVITE/[id]: {MentalExpertServiceLogTypes.NOT_FOUND.ToString()}");
                 throw new RecordNotFoundException("Invitation not found!");
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
+                _mentalExpertLoggerService.LogError($"INVITE/[id]: {e.Message}");
                 throw;
             }
         }

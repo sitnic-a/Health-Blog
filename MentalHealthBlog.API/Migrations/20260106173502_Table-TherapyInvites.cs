@@ -16,7 +16,7 @@ namespace MentalHealthBlog.API.Migrations
                 table: "RegularUsers",
                 type: "timestamp with time zone",
                 nullable: false,
-                defaultValue: new DateTime(2026, 1, 6, 12, 28, 9, 813, DateTimeKind.Utc).AddTicks(6049),
+                defaultValue: new DateTime(2026, 1, 6, 17, 35, 2, 260, DateTimeKind.Utc).AddTicks(2058),
                 oldClrType: typeof(DateTime),
                 oldType: "timestamp with time zone",
                 oldDefaultValue: new DateTime(2025, 12, 10, 16, 21, 8, 528, DateTimeKind.Utc).AddTicks(3822));
@@ -26,7 +26,7 @@ namespace MentalHealthBlog.API.Migrations
                 table: "MentalHealthExperts",
                 type: "timestamp with time zone",
                 nullable: false,
-                defaultValue: new DateTime(2026, 1, 6, 12, 28, 9, 813, DateTimeKind.Utc).AddTicks(6049),
+                defaultValue: new DateTime(2026, 1, 6, 17, 35, 2, 260, DateTimeKind.Utc).AddTicks(2058),
                 oldClrType: typeof(DateTime),
                 oldType: "timestamp with time zone",
                 oldDefaultValue: new DateTime(2025, 12, 10, 16, 21, 8, 528, DateTimeKind.Utc).AddTicks(3822));
@@ -35,7 +35,7 @@ namespace MentalHealthBlog.API.Migrations
                 name: "TherapyInvites",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<string>(type: "text", nullable: false),
                     MentalHealthExpertId = table.Column<int>(type: "integer", nullable: false),
                     RegularUserId = table.Column<int>(type: "integer", nullable: true),
                     IsRegularUserAlreadyUsingApplication = table.Column<bool>(type: "boolean", nullable: false),
@@ -62,7 +62,7 @@ namespace MentalHealthBlog.API.Migrations
                 defaultValue: new DateTime(2025, 12, 10, 16, 21, 8, 528, DateTimeKind.Utc).AddTicks(3822),
                 oldClrType: typeof(DateTime),
                 oldType: "timestamp with time zone",
-                oldDefaultValue: new DateTime(2026, 1, 6, 12, 28, 9, 813, DateTimeKind.Utc).AddTicks(6049));
+                oldDefaultValue: new DateTime(2026, 1, 6, 17, 35, 2, 260, DateTimeKind.Utc).AddTicks(2058));
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "RegisteredAt",
@@ -72,7 +72,7 @@ namespace MentalHealthBlog.API.Migrations
                 defaultValue: new DateTime(2025, 12, 10, 16, 21, 8, 528, DateTimeKind.Utc).AddTicks(3822),
                 oldClrType: typeof(DateTime),
                 oldType: "timestamp with time zone",
-                oldDefaultValue: new DateTime(2026, 1, 6, 12, 28, 9, 813, DateTimeKind.Utc).AddTicks(6049));
+                oldDefaultValue: new DateTime(2026, 1, 6, 17, 35, 2, 260, DateTimeKind.Utc).AddTicks(2058));
         }
     }
 }
