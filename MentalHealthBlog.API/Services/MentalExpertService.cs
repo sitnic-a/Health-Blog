@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+using MailKit.Net.Smtp;
+using MailKit.Security;
 using MentalHealthBlog.API.Exceptions;
 using MentalHealthBlog.API.ExtensionMethods.ExtensionAssignmentClass;
+using MentalHealthBlog.API.ExtensionMethods.ExtensionTherapyInviteClass;
 using MentalHealthBlog.API.Methods;
 using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
@@ -8,6 +11,7 @@ using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
 using MentalHealthBlogAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using MimeKit;
 
 #pragma warning disable CS8620
 #pragma warning disable CS8602
@@ -17,6 +21,7 @@ namespace MentalHealthBlog.API.Services
     enum MentalExpertServiceLogTypes
     {
         EMPTY,
+        INVALID_DATA,
         ASSIGNMENT_INVALID_DATA,
         NOT_FOUND,
         SUCCESS,
@@ -26,12 +31,14 @@ namespace MentalHealthBlog.API.Services
     public class MentalExpertService : IMentalExpertService
     {
         private readonly DataContext _context;
+        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         private readonly ILogger<IMentalExpertService> _mentalExpertLoggerService;
 
-        public MentalExpertService(DataContext context, IMapper mapper, ILogger<IMentalExpertService> mentalExpertLoggerService)
+        public MentalExpertService(DataContext context, IConfiguration configuration, IMapper mapper, ILogger<IMentalExpertService> mentalExpertLoggerService)
         {
             _context = context;
+            _configuration = configuration;
             _mapper = mapper;
             _mentalExpertLoggerService = mentalExpertLoggerService;
         }
@@ -309,41 +316,87 @@ namespace MentalHealthBlog.API.Services
 
         public async Task<Response> CreateInvite(InviteDto request)
         {
-            var userHelper = new UserHelper(_context);
-            var combinedUsers = await userHelper.GetCombinedDataFromMentalHealthExpertsAndRegularUsersAsync();
-            var userWithAccount = new _PartialCombinedUserDto();
-            bool isRegularUserAlreadyRegistered = false;
-            TherapyInvite newInvite;
-            if (combinedUsers.Any() && combinedUsers != null)
+            try
             {
+                if (request.IsRequestForTherapyValid())
+                {
+                    _mentalExpertLoggerService.LogWarning($"Creating regular user invite - {MentalExpertServiceLogTypes.INVALID_DATA.ToString()}");
+                    throw new ArgumentException("Bad request!");
+                }
+
+                var userHelper = new UserHelper(_context);
+                var combinedUsers = await userHelper.GetCombinedDataFromMentalHealthExpertsAndRegularUsersAsync();
+                var userWithAccount = new _PartialCombinedUserDto();
+                bool isRegularUserAlreadyRegistered = false;
+                TherapyInvite newInvite;
+
+                if (!combinedUsers.Any() || combinedUsers == null)
+                {
+                    _mentalExpertLoggerService.LogWarning($"Creating regular user invite - {MentalExpertServiceLogTypes.NOT_FOUND.ToString()}");
+                    throw new RecordNotFoundException("Users not found!");
+                }
+
                 isRegularUserAlreadyRegistered = combinedUsers.Any(e => e.Email == request.Email);
-                if (isRegularUserAlreadyRegistered)
+                if (isRegularUserAlreadyRegistered == true)
                 {
                     userWithAccount = combinedUsers.SingleOrDefault(e => e.Email == request.Email);
                 }
-            }
 
-            var newInviteGuid = Guid.NewGuid();
-            if (isRegularUserAlreadyRegistered)
+                var newInviteGuid = Guid.NewGuid();
+                if (isRegularUserAlreadyRegistered)
+                {
+                    newInvite = new TherapyInvite(newInviteGuid, request.MentalHealthExpertId, isRegularUserAlreadyRegistered, userWithAccount.Id);
+                    await _context.TherapyInvites.AddAsync(newInvite);
+                    await _context.SaveChangesAsync();
+
+                    if (newInvite != null)
+                    {
+                        _mentalExpertLoggerService.LogInformation($"Creating regular user invite - {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
+                        return new Response(newInvite, StatusCodes.Status201Created, MentalExpertServiceLogTypes.SUCCESS.ToString());
+                    }
+
+                    _mentalExpertLoggerService.LogWarning($"Creating regular user invite - {MentalExpertServiceLogTypes.NOT_FOUND.ToString()}");
+                    throw new CreateRecordException("Invite not created!");
+                }
+
+                newInvite = new TherapyInvite(newInviteGuid, request.MentalHealthExpertId, isRegularUserAlreadyRegistered, null);
+                await _context.TherapyInvites.AddAsync(newInvite);
+                await _context.SaveChangesAsync();
+
+                if (newInvite != null)
+                {
+                    _mentalExpertLoggerService.LogInformation($"Creating regular user invite - {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
+                    return new Response(newInvite, StatusCodes.Status201Created, MentalExpertServiceLogTypes.SUCCESS.ToString());
+                }
+
+                _mentalExpertLoggerService.LogWarning($"Creating regular user invite - {MentalExpertServiceLogTypes.NOT_FOUND.ToString()}");
+                throw new CreateRecordException("Invite not created!");
+            }
+            catch (Exception e)
             {
-                newInvite = new TherapyInvite(newInviteGuid, request.MentalHealthExpertId, isRegularUserAlreadyRegistered, userWithAccount.Id);
+                _mentalExpertLoggerService.LogError($"Creating regular user invite - {e.Message}");
+                throw;
             }
-
-            newInvite = new TherapyInvite(newInviteGuid, request.MentalHealthExpertId, isRegularUserAlreadyRegistered, null);
-            await _context.TherapyInvites.AddAsync(newInvite);
-            await _context.SaveChangesAsync();
-
-            return new Response(newInvite,StatusCodes.Status201Created,MentalExpertServiceLogTypes.SUCCESS.ToString());
         }
 
         public async Task SendInviteToUser(InviteDto request)
         {
-            if (request == null ||
-                string.IsNullOrEmpty(request.Email) ||
-                string.IsNullOrWhiteSpace(request.Email) ||
-                request.MentalHealthExpertId <= 0)
+
+            try
             {
-                throw new ArgumentException("Bad request!");
+                var newInviteResponse = await CreateInvite(request);
+                var newInviteServiceResponseObject = newInviteResponse.ServiceResponseObject as TherapyInvite;
+
+                if (newInviteResponse.StatusCode == StatusCodes.Status201Created && 
+                    newInviteServiceResponseObject != null)
+                {
+                    await SendInvitationEmailToUser(request, newInviteServiceResponseObject);
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw;
             }
 
             /*
@@ -355,6 +408,79 @@ namespace MentalHealthBlog.API.Services
                 5) Po uspjesnoj registraciji ako korisnik nije postojao u aplikaciji snimiti promjenu na rekordu na nacin da se pohrani koji
                   je korisnik pozvan od strane kojeg strucnjaka kako bi se mogla voditi statistika 
             */
+        }
+
+        public async Task SendInvitationEmailToUser(InviteDto request, TherapyInvite invite)
+        {
+            try
+            {
+                if (!request.IsRequestForTherapyValid() || !invite.IsTherapyInviteValid())
+                {
+                    _mentalExpertLoggerService.LogWarning($"INVITE/USER: {MentalExpertServiceLogTypes.INVALID_DATA.ToString()}");
+                    throw new ArgumentException("Bad request!");
+                }
+
+
+                var dbMentalHealthExpert = await _context.MentalHealthExperts
+                    .FirstOrDefaultAsync(mhe => mhe.UserId == request.MentalHealthExpertId);
+
+                if (dbMentalHealthExpert == null)
+                {
+                    _mentalExpertLoggerService.LogWarning($"INVITE/USER: {MentalExpertServiceLogTypes.NOT_FOUND.ToString()}");
+                    throw new RecordNotFoundException("Mental health expert is not found!");
+                }
+
+                var invitationUrl = $"https://localhost:3000/invite/{invite.Id}";
+                //var invitationUrl = $"https://mapp-terapija/invite/{invite.Id}";
+
+                var MentalHealthExpertFullName = string.Concat(dbMentalHealthExpert.FirstName, " ", dbMentalHealthExpert.LastName);
+
+                var smtpHost = _configuration.GetValue<string>("SMTP_HOST");
+                var smtpPort = _configuration.GetValue<int>("SMTP_PORT");
+                var smtpHostAddress = _configuration.GetValue<string>("SMTP_HOST_ADDRESS");
+                var smtpPassword = _configuration.GetValue<string>("SMTP_PASSWORD");
+
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("Podrška, Mapp Terapija", smtpHostAddress));
+                message.To.Add(new MailboxAddress("Recipient", request.Email));
+                message.Subject = "Zahtjev za terapijski proces";
+                message.Body = new TextPart("html")
+                {
+                    Text = $@"
+                <div>
+                    <p>Poštovani/a,</p>
+                    
+                    <h4>Dobili ste novi zahtjev za terapijski proces </h5>
+                    <p>Doktor <strong>{MentalHealthExpertFullName}</strong> Vam je poslao zahtjev za terapijski proces!</p>
+                    
+                    <p>Ukoliko ste već registrovani, zahtjev možete pregledati na Vašem profilu. Ukoliko niste, klikom na link ispod možete
+                        se registrovati na aplikaciju koja će Vas automatski povezati sa doktorom {MentalHealthExpertFullName} s kojim ćete 
+                        ubuduće moći komunicirati do trenutka kada poželite prekinuti Vaš proces. 
+                    </p>
+                    <br>
+
+                    <p>Link za registraciju na aplikaciju {invitationUrl}</p>
+                    <br>
+                    <p>Za sve dodatne informacije, pomoć ili neko drugo pitanje kontaktirajte Udruženje Menssana ili svoga doktora</p>
+
+                    <div>
+                       <p>Želimo Vam ugodan ostatak dana!</p>
+                       <p>Vaš PSIHOnet tim!</p>
+                    </div>
+                </div>"
+                };
+
+                using var client = new SmtpClient();
+                client.Connect(smtpHost, smtpPort, SecureSocketOptions.StartTls);
+                await client.AuthenticateAsync(smtpHostAddress, smtpPassword);
+                await client.SendAsync(message);
+                await client.DisconnectAsync(true);
+            }
+            catch (Exception e)
+            {
+                _mentalExpertLoggerService.LogError($"INVITE/USER: {e.Message}");
+                throw;
+            }
         }
         private async Task<List<SharesPerUserDto>> FillListGroupedUsersAndTheirShares(IEnumerable<IGrouping<User, Share>> groupedUsersAndTheirShares)
         {
