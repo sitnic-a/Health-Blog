@@ -28,6 +28,7 @@ import {
   checkPhotoValidity,
   checkUsernameValidity,
   previewImage,
+  removeCookies,
   stringIsNullOrEmpty,
 } from '../../utils/helper-methods/methods'
 import { db_roles } from '../../enums/roles'
@@ -416,6 +417,7 @@ export const Register = () => {
       if (statusCode === 201) {
         let serviceResponseObject = response?.payload?.serviceResponseObject
         dispatch(setSelectedMentalHealthExpertIds([]))
+        removeCookies()
         localStorage.setItem(
           'justRegisteredUser',
           JSON.stringify(serviceResponseObject)
@@ -627,11 +629,11 @@ export const Register = () => {
                 )}
               </div>
             </div>
-
             {isLoadingExperts ? (
               <LoadingSpinner />
             ) : (
-              suggestedMentalHealthExperts?.length > 0 && (
+              suggestedMentalHealthExperts?.length > 0 &&
+              stringIsNullOrEmpty(therapyInvitationId) && (
                 <div className="register-info-in-therapy-container">
                   <label
                     htmlFor="register-in-therapy"
@@ -649,6 +651,10 @@ export const Register = () => {
                   />
                 </div>
               )
+
+              // suggestedMentalHealthExperts?.length > 0 &&(
+
+              // )
             )}
 
             {isInTherapy && (
