@@ -67,12 +67,17 @@ namespace MentalHealthBlog.API.Controllers
 
                 if (invitation != null)
                 {
-                    Response.Cookies.Append("IsMentalHealthExpert", "false", new CookieOptions()
+                    Response.Cookies.Append("isMentalHealthExpert", "false", new CookieOptions()
                     {
                         Expires = DateTime.UtcNow.AddDays(2)
                     });
 
-                    Response.Cookies.Append("MentalHealthExpertId", $"{invitation.MentalHealthExpertId}", new CookieOptions()
+                    Response.Cookies.Append("therapyInvitationId", invitation.Id, new CookieOptions()
+                    {
+                        Expires = DateTime.UtcNow.AddDays(2)
+                    });
+
+                    Response.Cookies.Append("therapyInvitationSentById", $"{invitation.MentalHealthExpertId}", new CookieOptions()
                     {
                         Expires = DateTime.UtcNow.AddDays(2)
                     });

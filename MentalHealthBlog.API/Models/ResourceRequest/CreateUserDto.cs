@@ -5,6 +5,7 @@
         public string Username { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public CreateRegularUserDto? RegularUser { get; set; }
+        public string TherapyInvitationId { get; set; } = string.Empty;
         public List<int> Roles { get; set; }
         public bool?IsMentalHealthExpert { get; set; }
         public CreateMentalHealthExpertDto? MentalHealthExpert { get; set; }

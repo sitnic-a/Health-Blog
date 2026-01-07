@@ -14,7 +14,7 @@ namespace MentalHealthBlog.API.Methods
         {
             _configuration = configuration;
         }
-        public async Task<Response> SendEmailToInformAboutConnectionRequest(MentalHealthExpert dbMentalHealthExpert, RegularUser dbRegularUser)
+        public async Task<Response> SendEmailToInformAboutConnectionRequest(MentalHealthExpert dbMentalHealthExpert, RegularUser dbRegularUser, string? therapyInvitationId = null)
         {
 
             if (dbMentalHealthExpert == null || dbRegularUser == null)
@@ -33,13 +33,15 @@ namespace MentalHealthBlog.API.Methods
             var smtpHostAddress = _configuration.GetValue<string>("SMTP_HOST_ADDRESS");
             var smtpPassword = _configuration.GetValue<string>("SMTP_PASSWORD");
 
-            var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("Podrška, Mapp Terapija", smtpHostAddress));
-            message.To.Add(new MailboxAddress("Recipient", dbMentalHealthExpert.Email));
-            message.Subject = "Zahtjev za povezivanje";
-            message.Body = new TextPart("html")
+            if (string.IsNullOrEmpty(therapyInvitationId))
             {
-                Text = $@"
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("Podrška, Mapp Terapija", smtpHostAddress));
+                message.To.Add(new MailboxAddress("Recipient", dbMentalHealthExpert.Email));
+                message.Subject = "Zahtjev za povezivanje";
+                message.Body = new TextPart("html")
+                {
+                    Text = $@"
                 <div>
                     <p> Poštovani/a {mentalHealthExpertFullName}, 
                         <br />
@@ -66,13 +68,61 @@ namespace MentalHealthBlog.API.Methods
                         </p>
                     </div>
                 </div>"
-            };
+                };
 
-            using var client = new SmtpClient();
-            client.Connect(smtpHost, smtpPort, SecureSocketOptions.StartTls);
-            await client.AuthenticateAsync(smtpHostAddress, smtpPassword);
-            await client.SendAsync(message);
-            await client.DisconnectAsync(true);
+                using var client = new SmtpClient();
+                client.Connect(smtpHost, smtpPort, SecureSocketOptions.StartTls);
+                await client.AuthenticateAsync(smtpHostAddress, smtpPassword);
+                await client.SendAsync(message);
+                await client.DisconnectAsync(true);
+            }
+            else
+            {
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("Podrška, Mapp Terapija", smtpHostAddress));
+                message.To.Add(new MailboxAddress("Recipient", dbMentalHealthExpert.Email));
+                message.Subject = "Informacije o terapijskom procesu";
+                message.Body = new TextPart("html")
+                {
+                    Text = $@"
+                <div>
+                    <p> Poštovani/a {mentalHealthExpertFullName}, 
+                        <br />
+                        <br />
+                    </p>
+                    
+                    <p>
+                      <strong style='font-size: 1.05rem'>Vaš terapijski poziv je uspješno izvršen!</strong>
+                      <br />
+                      <br />
+                    </p>
+                    <p>Korisnik <strong>{regularUserFullName}</strong> je uspješno kreirao svoj profil. Budući da ste ga pozvali putem aplikacije, 
+                       automatski smo Vas povezali. Želimo Vam uspješnu komunikaciju!
+                    </p>
+
+                    <div>
+                        <p>Direktni pristup aplikaciji možete ostvariti klikom na link: 
+                          <a href={applicationUrl}> {applicationUrl}</a>
+                          <br />
+                          <p>Želimo Vam ugodan ostatak korištenja.
+                            <br />
+                            <br />
+                                Za sva pitanja, kontaktirajte nas putem <strong> support@mapp-terapija.com</strong>
+                                <p>Vaš PSIHOnet tim!</p>
+                          </p>
+                        </p>
+                    </div>
+                </div>"
+                };
+
+                using var client = new SmtpClient();
+                client.Connect(smtpHost, smtpPort, SecureSocketOptions.StartTls);
+                await client.AuthenticateAsync(smtpHostAddress, smtpPassword);
+                await client.SendAsync(message);
+                await client.DisconnectAsync(true);
+            }
+
+
 
             return new Response(dbMentalHealthExpert.Email, StatusCodes.Status200OK, EmailLogTypes.SUCCESS.ToString());
 

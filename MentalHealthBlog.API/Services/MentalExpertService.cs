@@ -473,10 +473,9 @@ namespace MentalHealthBlog.API.Services
                     <p>Poštovani/a,</p>
                     
                     <h3>Dobili ste novi zahtjev za terapijski proces </h3>
-                    <p>Doktor <strong>{MentalHealthExpertFullName}</strong> Vam je poslao zahtjev za terapijski proces!</p>
+                    <p>Doktor/ica <strong>{MentalHealthExpertFullName}</strong> Vam je poslao zahtjev za terapijski proces!</p>
                     
                     <p>Ukoliko ste već registrovani, zahtjev možete pregledati na Vašem profilu.</p>
-                    <br>
                     <p>Ukoliko niste, klikom na link ispod možete se registrovati na aplikaciju koja će Vas 
                        automatski povezati sa doktorom {MentalHealthExpertFullName} s kojim ćete ubuduće moći 
                        komunicirati do trenutka kada poželite prekinuti Vaš proces. 

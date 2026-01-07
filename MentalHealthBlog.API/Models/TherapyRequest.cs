@@ -15,10 +15,14 @@ namespace MentalHealthBlog.API.Models
         public DateTime SentAt { get; set; } = DateTime.UtcNow;
 
         public TherapyRequest() { }
-        public TherapyRequest(int regularUserId, int mentalHealthExpertId)
+        public TherapyRequest(int regularUserId, int mentalHealthExpertId, string? therapyInvitationId = null)
         {
             RegularUserId = regularUserId;
             MentalHealthExpertId = mentalHealthExpertId;
+            if (!string.IsNullOrEmpty(therapyInvitationId))
+            {
+                RequestStatus = RequestStatusEnum.Approved;
+            }
         }
     }
 }
