@@ -8,6 +8,7 @@ using MentalHealthBlog.API.Methods;
 using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
+using MentalHealthBlog.API.Services.Therapy;
 using MentalHealthBlog.API.Utils;
 using MentalHealthBlog.API.Utils.Email;
 using MentalHealthBlogAPI.Data;
@@ -56,8 +57,9 @@ namespace MentalHealthBlog.API.Services
         private HashAlgorithmName __HASHALGORITHM__ = HashAlgorithmName.SHA512;
         private User user = new();
         private readonly IMentalExpertService _mentalExpertService;
+        private readonly ITherapyInviteService _therapyInviteService;
 
-        public UserService(DataContext context, IConfiguration configuration, IMapper mapper, IMemoryCache memoryCache, ILogger<UserService> userLoggerService, IMentalExpertService mentalExpertService)
+        public UserService(DataContext context, IConfiguration configuration, IMapper mapper, IMemoryCache memoryCache, ILogger<UserService> userLoggerService, IMentalExpertService mentalExpertService, ITherapyInviteService therapyInviteService)
         {
             _context = context;
             _configuration = configuration;
@@ -65,6 +67,7 @@ namespace MentalHealthBlog.API.Services
             _memoryCache = memoryCache;
             _userLoggerService = userLoggerService;
             _mentalExpertService = mentalExpertService;
+            _therapyInviteService = therapyInviteService;
         }
 
         public async Task<Response> GetByIdAsync(int id)
@@ -332,6 +335,10 @@ namespace MentalHealthBlog.API.Services
                     }
 
                     var responseUser = new SignedUserDto(dbUser.Id, dbUser.Username, token, refreshToken.Token, dbUserRoles, dbUser.IsUsingForTheFirstTime, isPending);
+                    var automaticConnectionResponse = await _therapyInviteService.CheckIfRegularUserNotifiedAboutTherapyInviteAutomaticConnection(dbUser.Id);
+                    var isRegularUserNotifiedAboutTherapyInviteAutomaticConnections = (bool) automaticConnectionResponse.ServiceResponseObject;
+                    responseUser.IsRegularUserNotifiedAboutTherapyInviteAutomaticConnection = isRegularUserNotifiedAboutTherapyInviteAutomaticConnections; 
+
                     _userLoggerService.LogInformation($"LOGIN: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", responseUser);
                     return new Response(responseUser, StatusCodes.Status200OK, UserServiceLogTypes.USER_SUCCESFULL.ToString());
                 }

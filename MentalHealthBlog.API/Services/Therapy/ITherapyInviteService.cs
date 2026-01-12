@@ -4,6 +4,6 @@ namespace MentalHealthBlog.API.Services.Therapy
 {
     public interface ITherapyInviteService
     {
-        Task<Response> CheckIfInformedAboutTherapyInvites(int regularUserId);
+        Task<Response> CheckIfRegularUserNotifiedAboutTherapyInviteAutomaticConnection(int regularUserId);
     }
 }

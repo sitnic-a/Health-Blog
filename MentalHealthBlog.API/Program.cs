@@ -101,6 +101,7 @@ builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IRegularUserService, RegularUserService>();
 builder.Services.AddScoped<IEmotionService, EmotionService>();
 builder.Services.AddScoped<ITherapyRequestService, TherapyRequestService>();
+builder.Services.AddScoped<ITherapyInviteService, TherapyInviteService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IAssignmentService,AssignmentService>();
 builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();

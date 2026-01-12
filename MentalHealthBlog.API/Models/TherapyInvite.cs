@@ -8,6 +8,7 @@
         public bool IsRegularUserAlreadyUsingApplication { get; set; }
         public DateTime InvitedAt { get; set; }
         public bool IsUsed { get; set; }
+        public bool IsRegularUserNotifiedAboutAutomaticConnection { get; set; }
 
         public TherapyInvite(){}
         public TherapyInvite(string id, int mentalHealthExpertId, bool isRegularUserAlreadyUsingApplication, int? regularUserId = null)

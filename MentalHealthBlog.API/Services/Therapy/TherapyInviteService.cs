@@ -22,18 +22,19 @@ namespace MentalHealthBlog.API.Services.Therapy
             _therapyInviteLoggerService = therapyInviteLoggerService;
         }
 
-        public async Task<Response> CheckIfInformedAboutTherapyInvites(int regularUserId)
+        public async Task<Response> CheckIfRegularUserNotifiedAboutTherapyInviteAutomaticConnection(int regularUserId)
         {
             if (regularUserId<=0)
             {
-                _therapyInviteLoggerService.LogWarning($"Checking for therapy invites {TherapyInviteLogTypes.INVALID_DATA.ToString()}");
+                _therapyInviteLoggerService.LogWarning($"Checking if notified automatic connections available {TherapyInviteLogTypes.INVALID_DATA.ToString()}");
                 throw new ArgumentException("Bad request!");
             }
 
-            bool haveUnnotifiedTherapyInvites = false;
-            //bool haveUnnotifiedTherapyInvites = await _context.TherapyInvites.AnyAsync(ti => ti.IsNotifiedAboutTherapyInvite);
+            bool isRegularUserNotifiedAboutAutomaticConnection = await _context.TherapyInvites
+                .Where(ti => ti.RegularUserId == regularUserId)
+                .AnyAsync(ti => ti.IsRegularUserNotifiedAboutAutomaticConnection == true);
 
-            return new Response(haveUnnotifiedTherapyInvites, StatusCodes.Status200OK, $"Checking for therapy invites {TherapyInviteLogTypes.SUCCESS.ToString()}");
+            return new Response(isRegularUserNotifiedAboutAutomaticConnection, StatusCodes.Status200OK, $"Checking if notified automatic connections available {TherapyInviteLogTypes.SUCCESS.ToString()}");
         }
     }
 }
