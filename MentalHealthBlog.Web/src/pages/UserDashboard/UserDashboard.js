@@ -7,6 +7,7 @@ import { TrialPeriodPopup } from '../../components/TrialPeriodPopup/TrialPeriodP
 import UserDashboardCSS from './UserDashboard.css'
 import { useEffect } from 'react'
 import { getUsersTrialPeriod } from '../../redux-toolkit/features/subscriptionSlice'
+import { AutomaticConnectionNotifiedPopup } from '../../components/AutomaticConnectionNotifierPopup/AutomaticConnectionNotifierPopup'
 
 export const UserDashboard = () => {
   let dispatch = useDispatch()
@@ -26,6 +27,7 @@ export const UserDashboard = () => {
   return (
     <section className="user-dashboard">
       <TrialPeriodPopup />
+      <AutomaticConnectionNotifiedPopup />
 
       <Navbar />
       <ListOfPosts />
