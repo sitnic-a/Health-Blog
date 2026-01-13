@@ -48,18 +48,17 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpGet("regular-user-unnotified-automatic-connection")]
-        [Authorize(Roles = "User")]
+        //[Authorize(Roles = "User")]
         public async Task<Response> GetRegularUserUnnotifiedAutomaticConnectionTherapyInvites([FromQuery] int regularUserId)
         {
             return await _therapyInviteService.GetRegularUserUnnotifiedAutomaticConnectionTherapyInvites(regularUserId);
         }
 
         [HttpPut("notified-about-automatic-connection/{regularUserId}")]
-        [Authorize(Roles = "User")]
+        //[Authorize(Roles = "User")]
         public async Task<Response> MarkRegularUserAutomaticConnectionAsNotified(int regularUserId)
         {
-            Task.Delay(200);
-            return new Response();
+            return await _therapyInviteService.MarkRegularUserAutomaticConnectionAsNotified(regularUserId);
         }
     }
 }

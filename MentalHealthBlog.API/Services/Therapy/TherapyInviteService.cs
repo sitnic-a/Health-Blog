@@ -3,6 +3,7 @@ using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace MentalHealthBlog.API.Services.Therapy
 {
@@ -12,6 +13,7 @@ namespace MentalHealthBlog.API.Services.Therapy
         SUCCESS,
         NOT_FOUND,
         EMPTY,
+        NOTIFIED,
     }
 
     public class TherapyInviteService : ITherapyInviteService
@@ -38,7 +40,8 @@ namespace MentalHealthBlog.API.Services.Therapy
                 var automaticConnectionInvitesRegularUserIsNotNotifiedAbout = new List<TherapyInviteDto>();
 
                 List<TherapyInvite> dbTherapyInvites = await _context.TherapyInvites
-                    .Where(ti => ti.RegularUserId == regularUserId && ti.IsRegularUserNotifiedAboutAutomaticConnection == false)
+                    .Where(ti => ti.RegularUserId == regularUserId && 
+                                 ti.IsRegularUserNotifiedAboutAutomaticConnection == false)
                     .ToListAsync();
 
                 foreach (var automaticConnection in dbTherapyInvites)
@@ -80,6 +83,47 @@ namespace MentalHealthBlog.API.Services.Therapy
             catch (Exception e)
             {
                 _therapyInviteLoggerService.LogError($"REGULAR-USER-UNNOTIFIED-AUTOMATIC-CONNECTION: {e.Message}");
+                throw;
+            }
+        }
+
+        public async Task<Response> MarkRegularUserAutomaticConnectionAsNotified(int regularUserId)
+        {
+            try
+            {
+                List<TherapyInvite> dbTherapyInvites = await _context.TherapyInvites
+                    .Where(ti => ti.RegularUserId == regularUserId && 
+                                 ti.IsRegularUserNotifiedAboutAutomaticConnection == false)
+                    .ToListAsync();
+
+                var regularUserUnnotifiedAutomaticConnections = new List<TherapyInviteDto>();
+
+                if (dbTherapyInvites != null)
+                {
+                    if (dbTherapyInvites.Any())
+                    {
+                        foreach (var dbTherapyInvite in dbTherapyInvites)
+                        {
+                            dbTherapyInvite.IsRegularUserNotifiedAboutAutomaticConnection = true;
+                        }
+
+                        await _context.SaveChangesAsync();
+                        var regularUserUnnotifiedAutomaticConnectionsResponse = await GetRegularUserUnnotifiedAutomaticConnectionTherapyInvites(regularUserId);
+                        regularUserUnnotifiedAutomaticConnections = new List<TherapyInviteDto>();
+
+                        _therapyInviteLoggerService.LogInformation($"NOTIFIED-ABOUT-AUTOMATIC-CONNECTION/[regularUserId]: {TherapyInviteLogTypes.SUCCESS.ToString()}");
+                        return new Response(regularUserUnnotifiedAutomaticConnections, StatusCodes.Status200OK, TherapyInviteLogTypes.SUCCESS.ToString());
+                    }
+                    _therapyInviteLoggerService.LogWarning($"NOTIFIED-ABOUT-AUTOMATIC-CONNECTION/[regularUserId]: {TherapyInviteLogTypes.EMPTY.ToString()}");
+                    return new Response(regularUserUnnotifiedAutomaticConnections, StatusCodes.Status200OK, TherapyInviteLogTypes.EMPTY.ToString());
+                }
+
+                _therapyInviteLoggerService.LogWarning($"NOTIFIED-ABOUT-AUTOMATIC-CONNECTION/[regularUserId]: {TherapyInviteLogTypes.NOT_FOUND.ToString()}");
+                throw new RecordNotFoundException("Data not found!");
+            }
+            catch (Exception e)
+            {
+                _therapyInviteLoggerService.LogError($"NOTIFIED-ABOUT-AUTOMATIC-CONNECTION/[regularUserId]: {e.Message}");
                 throw;
             }
         }
