@@ -1,14 +1,15 @@
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Modal, { prototype } from 'react-modal'
 import { GoInfo } from 'react-icons/go'
-import { application } from '../../application'
-
-import AutomaticConnectionNotifierPopupCSS from './AutomaticConnectionNotifierPopup.css'
-import { useEffect } from 'react'
 import {
   getRegularUserUnnotifiedAutomaticConnectionTherapyInvites,
   markRegularUserAutomaticConnectionAsNotified,
 } from '../../redux-toolkit/features/therapySlice'
+
+import { application } from '../../application'
+
+import AutomaticConnectionNotifierPopupCSS from './AutomaticConnectionNotifierPopup.css'
 
 export const AutomaticConnectionNotifiedPopup = () => {
   let dispatch = useDispatch()
