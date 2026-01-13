@@ -1,14 +1,18 @@
 import { useDispatch, useSelector } from 'react-redux'
+import { TailSpin } from 'react-loader-spinner'
 import { sendInviteToRegularUser } from '../../../../redux-toolkit/features/mentalExpertSlice'
+import { setEmailValidationData } from '../../../../redux-toolkit/features/validationSlice'
+import { checkEmailValidity } from '../../../../utils/helper-methods/methods'
 import { Navbar } from '../../../shared/Navbar/Navbar'
 import { LoadingSpinner } from '../../../LoadingSpinner/LoadingSpinner'
 
 import InviteRegularUserCSS from './InviteRegularUser.css'
-import { TailSpin } from 'react-loader-spinner'
+import { toast } from 'react-toastify'
 
 export const InviteRegularUser = () => {
   let dispatch = useDispatch()
   let { isLoading } = useSelector((store) => store.mentalExpert)
+  let { emailValidationData } = useSelector((store) => store.validation)
   let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
   let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
 
@@ -46,8 +50,37 @@ export const InviteRegularUser = () => {
                   className="invite-regular-user-call-email-value form-field"
                   type="text"
                   placeholder="Unesite email adresu..."
+                  onBlur={(e) => {
+                    let email = e.target.value
+                    let isMentalHealthExpert = false
+                    let [isValid, validationMessages] = checkEmailValidity(
+                      email,
+                      [],
+                      isMentalHealthExpert
+                    )
+                    dispatch(
+                      setEmailValidationData({
+                        emailIsValid: isValid,
+                        emailValidationMessages: validationMessages,
+                      })
+                    )
+                  }}
                 />
               </div>
+
+              {!emailValidationData?.emailIsValid && (
+                <div className="validation-message-main-container">
+                  {emailValidationData?.emailValidationMessages?.map(
+                    (message, index) => {
+                      return (
+                        <p key={index} className="validation-message">
+                          - {message}
+                        </p>
+                      )
+                    }
+                  )}
+                </div>
+              )}
               {/* Invite validation data below */}
 
               <div className="invite-regular-user-call-actions-container">
@@ -60,9 +93,35 @@ export const InviteRegularUser = () => {
                     authenticatedUser = JSON.parse(
                       authenticatedUserLocalStorage
                     )
+
                     let sendEmailTo = document.querySelector(
                       '.invite-regular-user-call-email-value'
                     ).value
+
+                    let isMentalHealthExpert = true
+
+                    let [isValid, validationMessages] = checkEmailValidity(
+                      sendEmailTo,
+                      [],
+                      isMentalHealthExpert
+                    )
+                    dispatch(
+                      setEmailValidationData({
+                        emailIsValid: isValid,
+                        emailValidationMessages: validationMessages,
+                      })
+                    )
+
+                    if (!emailValidationData?.emailIsValid) {
+                      toast.error(
+                        'Molimo slijedite upute prilikom popunjavanja polja!',
+                        {
+                          autoClose: 3000,
+                          position: 'bottom-right',
+                        }
+                      )
+                      return
+                    }
 
                     let requestObj = {
                       mentalHealthExpertId: authenticatedUser?.id,
