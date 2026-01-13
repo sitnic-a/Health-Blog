@@ -335,10 +335,7 @@ namespace MentalHealthBlog.API.Services
                     }
 
                     var responseUser = new SignedUserDto(dbUser.Id, dbUser.Username, token, refreshToken.Token, dbUserRoles, dbUser.IsUsingForTheFirstTime, isPending);
-                    var automaticConnectionResponse = await _therapyInviteService.CheckIfRegularUserNotifiedAboutTherapyInviteAutomaticConnection(dbUser.Id);
-                    var isRegularUserNotifiedAboutTherapyInviteAutomaticConnections = (bool) automaticConnectionResponse.ServiceResponseObject;
-                    responseUser.IsRegularUserNotifiedAboutTherapyInviteAutomaticConnection = isRegularUserNotifiedAboutTherapyInviteAutomaticConnections; 
-
+                    
                     _userLoggerService.LogInformation($"LOGIN: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", responseUser);
                     return new Response(responseUser, StatusCodes.Status200OK, UserServiceLogTypes.USER_SUCCESFULL.ToString());
                 }

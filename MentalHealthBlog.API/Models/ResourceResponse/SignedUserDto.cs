@@ -13,7 +13,6 @@ namespace MentalHealthBlog.API.Models.ResourceResponse
         public bool? IsPending { get; set; }
         public bool IsUsingForTheFirstTime { get; set; } = false;
         public bool? IsMentalHealthExpert { get; set; }
-        public bool IsRegularUserNotifiedAboutTherapyInviteAutomaticConnection { get; set; }
 
         public SignedUserDto() { }
         public SignedUserDto(int id, string username, bool? isMentalHealthExpert=null)

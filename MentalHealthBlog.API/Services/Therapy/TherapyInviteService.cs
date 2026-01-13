@@ -1,4 +1,6 @@
-﻿using MentalHealthBlog.API.Models.ResourceResponse;
+﻿using MentalHealthBlog.API.Exceptions;
+using MentalHealthBlog.API.Models;
+using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlogAPI.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,7 +10,8 @@ namespace MentalHealthBlog.API.Services.Therapy
     {
         INVALID_DATA,
         SUCCESS,
-        NOT_FOUND
+        NOT_FOUND,
+        EMPTY,
     }
 
     public class TherapyInviteService : ITherapyInviteService
@@ -22,19 +25,63 @@ namespace MentalHealthBlog.API.Services.Therapy
             _therapyInviteLoggerService = therapyInviteLoggerService;
         }
 
-        public async Task<Response> CheckIfRegularUserNotifiedAboutTherapyInviteAutomaticConnection(int regularUserId)
+        public async Task<Response> GetRegularUserUnnotifiedAutomaticConnectionTherapyInvites(int regularUserId)
         {
-            if (regularUserId<=0)
+            try
             {
-                _therapyInviteLoggerService.LogWarning($"Checking if notified automatic connections available {TherapyInviteLogTypes.INVALID_DATA.ToString()}");
-                throw new ArgumentException("Bad request!");
+                if (regularUserId <= 0)
+                {
+                    _therapyInviteLoggerService.LogWarning($"REGULAR-USER-UNNOTIFIED-AUTOMATIC-CONNECTION: {TherapyInviteLogTypes.INVALID_DATA.ToString()}");
+                    throw new ArgumentException("Bad request!");
+                }
+
+                var automaticConnectionInvitesRegularUserIsNotNotifiedAbout = new List<TherapyInviteDto>();
+
+                List<TherapyInvite> dbTherapyInvites = await _context.TherapyInvites
+                    .Where(ti => ti.RegularUserId == regularUserId && ti.IsRegularUserNotifiedAboutAutomaticConnection == false)
+                    .ToListAsync();
+
+                foreach (var automaticConnection in dbTherapyInvites)
+                {
+                    var dbMentalHealthExpert = await _context.MentalHealthExperts
+                        .FirstOrDefaultAsync(mhe => mhe.UserId == automaticConnection.MentalHealthExpertId);
+
+                    if (dbMentalHealthExpert == null)
+                    {
+                        _therapyInviteLoggerService.LogWarning($"REGULAR-USER-UNNOTIFIED-AUTOMATIC-CONNECTION: {TherapyInviteLogTypes.NOT_FOUND.ToString()}");
+                        throw new RecordNotFoundException("Mental health expert not found!");
+                    }
+
+                    automaticConnectionInvitesRegularUserIsNotNotifiedAbout.Add(new TherapyInviteDto
+                    {
+                        Id = automaticConnection.Id,
+                        IsRegularUserNotifiedAboutAutomaticConnection = automaticConnection.IsRegularUserNotifiedAboutAutomaticConnection,
+                        MentalHealthExpertFirstName = dbMentalHealthExpert.FirstName,
+                        MentalHealthExpertLastName = dbMentalHealthExpert.LastName,
+                        MentalHealthExpertId = automaticConnection.MentalHealthExpertId,
+                    });
+                }
+
+                if (!automaticConnectionInvitesRegularUserIsNotNotifiedAbout.Any() && dbTherapyInvites.Any())
+                {
+                    _therapyInviteLoggerService.LogWarning($"REGULAR-USER-UNNOTIFIED-AUTOMATIC-CONNECTION: {TherapyInviteLogTypes.NOT_FOUND.ToString()}");
+                    throw new RecordNotFoundException("Therapy invites not fetched properly!");
+                }
+
+                if (!automaticConnectionInvitesRegularUserIsNotNotifiedAbout.Any() && !dbTherapyInvites.Any())
+                {
+                    _therapyInviteLoggerService.LogWarning($"REGULAR-USER-UNNOTIFIED-AUTOMATIC-CONNECTION: {TherapyInviteLogTypes.EMPTY.ToString()}");
+                    return new Response(new List<TherapyInviteDto>(), StatusCodes.Status200OK, TherapyInviteLogTypes.EMPTY.ToString());
+                }
+
+                _therapyInviteLoggerService.LogInformation($"REGULAR-USER-UNNOTIFIED-AUTOMATIC-CONNECTION: {TherapyInviteLogTypes.SUCCESS.ToString()}");
+                return new Response(automaticConnectionInvitesRegularUserIsNotNotifiedAbout, StatusCodes.Status200OK, TherapyInviteLogTypes.SUCCESS.ToString());
             }
-
-            bool isRegularUserNotifiedAboutAutomaticConnection = await _context.TherapyInvites
-                .Where(ti => ti.RegularUserId == regularUserId)
-                .AnyAsync(ti => ti.IsRegularUserNotifiedAboutAutomaticConnection == true);
-
-            return new Response(isRegularUserNotifiedAboutAutomaticConnection, StatusCodes.Status200OK, $"Checking if notified automatic connections available {TherapyInviteLogTypes.SUCCESS.ToString()}");
+            catch (Exception e)
+            {
+                _therapyInviteLoggerService.LogError($"REGULAR-USER-UNNOTIFIED-AUTOMATIC-CONNECTION: {e.Message}");
+                throw;
+            }
         }
     }
 }
