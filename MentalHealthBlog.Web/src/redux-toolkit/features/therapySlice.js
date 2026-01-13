@@ -9,6 +9,8 @@ let initialState = {
   myCurrentMentalHealthExperts: [],
   selectedMentalHealthExpertIds: [],
   stopSharingObject: {},
+  unnotifiedAutomaticConnectionTherapyInvites: [],
+  unnotifiedAutomaticConnectionExists: false,
 }
 
 export const getRequestsForMentalHealthExpert = createAsyncThunk(
@@ -84,6 +86,39 @@ export const stopSharing = createAsyncThunk(
   }
 )
 
+export const getRegularUserUnnotifiedAutomaticConnectionTherapyInvites =
+  createAsyncThunk(
+    'regular-user-unnotified-automatic-connection',
+    async (objectWithData) => {
+      let url = `${application.application_url}/therapy/regular-user-unnotified-automatic-connection?regularUserId=${objectWithData?.authenticatedUser?.id}`
+      let request = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
+        },
+      })
+      let response = await request.json()
+      return response
+    }
+  )
+
+export const markRegularUserAutomaticConnectionAsNotified = createAsyncThunk(
+  'notified-about-automatic-connection/[regularUserId]',
+  async (objectWithData) => {
+    let url = `${application.application_url}/therapy/notified-about-automatic-connection/${objectWithData?.authenticatedUser?.id}`
+    let request = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
+      },
+    })
+    let response = await request.json()
+    return response
+  }
+)
+
 let therapySlice = createSlice({
   name: 'therapySlice',
   initialState,
@@ -139,6 +174,52 @@ let therapySlice = createSlice({
       .addCase(stopSharing.pending, () => {})
       .addCase(stopSharing.fulfilled, (state, action) => {})
       .addCase(stopSharing.rejected, () => {})
+
+      //regular-user-unnotified-automatic-connection
+      .addCase(
+        getRegularUserUnnotifiedAutomaticConnectionTherapyInvites.pending,
+        (state, action) => {}
+      )
+      .addCase(
+        getRegularUserUnnotifiedAutomaticConnectionTherapyInvites.fulfilled,
+        (state, action) => {
+          let statusCode = action?.payload?.statusCode
+          if (statusCode === 200) {
+            let serviceResponseObject = action?.payload?.serviceResponseObject
+            state.unnotifiedAutomaticConnectionTherapyInvites =
+              serviceResponseObject
+            state.unnotifiedAutomaticConnectionExists =
+              state.unnotifiedAutomaticConnectionTherapyInvites?.length > 0
+          }
+        }
+      )
+      .addCase(
+        getRegularUserUnnotifiedAutomaticConnectionTherapyInvites.rejected,
+        (state, action) => {}
+      )
+
+      //notified-about-automatic-connection/[regularUserId]
+      .addCase(
+        markRegularUserAutomaticConnectionAsNotified.pending,
+        (state, action) => {}
+      )
+      .addCase(
+        markRegularUserAutomaticConnectionAsNotified.fulfilled,
+        (state, action) => {
+          let statusCode = action?.payload?.statusCode
+          if (statusCode === 200) {
+            let serviceResponseObject = action?.payload?.serviceResponseObject
+            state.unnotifiedAutomaticConnectionTherapyInvites =
+              serviceResponseObject
+            state.unnotifiedAutomaticConnectionExists =
+              state.unnotifiedAutomaticConnectionTherapyInvites?.length > 0
+          }
+        }
+      )
+      .addCase(
+        markRegularUserAutomaticConnectionAsNotified.rejected,
+        (state, action) => {}
+      )
   },
 })
 

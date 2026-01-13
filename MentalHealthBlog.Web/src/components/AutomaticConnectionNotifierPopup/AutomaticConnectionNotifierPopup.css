@@ -9,9 +9,14 @@
 
 .automatic-connection-notifier-description {
   font-family: 'SansDeva';
-  font-size: 1rem;
+  font-size: 1.05rem;
   line-height: 1.5;
   text-align: justify;
+}
+
+.automatic-connection-notifier-description-fullname {
+  font-weight: 700;
+  color: #34688f;
 }
 
 .automatic-connection-notifier-action {
@@ -19,7 +24,7 @@
   border: none;
   border-radius: 0.4rem;
   font-family: 'SansDeva';
-  font-size: 0.9rem;
+  font-size: 1rem;
   line-height: 1.4;
   outline: none;
   cursor: pointer;
