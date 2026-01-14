@@ -406,10 +406,18 @@ namespace MentalHealthBlog.API.Services
                 var newInviteServiceResponseObject = newInviteResponse.ServiceResponseObject as TherapyInvite;
 
                 if (newInviteResponse.StatusCode == StatusCodes.Status201Created &&
-                    newInviteServiceResponseObject != null)
+                    newInviteServiceResponseObject != null && 
+                    newInviteServiceResponseObject.IsRegularUserAlreadyUsingApplication == false)
                 {
                     _mentalExpertLoggerService.LogInformation($"INVITE/USER: {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
                     return await SendInvitationEmailToUser(request, newInviteServiceResponseObject);
+                }
+
+                if (newInviteResponse.StatusCode == StatusCodes.Status201Created &&
+                    newInviteServiceResponseObject != null &&
+                    newInviteServiceResponseObject.IsRegularUserAlreadyUsingApplication == true)
+                {
+                    //Handle if user exists
                 }
 
                 _mentalExpertLoggerService.LogWarning($"INVITE/USER: {MentalExpertServiceLogTypes.NOT_FOUND.ToString()}");
