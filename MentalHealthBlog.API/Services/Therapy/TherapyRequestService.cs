@@ -23,14 +23,16 @@ namespace MentalHealthBlog.API.Services.Therapy
         private readonly DataContext _context;
         private readonly IMentalExpertService _mentalExpertService;
         private readonly ILogger<ITherapyRequestService> _therapyRequestLoggerService;
-
+        private readonly ILogger<IMentalExpertService> _mentalExpertLoggerService;
         public TherapyRequestService(IConfiguration configuration, DataContext context,
-            IMentalExpertService mentalExpertService, ILogger<ITherapyRequestService> therapyRequestLoggerService)
+            IMentalExpertService mentalExpertService,
+            ILogger<ITherapyRequestService> therapyRequestLoggerService, ILogger<IMentalExpertService> mentalExpertLoggerService)
         {
             _configuration = configuration;
             _context = context;
             _mentalExpertService = mentalExpertService;
             _therapyRequestLoggerService = therapyRequestLoggerService;
+            _mentalExpertLoggerService = mentalExpertLoggerService;
         }
 
         public async Task<Response> GetRequestsForMentalHealthExpert(SearchTherapyRequestDto? query = null)
@@ -93,6 +95,7 @@ namespace MentalHealthBlog.API.Services.Therapy
             {
                 if (query is not null)
                 {
+
                     if (query.LoggedUserId <= 0)
                     {
                         _therapyRequestLoggerService.LogWarning($"MY-EXPERTS: {TherapyRequestLogTypes.ARGUMENT_NOT_VALID.ToString()}");
@@ -101,44 +104,8 @@ namespace MentalHealthBlog.API.Services.Therapy
 
                     if (query.RequestStatus != null)
                     {
-                        var dbMentalHealthExpertsFilteredByRequestStatus = await _context.TherapyRequests
-                        .Where(u => u.RegularUserId == query.LoggedUserId && u.RequestStatus == query.RequestStatus)
-                        .Join(_context.MentalHealthExperts,
-
-                              (tr) => tr.MentalHealthExpertId,
-                              (mhe) => mhe.UserId,
-                              (tr, mhe) => new MyExpertDto
-                              {
-                                  MentalHealthExpertId = mhe.Id,
-                                  MentalHealthExpertUserId = tr.MentalHealthExpertId,
-                                  MentalHealthExpert = mhe,
-                                  RegularUserId = tr.RegularUserId,
-                                  MentalHealthExpertUsername = _context.Users.SingleOrDefault(u => u.Id == mhe.UserId).Username,
-                                  MentalHealthExpertFirstName = mhe.FirstName,
-                                  MentalHealthExpertLastName = mhe.LastName,
-                                  MentalHealthExpertOrganization = mhe.Organization,
-                                  MentalHealthExpertEmail = mhe.Email,
-                                  MentalHealthExpertPhoneNumber = mhe.PhoneNumber,
-                                  MentalHealthExpertPhotoAsPath = mhe.PhotoAsPath,
-                                  MentalHealthExpertPhotoAsFile = mhe.PhotoAsFile,
-                                  RequestStatus = tr.RequestStatus,
-                              })
-                        .ToListAsync();
-
-                        if (dbMentalHealthExpertsFilteredByRequestStatus is not null)
-                        {
-                            if (dbMentalHealthExpertsFilteredByRequestStatus.Any())
-                            {
-                                _therapyRequestLoggerService.LogInformation($"MY-EXPERTS: {TherapyRequestLogTypes.SUCCESS.ToString()}", dbMentalHealthExpertsFilteredByRequestStatus);
-                                return new Response(dbMentalHealthExpertsFilteredByRequestStatus, StatusCodes.Status200OK, $"MY-EXPERTS: {TherapyRequestLogTypes.SUCCESS.ToString()}");
-                            }
-
-                            _therapyRequestLoggerService.LogInformation($"MY-EXPERTS: {TherapyRequestLogTypes.SUCCESS.ToString()}", dbMentalHealthExpertsFilteredByRequestStatus);
-                            return new Response(dbMentalHealthExpertsFilteredByRequestStatus, StatusCodes.Status200OK, $"MY-EXPERTS: {TherapyRequestLogTypes.SUCCESS.ToString()}");
-                        }
-
-                        _therapyRequestLoggerService.LogWarning($"MY-EXPERTS: {TherapyRequestLogTypes.NOT_FOUND.ToString()}");
-                        throw new RecordNotFoundException("Couldn't return data!");
+                        var therapyRequestHelper = new TherapyRequestHelper(_context, _configuration, _therapyRequestLoggerService);
+                        return await therapyRequestHelper.CallFilterMyExpertsByRequestStatus(query);
                     }
 
                     //Dodati provjere za filtere sa frontenda:
@@ -219,7 +186,7 @@ namespace MentalHealthBlog.API.Services.Therapy
                     .SingleOrDefaultAsync(tr => tr.MentalHealthExpertId == request.MentalHealthExpertUserId &&
                                          tr.RegularUserId == request.RegularUserId);
                 var userHelper = new UserHelper(_context);
-                var therapyRequestHelper = new TherapyRequestHelper(_configuration);
+                var therapyRequestHelper = new TherapyRequestHelper(_context,_configuration, _therapyRequestLoggerService);
                 var dbMentalHealthExpert = new MentalHealthExpert();
                 var dbRegularUser = new RegularUser();
                 var dbMentalHealthExpertsInfoTuple = await userHelper.ReturnUserAndInfoIsItMentalHealthExpert(request.MentalHealthExpertUserId);
@@ -273,7 +240,7 @@ namespace MentalHealthBlog.API.Services.Therapy
                     requestToModify.RequestStatus = (RequestStatusEnum)request.NewRequestStatus;
                     await _context.SaveChangesAsync();
                     await therapyRequestHelper.SendEmailToInformAboutConnectionRequest(dbMentalHealthExpert, dbRegularUser);
-                    
+
                     var searchQuery = new SearchExpertDto
                     {
                         LoggedUserId = request.MentalHealthExpertUserId

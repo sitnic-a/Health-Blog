@@ -7,6 +7,7 @@
         public int RegularUserId { get; set; }
         public int? NewRequestStatus { get; set; }
         public bool? UserSendingRequest { get; set; }
+        public bool? IsMentalHealthExpertInvitingRegularUser { get; set; }
         public bool? IsKeepingContent { get; set; }
     }
 }

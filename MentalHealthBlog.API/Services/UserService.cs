@@ -58,8 +58,9 @@ namespace MentalHealthBlog.API.Services
         private User user = new();
         private readonly IMentalExpertService _mentalExpertService;
         private readonly ITherapyInviteService _therapyInviteService;
+        private readonly ILogger<ITherapyRequestService> _therapyRequestLoggerService;
 
-        public UserService(DataContext context, IConfiguration configuration, IMapper mapper, IMemoryCache memoryCache, ILogger<UserService> userLoggerService, IMentalExpertService mentalExpertService, ITherapyInviteService therapyInviteService)
+        public UserService(DataContext context, IConfiguration configuration, IMapper mapper, IMemoryCache memoryCache, ILogger<UserService> userLoggerService, IMentalExpertService mentalExpertService, ITherapyInviteService therapyInviteService, ILogger<ITherapyRequestService> therapyRequestLoggerService)
         {
             _context = context;
             _configuration = configuration;
@@ -68,6 +69,7 @@ namespace MentalHealthBlog.API.Services
             _userLoggerService = userLoggerService;
             _mentalExpertService = mentalExpertService;
             _therapyInviteService = therapyInviteService;
+            _therapyRequestLoggerService = therapyRequestLoggerService;
         }
 
         public async Task<Response> GetByIdAsync(int id)
@@ -192,7 +194,7 @@ namespace MentalHealthBlog.API.Services
 
                             if (newRegularUserRequest.IsInTherapy == true && hasSelectedMentalHealthExperts)
                             {
-                                var therapyRequestHelper = new TherapyRequestHelper(_configuration);
+                                var therapyRequestHelper = new TherapyRequestHelper(_context, _configuration,_therapyRequestLoggerService);
                                 var userHelper = new UserHelper(_context);
                                 var dbMentalHealthExpert = new MentalHealthExpert();
 

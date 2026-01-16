@@ -8,6 +8,7 @@ using MentalHealthBlog.API.Methods;
 using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
+using MentalHealthBlog.API.Services.Therapy;
 using MentalHealthBlogAPI.Data;
 using MentalHealthBlogAPI.Models;
 using Microsoft.EntityFrameworkCore;
@@ -34,13 +35,15 @@ namespace MentalHealthBlog.API.Services
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         private readonly ILogger<IMentalExpertService> _mentalExpertLoggerService;
+        private readonly ILogger<ITherapyRequestService> _therapyRequestLoggerService;
 
-        public MentalExpertService(DataContext context, IConfiguration configuration, IMapper mapper, ILogger<IMentalExpertService> mentalExpertLoggerService)
+        public MentalExpertService(DataContext context, IConfiguration configuration, IMapper mapper, ILogger<IMentalExpertService> mentalExpertLoggerService, ILogger<ITherapyRequestService> therapyRequestLoggerService)
         {
             _context = context;
             _configuration = configuration;
             _mapper = mapper;
             _mentalExpertLoggerService = mentalExpertLoggerService;
+            _therapyRequestLoggerService = therapyRequestLoggerService;
         }
 
 
@@ -50,60 +53,11 @@ namespace MentalHealthBlog.API.Services
             {
                 var mentalHealthExperts = new List<MentalHealthExpertDto>();
                 List<MentalHealthExpert> dbMentalHealthExperts = new List<MentalHealthExpert>();
-                List<TherapyMentalHealthExpertDto> dbMentalHealthExpertsCombinedWithTherapies = new List<TherapyMentalHealthExpertDto>();
-                List<TherapyRequest> dbUsersMentalHealthExperts = new List<TherapyRequest>();
+
                 if (request is not null)
                 {
-                    dbMentalHealthExpertsCombinedWithTherapies = await _context.MentalHealthExperts
-                        .Where(mhe => mhe.IsApproved == true)
-                        .Select(mhe => new TherapyMentalHealthExpertDto
-                        {
-                            MentalHealthExpertId = mhe.Id,
-                            MentalHealthExpertUserId = mhe.UserId,
-                            FirstName = mhe.FirstName,
-                            LastName = mhe.LastName,
-                            Organization = mhe.Organization,
-                            PhoneNumber = mhe.PhoneNumber,
-                            Email = mhe.Email,
-                            PhotoAsFile = mhe.PhotoAsFile,
-                            PhotoAsPath = mhe.PhotoAsPath,
-                            RequestStatus = RequestStatusEnum.Undefined,
-                            RegularUserId = request.LoggedUserId
-                        })
-                        .ToListAsync();
-
-                    dbUsersMentalHealthExperts = await _context.TherapyRequests
-                        .Where(tr => tr.RegularUserId == request.LoggedUserId)
-                        .ToListAsync();
-
-                    foreach (var mentalHealthExpert in dbMentalHealthExpertsCombinedWithTherapies)
-                    {
-                        var mentalHealthExpertInRequests = dbUsersMentalHealthExperts
-                            .SingleOrDefault(mhe => mhe.MentalHealthExpertId == mentalHealthExpert.MentalHealthExpertUserId &&
-                                             mhe.RegularUserId == request.LoggedUserId);
-
-
-                        if (mentalHealthExpertInRequests != null)
-                        {
-                            mentalHealthExpert.RequestStatus = mentalHealthExpertInRequests.RequestStatus;
-                            continue;
-                        }
-                    }
-
-                    dbMentalHealthExpertsCombinedWithTherapies = dbMentalHealthExpertsCombinedWithTherapies
-                        .Where(mhe => mhe.RequestStatus == RequestStatusEnum.Undefined ||
-                               mhe.RequestStatus == RequestStatusEnum.Declined)
-                        .DistinctBy(mhe => mhe.MentalHealthExpertUserId)
-                        .ToList();
-
-                    if (!dbMentalHealthExpertsCombinedWithTherapies.Any())
-                    {
-                        _mentalExpertLoggerService.LogWarning($"EXPERTS: {MentalExpertServiceLogTypes.EMPTY.ToString()}");
-                        throw new EmptyListException("No records found in database");
-                    }
-
-                    _mentalExpertLoggerService.LogInformation($"EXPERTS: {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
-                    return new Response(dbMentalHealthExpertsCombinedWithTherapies, StatusCodes.Status200OK, $"EXPERTS: {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
+                    var mentalExpertHelper = new MentalExpertHelper(_context, _mentalExpertLoggerService);
+                    return await mentalExpertHelper.CallFilterMentalHealthExpertsBySearchParameter(request);
                 }
 
                 dbMentalHealthExperts = await _context.MentalHealthExperts
@@ -145,7 +99,6 @@ namespace MentalHealthBlog.API.Services
             }
 
         }
-
         public async Task<Response> GetSharesPerUser(ExpertSearchContentDto query)
         {
             try
@@ -313,7 +266,6 @@ namespace MentalHealthBlog.API.Services
                 throw;
             }
         }
-
         public async Task<Response> GetInvitationById(string id)
         {
             try
@@ -340,7 +292,6 @@ namespace MentalHealthBlog.API.Services
                 throw;
             }
         }
-
         public async Task<Response> CreateInvite(InviteDto request)
         {
             try
@@ -360,7 +311,7 @@ namespace MentalHealthBlog.API.Services
                 var newInviteGuid = newInviteGuidAsGuid
                     .ToString("N")
                     .Substring(0, 9);
-               
+
                 if (isRegularUserAlreadyRegistered)
                 {
                     newInvite = new TherapyInvite(newInviteGuid, request.MentalHealthExpertId, isRegularUserAlreadyRegistered, userWithAccount.UserId);
@@ -396,7 +347,6 @@ namespace MentalHealthBlog.API.Services
                 throw;
             }
         }
-
         public async Task<Response> SendInviteToUser(InviteDto request)
         {
 
@@ -406,7 +356,7 @@ namespace MentalHealthBlog.API.Services
                 var newInviteServiceResponseObject = newInviteResponse.ServiceResponseObject as TherapyInvite;
 
                 if (newInviteResponse.StatusCode == StatusCodes.Status201Created &&
-                    newInviteServiceResponseObject != null && 
+                    newInviteServiceResponseObject != null &&
                     newInviteServiceResponseObject.IsRegularUserAlreadyUsingApplication == false)
                 {
                     _mentalExpertLoggerService.LogInformation($"INVITE/USER: {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
@@ -417,6 +367,23 @@ namespace MentalHealthBlog.API.Services
                     newInviteServiceResponseObject != null &&
                     newInviteServiceResponseObject.IsRegularUserAlreadyUsingApplication == true)
                 {
+                    const int __MAX_EXPERTS_IN_THERAPY__ = 2;
+                    //Prebrojati koliko ima experta u seansi koji su pending i koji su approved
+                    //Napraviti novi therapy request
+                    var therapyRequestHandler = new TherapyRequestHelper(_context, _configuration, _therapyRequestLoggerService);
+                    var queryForMyApprovedExperts = new SearchTherapyRequestDto(newInviteServiceResponseObject.RegularUserId.Value, RequestStatusEnum.Approved);
+                    var myApprovedExpertsResponse = await therapyRequestHandler.CallFilterMyExpertsByRequestStatus(queryForMyApprovedExperts);
+                    var myApprovedExperts = myApprovedExpertsResponse.ServiceResponseObject as List<MyExpertDto>;
+
+                    var queryForMyPendingExperts = new SearchTherapyRequestDto(newInviteServiceResponseObject.RegularUserId.Value, RequestStatusEnum.Pending);
+                    var myPendingExpertsResponse = await therapyRequestHandler.CallFilterMyExpertsByRequestStatus(queryForMyPendingExperts);
+                    var myPendingExperts = myPendingExpertsResponse.ServiceResponseObject as List<MyExpertDto>;
+
+                    var myExpertsUnion = myApprovedExperts.Union(myPendingExperts).ToList();
+                    if (myExpertsUnion.Count >= __MAX_EXPERTS_IN_THERAPY__)
+                    {
+                        
+                    }
                     //Handle if user exists
                 }
 
@@ -439,7 +406,6 @@ namespace MentalHealthBlog.API.Services
                   je korisnik pozvan od strane kojeg strucnjaka kako bi se mogla voditi statistika 
             */
         }
-
         public async Task<Response> SendInvitationEmailToUser(InviteDto request, TherapyInvite invite)
         {
             try
@@ -560,9 +526,6 @@ namespace MentalHealthBlog.API.Services
                 throw;
             }
         }
-
-
-
 
     }
 }

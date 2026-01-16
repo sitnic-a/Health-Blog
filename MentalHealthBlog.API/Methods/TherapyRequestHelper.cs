@@ -1,19 +1,29 @@
 ﻿using MailKit.Net.Smtp;
 using MailKit.Security;
+using MentalHealthBlog.API.Exceptions;
 using MentalHealthBlog.API.Models;
+using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
+using MentalHealthBlog.API.Services.Therapy;
 using MentalHealthBlog.API.Utils.Email;
+using MentalHealthBlogAPI.Data;
+using Microsoft.EntityFrameworkCore;
 using MimeKit;
 
 namespace MentalHealthBlog.API.Methods
 {
     public class TherapyRequestHelper
     {
+        private readonly DataContext _context;
         private readonly IConfiguration _configuration;
-        public TherapyRequestHelper(IConfiguration configuration)
+        private readonly ILogger<ITherapyRequestService> _therapyRequestLoggerService;
+        public TherapyRequestHelper(DataContext context, IConfiguration configuration, ILogger<ITherapyRequestService> therapyRequestLoggerService)
         {
+            _context = context;
             _configuration = configuration;
+            _therapyRequestLoggerService = therapyRequestLoggerService;
         }
+
         public async Task<Response> SendEmailToInformAboutConnectionRequest(MentalHealthExpert dbMentalHealthExpert, RegularUser dbRegularUser, string? therapyInvitationId = null)
         {
 
@@ -126,6 +136,58 @@ namespace MentalHealthBlog.API.Methods
 
             return new Response(dbMentalHealthExpert.Email, StatusCodes.Status200OK, EmailLogTypes.SUCCESS.ToString());
 
+        }
+        public async Task<Response> CallFilterMyExpertsByRequestStatus(SearchTherapyRequestDto query)
+        {
+            return await FilterMyExpertsByRequestStatus(query);
+        }
+
+        private async Task<Response> FilterMyExpertsByRequestStatus(SearchTherapyRequestDto query)
+        {
+            if (query.RequestStatus != null)
+            {
+                var dbMentalHealthExpertsFilteredByRequestStatus = await _context.TherapyRequests
+                .Where(u => u.RegularUserId == query.LoggedUserId && u.RequestStatus == query.RequestStatus)
+                .Join(_context.MentalHealthExperts,
+
+                      (tr) => tr.MentalHealthExpertId,
+                      (mhe) => mhe.UserId,
+                      (tr, mhe) => new MyExpertDto
+                      {
+                          MentalHealthExpertId = mhe.Id,
+                          MentalHealthExpertUserId = tr.MentalHealthExpertId,
+                          MentalHealthExpert = mhe,
+                          RegularUserId = tr.RegularUserId,
+                          MentalHealthExpertUsername = _context.Users.SingleOrDefault(u => u.Id == mhe.UserId).Username,
+                          MentalHealthExpertFirstName = mhe.FirstName,
+                          MentalHealthExpertLastName = mhe.LastName,
+                          MentalHealthExpertOrganization = mhe.Organization,
+                          MentalHealthExpertEmail = mhe.Email,
+                          MentalHealthExpertPhoneNumber = mhe.PhoneNumber,
+                          MentalHealthExpertPhotoAsPath = mhe.PhotoAsPath,
+                          MentalHealthExpertPhotoAsFile = mhe.PhotoAsFile,
+                          RequestStatus = tr.RequestStatus,
+                      })
+                .ToListAsync();
+
+                if (dbMentalHealthExpertsFilteredByRequestStatus is not null)
+                {
+                    if (dbMentalHealthExpertsFilteredByRequestStatus.Any())
+                    {
+                        _therapyRequestLoggerService.LogInformation($"MY-EXPERTS: {TherapyRequestLogTypes.SUCCESS.ToString()}", dbMentalHealthExpertsFilteredByRequestStatus);
+                        return new Response(dbMentalHealthExpertsFilteredByRequestStatus, StatusCodes.Status200OK, $"MY-EXPERTS: {TherapyRequestLogTypes.SUCCESS.ToString()}");
+                    }
+
+                    _therapyRequestLoggerService.LogInformation($"MY-EXPERTS: {TherapyRequestLogTypes.SUCCESS.ToString()}", dbMentalHealthExpertsFilteredByRequestStatus);
+                    return new Response(dbMentalHealthExpertsFilteredByRequestStatus, StatusCodes.Status200OK, $"MY-EXPERTS: {TherapyRequestLogTypes.SUCCESS.ToString()}");
+                }
+
+                _therapyRequestLoggerService.LogWarning($"MY-EXPERTS: {TherapyRequestLogTypes.NOT_FOUND.ToString()}");
+                throw new RecordNotFoundException("Couldn't return data!");
+            }
+
+            _therapyRequestLoggerService.LogWarning($"MY-EXPERTS: {TherapyRequestLogTypes.ARGUMENT_NOT_VALID.ToString()}");
+            throw new RecordNotFoundException("Bad request!");
         }
     }
 }
