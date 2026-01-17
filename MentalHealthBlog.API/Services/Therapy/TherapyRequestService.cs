@@ -217,6 +217,11 @@ namespace MentalHealthBlog.API.Services.Therapy
                         _therapyRequestLoggerService.LogWarning($"CHANGE-REQUEST-STATUS : {TherapyRequestLogTypes.NOT_FOUND.ToString()}");
                         throw new CreateRecordException("Request couldn't be initialized!");
                     }
+                    if (request.IsMentalHealthExpertInvitingRegularUser == true)
+                    {
+                        return await therapyRequestHelper.SendTherapyRequestAsMentalHealthExpertToExistingRegularUser(request);
+                    }
+
                     _therapyRequestLoggerService.LogWarning($"CHANGE-REQUEST-STATUS: {TherapyRequestLogTypes.NOT_FOUND.ToString()}");
                     throw new RecordNotFoundException("Request couldn't be located!");
                 }

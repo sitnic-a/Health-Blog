@@ -382,7 +382,13 @@ namespace MentalHealthBlog.API.Services
                     var myExpertsUnion = myApprovedExperts.Union(myPendingExperts).ToList();
                     if (myExpertsUnion.Count >= __MAX_EXPERTS_IN_THERAPY__)
                     {
-                        
+                        var newTherapyRequest = new Models.ResourceRequest.TherapyRequestDto
+                        {
+                            RegularUserId = newInviteServiceResponseObject.RegularUserId.Value,
+                            MentalHealthExpertUserId = request.MentalHealthExpertId,
+                            IsMentalHealthExpertInvitingRegularUser = true,
+                        };
+                        return await therapyRequestHandler.SendTherapyRequestAsMentalHealthExpertToExistingRegularUser(newTherapyRequest);
                     }
                     //Handle if user exists
                 }

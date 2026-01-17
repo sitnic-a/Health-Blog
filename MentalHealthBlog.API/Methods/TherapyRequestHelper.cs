@@ -141,6 +141,10 @@ namespace MentalHealthBlog.API.Methods
         {
             return await FilterMyExpertsByRequestStatus(query);
         }
+        public async Task<Response> SendTherapyRequestAsMentalHealthExpertToExistingRegularUser(Models.ResourceRequest.TherapyRequestDto request)
+        {
+            return await CreateTherapyRequestAsMentalHealthExpertToExistingRegularUser(request);
+        }
 
         private async Task<Response> FilterMyExpertsByRequestStatus(SearchTherapyRequestDto query)
         {
@@ -188,6 +192,26 @@ namespace MentalHealthBlog.API.Methods
 
             _therapyRequestLoggerService.LogWarning($"MY-EXPERTS: {TherapyRequestLogTypes.ARGUMENT_NOT_VALID.ToString()}");
             throw new RecordNotFoundException("Bad request!");
+        }
+        private async Task<Response> CreateTherapyRequestAsMentalHealthExpertToExistingRegularUser(Models.ResourceRequest.TherapyRequestDto request)
+        {
+            if (request != null)
+            {
+                var newTherapyRequest = new TherapyRequest(request.RegularUserId, request.MentalHealthExpertUserId, null, isMentalHealthExpertInviting: true);
+                var newEntity = await _context.TherapyRequests.AddAsync(newTherapyRequest);
+                if (newEntity.Entity != null)
+                {
+                    await _context.SaveChangesAsync();
+                    _therapyRequestLoggerService.LogInformation($"CHANGE-REQUEST-STATUS: {TherapyRequestLogTypes.SUCCESS.ToString()}");
+                    return new Response(newTherapyRequest, StatusCodes.Status201Created, TherapyRequestLogTypes.SUCCESS.ToString());
+                }
+
+                _therapyRequestLoggerService.LogWarning($"CHANGE-REQUEST-STATUS: {TherapyRequestLogTypes.NOT_FOUND.ToString()}");
+                throw new CreateRecordException("Request couldn't be created!");
+            }
+
+            _therapyRequestLoggerService.LogWarning($"CHANGE-REQUEST-STATUS: {TherapyRequestLogTypes.ARGUMENT_NOT_VALID.ToString()}");
+            throw new ArgumentException("Bad request!");
         }
     }
 }
