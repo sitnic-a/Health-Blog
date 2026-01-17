@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
-
-namespace MentalHealthBlog.API.Models
+﻿namespace MentalHealthBlog.API.Models
 {
     public class TherapyRequest
     {
@@ -13,9 +10,10 @@ namespace MentalHealthBlog.API.Models
         
         [NpgsqlTypes.PgName("TIMESTAMP")]
         public DateTime SentAt { get; set; } = DateTime.UtcNow;
+        public bool? IsMentalHealthExpertInviting { get;set; }
 
         public TherapyRequest() { }
-        public TherapyRequest(int regularUserId, int mentalHealthExpertId, string? therapyInvitationId = null)
+        public TherapyRequest(int regularUserId, int mentalHealthExpertId, string? therapyInvitationId = null, bool? isMentalHealthExpertInviting = null)
         {
             RegularUserId = regularUserId;
             MentalHealthExpertId = mentalHealthExpertId;
@@ -23,6 +21,7 @@ namespace MentalHealthBlog.API.Models
             {
                 RequestStatus = RequestStatusEnum.Approved;
             }
+            IsMentalHealthExpertInviting = isMentalHealthExpertInviting;
         }
     }
 }
