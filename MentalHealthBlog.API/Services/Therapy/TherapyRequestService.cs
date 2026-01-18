@@ -15,7 +15,8 @@ namespace MentalHealthBlog.API.Services.Therapy
         ARGUMENT_NOT_VALID,
         EMPTY,
         NOT_FOUND,
-        SUCCESS
+        SUCCESS,
+        REQUEST_EXISTS
     }
     public class TherapyRequestService : ITherapyRequestService
     {

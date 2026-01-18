@@ -33,6 +33,12 @@ namespace MentalHealthBlog.API.Controllers
             return await _therapyRequestService.GetMyExperts(query);
         }
 
+        [HttpPost("my-experts/therapy-invitations")]
+        public async Task<Response> GetMentalHealthExpertsWhoSentUserAnInvitationForTherapy([FromBody] SearchTherapyRequestDto? query = null)
+        {
+            return await _therapyRequestService.GetMyExperts(query);
+        }
+
         [HttpPut("change-request-status")]
         [Authorize(Roles = "Psychologist / Psychotherapist, User")]
         public async Task<Response> ChangeRequestStatus([FromBody] Models.ResourceRequest.TherapyRequestDto request)
