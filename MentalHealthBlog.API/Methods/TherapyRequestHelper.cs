@@ -178,6 +178,21 @@ namespace MentalHealthBlog.API.Methods
                              RequestStatus = tr.RequestStatus,
                          })
                    .ToListAsync();
+
+                    if (dbMentalHealthExpertsFilteredByRequestStatus != null)
+                    {
+                        if (dbMentalHealthExpertsFilteredByRequestStatus.Any())
+                        {
+                            _therapyRequestLoggerService.LogInformation($"MY-EXPERTS/THERAPY-INVITATIONS: {TherapyRequestLogTypes.SUCCESS.ToString()}");
+                            return new Response(dbMentalHealthExpertsFilteredByRequestStatus, StatusCodes.Status200OK, TherapyRequestLogTypes.SUCCESS.ToString());
+                        }
+
+                        _therapyRequestLoggerService.LogInformation($"MY-EXPERTS/THERAPY-INVITATIONS: {TherapyRequestLogTypes.EMPTY.ToString()}");
+                        return new Response(dbMentalHealthExpertsFilteredByRequestStatus, StatusCodes.Status200OK, TherapyRequestLogTypes.EMPTY.ToString());
+                    }
+
+                    _therapyRequestLoggerService.LogWarning($"MY-EXPERTS/THERAPY-INVITATIONS: {TherapyRequestLogTypes.NOT_FOUND.ToString()}");
+                    throw new RecordNotFoundException("Invitation not fetched properly!");
                 }
 
                 dbMentalHealthExpertsFilteredByRequestStatus = await _context.TherapyRequests
