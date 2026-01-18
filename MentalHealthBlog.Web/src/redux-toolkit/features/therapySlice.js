@@ -7,6 +7,7 @@ let initialState = {
   isFailed: false,
   myApprovedOrPendingMentalHealthExperts: [],
   myCurrentMentalHealthExperts: [],
+  myPendingMentalHealthExpertWhoSentAnInvitationForTherapy: [],
   selectedMentalHealthExpertIds: [],
   stopSharingObject: {},
   unnotifiedAutomaticConnectionTherapyInvites: [],
@@ -51,6 +52,21 @@ export const getMyExperts = createAsyncThunk(
     return response
   }
 )
+
+export const getMentalHealthExpertsWhoSentUserAnInvitationForTherapy =
+  createAsyncThunk('my-experts/therapy-invitations', async (objectWithData) => {
+    let url = `${application.application_url}/therapy/my-experts/therapy-invitations`
+    let request = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(objectWithData?.query),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
+      },
+    })
+    let response = await request.json()
+    return response
+  })
 
 export const changeRequestStatus = createAsyncThunk(
   'change-request-status',
@@ -158,6 +174,27 @@ let therapySlice = createSlice({
         }
       })
       .addCase(getMyExperts.rejected, () => {})
+
+      //my-experts/therapy-invitations
+      .addCase(
+        getMentalHealthExpertsWhoSentUserAnInvitationForTherapy.pending,
+        (state, action) => {}
+      )
+      .addCase(
+        getMentalHealthExpertsWhoSentUserAnInvitationForTherapy.fulfilled,
+        (state, action) => {
+          let statusCode = action?.payload?.statusCode
+          if (statusCode === 200) {
+            let serviceResponseObject = action?.payload?.serviceResponseObject
+            state.myPendingMentalHealthExpertWhoSentAnInvitationForTherapy =
+              serviceResponseObject
+          }
+        }
+      )
+      .addCase(
+        getMentalHealthExpertsWhoSentUserAnInvitationForTherapy.rejected,
+        (state, action) => {}
+      )
 
       //change-request-status
       .addCase(changeRequestStatus.pending, () => {})

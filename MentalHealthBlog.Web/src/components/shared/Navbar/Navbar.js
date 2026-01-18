@@ -10,6 +10,9 @@ import NavbarCSS from '../Navbar/Navbar.css'
 import SharedCSS from '../shared.css'
 
 export const Navbar = () => {
+  let { myPendingMentalHealthExpertWhoSentAnInvitationForTherapy } =
+    useSelector((store) => store.therapy)
+
   useEffect(() => {
     let tabs = document.querySelectorAll('.navigation-bar-action')
     switchActiveTab(tabs)
@@ -50,8 +53,19 @@ export const Navbar = () => {
               Podijeljeno
             </Link>
 
-            <Link to={'/my-experts'} className="navigation-bar-action">
+            <Link
+              to={'/my-experts'}
+              className="navigation-bar-action navigation-bar-my-experts"
+            >
               Stručnjaci
+              {myPendingMentalHealthExpertWhoSentAnInvitationForTherapy?.length >
+                0 && (
+                <span className="pending-therapy-request-invitation-indicator">
+                  {
+                    myPendingMentalHealthExpertWhoSentAnInvitationForTherapy?.length
+                  }
+                </span>
+              )}
             </Link>
 
             <Link

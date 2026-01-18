@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { application } from '../../application'
+import { toast } from 'react-toastify'
 
 let initialState = {
   dbMentalHealthExperts: [],
@@ -195,6 +196,24 @@ export const mentalExpertSlice = createSlice({
       })
       .addCase(sendInviteToRegularUser.fulfilled, (state, action) => {
         state.isLoading = false
+        let statusCode = action?.payload?.statusCode
+        if (statusCode === 201) {
+          toast.success('Uspješno ste pozvali korisnika u seansu!', {
+            autoClose: 5000,
+            position: 'bottom-right',
+          })
+          return
+        }
+        if (statusCode !== 200) {
+          let StatusCode = action?.payload?.StatusCode
+          if (StatusCode === 400) {
+            toast.error('Nije moguće pozvati korisnika s kojim ste povezani!', {
+              autoClose: 5000,
+              position: 'bottom-right',
+            })
+            return
+          }
+        }
       })
       .addCase(sendInviteToRegularUser.rejected, (state, action) => {
         state.isLoading = false

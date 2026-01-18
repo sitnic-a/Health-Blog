@@ -45,6 +45,10 @@ export const MyMentalHealthExperts = () => {
   )[1]
 
   useEffect(() => {
+    document.querySelector(
+      '.pending-therapy-request-invitation-indicator'
+    ).style.display = 'none'
+
     let objectWithData = {
       authenticatedUser,
       loggedUserId: authenticatedUser?.id,

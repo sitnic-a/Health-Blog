@@ -1,13 +1,14 @@
+import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { openTrialPeriodPopup } from '../../redux-toolkit/features/modalSlice'
+import { getUsersTrialPeriod } from '../../redux-toolkit/features/subscriptionSlice'
+import { getMentalHealthExpertsWhoSentUserAnInvitationForTherapy } from '../../redux-toolkit/features/therapySlice'
 import { ListOfPosts } from '../../components/ListOfPosts/ListOfPosts'
+import { requestStatuses } from '../../enums/requestStatuses'
 import { Navbar } from '../../components/shared/Navbar/Navbar'
 import { TrialPeriodPopup } from '../../components/TrialPeriodPopup/TrialPeriodPopup'
+import { AutomaticConnectionNotifiedPopup } from '../../components/AutomaticConnectionNotifierPopup/AutomaticConnectionNotifierPopup'
 
 import UserDashboardCSS from './UserDashboard.css'
-import { useEffect } from 'react'
-import { getUsersTrialPeriod } from '../../redux-toolkit/features/subscriptionSlice'
-import { AutomaticConnectionNotifiedPopup } from '../../components/AutomaticConnectionNotifierPopup/AutomaticConnectionNotifierPopup'
 
 export const UserDashboard = () => {
   let dispatch = useDispatch()
@@ -22,6 +23,18 @@ export const UserDashboard = () => {
       dispatch(getUsersTrialPeriod(objectWithData))
       console.log('Counting....')
     }
+    let query = {
+      loggedUserId: authenticatedUser?.id,
+      requestStatus: requestStatuses.PENDING,
+      IsMentalHealthExpertInviting: true,
+    }
+    let objectWithData = {
+      authenticatedUser,
+      query,
+    }
+    dispatch(
+      getMentalHealthExpertsWhoSentUserAnInvitationForTherapy(objectWithData)
+    )
   }, [])
 
   return (
