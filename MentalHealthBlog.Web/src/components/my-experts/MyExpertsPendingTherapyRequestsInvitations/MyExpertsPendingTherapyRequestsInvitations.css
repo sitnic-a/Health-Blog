@@ -2,11 +2,30 @@
   max-width: 400px;
   width: 100%;
   padding-inline: 1rem;
-  background: red;
+  /* background: #f3f1e3; */
 }
 
 @media (width<=1080px) {
   .my-mental-health-experts-pending-therapy-requests-invitations-main-container {
     display: none;
   }
+}
+
+.my-mental-health-experts-pending-therapy-requests-invitations-main-container-on-review {
+  display: initial;
+  max-width: 700px;
+  margin-inline: auto;
+}
+
+.my-mental-health-experts-pending-therapy-requests-invitations-header-title {
+  font-family: 'Overlock';
+  font-size: 1.4rem;
+  text-align: center;
+}
+
+.my-mental-health-experts-pending-therapy-requests-invitations-header-description {
+  font-family: 'SansDeva';
+  font-size: 0.9rem;
+  line-height: 1.4;
+  text-align: justify;
 }

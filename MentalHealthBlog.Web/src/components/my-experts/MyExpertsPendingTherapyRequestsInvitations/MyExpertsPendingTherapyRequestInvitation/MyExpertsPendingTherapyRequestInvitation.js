@@ -18,9 +18,20 @@ export const MyExpertsPendingTherapyRequestInvitation = ({ invitation }) => {
         </p>
       </div>
       <div className="my-mental-health-experts-invitation-therapy-request-actions">
-        <button type="button">Prihvati</button>
-        <button type="button">Odbij</button>
+        <button
+          type="button"
+          className="my-mental-health-experts-invitation-therapy-request-action my-mental-health-experts-invitation-therapy-request-accept"
+        >
+          Prihvati
+        </button>
+        <button
+          type="button"
+          className="my-mental-health-experts-invitation-therapy-request-action my-mental-health-experts-invitation-therapy-request-decline"
+        >
+          Odbij
+        </button>
       </div>
+      <hr />
     </div>
   )
 }

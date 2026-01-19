@@ -39,6 +39,18 @@ export const MyExpertsPendingTherapyRequestsInvitations = () => {
 
   return (
     <section className="my-mental-health-experts-pending-therapy-requests-invitations-main-container">
+      <div className="my-mental-health-experts-pending-therapy-requests-invitations-header">
+        <h3 className="my-mental-health-experts-pending-therapy-requests-invitations-header-title">
+          Stručnjaci koji su Vam poslali zahtjev
+        </h3>
+        <p className="my-mental-health-experts-pending-therapy-requests-invitations-header-description">
+          Ispod možete pregledati listu stručnjaka koji su Vam poslali zahtjev
+          da se povežete! Navedeni su tako da prvo vidite njihovo ime i prezime,
+          a zatim organizaciju, savjetovalište ili ordinaciju koju
+          predstavljaju!
+        </p>
+      </div>
+
       {myPendingMentalHealthExpertWhoSentAnInvitationForTherapy?.map(
         (pendingTherapyRequestInvitation) => {
           return (
