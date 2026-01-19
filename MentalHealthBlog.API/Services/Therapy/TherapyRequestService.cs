@@ -63,6 +63,7 @@ namespace MentalHealthBlog.API.Services.Therapy
                                MentalHealthExpertUserId = tr.MentalHealthExpertId,
                                RequestStatus = tr.RequestStatus,
                                SentAt = tr.SentAt,
+                               IsMentalHealthExpertInviting = tr.IsMentalHealthExpertInviting.GetValueOrDefault()
                            })
                      .ToListAsync();
 
