@@ -37,106 +37,84 @@ export const Requests = () => {
           <div className="therapy-requests-requests-container">
             <div className="therapy-requests-requests-content">
               {requestsForMentalHealthExpert?.map((request, index) => {
+                console.log('Request ', request)
+
                 let fullName = `${request?.regularUserFirstName} ${request?.regularUserLastName}`
                 let sentAt = moment(request?.sentAt).fromNow()
                 return (
-                  <div
-                    key={index}
-                    className="therapy-requests-requests-content-row"
-                  >
-                    <div className="therapy-requests-requests-content-cell">
-                      <span className="therapy-request-request-content-cell-value">
-                        {fullName}
-                      </span>
-                    </div>
+                  request?.isMentalHealthExpertInviting !== true && (
+                    <div
+                      key={index}
+                      className="therapy-requests-requests-content-row"
+                    >
+                      <div className="therapy-requests-requests-content-cell">
+                        <span className="therapy-request-request-content-cell-value">
+                          {fullName}
+                        </span>
+                      </div>
 
-                    <div className="therapy-requests-requests-content-cell">
-                      {request?.requestStatus === requestStatuses.DECLINED ? (
-                        <div className="therapy-requests-requests-content-actions-main-container">
-                          <p className="therapy-requests-requests-content-actions-description-message">
-                            Odbijen
-                          </p>
-                        </div>
-                      ) : (
-                        <div className="therapy-requests-requests-content-actions-main-container">
-                          {request?.requestStatus ===
-                            requestStatuses.APPROVED || (
+                      <div className="therapy-requests-requests-content-cell">
+                        {request?.requestStatus === requestStatuses.DECLINED ? (
+                          <div className="therapy-requests-requests-content-actions-main-container">
+                            <p className="therapy-requests-requests-content-actions-description-message">
+                              Odbijen
+                            </p>
+                          </div>
+                        ) : (
+                          <div className="therapy-requests-requests-content-actions-main-container">
+                            {request?.requestStatus ===
+                              requestStatuses.APPROVED || (
+                              <button
+                                className="therapy-requests-request-content-action therapy-request-approve-action"
+                                type="button"
+                                onClick={() => {
+                                  authenticatedUserLocalStorage =
+                                    localStorage.getItem('authenticatedUser')
+                                  authenticatedUser = JSON.parse(
+                                    authenticatedUserLocalStorage
+                                  )
+
+                                  let objectWithData = {
+                                    authenticatedUser,
+                                    mentalHealthExpertUserId:
+                                      authenticatedUser?.id,
+                                    regularUserId: request?.regularUserId,
+                                    newRequestStatus: requestStatuses.APPROVED,
+                                    userSendingRequest: false,
+                                  }
+                                  dispatch(changeRequestStatus(objectWithData))
+                                }}
+                              >
+                                Prihvati
+                              </button>
+                            )}
+
+                            {request?.requestStatus ===
+                              requestStatuses.PENDING && (
+                              <FaCheck
+                                className="therapy-requests-request-content-action therapy-request-icon-action therapy-request-approve-icon-action"
+                                onClick={() => {
+                                  authenticatedUserLocalStorage =
+                                    localStorage.getItem('authenticatedUser')
+                                  authenticatedUser = JSON.parse(
+                                    authenticatedUserLocalStorage
+                                  )
+
+                                  let objectWithData = {
+                                    authenticatedUser,
+                                    mentalHealthExpertUserId:
+                                      authenticatedUser?.id,
+                                    regularUserId: request?.regularUserId,
+                                    newRequestStatus: requestStatuses.APPROVED,
+                                    userSendingRequest: false,
+                                  }
+                                  dispatch(changeRequestStatus(objectWithData))
+                                }}
+                              />
+                            )}
+
                             <button
-                              className="therapy-requests-request-content-action therapy-request-approve-action"
-                              type="button"
-                              onClick={() => {
-                                authenticatedUserLocalStorage =
-                                  localStorage.getItem('authenticatedUser')
-                                authenticatedUser = JSON.parse(
-                                  authenticatedUserLocalStorage
-                                )
-
-                                let objectWithData = {
-                                  authenticatedUser,
-                                  mentalHealthExpertUserId:
-                                    authenticatedUser?.id,
-                                  regularUserId: request?.regularUserId,
-                                  newRequestStatus: requestStatuses.APPROVED,
-                                  userSendingRequest: false,
-                                }
-                                dispatch(changeRequestStatus(objectWithData))
-                              }}
-                            >
-                              Prihvati
-                            </button>
-                          )}
-
-                          {request?.requestStatus ===
-                            requestStatuses.PENDING && (
-                            <FaCheck
-                              className="therapy-requests-request-content-action therapy-request-icon-action therapy-request-approve-icon-action"
-                              onClick={() => {
-                                authenticatedUserLocalStorage =
-                                  localStorage.getItem('authenticatedUser')
-                                authenticatedUser = JSON.parse(
-                                  authenticatedUserLocalStorage
-                                )
-
-                                let objectWithData = {
-                                  authenticatedUser,
-                                  mentalHealthExpertUserId:
-                                    authenticatedUser?.id,
-                                  regularUserId: request?.regularUserId,
-                                  newRequestStatus: requestStatuses.APPROVED,
-                                  userSendingRequest: false,
-                                }
-                                dispatch(changeRequestStatus(objectWithData))
-                              }}
-                            />
-                          )}
-
-                          <button
-                            className="therapy-requests-request-content-action therapy-request-decline-action"
-                            type="button"
-                            onClick={() => {
-                              authenticatedUserLocalStorage =
-                                localStorage.getItem('authenticatedUser')
-                              authenticatedUser = JSON.parse(
-                                authenticatedUserLocalStorage
-                              )
-
-                              let objectWithData = {
-                                authenticatedUser,
-                                mentalHealthExpertUserId: authenticatedUser?.id,
-                                regularUserId: request?.regularUserId,
-                                newRequestStatus: requestStatuses.DECLINED,
-                                userSendingRequest: false,
-                              }
-                              dispatch(changeRequestStatus(objectWithData))
-                            }}
-                          >
-                            Odbij
-                          </button>
-
-                          {request?.requestStatus ===
-                            requestStatuses.APPROVED && (
-                            <button
-                              className="therapy-requests-request-content-action therapy-request-stop-sharing-action"
+                              className="therapy-requests-request-content-action therapy-request-decline-action"
                               type="button"
                               onClick={() => {
                                 authenticatedUserLocalStorage =
@@ -156,43 +134,70 @@ export const Requests = () => {
                                 dispatch(changeRequestStatus(objectWithData))
                               }}
                             >
-                              Zaustavi dijeljenje
+                              Odbij
                             </button>
-                          )}
 
-                          {request?.requestStatus ===
-                            requestStatuses.PENDING && (
-                            <HiX
-                              className="therapy-requests-request-content-action therapy-request-icon-action therapy-request-decline-icon-action"
-                              onClick={() => {
-                                authenticatedUserLocalStorage =
-                                  localStorage.getItem('authenticatedUser')
-                                authenticatedUser = JSON.parse(
-                                  authenticatedUserLocalStorage
-                                )
+                            {request?.requestStatus ===
+                              requestStatuses.APPROVED && (
+                              <button
+                                className="therapy-requests-request-content-action therapy-request-stop-sharing-action"
+                                type="button"
+                                onClick={() => {
+                                  authenticatedUserLocalStorage =
+                                    localStorage.getItem('authenticatedUser')
+                                  authenticatedUser = JSON.parse(
+                                    authenticatedUserLocalStorage
+                                  )
 
-                                let objectWithData = {
-                                  authenticatedUser,
-                                  mentalHealthExpertUserId:
-                                    authenticatedUser?.id,
-                                  regularUserId: request?.regularUserId,
-                                  newRequestStatus: requestStatuses.DECLINED,
-                                  userSendingRequest: false,
-                                }
-                                dispatch(changeRequestStatus(objectWithData))
-                              }}
-                            />
-                          )}
-                        </div>
-                      )}
+                                  let objectWithData = {
+                                    authenticatedUser,
+                                    mentalHealthExpertUserId:
+                                      authenticatedUser?.id,
+                                    regularUserId: request?.regularUserId,
+                                    newRequestStatus: requestStatuses.DECLINED,
+                                    userSendingRequest: false,
+                                  }
+                                  dispatch(changeRequestStatus(objectWithData))
+                                }}
+                              >
+                                Zaustavi dijeljenje
+                              </button>
+                            )}
+
+                            {request?.requestStatus ===
+                              requestStatuses.PENDING && (
+                              <HiX
+                                className="therapy-requests-request-content-action therapy-request-icon-action therapy-request-decline-icon-action"
+                                onClick={() => {
+                                  authenticatedUserLocalStorage =
+                                    localStorage.getItem('authenticatedUser')
+                                  authenticatedUser = JSON.parse(
+                                    authenticatedUserLocalStorage
+                                  )
+
+                                  let objectWithData = {
+                                    authenticatedUser,
+                                    mentalHealthExpertUserId:
+                                      authenticatedUser?.id,
+                                    regularUserId: request?.regularUserId,
+                                    newRequestStatus: requestStatuses.DECLINED,
+                                    userSendingRequest: false,
+                                  }
+                                  dispatch(changeRequestStatus(objectWithData))
+                                }}
+                              />
+                            )}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="therapy-requests-requests-content-cell">
+                        <span className="therapy-request-request-content-cell-value">
+                          {sentAt}
+                        </span>
+                      </div>
                     </div>
-
-                    <div className="therapy-requests-requests-content-cell">
-                      <span className="therapy-request-request-content-cell-value">
-                        {sentAt}
-                      </span>
-                    </div>
-                  </div>
+                  )
                 )
               })}
             </div>
