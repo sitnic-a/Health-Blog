@@ -2,12 +2,17 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getMentalHealthExperts } from '../../../redux-toolkit/features/mentalExpertSlice'
 import { getMyExperts } from '../../../redux-toolkit/features/therapySlice'
-import { setActiveMyMentalHealthExpertFilterActionTab } from '../../../utils/helper-methods/methods'
+import {
+  setActiveMyMentalHealthExpertFilterActionTab,
+  stringIsNullOrEmpty,
+} from '../../../utils/helper-methods/methods'
+import { requestStatuses } from '../../../enums/requestStatuses'
 import { MyMentalHealthExpertPocket } from '../MyMentalHealthExpertPocket/MyMentalHealthExpertPocket'
 import { MentalHealthExpertsDropdown } from '../../MentalHealthExpertsDropdown/MentalHealthExpertsDropdown'
 import { MyMentalHealthExpertProfile } from '../MyMentalHealthExpertProfile/MyMentalHealthExpertProfile'
 import { Navbar } from '../../shared/Navbar/Navbar'
-import { requestStatuses } from '../../../enums/requestStatuses'
+import { MyExpertsPendingTherapyRequestsInvitations } from '../MyExpertsPendingTherapyRequestsInvitations/MyExpertsPendingTherapyRequestsInvitations'
+
 import { LoadingSpinner } from '../../LoadingSpinner/LoadingSpinner'
 
 import { TiArrowSortedDown } from 'react-icons/ti'
@@ -45,9 +50,15 @@ export const MyMentalHealthExperts = () => {
   )[1]
 
   useEffect(() => {
-    document.querySelector(
+    let pendingTherapyRequestInvitationIndicator = document.querySelector(
       '.pending-therapy-request-invitation-indicator'
-    ).style.display = 'none'
+    )
+
+    if (!stringIsNullOrEmpty(pendingTherapyRequestInvitationIndicator)) {
+      pendingTherapyRequestInvitationIndicator.classList.add(
+        'pending-therapy-request-invitation-indicator-hidden'
+      )
+    }
 
     let objectWithData = {
       authenticatedUser,
@@ -182,39 +193,43 @@ export const MyMentalHealthExperts = () => {
       </div>
 
       <div className="my-mental-health-experts-experts-container">
-        {myApprovedOrPendingMentalHealthExperts?.filter(
-          (mhe) =>
-            (mhe.regularUserId === authenticatedUser?.id &&
-              mhe.requestStatus === requestStatuses.APPROVED) ||
-            mhe.requestStatus === requestStatuses.PENDING
-        )?.length === 0 && (
-          <>
-            <MyMentalHealthExpertPocket />
-            <MyMentalHealthExpertPocket />
-          </>
-        )}
+        <div className="my-mental-health-experts-users-therapy-requests-main-container">
+          {myApprovedOrPendingMentalHealthExperts?.filter(
+            (mhe) =>
+              (mhe.regularUserId === authenticatedUser?.id &&
+                mhe.requestStatus === requestStatuses.APPROVED) ||
+              mhe.requestStatus === requestStatuses.PENDING
+          )?.length === 0 && (
+            <>
+              <MyMentalHealthExpertPocket />
+              <MyMentalHealthExpertPocket />
+            </>
+          )}
 
-        {myApprovedOrPendingMentalHealthExperts?.filter(
-          (mhe) =>
-            mhe.regularUserId === authenticatedUser?.id &&
-            mhe.requestStatus === requestStatuses.APPROVED
-        )?.length === 1 && (
-          <>
-            <MyMentalHealthExpertProfile expert={firstElement} />
-            <MyMentalHealthExpertPocket />
-          </>
-        )}
+          {myApprovedOrPendingMentalHealthExperts?.filter(
+            (mhe) =>
+              mhe.regularUserId === authenticatedUser?.id &&
+              mhe.requestStatus === requestStatuses.APPROVED
+          )?.length === 1 && (
+            <>
+              <MyMentalHealthExpertProfile expert={firstElement} />
+              <MyMentalHealthExpertPocket />
+            </>
+          )}
 
-        {myApprovedOrPendingMentalHealthExperts?.filter(
-          (mhe) =>
-            mhe.regularUserId === authenticatedUser?.id &&
-            mhe.requestStatus === requestStatuses.APPROVED
-        )?.length === 2 && (
-          <>
-            <MyMentalHealthExpertProfile expert={firstElement} />
-            <MyMentalHealthExpertProfile expert={secondElement} />
-          </>
-        )}
+          {myApprovedOrPendingMentalHealthExperts?.filter(
+            (mhe) =>
+              mhe.regularUserId === authenticatedUser?.id &&
+              mhe.requestStatus === requestStatuses.APPROVED
+          )?.length === 2 && (
+            <>
+              <MyMentalHealthExpertProfile expert={firstElement} />
+              <MyMentalHealthExpertProfile expert={secondElement} />
+            </>
+          )}
+        </div>
+
+        <MyExpertsPendingTherapyRequestsInvitations />
       </div>
     </section>
   )

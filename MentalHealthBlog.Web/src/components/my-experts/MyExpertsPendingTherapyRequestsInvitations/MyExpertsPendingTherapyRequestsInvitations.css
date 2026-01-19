@@ -1,0 +1,12 @@
+.my-mental-health-experts-pending-therapy-requests-invitations-main-container {
+  max-width: 400px;
+  width: 100%;
+  padding-inline: 1rem;
+  background: red;
+}
+
+@media (width<=1080px) {
+  .my-mental-health-experts-pending-therapy-requests-invitations-main-container {
+    display: none;
+  }
+}

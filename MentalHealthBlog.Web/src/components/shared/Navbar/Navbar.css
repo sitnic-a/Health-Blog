@@ -55,6 +55,10 @@
   background: #edb572;
 }
 
+.pending-therapy-request-invitation-indicator-hidden {
+  display: none;
+}
+
 .navbar-app-logo {
   max-width: 50px;
   max-height: 30px;

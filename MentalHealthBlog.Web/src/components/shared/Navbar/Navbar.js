@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { switchActiveTab } from '../../../utils/helper-methods/methods'
 
 import { Logout } from '../Logout/Logout'
@@ -10,6 +10,7 @@ import NavbarCSS from '../Navbar/Navbar.css'
 import SharedCSS from '../shared.css'
 
 export const Navbar = () => {
+  let location = useLocation()
   let { myPendingMentalHealthExpertWhoSentAnInvitationForTherapy } =
     useSelector((store) => store.therapy)
 
@@ -59,17 +60,18 @@ export const Navbar = () => {
             >
               Stručnjaci
               {myPendingMentalHealthExpertWhoSentAnInvitationForTherapy?.length >
-                0 && (
-                <span className="pending-therapy-request-invitation-indicator">
-                  {
-                    myPendingMentalHealthExpertWhoSentAnInvitationForTherapy?.length
-                  }
-                </span>
-              )}
+                0 &&
+                location?.pathname !== '/my-experts' && (
+                  <span className="pending-therapy-request-invitation-indicator">
+                    {
+                      myPendingMentalHealthExpertWhoSentAnInvitationForTherapy?.length
+                    }
+                  </span>
+                )}
             </Link>
 
             <Link
-              to={`/assignments/user/${authenticatedUser.id}`}
+              to={`/assignments/user/${authenticatedUser?.id}`}
               className="navigation-bar-action"
             >
               Zadaće

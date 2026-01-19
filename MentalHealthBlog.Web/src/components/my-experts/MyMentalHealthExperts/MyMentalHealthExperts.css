@@ -104,8 +104,23 @@
   margin-top: 2rem;
 }
 
-@media (width<=610px) {
+/* @media (width<=610px) {
   .my-mental-health-experts-experts-container {
+    flex-wrap: wrap;
+    row-gap: 20px;
+    justify-content: center;
+  }
+} */
+
+.my-mental-health-experts-users-therapy-requests-main-container {
+  display: flex;
+  column-gap: 20px;
+  max-width: 800px;
+  width: 100%;
+}
+
+@media (width<=610px) {
+  .my-mental-health-experts-users-therapy-requests-main-container {
     flex-wrap: wrap;
     row-gap: 20px;
     justify-content: center;
