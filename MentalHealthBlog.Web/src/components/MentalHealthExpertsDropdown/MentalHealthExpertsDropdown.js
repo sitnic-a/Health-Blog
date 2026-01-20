@@ -28,7 +28,7 @@ export const MentalHealthExpertsDropdown = () => {
   }
 
   let { suggestedMentalHealthExperts } = useSelector(
-    (store) => store.mentalExpert
+    (store) => store.mentalExpert,
   )
   let { selectedMentalHealthExpertIds } = useSelector((store) => store.therapy)
 
@@ -73,20 +73,28 @@ export const MentalHealthExpertsDropdown = () => {
                           authenticatedUserLocalStorage =
                             localStorage.getItem('authenticatedUser')
                           authenticatedUser = JSON.parse(
-                            authenticatedUserLocalStorage
+                            authenticatedUserLocalStorage,
                           )
 
-                          let objectWithData = {
+                          let requestObj = {
                             mentalHealthExpertUserId:
                               expert?.mentalHealthExpertUserId,
                             regularUserId: authenticatedUser?.id,
                             newRequestStatus: requestStatuses.PENDING,
-                            authenticatedUser,
                             userSendingRequest: true,
+                          }
+                          let objectWithData = {
+                            authenticatedUser,
+                            requestObj,
                           }
 
                           dispatch(changeRequestStatus(objectWithData)).then(
                             (data) => {
+                              authenticatedUserLocalStorage =
+                                localStorage.getItem('authenticatedUser')
+                              authenticatedUser = JSON.parse(
+                                authenticatedUserLocalStorage,
+                              )
                               let statusCode = data?.payload?.statusCode
                               if (statusCode === 200) {
                                 objectWithData = {
@@ -106,7 +114,7 @@ export const MentalHealthExpertsDropdown = () => {
                                   position: 'bottom-right',
                                 })
                               }
-                            }
+                            },
                           )
                         }}
                       >
@@ -126,16 +134,16 @@ export const MentalHealthExpertsDropdown = () => {
 
                           let pickedMentalHealthExpertId =
                             mainMentalHealthExpertSelectedPickerOption.querySelector(
-                              '#main-mental-health-expert-picker-option-id'
+                              '#main-mental-health-expert-picker-option-id',
                             ).value
 
                           let optionAddAction =
                             mainMentalHealthExpertSelectedPickerOption.querySelector(
-                              '.picker-option-add-action'
+                              '.picker-option-add-action',
                             )
                           let optionCancelAction =
                             mainMentalHealthExpertSelectedPickerOption.querySelector(
-                              '.picker-option-cancel-action'
+                              '.picker-option-cancel-action',
                             )
 
                           let selectedMentalHealthExpertIdsTemp = [
@@ -143,7 +151,7 @@ export const MentalHealthExpertsDropdown = () => {
                           ]
 
                           mainMentalHealthExpertSelectedPickerOption.classList.add(
-                            'main-mental-health-expert-selected-picker-option-active'
+                            'main-mental-health-expert-selected-picker-option-active',
                           )
 
                           optionAddAction.style.display = 'none'
@@ -156,8 +164,8 @@ export const MentalHealthExpertsDropdown = () => {
 
                           dispatch(
                             setSelectedMentalHealthExpertIds(
-                              selectedMentalHealthExpertIdsTemp
-                            )
+                              selectedMentalHealthExpertIdsTemp,
+                            ),
                           )
                           return
                         }}
@@ -174,16 +182,16 @@ export const MentalHealthExpertsDropdown = () => {
 
                       let pickedMentalHealthExpertId =
                         mainMentalHealthExpertSelectedPickerOption.querySelector(
-                          '#main-mental-health-expert-picker-option-id'
+                          '#main-mental-health-expert-picker-option-id',
                         ).value
 
                       let optionAddAction =
                         mainMentalHealthExpertSelectedPickerOption.querySelector(
-                          '.picker-option-add-action'
+                          '.picker-option-add-action',
                         )
                       let optionCancelAction =
                         mainMentalHealthExpertSelectedPickerOption.querySelector(
-                          '.picker-option-cancel-action'
+                          '.picker-option-cancel-action',
                         )
 
                       let selectedMentalHealthExpertIdsTemp = [
@@ -191,7 +199,7 @@ export const MentalHealthExpertsDropdown = () => {
                       ]
 
                       mainMentalHealthExpertSelectedPickerOption.classList.remove(
-                        'main-mental-health-expert-selected-picker-option-active'
+                        'main-mental-health-expert-selected-picker-option-active',
                       )
 
                       optionCancelAction.style.display = 'none'
@@ -202,13 +210,13 @@ export const MentalHealthExpertsDropdown = () => {
                       ].filter(
                         (mentalHealthExpert) =>
                           mentalHealthExpert !==
-                          parseInt(pickedMentalHealthExpertId)
+                          parseInt(pickedMentalHealthExpertId),
                       )
 
                       dispatch(
                         setSelectedMentalHealthExpertIds(
-                          selectedMentalHealthExpertIdsTemp
-                        )
+                          selectedMentalHealthExpertIdsTemp,
+                        ),
                       )
                     }}
                   >

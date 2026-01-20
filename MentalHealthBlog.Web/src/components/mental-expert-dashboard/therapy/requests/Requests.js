@@ -71,16 +71,19 @@ export const Requests = () => {
                                   authenticatedUserLocalStorage =
                                     localStorage.getItem('authenticatedUser')
                                   authenticatedUser = JSON.parse(
-                                    authenticatedUserLocalStorage
+                                    authenticatedUserLocalStorage,
                                   )
-
-                                  let objectWithData = {
-                                    authenticatedUser,
+                                  let requestObj = {
                                     mentalHealthExpertUserId:
                                       authenticatedUser?.id,
                                     regularUserId: request?.regularUserId,
                                     newRequestStatus: requestStatuses.APPROVED,
                                     userSendingRequest: false,
+                                  }
+
+                                  let objectWithData = {
+                                    authenticatedUser,
+                                    requestObj,
                                   }
                                   dispatch(changeRequestStatus(objectWithData))
                                 }}
@@ -97,16 +100,19 @@ export const Requests = () => {
                                   authenticatedUserLocalStorage =
                                     localStorage.getItem('authenticatedUser')
                                   authenticatedUser = JSON.parse(
-                                    authenticatedUserLocalStorage
+                                    authenticatedUserLocalStorage,
                                   )
-
-                                  let objectWithData = {
-                                    authenticatedUser,
+                                  let requestObj = {
                                     mentalHealthExpertUserId:
                                       authenticatedUser?.id,
                                     regularUserId: request?.regularUserId,
                                     newRequestStatus: requestStatuses.APPROVED,
                                     userSendingRequest: false,
+                                  }
+
+                                  let objectWithData = {
+                                    authenticatedUser,
+                                    requestObj,
                                   }
                                   dispatch(changeRequestStatus(objectWithData))
                                 }}
@@ -120,16 +126,19 @@ export const Requests = () => {
                                 authenticatedUserLocalStorage =
                                   localStorage.getItem('authenticatedUser')
                                 authenticatedUser = JSON.parse(
-                                  authenticatedUserLocalStorage
+                                  authenticatedUserLocalStorage,
                                 )
-
-                                let objectWithData = {
-                                  authenticatedUser,
+                                let requestObj = {
                                   mentalHealthExpertUserId:
                                     authenticatedUser?.id,
                                   regularUserId: request?.regularUserId,
                                   newRequestStatus: requestStatuses.DECLINED,
                                   userSendingRequest: false,
+                                }
+
+                                let objectWithData = {
+                                  authenticatedUser,
+                                  requestObj,
                                 }
                                 dispatch(changeRequestStatus(objectWithData))
                               }}
@@ -146,16 +155,19 @@ export const Requests = () => {
                                   authenticatedUserLocalStorage =
                                     localStorage.getItem('authenticatedUser')
                                   authenticatedUser = JSON.parse(
-                                    authenticatedUserLocalStorage
+                                    authenticatedUserLocalStorage,
                                   )
-
-                                  let objectWithData = {
-                                    authenticatedUser,
+                                  let requestObj = {
                                     mentalHealthExpertUserId:
                                       authenticatedUser?.id,
                                     regularUserId: request?.regularUserId,
                                     newRequestStatus: requestStatuses.DECLINED,
                                     userSendingRequest: false,
+                                  }
+
+                                  let objectWithData = {
+                                    authenticatedUser,
+                                    requestObj,
                                   }
                                   dispatch(changeRequestStatus(objectWithData))
                                 }}
@@ -172,16 +184,18 @@ export const Requests = () => {
                                   authenticatedUserLocalStorage =
                                     localStorage.getItem('authenticatedUser')
                                   authenticatedUser = JSON.parse(
-                                    authenticatedUserLocalStorage
+                                    authenticatedUserLocalStorage,
                                   )
-
-                                  let objectWithData = {
-                                    authenticatedUser,
+                                  let requestObj = {
                                     mentalHealthExpertUserId:
                                       authenticatedUser?.id,
                                     regularUserId: request?.regularUserId,
                                     newRequestStatus: requestStatuses.DECLINED,
                                     userSendingRequest: false,
+                                  }
+                                  let objectWithData = {
+                                    authenticatedUser,
+                                    requestObj,
                                   }
                                   dispatch(changeRequestStatus(objectWithData))
                                 }}

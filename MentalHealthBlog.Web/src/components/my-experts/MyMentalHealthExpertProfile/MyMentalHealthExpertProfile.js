@@ -110,13 +110,16 @@ export const MyMentalHealthExpertProfile = (props) => {
               className="my-expert-stop-sharing-action"
               onClick={() => {
                 dispatch(openStopSharing(!isStopSharingOpen))
-                let objectWithData = {
+                let requestObj = {
                   mentalHealthExpertId: expert?.mentalHealthExpertId,
                   mentalHealthExpertUserId: expert?.mentalHealthExpertUserId,
                   regularUserId: authenticatedUser?.id,
                   newRequestStatus: requestStatuses.UNDEFINED,
                   userSendingRequest: false,
+                }
+                let objectWithData = {
                   authenticatedUser,
+                  requestObj,
                 }
                 dispatch(setStopSharingObject(objectWithData))
               }}

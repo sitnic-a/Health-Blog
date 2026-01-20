@@ -58,15 +58,19 @@ export const StopSharingConfirmation = () => {
                       }
                       dispatch(getMentalHealthExperts(objectWithData))
                     }
-                  }
+                  },
                 )
-                let request = {
-                  authenticatedUser,
-                  mentalHealthExpertId: stopSharingObject?.mentalHealthExpertId,
-                  regularUserId: stopSharingObject?.regularUserId,
+                let requestObj = {
+                  mentalHealthExpertId:
+                    stopSharingObject?.requestObj?.mentalHealthExpertId,
+                  regularUserId: stopSharingObject?.requestObj?.regularUserId,
                   isKeepingContent: false,
                 }
-                dispatch(stopSharing(request))
+                let objectWithData = {
+                  authenticatedUser,
+                  requestObj,
+                }
+                dispatch(stopSharing(objectWithData))
                 dispatch(openStopSharing(!isStopSharingOpen))
               }}
             >
@@ -90,15 +94,19 @@ export const StopSharingConfirmation = () => {
                       }
                       dispatch(getMentalHealthExperts(objectWithData))
                     }
-                  }
+                  },
                 )
-                let request = {
-                  authenticatedUser,
-                  mentalHealthExpertId: stopSharingObject?.mentalHealthExpertId,
-                  regularUserId: stopSharingObject?.regularUserId,
+                let requestObj = {
+                  mentalHealthExpertId:
+                    stopSharingObject?.requestObj?.mentalHealthExpertId,
+                  regularUserId: stopSharingObject?.requestObj?.regularUserId,
                   isKeepingContent: true,
                 }
-                dispatch(stopSharing(request))
+                let objectWithData = {
+                  authenticatedUser,
+                  requestObj,
+                }
+                dispatch(stopSharing(objectWithData))
                 dispatch(openStopSharing(!isStopSharingOpen))
               }}
             >
