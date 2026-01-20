@@ -367,10 +367,13 @@ namespace MentalHealthBlog.API.Services
                     newInviteServiceResponseObject != null &&
                     newInviteServiceResponseObject.IsRegularUserAlreadyUsingApplication == true)
                 {
-                    const int __MAX_EXPERTS_IN_THERAPY__ = 2;
-                    //Prebrojati koliko ima experta u seansi koji su pending i koji su approved
-                    //Napraviti novi therapy request
                     var therapyRequestHandler = new TherapyRequestHelper(_context, _configuration, _therapyRequestLoggerService);
+                    
+                    // Razmisliti da li je potrebna provjera da li postoje dva ili vise eksperta i na osnovu zakljucka implementirati ostatak funkcionalnosti
+                    // Za sada drzati zakomentarisan kod prebrojavanja ( blok kod i provjera Count > _MAX_EXPERTS)
+                    
+                    /*
+                    const int __MAX_EXPERTS_IN_THERAPY__ = 2;
                     var queryForMyApprovedExperts = new SearchTherapyRequestDto(newInviteServiceResponseObject.RegularUserId.Value, RequestStatusEnum.Approved);
                     var myApprovedExpertsResponse = await therapyRequestHandler.CallFilterMyExpertsByRequestStatus(queryForMyApprovedExperts);
                     var myApprovedExperts = myApprovedExpertsResponse.ServiceResponseObject as List<MyExpertDto>;
@@ -380,8 +383,10 @@ namespace MentalHealthBlog.API.Services
                     var myPendingExperts = myPendingExpertsResponse.ServiceResponseObject as List<MyExpertDto>;
 
                     var myExpertsUnion = myApprovedExperts.Union(myPendingExperts).ToList();
-                    if (myExpertsUnion.Count >= __MAX_EXPERTS_IN_THERAPY__)
-                    {
+                    */
+
+                    //if (myExpertsUnion.Count >= __MAX_EXPERTS_IN_THERAPY__)
+                    //{
                         var newTherapyRequest = new Models.ResourceRequest.TherapyRequestDto
                         {
                             RegularUserId = newInviteServiceResponseObject.RegularUserId.Value,
@@ -389,8 +394,7 @@ namespace MentalHealthBlog.API.Services
                             IsMentalHealthExpertInvitingRegularUser = true,
                         };
                         return await therapyRequestHandler.SendTherapyRequestAsMentalHealthExpertToExistingRegularUser(newTherapyRequest);
-                    }
-                    //Handle if user exists
+                    //}
                 }
 
                 _mentalExpertLoggerService.LogWarning($"INVITE/USER: {MentalExpertServiceLogTypes.NOT_FOUND.ToString()}");
