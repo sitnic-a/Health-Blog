@@ -15,5 +15,6 @@
         public string MentalHealthExpertPhotoAsPath { get; set; } = string.Empty;
         public byte[] MentalHealthExpertPhotoAsFile { get; set; }
         public RequestStatusEnum RequestStatus { get; set; }
+        public bool MentalHealthExpertInviting { get; set; }
     }
 }

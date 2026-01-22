@@ -136,6 +136,7 @@ namespace MentalHealthBlog.API.Services.Therapy
                                   MentalHealthExpertPhotoAsPath = mhe.PhotoAsPath,
                                   MentalHealthExpertPhotoAsFile = mhe.PhotoAsFile,
                                   RequestStatus = tr.RequestStatus,
+                                  MentalHealthExpertInviting = tr.IsMentalHealthExpertInviting.GetValueOrDefault(),
                               })
                         .ToListAsync();
 
