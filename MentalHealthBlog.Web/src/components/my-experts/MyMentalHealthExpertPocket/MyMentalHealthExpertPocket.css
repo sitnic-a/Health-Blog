@@ -6,3 +6,48 @@
   border-radius: 0.6rem;
   background: #b4d3ea;
 }
+
+.my-mental-health-expert-pocket-content {
+  margin-top: 50%;
+  padding-inline: 0.7rem;
+}
+
+.my-mental-health-expert-pocket-content-description {
+  font-family: 'SansDeva';
+  font-size: 1.1rem;
+  line-height: 1.4;
+  text-align: center;
+  color: #000;
+}
+
+.my-mental-health-expert-pocket-content-description:nth-of-type(2) {
+  text-align: justify;
+}
+
+.my-mental-health-expert-pocket-content-description-expert-full-name {
+  font-weight: 600;
+}
+
+.my-mental-health-expert-pocket-actions {
+  display: flex;
+  justify-content: center;
+  padding-inline: 0.7rem;
+}
+
+.my-mental-health-expert-pocket-action {
+  padding: 0.3rem 1rem;
+  border: none;
+  border-radius: 0.4rem;
+  font-family: 'SansDeva';
+  font-size: 0.9rem;
+  line-height: 1.4;
+  outline: none;
+  transition: 150ms;
+  cursor: pointer;
+  color: #f3f1e3;
+  background: #c93232;
+}
+
+.my-mental-health-expert-pocket-cancel-action:hover {
+  background: #a02929;
+}
