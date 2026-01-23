@@ -138,6 +138,7 @@ namespace MentalHealthBlog.API.Services.Therapy
                                   RequestStatus = tr.RequestStatus,
                                   MentalHealthExpertInviting = tr.IsMentalHealthExpertInviting.GetValueOrDefault(),
                               })
+                        .OrderBy(mhe => mhe.RequestStatus)
                         .ToListAsync();
 
                     if (dbMentalHealthExperts is not null)
@@ -229,6 +230,21 @@ namespace MentalHealthBlog.API.Services.Therapy
                     throw new RecordNotFoundException("Request couldn't be located!");
                 }
 
+                if (request.IsMentalHealthExpertInvitingRegularUser == true)
+                {
+                    if (request.NewRequestStatus == (int) RequestStatusEnum.Undefined)
+                    {
+                        _context.TherapyRequests.Remove(requestToModify);
+                        await _context.SaveChangesAsync();
+
+                        var searchQuery = new SearchTherapyRequestDto(request.MentalHealthExpertUserId);
+                        var requestsForMentalHealthExpertResponse = await GetRequestsForMentalHealthExpert(searchQuery);
+                        var requestsForMentalHealthExpert = requestsForMentalHealthExpertResponse.ServiceResponseObject as List<Models.ResourceResponse.TherapyRequestDto>;
+                        _therapyRequestLoggerService.LogInformation($"CHANGE-REQUEST-STATUS: {TherapyInviteLogTypes.SUCCESS.ToString()}");
+                        return new Response(requestsForMentalHealthExpert, StatusCodes.Status200OK, TherapyInviteLogTypes.SUCCESS.ToString());
+                    }
+                }
+
                 if (request.UserSendingRequest == null)
                 {
                     requestToModify.RequestStatus = (RequestStatusEnum)request.NewRequestStatus;
@@ -265,7 +281,6 @@ namespace MentalHealthBlog.API.Services.Therapy
                     var searchQuery = new SearchTherapyRequestDto
                     {
                         LoggedUserId = request.RegularUserId,
-                        RequestStatus = RequestStatusEnum.Approved
                     };
                     var usersMentalHealthExperts = await GetMyExperts(searchQuery);
                     _therapyRequestLoggerService.LogInformation($"CHANGE-REQUEST-STATUS: {TherapyRequestLogTypes.SUCCESS.ToString()}");
