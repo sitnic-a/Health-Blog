@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 import moment from 'moment'
 import {
   changeRequestStatus,
@@ -167,6 +168,7 @@ export const Requests = () => {
                                     regularUserId: request?.regularUserId,
                                     newRequestStatus: requestStatuses.UNDEFINED,
                                     userSendingRequest: false,
+                                    isMentalHealthExpertInvitingRegularUser: true,
                                   }
 
                                   let objectWithData = {
@@ -174,7 +176,21 @@ export const Requests = () => {
                                     requestObj,
                                   }
 
-                                  dispatch(changeRequestStatus(objectWithData))
+                                  dispatch(
+                                    changeRequestStatus(objectWithData),
+                                  ).then((data) => {
+                                    let statusCode = data?.payload?.statusCode
+                                    if (statusCode === 200) {
+                                      toast.success(
+                                        'Uspješno ste otkazali poslani zahtjev',
+                                        {
+                                          autoClose: 4000,
+                                          position: 'bottom-right',
+                                        },
+                                      )
+                                      return
+                                    }
+                                  })
                                 }}
                               >
                                 Otkažite zahtjev
