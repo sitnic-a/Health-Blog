@@ -42,28 +42,28 @@ export const Requests = () => {
                 let fullName = `${request?.regularUserFirstName} ${request?.regularUserLastName}`
                 let sentAt = moment(request?.sentAt).fromNow()
                 return (
-                  request?.isMentalHealthExpertInviting !== true && (
-                    <div
-                      key={index}
-                      className="therapy-requests-requests-content-row"
-                    >
-                      <div className="therapy-requests-requests-content-cell">
-                        <span className="therapy-request-request-content-cell-value">
-                          {fullName}
-                        </span>
-                      </div>
+                  <div
+                    key={index}
+                    className="therapy-requests-requests-content-row"
+                  >
+                    <div className="therapy-requests-requests-content-cell">
+                      <span className="therapy-request-request-content-cell-value">
+                        {fullName}
+                      </span>
+                    </div>
 
-                      <div className="therapy-requests-requests-content-cell">
-                        {request?.requestStatus === requestStatuses.DECLINED ? (
-                          <div className="therapy-requests-requests-content-actions-main-container">
-                            <p className="therapy-requests-requests-content-actions-description-message">
-                              Odbijen
-                            </p>
-                          </div>
-                        ) : (
-                          <div className="therapy-requests-requests-content-actions-main-container">
-                            {request?.requestStatus ===
-                              requestStatuses.APPROVED || (
+                    <div className="therapy-requests-requests-content-cell">
+                      {request?.requestStatus === requestStatuses.DECLINED ? (
+                        <div className="therapy-requests-requests-content-actions-main-container">
+                          <p className="therapy-requests-requests-content-actions-description-message">
+                            Odbijen
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="therapy-requests-requests-content-actions-main-container">
+                          {request?.requestStatus ===
+                            requestStatuses.APPROVED ||
+                            request?.isMentalHealthExpertInviting === true || (
                               <button
                                 className="therapy-requests-request-content-action therapy-request-approve-action"
                                 type="button"
@@ -92,8 +92,8 @@ export const Requests = () => {
                               </button>
                             )}
 
-                            {request?.requestStatus ===
-                              requestStatuses.PENDING && (
+                          {request?.requestStatus === requestStatuses.PENDING &&
+                            request?.isMentalHealthExpertInviting === false && (
                               <FaCheck
                                 className="therapy-requests-request-content-action therapy-request-icon-action therapy-request-approve-icon-action"
                                 onClick={() => {
@@ -119,6 +119,7 @@ export const Requests = () => {
                               />
                             )}
 
+                          {request?.isMentalHealthExpertInviting === false && (
                             <button
                               className="therapy-requests-request-content-action therapy-request-decline-action"
                               type="button"
@@ -145,23 +146,26 @@ export const Requests = () => {
                             >
                               Odbij
                             </button>
+                          )}
 
-                            {request?.requestStatus ===
-                              requestStatuses.APPROVED && (
+                          {request?.isMentalHealthExpertInviting === true &&
+                            request?.requestStatus ===
+                              requestStatuses.PENDING && (
                               <button
-                                className="therapy-requests-request-content-action therapy-request-stop-sharing-action"
+                                className="therapy-requests-request-content-action therapy-request-decline-action"
                                 type="button"
                                 onClick={() => {
-                                  authenticatedUserLocalStorage =
+                                  let authenticatedUserLocalStorage =
                                     localStorage.getItem('authenticatedUser')
-                                  authenticatedUser = JSON.parse(
+                                  let authenticatedUser = JSON.parse(
                                     authenticatedUserLocalStorage,
                                   )
+
                                   let requestObj = {
                                     mentalHealthExpertUserId:
                                       authenticatedUser?.id,
                                     regularUserId: request?.regularUserId,
-                                    newRequestStatus: requestStatuses.DECLINED,
+                                    newRequestStatus: requestStatuses.UNDEFINED,
                                     userSendingRequest: false,
                                   }
 
@@ -169,15 +173,46 @@ export const Requests = () => {
                                     authenticatedUser,
                                     requestObj,
                                   }
+
                                   dispatch(changeRequestStatus(objectWithData))
                                 }}
                               >
-                                Zaustavi dijeljenje
+                                Otkažite zahtjev
                               </button>
                             )}
 
-                            {request?.requestStatus ===
-                              requestStatuses.PENDING && (
+                          {request?.requestStatus ===
+                            requestStatuses.APPROVED && (
+                            <button
+                              className="therapy-requests-request-content-action therapy-request-stop-sharing-action"
+                              type="button"
+                              onClick={() => {
+                                authenticatedUserLocalStorage =
+                                  localStorage.getItem('authenticatedUser')
+                                authenticatedUser = JSON.parse(
+                                  authenticatedUserLocalStorage,
+                                )
+                                let requestObj = {
+                                  mentalHealthExpertUserId:
+                                    authenticatedUser?.id,
+                                  regularUserId: request?.regularUserId,
+                                  newRequestStatus: requestStatuses.DECLINED,
+                                  userSendingRequest: false,
+                                }
+
+                                let objectWithData = {
+                                  authenticatedUser,
+                                  requestObj,
+                                }
+                                dispatch(changeRequestStatus(objectWithData))
+                              }}
+                            >
+                              Zaustavi dijeljenje
+                            </button>
+                          )}
+
+                          {request?.requestStatus === requestStatuses.PENDING &&
+                            request?.isMentalHealthExpertInviting === false && (
                               <HiX
                                 className="therapy-requests-request-content-action therapy-request-icon-action therapy-request-decline-icon-action"
                                 onClick={() => {
@@ -201,17 +236,16 @@ export const Requests = () => {
                                 }}
                               />
                             )}
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="therapy-requests-requests-content-cell">
-                        <span className="therapy-request-request-content-cell-value">
-                          {sentAt}
-                        </span>
-                      </div>
+                        </div>
+                      )}
                     </div>
-                  )
+
+                    <div className="therapy-requests-requests-content-cell">
+                      <span className="therapy-request-request-content-cell-value">
+                        {sentAt}
+                      </span>
+                    </div>
+                  </div>
                 )
               })}
             </div>

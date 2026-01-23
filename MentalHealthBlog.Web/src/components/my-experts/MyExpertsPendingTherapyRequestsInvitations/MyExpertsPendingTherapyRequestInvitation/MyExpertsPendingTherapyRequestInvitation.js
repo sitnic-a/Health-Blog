@@ -5,6 +5,7 @@ import MyExpertsPendingTherapyRequestInvitationCSS from './MyExpertsPendingThera
 import {
   changeRequestStatus,
   getMentalHealthExpertsWhoSentUserAnInvitationForTherapy,
+  getMyExperts,
 } from '../../../../redux-toolkit/features/therapySlice'
 import { toast } from 'react-toastify'
 
@@ -71,6 +72,11 @@ export const MyExpertsPendingTherapyRequestInvitation = ({ invitation }) => {
                     objectWithData,
                   ),
                 )
+                objectWithData = {
+                  authenticatedUser,
+                  loggedUserId: authenticatedUser?.id,
+                }
+                dispatch(getMyExperts(objectWithData))
               }
             })
           }}
@@ -117,6 +123,11 @@ export const MyExpertsPendingTherapyRequestInvitation = ({ invitation }) => {
                     objectWithData,
                   ),
                 )
+                objectWithData = {
+                  authenticatedUser,
+                  loggedUserId: authenticatedUser?.id,
+                }
+                dispatch(getMyExperts(objectWithData))
               }
             })
           }}

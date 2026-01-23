@@ -1,8 +1,11 @@
+import { useDispatch } from 'react-redux'
 import { requestStatuses } from '../../../enums/requestStatuses'
 import MyMentalHealthExpertPocketCSS from './MyMentalHealthExpertPocket.css'
+import { changeRequestStatus } from '../../../redux-toolkit/features/therapySlice'
 
 export const MyMentalHealthExpertPocket = ({ request }) => {
-  console.log('Expert ', request)
+  let dispatch = useDispatch()
+
   let mentalHealthExpertFullName = String.prototype.concat(
     request?.mentalHealthExpertFirstName,
     ' ',
@@ -31,6 +34,28 @@ export const MyMentalHealthExpertPocket = ({ request }) => {
               <button
                 className="my-mental-health-expert-pocket-action my-mental-health-expert-pocket-cancel-action"
                 type="button"
+                onClick={() => {
+                  let authenticatedUserLocalStorage =
+                    localStorage.getItem('authenticatedUser')
+                  let authenticatedUser = JSON.parse(
+                    authenticatedUserLocalStorage,
+                  )
+
+                  let requestObj = {
+                    mentalHealthExpertId: request?.mentalHealthExpertId,
+                    mentalHealthExpertUserId: request?.mentalHealthExpertUserId,
+                    regularUserId: authenticatedUser?.id,
+                    newRequestStatus: requestStatuses.UNDEFINED,
+                    userSendingRequest: false,
+                  }
+
+                  let objectWithData = {
+                    authenticatedUser,
+                    requestObj,
+                  }
+
+                  dispatch(changeRequestStatus(objectWithData))
+                }}
               >
                 Otkaži zahtjev
               </button>

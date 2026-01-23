@@ -18,7 +18,6 @@ import { LoadingSpinner } from '../../LoadingSpinner/LoadingSpinner'
 import { TiArrowSortedDown } from 'react-icons/ti'
 
 import MyMentalHealthExpertsCSS from './MyMentalHealthExperts.css'
-import { render } from '@testing-library/react'
 
 export const MyMentalHealthExperts = () => {
   let dispatch = useDispatch()
@@ -32,26 +31,14 @@ export const MyMentalHealthExperts = () => {
     myPendingMentalHealthExpertWhoSentAnInvitationForTherapy,
   } = useSelector((store) => store.therapy)
 
+  console.log('My myAP ', myApprovedOrPendingMentalHealthExperts)
+
   let myApprovedOrPendingRequests =
     myApprovedOrPendingMentalHealthExperts.filter(
       (tr) =>
         tr.requestStatus === requestStatuses.APPROVED ||
         tr.requestStatus === requestStatuses.PENDING,
     )
-
-  let firstElement = myApprovedOrPendingMentalHealthExperts?.filter(
-    (mhe) =>
-      (mhe.regularUserId === authenticatedUser?.id &&
-        mhe.requestStatus === requestStatuses.APPROVED) ||
-      mhe.requestStatus === requestStatuses.PENDING,
-  )[0]
-
-  let secondElement = myApprovedOrPendingMentalHealthExperts?.filter(
-    (mhe) =>
-      (mhe.regularUserId === authenticatedUser?.id &&
-        mhe.requestStatus === requestStatuses.APPROVED) ||
-      mhe.requestStatus === requestStatuses.PENDING,
-  )[1]
 
   useEffect(() => {
     let pendingTherapyRequestInvitationIndicator = document.querySelector(
@@ -71,20 +58,6 @@ export const MyMentalHealthExperts = () => {
     dispatch(getMyExperts(objectWithData))
     dispatch(getMentalHealthExperts(objectWithData))
   }, [])
-
-  let usersMentalHealthExperts = myApprovedOrPendingMentalHealthExperts?.filter(
-    (mhe) =>
-      (mhe.regularUserId === authenticatedUser?.id &&
-        mhe.requestStatus === requestStatuses.APPROVED) ||
-      mhe.requestStatus === requestStatuses.PENDING,
-  )
-
-  let usersCurrentMentalHealthExperts =
-    myApprovedOrPendingMentalHealthExperts?.filter(
-      (mhe) =>
-        mhe.regularUserId === authenticatedUser?.id &&
-        mhe.requestStatus === requestStatuses.APPROVED,
-    )
 
   return (
     <section id="my-mental-health-experts-main-container">
@@ -314,7 +287,6 @@ export const MyMentalHealthExperts = () => {
           )} */}
 
           {myApprovedOrPendingMentalHealthExperts?.map((request, index) => {
-            console.log('My ', request)
             if (index >= 2) {
               return
             }
