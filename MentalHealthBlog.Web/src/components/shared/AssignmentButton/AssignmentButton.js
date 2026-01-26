@@ -16,7 +16,7 @@ export const AssignmentButton = () => {
         if (location?.pathname !== '/') {
           const now = new Date()
           const time = now.getTime()
-          const expireTime = time + 1000 * 15
+          const expireTime = time + 1000 * 60 * 15
           now.setTime(expireTime)
 
           Cookies.set('mentalHealthExpertIsChoosingUser', true, {

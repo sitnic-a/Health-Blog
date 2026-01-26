@@ -71,6 +71,25 @@
   background: #faffff;
 }
 
+.create-assignment-choose-user-to-accomplish-picker-filter-label {
+  margin-top: -1rem;
+  font-family: 'SansDeva';
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.create-assignment-choose-user-to-accomplish-picker-filter-experts {
+  margin-bottom: 1rem;
+  padding-block: 0.1rem;
+  font-size: 0.8rem;
+  transition: 150ms;
+  background: #f3f1e3;
+}
+
+.create-assignment-choose-user-to-accomplish-picker-filter-experts:hover {
+  background: #faffff;
+}
+
 .create-assignment-user-to-accomplish-task {
   margin-block: 1rem;
   padding-block: 0.5rem;

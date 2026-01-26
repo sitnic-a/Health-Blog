@@ -15,6 +15,7 @@ import {
 import CreateAssignmentCSS from './CreateAssignment.css'
 
 export const CreateAssignment = () => {
+  let list = ['Admir Sitnić', 'Emir Idrizovic', 'Adrian Memaj', 'Amar Rogo']
   let dispatch = useDispatch()
   let navigate = useNavigate()
 
@@ -174,9 +175,29 @@ export const CreateAssignment = () => {
 
               <div className="create-assignment-user-to-accomplish">
                 {mentalHealthExpertIsChoosingUser === true ? (
-                  <>
-                    <p>uh</p>
-                  </>
+                  <div className="create-assignment-choose-user-to-accomplish-main-container">
+                    <label className="create-assignment-label">
+                      Odaberite kome želite dati zadaću:{' '}
+                      <span className="required-field">*</span>
+                    </label>
+                    <br />
+                    <label className="create-assignment-choose-user-to-accomplish-picker-filter-label">
+                      Filterirajte putem imena ili prezimena
+                    </label>
+                    <div className="create-assignment-choose-user-to-accomplish-picker-container">
+                      <input
+                        list="create-assignment-choose-user-to-accomplish-picker-filter-experts"
+                        className="form-field create-assignment-choose-user-to-accomplish-picker-filter-experts"
+                        type="text"
+                        placeholder="Unesite ime ili prezime... "
+                      />
+                      <datalist id="create-assignment-choose-user-to-accomplish-picker-filter-experts">
+                        {list.map((item) => {
+                          return <option>{item}</option>
+                        })}
+                      </datalist>
+                    </div>
+                  </div>
                 ) : (
                   <>
                     <label
