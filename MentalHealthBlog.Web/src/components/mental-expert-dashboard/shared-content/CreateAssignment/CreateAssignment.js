@@ -1,19 +1,33 @@
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import Cookies from 'js-cookie'
+
 import { createAssignment } from '../../../../redux-toolkit/features/mentalExpertSlice'
 import { setContentValidationData } from '../../../../redux-toolkit/features/validationSlice'
 import {
   checkInputDataValidity,
   checkNewAssignmentValidity,
+  stringIsNullOrEmpty,
 } from '../../../../utils/helper-methods/methods'
 
 import CreateAssignmentCSS from './CreateAssignment.css'
-import { useEffect } from 'react'
 
 export const CreateAssignment = () => {
   let dispatch = useDispatch()
   let navigate = useNavigate()
+
+  let mentalHealthExpertIsChoosingUserCookie = Cookies.get(
+    'mentalHealthExpertIsChoosingUser',
+  )
+
+  console.log(mentalHealthExpertIsChoosingUserCookie)
+
+  let mentalHealthExpertIsChoosingUser = !stringIsNullOrEmpty(
+    mentalHealthExpertIsChoosingUserCookie,
+  )
+
   let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
   let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
 
@@ -45,14 +59,14 @@ export const CreateAssignment = () => {
       content,
       [],
       isTitle,
-      isContent
+      isContent,
     )
 
     dispatch(
       setContentValidationData({
         contentIsValid: isValid,
         contentValidationMessages: validationMessages,
-      })
+      }),
     )
 
     if (!contentValidationData?.contentIsValid) {
@@ -131,14 +145,14 @@ export const CreateAssignment = () => {
                       content,
                       [],
                       isTitle,
-                      isContent
+                      isContent,
                     )
 
                     dispatch(
                       setContentValidationData({
                         contentIsValid: isValid,
                         contentValidationMessages: validationMessages,
-                      })
+                      }),
                     )
                   }}
                 ></textarea>
@@ -153,22 +167,30 @@ export const CreateAssignment = () => {
                           - {message}
                         </p>
                       )
-                    }
+                    },
                   )}
                 </div>
               )}
 
               <div className="create-assignment-user-to-accomplish">
-                <label
-                  className="create-assignment-label"
-                  htmlFor="user-to-accomplish-task"
-                >
-                  Zadaću dodjeljujete:
-                </label>
-                <span className="required-field"> *</span>
-                <p className="create-assignment-user-to-accomplish-task">
-                  {dbUser?.username}
-                </p>
+                {mentalHealthExpertIsChoosingUser === true ? (
+                  <>
+                    <p>uh</p>
+                  </>
+                ) : (
+                  <>
+                    <label
+                      className="create-assignment-label"
+                      htmlFor="user-to-accomplish-task"
+                    >
+                      Zadaću dodjeljujete:
+                    </label>
+                    <span className="required-field"> *</span>
+                    <p className="create-assignment-user-to-accomplish-task">
+                      {dbUser?.username}
+                    </p>
+                  </>
+                )}
               </div>
             </div>
             <button

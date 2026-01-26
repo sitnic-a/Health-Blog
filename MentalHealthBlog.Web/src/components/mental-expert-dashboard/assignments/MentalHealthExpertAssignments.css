@@ -5,10 +5,19 @@
   background: #cce5f1;
 }
 
+.mental-health-experts-assignments-for-users-header {
+  display: flex;
+  align-items: center;
+}
+
 .mental-health-experts-assignments-for-users-header-title {
   font-family: 'SansDeva';
   /* font-size: 1rem; */
   /* border: 1px solid red; */
+}
+
+.mental-health-experts-assignments-for-users-header-give-assignment-main-container {
+  margin-left: 1rem;
 }
 
 .mental-health-experts-assignments-for-users-container {

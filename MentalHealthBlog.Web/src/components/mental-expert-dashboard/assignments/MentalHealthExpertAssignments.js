@@ -10,6 +10,8 @@ import {
 import { openAssignmentResponses } from '../../../redux-toolkit/features/modalSlice'
 
 import { Navbar } from '../../shared/Navbar/Navbar'
+import { AssignmentButton } from '../../shared/AssignmentButton/AssignmentButton'
+
 import { AssignmentResponses } from '../../AssignmentResponses/AssignmentResponses'
 import { RespondToAssignment } from '../../RespondToAssignment/RespondToAssignment'
 import { LiaReadme } from 'react-icons/lia'
@@ -46,8 +48,12 @@ export const MentalHealthExpertAssignments = () => {
       <RespondToAssignment />
       <div className="mental-health-experts-assignments-for-users-header">
         <h3 className="mental-health-experts-assignments-for-users-header-title">
-          Zadaci za korisnika user
+          Zadaci za korisnika
         </h3>
+
+        <div className="mental-health-experts-assignments-for-users-header-give-assignment-main-container">
+          <AssignmentButton />
+        </div>
       </div>
       <div className="mental-health-experts-assignments-for-users-container">
         <div className="mental-health-experts-assignments-users-main-container">
@@ -63,24 +69,24 @@ export const MentalHealthExpertAssignments = () => {
                   onClick={() => {
                     let mentalHealthExpertsAssignmentsUsersMainContainer =
                       document.querySelector(
-                        '.mental-health-experts-assignments-users-main-container'
+                        '.mental-health-experts-assignments-users-main-container',
                       )
                     let mentalHealthExpertsAssignmentsForUsersListOfAssignmentsMainContainer =
                       document.querySelector(
-                        '.mental-health-experts-assignments-for-users-list-of-assignements-main-container'
+                        '.mental-health-experts-assignments-for-users-list-of-assignements-main-container',
                       )
                     let mentalHealthExpertsAssignmentsForUsersContainer =
                       document.querySelector(
-                        '.mental-health-experts-assignments-for-users-container'
+                        '.mental-health-experts-assignments-for-users-container',
                       )
                     mentalHealthExpertsAssignmentsUsersMainContainer.classList.remove(
-                      'mental-health-experts-assignments-users-main-container-expanded'
+                      'mental-health-experts-assignments-users-main-container-expanded',
                     )
                     mentalHealthExpertsAssignmentsForUsersListOfAssignmentsMainContainer.classList.remove(
-                      'mental-health-experts-assignments-for-users-list-of-assignements-main-container-shrinked'
+                      'mental-health-experts-assignments-for-users-list-of-assignements-main-container-shrinked',
                     )
                     mentalHealthExpertsAssignmentsForUsersContainer.classList.remove(
-                      'mental-health-experts-assignments-for-users-container-expanded'
+                      'mental-health-experts-assignments-for-users-container-expanded',
                     )
 
                     let request = {
@@ -113,28 +119,28 @@ export const MentalHealthExpertAssignments = () => {
                   onClick={() => {
                     let mentalHealthExpertsAssignmentsForUsersContainer =
                       document.querySelector(
-                        '.mental-health-experts-assignments-for-users-container'
+                        '.mental-health-experts-assignments-for-users-container',
                       )
                     let mentalHealthExpertsAssignmentsForUsersListOfAssignmentsMainContainer =
                       document.querySelector(
-                        '.mental-health-experts-assignments-for-users-list-of-assignements-main-container'
+                        '.mental-health-experts-assignments-for-users-list-of-assignements-main-container',
                       )
 
                     let mentalHealthExpertsAssignmentsUsersMainContainer =
                       document.querySelector(
-                        '.mental-health-experts-assignments-users-main-container'
+                        '.mental-health-experts-assignments-users-main-container',
                       )
 
                     mentalHealthExpertsAssignmentsForUsersContainer.classList.add(
-                      'mental-health-experts-assignments-for-users-container-expanded'
+                      'mental-health-experts-assignments-for-users-container-expanded',
                     )
 
                     mentalHealthExpertsAssignmentsForUsersListOfAssignmentsMainContainer.classList.add(
-                      'mental-health-experts-assignments-for-users-list-of-assignements-main-container-shrinked'
+                      'mental-health-experts-assignments-for-users-list-of-assignements-main-container-shrinked',
                     )
 
                     mentalHealthExpertsAssignmentsUsersMainContainer.classList.add(
-                      'mental-health-experts-assignments-users-main-container-expanded'
+                      'mental-health-experts-assignments-users-main-container-expanded',
                     )
                   }}
                 />
@@ -148,7 +154,7 @@ export const MentalHealthExpertAssignments = () => {
                   ?.substr(0, 35)
                   ?.concat('...')
                 let writtenAt = moment(assignment?.writtenAt).format(
-                  'DD/MM/yyyy'
+                  'DD/MM/yyyy',
                 )
                 return (
                   <div
@@ -156,7 +162,7 @@ export const MentalHealthExpertAssignments = () => {
                     className="mental-health-experts-assignments-for-users-assignments-assignment-main-container"
                     onClick={() => {
                       dispatch(
-                        openAssignmentResponses(!isAssignmentResponsesOpen)
+                        openAssignmentResponses(!isAssignmentResponsesOpen),
                       )
                       dispatch(setChosenAssignment(assignment))
                     }}
