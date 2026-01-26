@@ -22,6 +22,13 @@ namespace MentalHealthBlog.API.Controllers
             _mentalExpertLoggerService = mentalExpertLoggerService;
         }
 
+        [HttpPost("regular-users-by-therapy-status")]
+        [Authorize(Roles = "Psychologist / Psychotherapist")]
+        public async Task<Response> GetRegularUsersByTherapyStatus(Models.ResourceRequest.TherapyRequestDto request)
+        {
+            return await _mentalExpertService.GetRegularUsersByTherapyStatus(request);
+        }
+
         [HttpPost("experts")]
         public async Task<Response> GetExperts([FromBody] SearchExpertDto? request = null)
         {

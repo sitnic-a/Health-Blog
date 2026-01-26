@@ -46,6 +46,54 @@ namespace MentalHealthBlog.API.Services
             _therapyRequestLoggerService = therapyRequestLoggerService;
         }
 
+        public async Task<Response> GetRegularUsersByTherapyStatus(Models.ResourceRequest.TherapyRequestDto request)
+        {
+            try
+            {
+                if (request == null || !request.NewRequestStatus.HasValue)
+                {
+                    _mentalExpertLoggerService.LogWarning($"REGULAR-USERS-BY-THERAPY-STATUS: {MentalExpertServiceLogTypes.INVALID_DATA.ToString()}");
+                    throw new ArgumentException("Bad request!");
+                }
+
+                var dbMentalHealthExpertsTherapyRequestsByRequestedStatus = await _context.TherapyRequests
+                    .Where(tr => tr.MentalHealthExpertId == request.MentalHealthExpertUserId &&
+                                 (int)tr.RequestStatus == request.NewRequestStatus.GetValueOrDefault())
+                    .ToListAsync();
+
+                var dbRegularUsers = new List<Models.ResourceResponse.RegularUserDto>();
+
+                foreach (var therapyRequest in dbMentalHealthExpertsTherapyRequestsByRequestedStatus)
+                {
+                    var dbRegularUser = await _context.RegularUsers
+                        .SingleOrDefaultAsync(ru => ru.UserId == therapyRequest.RegularUserId);
+                    var dbUser = await _context.Users.FindAsync(dbRegularUser.UserId);
+                    var regularUser = new Models.ResourceResponse.RegularUserDto(dbRegularUser.UserId, dbRegularUser.FirstName, dbRegularUser.LastName, dbRegularUser.Email, dbUser.Username);
+
+                    dbRegularUsers.Add(regularUser);
+                }
+
+                if (dbMentalHealthExpertsTherapyRequestsByRequestedStatus.Any() && !dbRegularUsers.Any())
+                {
+                    _mentalExpertLoggerService.LogWarning($"REGULAR-USERS-BY-THERAPY-STATUS: {MentalExpertServiceLogTypes.NOT_FOUND.ToString()}");
+                    throw new RecordNotFoundException("List is not filled properly!");
+                }
+
+                if (!dbMentalHealthExpertsTherapyRequestsByRequestedStatus.Any() && !dbRegularUsers.Any())
+                {
+                    _mentalExpertLoggerService.LogWarning($"REGULAR-USERS-BY-THERAPY-STATUS: {MentalExpertServiceLogTypes.EMPTY.ToString()}");
+                    return new Response(dbRegularUsers, StatusCodes.Status200OK, MentalExpertServiceLogTypes.EMPTY.ToString());
+                }
+
+                _mentalExpertLoggerService.LogInformation($"REGULAR-USERS-BY-THERAPY-STATUS: {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
+                return new Response(dbRegularUsers, StatusCodes.Status200OK, MentalExpertServiceLogTypes.SUCCESS.ToString());
+            }
+            catch (Exception e)
+            {
+                _mentalExpertLoggerService.LogError($"REGULAR-USERS-BY-THERAPY-STATUS: {e.Message}");
+                throw;
+            }
+        }
 
         public async Task<Response> GetMentalHealthExperts(SearchExpertDto? request)
         {
