@@ -61,7 +61,7 @@ export const MentalHealthExpertAssignments = () => {
             Korisnici sa zadacima
           </p>
           <div className="mental-health-experts-assignments-users-container">
-            {usersWithSetAssignments.map((user) => {
+            {usersWithSetAssignments?.map((user) => {
               return (
                 <div
                   className="mental-health-experts-assignments-users-user"

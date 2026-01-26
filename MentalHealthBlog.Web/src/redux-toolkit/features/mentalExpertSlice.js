@@ -4,6 +4,7 @@ import { toast } from 'react-toastify'
 
 let initialState = {
   dbMentalHealthExperts: [],
+  dbRegularUsersByTherapyStatus: [],
   suggestedMentalHealthExperts: [],
   usersThatSharedContent: [],
   usersWithSetAssignments: [],
@@ -13,6 +14,23 @@ let initialState = {
   isLoadingExperts: false,
   isLoading: false,
 }
+
+export const getRegularUsersByTherapyStatus = createAsyncThunk(
+  'regular-users-by-therapy-status',
+  async (objectWithData) => {
+    let url = `${application.application_url}/mentalExpert/regular-users-by-therapy-status`
+    let request = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(objectWithData?.requestObj),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
+      },
+    })
+    let response = await request.json()
+    return response
+  },
+)
 
 export const getMentalHealthExperts = createAsyncThunk(
   'experts',
@@ -34,7 +52,7 @@ export const getMentalHealthExperts = createAsyncThunk(
     })
     let response = await request.json()
     return response
-  }
+  },
 )
 
 export const getSharesPerUser = createAsyncThunk(
@@ -51,7 +69,7 @@ export const getSharesPerUser = createAsyncThunk(
     let response = await request.json()
 
     return response
-  }
+  },
 )
 
 export const createAssignment = createAsyncThunk(
@@ -68,7 +86,7 @@ export const createAssignment = createAsyncThunk(
     })
     let response = await request.json()
     return response
-  }
+  },
 )
 
 export const getUsersWithSetAssignments = createAsyncThunk(
@@ -84,7 +102,7 @@ export const getUsersWithSetAssignments = createAsyncThunk(
     })
     let response = await request.json()
     return response
-  }
+  },
 )
 
 export const sendInviteToRegularUser = createAsyncThunk(
@@ -101,7 +119,7 @@ export const sendInviteToRegularUser = createAsyncThunk(
     })
     let response = request.json()
     return response
-  }
+  },
 )
 
 export const mentalExpertSlice = createSlice({
@@ -128,7 +146,7 @@ export const mentalExpertSlice = createSlice({
       let userId = action?.payload?.userId
       let response = action?.payload?.usersThatSharedIncludingItsContent
       let pickedObj = response.find(
-        (u) => u?.userThatSharedContent?.id === userId
+        (u) => u?.userThatSharedContent?.id === userId,
       )
       state.sharedContent = [...pickedObj.sharedContent]
     },
@@ -146,6 +164,17 @@ export const mentalExpertSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+
+      //regular-users-by-therapy-status
+      .addCase(getRegularUsersByTherapyStatus.pending, (state, action) => {})
+      .addCase(getRegularUsersByTherapyStatus.fulfilled, (state, action) => {
+        let statusCode = action?.payload?.statusCode
+        let serviceResponseObject = action?.payload?.serviceResponseObject
+        if (statusCode === 200) {
+          state.dbRegularUsersByTherapyStatus = serviceResponseObject
+        }
+      })
+      .addCase(getRegularUsersByTherapyStatus.rejected, (state, action) => {})
 
       //experts
       .addCase(getMentalHealthExperts.pending, (state) => {

@@ -4,7 +4,10 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import Cookies from 'js-cookie'
 
-import { createAssignment } from '../../../../redux-toolkit/features/mentalExpertSlice'
+import {
+  createAssignment,
+  getRegularUsersByTherapyStatus,
+} from '../../../../redux-toolkit/features/mentalExpertSlice'
 import { setContentValidationData } from '../../../../redux-toolkit/features/validationSlice'
 import {
   checkInputDataValidity,
@@ -12,12 +15,16 @@ import {
   stringIsNullOrEmpty,
 } from '../../../../utils/helper-methods/methods'
 
+import { requestStatuses } from '../../../../enums/requestStatuses'
+
 import CreateAssignmentCSS from './CreateAssignment.css'
 
 export const CreateAssignment = () => {
-  let list = ['Admir Sitnić', 'Emir Idrizovic', 'Adrian Memaj', 'Amar Rogo']
   let dispatch = useDispatch()
   let navigate = useNavigate()
+  let { dbRegularUsersByTherapyStatus } = useSelector(
+    (store) => store.mentalExpert,
+  )
 
   let mentalHealthExpertIsChoosingUserCookie = Cookies.get(
     'mentalHealthExpertIsChoosingUser',
@@ -37,20 +44,66 @@ export const CreateAssignment = () => {
 
   useEffect(() => {
     dispatch(setContentValidationData({}))
+    if (mentalHealthExpertIsChoosingUser) {
+      let requestObj = {
+        mentalHealthExpertUserId: authenticatedUser?.id,
+        newRequestStatus: requestStatuses.APPROVED,
+      }
+      let objectWithData = {
+        authenticatedUser,
+        requestObj,
+      }
+      dispatch(getRegularUsersByTherapyStatus(objectWithData))
+    }
   }, [])
 
   let giveAssignment = (e) => {
     e.preventDefault()
+    let createAssignmentChooseUserToAccomplishPicker = document.querySelector(
+      '.create-assignment-choose-user-to-accomplish-picker',
+    )
+    let createAssignmentChooseUserToAccomplishPickerSelectedIndex =
+      createAssignmentChooseUserToAccomplishPicker?.selectedIndex
+
+    let chosenRegularUser =
+      createAssignmentChooseUserToAccomplishPicker?.options[
+        createAssignmentChooseUserToAccomplishPickerSelectedIndex
+      ]?.value
+
     let form = new FormData(e.target)
     let data = Object.fromEntries([...form.entries()])
-    let objectWithData = {
-      addAssignmentObj: {
-        assignmentGivenToId: dbUser?.id,
-        assignmentGivenById: authenticatedUser?.id,
-        content: data['create-assignment-content'],
-        createdAt: new Date(),
-      },
-      authenticatedUser,
+    let objectWithData
+    if (!stringIsNullOrEmpty(chosenRegularUser)) {
+      objectWithData = {
+        addAssignmentObj: {
+          assignmentGivenToId: parseInt(chosenRegularUser),
+          assignmentGivenById: authenticatedUser?.id,
+          content: data['create-assignment-content'],
+          createdAt: new Date(),
+        },
+        authenticatedUser,
+      }
+    } else {
+      objectWithData = {
+        addAssignmentObj: {
+          assignmentGivenToId: dbUser?.id,
+          assignmentGivenById: authenticatedUser?.id,
+          content: data['create-assignment-content'],
+          createdAt: new Date(),
+        },
+        authenticatedUser,
+      }
+    }
+
+    if (
+      objectWithData?.addAssignmentObj?.assignmentGivenToId <= 0 ||
+      stringIsNullOrEmpty(objectWithData?.addAssignmentObj?.assignmentGivenToId)
+    ) {
+      toast.error('Molimo slijedite upute prilikom popunjavanja polja!', {
+        autoClose: 3000,
+        position: 'bottom-right',
+      })
+      return
     }
 
     let content = objectWithData?.addAssignmentObj?.content
@@ -99,7 +152,7 @@ export const CreateAssignment = () => {
       }
 
       if (data?.payload?.statusCode === 201) {
-        toast.success(`Zadatak uspješno dodijeljen ${dbUser.username}`, {
+        toast.success(`Zadatak uspješno dodijeljen`, {
           autoClose: 1500,
           position: 'bottom-right',
         })
@@ -186,16 +239,27 @@ export const CreateAssignment = () => {
                     </label>
                     <div className="create-assignment-choose-user-to-accomplish-picker-container">
                       <input
-                        list="create-assignment-choose-user-to-accomplish-picker-filter-experts"
-                        className="form-field create-assignment-choose-user-to-accomplish-picker-filter-experts"
+                        className="form-field create-assignment-choose-user-to-accomplish-picker-filter"
                         type="text"
                         placeholder="Unesite ime ili prezime... "
                       />
-                      <datalist id="create-assignment-choose-user-to-accomplish-picker-filter-experts">
-                        {list.map((item) => {
-                          return <option>{item}</option>
+                      <select className="create-assignment-choose-user-to-accomplish-picker">
+                        {dbRegularUsersByTherapyStatus?.map((regularUser) => {
+                          let fullName = String.prototype.concat(
+                            regularUser?.firstName,
+                            ' ',
+                            regularUser?.lastName,
+                          )
+                          return (
+                            <option
+                              value={regularUser?.regularUserId}
+                              className="create-assignment-choose-user-to-accomplish-picker-filter-experts-option"
+                            >
+                              {fullName}
+                            </option>
+                          )
                         })}
-                      </datalist>
+                      </select>
                     </div>
                   </div>
                 ) : (
