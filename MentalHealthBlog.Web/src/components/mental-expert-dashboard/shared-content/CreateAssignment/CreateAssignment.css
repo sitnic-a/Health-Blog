@@ -71,6 +71,11 @@
   background: #faffff;
 }
 
+.create-assignment-user-to-accomplish-info-message {
+  font-family: 'SansDeva';
+  color: #f00;
+}
+
 .create-assignment-choose-user-to-accomplish-picker-filter-label {
   margin-top: -1rem;
   font-family: 'SansDeva';

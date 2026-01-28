@@ -1,15 +1,18 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { application } from '../../application'
 import { toast } from 'react-toastify'
+import { requestStatuses } from '../../enums/requestStatuses'
 
 let initialState = {
   dbMentalHealthExperts: [],
   dbRegularUsersByTherapyStatus: [],
+  dbApprovedRegularUsers: [],
   suggestedMentalHealthExperts: [],
   usersThatSharedContent: [],
   usersWithSetAssignments: [],
   sharedContent: [],
   usersThatSharedIncludingItsContent: {},
+  queryRequestStatus: null,
   overlayPost: null,
   isLoadingExperts: false,
   isLoading: false,
@@ -166,12 +169,22 @@ export const mentalExpertSlice = createSlice({
     builder
 
       //regular-users-by-therapy-status
-      .addCase(getRegularUsersByTherapyStatus.pending, (state, action) => {})
+      .addCase(getRegularUsersByTherapyStatus.pending, (state, action) => {
+        let argQuery = action?.meta?.arg?.requestObj
+        if (argQuery?.newRequestStatus === requestStatuses.APPROVED) {
+          state.queryRequestStatus = requestStatuses.APPROVED
+          return
+        }
+      })
       .addCase(getRegularUsersByTherapyStatus.fulfilled, (state, action) => {
         let statusCode = action?.payload?.statusCode
         let serviceResponseObject = action?.payload?.serviceResponseObject
         if (statusCode === 200) {
           state.dbRegularUsersByTherapyStatus = serviceResponseObject
+          if (state.queryRequestStatus === requestStatuses.APPROVED) {
+            state.dbApprovedRegularUsers = serviceResponseObject
+            return
+          }
         }
       })
       .addCase(getRegularUsersByTherapyStatus.rejected, (state, action) => {})

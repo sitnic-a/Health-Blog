@@ -14,7 +14,6 @@ import {
   checkNewAssignmentValidity,
   stringIsNullOrEmpty,
 } from '../../../../utils/helper-methods/methods'
-
 import { requestStatuses } from '../../../../enums/requestStatuses'
 
 import CreateAssignmentCSS from './CreateAssignment.css'
@@ -22,15 +21,13 @@ import CreateAssignmentCSS from './CreateAssignment.css'
 export const CreateAssignment = () => {
   let dispatch = useDispatch()
   let navigate = useNavigate()
-  let { dbRegularUsersByTherapyStatus } = useSelector(
+  let { dbRegularUsersByTherapyStatus, dbApprovedRegularUsers } = useSelector(
     (store) => store.mentalExpert,
   )
 
   let mentalHealthExpertIsChoosingUserCookie = Cookies.get(
     'mentalHealthExpertIsChoosingUser',
   )
-
-  console.log(mentalHealthExpertIsChoosingUserCookie)
 
   let mentalHealthExpertIsChoosingUser = !stringIsNullOrEmpty(
     mentalHealthExpertIsChoosingUserCookie,
@@ -228,40 +225,48 @@ export const CreateAssignment = () => {
 
               <div className="create-assignment-user-to-accomplish">
                 {mentalHealthExpertIsChoosingUser === true ? (
-                  <div className="create-assignment-choose-user-to-accomplish-main-container">
-                    <label className="create-assignment-label">
-                      Odaberite kome želite dati zadaću:{' '}
-                      <span className="required-field">*</span>
-                    </label>
-                    <br />
-                    <label className="create-assignment-choose-user-to-accomplish-picker-filter-label">
-                      Filterirajte putem imena ili prezimena
-                    </label>
-                    <div className="create-assignment-choose-user-to-accomplish-picker-container">
-                      <input
-                        className="form-field create-assignment-choose-user-to-accomplish-picker-filter"
-                        type="text"
-                        placeholder="Unesite ime ili prezime... "
-                      />
-                      <select className="create-assignment-choose-user-to-accomplish-picker">
-                        {dbRegularUsersByTherapyStatus?.map((regularUser) => {
-                          let fullName = String.prototype.concat(
-                            regularUser?.firstName,
-                            ' ',
-                            regularUser?.lastName,
-                          )
-                          return (
-                            <option
-                              value={regularUser?.regularUserId}
-                              className="create-assignment-choose-user-to-accomplish-picker-filter-experts-option"
-                            >
-                              {fullName}
-                            </option>
-                          )
-                        })}
-                      </select>
+                  dbApprovedRegularUsers?.length <= 0 ? (
+                    <div className="create-assignment-user-to-accomplish-info-container">
+                      <p className="create-assignment-user-to-accomplish-info-message">
+                        Trenutno nema korisnika kojima možete dati zadaću!
+                      </p>
                     </div>
-                  </div>
+                  ) : (
+                    <div className="create-assignment-choose-user-to-accomplish-main-container">
+                      <label className="create-assignment-label">
+                        Odaberite kome želite dati zadaću:{' '}
+                        <span className="required-field">*</span>
+                      </label>
+                      <br />
+                      <label className="create-assignment-choose-user-to-accomplish-picker-filter-label">
+                        Filterirajte putem imena ili prezimena
+                      </label>
+                      <div className="create-assignment-choose-user-to-accomplish-picker-container">
+                        <input
+                          className="form-field create-assignment-choose-user-to-accomplish-picker-filter"
+                          type="text"
+                          placeholder="Unesite ime ili prezime... "
+                        />
+                        <select className="create-assignment-choose-user-to-accomplish-picker">
+                          {dbRegularUsersByTherapyStatus?.map((regularUser) => {
+                            let fullName = String.prototype.concat(
+                              regularUser?.firstName,
+                              ' ',
+                              regularUser?.lastName,
+                            )
+                            return (
+                              <option
+                                value={regularUser?.regularUserId}
+                                className="create-assignment-choose-user-to-accomplish-picker-filter-experts-option"
+                              >
+                                {fullName}
+                              </option>
+                            )
+                          })}
+                        </select>
+                      </div>
+                    </div>
+                  )
                 ) : (
                   <>
                     <label
@@ -278,12 +283,26 @@ export const CreateAssignment = () => {
                 )}
               </div>
             </div>
-            <button
-              className="create-assignment-give-assignment-button"
-              type="submit"
-            >
-              Dodijeli zadatak
-            </button>
+
+            {mentalHealthExpertIsChoosingUser === true &&
+              dbApprovedRegularUsers?.length > 0 && (
+                <button
+                  className="create-assignment-give-assignment-button"
+                  type="submit"
+                >
+                  Dodijeli zadatak
+                </button>
+              )}
+
+            {mentalHealthExpertIsChoosingUser !== true &&
+              dbApprovedRegularUsers?.length > 0 && (
+                <button
+                  className="create-assignment-give-assignment-button"
+                  type="submit"
+                >
+                  Dodijeli zadatak
+                </button>
+              )}
           </form>
         </div>
       </div>
