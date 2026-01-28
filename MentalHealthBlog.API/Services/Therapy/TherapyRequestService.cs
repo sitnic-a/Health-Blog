@@ -157,7 +157,9 @@ namespace MentalHealthBlog.API.Services.Therapy
                     else
                     {
                         dbMentalHealthExperts = await _context.TherapyRequests
-                            .Where(u => u.RegularUserId == query.LoggedUserId)
+                            .Where(u => u.RegularUserId == query.LoggedUserId &&
+                                        (u.RequestStatus == RequestStatusEnum.Pending ||
+                                        u.RequestStatus == RequestStatusEnum.Approved))
                             .Join(_context.MentalHealthExperts,
 
                                   (tr) => tr.MentalHealthExpertId,
@@ -179,7 +181,7 @@ namespace MentalHealthBlog.API.Services.Therapy
                                       RequestStatus = tr.RequestStatus,
                                       MentalHealthExpertInviting = tr.IsMentalHealthExpertInviting.GetValueOrDefault(),
                                   })
-                            .OrderBy(mhe => mhe.RequestStatus)
+                            .OrderByDescending(mhe => mhe.RequestStatus)
                             .ToListAsync();
                     }
 
