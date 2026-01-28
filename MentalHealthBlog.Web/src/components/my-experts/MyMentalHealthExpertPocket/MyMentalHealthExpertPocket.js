@@ -1,7 +1,14 @@
 import { useDispatch } from 'react-redux'
+import { toast } from 'react-toastify'
+import {
+  changeRequestStatus,
+  getMyExperts,
+} from '../../../redux-toolkit/features/therapySlice'
+import { getMentalHealthExperts } from '../../../redux-toolkit/features/mentalExpertSlice'
 import { requestStatuses } from '../../../enums/requestStatuses'
+
 import MyMentalHealthExpertPocketCSS from './MyMentalHealthExpertPocket.css'
-import { changeRequestStatus } from '../../../redux-toolkit/features/therapySlice'
+import { stringIsNullOrEmpty } from '../../../utils/helper-methods/methods'
 
 export const MyMentalHealthExpertPocket = ({ request }) => {
   let dispatch = useDispatch()
@@ -9,9 +16,11 @@ export const MyMentalHealthExpertPocket = ({ request }) => {
   let mentalHealthExpertFullName = String.prototype.concat(
     request?.mentalHealthExpertFirstName,
     ' ',
-    request.mentalHealthExpertLastName,
+    request?.mentalHealthExpertLastName,
   )
-  return (
+  return stringIsNullOrEmpty(request) ? (
+    <div className="my-mental-health-expert-pocket-main-container"></div>
+  ) : (
     <>
       {request?.requestStatus !== requestStatuses.PENDING && (
         <div className="my-mental-health-expert-pocket-main-container"></div>
@@ -54,7 +63,22 @@ export const MyMentalHealthExpertPocket = ({ request }) => {
                     requestObj,
                   }
 
-                  dispatch(changeRequestStatus(objectWithData))
+                  dispatch(changeRequestStatus(objectWithData)).then((data) => {
+                    let statusCode = data?.payload?.statusCode
+                    if (statusCode === 200) {
+                      toast.success('Zahtjev uspješno otkazan!', {
+                        autoClose: 4000,
+                        position: 'bottom-right',
+                      })
+
+                      objectWithData = {
+                        authenticatedUser,
+                        loggedUserId: authenticatedUser?.id,
+                      }
+                      dispatch(getMentalHealthExperts(objectWithData))
+                      dispatch(getMyExperts(objectWithData))
+                    }
+                  })
                 }}
               >
                 Otkaži zahtjev

@@ -103,10 +103,6 @@ export const MentalHealthExpertsDropdown = () => {
                                 }
 
                                 dispatch(getMentalHealthExperts(objectWithData))
-
-                                objectWithData = {
-                                  loggedUserId: authenticatedUser?.id,
-                                }
                                 dispatch(getMyExperts(objectWithData))
 
                                 toast.success('Uspješno ste poslali zahtjev!', {
