@@ -115,8 +115,21 @@ namespace MentalHealthBlog.API.Services.Therapy
                     // za trenutno aktivne experte
                     // za experte koji su nekada imali pristup sadrzaju
 
-                    var dbMentalHealthExperts = await _context.TherapyRequests
-                        .Where(u => u.RegularUserId == query.LoggedUserId)
+                    var dbTherapyRequests = await _context.TherapyRequests
+                        .Where(tr => tr.RegularUserId == query.LoggedUserId)
+                        .ToListAsync();
+                    var dbTherapyRequestsApprovedCount = dbTherapyRequests
+                        .Where(tr => tr.RegularUserId == query.LoggedUserId &&
+                                     tr.RequestStatus == RequestStatusEnum.Approved)
+                        .Count();
+
+                    var dbMentalHealthExperts = new List<MyExpertDto>();
+
+                    if (dbTherapyRequestsApprovedCount >= 2)
+                    {
+                        dbMentalHealthExperts = await _context.TherapyRequests
+                        .Where(u => u.RegularUserId == query.LoggedUserId && 
+                                    u.RequestStatus == RequestStatusEnum.Approved)
                         .Join(_context.MentalHealthExperts,
 
                               (tr) => tr.MentalHealthExpertId,
@@ -138,8 +151,37 @@ namespace MentalHealthBlog.API.Services.Therapy
                                   RequestStatus = tr.RequestStatus,
                                   MentalHealthExpertInviting = tr.IsMentalHealthExpertInviting.GetValueOrDefault(),
                               })
-                        .OrderBy(mhe => mhe.RequestStatus)
+                        .Take(2)
                         .ToListAsync();
+                    }
+                    else
+                    {
+                        dbMentalHealthExperts = await _context.TherapyRequests
+                            .Where(u => u.RegularUserId == query.LoggedUserId)
+                            .Join(_context.MentalHealthExperts,
+
+                                  (tr) => tr.MentalHealthExpertId,
+                                  (mhe) => mhe.UserId,
+                                  (tr, mhe) => new MyExpertDto
+                                  {
+                                      MentalHealthExpertId = mhe.Id,
+                                      MentalHealthExpertUserId = tr.MentalHealthExpertId,
+                                      MentalHealthExpert = mhe,
+                                      RegularUserId = tr.RegularUserId,
+                                      MentalHealthExpertUsername = _context.Users.SingleOrDefault(u => u.Id == mhe.UserId).Username,
+                                      MentalHealthExpertFirstName = mhe.FirstName,
+                                      MentalHealthExpertLastName = mhe.LastName,
+                                      MentalHealthExpertOrganization = mhe.Organization,
+                                      MentalHealthExpertEmail = mhe.Email,
+                                      MentalHealthExpertPhoneNumber = mhe.PhoneNumber,
+                                      MentalHealthExpertPhotoAsPath = mhe.PhotoAsPath,
+                                      MentalHealthExpertPhotoAsFile = mhe.PhotoAsFile,
+                                      RequestStatus = tr.RequestStatus,
+                                      MentalHealthExpertInviting = tr.IsMentalHealthExpertInviting.GetValueOrDefault(),
+                                  })
+                            .OrderBy(mhe => mhe.RequestStatus)
+                            .ToListAsync();
+                    }
 
                     if (dbMentalHealthExperts is not null)
                     {
@@ -190,7 +232,7 @@ namespace MentalHealthBlog.API.Services.Therapy
                     .SingleOrDefaultAsync(tr => tr.MentalHealthExpertId == request.MentalHealthExpertUserId &&
                                          tr.RegularUserId == request.RegularUserId);
                 var userHelper = new UserHelper(_context);
-                var therapyRequestHelper = new TherapyRequestHelper(_context,_configuration, _therapyRequestLoggerService);
+                var therapyRequestHelper = new TherapyRequestHelper(_context, _configuration, _therapyRequestLoggerService);
                 var dbMentalHealthExpert = new MentalHealthExpert();
                 var dbRegularUser = new RegularUser();
                 var dbMentalHealthExpertsInfoTuple = await userHelper.ReturnUserAndInfoIsItMentalHealthExpert(request.MentalHealthExpertUserId);
@@ -232,7 +274,7 @@ namespace MentalHealthBlog.API.Services.Therapy
 
                 if (request.IsMentalHealthExpertInvitingRegularUser == true)
                 {
-                    if (request.NewRequestStatus == (int) RequestStatusEnum.Undefined)
+                    if (request.NewRequestStatus == (int)RequestStatusEnum.Undefined)
                     {
                         _context.TherapyRequests.Remove(requestToModify);
                         await _context.SaveChangesAsync();
