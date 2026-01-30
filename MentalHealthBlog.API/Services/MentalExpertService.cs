@@ -484,8 +484,8 @@ namespace MentalHealthBlog.API.Services
                     throw new RecordNotFoundException("Mental health expert is not found!");
                 }
 
-                var invitationUrl = $"https://localhost:7029/invite/{invite.Id}";
-                //var invitationUrl = $"https://mapp-terapija/invite/{invite.Id}";
+                //var invitationUrl = $"https://localhost:7029/invite/{invite.Id}";
+                var invitationUrl = $"https://mapp-terapija.com/invite/{invite.Id}";
 
                 var MentalHealthExpertFullName = string.Concat(dbMentalHealthExpert.FirstName, " ", dbMentalHealthExpert.LastName);
 

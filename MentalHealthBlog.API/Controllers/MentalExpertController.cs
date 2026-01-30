@@ -90,7 +90,8 @@ namespace MentalHealthBlog.API.Controllers
                     });
 
                     _mentalExpertLoggerService.LogInformation($"INVITE/[id]: {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
-                    HttpContext.Response.Redirect("http://localhost:3000/register");
+                    //HttpContext.Response.Redirect("http://localhost:3000/register");
+                    HttpContext.Response.Redirect("https://mapp-terapija.com/register");
                     return new Response(invitation, StatusCodes.Status200OK, MentalExpertServiceLogTypes.SUCCESS.ToString());
                 }
 
