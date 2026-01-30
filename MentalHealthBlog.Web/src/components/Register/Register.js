@@ -45,7 +45,7 @@ export const Register = () => {
   let { dbRoles, isLoading } = useSelector((store) => store.user)
   let [photoFile, setPhotoFile] = useState({})
   let { suggestedMentalHealthExperts, isLoadingExperts } = useSelector(
-    (store) => store.mentalExpert
+    (store) => store.mentalExpert,
   )
   let { selectedMentalHealthExpertIds } = useSelector((store) => store.therapy)
 
@@ -56,7 +56,6 @@ export const Register = () => {
   isMentalHealthExpert = isMentalHealthExpert === 'true'
   let isRegularUser = Cookies.get('isRegularUser')
   isRegularUser = isRegularUser === 'true'
-  console.log('MHE ', isMentalHealthExpert)
 
   let [isInTherapy, setIsInTherapy] = useState(false)
   let {
@@ -94,7 +93,7 @@ export const Register = () => {
 
     let roles = []
     let selectedRoles = document.querySelectorAll(
-      'input[type="checkbox"]:checked'
+      'input[type="checkbox"]:checked',
     )
 
     let sendData
@@ -104,46 +103,46 @@ export const Register = () => {
 
     if (isMentalHealthExpert === true) {
       let mentalHealthExpertFirstName = document.getElementById(
-        'register-mental-health-expert-first-name'
+        'register-mental-health-expert-first-name',
       ).value
       let mentalHealthExpertLastName = document.getElementById(
-        'register-mental-health-expert-last-name'
+        'register-mental-health-expert-last-name',
       ).value
       let mentalHealthExpertOrganization = document.getElementById(
-        'register-mental-health-expert-organization'
+        'register-mental-health-expert-organization',
       ).value
       let mentalHealthExpertPhoneNumber = document.getElementById(
-        'register-mental-health-expert-phone-number'
+        'register-mental-health-expert-phone-number',
       ).value
       let mentalHealthExpertEmail = document.getElementById(
-        'register-mental-health-expert-email'
+        'register-mental-health-expert-email',
       ).value
       let mentalHealthExpertPhoto = document.getElementById(
-        'register-mental-health-expert-photo'
+        'register-mental-health-expert-photo',
       ).files[0]
 
       roles.push(db_roles.PSYCHOLOGIST)
 
       let [usernameIsValid, usernameValidationMessages] = checkUsernameValidity(
         username,
-        []
+        [],
       )
       dispatch(
         setUsernameValidationData({
           usernameIsValid,
           usernameValidationMessages,
-        })
+        }),
       )
 
       let [passwordIsValid, passwordValidationMessages] = checkPasswordValidity(
         password,
-        []
+        [],
       )
       dispatch(
         setPasswordValidationData({
           passwordIsValid,
           passwordValidationMessages,
-        })
+        }),
       )
 
       let isOrganization = false
@@ -151,27 +150,27 @@ export const Register = () => {
         checkPersonalInformationValidity(
           mentalHealthExpertFirstName,
           [],
-          isOrganization
+          isOrganization,
         )
 
       dispatch(
         setFirstNameValidationData({
           firstNameIsValid,
           firstNameValidationMessages,
-        })
+        }),
       )
 
       let [lastNameIsValid, lastNameValidationMessages] =
         checkPersonalInformationValidity(
           mentalHealthExpertLastName,
           [],
-          isOrganization
+          isOrganization,
         )
       dispatch(
         setLastNameValidationData({
           lastNameIsValid,
           lastNameValidationMessages,
-        })
+        }),
       )
 
       isOrganization = true
@@ -179,13 +178,13 @@ export const Register = () => {
         checkPersonalInformationValidity(
           mentalHealthExpertOrganization,
           [],
-          isOrganization
+          isOrganization,
         )
       dispatch(
         setOrganizationValidationData({
           organizationIsValid,
           organizationValidationMessages,
-        })
+        }),
       )
 
       let [phoneNumberIsValid, phoneNumberValidationMessages] =
@@ -194,27 +193,27 @@ export const Register = () => {
         setPhoneNumberValidationData({
           phoneNumberIsValid,
           phoneNumberValidationMessages,
-        })
+        }),
       )
 
       let [emailIsValid, emailValidationMessages] = checkEmailValidity(
         mentalHealthExpertEmail,
         [],
-        isMentalHealthExpert
+        isMentalHealthExpert,
       )
       dispatch(
-        setEmailValidationData({ emailIsValid, emailValidationMessages })
+        setEmailValidationData({ emailIsValid, emailValidationMessages }),
       )
 
       let [photoIsValid, photoValidationMessages] = checkPhotoValidity(
         photoFile,
-        []
+        [],
       )
       dispatch(
         setPhotoValidationData({
           photoIsValid,
           photoValidationMessages,
-        })
+        }),
       )
 
       if (
@@ -264,24 +263,24 @@ export const Register = () => {
 
       let [usernameIsValid, usernameValidationMessages] = checkUsernameValidity(
         username,
-        []
+        [],
       )
       dispatch(
         setUsernameValidationData({
           usernameIsValid,
           usernameValidationMessages,
-        })
+        }),
       )
 
       let [passwordIsValid, passwordValidationMessages] = checkPasswordValidity(
         password,
-        []
+        [],
       )
       dispatch(
         setPasswordValidationData({
           passwordIsValid,
           passwordValidationMessages,
-        })
+        }),
       )
 
       let isOrganization = false
@@ -292,7 +291,7 @@ export const Register = () => {
         setFirstNameValidationData({
           firstNameIsValid,
           firstNameValidationMessages,
-        })
+        }),
       )
 
       let [lastNameIsValid, lastNameValidationMessages] =
@@ -301,16 +300,16 @@ export const Register = () => {
         setLastNameValidationData({
           lastNameIsValid,
           lastNameValidationMessages,
-        })
+        }),
       )
 
       let [emailIsValid, emailValidationMessages] = checkEmailValidity(
         email,
         [],
-        isMentalHealthExpert
+        isMentalHealthExpert,
       )
       dispatch(
-        setEmailValidationData({ emailIsValid, emailValidationMessages })
+        setEmailValidationData({ emailIsValid, emailValidationMessages }),
       )
 
       if (
@@ -396,7 +395,7 @@ export const Register = () => {
         for (let previewKey in sendData[dataKey]) {
           form.append(
             `mentalHealthExpert[${previewKey}]`,
-            sendData[dataKey][previewKey]
+            sendData[dataKey][previewKey],
           )
         }
       } else {
@@ -405,7 +404,7 @@ export const Register = () => {
           for (let previewKey in sendData[dataKey]) {
             form.append(
               `regularUser[${previewKey}]`,
-              sendData[dataKey][previewKey]
+              sendData[dataKey][previewKey],
             )
           }
         }
@@ -420,7 +419,7 @@ export const Register = () => {
         removeCookies()
         localStorage.setItem(
           'justRegisteredUser',
-          JSON.stringify(serviceResponseObject)
+          JSON.stringify(serviceResponseObject),
         )
         navigate('/subscription-plans')
       } else {
@@ -466,7 +465,7 @@ export const Register = () => {
                   setUsernameValidationData({
                     usernameIsValid,
                     usernameValidationMessages,
-                  })
+                  }),
                 )
               }}
             />
@@ -480,7 +479,7 @@ export const Register = () => {
                         - {message}
                       </p>
                     )
-                  }
+                  },
                 )}
               </div>
             )}
@@ -512,14 +511,14 @@ export const Register = () => {
                       checkPersonalInformationValidity(
                         firstName,
                         [],
-                        isOrganization
+                        isOrganization,
                       )
 
                     dispatch(
                       setFirstNameValidationData({
                         firstNameIsValid: isValid,
                         firstNameValidationMessages: validationMessages,
-                      })
+                      }),
                     )
                   }}
                 />
@@ -533,7 +532,7 @@ export const Register = () => {
                             - {message}
                           </p>
                         )
-                      }
+                      },
                     )}
                   </div>
                 )}
@@ -560,13 +559,13 @@ export const Register = () => {
                       checkPersonalInformationValidity(
                         lastName,
                         [],
-                        isOrganization
+                        isOrganization,
                       )
                     dispatch(
                       setLastNameValidationData({
                         lastNameIsValid: isValid,
                         lastNameValidationMessages: validationMessages,
-                      })
+                      }),
                     )
                   }}
                 />
@@ -580,7 +579,7 @@ export const Register = () => {
                             - {message}
                           </p>
                         )
-                      }
+                      },
                     )}
                   </div>
                 )}
@@ -603,13 +602,13 @@ export const Register = () => {
                     let [isValid, validationMessages] = checkEmailValidity(
                       email,
                       [],
-                      isMentalHealthExpert
+                      isMentalHealthExpert,
                     )
                     dispatch(
                       setEmailValidationData({
                         emailIsValid: isValid,
                         emailValidationMessages: validationMessages,
-                      })
+                      }),
                     )
                   }}
                 />
@@ -623,7 +622,7 @@ export const Register = () => {
                             - {message}
                           </p>
                         )
-                      }
+                      },
                     )}
                   </div>
                 )}
@@ -673,48 +672,48 @@ export const Register = () => {
                     onClick={() => {
                       let mainMentalHealthExpertPicker =
                         document.getElementById(
-                          'main-mental-health-expert-picker'
+                          'main-mental-health-expert-picker',
                         )
                       let mainMentalHealthExpertExpandIcon =
                         document.getElementById(
-                          'main-mental-health-expert-expand-icon'
+                          'main-mental-health-expert-expand-icon',
                         )
 
                       if (
                         mainMentalHealthExpertPicker.classList.contains(
-                          'main-mental-health-expert-picker-shrinked'
+                          'main-mental-health-expert-picker-shrinked',
                         )
                       ) {
                         mainMentalHealthExpertPicker.classList.remove(
-                          'main-mental-health-expert-picker-shrinked'
+                          'main-mental-health-expert-picker-shrinked',
                         )
                         mainMentalHealthExpertExpandIcon.classList.remove(
-                          'main-mental-health-expert-expand-icon'
+                          'main-mental-health-expert-expand-icon',
                         )
 
                         mainMentalHealthExpertPicker.classList.add(
-                          'main-mental-health-expert-picker-expanded'
+                          'main-mental-health-expert-picker-expanded',
                         )
                         mainMentalHealthExpertExpandIcon.classList.add(
-                          'main-mental-health-expert-expand-icon-clicked'
+                          'main-mental-health-expert-expand-icon-clicked',
                         )
                       } else if (
                         mainMentalHealthExpertPicker.classList.contains(
-                          'main-mental-health-expert-picker-expanded'
+                          'main-mental-health-expert-picker-expanded',
                         )
                       ) {
                         mainMentalHealthExpertPicker.classList.remove(
-                          'main-mental-health-expert-picker-expanded'
+                          'main-mental-health-expert-picker-expanded',
                         )
                         mainMentalHealthExpertExpandIcon.classList.remove(
-                          'main-mental-health-expert-expand-icon-clicked'
+                          'main-mental-health-expert-expand-icon-clicked',
                         )
 
                         mainMentalHealthExpertPicker.classList.add(
-                          'main-mental-health-expert-picker-shrinked'
+                          'main-mental-health-expert-picker-shrinked',
                         )
                         mainMentalHealthExpertExpandIcon.classList.add(
-                          'main-mental-health-expert-expand-icon'
+                          'main-mental-health-expert-expand-icon',
                         )
                       }
                     }}
@@ -792,14 +791,14 @@ export const Register = () => {
                       checkPersonalInformationValidity(
                         firstName,
                         [],
-                        isOrganization
+                        isOrganization,
                       )
 
                     dispatch(
                       setFirstNameValidationData({
                         firstNameIsValid: isValid,
                         firstNameValidationMessages: validationMessages,
-                      })
+                      }),
                     )
                   }}
                 />
@@ -813,7 +812,7 @@ export const Register = () => {
                             - {message}
                           </p>
                         )
-                      }
+                      },
                     )}
                   </div>
                 )}
@@ -841,14 +840,14 @@ export const Register = () => {
                       checkPersonalInformationValidity(
                         lastName,
                         [],
-                        isOrganization
+                        isOrganization,
                       )
 
                     dispatch(
                       setLastNameValidationData({
                         lastNameIsValid: isValid,
                         lastNameValidationMessages: validationMessages,
-                      })
+                      }),
                     )
                   }}
                 />
@@ -862,7 +861,7 @@ export const Register = () => {
                             - {message}
                           </p>
                         )
-                      }
+                      },
                     )}
                   </div>
                 )}
@@ -890,13 +889,13 @@ export const Register = () => {
                       checkPersonalInformationValidity(
                         organization,
                         [],
-                        isOrganization
+                        isOrganization,
                       )
                     dispatch(
                       setOrganizationValidationData({
                         organizationIsValid: isValid,
                         organizationValidationMessages: validationMessages,
-                      })
+                      }),
                     )
                   }}
                 />
@@ -910,7 +909,7 @@ export const Register = () => {
                             - {message}
                           </p>
                         )
-                      }
+                      },
                     )}
                   </div>
                 )}
@@ -939,7 +938,7 @@ export const Register = () => {
                       setPhoneNumberValidationData({
                         phoneNumberIsValid: isValid,
                         phoneNumberValidationMessages: validationMessages,
-                      })
+                      }),
                     )
                   }}
                 />
@@ -953,7 +952,7 @@ export const Register = () => {
                             - {message}
                           </p>
                         )
-                      }
+                      },
                     )}
                   </div>
                 )}
@@ -979,13 +978,13 @@ export const Register = () => {
                     let [isValid, validationMessages] = checkEmailValidity(
                       email,
                       [],
-                      isMentalHealthExpert
+                      isMentalHealthExpert,
                     )
                     dispatch(
                       setEmailValidationData({
                         emailIsValid: isValid,
                         emailValidationMessages: validationMessages,
-                      })
+                      }),
                     )
                   }}
                 />
@@ -999,7 +998,7 @@ export const Register = () => {
                             - {message}
                           </p>
                         )
-                      }
+                      },
                     )}
                   </div>
                 )}
@@ -1020,18 +1019,18 @@ export const Register = () => {
                     setPhotoFile(photo)
                     let [isValid, validationMessages] = checkPhotoValidity(
                       photo,
-                      []
+                      [],
                     )
                     dispatch(
                       setPhotoValidationData({
                         photoIsValid: isValid,
                         photoValidationMessages: validationMessages,
-                      })
+                      }),
                     )
 
                     if (!isValid) {
                       let displayPhotoContainer = document.getElementById(
-                        'mental-health-expert-register-photo-main-container'
+                        'mental-health-expert-register-photo-main-container',
                       )
                       displayPhotoContainer.innerHTML = ''
                       return
@@ -1059,7 +1058,7 @@ export const Register = () => {
                           - {message}
                         </p>
                       )
-                    }
+                    },
                   )}
                 </div>
               )}

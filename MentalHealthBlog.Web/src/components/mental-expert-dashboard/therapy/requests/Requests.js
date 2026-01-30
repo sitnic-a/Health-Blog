@@ -38,8 +38,6 @@ export const Requests = () => {
           <div className="therapy-requests-requests-container">
             <div className="therapy-requests-requests-content">
               {requestsForMentalHealthExpert?.map((request, index) => {
-                console.log('Request ', request)
-
                 let fullName = `${request?.regularUserFirstName} ${request?.regularUserLastName}`
                 let sentAt = moment(request?.sentAt).fromNow()
                 return (

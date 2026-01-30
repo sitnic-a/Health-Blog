@@ -15,11 +15,6 @@ export const MyExpertsPendingTherapyRequestsInvitations = () => {
     myApprovedOrPendingMentalHealthExperts,
   } = useSelector((store) => store.therapy)
 
-  //ova mi varijabla ispod treba kada budem trebao sklanjati pozivnice, a to je ukoliko user vec ima na cekanju nekoga
-  // ili vec potvrdene eksperte
-
-  //   console.log('My current ', myApprovedOrPendingMentalHealthExperts)
-
   useEffect(() => {
     authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
     authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
@@ -33,7 +28,7 @@ export const MyExpertsPendingTherapyRequestsInvitations = () => {
       query,
     }
     dispatch(
-      getMentalHealthExpertsWhoSentUserAnInvitationForTherapy(objectWithData)
+      getMentalHealthExpertsWhoSentUserAnInvitationForTherapy(objectWithData),
     )
   }, [])
 
@@ -59,7 +54,7 @@ export const MyExpertsPendingTherapyRequestsInvitations = () => {
               invitation={pendingTherapyRequestInvitation}
             />
           )
-        }
+        },
       )}
     </section>
   )

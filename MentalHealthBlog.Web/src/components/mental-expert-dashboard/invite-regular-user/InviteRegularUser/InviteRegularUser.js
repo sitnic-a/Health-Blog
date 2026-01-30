@@ -56,13 +56,13 @@ export const InviteRegularUser = () => {
                     let [isValid, validationMessages] = checkEmailValidity(
                       email,
                       [],
-                      isMentalHealthExpert
+                      isMentalHealthExpert,
                     )
                     dispatch(
                       setEmailValidationData({
                         emailIsValid: isValid,
                         emailValidationMessages: validationMessages,
-                      })
+                      }),
                     )
                   }}
                 />
@@ -77,7 +77,7 @@ export const InviteRegularUser = () => {
                           - {message}
                         </p>
                       )
-                    }
+                    },
                   )}
                 </div>
               )}
@@ -91,11 +91,11 @@ export const InviteRegularUser = () => {
                     authenticatedUserLocalStorage =
                       localStorage.getItem('authenticatedUser')
                     authenticatedUser = JSON.parse(
-                      authenticatedUserLocalStorage
+                      authenticatedUserLocalStorage,
                     )
 
                     let sendEmailTo = document.querySelector(
-                      '.invite-regular-user-call-email-value'
+                      '.invite-regular-user-call-email-value',
                     ).value
 
                     let isMentalHealthExpert = true
@@ -103,13 +103,13 @@ export const InviteRegularUser = () => {
                     let [isValid, validationMessages] = checkEmailValidity(
                       sendEmailTo,
                       [],
-                      isMentalHealthExpert
+                      isMentalHealthExpert,
                     )
                     dispatch(
                       setEmailValidationData({
                         emailIsValid: isValid,
                         emailValidationMessages: validationMessages,
-                      })
+                      }),
                     )
 
                     if (!emailValidationData?.emailIsValid) {
@@ -118,7 +118,7 @@ export const InviteRegularUser = () => {
                         {
                           autoClose: 3000,
                           position: 'bottom-right',
-                        }
+                        },
                       )
                       return
                     }
@@ -131,8 +131,6 @@ export const InviteRegularUser = () => {
                       authenticatedUser,
                       requestObj,
                     }
-
-                    console.log('Object with data IRU ', objectWithData)
 
                     dispatch(sendInviteToRegularUser(objectWithData))
                   }}

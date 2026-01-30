@@ -31,8 +31,6 @@ export const MyMentalHealthExperts = () => {
     myPendingMentalHealthExpertWhoSentAnInvitationForTherapy,
   } = useSelector((store) => store.therapy)
 
-  console.log('My myAP ', myApprovedOrPendingMentalHealthExperts)
-
   let myApprovedOrPendingRequests =
     myApprovedOrPendingMentalHealthExperts.filter(
       (tr) =>

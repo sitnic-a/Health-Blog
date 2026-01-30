@@ -11,8 +11,6 @@ import { toast } from 'react-toastify'
 
 export const MyExpertsPendingTherapyRequestInvitation = ({ invitation }) => {
   let dispatch = useDispatch()
-
-  console.log('Invitation ', invitation)
   let mentalHealthExpertFullName = String.prototype.concat(
     invitation?.mentalHealthExpertFirstName,
     ' ',

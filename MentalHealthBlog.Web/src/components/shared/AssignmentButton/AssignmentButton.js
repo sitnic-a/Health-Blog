@@ -12,7 +12,6 @@ export const AssignmentButton = () => {
     <div
       className="sharing-users-give-assignment-container"
       onClick={() => {
-        console.log('Location ', location)
         if (location?.pathname !== '/') {
           const now = new Date()
           const time = now.getTime()

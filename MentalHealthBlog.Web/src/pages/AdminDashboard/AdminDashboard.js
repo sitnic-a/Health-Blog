@@ -18,7 +18,7 @@ export const AdminDashboard = () => {
   let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
 
   let { isFailed, numberOfNewlyRegisteredMentalHealthExperts } = useSelector(
-    (store) => store.admin
+    (store) => store.admin,
   )
 
   useEffect(() => {
@@ -71,9 +71,7 @@ export const AdminDashboard = () => {
     dispatch(getNewRegisteredExperts(objectWithData))
   })
 
-  connection.start().catch((e) => {
-    console.log('Fetched error ', e)
-  })
+  connection.start().catch((e) => {})
 
   return (
     <section id="admin-dashboard-main-container">

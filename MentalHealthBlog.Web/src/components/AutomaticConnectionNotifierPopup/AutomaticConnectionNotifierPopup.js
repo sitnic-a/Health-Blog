@@ -21,34 +21,28 @@ export const AutomaticConnectionNotifiedPopup = () => {
   let fullName = String.prototype.concat(
     unnotifiedAutomaticConnectionTherapyInvites[0]?.mentalHealthExpertFirstName,
     ' ',
-    unnotifiedAutomaticConnectionTherapyInvites[0]?.mentalHealthExpertLastName
+    unnotifiedAutomaticConnectionTherapyInvites[0]?.mentalHealthExpertLastName,
   )
 
   let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
   let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
-  console.log('Authenticated ', authenticatedUser)
 
   useEffect(() => {
     let objectWithData = {
       authenticatedUser,
     }
     dispatch(
-      getRegularUserUnnotifiedAutomaticConnectionTherapyInvites(objectWithData)
+      getRegularUserUnnotifiedAutomaticConnectionTherapyInvites(objectWithData),
     )
   }, [])
 
   return (
     <section id="automatic-connection-notifier-main-container">
       <Modal
-        // isOpen={
-        //   authenticatedUser?.isRegularUserNotifiedAboutTherapyInviteAutomaticConnection
-        // }
-
         isOpen={unnotifiedAutomaticConnectionExists}
         appElement={document.getElementById('root')}
         style={application.trial_period_style}
         onRequestClose={() => {
-          //Pozvati metodu za setanje novog statea autoconnnotifiera
           let objectWithData = {
             authenticatedUser,
           }
@@ -88,7 +82,7 @@ export const AutomaticConnectionNotifiedPopup = () => {
                   authenticatedUser,
                 }
                 dispatch(
-                  markRegularUserAutomaticConnectionAsNotified(objectWithData)
+                  markRegularUserAutomaticConnectionAsNotified(objectWithData),
                 )
               }}
             >
