@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
+import Cookies from 'js-cookie'
 
 import {
   login,
@@ -15,6 +16,7 @@ import {
 import {
   checkPasswordValidity,
   checkUsernameValidity,
+  removeCookies,
   stringIsNullOrEmpty,
 } from '../../utils/helper-methods/methods'
 
@@ -23,7 +25,6 @@ import { Password } from '../shared/Password/Password'
 import { LoginFooterBankAccount } from '../LoginFooterBankAccount/LoginFooterBankAccount'
 
 import LoginCSS from './Login.css'
-import { checkIfTokenIsExpired } from '../../utils/helper-methods/jwt'
 
 export const Login = () => {
   let dispatch = useDispatch()
@@ -189,7 +190,10 @@ export const Login = () => {
                     <Link
                       className="register-link regular-user-link"
                       to={'/register'}
-                      state={{ isRegularUser: true }}
+                      onClick={() => {
+                        removeCookies()
+                        Cookies.set('isRegularUser', true)
+                      }}
                     >
                       Registruj se kao korisnik
                     </Link>
@@ -198,7 +202,10 @@ export const Login = () => {
                     <Link
                       className="register-link mental-health-expert-link"
                       to={'/register'}
-                      state={{ isMentalHealthExpert: true }}
+                      onClick={() => {
+                        removeCookies()
+                        Cookies.set('isMentalHealthExpert', true)
+                      }}
                     >
                       Registruj se kao stručnjak mentalnog zdravlja
                     </Link>

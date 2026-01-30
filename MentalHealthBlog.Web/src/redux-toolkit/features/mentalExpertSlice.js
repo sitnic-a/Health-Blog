@@ -1,16 +1,39 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { application } from '../../application'
+import { toast } from 'react-toastify'
+import { requestStatuses } from '../../enums/requestStatuses'
 
 let initialState = {
   dbMentalHealthExperts: [],
+  dbRegularUsersByTherapyStatus: [],
+  dbApprovedRegularUsers: [],
   suggestedMentalHealthExperts: [],
   usersThatSharedContent: [],
   usersWithSetAssignments: [],
   sharedContent: [],
   usersThatSharedIncludingItsContent: {},
+  queryRequestStatus: null,
   overlayPost: null,
   isLoadingExperts: false,
+  isLoading: false,
 }
+
+export const getRegularUsersByTherapyStatus = createAsyncThunk(
+  'regular-users-by-therapy-status',
+  async (objectWithData) => {
+    let url = `${application.application_url}/mentalExpert/regular-users-by-therapy-status`
+    let request = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(objectWithData?.requestObj),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
+      },
+    })
+    let response = await request.json()
+    return response
+  },
+)
 
 export const getMentalHealthExperts = createAsyncThunk(
   'experts',
@@ -32,7 +55,7 @@ export const getMentalHealthExperts = createAsyncThunk(
     })
     let response = await request.json()
     return response
-  }
+  },
 )
 
 export const getSharesPerUser = createAsyncThunk(
@@ -49,7 +72,7 @@ export const getSharesPerUser = createAsyncThunk(
     let response = await request.json()
 
     return response
-  }
+  },
 )
 
 export const createAssignment = createAsyncThunk(
@@ -66,7 +89,7 @@ export const createAssignment = createAsyncThunk(
     })
     let response = await request.json()
     return response
-  }
+  },
 )
 
 export const getUsersWithSetAssignments = createAsyncThunk(
@@ -82,7 +105,24 @@ export const getUsersWithSetAssignments = createAsyncThunk(
     })
     let response = await request.json()
     return response
-  }
+  },
+)
+
+export const sendInviteToRegularUser = createAsyncThunk(
+  'invite/user',
+  async (objectWithData) => {
+    let url = `${application.application_url}/mentalExpert/invite/user`
+    let request = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(objectWithData?.requestObj),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${objectWithData?.authenticatedUser?.jwToken}`,
+      },
+    })
+    let response = request.json()
+    return response
+  },
 )
 
 export const mentalExpertSlice = createSlice({
@@ -109,7 +149,7 @@ export const mentalExpertSlice = createSlice({
       let userId = action?.payload?.userId
       let response = action?.payload?.usersThatSharedIncludingItsContent
       let pickedObj = response.find(
-        (u) => u?.userThatSharedContent?.id === userId
+        (u) => u?.userThatSharedContent?.id === userId,
       )
       state.sharedContent = [...pickedObj.sharedContent]
     },
@@ -127,6 +167,27 @@ export const mentalExpertSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+
+      //regular-users-by-therapy-status
+      .addCase(getRegularUsersByTherapyStatus.pending, (state, action) => {
+        let argQuery = action?.meta?.arg?.requestObj
+        if (argQuery?.newRequestStatus === requestStatuses.APPROVED) {
+          state.queryRequestStatus = requestStatuses.APPROVED
+          return
+        }
+      })
+      .addCase(getRegularUsersByTherapyStatus.fulfilled, (state, action) => {
+        let statusCode = action?.payload?.statusCode
+        let serviceResponseObject = action?.payload?.serviceResponseObject
+        if (statusCode === 200) {
+          state.dbRegularUsersByTherapyStatus = serviceResponseObject
+          if (state.queryRequestStatus === requestStatuses.APPROVED) {
+            state.dbApprovedRegularUsers = serviceResponseObject
+            return
+          }
+        }
+      })
+      .addCase(getRegularUsersByTherapyStatus.rejected, (state, action) => {})
 
       //experts
       .addCase(getMentalHealthExperts.pending, (state) => {
@@ -170,6 +231,35 @@ export const mentalExpertSlice = createSlice({
         }
       })
       .addCase(getUsersWithSetAssignments.rejected, (state, action) => {})
+
+      //invite/user
+      .addCase(sendInviteToRegularUser.pending, (state, action) => {
+        state.isLoading = true
+      })
+      .addCase(sendInviteToRegularUser.fulfilled, (state, action) => {
+        state.isLoading = false
+        let statusCode = action?.payload?.statusCode
+        if (statusCode === 201) {
+          toast.success('Uspješno ste pozvali korisnika u seansu!', {
+            autoClose: 5000,
+            position: 'bottom-right',
+          })
+          return
+        }
+        if (statusCode !== 200) {
+          let StatusCode = action?.payload?.StatusCode
+          if (StatusCode === 400) {
+            toast.error('Nije moguće pozvati korisnika s kojim ste povezani!', {
+              autoClose: 5000,
+              position: 'bottom-right',
+            })
+            return
+          }
+        }
+      })
+      .addCase(sendInviteToRegularUser.rejected, (state, action) => {
+        state.isLoading = false
+      })
   },
 })
 

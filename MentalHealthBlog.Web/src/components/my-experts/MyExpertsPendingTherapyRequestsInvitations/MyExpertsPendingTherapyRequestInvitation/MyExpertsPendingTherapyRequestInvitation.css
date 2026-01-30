@@ -1,0 +1,52 @@
+.my-mental-health-experts-pending-therapy-requests-invitation-container {
+  margin-block: 0.3rem;
+  padding: 0.3rem;
+  /* border: 1px solid blue; */
+}
+
+.my-mental-health-experts-pending-therapy-requests-invitation-header-title {
+  margin-block: 0.2rem;
+  font-family: 'SansDeva';
+  line-height: 1.4;
+  text-align: center;
+}
+
+.my-mental-health-expert-pending-therapy-request-invitation-organization {
+  font-weight: 600;
+}
+
+.my-mental-health-experts-invitation-therapy-request-actions {
+  text-align: center;
+  /* background: yellow; */
+}
+
+.my-mental-health-experts-invitation-therapy-request-action {
+  margin-inline: 0.2rem;
+  padding: 0.3rem 1rem;
+  border: none;
+  border-radius: 0.4rem;
+  font-family: 'SansDeva';
+  font-size: 0.8rem;
+  line-height: 1.4;
+  outline: none;
+  transition: 150ms;
+  cursor: pointer;
+}
+
+.my-mental-health-experts-invitation-therapy-request-accept {
+  color: #f3f1e3;
+  background: #5eba69;
+}
+
+.my-mental-health-experts-invitation-therapy-request-accept:hover {
+  background: #478c4f;
+}
+
+.my-mental-health-experts-invitation-therapy-request-decline {
+  color: #f3f1e3;
+  background: #c93232;
+}
+
+.my-mental-health-experts-invitation-therapy-request-decline:hover {
+  background: #a02929;
+}

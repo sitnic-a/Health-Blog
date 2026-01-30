@@ -1,4 +1,5 @@
 import moment from 'moment'
+import Cookies from 'js-cookie'
 
 export function stringIsNullOrEmpty(variable) {
   return (
@@ -659,5 +660,12 @@ export const deselectPlans = () => {
     plan
       .querySelector('.register-plan-choose-plan-button')
       .classList.remove('register-plan-choose-plan-button-selected')
+  })
+}
+
+export const removeCookies = () => {
+  let cookies = Cookies.get()
+  Object.keys(cookies).forEach((cookie) => {
+    Cookies.remove(cookie)
   })
 }

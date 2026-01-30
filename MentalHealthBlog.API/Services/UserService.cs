@@ -8,6 +8,7 @@ using MentalHealthBlog.API.Methods;
 using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
+using MentalHealthBlog.API.Services.Therapy;
 using MentalHealthBlog.API.Utils;
 using MentalHealthBlog.API.Utils.Email;
 using MentalHealthBlogAPI.Data;
@@ -55,15 +56,20 @@ namespace MentalHealthBlog.API.Services
         private const int __PSYCHOLOGIST_ROLE__ = 4;
         private HashAlgorithmName __HASHALGORITHM__ = HashAlgorithmName.SHA512;
         private User user = new();
+        private readonly IMentalExpertService _mentalExpertService;
+        private readonly ITherapyInviteService _therapyInviteService;
+        private readonly ILogger<ITherapyRequestService> _therapyRequestLoggerService;
 
-
-        public UserService(DataContext context, IConfiguration configuration, IMapper mapper, IMemoryCache memoryCache, ILogger<UserService> userLoggerService)
+        public UserService(DataContext context, IConfiguration configuration, IMapper mapper, IMemoryCache memoryCache, ILogger<UserService> userLoggerService, IMentalExpertService mentalExpertService, ITherapyInviteService therapyInviteService, ILogger<ITherapyRequestService> therapyRequestLoggerService)
         {
             _context = context;
             _configuration = configuration;
             _mapper = mapper;
             _memoryCache = memoryCache;
             _userLoggerService = userLoggerService;
+            _mentalExpertService = mentalExpertService;
+            _therapyInviteService = therapyInviteService;
+            _therapyRequestLoggerService = therapyRequestLoggerService;
         }
 
         public async Task<Response> GetByIdAsync(int id)
@@ -188,17 +194,32 @@ namespace MentalHealthBlog.API.Services
 
                             if (newRegularUserRequest.IsInTherapy == true && hasSelectedMentalHealthExperts)
                             {
-                                var therapyRequestHelper = new TherapyRequestHelper(_configuration);
+                                var therapyRequestHelper = new TherapyRequestHelper(_context, _configuration,_therapyRequestLoggerService);
                                 var userHelper = new UserHelper(_context);
                                 var dbMentalHealthExpert = new MentalHealthExpert();
 
-                                foreach (var mentalHealthExpertToConnectWith in mentalHealthExpertsId)
+                                if (!string.IsNullOrEmpty(newUserRequest.TherapyInvitationId))
                                 {
-                                    int MentalHealthExpertId = int.Parse(mentalHealthExpertToConnectWith);
+                                    int MentalHealthExpertId = int.Parse(mentalHealthExpertsId[0]);
                                     var dbMentalHealthExpertInfoTuple = await userHelper.ReturnUserAndInfoIsItMentalHealthExpert(MentalHealthExpertId);
                                     dbMentalHealthExpert = (MentalHealthExpert)dbMentalHealthExpertInfoTuple.Item1;
-                                    await _context.TherapyRequests.AddAsync(new TherapyRequest(regularUser.UserId, MentalHealthExpertId));
-                                    await therapyRequestHelper.SendEmailToInformAboutConnectionRequest(dbMentalHealthExpert, regularUser);
+                                    await _context.TherapyRequests.AddAsync(new TherapyRequest(regularUser.UserId, MentalHealthExpertId, newUserRequest.TherapyInvitationId));
+                                    await therapyRequestHelper.SendEmailToInformAboutConnectionRequest(dbMentalHealthExpert, regularUser, newUserRequest.TherapyInvitationId);
+                                    var invitationResponse = await _mentalExpertService.GetInvitationById(newUserRequest.TherapyInvitationId);
+                                    var invitation = invitationResponse.ServiceResponseObject as TherapyInvite;
+                                    invitation.IsUsed = true;
+                                    invitation.RegularUserId = regularUser.UserId;
+                                }
+                                else
+                                {
+                                    foreach (var mentalHealthExpertToConnectWith in mentalHealthExpertsId)
+                                    {
+                                        int MentalHealthExpertId = int.Parse(mentalHealthExpertToConnectWith);
+                                        var dbMentalHealthExpertInfoTuple = await userHelper.ReturnUserAndInfoIsItMentalHealthExpert(MentalHealthExpertId);
+                                        dbMentalHealthExpert = (MentalHealthExpert)dbMentalHealthExpertInfoTuple.Item1;
+                                        await _context.TherapyRequests.AddAsync(new TherapyRequest(regularUser.UserId, MentalHealthExpertId));
+                                        await therapyRequestHelper.SendEmailToInformAboutConnectionRequest(dbMentalHealthExpert, regularUser);
+                                    }
                                 }
                                 await _context.SaveChangesAsync();
                                 _userLoggerService.LogInformation($"REGISTER: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", user);
@@ -267,7 +288,7 @@ namespace MentalHealthBlog.API.Services
                 {
                     var dbUserRoles = jwtMiddleware.GetRoles(dbUser);
 
-                     if (dbUserRoles.Any(r => r.Id == __PSYCHOLOGIST_ROLE_ID__))
+                    if (dbUserRoles.Any(r => r.Id == __PSYCHOLOGIST_ROLE_ID__))
                     {
                         var mentalHealthExpert = await _context.MentalHealthExperts.SingleOrDefaultAsync(mhe => mhe.UserId == dbUser.Id);
                         isPending = mentalHealthExpert.IsApproved == false && mentalHealthExpert.IsRejected == false;
@@ -316,6 +337,7 @@ namespace MentalHealthBlog.API.Services
                     }
 
                     var responseUser = new SignedUserDto(dbUser.Id, dbUser.Username, token, refreshToken.Token, dbUserRoles, dbUser.IsUsingForTheFirstTime, isPending);
+                    
                     _userLoggerService.LogInformation($"LOGIN: {UserServiceLogTypes.USER_SUCCESFULL.ToString()}", responseUser);
                     return new Response(responseUser, StatusCodes.Status200OK, UserServiceLogTypes.USER_SUCCESFULL.ToString());
                 }

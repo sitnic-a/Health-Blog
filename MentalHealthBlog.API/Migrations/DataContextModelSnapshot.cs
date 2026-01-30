@@ -574,7 +574,7 @@ namespace MentalHealthBlog.API.Migrations
                     b.Property<DateTime>("RegisteredAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2025, 12, 10, 16, 21, 8, 528, DateTimeKind.Utc).AddTicks(3822));
+                        .HasDefaultValue(new DateTime(2026, 1, 16, 15, 25, 40, 541, DateTimeKind.Utc).AddTicks(4902));
 
                     b.Property<DateTime?>("TrialEndsAt")
                         .HasColumnType("timestamp with time zone");
@@ -694,7 +694,7 @@ namespace MentalHealthBlog.API.Migrations
                     b.Property<DateTime>("RegisteredAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2025, 12, 10, 16, 21, 8, 528, DateTimeKind.Utc).AddTicks(3822));
+                        .HasDefaultValue(new DateTime(2026, 1, 16, 15, 25, 40, 541, DateTimeKind.Utc).AddTicks(4902));
 
                     b.Property<DateTime?>("TrialEndsAt")
                         .HasColumnType("timestamp with time zone");
@@ -925,6 +925,34 @@ namespace MentalHealthBlog.API.Migrations
                         });
                 });
 
+            modelBuilder.Entity("MentalHealthBlog.API.Models.TherapyInvite", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("InvitedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsRegularUserAlreadyUsingApplication")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsRegularUserNotifiedAboutAutomaticConnection")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("MentalHealthExpertId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("RegularUserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TherapyInvites");
+                });
+
             modelBuilder.Entity("MentalHealthBlog.API.Models.TherapyRequest", b =>
                 {
                     b.Property<int>("RegularUserId")
@@ -932,6 +960,9 @@ namespace MentalHealthBlog.API.Migrations
 
                     b.Property<int>("MentalHealthExpertId")
                         .HasColumnType("integer");
+
+                    b.Property<bool?>("IsMentalHealthExpertInviting")
+                        .HasColumnType("boolean");
 
                     b.Property<int>("RequestStatus")
                         .HasColumnType("integer");

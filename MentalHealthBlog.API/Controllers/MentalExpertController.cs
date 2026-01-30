@@ -1,4 +1,5 @@
-﻿using MentalHealthBlog.API.Models;
+﻿using MentalHealthBlog.API.Exceptions;
+using MentalHealthBlog.API.Models;
 using MentalHealthBlog.API.Models.ResourceRequest;
 using MentalHealthBlog.API.Models.ResourceResponse;
 using MentalHealthBlog.API.Services;
@@ -12,10 +13,20 @@ namespace MentalHealthBlog.API.Controllers
     public class MentalExpertController : ControllerBase
     {
         private readonly IMentalExpertService _mentalExpertService;
-
-        public MentalExpertController(IMentalExpertService mentalExpertService)
+        private readonly IHttpContextAccessor _httpContext;
+        ILogger<IMentalExpertService> _mentalExpertLoggerService;
+        public MentalExpertController(IMentalExpertService mentalExpertService, IHttpContextAccessor httpContext, ILogger<IMentalExpertService> mentalExpertLoggerService)
         {
             _mentalExpertService = mentalExpertService;
+            _httpContext = httpContext;
+            _mentalExpertLoggerService = mentalExpertLoggerService;
+        }
+
+        [HttpPost("regular-users-by-therapy-status")]
+        [Authorize(Roles = "Psychologist / Psychotherapist")]
+        public async Task<Response> GetRegularUsersByTherapyStatus(Models.ResourceRequest.TherapyRequestDto request)
+        {
+            return await _mentalExpertService.GetRegularUsersByTherapyStatus(request);
         }
 
         [HttpPost("experts")]
@@ -26,7 +37,7 @@ namespace MentalHealthBlog.API.Controllers
 
 
         [HttpGet("shares-per-user")]
-        [Authorize(Roles= "Psychologist / Psychotherapist")]
+        [Authorize(Roles = "Psychologist / Psychotherapist")]
         public async Task<Response> GetSharesPerUser([FromQuery] ExpertSearchContentDto query)
         {
             return await _mentalExpertService.GetSharesPerUser(query);
@@ -40,10 +51,57 @@ namespace MentalHealthBlog.API.Controllers
         }
 
         [HttpPost("give-assignment")]
-        [Authorize(Roles= "Psychologist / Psychotherapist")]
+        [Authorize(Roles = "Psychologist / Psychotherapist")]
         public async Task<Response> CreateAssignment([FromBody] CreateAssignmentDto request)
         {
             return await _mentalExpertService.CreateAssignment(request);
+        }
+
+        [HttpPost("invite/user")]
+        [Authorize(Roles = "Psychologist / Psychotherapist")]
+        public async Task<Response> SendInviteToUser([FromBody] InviteDto request)
+        {
+            return await _mentalExpertService.SendInviteToUser(request);
+        }
+
+        [HttpGet("/invite/{id}")]
+        public async Task<Response> Invite(string id)
+        {
+            try
+            {
+                var invitationResponse = await _mentalExpertService.GetInvitationById(id);
+                var invitation = invitationResponse.ServiceResponseObject as TherapyInvite;
+
+                if (invitation != null)
+                {
+                    Response.Cookies.Append("isMentalHealthExpert", "false", new CookieOptions()
+                    {
+                        Expires = DateTime.UtcNow.AddDays(2)
+                    });
+
+                    Response.Cookies.Append("therapyInvitationId", invitation.Id, new CookieOptions()
+                    {
+                        Expires = DateTime.UtcNow.AddDays(2)
+                    });
+
+                    Response.Cookies.Append("therapyInvitationSentById", $"{invitation.MentalHealthExpertId}", new CookieOptions()
+                    {
+                        Expires = DateTime.UtcNow.AddDays(2)
+                    });
+
+                    _mentalExpertLoggerService.LogInformation($"INVITE/[id]: {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
+                    HttpContext.Response.Redirect("http://localhost:3000/register");
+                    return new Response(invitation, StatusCodes.Status200OK, MentalExpertServiceLogTypes.SUCCESS.ToString());
+                }
+
+                _mentalExpertLoggerService.LogWarning($"INVITE/[id]: {MentalExpertServiceLogTypes.NOT_FOUND.ToString()}");
+                throw new RecordNotFoundException("Invitation not found!");
+            }
+            catch (Exception e)
+            {
+                _mentalExpertLoggerService.LogError($"INVITE/[id]: {e.Message}");
+                throw;
+            }
         }
 
     }

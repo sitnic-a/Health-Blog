@@ -1,19 +1,38 @@
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { createAssignment } from '../../../../redux-toolkit/features/mentalExpertSlice'
+import Cookies from 'js-cookie'
+
+import {
+  createAssignment,
+  getRegularUsersByTherapyStatus,
+} from '../../../../redux-toolkit/features/mentalExpertSlice'
 import { setContentValidationData } from '../../../../redux-toolkit/features/validationSlice'
 import {
   checkInputDataValidity,
   checkNewAssignmentValidity,
+  stringIsNullOrEmpty,
 } from '../../../../utils/helper-methods/methods'
+import { requestStatuses } from '../../../../enums/requestStatuses'
 
 import CreateAssignmentCSS from './CreateAssignment.css'
-import { useEffect } from 'react'
 
 export const CreateAssignment = () => {
   let dispatch = useDispatch()
   let navigate = useNavigate()
+  let { dbRegularUsersByTherapyStatus, dbApprovedRegularUsers } = useSelector(
+    (store) => store.mentalExpert,
+  )
+
+  let mentalHealthExpertIsChoosingUserCookie = Cookies.get(
+    'mentalHealthExpertIsChoosingUser',
+  )
+
+  let mentalHealthExpertIsChoosingUser = !stringIsNullOrEmpty(
+    mentalHealthExpertIsChoosingUserCookie,
+  )
+
   let authenticatedUserLocalStorage = localStorage.getItem('authenticatedUser')
   let authenticatedUser = JSON.parse(authenticatedUserLocalStorage)
 
@@ -22,20 +41,66 @@ export const CreateAssignment = () => {
 
   useEffect(() => {
     dispatch(setContentValidationData({}))
+    if (mentalHealthExpertIsChoosingUser) {
+      let requestObj = {
+        mentalHealthExpertUserId: authenticatedUser?.id,
+        newRequestStatus: requestStatuses.APPROVED,
+      }
+      let objectWithData = {
+        authenticatedUser,
+        requestObj,
+      }
+      dispatch(getRegularUsersByTherapyStatus(objectWithData))
+    }
   }, [])
 
   let giveAssignment = (e) => {
     e.preventDefault()
+    let createAssignmentChooseUserToAccomplishPicker = document.querySelector(
+      '.create-assignment-choose-user-to-accomplish-picker',
+    )
+    let createAssignmentChooseUserToAccomplishPickerSelectedIndex =
+      createAssignmentChooseUserToAccomplishPicker?.selectedIndex
+
+    let chosenRegularUser =
+      createAssignmentChooseUserToAccomplishPicker?.options[
+        createAssignmentChooseUserToAccomplishPickerSelectedIndex
+      ]?.value
+
     let form = new FormData(e.target)
     let data = Object.fromEntries([...form.entries()])
-    let objectWithData = {
-      addAssignmentObj: {
-        assignmentGivenToId: dbUser?.id,
-        assignmentGivenById: authenticatedUser?.id,
-        content: data['create-assignment-content'],
-        createdAt: new Date(),
-      },
-      authenticatedUser,
+    let objectWithData
+    if (!stringIsNullOrEmpty(chosenRegularUser)) {
+      objectWithData = {
+        addAssignmentObj: {
+          assignmentGivenToId: parseInt(chosenRegularUser),
+          assignmentGivenById: authenticatedUser?.id,
+          content: data['create-assignment-content'],
+          createdAt: new Date(),
+        },
+        authenticatedUser,
+      }
+    } else {
+      objectWithData = {
+        addAssignmentObj: {
+          assignmentGivenToId: dbUser?.id,
+          assignmentGivenById: authenticatedUser?.id,
+          content: data['create-assignment-content'],
+          createdAt: new Date(),
+        },
+        authenticatedUser,
+      }
+    }
+
+    if (
+      objectWithData?.addAssignmentObj?.assignmentGivenToId <= 0 ||
+      stringIsNullOrEmpty(objectWithData?.addAssignmentObj?.assignmentGivenToId)
+    ) {
+      toast.error('Molimo slijedite upute prilikom popunjavanja polja!', {
+        autoClose: 3000,
+        position: 'bottom-right',
+      })
+      return
     }
 
     let content = objectWithData?.addAssignmentObj?.content
@@ -45,14 +110,14 @@ export const CreateAssignment = () => {
       content,
       [],
       isTitle,
-      isContent
+      isContent,
     )
 
     dispatch(
       setContentValidationData({
         contentIsValid: isValid,
         contentValidationMessages: validationMessages,
-      })
+      }),
     )
 
     if (!contentValidationData?.contentIsValid) {
@@ -84,7 +149,7 @@ export const CreateAssignment = () => {
       }
 
       if (data?.payload?.statusCode === 201) {
-        toast.success(`Zadatak uspješno dodijeljen ${dbUser.username}`, {
+        toast.success(`Zadatak uspješno dodijeljen`, {
           autoClose: 1500,
           position: 'bottom-right',
         })
@@ -131,14 +196,14 @@ export const CreateAssignment = () => {
                       content,
                       [],
                       isTitle,
-                      isContent
+                      isContent,
                     )
 
                     dispatch(
                       setContentValidationData({
                         contentIsValid: isValid,
                         contentValidationMessages: validationMessages,
-                      })
+                      }),
                     )
                   }}
                 ></textarea>
@@ -153,30 +218,91 @@ export const CreateAssignment = () => {
                           - {message}
                         </p>
                       )
-                    }
+                    },
                   )}
                 </div>
               )}
 
               <div className="create-assignment-user-to-accomplish">
-                <label
-                  className="create-assignment-label"
-                  htmlFor="user-to-accomplish-task"
-                >
-                  Zadaću dodjeljujete:
-                </label>
-                <span className="required-field"> *</span>
-                <p className="create-assignment-user-to-accomplish-task">
-                  {dbUser?.username}
-                </p>
+                {mentalHealthExpertIsChoosingUser === true ? (
+                  dbApprovedRegularUsers?.length <= 0 ? (
+                    <div className="create-assignment-user-to-accomplish-info-container">
+                      <p className="create-assignment-user-to-accomplish-info-message">
+                        Trenutno nema korisnika kojima možete dati zadaću!
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="create-assignment-choose-user-to-accomplish-main-container">
+                      <label className="create-assignment-label">
+                        Odaberite kome želite dati zadaću:{' '}
+                        <span className="required-field">*</span>
+                      </label>
+                      <br />
+                      <label className="create-assignment-choose-user-to-accomplish-picker-filter-label">
+                        Filterirajte putem imena ili prezimena
+                      </label>
+                      <div className="create-assignment-choose-user-to-accomplish-picker-container">
+                        <input
+                          className="form-field create-assignment-choose-user-to-accomplish-picker-filter"
+                          type="text"
+                          placeholder="Unesite ime ili prezime... "
+                        />
+                        <select className="create-assignment-choose-user-to-accomplish-picker">
+                          {dbRegularUsersByTherapyStatus?.map((regularUser) => {
+                            let fullName = String.prototype.concat(
+                              regularUser?.firstName,
+                              ' ',
+                              regularUser?.lastName,
+                            )
+                            return (
+                              <option
+                                value={regularUser?.regularUserId}
+                                className="create-assignment-choose-user-to-accomplish-picker-filter-experts-option"
+                              >
+                                {fullName}
+                              </option>
+                            )
+                          })}
+                        </select>
+                      </div>
+                    </div>
+                  )
+                ) : (
+                  <>
+                    <label
+                      className="create-assignment-label"
+                      htmlFor="user-to-accomplish-task"
+                    >
+                      Zadaću dodjeljujete:
+                    </label>
+                    <span className="required-field"> *</span>
+                    <p className="create-assignment-user-to-accomplish-task">
+                      {dbUser?.username}
+                    </p>
+                  </>
+                )}
               </div>
             </div>
-            <button
-              className="create-assignment-give-assignment-button"
-              type="submit"
-            >
-              Dodijeli zadatak
-            </button>
+
+            {mentalHealthExpertIsChoosingUser === true &&
+              dbApprovedRegularUsers?.length > 0 && (
+                <button
+                  className="create-assignment-give-assignment-button"
+                  type="submit"
+                >
+                  Dodijeli zadatak
+                </button>
+              )}
+
+            {mentalHealthExpertIsChoosingUser !== true &&
+              dbApprovedRegularUsers?.length > 0 && (
+                <button
+                  className="create-assignment-give-assignment-button"
+                  type="submit"
+                >
+                  Dodijeli zadatak
+                </button>
+              )}
           </form>
         </div>
       </div>

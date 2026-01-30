@@ -97,6 +97,69 @@
   background: #34688f;
 }
 
+.my-mental-health-experts-review-pending-therapy-requests-invitations-main-container {
+  display: none;
+}
+
+@media (width<=1080px) {
+  .my-mental-health-experts-review-pending-therapy-requests-invitations-main-container {
+    display: initial;
+  }
+}
+
+.my-mental-health-experts-review-pending-therapy-requests-invitations-review-button {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 0.4rem;
+  font-family: 'SansDeva';
+  font-size: 0.95rem;
+  line-height: 1.4;
+  outline: none;
+  transition: 150ms;
+  cursor: pointer;
+  color: #f3f1e3;
+  background: #edb572;
+}
+
+.my-mental-health-experts-review-pending-therapy-requests-invitations-review-button:hover {
+  transform: scale(1.05);
+}
+
+.my-mental-health-experts-review-pending-therapy-requests-invitations-review-button-hidden {
+  display: none;
+}
+
+.my-mental-health-experts-review-pending-therapy-requests-invitations-review-button-visible {
+  display: initial;
+}
+
+.my-mental-health-experts-users-therapy-requests-review-button {
+  display: none;
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 0.4rem;
+  font-family: 'SansDeva';
+  font-size: 0.95rem;
+  line-height: 1.4;
+  outline: none;
+  transition: 150ms;
+  cursor: pointer;
+  color: #f3f1e3;
+  background: #34688f;
+}
+
+.my-mental-health-experts-users-therapy-requests-review-button:hover {
+  transform: scale(1.05);
+}
+
+.my-mental-health-experts-users-therapy-requests-review-button-hidden {
+  display: none;
+}
+
+.my-mental-health-experts-users-therapy-requests-review-button-visible {
+  display: initial;
+}
+
 .my-mental-health-experts-experts-container {
   max-width: 100vw;
   display: flex;
@@ -104,8 +167,27 @@
   margin-top: 2rem;
 }
 
-@media (width<=610px) {
+/* @media (width<=610px) {
   .my-mental-health-experts-experts-container {
+    flex-wrap: wrap;
+    row-gap: 20px;
+    justify-content: center;
+  }
+} */
+
+.my-mental-health-experts-users-therapy-requests-main-container {
+  display: flex;
+  column-gap: 20px;
+  max-width: 800px;
+  width: 100%;
+}
+
+.my-mental-health-experts-users-therapy-requests-main-container-hidden {
+  display: none;
+}
+
+@media (width<=610px) {
+  .my-mental-health-experts-users-therapy-requests-main-container {
     flex-wrap: wrap;
     row-gap: 20px;
     justify-content: center;

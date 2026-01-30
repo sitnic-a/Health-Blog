@@ -12,14 +12,16 @@ namespace MentalHealthBlog.API.Controllers
     public class TherapyController : ControllerBase
     {
         private readonly ITherapyRequestService _therapyRequestService;
-        public TherapyController(ITherapyRequestService therapyRequestService, ILogger<ITherapyRequestService> therapyRequestLoggerService)
+        private readonly ITherapyInviteService _therapyInviteService;
+        public TherapyController(ITherapyRequestService therapyRequestService, ITherapyInviteService therapyInviteService)
         {
             _therapyRequestService = therapyRequestService;
+            _therapyInviteService = therapyInviteService;
         }
 
         [HttpPost("requests-for-mental-health-experts")]
         [Authorize(Roles = "Psychologist / Psychotherapist")]
-        public async Task<Response> GetRequestsForMentalHealthExperts([FromBody] SearchTherapyRequestDto? query =null)
+        public async Task<Response> GetRequestsForMentalHealthExperts([FromBody] SearchTherapyRequestDto? query = null)
         {
             return await _therapyRequestService.GetRequestsForMentalHealthExpert(query);
         }
@@ -27,6 +29,12 @@ namespace MentalHealthBlog.API.Controllers
         [HttpPost("my-experts")]
         [Authorize(Roles = "User")]
         public async Task<Response> GetUsersMentalHealthExperts([FromBody] SearchTherapyRequestDto? query = null)
+        {
+            return await _therapyRequestService.GetMyExperts(query);
+        }
+
+        [HttpPost("my-experts/therapy-invitations")]
+        public async Task<Response> GetMentalHealthExpertsWhoSentUserAnInvitationForTherapy([FromBody] SearchTherapyRequestDto? query = null)
         {
             return await _therapyRequestService.GetMyExperts(query);
         }
@@ -43,6 +51,20 @@ namespace MentalHealthBlog.API.Controllers
         public async Task<Response> StopSharing(Models.ResourceRequest.TherapyRequestDto request)
         {
             return await _therapyRequestService.StopSharing(request);
+        }
+
+        [HttpGet("regular-user-unnotified-automatic-connection")]
+        //[Authorize(Roles = "User")]
+        public async Task<Response> GetRegularUserUnnotifiedAutomaticConnectionTherapyInvites([FromQuery] int regularUserId)
+        {
+            return await _therapyInviteService.GetRegularUserUnnotifiedAutomaticConnectionTherapyInvites(regularUserId);
+        }
+
+        [HttpPut("notified-about-automatic-connection/{regularUserId}")]
+        //[Authorize(Roles = "User")]
+        public async Task<Response> MarkRegularUserAutomaticConnectionAsNotified(int regularUserId)
+        {
+            return await _therapyInviteService.MarkRegularUserAutomaticConnectionAsNotified(regularUserId);
         }
     }
 }

@@ -36,6 +36,7 @@ import { TrialPeriodExpired } from './components/TrialPeriodExpired/TrialPeriodE
 import { SubscriptionPlans } from './components/Register/SubscriptionPlans/SubscriptionPlans'
 import { TimeRemainingNotifier } from './components/TimeRemainingNotifier/TimeRemainingNotifier'
 import { AdminSubscriptions } from './components/administrator-dashboard/sections/admin-subscriptions/AdminSubscriptions'
+import { InviteRegularUser } from './components/mental-expert-dashboard/invite-regular-user/InviteRegularUser/InviteRegularUser'
 
 function App() {
   windowResize(application.layouts.min_screen_single_col_width)
@@ -92,6 +93,7 @@ function App() {
                   element={<MyMentalHealthExperts />}
                 />
                 <Route path="/therapy/requests" element={<Requests />} />
+                <Route path="/invite/user" element={<InviteRegularUser />} />
               </Route>
               <Route
                 path="admin-subscriptions"

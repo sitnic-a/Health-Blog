@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
+import Cookies from 'js-cookie'
+import { TiArrowSortedDown } from 'react-icons/ti'
 
 import { register, getDbRoles } from '../../redux-toolkit/features/userSlice'
 import { getMentalHealthExperts } from '../../redux-toolkit/features/mentalExpertSlice'
@@ -26,6 +28,7 @@ import {
   checkPhotoValidity,
   checkUsernameValidity,
   previewImage,
+  removeCookies,
   stringIsNullOrEmpty,
 } from '../../utils/helper-methods/methods'
 import { db_roles } from '../../enums/roles'
@@ -33,11 +36,10 @@ import { db_roles } from '../../enums/roles'
 import { MentalHealthExpertsDropdown } from '../MentalHealthExpertsDropdown/MentalHealthExpertsDropdown'
 import { Password } from '../shared/Password/Password'
 import { Loader } from '../shared/Loader/Loader'
-import { TiArrowSortedDown } from 'react-icons/ti'
+import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner'
 
 import RegisterCSS from './Register.css'
 import ValidationCSS from '../shared/Validation/Validation.css'
-import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner'
 
 export const Register = () => {
   let { dbRoles, isLoading } = useSelector((store) => store.user)
@@ -46,7 +48,16 @@ export const Register = () => {
     (store) => store.mentalExpert
   )
   let { selectedMentalHealthExpertIds } = useSelector((store) => store.therapy)
-  let { isMentalHealthExpert, isRegularUser } = useFetchLocationState()
+
+  let isMentalHealthExpert = Cookies.get('isMentalHealthExpert')
+  let therapyInvitationId = Cookies.get('therapyInvitationId')
+  let therapyInvitationSentById = Cookies.get('therapyInvitationSentById')
+
+  isMentalHealthExpert = isMentalHealthExpert === 'true'
+  let isRegularUser = Cookies.get('isRegularUser')
+  isRegularUser = isRegularUser === 'true'
+  console.log('MHE ', isMentalHealthExpert)
+
   let [isInTherapy, setIsInTherapy] = useState(false)
   let {
     usernameValidationData,
@@ -348,6 +359,21 @@ export const Register = () => {
           isMentalHealthExpert: false,
           roles,
         }
+      } else if (!stringIsNullOrEmpty(therapyInvitationId)) {
+        sendData = {
+          username,
+          password,
+          therapyInvitationId: therapyInvitationId,
+          regularUser: {
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            isInTherapy: true,
+            mentalHealthExpertsToConnectWithIds: [therapyInvitationSentById],
+          },
+          isMentalHealthExpert: false,
+          roles,
+        }
       } else {
         sendData = {
           username,
@@ -391,6 +417,7 @@ export const Register = () => {
       if (statusCode === 201) {
         let serviceResponseObject = response?.payload?.serviceResponseObject
         dispatch(setSelectedMentalHealthExpertIds([]))
+        removeCookies()
         localStorage.setItem(
           'justRegisteredUser',
           JSON.stringify(serviceResponseObject)
@@ -602,11 +629,11 @@ export const Register = () => {
                 )}
               </div>
             </div>
-
             {isLoadingExperts ? (
               <LoadingSpinner />
             ) : (
-              suggestedMentalHealthExperts?.length > 0 && (
+              suggestedMentalHealthExperts?.length > 0 &&
+              stringIsNullOrEmpty(therapyInvitationId) && (
                 <div className="register-info-in-therapy-container">
                   <label
                     htmlFor="register-in-therapy"
@@ -624,6 +651,10 @@ export const Register = () => {
                   />
                 </div>
               )
+
+              // suggestedMentalHealthExperts?.length > 0 &&(
+
+              // )
             )}
 
             {isInTherapy && (

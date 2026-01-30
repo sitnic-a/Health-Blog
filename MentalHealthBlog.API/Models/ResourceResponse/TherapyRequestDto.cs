@@ -8,6 +8,7 @@
         public int MentalHealthExpertUserId { get; set; }
         public DateTime SentAt { get; set; }
         public RequestStatusEnum RequestStatus { get; set; }
+        public bool IsMentalHealthExpertInviting { get; set; }
 
         public TherapyRequestDto(){}
         public TherapyRequestDto(int regularUserId, string regularUserFirstName, string regularUserLastName, int mentalHealthExpertUserId, DateTime sentAt, RequestStatusEnum requestStatus)

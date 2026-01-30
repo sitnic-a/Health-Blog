@@ -24,6 +24,7 @@
 }
 
 .navigation-bar-action {
+  position: relative;
   font-size: 0.9rem;
   font-family: 'SansDeva';
   color: #000;
@@ -37,11 +38,35 @@
   transition: 80ms;
 }
 
+.navigation-bar-my-experts {
+  margin-right: 0.7rem;
+}
+
+.pending-therapy-request-invitation-indicator {
+  position: absolute;
+  top: -2px;
+  right: -14px;
+  border-radius: 360px;
+  padding: 0.3rem;
+  font-family: 'SansDeva';
+  font-size: 0.7rem;
+  line-height: 0.5;
+  color: #f3f1e3;
+  background: #edb572;
+}
+
+.pending-therapy-request-invitation-indicator-hidden {
+  display: none;
+}
+
 .navbar-app-logo {
   max-width: 50px;
   max-height: 30px;
   margin-left: 10px;
   margin-right: 20px;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
 @media (width<=460px) {

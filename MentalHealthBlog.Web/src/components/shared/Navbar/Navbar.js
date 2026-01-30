@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { switchActiveTab } from '../../../utils/helper-methods/methods'
 
 import { Logout } from '../Logout/Logout'
@@ -10,6 +10,10 @@ import NavbarCSS from '../Navbar/Navbar.css'
 import SharedCSS from '../shared.css'
 
 export const Navbar = () => {
+  let location = useLocation()
+  let { myPendingMentalHealthExpertWhoSentAnInvitationForTherapy } =
+    useSelector((store) => store.therapy)
+
   useEffect(() => {
     let tabs = document.querySelectorAll('.navigation-bar-action')
     switchActiveTab(tabs)
@@ -50,12 +54,24 @@ export const Navbar = () => {
               Podijeljeno
             </Link>
 
-            <Link to={'/my-experts'} className="navigation-bar-action">
+            <Link
+              to={'/my-experts'}
+              className="navigation-bar-action navigation-bar-my-experts"
+            >
               Stručnjaci
+              {myPendingMentalHealthExpertWhoSentAnInvitationForTherapy?.length >
+                0 &&
+                location?.pathname !== '/my-experts' && (
+                  <span className="pending-therapy-request-invitation-indicator">
+                    {
+                      myPendingMentalHealthExpertWhoSentAnInvitationForTherapy?.length
+                    }
+                  </span>
+                )}
             </Link>
 
             <Link
-              to={`/assignments/user/${authenticatedUser.id}`}
+              to={`/assignments/user/${authenticatedUser?.id}`}
               className="navigation-bar-action"
             >
               Zadaće
@@ -86,6 +102,10 @@ export const Navbar = () => {
               className="navigation-bar-action"
             >
               Zadaće
+            </Link>
+
+            <Link to={'/invite/user'} className="navigation-bar-action">
+              Pozovi u proces
             </Link>
           </div>
 
