@@ -284,11 +284,6 @@ export const MyMentalHealthExperts = () => {
             </>
           )} */}
 
-          {myApprovedOrPendingRequests?.length === 1 &&
-            myApprovedOrPendingMentalHealthExperts?.length === 1 && (
-              <MyMentalHealthExpertPocket />
-            )}
-
           {myApprovedOrPendingMentalHealthExperts?.length === 0 && (
             <>
               <MyMentalHealthExpertPocket />
@@ -319,6 +314,11 @@ export const MyMentalHealthExperts = () => {
               )
             }
           })}
+
+          {myApprovedOrPendingRequests?.length === 1 &&
+            myApprovedOrPendingMentalHealthExperts?.length === 1 && (
+              <MyMentalHealthExpertPocket />
+            )}
 
           {/* {myApprovedOrPendingMentalHealthExperts?.filter(
             (mhe) =>
