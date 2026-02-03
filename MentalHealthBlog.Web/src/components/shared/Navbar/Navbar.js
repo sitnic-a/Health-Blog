@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { Link, useLocation } from 'react-router-dom'
 import { switchActiveTab } from '../../../utils/helper-methods/methods'
+import { requestStatuses } from '../../../enums/requestStatuses'
 
 import { Logout } from '../Logout/Logout'
 import appLogo from '../../../images/Brain.png'
@@ -11,8 +12,13 @@ import SharedCSS from '../shared.css'
 
 export const Navbar = () => {
   let location = useLocation()
-  let { myPendingMentalHealthExpertWhoSentAnInvitationForTherapy } =
-    useSelector((store) => store.therapy)
+  let {
+    myApprovedOrPendingMentalHealthExperts,
+    myPendingMentalHealthExpertWhoSentAnInvitationForTherapy,
+  } = useSelector((store) => store.therapy)
+  let myApprovedRequests = myApprovedOrPendingMentalHealthExperts?.filter(
+    (tr) => tr?.requestStatus === requestStatuses.APPROVED,
+  )
 
   useEffect(() => {
     let tabs = document.querySelectorAll('.navigation-bar-action')
@@ -30,7 +36,7 @@ export const Navbar = () => {
   return (
     <section id="navigation-bar-main-container">
       {authenticatedUser?.userRoles?.some(
-        (role) => role?.id === __ADMIN_ROLE_ID
+        (role) => role?.id === __ADMIN_ROLE_ID,
       ) && (
         <div className="navigation-bar-container">
           <div className="navigation-bar-features"></div>
@@ -42,7 +48,7 @@ export const Navbar = () => {
       )}
 
       {authenticatedUser?.userRoles?.some(
-        (role) => role?.id === __USER_ROLE_ID
+        (role) => role?.id === __USER_ROLE_ID,
       ) && (
         <div className="navigation-bar-container">
           <div className="navigation-bar-features">
@@ -61,6 +67,7 @@ export const Navbar = () => {
               Stručnjaci
               {myPendingMentalHealthExpertWhoSentAnInvitationForTherapy?.length >
                 0 &&
+                myApprovedRequests?.length < 2 &&
                 location?.pathname !== '/my-experts' && (
                   <span className="pending-therapy-request-invitation-indicator">
                     {
@@ -85,7 +92,7 @@ export const Navbar = () => {
       )}
 
       {authenticatedUser?.userRoles?.some(
-        (role) => role?.id === __PSYCHOLOGIST_ROLE_ID
+        (role) => role?.id === __PSYCHOLOGIST_ROLE_ID,
       ) && (
         <div className="navigation-bar-container">
           <div className="navigation-bar-features">

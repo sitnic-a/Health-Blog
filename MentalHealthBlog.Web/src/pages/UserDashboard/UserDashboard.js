@@ -1,7 +1,10 @@
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { getUsersTrialPeriod } from '../../redux-toolkit/features/subscriptionSlice'
-import { getMentalHealthExpertsWhoSentUserAnInvitationForTherapy } from '../../redux-toolkit/features/therapySlice'
+import {
+  getMentalHealthExpertsWhoSentUserAnInvitationForTherapy,
+  getMyExperts,
+} from '../../redux-toolkit/features/therapySlice'
 import { ListOfPosts } from '../../components/ListOfPosts/ListOfPosts'
 import { requestStatuses } from '../../enums/requestStatuses'
 import { Navbar } from '../../components/shared/Navbar/Navbar'
@@ -23,17 +26,25 @@ export const UserDashboard = () => {
       dispatch(getUsersTrialPeriod(objectWithData))
       console.log('Counting....')
     }
+
+    let objectWithData = {
+      authenticatedUser,
+      loggedUserId: authenticatedUser?.id,
+    }
+    dispatch(getMyExperts(objectWithData))
+
     let query = {
       loggedUserId: authenticatedUser?.id,
       requestStatus: requestStatuses.PENDING,
       IsMentalHealthExpertInviting: true,
     }
-    let objectWithData = {
+
+    objectWithData = {
       authenticatedUser,
       query,
     }
     dispatch(
-      getMentalHealthExpertsWhoSentUserAnInvitationForTherapy(objectWithData)
+      getMentalHealthExpertsWhoSentUserAnInvitationForTherapy(objectWithData),
     )
   }, [])
 

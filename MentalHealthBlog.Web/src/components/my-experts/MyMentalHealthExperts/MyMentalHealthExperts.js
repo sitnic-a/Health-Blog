@@ -32,11 +32,15 @@ export const MyMentalHealthExperts = () => {
   } = useSelector((store) => store.therapy)
 
   let myApprovedOrPendingRequests =
-    myApprovedOrPendingMentalHealthExperts.filter(
+    myApprovedOrPendingMentalHealthExperts?.filter(
       (tr) =>
         tr.requestStatus === requestStatuses.APPROVED ||
         tr.requestStatus === requestStatuses.PENDING,
     )
+
+  let myApprovedRequests = myApprovedOrPendingMentalHealthExperts?.filter(
+    (tr) => tr?.requestStatus === requestStatuses.APPROVED,
+  )
 
   useEffect(() => {
     let pendingTherapyRequestInvitationIndicator = document.querySelector(
@@ -93,7 +97,7 @@ export const MyMentalHealthExperts = () => {
         {myApprovedOrPendingMentalHealthExperts?.filter(
           (mhe) =>
             (mhe.regularUserId === authenticatedUser?.id &&
-              myApprovedOrPendingRequests.length >= 2 &&
+              myApprovedOrPendingRequests?.length >= 2 &&
               mhe.requestStatus === requestStatuses.APPROVED) ||
             mhe.requestStatus === requestStatuses.PENDING,
         )?.length >= 2 || (
@@ -167,97 +171,99 @@ export const MyMentalHealthExperts = () => {
         )}
       </div>
 
-      {myPendingMentalHealthExpertWhoSentAnInvitationForTherapy?.length > 0 && (
-        <div className="my-mental-health-experts-review-pending-therapy-requests-invitations-main-container">
-          <div className="my-mental-health-experts-review-pending-therapy-requests-invitations-actions">
-            <button
-              className="my-mental-health-experts-review-pending-therapy-requests-invitations-review-button"
-              type="button"
-              onClick={(e) => {
-                let myExpertsReviewPendingTherapyRequestInvitationsButton =
-                  e.currentTarget
-                let myExpertsReviewUsersTherapyRequestsButton =
-                  document.querySelector(
-                    '.my-mental-health-experts-users-therapy-requests-review-button',
+      {myPendingMentalHealthExpertWhoSentAnInvitationForTherapy?.length > 0 &&
+        myApprovedRequests?.length < 2 && (
+          <div className="my-mental-health-experts-review-pending-therapy-requests-invitations-main-container">
+            <div className="my-mental-health-experts-review-pending-therapy-requests-invitations-actions">
+              <button
+                className="my-mental-health-experts-review-pending-therapy-requests-invitations-review-button"
+                type="button"
+                onClick={(e) => {
+                  let myExpertsReviewPendingTherapyRequestInvitationsButton =
+                    e.currentTarget
+                  let myExpertsReviewUsersTherapyRequestsButton =
+                    document.querySelector(
+                      '.my-mental-health-experts-users-therapy-requests-review-button',
+                    )
+
+                  myExpertsReviewPendingTherapyRequestInvitationsButton.classList.add(
+                    'my-mental-health-experts-review-pending-therapy-requests-invitations-review-button-hidden',
                   )
 
-                myExpertsReviewPendingTherapyRequestInvitationsButton.classList.add(
-                  'my-mental-health-experts-review-pending-therapy-requests-invitations-review-button-hidden',
-                )
-
-                myExpertsReviewPendingTherapyRequestInvitationsButton.classList.remove(
-                  'my-mental-health-experts-review-pending-therapy-requests-invitations-review-button-visible',
-                )
-
-                myExpertsReviewUsersTherapyRequestsButton.classList.add(
-                  'my-mental-health-experts-users-therapy-requests-review-button-visible',
-                )
-
-                myExpertsReviewUsersTherapyRequestsButton.classList.remove(
-                  'my-mental-health-experts-users-therapy-requests-review-button-hidden',
-                )
-
-                let myExpertsUsersTherapyRequestsMainContainer =
-                  document.querySelector(
-                    '.my-mental-health-experts-users-therapy-requests-main-container',
-                  )
-                let myExpertsPendingTherapyRequestsInvitationsMainContainer =
-                  document.querySelector(
-                    '.my-mental-health-experts-pending-therapy-requests-invitations-main-container',
-                  )
-                myExpertsUsersTherapyRequestsMainContainer.classList.add(
-                  'my-mental-health-experts-users-therapy-requests-main-container-hidden',
-                )
-
-                myExpertsPendingTherapyRequestsInvitationsMainContainer.classList.add(
-                  'my-mental-health-experts-pending-therapy-requests-invitations-main-container-on-review',
-                )
-              }}
-            >
-              Prikaži zahtjeve
-            </button>
-
-            <button
-              className="my-mental-health-experts-users-therapy-requests-review-button"
-              type="button"
-              onClick={(e) => {
-                let myExpertsReviewUsersTherapyRequestsButton = e.currentTarget
-                let myExpertsReviewPendingTherapyRequestsInvitationsButton =
-                  document.querySelector(
-                    '.my-mental-health-experts-review-pending-therapy-requests-invitations-review-button',
+                  myExpertsReviewPendingTherapyRequestInvitationsButton.classList.remove(
+                    'my-mental-health-experts-review-pending-therapy-requests-invitations-review-button-visible',
                   )
 
-                myExpertsReviewUsersTherapyRequestsButton.classList.remove(
-                  'my-mental-health-experts-users-therapy-requests-review-button-visible',
-                )
-
-                myExpertsReviewPendingTherapyRequestsInvitationsButton.classList.remove(
-                  'my-mental-health-experts-review-pending-therapy-requests-invitations-review-button-hidden',
-                )
-
-                let myExpertsUsersTherapyRequestsMainContainer =
-                  document.querySelector(
-                    '.my-mental-health-experts-users-therapy-requests-main-container',
-                  )
-                let myExpertsPendingTherapyRequestsInvitationsMainContainer =
-                  document.querySelector(
-                    '.my-mental-health-experts-pending-therapy-requests-invitations-main-container',
+                  myExpertsReviewUsersTherapyRequestsButton.classList.add(
+                    'my-mental-health-experts-users-therapy-requests-review-button-visible',
                   )
 
-                myExpertsUsersTherapyRequestsMainContainer.classList.remove(
-                  'my-mental-health-experts-users-therapy-requests-main-container-hidden',
-                )
+                  myExpertsReviewUsersTherapyRequestsButton.classList.remove(
+                    'my-mental-health-experts-users-therapy-requests-review-button-hidden',
+                  )
 
-                myExpertsPendingTherapyRequestsInvitationsMainContainer.classList.remove(
-                  'my-mental-health-experts-pending-therapy-requests-invitations-main-container-on-review',
-                )
-              }}
-            >
-              Moji stručnjaci
-            </button>
+                  let myExpertsUsersTherapyRequestsMainContainer =
+                    document.querySelector(
+                      '.my-mental-health-experts-users-therapy-requests-main-container',
+                    )
+                  let myExpertsPendingTherapyRequestsInvitationsMainContainer =
+                    document.querySelector(
+                      '.my-mental-health-experts-pending-therapy-requests-invitations-main-container',
+                    )
+                  myExpertsUsersTherapyRequestsMainContainer.classList.add(
+                    'my-mental-health-experts-users-therapy-requests-main-container-hidden',
+                  )
+
+                  myExpertsPendingTherapyRequestsInvitationsMainContainer.classList.add(
+                    'my-mental-health-experts-pending-therapy-requests-invitations-main-container-on-review',
+                  )
+                }}
+              >
+                Prikaži zahtjeve
+              </button>
+
+              <button
+                className="my-mental-health-experts-users-therapy-requests-review-button"
+                type="button"
+                onClick={(e) => {
+                  let myExpertsReviewUsersTherapyRequestsButton =
+                    e.currentTarget
+                  let myExpertsReviewPendingTherapyRequestsInvitationsButton =
+                    document.querySelector(
+                      '.my-mental-health-experts-review-pending-therapy-requests-invitations-review-button',
+                    )
+
+                  myExpertsReviewUsersTherapyRequestsButton.classList.remove(
+                    'my-mental-health-experts-users-therapy-requests-review-button-visible',
+                  )
+
+                  myExpertsReviewPendingTherapyRequestsInvitationsButton.classList.remove(
+                    'my-mental-health-experts-review-pending-therapy-requests-invitations-review-button-hidden',
+                  )
+
+                  let myExpertsUsersTherapyRequestsMainContainer =
+                    document.querySelector(
+                      '.my-mental-health-experts-users-therapy-requests-main-container',
+                    )
+                  let myExpertsPendingTherapyRequestsInvitationsMainContainer =
+                    document.querySelector(
+                      '.my-mental-health-experts-pending-therapy-requests-invitations-main-container',
+                    )
+
+                  myExpertsUsersTherapyRequestsMainContainer.classList.remove(
+                    'my-mental-health-experts-users-therapy-requests-main-container-hidden',
+                  )
+
+                  myExpertsPendingTherapyRequestsInvitationsMainContainer.classList.remove(
+                    'my-mental-health-experts-pending-therapy-requests-invitations-main-container-on-review',
+                  )
+                }}
+              >
+                Moji stručnjaci
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
       <div className="my-mental-health-experts-experts-container">
         <div className="my-mental-health-experts-users-therapy-requests-main-container">
@@ -354,7 +360,9 @@ export const MyMentalHealthExperts = () => {
           )} */}
         </div>
 
-        <MyExpertsPendingTherapyRequestsInvitations />
+        {myApprovedRequests?.length >= 2 || (
+          <MyExpertsPendingTherapyRequestsInvitations />
+        )}
       </div>
     </section>
   )
