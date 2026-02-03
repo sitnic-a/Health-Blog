@@ -79,6 +79,11 @@ namespace MentalHealthBlog.API.Controllers
                         Expires = DateTime.UtcNow.AddDays(2)
                     });
 
+                    Response.Cookies.Append("isMentalHealthExpertInviting", "true", new CookieOptions()
+                    {
+                        Expires = DateTime.UtcNow.AddDays(2)
+                    });
+
                     Response.Cookies.Append("therapyInvitationId", invitation.Id, new CookieOptions()
                     {
                         Expires = DateTime.UtcNow.AddDays(2)

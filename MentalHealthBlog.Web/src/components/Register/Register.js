@@ -50,10 +50,13 @@ export const Register = () => {
   let { selectedMentalHealthExpertIds } = useSelector((store) => store.therapy)
 
   let isMentalHealthExpert = Cookies.get('isMentalHealthExpert')
+  let isMentalHealthExpertInviting = Cookies.get('isMentalHealthExpertInviting')
   let therapyInvitationId = Cookies.get('therapyInvitationId')
   let therapyInvitationSentById = Cookies.get('therapyInvitationSentById')
 
   isMentalHealthExpert = isMentalHealthExpert === 'true'
+  isMentalHealthExpertInviting = isMentalHealthExpertInviting === 'true'
+
   let isRegularUser = Cookies.get('isRegularUser')
   isRegularUser = isRegularUser === 'true'
 
@@ -628,7 +631,7 @@ export const Register = () => {
                 )}
               </div>
             </div>
-            {isLoadingExperts ? (
+            {isLoadingExperts && isMentalHealthExpertInviting !== true ? (
               <LoadingSpinner />
             ) : (
               suggestedMentalHealthExperts?.length > 0 &&
