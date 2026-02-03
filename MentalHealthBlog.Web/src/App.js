@@ -37,9 +37,12 @@ import { SubscriptionPlans } from './components/Register/SubscriptionPlans/Subsc
 import { TimeRemainingNotifier } from './components/TimeRemainingNotifier/TimeRemainingNotifier'
 import { AdminSubscriptions } from './components/administrator-dashboard/sections/admin-subscriptions/AdminSubscriptions'
 import { InviteRegularUser } from './components/mental-expert-dashboard/invite-regular-user/InviteRegularUser/InviteRegularUser'
+import { InviteExpiredOrUsed } from './pages/exceptions/InviteExpiredOrUsed/InviteExpiredOrUsed'
 
 function App() {
   windowResize(application.layouts.min_screen_single_col_width)
+  let redirect_url = `https://localhost:7029/invite/:id`
+  console.log(redirect_url)
 
   return (
     <Provider store={store}>
@@ -103,6 +106,8 @@ function App() {
 
             <Route path="*" element={<NotFound />} />
             <Route path="/not-found" element={<NotFound />} />
+            <Route path="/invite/:id" element={<InviteExpiredOrUsed />} />
+
             <Route path="/expired" element={<TrialPeriodExpired />} />
           </Routes>
 
