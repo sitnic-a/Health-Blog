@@ -74,6 +74,14 @@ namespace MentalHealthBlog.API.Controllers
 
                 if (invitation != null)
                 {
+
+                    if (invitationResponse.StatusCode == StatusCodes.Status204NoContent)
+                    {
+                        HttpContext.Response.Redirect($"http://localhost:3000/invite/{invitation.Id}");
+                        //HttpContext.Response.Redirect($"https://mapp-terapija.com/invite/{invitation.Id}");
+                        return new Response();
+                    }
+
                     Response.Cookies.Append("isMentalHealthExpert", "false", new CookieOptions()
                     {
                         Expires = DateTime.UtcNow.AddDays(2)

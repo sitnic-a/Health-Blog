@@ -26,6 +26,7 @@ namespace MentalHealthBlog.API.Services
         ASSIGNMENT_INVALID_DATA,
         NOT_FOUND,
         SUCCESS,
+        INVITATION_EXPIRED,
         ERROR
     }
 
@@ -329,6 +330,12 @@ namespace MentalHealthBlog.API.Services
                 {
                     _mentalExpertLoggerService.LogWarning($"INVITE/[id]: {MentalExpertServiceLogTypes.NOT_FOUND.ToString()}");
                     throw new RecordNotFoundException("Invitation not found!");
+                }
+
+                if (invitation.IsUsed == true)
+                {
+                    _mentalExpertLoggerService.LogWarning($"INVITE/[id]: {MentalExpertServiceLogTypes.INVITATION_EXPIRED.ToString()}");
+                    return new Response(invitation, StatusCodes.Status204NoContent,MentalExpertServiceLogTypes.INVITATION_EXPIRED.ToString());
                 }
 
                 _mentalExpertLoggerService.LogInformation($"INVITE/[id]: {MentalExpertServiceLogTypes.SUCCESS.ToString()}");
